@@ -1,0 +1,14 @@
+/*
+To avoid long posts being clipped, the overflow needs to be set to visible.
+See https://bugzilla.mozilla.org/show_bug.cgi?id=215055 for more info.
+*/
+.post, .personalmessage
+{
+	overflow: visible;
+}
+
+/* Display.template */
+#quickreplybox h3.catbg
+{
+	margin: 0;
+}

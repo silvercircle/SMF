@@ -1,0 +1,25 @@
+// English language strings
+hs.lang = {
+loadingText : "Indlæser...",
+loadingTitle : "Kilk igen for at afbryde",
+focusTitle : "Click to bring to front",
+fullExpandTitle : "Udvid til fuld størrelse",
+creditsText : "Powered by <i>Highslide JS</i>",
+creditsTitle : "Go to the Highslide JS homepage",
+previousText : "Forrige",
+nextText : "Næste",
+moveText : "Flyt",
+closeText : "Luk",
+closeTitle : "Luk (esc)",
+resizeTitle : "Resize",
+playText : "Afspil",
+playTitle : "Afspil slideshow (mellemrumstast)",
+pauseText : "Pause",
+pauseTitle : "Pause slideshow (mellemrumstast)",
+previousTitle : "Forrige (venstre piletast)",
+nextTitle : "Næste (højre piletast)",
+moveTitle : "Flyt",
+fullExpandText : "Fuld størrelse",
+number: "Billede %1 af %2",
+restoreTitle : "Klik igen for at lukke billede, hold mus inde for at trække. Brug pile taster for næste/forrige."
+};

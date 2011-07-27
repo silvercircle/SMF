@@ -1,0 +1,25 @@
+// Traduzione italiana by gianko82
+hs.lang = {
+loadingText : "Caricamento...",
+loadingTitle : "Click per annullare",
+focusTitle : "Click per portare in primo piano",
+fullExpandTitle : "Espandi a dimensioni reali",
+creditsText : "Powered by <i>Highslide JS</i>",
+creditsTitle : "Vai all'homepage Highslide JS",
+previousText : "Precedente",
+nextText : "Successiva",
+moveText : "Sposta",
+closeText : "Chiudi",
+closeTitle : "Chiudi (esc)",
+resizeTitle : "Ridimensiona",
+playText : "Play",
+playTitle : "Avvia presentazione (spazio)",
+pauseText : "Pausa",
+pauseTitle : "Pausa presentazione (spazio)",
+previousTitle : "Precedente (freccia sinistra)",
+nextTitle : "Successiva (freccia destra)",
+moveTitle : "Sposta",
+fullExpandText : "Dimensioni efettive",
+number: "Immagine %1 di %2",
+restoreTitle : "Click per chiudere, click & drag per spostare l'immagine. Usa i tasti freccia sx e dx per la precedente e la successiva."
+};

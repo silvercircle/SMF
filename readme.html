@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>SMF 2.0 RC1 Upgrade Guide</title>
+		<link rel="stylesheet" type="text/css" href="Themes/default/css/index.css?rc2" />
+		<style type="text/css">
+			#upper_section .user
+			{
+				height: 4em;
+			}
+			#upper_section .news
+			{
+				height: 80px;
+			}
+			#main_screen
+			{
+				padding: 0 40px;
+			}
+			#main_screen h2
+			{
+				font-size: 2em;
+				border-bottom: solid 1px #d05800;
+				line-height: 2em;
+				margin: 0 0 0.5em 0;
+				color: #d05800;
+			}
+			#content_section
+			{
+				position: relative;
+				top: -20px;
+			}
+			#main_content_section
+			{
+			}
+			#main_content_section .panel
+			{
+				padding: 1em 2em 1em 1em;
+				line-height: 1.6em;
+			}
+			#main_content_section h2
+			{
+				font-size: 1.5em;
+				border-bottom: solid 1px #d05800;
+				line-height: 1.5em;
+				margin: 0 2em 0.5em 0;
+				color: #d05800;
+			}
+			#main_content_section li
+			{
+				line-height: 1.6em;
+				font-weight: bold;
+			}
+			#main_content_section li li
+			{
+				font-weight: normal;
+				line-height: 1.6em;
+			}
+			#liftup
+			{
+				position: relative;
+				top: -70px;
+			}
+			#footer_section
+			{
+				position: relative;
+				top: -20px;
+			}
+			#footer_section
+			{
+				position: relative;
+				top: -20px;
+			}
+			tt
+			{
+				font-family: verdana, sans-serif;
+				letter-spacing: 1px;
+				font-weight: bold;
+				font-size: 90%;
+				font-style: italic;
+			}
+		</style>
+	</head>
+	<body>
+	<div id="header"><div class="frame">
+		<div id="top_section">
+			<h1 class="forumtitle">SMF 2.0 RC1 Upgrade Guide</h1>
+			<img id="smflogo" src="Themes/default/images/smflogo.png" alt="Simple Machines Forum" title="Simple Machines Forum" />
+		</div>
+		<div id="upper_section" class="middletext" style="overflow: hidden;">
+			<div class="user"></div>
+			<div class="news normaltext">
+			</div>
+		</div>
+	</div></div>
+	<div id="content_section"><div class="frame">
+		<div id="main_content_section">
+			<div id="liftup">
+			<div class="panel">
+				<h2 id="contents">Upgrading your forum</h2>
+
+				Thank you for deciding to upgrade to <a href="http://www.simplemachines.org/smf/">SMF</a>.  Before you get started, please remember that there is <a href="http://www.simplemachines.org/community/index.php">a place for help at www.simplemachines.org</a> if you run into any problems at all.<br />
+				<br />
+				You can find the following information in this file:<br />
+
+				<ul type="none" style="list-style-type: none;">
+					<li>&raquo; <a href="#requirements">Minimum installation requirements.</a></li>
+					<li>&raquo; <a href="#uploading">Uploading SMF onto your webserver.</a></li>
+					<li>&raquo; <a href="#finishing">Finishing the upgrade and cleaning up.</a></li>
+				</ul>
+			</div>
+
+			<div class="panel">
+				<h2 id="requirements">What's required to run SMF?</h2>
+
+				Your server must meet a few requirements to be able to run SMF.  If you unsure as to whether your webserver meets these, please try to upgrade anyway - it should detect any problems.<br />
+
+				<ul>
+					<li>Any webserver that properly supports PHP, such as <a href="http://httpd.apache.org/" target="_blank">Apache</a> or <a href="http://www.microsoft.com/iis" target="_blank">Internet Information Services (IIS)</a>.</li>
+					<li>
+						<a href="http://www.php.net" target="_blank">PHP</a> 4.1.0 or higher.  The following directives are required to be set correctly in php.ini:
+						<ul>
+							<li>the engine directive must be On.</li>
+							<li>the <a href="http://www.php.net/sybase#ini.magic-quotes-sybase" target="_blank">magic_quotes_sybase</a> directive must be set to Off.</li>
+							<li>the <a href="http://www.php.net/session#ini.session.save-path" target="_blank">session.save_path</a> directive must be set to a valid directory.</li>
+							<li>the <a href="http://www.php.net/configuration.directives#ini.file-uploads" target="_blank">file_uploads</a> directive must be On.</li>
+							<li>the <a href="http://www.php.net/configuration.directives#ini.upload-tmp-dir" target="_blank">upload_tmp_dir</a> must be set to a valid directory.</li>
+						</ul>
+					</li>
+					<li>Any of the following database systems (MySQL only for 1.0 and 1.1)
+						<ul>
+							<li><a href="http://www.mysql.com/" target="_blank">MySQL</a> 3.23.28 or higher.</li>
+							<li><a href="http://www.postgresql.org/" target="_blank">PostgreSQL</a> 7.4.10 or higher.</li>
+							<li><a href="http://www.sqlite.org/" target="_blank">SQLite</a> 2.8 or higher.</li>
+						</ul>
+					</li>
+					<li>at least 512 kilobytes of storage space in the database, although more is highly recommended.</li>
+					<li>about two and a half megabytes of storage space on the web server, although more is recommended.</li>
+				</ul>
+
+				Recommendations for best performance:<br />
+
+				<ul>
+					<li><a href="http://www.linux.org/" target="_blank">Linux</a> or another Unix based operating system.</li>
+					<li>the <a href="http://aspell.sf.net/" target="_blank">GNU Aspell</a> and <a href="http://ftp.gnu.org/gnu/aspell/dict/" target="_blank">its dictionaries</a> for spell checking support.</li>
+					<li><a href="http://httpd.apache.org/" target="_blank">Apache</a> with <a href="http://httpd.apache.org/docs-2.0/mod/core.html#acceptpathinfo" target="_blank">AcceptPathInfo</a> set to On (Apache 2 and later only) for queryless URL support.</li>
+					<li>
+						<a href="http://www.php.net" target="_blank">PHP</a> 5.0.0 or higher, with the following set in php.ini:
+						<ul>
+							<li>the <a href="http://www.php.net/ref.info#ini.max-input-time" target="_blank">max_input_time</a> directive is set to a value of at least 30.</li>
+							<li>the <a href="http://www.php.net/configuration.directives#ini.post-max-size" target="_blank">post_max_size</a> and <a href="http://www.php.net/configuration.directives#ini.upload-max-filesize" target="_blank">upload_max_filesize</a> directives are set to the size of the largest attachments you wish to be able to upload.</li>
+							<li>the <a href="http://www.php.net/session#ini.session.use-trans-sid" target="_blank">session.use_trans_sid</a> directive set to Off.</li>
+							<li>the <a href="http://www.php.net/configuration.directives#ini.memory-limit" target="_blank">memory_limit</a> directive is set to at least 8M.</li>
+							<li>the <a href="http://www.php.net/info#ini.max-execution-time" target="_blank">max_execution_time</a> directive is set to at least 15.</li>
+							<li>the <a href="http://www.php.net/configuration.directives#register-globals" target="_blank">register_globals</a> directive is set to Off.</li>
+						</ul>
+					</li>
+					<li><a href="http://www.mysql.com/" target="_blank">MySQL</a> 4.0.15 or higher with query caching enabled.</li>
+					<li>Any of the following database systems (MySQL only for 1.0 and 1.1)
+						<ul>
+							<li><a href="http://www.mysql.com/" target="_blank">MySQL</a> 5.0 or higher.</li>
+							<li><a href="http://www.postgresql.org/" target="_blank">PostgreSQL</a> 8.2.13 or higher.</li>
+							<li><a href="http://www.sqlite.org/" target="_blank">SQLite</a> 2.8 or higher.</li>
+						</ul>
+					</li>
+					<li><a href="http://www.boutell.com/gd/" target="_blank">GD Graphics Library</a> 2.0 or higher.</li>
+				</ul>
+
+				If your server does not meet these requirements, SMF may not work properly.
+			</div>
+
+			<div class="panel">
+				<h2 id="backups">Backing up data</h2>
+
+				Before uploading anything, make sure to make a backup of what's there.  Some administration panels allow you to download a backup of everything, and if yours does this would be highly recommendable.  It's best to backup both the database and the files.  Additionally, if you are using any languages other than English please make sure to upload their versions as well to the same directory you uploaded everything else to.<br />
+			</div>
+			<div class="panel">
+				<h2 id="webinstall">Upload files method 1: Using webinstall.php</h2>
+
+				Your server may support webinstall.php. This script will automatically download SMF to your server. This may not work on all servers and also may require providing it with FTP details.<br />
+				<br />
+				The first thing you need to do is upload webinstall.php to the location of where SMF is to exist on your server.
+				<br />
+				After you have finished uploading the file, point your browser to http://www.yourdomain.tld/forum/webinstall.php - where www.yourdomain.tld/forum is the URL to where you uploaded it.  You should then see the webinstall interface.<br />
+				<br />
+				The first page you see may request your FTP information.  If you see this screen, it is because the webinstaller found some files or folders with inadequate permissions for SMF to run properly.  If you enter your FTP information here, the webinstaller can automatically fix these permissions for you.  Please note that the path should be the same path you see in your FTP client.  For example, it might be &quot;public_html/forum&quot;.  And remember, the webinstaller will not save your FTP password anywhere.
+				<br />
+				On the webinstall interface you have an option to login, this is useful for charter members to easily download early releases. You may have an option to select multiple versions of SMF to download. It is up to you to decide which version of SMF you wish to install. Additionally you may have options of additional languages to download.
+				<br />
+				After specifying these options and agreeing to the agreement, webinstall will attempt to download al SMF files and decompress them in the same folder as webinstall.php. If successful you will be prompted to the SMF upgrade screen. If this fails you will need to follow the process below to upload files.
+				<br />
+				In most cases, you'll want to have &quot;Put the forum into maintenance mode during upgrade.&quot; checked, because it will ensure that nothing is messed with while the upgrader is working.  You may also wish to check &quot;Backup tables in your database...&quot;, which will make a backup of your old information and tables before making any changes in the database.
+			</div>
+
+			<div class="panel">
+				<h2 id="uploading">Uploading the files</h2>
+				After that, you need to do is upload all of the files in this package, excluding this file itself, to your server.  You should upload it to the same directory as your previous installation of SMF or YaBB SE.  If you are given the option to &quot;resume&quot; uploads, make sure you do not do that - you must upload all of the files.  You may wish to make sure that all of the files were uploaded, such as those in <tt>Themes/default/languages</tt>, because some FTP clients have been known to drop files.<br />
+				<br />
+				After you have finished uploading the files, point your browser to http://www.yourdomain.tld/forum/upgrade.php - where www.yourdomain.tld/forum is the URL to where you uploaded it.  You should then see a page asking you for a few bits of information.<br />
+				<br />
+				In most cases, you'll want to have &quot;Put the forum into maintenance mode during upgrade.&quot; checked, because it will ensure that nothing is messed with while the upgrader is working.  You may also wish to check &quot;Backup tables in your database...&quot;, which will make a backup of your old information and tables before making any changes in the database.  This is <strong>strongly</strong> recommended if you haven't already made a different backup.
+			</div>
+
+			<div class="panel">
+				<h2 id="finishing">Finishing everything up</h2>
+
+				From this point, the upgrader should walk you through everything.  It may take some time if you are upgrading from YaBB SE, but it shouldn't be too long.<br />
+				<br />
+				Please remember to delete upgrade.php after finishing the installation.  If you do not delete it, it is possible that someone could compromise the security of your forum with it.<br />
+				<br />
+				Good luck!<br />
+				Simple Machines
+			</div>
+			</div>
+		</div>
+	</div></div>
+	<div id="footer_section"><div class="frame" style="height: 50px;">
+		<div class="smalltext"><a href="http://www.simplemachines.org">Simple Machines Forum</a></div>
+	</div></div>
+	</body>
+</html>

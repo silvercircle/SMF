@@ -1,0 +1,25 @@
+// English language strings
+hs.lang = {
+loadingText : "Učitavanje...",
+loadingTitle : "Klikni da otkažeš",
+focusTitle : "Klikni da premestiš napred",
+fullExpandTitle : "Raširi na punu veličinu",
+creditsText : "Powered by <i>Highslide JS</i>",
+creditsTitle : "Go to the Highslide JS homepage",
+previousText : "Prethodna",
+nextText : "Sledeća",
+moveText : "Pomeri",
+closeText : "Zatvori",
+closeTitle : "Zatvori (esc)",
+resizeTitle : "Promeni veličinu",
+playText : "Play",
+playTitle : "Pusti slideshow (spacebar)",
+pauseText : "Pauza",
+pauseTitle : "Pauziraj slideshow (spacebar)",
+previousTitle : "Prethodna (strelica levo)",
+nextTitle : "Sledeća (strelica desno)",
+moveTitle : "Move",
+fullExpandText : "Puna veličina",
+number: "Slika %1 od %2",
+restoreTitle : "Klikni da zatvoris sliku, klikni i povuci da pomeriš. Koristi strelice za sledeću i prethodnu."
+};
