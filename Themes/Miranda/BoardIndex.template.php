@@ -155,7 +155,7 @@ function template_main()
 						</a>
 					</td>
 					<td class="info">
-						<a class="subject" href="', $board['href'], '" name="b', $board['id'], '">', $board['name'], '</a>';
+						<a href="',$scripturl,'?action=.xml;type=rss;board=',$board['id'],'"><img style="float:right" src="',$settings['images_url'],'/icons/rss.png" alt="rss" title="feed" /></a><a class="subject" href="', $board['href'], '" name="b', $board['id'], '">', $board['name'], '</a>';
 
 				// Has it outstanding posts for approval?
 				if ($board['can_approve_posts'] && ($board['unapproved_posts'] || $board['unapproved_topics']))
@@ -164,7 +164,7 @@ function template_main()
 
 				echo '
 
-						<p>', $board['description'] , '</p>';
+						<p class="smalltext">', $board['description'] , '</p>';
 
 				// Show the "Moderators: ". Each has name, href, link, and id. (but we're gonna use link_moderators.)
 				if (!empty($board['moderators']))
@@ -205,16 +205,19 @@ function template_main()
 						', $board['is_redirect'] ? '' : comma_format($board['topics']) . ' ' . $txt['board_topics'], '
 						</p>
 					</td>
-					<td class="lastpost">';
+					<td class="lastpost" style="padding:3px 5px;">';
 
 				/* The board's and children's 'last_post's have:
 				time, timestamp (a number that represents the time.), id (of the post), topic (topic id.),
 				link, href, subject, start (where they should go for the first unread post.),
 				and member. (which has id, name, link, href, username in it.) */
 				if (!empty($board['last_post']['id']))
-					echo '<div class="blue_container"><strong>',$txt['in'], ': </strong>', $board['last_post']['link'], '<br />
-						<div style="float:right;">',$board['last_post']['time'],'</div>
-						<strong>', $txt['by'], ': </strong>', $board['last_post']['member']['link'] , '</div>';
+					echo '<img src="',$board['first_post']['icon_url'],'" alt="icon" />
+					<strong>',$txt['in'], ': </strong>', $board['last_post']['topiclink'], '<br />
+						<div style="float:right;">',$board['last_post']['time'],'<a title="',$txt['last_post'],'" href="',$board['last_post']['href'],'"><img style="margin-left:6px;" src="',$settings['images_url'],'/icons/last_post.gif" alt="lastpost" /></a></div>
+						<strong style="padding-left:17px;">', $txt['by'], ': </strong>', $board['last_post']['member']['link'];
+				else
+					echo $txt['not_applicable'];
 				echo '
 					</td>
 				</tr>';

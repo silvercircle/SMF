@@ -199,12 +199,6 @@ function Display()
 		fatal_lang_error('not_a_topic', false);
 	$topicinfo = $smcFunc['db_fetch_assoc']($request);
 	$smcFunc['db_free_result']($request);
-	// Added by Related Topics
-	if (!empty($modSettings['relatedTopicsEnabled']))
-	{
-		require_once($sourcedir . '/Subs-Related.php');
-		loadRelated($topic);
-	}
 
 	$context['real_num_replies'] = $context['num_replies'] = $topicinfo['num_replies'];
 	$context['topic_first_message'] = $topicinfo['id_first_msg'];

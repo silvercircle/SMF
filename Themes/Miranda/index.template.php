@@ -175,20 +175,22 @@ function template_body_above()
 <div id="wrapper" style="width: ' . $settings['forum_width'] . '">' : '', '
 	<div id="header"><div class="frame">
 		<div id="upper_section" class="middletext"><img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" />
-			<div class="user">';
+			<div class="user" style="padding:5px 5px 0 0;">';
 
 	// If the user is logged in, display stuff like their name, new messages, etc.
 	if ($context['user']['is_logged'])
 	{
 		if (!empty($context['user']['avatar']))
 			echo '
-				<p class="avatar">', $context['user']['avatar']['image'], '</p>';
+				<div class="avatar">', $context['user']['avatar']['image'], '</div>';
 		echo '
-				<ul class="reset">
+				<div><ul class="reset">
 					<li class="greeting">', $txt['hello_member_ndt'], ' <span>', $context['user']['name'], '</span></li>
 					<li><a href="', $scripturl, '?action=unread">', $txt['unread_since_visit'], '</a></li>
-					<li><a href="', $scripturl, '?action=unreadreplies">', $txt['show_unread_replies'], '</a></li>';
+					<li><a href="', $scripturl, '?action=unreadreplies">', $txt['show_unread_replies'], '</a></li>
+					<li>', $context['current_time'], '</li></ul></div>';
 
+		echo '<div style="margin-top:3px;"><ul class="reset">';
 		// Is the forum in maintenance mode?
 		if ($context['in_maintenance'] && $context['user']['is_admin'])
 			echo '
@@ -203,18 +205,16 @@ function template_body_above()
 			echo '
 					<li><a href="', $scripturl, '?action=moderate;area=reports">', sprintf($txt['mod_reports_waiting'], $context['open_mod_reports']), '</a></li>';
 
-		echo '
-					<li>', $context['current_time'], '</li>
-				</ul>';
+		echo '</ul></div>';
 	}
 	// Otherwise they're a guest - this time ask them to either register or login - lazy bums...
 	elseif (!empty($context['show_login_bar']))
 	{
 		echo '
 				<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/sha1.js"></script>
-				<form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
-					<div class="info">', sprintf($txt['welcome_guest'], $txt['guest_title']), '</div>
-					<input type="text" name="user" size="10" class="input_text" />
+				<div class="loginbar"><form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
+					<div style="float:left;margin:5px;">', sprintf($txt['welcome_guest'], $txt['guest_title']), '</div>
+					<div style="margin:5px;"><input type="text" name="user" size="10" class="input_text" />
 					<input type="password" name="passwrd" size="10" class="input_password" />
 					<select name="cookielength">
 						<option value="60">', $txt['one_hour'], '</option>
@@ -224,7 +224,7 @@ function template_body_above()
 						<option value="-1" selected="selected">', $txt['forever'], '</option>
 					</select>
 					<input type="submit" value="', $txt['login'], '" class="button_submit" /><br />
-					<div class="info">', $txt['quick_login_dec'], '</div>';
+					<div class="info">', $txt['quick_login_dec'], '</div></div>';
 
 		if (!empty($modSettings['enableOpenID']))
 			echo '
@@ -232,7 +232,7 @@ function template_body_above()
 
 		echo '
 					<input type="hidden" name="hash_passwrd" value="" />
-				</form>';
+				</form></div>';
 	}
 
 	echo '

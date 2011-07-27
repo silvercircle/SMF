@@ -74,94 +74,6 @@ function Register($reg_errors = array())
 		$context['coppa_agree_below'] = sprintf($txt['agreement_agree_coppa_below'], $modSettings['coppaAge']);
 	}
 
-	// Start of Anti-bot Registration Puzzles Mod
-	$puzzles = array(
-		'shapes' => create_function('', '
-						$a = array(0 => "sides", 1 => "corners");
-						$b = rand(0,1);
-						$c = array(\'square\' => 4, \'rectangle\' => 4, \'pentagon\' => 5,
-									\'hexagon\' => 6, \'heptagon\' => 7, \'octagon\' => 8);
-
-						$d = array_rand($c); // randomly select a shape
-						$e = $c[$d]; // the answer
-						global $txt;
-						$txt[\'puzzle_shapes\'] = sprintf(($d == \'octagon\' ? $txt[\'puzzle_shapes2\'] : $txt[\'puzzle_shapes\']), $txt[\'puzzle_\'.$a[$b]], $txt[\'puzzle_\'.$d]);
-					return array(\'shapes\', \'\', md5($e));
-				'),
-		'math' => create_function('', '
-						$a = array();
-						$a[0] = rand(5,19);
-						$a[1] = rand(1,$a[0]-2);
-						$a[2] = rand(1,($a[0]-$a[1]-2));
-						$a[3] = array("+","-");
-						$a[4] = $a[3][array_rand($a[3])];
-						$a[5] = $a[3][array_rand($a[3])];
-						$d = "$a[0]$a[4] $a[1] $a[5] $a[2]";
-						eval("\$d=" . $d . ";");
-					return array(\'math\', "<span style=\"font-weight:bold;\">$a[0] $a[4] $a[1] $a[5] $a[2] =</span>", md5($d));
-				'),
-		'math2' => create_function('', '
-						$a = array();
-						$a[0] = rand(5,19);
-						$a[1] = rand(1,$a[0]-2);
-						$a[2] = rand(1,($a[0]-$a[1]-2));
-						$a[3] = array("+","-");
-						$a[4] = $a[3][array_rand($a[3])];
-						$a[5] = $a[3][array_rand($a[3])];
-						$c = array(rand(0,1),rand(0,1),rand(0,1));
-						$d = "$a[0]$a[4] $a[1] $a[5] $a[2]";
-						// Whats the sum/answer
-						eval("\$d=" . $d . ";");
-						// Access txt strings
-						global $txt;
-					return array(\'math\', \'<span style="font-weight:bold;">\'.($c[0] ? $a[0] : $txt[\'puzzle_\'.$a[0]]).\' \'.$a[4].\' \'.($c[1] ? $a[1] : $txt[\'puzzle_\'.$a[1]]).\' \'.$a[5].\' \'.($c[2] ? $a[2] : $txt[\'puzzle_\'.$a[2]]).\' = </span>\', md5($d));
-				'),
-		'colors' => create_function('', '
-						$a = array(\'red\' => \'#FF0033\', \'orange\' => \'#FF6600\', \'yellow\' => \'#FFFF33\', \'green\' => \'#006600\', \'blue\' => \'#0033FF\', \'purple\' => \'#663366\', \'pink\' => \'#FF9999\', \'black\' => \'#000000\', \'grey\' => \'#999999\');
-						
-						// Select them randomly
-						$b = array_rand($a,8);
-						$c = $b[rand(0,7)]; // the answer
-						$d = \'\';
-						// Access txt strings
-						global $txt;
-						for($i=0;$i<=7;$i++)
-						{
-							// Color or hex? randomly change
-							$e = rand(0,1);
-							$j = $i+1;
-							if($c == $b[$i] || $c == $b[$j])
-								$d .= \'<span style="font-weight:bold;color:\'. ($e ? $a[$c] : $c ) .\'">\'. $txt[\'puzzle_\'.$c] .\'</span> \';
-							else
-								$d .= \'<span style="font-weight:bold;color:\'. ($e ? $a[$b[$i]] : $b[$i] ) .\'">\'. $txt[\'puzzle_\'.$b[$j]] .\'</span> \';
-							$i++;
-						}
-						unset($a,$b,$e,$i,$j);
-					return array(\'colors\', $d, md5(strtolower($txt[\'puzzle_\'.$c])));
-				'),
-	);
-	// Generate a new puzzle code every time
-	$_SESSION['puzzle_dynamic_input'] = $_SESSION['puzzle_code'] = '';
-	
-	// Generate Random field name 
-	$range1 = range('a', 'z');
-	$range2 = range(0, 9);
-	// Must start with a letter not a digit
-	$_SESSION['puzzle_dynamic_input'] = $range1[array_rand($range1)];
-	// Length over 8
-	$rand = rand(8,12);
-	for($i=0;$i<=$rand;$i++)
-		$_SESSION['puzzle_dynamic_input'] .= (rand(0, 1) == 0) ? $range1[array_rand($range1)] : $range2[array_rand($range2)];
-	
-	unset($range1, $range2, $rand);
-	
-	// Choose a puzzle
-	$context['puzzle'] = $puzzles[array_rand($puzzles)]();
-	$_SESSION['puzzle_code'] = $context['puzzle'][2];
-	$context['puzzle'][2] = $_SESSION['puzzle_dynamic_input'];
-	unset($puzzles);
-	// End of Anti-bot Registration Puzzles Mod
-
 	// What step are we at?
 	$current_step = isset($_REQUEST['step']) ? (int) $_REQUEST['step'] : ($context['require_agreement'] ? 1 : 2);
 
@@ -327,17 +239,7 @@ function Register2($verifiedOpenID = false)
 		if (!isset($_SESSION['old_url']))
 			redirectexit('action=register');
 
-		
-	// Start of Anti-bot Registration Puzzles Mod
-	// Checks whether field was completed, if not it goes to an error screen
-	if(empty($_SESSION['puzzle_dynamic_input']) || empty($_POST[$_SESSION['puzzle_dynamic_input']]))
-		fatal_lang_error('puzzle_incomplete', false);
-	// If puzzle was answered incorrectly
-	elseif (md5(strtolower($_POST[$_SESSION['puzzle_dynamic_input']])) != $_SESSION['puzzle_code'])
-		fatal_lang_error('puzzle_incorrect', false);
-	// End of Anti-bot Registration Puzzles Mod
-		
-// Are they under age, and under age users are banned?
+		// Are they under age, and under age users are banned?
 		if (!empty($modSettings['coppaAge']) && empty($modSettings['coppaType']) && empty($_SESSION['skip_coppa']))
 		{
 			// !!! This should be put in Errors, imho.

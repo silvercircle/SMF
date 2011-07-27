@@ -47,7 +47,7 @@ function getBoardIndex($boardIndexOptions)
 			CASE WHEN b.redirect != {string:blank_string} THEN 1 ELSE 0 END AS is_redirect,
 			b.num_posts, b.num_topics, b.unapproved_posts, b.unapproved_topics, b.id_parent,
 			IFNULL(m.poster_time, 0) AS poster_time, IFNULL(mem.member_name, m.poster_name) AS poster_name,
-			m.subject, m.id_topic, IFNULL(mem.real_name, m.poster_name) AS real_name,
+			m.subject, m.id_topic, t.id_first_msg AS id_first_msg, m1.icon AS icon, IFNULL(mem.real_name, m.poster_name) AS real_name,
 			' . ($user_info['is_guest'] ? ' 1 AS is_read, 0 AS new_from,' : '
 			(IFNULL(lb.id_msg, 0) >= b.id_msg_updated) AS is_read, IFNULL(lb.id_msg, -1) + 1 AS new_from,' . ($boardIndexOptions['include_categories'] ? '
 			c.can_collapse, IFNULL(cc.id_member, 0) AS is_collapsed,' : '')) . '
@@ -56,6 +56,8 @@ function getBoardIndex($boardIndexOptions)
 		FROM {db_prefix}boards AS b' . ($boardIndexOptions['include_categories'] ? '
 			LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)' : '') . '
 			LEFT JOIN {db_prefix}messages AS m ON (m.id_msg = b.id_last_msg)
+			LEFT JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic)
+			LEFT JOIN {db_prefix}messages AS m1 ON (m1.id_msg = t.id_first_msg)
 			LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = m.id_member)' . ($user_info['is_guest'] ? '' : '
 			LEFT JOIN {db_prefix}log_boards AS lb ON (lb.id_board = b.id_board AND lb.id_member = {int:current_member})' . ($boardIndexOptions['include_categories'] ? '
 			LEFT JOIN {db_prefix}collapsed_categories AS cc ON (cc.id_cat = c.id_cat AND cc.id_member = {int:current_member})' : '')) . '
@@ -228,7 +230,7 @@ function getBoardIndex($boardIndexOptions)
 
 		// Prepare the subject, and make sure it's not too long.
 		censorText($row_board['subject']);
-		$row_board['short_subject'] = shorten_subject($row_board['subject'], 24);
+		$row_board['short_subject'] = shorten_subject($row_board['subject'], 50);
 		$this_last_post = array(
 			'id' => $row_board['id_msg'],
 			'time' => $row_board['poster_time'] > 0 ? timeformat($row_board['poster_time']) : $txt['not_applicable'],
@@ -244,26 +246,41 @@ function getBoardIndex($boardIndexOptions)
 			'start' => 'msg' . $row_board['new_from'],
 			'topic' => $row_board['id_topic']
 		);
+		
+		if (!isset($context['icon_sources'][$row_board['icon']]))
+			$context['icon_sources'][$row_board['icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $row_board['icon'] . '.gif') ? 'images_url' : 'default_images_url';
+		
+		$this_first_post = array(
+			'id' => $row_board['id_first_msg'],
+			'icon' => $row_board['icon'],
+			'icon_url' => $settings[$context['icon_sources'][$row_board['icon']]] . '/post/' . $row_board['icon'] . '.gif',
 
+		);
 		// Provide the href and link.
 		if ($row_board['subject'] != '')
 		{
 			$this_last_post['href'] = $scripturl . '?topic=' . $row_board['id_topic'] . '.msg' . ($user_info['is_guest'] ? $row_board['id_msg'] : $row_board['new_from']) . (empty($row_board['is_read']) ? ';boardseen' : '') . '#new';
 			$this_last_post['link'] = '<a href="' . $this_last_post['href'] . '" title="' . $row_board['subject'] . '">' . $row_board['short_subject'] . '</a>';
+			$this_last_post['topichref'] = $scripturl . '?topic=' . $row_board['id_topic'];
+			$this_last_post['topiclink'] = '<a href="' . $this_last_post['topichref'] . '" title="' . $row_board['subject'] . '">' . $row_board['short_subject'] . '</a>';
 		}
 		else
 		{
 			$this_last_post['href'] = '';
 			$this_last_post['link'] = $txt['not_applicable'];
+			$this_last_post['topiclink'] = $txt['not_applicable'];
 		}
 
 		// Set the last post in the parent board.
-		if ($row_board['id_parent'] == $boardIndexOptions['parent_id'] || ($isChild && !empty($row_board['poster_time']) && $this_category[$row_board['id_parent']]['last_post']['timestamp'] < forum_time(true, $row_board['poster_time'])))
+		if ($row_board['id_parent'] == $boardIndexOptions['parent_id'] || ($isChild && !empty($row_board['poster_time']) && $this_category[$row_board['id_parent']]['last_post']['timestamp'] < forum_time(true, $row_board['poster_time']))) {
 			$this_category[$isChild ? $row_board['id_parent'] : $row_board['id_board']]['last_post'] = $this_last_post;
+			$this_category[$isChild ? $row_board['id_parent'] : $row_board['id_board']]['first_post'] = $this_first_post;
+		}
 		// Just in the child...?
 		if ($isChild)
 		{
 			$this_category[$row_board['id_parent']]['children'][$row_board['id_board']]['last_post'] = $this_last_post;
+			$this_category[$row_board['id_parent']]['children'][$row_board['id_board']]['first_post'] = $this_first_post;
 
 			// If there are no posts in this board, it really can't be new...
 			$this_category[$row_board['id_parent']]['children'][$row_board['id_board']]['new'] &= $row_board['poster_name'] != '';

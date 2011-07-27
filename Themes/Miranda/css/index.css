@@ -35,7 +35,7 @@ table
 body
 {
 	background: #E9EEF2 url(../images/bodybg-blue2.jpg) left -5px repeat-x;
-	font: 80%/120% "Trebuchet MS", "Verdana", "Arial", "Helvetica", sans-serif;
+	font: 10pt "Trebuchet MS", "Verdana", "Arial", "Helvetica", sans-serif;
 	margin: 0 auto;
 	padding: 0;
 }
@@ -77,51 +77,50 @@ form
 */
 
 #search_form {margin-bottom:0px;}
-input, button, select, textarea
+input, select, textarea
 {
 	color: #000;
 	border: 1px solid #6b81ab;
-	padding: 2px;
-	border-radius:3px;
+	padding: 3px;
+	background-color: #E7EBF1;
+	font-size:11px;
 }
 
-button, .button_submit {
+select {padding:2px;}
+input[type=button], .button_submit, .button_reset {
+	border: 2px solid #6b81ab;
 	font-weight:bold;
+	font-size:11px;
 	padding: 2px 5px;
-	background-color:#ddd;
+	background-color:#D8DFEA;
+	cursor:pointer;
+}
+
+/* Buttons should be styled a bit differently, in order to make them look more button'ish. */
+input:hover, textarea:hover, select:hover
+{
+	border: 1px solid #454545;
+}
+input:focus, textarea:focus, select:focus
+{
+	border: 1px solid #454545;
+}
+.button_submit:hover, .button_reset:hover, button:hover
+{
+	border: 2px solid #6b81ab;
+	background-color:#c8cfda;
 }
 
 /* Add some padding to the options instead. */
 select option
 {
-	padding: 2px;
+	padding: 0px;
 }
 
 /* The font size of textareas should be just a little bit larger. */
 textarea
 {
 	font: 100%/130% verdana, Helvetica, sans-serif;
-}
-
-/* Buttons should be styled a bit differently, in order to make them look more button'ish. */
-.button_submit, .button_reset
-{
-	border: 1px solid #6b81ab;
-	cursor: pointer;
-	border-radius:3px;
-}
-input:hover, textarea:hover, button:hover, select:hover
-{
-	border: 1px solid #454545;
-}
-.button_submit:hover, .button_reset:hover
-{
-	border: 1px solid #aaa;
-	background: url(../images/theme/submit_bg.png) no-repeat 0 -140px #cde7ff;
-}
-input:focus, textarea:focus, button:focus, select:focus
-{
-	border: 1px solid #454545;
 }
 
 /* All input elements that are checkboxes or radio buttons shouldn't have a border around them. */
@@ -1335,7 +1334,6 @@ ul#navigation li
 }
 #header div.frame
 {
-	display: block;
 	background-color:#333355;
 }
 /* the content section */
@@ -1434,25 +1432,23 @@ img#smflogo
 div#upper_section div.user
 {
 	float: right;
-	overflow: hidden;
-	margin-top:5px;
-	margin-right:10px;
 	color:white;
 	white-space: nowrap;
 	font-size:11px;
+	width:auto;
 }
 div.user .avatar img {
 	border:1px solid blue;
 	padding:1px;
 	background-color:#aaa;
-	margin-right:10px;
 	border-radius:0;
 	max-height:63px;
 	width:auto;
+	margin-left:10px;
 }
-div#upper_section div.user p
+div#upper_section div.user div
 {
-	float: left;
+	float: right;
 	margin: 0;
 	padding: 0;
 }
@@ -1579,14 +1575,14 @@ table.table_list tbody.header td
 table.table_list tbody.content td.stats
 {
 	font-size: 90%;
-	width: 15%;
 	text-align: center;
+	white-space:nowrap;
 }
 table.table_list tbody.content td.lastpost
 {
 	line-height: 1.3em;
 	font-size: 90%;
-	width: 24%;
+	white-space:nowrap;
 }
 table.table_list tbody.content td.icon
 {
@@ -1598,6 +1594,9 @@ table.table_list tbody.content td.icon
 ------------------------------------------------- */
 
 /* the board title! */
+.table_list tbody.content td.info {
+	width:100%;
+}
 .table_list tbody.content td.info a.subject
 {
 	font-weight: bold;
@@ -1781,8 +1780,9 @@ div.table_frame .table_list
 }
 .lastpost img
 {
-	float: right;
-	padding: 4px;
+	vertical-align: middle;
+	width:15px;
+	height:15px;
 }
 
 /* Styles for the display template (topic view).
@@ -1954,21 +1954,21 @@ p#whoisviewing
 .poster
 {
 	float: left;
-	width: 180px;
-	max-width:180px;
-	min-width:180px;
-	text-align:center;
+	width: 200px;
+	max-width:200px;
+	min-width:200px;
 }
 .poster_details
 {
 	text-align:center;
 	background-color:#f2f5fe;
 	border:1px solid #d5ecfa;
-	width:auto;
-	margin-left:auto;
-	margin-right:auto;
-	display:inline-block;
-	padding:5px 15px;
+	width:180px;
+	max-width:180px;
+	min-width:180px;
+	margin-left:5px;
+	margin-right:10px;
+	padding:5px 5px;
 }
 .postarea, .moderatorbar
 {
@@ -3685,6 +3685,10 @@ a.navPages {
 	border-radius:3px;
 }
 
+div.loginbar {
+	background-color:#485B7D;
+	border-bottom-left-radius:10px;
+}
 tbody.divider tr {background:white;}
 .td_children {font-size:90%;padding:1px 10px;border-top:1px solid #ccc;margin-top:3px;}
 #quick_search form {padding-top:1px !important;}

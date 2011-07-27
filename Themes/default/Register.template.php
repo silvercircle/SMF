@@ -328,46 +328,20 @@ function template_registration_form()
 				</fieldset>
 				<span class="botslice"><span></span></span>
 			</div>';
-	}
-
-	// Start of Anti-bot Registration Puzzles Mod 		
+	}	if ($context['visual_verification'])
+	{
 		echo '
 			<h4 class="titlebg"><span class="left"></span>
 				', $txt['verification'], '
 			</h4>
-			<div class="windowbg2">';
-
-	echo'
-				<span class="topslice"><span></span></span>	
-				<dl class="register_form" id="custom_group">
-					<dt>
-						<strong>', $txt['puzzle_'.$context['puzzle'][0]], '</strong>
-						<span class="smalltext">', $txt['puzzle_antibot'], '</span>
-					</dt>
-					<dl>
-						', (empty($context['puzzle'][1]) ? '' : $context['puzzle'][1].'<br />'), '
-						<input type="text" name="', $context['puzzle'][2], '" size="30" value="" tabindex="', $context['tabindex']++, '" />
-					</dl>
-				</dl>
-				</fieldset>
-				
-	';
-			
-	if ($context['visual_verification'])
-	{		
-		echo'
+			<div class="windowbg2">
+				<span class="topslice"><span></span></span>
 				<fieldset class="content centertext">
 					', template_control_verification($context['visual_verification_id'], 'all'), '
-				</fieldset>';
-	}
-	
-	echo'	
+				</fieldset>
 				<span class="botslice"><span></span></span>
 			</div>';
-
-	// End of Anti-bot Registration Puzzles Mod
-
-	echo '
+	}echo '
 			<div id="confirm_buttons">
 				<input type="submit" name="regSubmit" value="', $txt['register'], '" tabindex="', $context['tabindex']++, '" class="button_submit" />
 			</div>
