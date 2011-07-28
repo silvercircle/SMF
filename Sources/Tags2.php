@@ -1,7 +1,7 @@
 <?php
 /*
 Tagging System
-Version 2.5
+Version 2.4.1
 by:vbgamer45
 http://www.smfhacks.com
 */
@@ -41,7 +41,7 @@ function TagsMain()
 
 function ViewTags()
 {
-	global $context, $txt, $mbname,$scripturl, $user_info, $smcFunc,  $modSettings;
+	global $context, $txt, $mbname, $scripturl, $user_info, $smcFunc,  $modSettings;
 
 	// Views that tag results and popular tags
 	if (isset($_REQUEST['tagid']))
@@ -60,11 +60,26 @@ function ViewTags()
 
 		$context['tag_search'] = $row['tag'];
 		$context['page_title'] = $mbname . ' - ' . $txt['smftags_resultsfor'] . $context['tag_search'];
+		$context['start'] = (int) $_REQUEST['start'];
+		
+		$dbresult = $smcFunc['db_query']('', "
+		SELECT count(*) as total 
+		FROM ({db_prefix}tags_log as l, {db_prefix}boards AS b, {db_prefix}topics as t, {db_prefix}messages as m)
+		
+		WHERE l.ID_TAG = $id AND b.ID_BOARD = t.ID_BOARD AND l.ID_TOPIC = t.id_topic  AND t.approved = 1 
+		AND t.ID_FIRST_MSG = m.ID_MSG AND " . $user_info['query_see_board'] . " 
+		");
+		$totalRow = $smcFunc['db_fetch_assoc']($dbresult);
+		$numofrows = $totalRow['total'];
+		
 		// Find Results
 		$dbresult = $smcFunc['db_query']('', "
 		SELECT t.num_replies,t.num_views,m.id_member,m.poster_name,m.subject,m.id_topic,m.poster_time, t.ID_BOARD
 		FROM ({db_prefix}tags_log as l, {db_prefix}boards AS b, {db_prefix}topics as t, {db_prefix}messages as m)
-		WHERE l.ID_TAG = $id AND b.ID_BOARD = t.ID_BOARD AND l.ID_TOPIC = t.id_topic  AND t.approved = 1 AND t.ID_FIRST_MSG = m.ID_MSG AND " . $user_info['query_see_board']);
+		
+		WHERE l.ID_TAG = $id AND b.ID_BOARD = t.ID_BOARD AND l.ID_TOPIC = t.id_topic  AND t.approved = 1 
+		AND t.ID_FIRST_MSG = m.ID_MSG AND " . $user_info['query_see_board'] . " 
+		ORDER BY m.ID_MSG DESC LIMIT $context[start],25 ");
 
 		$context['tags_topics'] = array();
 		while ($row = $smcFunc['db_fetch_assoc']($dbresult))
@@ -86,6 +101,8 @@ function ViewTags()
 
 
 		$context['sub_template']  = 'results';
+		
+		$context['page_index'] = constructPageIndex($scripturl . '?action=tags;tagid=' . $id, $_REQUEST['start'], $numofrows, 25);
 
 	}
 	else
@@ -168,8 +185,11 @@ function ViewTags()
 
 		// Find Results
 		$dbresult = $smcFunc['db_query']('', "
-		SELECT DISTINCT l.ID_TOPIC, t.num_replies,t.num_views,m.id_member,m.poster_name,m.subject,m.id_topic,m.poster_time, t.id_board
+		SELECT DISTINCT l.ID_TOPIC, t.num_replies,t.num_views,m.id_member,
+		m.poster_name,m.subject,m.id_topic,m.poster_time, 
+		t.id_board, g.tag, g.ID_TAG 
 		 FROM ({db_prefix}tags_log as l, {db_prefix}boards AS b, {db_prefix}topics as t, {db_prefix}messages as m) 
+		  LEFT JOIN {db_prefix}tags AS g ON (l.ID_TAG = g.ID_TAG)
 		 WHERE b.ID_BOARD = t.id_board AND l.ID_TOPIC = t.id_topic AND t.approved = 1 AND t.id_first_msg = m.id_msg AND " . $user_info['query_see_board'] . " ORDER BY l.ID DESC LIMIT 20");
 
 		$context['tags_topics'] = array();
@@ -183,6 +203,8 @@ function ViewTags()
 				'poster_time' => $row['poster_time'],
 				'num_views' => $row['num_views'],
 				'num_replies' => $row['num_replies'],
+				'ID_TAG' => $row['ID_TAG'],
+				'tag' => $row['tag'],
 
 				);
 		}
@@ -201,7 +223,7 @@ function ViewTags()
 
 function AddTag()
 {
-	global $context, $txt, $mbname, $user_info, $smcFunc, $sourcedir;
+	global $context, $txt, $mbname, $user_info, $smcFunc;
 
 	isAllowedTo('smftags_add');
 
@@ -293,63 +315,75 @@ function AddTag2()
 		fatal_error($txt['smftags_err_toomaxtag'],false);
 
 	// Check Tag restrictions
-	$tag = trim(htmlspecialchars($_REQUEST['tag'],ENT_QUOTES));
-
+	$tag = htmlspecialchars(trim($_REQUEST['tag']),ENT_QUOTES);
+	$tag = strtolower($tag);
+	
 	if (empty($tag))
 		fatal_error($txt['smftags_err_notag'],false);
+	
+	$tags = explode(',',htmlspecialchars($tag,ENT_QUOTES));
+
+	
 
 	// Check min tag length
-	if (strlen($tag) < $modSettings['smftags_set_mintaglength'])
-		fatal_error($txt['smftags_err_mintag'] .  $modSettings['smftags_set_mintaglength'],false);
-	// Check max tag length
-	if (strlen($tag) > $modSettings['smftags_set_maxtaglength'])
-		fatal_error($txt['smftags_err_maxtag'] . $modSettings['smftags_set_maxtaglength'],false);
-
-	// Insert The tag
-	$dbresult = $smcFunc['db_query']('', "
-	SELECT 
-		ID_TAG 
-	FROM {db_prefix}tags 
-	WHERE tag = '$tag'");
-
-	if ($smcFunc['db_affected_rows']() == 0)
+	foreach($tags as $tag)
 	{
-		// Insert into Tags table
-		$smcFunc['db_query']('', "INSERT INTO {db_prefix}tags
-			(tag, approved)
-		VALUES ('$tag',1)");
-		$ID_TAG = $smcFunc['db_insert_id']("{db_prefix}tags",'ID_TAG');
-
-		// Insert into Tags log
-		$smcFunc['db_query']('', "INSERT INTO {db_prefix}tags_log
-			(ID_TAG,ID_TOPIC, ID_MEMBER)
-		VALUES ($ID_TAG,$topic,$user_info[id])");
-	}
-	else
-	{
-		$row = $smcFunc['db_fetch_assoc']($dbresult);
-		$ID_TAG = $row['ID_TAG'];
-		$dbresult2= $smcFunc['db_query']('', "
-		SELECT
-			ID
-		FROM {db_prefix}tags_log
-		WHERE ID_TAG  =  $ID_TAG  AND ID_TOPIC = $topic");
-
-		if ($smcFunc['db_affected_rows']() != 0)
+		$tag = trim($tag);
+		if (strlen($tag) < $modSettings['smftags_set_mintaglength'])
+			continue;
+			//fatal_error($txt['smftags_err_mintag'] .  $modSettings['smftags_set_mintaglength'],false);
+		// Check max tag length
+		if (strlen($tag) > $modSettings['smftags_set_maxtaglength'])
+			continue;
+			//fatal_error($txt['smftags_err_maxtag'] . $modSettings['smftags_set_maxtaglength'],false);
+	
+		// Insert The tag
+		$dbresult = $smcFunc['db_query']('', "
+		SELECT 
+			ID_TAG 
+		FROM {db_prefix}tags 
+		WHERE tag = '$tag' LIMIT 1");
+	
+		if ($smcFunc['db_affected_rows']() == 0)
 		{
-			fatal_error($txt['smftags_err_alreadyexists'],false);
-
+			// Insert into Tags table
+			$smcFunc['db_query']('', "INSERT INTO {db_prefix}tags
+				(tag, approved)
+			VALUES ('$tag',1)");
+			$ID_TAG = $smcFunc['db_insert_id']("{db_prefix}tags",'ID_TAG');
+	
+			// Insert into Tags log
+			$smcFunc['db_query']('', "INSERT INTO {db_prefix}tags_log
+				(ID_TAG,ID_TOPIC, ID_MEMBER)
+			VALUES ($ID_TAG,$topic,$user_info[id])");
 		}
-		$smcFunc['db_free_result']($dbresult2);
-		
-		// Insert into Tags log
-		$smcFunc['db_query']('', "INSERT INTO {db_prefix}tags_log
-			(ID_TAG,ID_TOPIC, ID_MEMBER)
-		VALUES ($ID_TAG,$topic,$user_info[id])");
-
-
+		else
+		{
+			$row = $smcFunc['db_fetch_assoc']($dbresult);
+			$ID_TAG = $row['ID_TAG'];
+			$dbresult2= $smcFunc['db_query']('', "
+			SELECT
+				ID
+			FROM {db_prefix}tags_log
+			WHERE ID_TAG  =  $ID_TAG  AND ID_TOPIC = $topic");
+	
+			if ($smcFunc['db_affected_rows']() != 0)
+			{
+				continue;
+				//fatal_error($txt['smftags_err_alreadyexists'],false);
+	
+			}
+			$smcFunc['db_free_result']($dbresult2);
+			
+			// Insert into Tags log
+			$smcFunc['db_query']('', "INSERT INTO {db_prefix}tags_log
+				(ID_TAG,ID_TOPIC, ID_MEMBER)
+			VALUES ($ID_TAG,$topic,$user_info[id])");
+	
+	
+		}
+		$smcFunc['db_free_result']($dbresult);
 	}
-	$smcFunc['db_free_result']($dbresult);
 
 	// Redirect back to the topic
 	redirectexit('topic=' . $topic);

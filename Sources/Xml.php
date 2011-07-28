@@ -31,6 +31,7 @@ function XMLhttpMain()
 		'messageicons' => array(
 			'function' => 'ListMessageIcons',
 		),
+		'mcard' => array('function' => 'GetMcard'),
 	);
 	if (!isset($_REQUEST['sa'], $sub_actions[$_REQUEST['sa']]))
 		fatal_lang_error('no_access', false);
@@ -72,4 +73,31 @@ function ListMessageIcons()
 	$context['sub_template'] = 'message_icons';
 }
 
+function GetMcard()
+{
+	global $memberContext, $context;
+	global $modSettings, $settings, $user_info, $board, $topic, $board_info, $maintenance, $sourcedir;
+
+	//var_dump($user_info);
+	$uid = (int)$_REQUEST['u'];
+	
+	if(allowedTo('profile_view_any')) {
+		loadMemberData($uid);
+		loadMemberContext($uid);
+		$member = $memberContext[$uid];
+		echo '<div style="float:left;margin:5px;">',$member['avatar']['image'];
+		echo '</div><div style="float:left;margin-left:10px;"><div style="float:right;margin-left:10px;">',
+		$member['group_stars'],'<br />',$member['blurb'],'</div><span style="font-size:22px;font-weight:bold;">',$member['name'],'</span><hr />';
+		echo $member['group'],' ',$member['post_group'],'<br />';
+		echo $member['gender']['name'];
+		if(!empty($member['location']))
+			echo ' from ',$member['location'];
+		
+		echo '<br />Member since: ', $member['registered'];
+		echo '</div>';
+		die;
+	}
+	echo "ERROR";
+	die;
+}
 ?>

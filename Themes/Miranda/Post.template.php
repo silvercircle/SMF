@@ -201,6 +201,27 @@ function template_main()
 						<dd>
 							<input type="text" name="subject"', $context['subject'] == '' ? '' : ' value="' . $context['subject'] . '"', ' tabindex="', $context['tabindex']++, '" size="80" maxlength="80" class="input_text" />
 						</dd>
+		';
+		// Tagging system Mod
+		if(!isset($context['num_replies']))
+		{
+		echo '
+		<dt>
+											<b>', $txt['smftags_topic'], '</b>
+		</dt>
+		<dd>
+											<input type="text" name="tags"', ' tabindex="', $context['tabindex']++, '" size="80" maxlength="80" />
+											<br /><span class="smalltext">', $txt['smftags_seperate'], '</span>
+		</dd>';
+							
+		}
+		
+		
+		//End Tagging system mod
+		echo '
+		
+		
+		
 						<dt class="clear_left">
 							', $txt['message_icon'], ':
 						</dt>

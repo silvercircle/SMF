@@ -176,6 +176,24 @@ function Display()
 		$_SESSION['last_read_topic'] = $topic;
 	}
 
+	//Tagging System
+	$dbresult= $smcFunc['db_query']('', "
+        SELECT
+                t.tag,l.ID,t.ID_TAG
+        FROM {db_prefix}tags_log as l, {db_prefix}tags as t
+        WHERE t.ID_TAG = l.ID_TAG && l.ID_TOPIC = $topic");
+                $context['topic_tags'] = array();
+                 while($row = $smcFunc['db_fetch_assoc']($dbresult))
+                        {
+                                $context['topic_tags'][] = array(
+                                'ID' => $row['ID'],
+                                'ID_TAG' => $row['ID_TAG'],
+                                'tag' => $row['tag'],
+                                );
+                }
+	$smcFunc['db_free_result']($dbresult);
+	//End Tagging System
+        	
 	// Get all the important topic info.
 	$request = $smcFunc['db_query']('', '
 		SELECT

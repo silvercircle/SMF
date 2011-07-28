@@ -522,7 +522,18 @@ function removeTopics($topics, $decreasePostCount = true, $ignoreRecycling = fal
 			'topics' => $topics,
 		)
 	);
-	$smcFunc['db_query']('', '
+	
+		
+		// Tagging System for Topics
+				$smcFunc['db_query']('', '
+						DELETE FROM {db_prefix}tags_log 
+						WHERE id_topic IN ({array_int:topics})',
+						array(
+							'topics' => $topics,
+						)
+		// End Tagging System for Topics
+	);
+$smcFunc['db_query']('', '
 		DELETE FROM {db_prefix}log_search_subjects
 		WHERE id_topic IN ({array_int:topics})',
 		array(

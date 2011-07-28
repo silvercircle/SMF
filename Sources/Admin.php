@@ -169,6 +169,17 @@ function AdminMain()
 						'loads' => array($txt['load_balancing_settings']),
 					),
 				),
+
+				'tags' => array(
+					'label' => $txt['smftags_admin'],
+					'file' => 'Tags2.php',
+					'function' => 'TagsMain',
+					'custom_url' => $scripturl . '?action=admin;area=tags;sa=admin',
+					'icon' => 'server.gif',
+					'subsections' => array(
+						'admin' => array($txt['smftags_settings']),
+					),
+				),
 				'current_theme' => array(
 					'label' => $txt['theme_current_settings'],
 					'file' => 'Themes.php',

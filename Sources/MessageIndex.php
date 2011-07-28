@@ -30,7 +30,8 @@ function MessageIndex()
 {
 	global $txt, $scripturl, $board, $modSettings, $context;
 	global $options, $settings, $board_info, $user_info, $smcFunc, $sourcedir;
-
+	global $memberContext;
+	
 	// If this is a redirection board head off.
 	if ($board_info['redirect'])
 	{
@@ -396,8 +397,10 @@ function MessageIndex()
 		);
 
 		// Begin 'printing' the message index for current board.
+		$first_posters = array();
 		while ($row = $smcFunc['db_fetch_assoc']($result))
 		{
+			
 			if ($row['id_poll'] > 0 && $modSettings['pollMode'] == '0')
 				continue;
 
@@ -474,7 +477,7 @@ function MessageIndex()
 				if (!isset($context['icon_sources'][$row['last_icon']]))
 					$context['icon_sources'][$row['last_icon']] = 'images_url';
 			}
-
+            $first_posters[$row['id_topic']] = $row['first_id_member'];
 			// 'Print' the topic info.
 			$context['topics'][$row['id_topic']] = array(
 				'id' => $row['id_topic'],
@@ -485,7 +488,7 @@ function MessageIndex()
 						'name' => $row['first_display_name'],
 						'id' => $row['first_id_member'],
 						'href' => !empty($row['first_id_member']) ? $scripturl . '?action=profile;u=' . $row['first_id_member'] : '',
-						'link' => !empty($row['first_id_member']) ? '<a href="' . $scripturl . '?action=profile;u=' . $row['first_id_member'] . '" title="' . $txt['profile_of'] . ' ' . $row['first_display_name'] . '">' . $row['first_display_name'] . '</a>' : $row['first_display_name']
+						'link' => !empty($row['first_id_member']) ? '<a class="mcard" data-id="'.$row['first_id_member'].'" href="' . $scripturl . '?action=profile;u=' . $row['first_id_member'] . '" title="' . $txt['profile_of'] . ' ' . $row['first_display_name'] . '">' . $row['first_display_name'] . '</a>' : $row['first_display_name'],
 					),
 					'time' => timeformat($row['first_poster_time']),
 					'timestamp' => forum_time(true, $row['first_poster_time']),
@@ -503,7 +506,7 @@ function MessageIndex()
 						'name' => $row['last_display_name'],
 						'id' => $row['last_id_member'],
 						'href' => !empty($row['last_id_member']) ? $scripturl . '?action=profile;u=' . $row['last_id_member'] : '',
-						'link' => !empty($row['last_id_member']) ? '<a href="' . $scripturl . '?action=profile;u=' . $row['last_id_member'] . '">' . $row['last_display_name'] . '</a>' : $row['last_display_name']
+						'link' => !empty($row['last_id_member']) ? '<a class="mcard" data-id="'.$row['last_id_member'].'" href="' . $scripturl . '?action=profile;u=' . $row['last_id_member'] . '">' . $row['last_display_name'] . '</a>' : $row['last_display_name']
 					),
 					'time' => timeformat($row['last_poster_time']),
 					'timestamp' => forum_time(true, $row['last_poster_time']),
@@ -535,6 +538,13 @@ function MessageIndex()
 			);
 
 			determineTopicClass($context['topics'][$row['id_topic']]);
+		}
+		if (!empty($settings['show_user_images']) && empty($options['show_no_avatars'])) {
+			loadMemberData($first_posters);
+			foreach($context['topics'] as &$_topic) {
+				loadMemberContext($first_posters[$_topic['id']], true);
+				$_topic['first_post']['member']['avatar'] = $memberContext[$first_posters[$_topic['id']]]['avatar']['image'];
+			}
 		}
 		$smcFunc['db_free_result']($result);
 

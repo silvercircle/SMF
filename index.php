@@ -325,6 +325,7 @@ function smf_main()
 		'who' => array('Who.php', 'Who'),
 		'.xml' => array('News.php', 'ShowXmlFeed'),
 		'xmlhttp' => array('Xml.php', 'XMLhttpMain'),
+		'tags' => array('Tags2.php', 'TagsMain'),
 	);
 
 	// Allow modifying $actionArray easily.
@@ -344,7 +345,6 @@ function smf_main()
 		require_once($sourcedir . '/BoardIndex.php');
 		return 'BoardIndex';
 	}
-
 	// Otherwise, it was set - so let's go to that action.
 	require_once($sourcedir . '/' . $actionArray[$_REQUEST['action']][0]);
 	return $actionArray[$_REQUEST['action']][1];

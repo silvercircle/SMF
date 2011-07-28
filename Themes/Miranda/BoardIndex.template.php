@@ -27,13 +27,13 @@ function template_main()
 	{
 		echo '
 	<div id="newsfader">
-		<div class="cat_bar">
+		<div class="cat_bar rounded_top">
 			<h3 class="catbg">
-				<img id="newsupshrink" src="', $settings['images_url'], '/collapse.gif" alt="*" title="', $txt['upshrink_description'], '" align="bottom" style="display: none;" />
+				<img id="newsupshrink" src="', $settings['images_url'], '/collapse.gif" alt="*" title="', $txt['upshrink_description'], '" style="display: none;" />
 				', $txt['news'], '
 			</h3>
 		</div>
-		<ul class="reset" id="smfFadeScroller"', empty($options['collapse_news_fader']) ? '' : ' style="display: none;"', '>';
+		<ul class="windowbg rounded_bottom reset" id="smfFadeScroller"', empty($options['collapse_news_fader']) ? '' : ' style="display: none;"', '>';
 
 			foreach ($context['news_lines'] as $news)
 				echo '
@@ -101,7 +101,7 @@ function template_main()
 			<tbody class="header" id="category_', $category['id'], '">
 				<tr>
 					<td colspan="4">
-						<div class="cat_bar">
+						<div class="cat_bar rounded_top">
 							<h3 class="catbg">';
 
 		// If this category even can collapse, show a link to collapse it.
@@ -155,7 +155,7 @@ function template_main()
 						</a>
 					</td>
 					<td class="info">
-						<a href="',$scripturl,'?action=.xml;type=rss;board=',$board['id'],'"><img style="float:right" src="',$settings['images_url'],'/icons/rss.png" alt="rss" title="feed" /></a><a class="subject" href="', $board['href'], '" name="b', $board['id'], '">', $board['name'], '</a>';
+						<a href="',$scripturl,'?action=.xml;type=rss;board=',$board['id'],'"><img style="float:right" src="',$settings['images_url'],'/icons/rss.png" alt="rss" title="feed" /></a><a class="subject" href="', $board['href'], '" id="b', $board['id'], '">', $board['name'], '</a>';
 
 				// Has it outstanding posts for approval?
 				if ($board['can_approve_posts'] && ($board['unapproved_posts'] || $board['unapproved_topics']))
@@ -277,16 +277,14 @@ function template_info_center()
 	global $context, $settings, $options, $txt, $scripturl, $modSettings;
 
 	// Here's where the "Info Center" starts...
-	echo '
-	<span class="clear upperframe"><span></span></span>
-	<div class="roundframe"><div class="innerframe">
-		<div class="cat_bar">
+	echo '<div class="clear"></div>
+		<div class="cat_bar rounded_top">
 			<h3 class="catbg">
 				<img class="icon" id="upshrink_ic" src="', $settings['images_url'], '/collapse.gif" alt="*" title="', $txt['upshrink_description'], '" style="display: none;" />
 				', sprintf($txt['info_center_title'], $context['forum_name_html_safe']), '
 			</h3>
 		</div>
-		<div id="upshrinkHeaderIC"', empty($options['collapse_header_ic']) ? '' : ' style="display: none;"', '>';
+		<div class="windowbg rounded_bottom" id="upshrinkHeaderIC"', empty($options['collapse_header_ic']) ? '' : ' style="display: none;"', '>';
 
 	// This is the "Recent Posts" bar.
 	if (!empty($settings['number_recent_posts']) && (!empty($context['latest_posts']) || !empty($context['latest_post'])))
@@ -303,7 +301,7 @@ function template_info_center()
 			<div class="hslice" id="recent_posts_content">
 				<div class="entry-title" style="display: none;">', $context['forum_name_html_safe'], ' - ', $txt['recent_posts'], '</div>
 				<div class="entry-content" style="display: none;">
-					<a rel="feedurl" href="', $scripturl, '?action=.xml;type=webslice">', $txt['subscribe_webslice'], '</a>
+					<a rel="alternate" type="application/rss+xml" href="', $scripturl, '?action=.xml;type=webslice">', $txt['subscribe_webslice'], '</a>
 				</div>';
 
 		// Only show one post.
@@ -470,9 +468,7 @@ function template_info_center()
 	}
 
 	echo '
-		</div>
-	</div></div>
-	<span class="lowerframe"><span></span></span>';
+		</div>';
 
 	// Info center collapse object.
 	echo '

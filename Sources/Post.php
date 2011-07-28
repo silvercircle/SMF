@@ -1907,6 +1907,101 @@ function Post2()
 
 		if (isset($topicOptions['id']))
 			$topic = $topicOptions['id'];
+	
+	
+//Tagging System
+
+	
+	if(isset($_REQUEST['tags']) && !isset($_REQUEST['num_replies']))
+	{
+		global $user_info;
+		//Get how many tags there have been for the topic
+		$dbresult = $smcFunc['db_query']('', "
+		SELECT 
+			COUNT(*) as total 
+		FROM {db_prefix}tags_log 
+		WHERE ID_TOPIC = " . $topic);
+		$row = $smcFunc['db_fetch_assoc']($dbresult);
+		$totaltags = $row['total'];
+		$smcFunc['db_free_result']($dbresult);
+
+		// Check Tag restrictions
+		$tags = explode(',',htmlspecialchars($_REQUEST['tags'],ENT_QUOTES));
+
+		if($totaltags < $modSettings['smftags_set_maxtags'])
+		{
+			$tagcount = 0;
+			foreach($tags as $tag)
+			{
+			
+				$tag = trim($tag);
+				
+				if($tagcount >= $modSettings['smftags_set_maxtags'])
+					continue;
+
+
+				if(empty($tag))
+					continue;
+
+				//Check min tag length	
+				if (strlen($tag) < $modSettings['smftags_set_mintaglength'])
+					continue;
+				//Check max tag length
+				if (strlen($tag) > $modSettings['smftags_set_maxtaglength'])
+					continue;
+
+				//Insert The tag
+				$dbresult = $smcFunc['db_query']('', "
+				SELECT 
+					ID_TAG 
+				FROM {db_prefix}tags 
+				WHERE tag = '$tag'");
+				
+				if ($smcFunc['db_affected_rows']() == 0)
+				{
+					//Insert into Tags table
+					$smcFunc['db_query']('', "INSERT INTO {db_prefix}tags
+						(tag, approved)
+					VALUES ('$tag',1)");	
+					$ID_TAG = $smcFunc['db_insert_id']("{db_prefix}tags",'ID_TAG');
+					//Insert into Tags log
+					$smcFunc['db_query']('', "INSERT INTO {db_prefix}tags_log
+						(ID_TAG,ID_TOPIC, ID_MEMBER)
+					VALUES ($ID_TAG,$topic,$user_info[id])");
+
+					$tagcount++;
+				}
+				else 
+				{
+					$row = $smcFunc['db_fetch_assoc']($dbresult);
+					$ID_TAG = $row['ID_TAG'];
+					$dbresult2= $smcFunc['db_query']('', "
+					SELECT 
+						ID FROM {db_prefix}tags_log 
+					WHERE ID_TAG  =  $ID_TAG  AND ID_TOPIC = $topic");
+					if ($smcFunc['db_affected_rows']() != 0)
+					{
+						continue;
+
+					}
+					$smcFunc['db_free_result']($dbresult2);
+					//Insert into Tags log
+
+					$smcFunc['db_query']('', "INSERT INTO {db_prefix}tags_log
+						(ID_TAG,ID_TOPIC, ID_MEMBER)
+					VALUES ($ID_TAG,$topic,$user_info[id])");
+					$tagcount++;
+
+				}
+				$smcFunc['db_free_result']($dbresult);
+			}
+		}
+	}
+	
+	//End Tagging System
+	
+	
+
 	}
 
 	// Editing or posting an event?

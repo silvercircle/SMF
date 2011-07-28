@@ -3932,12 +3932,19 @@ function setupMenuContext()
 						'href' => $scripturl . '?action=admin;area=logs;sa=errorlog;desc',
 						'show' => allowedTo('admin_forum') && !empty($modSettings['enableErrorLogging']),
 					),
+					
 					'permissions' => array(
-						'title' => $txt['edit_permissions'],
-						'href' => $scripturl . '?action=admin;area=permissions',
-						'show' => allowedTo('manage_permissions'),
-						'is_last' => true,
+											'title' => $txt['edit_permissions'],
+											'href' => $scripturl . '?action=admin;area=permissions',
+											'show' => allowedTo('manage_permissions'),
+											'is_last' => true,
 					),
+					'tags_settings' => array(
+						'title' => $txt['smftags_admin'],
+						'href' => $scripturl . '?action=admin;area=tags;sa=admin',
+						'show' => allowedTo('admin_forum'),
+					),
+
 				),
 			),
 			'moderate' => array(
@@ -4009,7 +4016,16 @@ function setupMenuContext()
 					),
 				),
 			),
-			'calendar' => array(
+			
+			'tags' => array(
+				'title' => $txt['smftags_menu'],
+				'href' => $scripturl . '?action=tags',
+				'show' => true,
+				'sub_buttons' => array(
+				),
+			),
+	'calendar' => array(
+
 				'title' => $txt['calendar'],
 				'href' => $scripturl . '?action=calendar',
 				'show' => $context['allow_calendar'],

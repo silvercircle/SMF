@@ -2105,6 +2105,9 @@ function AutoSuggestHandler($checkRegistered = null)
 
 	// These are all registered types.
 	$searchTypes = array(
+		'tags' => 'Tags',
+		
+
 		'member' => 'Member',
 	);
 
@@ -2168,5 +2171,43 @@ function AutoSuggest_Search_Member()
 
 	return $xml_data;
 }
+
+function AutoSuggest_Search_Tags()
+{
+	global $user_info, $txt, $smcFunc;
+
+	$_REQUEST['search'] = trim($smcFunc['strtolower']($_REQUEST['search'])) . '*';
+	$_REQUEST['search'] = strtr($_REQUEST['search'], array('%' => '\%', '_' => '\_', '*' => '%', '?' => '_', '&#038;' => '&amp;'));
+
+	// Find tags
+	$request = $smcFunc['db_query']('', '
+		SELECT id_member, real_name
+		FROM {db_prefix}tags
+		WHERE tag LIKE {string:search} 
+		LIMIT ' . (strlen($_REQUEST['search']) <= 2 ? '100' : '800'),
+		array(
+			'search' => $_REQUEST['search'],
+		)
+	);
+	$xml_data = array(
+		'tags' => array(
+			'identifier' => 'tag',
+			'children' => array(),
+		),
+	);
+	while ($row = $smcFunc['db_fetch_assoc']($request))
+	{
+		$xml_data['tags']['children'][] = array(
+			'attributes' => array(
+				'id' => $row['id_tag'],
+			),
+			'value' => $row['tag'],
+		);
+	}
+	$smcFunc['db_free_result']($request);
+
+	return $xml_data;
+}
+		
 
 ?>

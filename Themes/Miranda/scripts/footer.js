@@ -6,18 +6,6 @@
  * 
  * This script is loaded asynchronously in the footer of the wordpress template
  */
-
-function savePrivacy(o) {
-	if (jQuery('#social_pref').is(':checked')) {
-		createCookie('wp_privacy', 1, 500);
-		wp_privacy = 1;
-	} else {
-		wp_privacy = 0;
-		createCookie('wp_privacy', 0, 500);
-	}
-	$.colorbox.close();
-};
-
 // ColorBox v1.3.17.1 - a full featured, light-weight, customizable lightbox based on jQuery 1.3+
 // Copyright (c) 2011 Jack Moore - jack@colorpowered.com
 // Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
@@ -58,154 +46,6 @@ function share_popup (url_add, width, height)  {
 				 +width+',height='+height+',left='+left+',top='+top);
 };
 
-(function(jQuery){ 
-	jQuery.fn.extend({  
-		elastic: function() {
-		
-			//	We will create a div clone of the textarea
-			//	by copying these attributes from the textarea to the div.
-			var mimics = [
-				'paddingTop',
-				'paddingRight',
-				'paddingBottom',
-				'paddingLeft',
-				'fontSize',
-				'lineHeight',
-				'fontFamily',
-				'width',
-				'fontWeight',
-				'border-top-width',
-				'border-right-width',
-				'border-bottom-width',
-				'border-left-width',
-				'borderTopStyle',
-				'borderTopColor',
-				'borderRightStyle',
-				'borderRightColor',
-				'borderBottomStyle',
-				'borderBottomColor',
-				'borderLeftStyle',
-				'borderLeftColor'
-				];
-			
-			return this.each( function() {
-				
-				// Elastic only works on textareas
-				if ( this.type !== 'textarea' ) {
-					return false;
-				}
-					
-			var $textarea	= jQuery(this),
-				$twin		= jQuery('<div />').css({'position': 'absolute','display':'none','word-wrap':'break-word'}),
-				lineHeight	= parseInt($textarea.css('line-height'),10) || parseInt($textarea.css('font-size'),'10'),
-				minheight	= parseInt($textarea.css('height'),10) || lineHeight*3,
-				maxheight	= parseInt($textarea.css('max-height'),10) || Number.MAX_VALUE,
-				goalheight	= 0;
-				
-				// Opera returns max-height of -1 if not set
-				if (maxheight < 0) { maxheight = Number.MAX_VALUE; }
-					
-				// Append the twin to the DOM
-				// We are going to meassure the height of this, not the textarea.
-				$twin.appendTo($textarea.parent());
-				
-				// Copy the essential styles (mimics) from the textarea to the twin
-				var i = mimics.length;
-				while(i--){
-					$twin.css(mimics[i].toString(),$textarea.css(mimics[i].toString()));
-				}
-				
-				// Updates the width of the twin. (solution for textareas with widths in percent)
-				function setTwinWidth(){
-					curatedWidth = Math.floor(parseInt($textarea.width(),10));
-					if($twin.width() !== curatedWidth){
-						$twin.css({'width': curatedWidth + 'px'});
-						
-						// Update height of textarea
-						update(true);
-					}
-				}
-				
-				// Sets a given height and overflow state on the textarea
-				function setHeightAndOverflow(height, overflow){
-				
-					var curratedHeight = Math.floor(parseInt(height,10));
-					if($textarea.height() !== curratedHeight){
-						$textarea.css({'height': curratedHeight + 'px','overflow':overflow});
-						
-						// Fire the custom event resize
-						$textarea.trigger('resize');
-						
-					}
-				}
-				
-				// This function will update the height of the textarea if necessary 
-				function update(forced) {
-					
-					// Get curated content from the textarea.
-					var textareaContent = $textarea.val().replace(/&/g,'&amp;').replace(/ {2}/g, '&nbsp;').replace(/<|>/g, '&gt;').replace(/\n/g, '<br />');
-					
-					// Compare curated content with curated twin.
-					var twinContent = $twin.html().replace(/<br>/ig,'<br />');
-					
-					if(forced || textareaContent+'&nbsp;' !== twinContent){
-					
-						// Add an extra white space so new rows are added when you are at the end of a row.
-						$twin.html(textareaContent+'&nbsp;');
-						
-						// Change textarea height if twin plus the height of one line differs more than 3 pixel from textarea height
-						if(Math.abs($twin.height() + lineHeight - $textarea.height()) > 3){
-							
-							var goalheight = $twin.height()+lineHeight;
-							if(goalheight >= maxheight) {
-								setHeightAndOverflow(maxheight,'auto');
-							} else if(goalheight <= minheight) {
-								setHeightAndOverflow(minheight,'hidden');
-							} else {
-								setHeightAndOverflow(goalheight,'hidden');
-							}
-							
-						}
-						
-					}
-					
-				}
-				
-				// Hide scrollbars
-				$textarea.css({'overflow':'hidden'});
-				
-				// Update textarea size on keyup, change, cut and paste
-				$textarea.bind('keyup change cut paste', function(){
-					update(); 
-				});
-				
-				// Update width of twin if browser or textarea is resized (solution for textareas with widths in percent)
-				$(window).bind('resize', setTwinWidth);
-				$textarea.bind('resize', setTwinWidth);
-				$textarea.bind('update', update);
-				
-				// Compact textarea on blur
-				$textarea.bind('blur',function(){
-					if($twin.height() < maxheight){
-						if($twin.height() > minheight) {
-							$textarea.height($twin.height());
-						} else {
-							$textarea.height(minheight);
-						}
-					}
-				});
-				
-				// And this line is to catch the browser paste event
-				$textarea.bind('input paste',function(e){ setTimeout( update, 250); });				
-				
-				// Run update once when elastic is initialized
-				update();
-				
-			});
-			
-        } 
-    }); 
-})(jQuery);
 jQuery(document).ready(function() {
 	
   SyntaxHighlighter.autoloader(
@@ -245,21 +85,6 @@ jQuery(document).ready(function() {
 		scalePhotos : false,
 		transition : 'fade'
 	});
-	$('a.cboxfixed').colorbox({
-		maxWidth : '100%',
-		maxHeight : '100%',
-		opacity : 0.6,
-		scalePhotos : true,
-		rel : 'group',
-		transition : 'fade'
-	});
-	$('a.cboxInline').colorbox({
-		maxWidth : '90%',
-		innerWidth : '90%',
-		innerHeight : '90%',
-		iframe : true,
-		transition : 'fade'
-	});
 	/*
 	jQuery("#fontsize").text(textsize + textSizeUnit);
 	jQuery("#fontinc").bind("click", function() {
@@ -292,6 +117,85 @@ jQuery(document).ready(function() {
 		share_popup($(this).attr('href'), 700, 400);
 		return(false);
 	});
-	$('div.content_table_wrapper').show();
-	$('div#footer').show();
+	$('.mcard').click(function() {
+		var uid = $(this).attr('data-id');
+		if(uid > 0) {
+			sendRequest(smf_scripturl, 'action=xmlhttp&sa=mcard&u=' + parseInt(uid), $(this));
+		}
+		return(false);
+	});
+	$('#mcard_close').click(function() {
+		$('#mcard').fadeOut();
+		return(false);
+	});
 });
+
+var timer = null;
+
+function timeOutError() 
+{
+	if(req) 
+		req.abort();
+	alert('Error: Connection has timed out.');
+};
+
+function setTimeOut(t) {
+	this.timer = window.setTimeout(function(){ timeOutError(); },t);
+};
+	
+function clearTimeOut()
+{
+	if(timer) {
+		clearTimeout(timer);
+		timer = null;
+	}
+};
+
+var req = null;
+var locked = false;
+
+function sendRequest(uri, request, anchor_element)
+{
+	if(locked)
+		return;
+		
+	var xmlrequest = new XMLHttpRequest();
+	if(xmlrequest) {
+		if(typeof(sSessionVar) == 'undefined')
+			sSessionVar = 'sesc';
+		
+		request = request + '&' + sSessionVar + '='	+ sSessionId;
+		//alert(uri + request);
+		setTimeOut(3000);
+		req = xmlrequest;
+		xmlrequest.onreadystatechange = function() { response(anchor_element) };
+		xmlrequest.open('POST', uri, true);
+		xmlrequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		xmlrequest.send(request);
+	}
+};
+
+function response(el)
+{
+	var com, srch, err;
+	
+	try {
+		if(req.readyState == 4) {
+			clearTimeOut();
+			if(req.status == 200) {
+				//$('#mcard').insertAfter($(el));
+				var el = $('#mcard');
+			    el.css("position","absolute");
+    			el.css("top", (($(window).height() - el.outerHeight()) / 2) + $(window).scrollTop() + "px");
+    			el.css("left", (($(window).width() - el.outerWidth()) / 2) + $(window).scrollLeft() + "px");
+				$('#mcard_inner').html(req.responseText);
+				el.fadeIn();
+			} else if(req.status == 500) {
+				clearTimeOut();
+				err = req.responseText || req.statusText;
+			}
+		}
+	} catch(e) {
+		//this.showError('Unspecified server or script error.');
+	}
+};

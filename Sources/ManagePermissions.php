@@ -1490,7 +1490,10 @@ function loadAllPermissions($loadType = 'classic')
 			'profile_remove' => array(true, 'profile', 'delete_account', 'moderate_general'),
 			'profile_server_avatar' => array(false, 'profile', 'use_avatar'),
 			'profile_upload_avatar' => array(false, 'profile', 'use_avatar'),
-			'profile_remote_avatar' => array(false, 'profile', 'use_avatar'),
+			'profile_remote_avatar' => array(false, 'profile', 'use_avatar'),'smftags_add' => array(false, 'smftags', 'smftags'),
+			      'smftags_del' => array(false, 'smftags', 'smftags'),
+			      'smftags_manage' => array(false, 'smftags', 'smftags'),
+		
 		),
 		'board' => array(
 			'moderate_board' => array(false, 'general_board', 'moderate'),

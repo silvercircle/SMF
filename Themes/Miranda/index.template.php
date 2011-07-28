@@ -80,8 +80,7 @@ function template_html_above()
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
 	// Show right to left and the character set for ease of translating.
-	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"', $context['right_to_left'] ? ' dir="rtl"' : '', '>
+	echo '<!DOCTYPE html ', $context['right_to_left'] ? ' dir="rtl"' : '', '>
 <head>';
 
 	// The ?fin20 part of this link is just here to make sure browsers don't cache it wrongly.
@@ -119,6 +118,9 @@ function template_html_above()
 		addLoadEvent(fPmPopup);' : '', '
 		var ajax_notification_text = "', $txt['ajax_in_progress'], '";
 		var ajax_notification_cancel_text = "', $txt['modify_cancel'], '";
+		var sSessionId = \'', $context['session_id'], '\';
+		var sSessionVar = \'', $context['session_var'], '\';
+
 	// ]]></script>';
 
 	echo '
@@ -156,8 +158,7 @@ function template_html_above()
 
 	// If we're in a board, or a topic for that matter, the index will be the board's index.
 	if (!empty($context['current_board']))
-		echo '
-	<link rel="index" href="', $scripturl, '?board=', $context['current_board'], '.0" />';
+		//echo '<link rel="index" href="', $scripturl, '?board=', $context['current_board'], '.0" />';
 
 	// Output any remaining HTML headers. (from mods, maybe?)
 	echo $context['html_headers'];
@@ -171,15 +172,15 @@ function template_body_above()
 {
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
-	echo !empty($settings['forum_width']) ? '
-<div id="wrapper" style="width: ' . $settings['forum_width'] . '">' : '', '
-	<div id="header"><div class="frame">
-		<div id="upper_section" class="middletext"><img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" />
-			<div class="user" style="padding:5px 5px 0 0;">';
+	echo '<div id="mcard" style="display:none;"><div id="mcard_close"><a href="#">Close</a></div><div id="mcard_inner">foo</div></div>
+	<header><div id="header"><div class="frame">
+		<div id="upper_section" class="middletext"><img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" /><div style="float:left;color:white;font-size:22px;padding:20px 30px;">SMF pLayGround</div>';
 
 	// If the user is logged in, display stuff like their name, new messages, etc.
 	if ($context['user']['is_logged'])
 	{
+		echo '<div class="user" style="padding:5px 5px 0 0;">';
+
 		if (!empty($context['user']['avatar']))
 			echo '
 				<div class="avatar">', $context['user']['avatar']['image'], '</div>';
@@ -190,7 +191,7 @@ function template_body_above()
 					<li><a href="', $scripturl, '?action=unreadreplies">', $txt['show_unread_replies'], '</a></li>
 					<li>', $context['current_time'], '</li></ul></div>';
 
-		echo '<div style="margin-top:3px;"><ul class="reset">';
+		echo '<div style="margin-top:3px;"><ul class="reset"><li></li>';
 		// Is the forum in maintenance mode?
 		if ($context['in_maintenance'] && $context['user']['is_admin'])
 			echo '
@@ -205,12 +206,13 @@ function template_body_above()
 			echo '
 					<li><a href="', $scripturl, '?action=moderate;area=reports">', sprintf($txt['mod_reports_waiting'], $context['open_mod_reports']), '</a></li>';
 
-		echo '</ul></div>';
+		echo '</ul></div></div>';
 	}
 	// Otherwise they're a guest - this time ask them to either register or login - lazy bums...
 	elseif (!empty($context['show_login_bar']))
 	{
 		echo '
+				<div class="user">
 				<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/sha1.js"></script>
 				<div class="loginbar"><form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
 					<div style="float:left;margin:5px;">', sprintf($txt['welcome_guest'], $txt['guest_title']), '</div>
@@ -232,11 +234,10 @@ function template_body_above()
 
 		echo '
 					<input type="hidden" name="hash_passwrd" value="" />
-				</form></div>';
+				</form></div></div>';
 	}
 
 	echo '
-			</div>
 			<div class="news normaltext">';
 	// Show a random news item? (or you could pick one from news_lines...)
 	if (!empty($settings['enable_news']))
@@ -246,15 +247,15 @@ function template_body_above()
 
 	echo '
 			</div>
-		</div>';
+		</div><nav>';
 
 
 	// Show the menu here, according to the menu sub template.
 	template_menu();
 
-	echo '
+	echo '</nav>
 		<br class="clear" />
-	</div></div>';
+	</div></div></header>';
 
 	// The main content should go here.
 	echo '
@@ -305,22 +306,20 @@ function template_body_below()
 	anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
 	</script>
-	<div id="footer_section"><div class="frame">
-		<ul class="reset">
-			<li class="copyright">', theme_copyright(), '</li>
-			<li><a id="button_xhtml" href="http://validator.w3.org/check?uri=referer" target="_blank" class="new_win" title="', $txt['valid_xhtml'], '"><span>', $txt['xhtml'], '</span></a></li>
-			', !empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']) ? '<li><a id="button_rss" href="' . $scripturl . '?action=.xml;type=rss" class="new_win"><span>' . $txt['rss'] . '</span></a></li>' : '', '
-			<li class="last"><a id="button_wap2" href="', $scripturl , '?wap2" class="new_win"><span>', $txt['wap2'], '</span></a></li>
-		</ul>';
-
+	<div id="footer_section">';
 	// Show the load time?
 	if ($context['show_load_time'])
 		echo '
-		<span class="smalltext">',$txt['page_created'], $context['load_time'], $txt['seconds_with'], $context['load_queries'], $txt['queries'],'</span>';
+		<div style="float:right;" class="smalltext">',$txt['page_created'], $context['load_time'], $txt['seconds_with'], $context['load_queries'], $txt['queries'],'</div>';
+	
+	echo '	<div class="copyright">', my_theme_copyright(), '</div>
+			<div><a id="button_xhtml" href="http://validator.w3.org/check?uri=referer" target="_blank" class="new_win" title="Valid HTML"><span>HTML</span></a> | 
+			', !empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']) ? '<a id="button_rss" href="' . $scripturl . '?action=.xml;type=rss" class="new_win"><span>' . $txt['rss'] . '</span></a> | ' : '', '
+			<a id="button_wap2" href="', $scripturl , '?wap2" class="new_win"><span>', $txt['wap2'], '</span></a>
+			</div>';
 
 	echo '
-	</div></div>', !empty($settings['forum_width']) ? '
-</div>' : '';
+	</div>';
 }
 
 function template_html_below()
@@ -381,6 +380,10 @@ function template_menu()
 {
 	global $context, $settings, $options, $scripturl, $txt;
 
+	$context['menu_buttons']['blog']['title'] = "Blog";
+	$context['menu_buttons']['blog']['show'] = true;
+	$context['menu_buttons']['blog']['href'] = "http://blog.miranda.or.at";
+	
 	echo '
 		<div id="main_menu">
 			<ul class="dropmenu" id="menu_nav">';
@@ -471,6 +474,22 @@ function template_button_strip($button_strip, $direction = 'top', $strip_options
 				implode('', $buttons), '
 			</ul>
 		</div>';
+}
+function my_theme_copyright($get_it = false)
+{
+	global $forum_copyright, $context, $boardurl, $forum_version, $txt, $modSettings;
+
+	// Don't display copyright for things like SSI.
+	if (!isset($forum_version))
+		return;
+
+	// Put in the version...
+	//$forum_copyright = sprintf($forum_copyright, $forum_version);
+	$forum_copyright = 'Forum software based on SMF 2.0, &copy;2011 by <a href="http://www.simplemachines.org">Simple Machines</a> and contributors. <a href="http://www.simplemachines.org/about/smf/license.php">License terms.</a>';
+
+	echo '
+			<span class="smalltext" style="display: inline; visibility: visible;">' . $forum_copyright . '
+			</span>';
 }
 
 ?>
