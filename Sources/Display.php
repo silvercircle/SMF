@@ -994,12 +994,13 @@ function Display()
 			loadMemberData($posters);
 		$messages_request = $smcFunc['db_query']('', '
 			SELECT
-				id_msg, icon, subject, poster_time, poster_ip, id_member, modified_time, modified_name, body,
-				smileys_enabled, poster_name, poster_email, approved,
-				id_msg_modified < {int:new_from} AS is_read
-			FROM {db_prefix}messages
-			WHERE id_msg IN ({array_int:message_list})
-			ORDER BY id_msg' . (empty($options['view_newest_first']) ? '' : ' DESC'),
+				m.id_msg, m.icon, m.subject, m.poster_time, m.poster_ip, m.id_member, m.modified_time, m.modified_name, m.body,
+				m.smileys_enabled, m.poster_name, m.poster_email, m.approved, m.likes_count, m.like_status, l.id_user AS liked,
+				m.id_msg_modified < {int:new_from} AS is_read
+			FROM {db_prefix}messages AS m
+			LEFT JOIN {db_prefix}likes AS l ON l.id_msg = m.id_msg AND l.id_user = '.$user_info['id'].'
+			WHERE m.id_msg IN ({array_int:message_list})
+			ORDER BY m.id_msg' . (empty($options['view_newest_first']) ? '' : ' DESC'),
 			array(
 				'message_list' => $messages,
 				'new_from' => $topicinfo['new_from'],
@@ -1109,7 +1110,7 @@ function Display()
 // Callback for the message display.
 function prepareDisplayContext($reset = false)
 {
-	global $settings, $txt, $modSettings, $scripturl, $options, $user_info, $smcFunc;
+	global $settings, $txt, $modSettings, $scripturl, $options, $user_info, $smcFunc, $sourcedir;
 	global $memberContext, $context, $messages_request, $topic, $attachments, $topicinfo;
 
 	static $counter = null;
@@ -1216,8 +1217,30 @@ function prepareDisplayContext($reset = false)
 		'can_modify' => (!$context['is_locked'] || allowedTo('moderate_board')) && (allowedTo('modify_any') || (allowedTo('modify_replies') && $context['user']['started']) || (allowedTo('modify_own') && $message['id_member'] == $user_info['id'] && (empty($modSettings['edit_disable_time']) || !$message['approved'] || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 > time()))),
 		'can_remove' => allowedTo('delete_any') || (allowedTo('delete_replies') && $context['user']['started']) || (allowedTo('delete_own') && $message['id_member'] == $user_info['id'] && (empty($modSettings['edit_disable_time']) || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 > time())),
 		'can_see_ip' => allowedTo('moderate_forum') || ($message['id_member'] == $user_info['id'] && !empty($user_info['id'])),
+		'likes_count' => $message['likes_count'],
+		'like_status' => $message['like_status'],
+		'liked' => $message['liked'],
 	);
 
+	if(1) {		// todo: check permission, like system allowed etc..
+		require_once($sourcedir . '/LikeSystem.php');
+		$output['likers'] = '';
+		$have_liked_it = false;
+		if(intval($output['liked']) > 0) {
+			$output['likelink'] = '<a class="givelike" data-fn="remove" href="#" data-id="'.$message['id_msg'].'">'.$txt['unlike_label'].'</a>';
+			$have_liked_it = true;
+		}
+		else if(!$user_info['is_guest']) {
+			if($message['id_member'] != $user_info['id'])
+				$output['likelink'] = '<a class="givelike" data-fn="give" href="#" data-id="'.$message['id_msg'].'">'.$txt['like_label'].'</a>';
+			else
+				$output['likelink'] = '&nbsp;';
+		}
+		if($user_info['is_admin'])
+			$output['likelink'] .= ' <a class="givelike" data-fn="repair" href="#" data-id="'.$message['id_msg'].'">Repair Likes</a>';
+			
+		LikesGenerateOutput($message['like_status'], &$output['likers'], $output['likes_count'], $message['id_msg'], $have_liked_it);
+	}
 	// Is this user the message author?
 	$output['is_message_author'] = $message['id_member'] == $user_info['id'];
 

@@ -128,6 +128,25 @@ jQuery(document).ready(function() {
 		$('#mcard').fadeOut();
 		return(false);
 	});
+	$('.givelike').click(function() {
+		var mid = $(this).attr('data-id');
+		if(mid > 0) {
+			switch($(this).attr('data-fn')) {
+				case 'give':
+					sendRequest(smf_scripturl, 'action=xmlhttp&sa=givelike&m=' + parseInt(mid), $(this));
+				    break;
+				case 'remove':
+					sendRequest(smf_scripturl, 'action=xmlhttp&sa=givelike&remove=1&m=' + parseInt(mid), $(this));
+				    break;
+				case 'repair':
+					sendRequest(smf_scripturl, 'action=xmlhttp&sa=givelike&repair=1&m=' + parseInt(mid), $(this));
+					break;
+				default:
+					break;
+			}
+		}
+		return(false);
+	});
 });
 
 var timer = null;
@@ -164,7 +183,7 @@ function sendRequest(uri, request, anchor_element)
 		if(typeof(sSessionVar) == 'undefined')
 			sSessionVar = 'sesc';
 		
-		request = request + '&' + sSessionVar + '='	+ sSessionId;
+		request = request + '&' + sSessionVar + '='	+ sSessionId + '&xml=1';
 		//alert(uri + request);
 		setTimeOut(3000);
 		req = xmlrequest;
@@ -175,7 +194,7 @@ function sendRequest(uri, request, anchor_element)
 	}
 };
 
-function response(el)
+function response(ele)
 {
 	var com, srch, err;
 	
@@ -183,7 +202,19 @@ function response(el)
 		if(req.readyState == 4) {
 			clearTimeOut();
 			if(req.status == 200) {
-				//$('#mcard').insertAfter($(el));
+				if(ele.attr('class') == 'givelike') {
+					var id = '#likers_msg_' + ele.attr('data-id');
+					$(id).html(req.responseText);
+					if(ele.attr('data-fn') == 'give') {
+						ele.attr('data-fn', 'remove');
+						ele.html(smf_unlikelabel);
+					}
+					else if(ele.attr('data-fn') == 'remove'){
+						ele.attr('data-fn', 'give');
+						ele.html(smf_likelabel);
+					}
+					return;
+				}
 				var el = $('#mcard');
 			    el.css("position","absolute");
     			el.css("top", (($(window).height() - el.outerHeight()) / 2) + $(window).scrollTop() + "px");

@@ -32,6 +32,7 @@ function XMLhttpMain()
 			'function' => 'ListMessageIcons',
 		),
 		'mcard' => array('function' => 'GetMcard'),
+		'givelike' => array('function' => 'GiveLike'),
 	);
 	if (!isset($_REQUEST['sa'], $sub_actions[$_REQUEST['sa']]))
 		fatal_lang_error('no_access', false);
@@ -73,9 +74,14 @@ function ListMessageIcons()
 	$context['sub_template'] = 'message_icons';
 }
 
+/*
+ * output the member card
+ * todo: make it use the template system
+ */
+ 
 function GetMcard()
 {
-	global $memberContext, $context;
+	global $memberContext, $context, $txt;
 	global $modSettings, $settings, $user_info, $board, $topic, $board_info, $maintenance, $sourcedir;
 
 	//var_dump($user_info);
@@ -97,7 +103,90 @@ function GetMcard()
 		echo '</div>';
 		die;
 	}
-	echo "ERROR";
+	loadLanguage('Login');
+	echo '<div style="text-align:center;margin-top:40px;">'.$txt['only_members_can_access'].'</div>';
+	die;
+}
+
+/*
+ * handle a like. _REQUEST['m'] is the message id that is to receive the
+ * like
+ * 
+ * todo: permission system
+ * todo: remove likes from the database when a user is deleted
+ * todo: make it work without AJAX and JavaScript
+ * todo: error responses
+ * todo: disallow like for posts by banned users
+ */
+ 
+function GiveLike()
+{
+	global $context;
+	global $settings, $user_info, $sourcedir, $smcFunc;
+	$total = array();
+	
+	$mid = intval($_REQUEST['m']);
+	if($mid > 0) {
+		$uid = $user_info['id'];
+		$remove_it = $_REQUEST['remove'] == '1' ? true : false;
+		require_once($sourcedir . '/LikeSystem.php');
+		
+		/* check for dupes */
+		$request = $smcFunc['db_query']('', '
+			SELECT COUNT(id_msg) as count
+				FROM {db_prefix}likes AS l WHERE l.id_msg = '.$mid.' AND l.id_user = '.$uid);
+		$count = $smcFunc['db_fetch_row']($request);
+		$smcFunc['db_free_result']($request);
+		
+		$c = intval($count[0]);
+
+		/*
+		 * this is a debugging feature and allows the admin to repair
+		 * the likes for a post.
+		 * it may go away at a later time.
+		 */
+		if($_REQUEST['repair'] == '1') {
+			$total = LikesUpdate($mid);
+			$output = '';
+			LikesGenerateOutput($total['status'], $output, $total['count'], $mid, $c > 0 ? true : false);
+			echo $output;
+			die;
+		}
+		
+		if($c > 0)	{	// duplicate like
+			LikesUpdate($mid);
+			die;
+		}
+			
+		/*
+		 * you cannot like your own post - the front end handles this with a seperate check and
+		 * doesn't show the like button for own messages, but this check is still necessary
+		 */		
+		
+		$request = $smcFunc['db_query']('', '
+			SELECT id_member FROM {db_prefix}messages AS m WHERE m.id_msg = '.$mid);
+		
+		$m = $smcFunc['db_fetch_row']($request);
+		$smcFunc['db_free_result']($request);
+		if(intval($m[0]) == $uid) {
+			LikesUpdate($mid);
+			die;
+		}
+		
+		if($_REQUEST['remove'] == '1') {
+			
+		}
+		else {
+			$smcFunc['db_query']('', '
+				INSERT INTO {db_prefix}likes values('.$mid.', ' . $uid . ', ' . time() . ')');
+		}
+		
+		$total = LikesUpdate($mid);
+		$output = '';
+		LikesGenerateOutput($total['status'], $output, $total['count'], $mid, true);
+		echo $output;
+		LikesUpdate($mid);
+	}
 	die;
 }
 ?>

@@ -157,7 +157,7 @@ function template_html_above()
 	<link rel="next" href="', $scripturl, '?topic=', $context['current_topic'], '.0;prev_next=next" />';
 
 	// If we're in a board, or a topic for that matter, the index will be the board's index.
-	if (!empty($context['current_board']))
+	//if (!empty($context['current_board']))
 		//echo '<link rel="index" href="', $scripturl, '?board=', $context['current_board'], '.0" />';
 
 	// Output any remaining HTML headers. (from mods, maybe?)

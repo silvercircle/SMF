@@ -359,7 +359,7 @@ function template_main()
 									<h5 id="subject_', $message['id'], '">
 										<a href="', $message['href'], '" rel="nofollow">', $message['subject'], '</a>
 									</h5>
-									<div class="smalltext">&#171; <strong>', !empty($message['counter']) ? $txt['reply_noun'] . ' #' . $message['counter'] : '', ' ', $txt['on'], ':</strong> ', $message['time'], ' &#187;</div>
+									<div class="smalltext">&#171; ', !empty($message['counter']) ? $txt['reply_noun'] . ' #' . $message['counter'] : '', ' ', $txt['on'], ': ', $message['time'], ' &#187;</div>
 									<div id="msg_', $message['id'], '_quick_mod"></div>
 								</div>';
 
@@ -569,6 +569,10 @@ function template_main()
 
 		echo '
 						</div>
+						<div style="clear:both;"></div><div class="likebar">
+						<div style="float:right;">',$message['likelink'],'</div>
+						<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
+						<div style="clear:both;"></div></div>
 					</div>
 				</div>
 				<hr class="post_separator" />';
@@ -577,8 +581,14 @@ function template_main()
 	echo '
 				</form>
 			</div>
-			<a id="lastPost"></a>';
-
+			<a id="lastPost"></a>
+			<script type="text/javascript">
+				<!-- // --><![CDATA[
+				var smf_likelabel = \'',$txt['like_label'],'\';
+				var smf_unlikelabel = \'',$txt['unlike_label'],'\';
+				// ]]>
+			</script>';
+			
 	// Show the page index... "Pages: [1]".
 	echo '
 			<div class="pagesection">
