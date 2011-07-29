@@ -1490,10 +1490,10 @@ function loadAllPermissions($loadType = 'classic')
 			'profile_remove' => array(true, 'profile', 'delete_account', 'moderate_general'),
 			'profile_server_avatar' => array(false, 'profile', 'use_avatar'),
 			'profile_upload_avatar' => array(false, 'profile', 'use_avatar'),
-			'profile_remote_avatar' => array(false, 'profile', 'use_avatar'),'smftags_add' => array(false, 'smftags', 'smftags'),
-			      'smftags_del' => array(false, 'smftags', 'smftags'),
-			      'smftags_manage' => array(false, 'smftags', 'smftags'),
-		
+			'profile_remote_avatar' => array(false, 'profile', 'use_avatar'),
+			'smftags_add' => array(false, 'smftags', 'smftags'),
+			'smftags_del' => array(false, 'smftags', 'smftags'),
+			'smftags_manage' => array(false, 'smftags', 'smftags'),
 		),
 		'board' => array(
 			'moderate_board' => array(false, 'general_board', 'moderate'),
@@ -1527,6 +1527,8 @@ function loadAllPermissions($loadType = 'classic')
 			'view_attachments' => array(false, 'attachment', 'participate'),
 			'post_unapproved_attachments' => array(false, 'attachment', 'make_unapproved_posts'),
 			'post_attachment' => array(false, 'attachment', 'attach'),
+			'like_see' => array(false, 'like', 'like'),
+			'like_give' => array(false, 'like', 'like'),
 		),
 	);
 

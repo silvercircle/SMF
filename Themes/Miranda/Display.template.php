@@ -226,13 +226,13 @@ function template_main()
 		}
 
 		// Show the message anchor and a "new" anchor if this message is new.
-		if ($message['id'] != $context['first_message'])
-			echo '
-				<a id="msg', $message['id'], '"></a>', $message['first_new'] ? '<a id="new"></a>' : '';
-
 		echo '
 				<div class="', $message['approved'] ? ($message['alternate'] == 0 ? 'windowbg' : 'windowbg2') : 'approvebg', '">
 					<div class="post_wrapper light_shadow">';
+
+		if ($message['id'] != $context['first_message'])
+			echo '
+				<a id="msg', $message['id'], '"></a>', $message['first_new'] ? '<a id="new"></a>' : '';
 
 		// Show information about the poster of this message.
 		echo '
@@ -568,12 +568,13 @@ function template_main()
 							<div class="signature" id="msg_', $message['id'], '_signature">', $message['member']['signature'], '</div>';
 
 		echo '
-						</div>
-						<div style="clear:both;"></div><div class="likebar">
-						<div style="float:right;">',$message['likelink'],'</div>
-						<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
-						<div style="clear:both;"></div></div>
-					</div>
+						</div>';
+						if($message['likes_count'] > 0 || $message['likelink'] != '') 
+							echo '<div style="clear:both;"></div><div class="likebar">
+							<div style="float:right;">',$message['likelink'],'</div>
+							<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
+							<div style="clear:both;"></div></div>';
+					echo '</div>
 				</div>
 				<hr class="post_separator" />';
 	}

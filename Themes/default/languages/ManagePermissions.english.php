@@ -342,4 +342,8 @@ $txt['auto_approve_topics'] = 'Post new topics, without requiring approval';
 $txt['auto_approve_replies'] = 'Post replies to topics, without requiring approval';
 $txt['auto_approve_attachments'] = 'Post attachments, without requiring approval';
 
+$txt['permissiongroup_like'] = 'Like system';
+$txt['permissiongroup_simple_like'] = 'Like system';
+$txt['permissionname_like_see'] = "See likes on posts";
+$txt['permissionname_like_give'] = "Gives likes on posts";
 ?>

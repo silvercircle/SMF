@@ -21,17 +21,17 @@ function LikesUpdate($mid)
 	
 	$request = $smcFunc['db_query']('', '
 		SELECT l.id_msg AS like_message, l.id_user AS like_user, m.member_name FROM {db_prefix}likes AS l
-			LEFT JOIN {db_prefix}members AS m on m.id_member = l.id_user WHERE l.id_msg = '.$mid.' ORDER BY l.updated DESC');
+			LEFT JOIN {db_prefix}members AS m on m.id_member = l.id_user WHERE l.id_msg = '.$mid.' AND m.id_member <> 0 ORDER BY l.updated DESC LIMIT 4');
 
 	while ($row = $smcFunc['db_fetch_assoc']($request)) {
 		if(empty($row['member_name']))
 			continue;
-		$likers[$count] = $row['like_user'].'__//__' . $row['member_name'];
+		$likers[$count] = $row['like_user'].'[**]' . $row['member_name'];
 		$count++;
 		if($count > 3)
 			break;
 	}
-	$like_string = implode("__||__", $likers);
+	$like_string = implode("(**)", $likers);
 	$smcFunc['db_free_result']($request);
 	
 	
@@ -43,10 +43,9 @@ function LikesUpdate($mid)
 	$totalcount = $count[0];
 	
 	$smcFunc['db_query']('', '
-		UPDATE {db_prefix}messages SET likes_count = '.$totalcount.', like_status = "'.$like_string.'" WHERE id_msg = '.$mid);
-	//$names = explode("__||__", $like_string);
-	//echo "count = $totalcount, status = $like_string";
-	//var_dump($names);
+		INSERT INTO {db_prefix}like_cache VALUES('.$mid.', '.$totalcount.', "'.$like_string.'") 
+			ON DUPLICATE KEY UPDATE likes_count = '.$totalcount.', like_status = "'.$like_string.'"');
+
 	$result['count'] = $totalcount;
 	$result['status'] = $like_string;
 	return($result);
@@ -68,21 +67,19 @@ function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_l
 	$like_template[4] = $txt['4likes'];
 	$like_template[5] = $txt['5likes'];
 
-	$likers = explode("__||__", $like_status);
+	$likers = explode("(**)", $like_status);
 	$n = 1;
 	$results = array();
-	
 	foreach($likers as $liker) {
 		if(!empty($liker)) {
-			$liker_components = explode("__//__", $liker);
+			$liker_components = explode("[**]", $liker);
 			if($liker_components[1] === $user_info['name']) {
 				$results[0] = $txt['you_liker'];
 				continue;
 			}
-			$results[$n++] = '<a class="mcard" data-id="'.$liker_components[0].'" href="'.$scripturl.'?action=profile;u='.intval($liker_components[0]).'">'.$liker_components[1].'</a>';
+			$results[$n++] = '<a rel="nofollow" class="mcard" data-id="'.$liker_components[0].'" href="'.$scripturl.'?action=profile;u='.intval($liker_components[0]).'">'.$liker_components[1].'</a>';
 		}
 	}
-	
 	$count = count($results);
 	if($count == 0)
 		return($output);
@@ -90,7 +87,7 @@ function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_l
 	if($have_liked && !isset($results[0])) {
 		array_pop($results);
 		$results[0] = $txt['you_liker'];
-		$count = count($results);
+		//$count = count($results);
 	}
 	
 	ksort($results);
@@ -98,10 +95,19 @@ function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_l
 		$output = $txt['you_like_it'];
 	else if($total_likes > 4) {
 		$output = vsprintf($like_template[5], $results);
-		$output .= ('<a href="'.$scripturl.'?action=getlikes;m='.$mid.'">'. ($total_likes - $count).$txt['like_others']);
+		$output .= ('<a rel="nofollow" href="'.$scripturl.'?action=getlikes;m='.$mid.'">'. ($total_likes - $count).$txt['like_others']);
 	}
 	else
 		$output = vsprintf($like_template[$count], $results);
 	return($output);
+}
+
+function LikesError($msg, $xmlreq)
+{
+	if($xmlreq) {
+		echo $msg;
+		die;
+	}
+	fatal_error($msg, '');
 }
 ?>

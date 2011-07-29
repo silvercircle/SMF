@@ -88,10 +88,10 @@ function template_html_above()
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css?fin20" />';
 
 	// Some browsers need an extra stylesheet due to bugs/compatibility issues.
-	foreach (array('ie7', 'ie6', 'webkit') as $cssfix)
-		if ($context['browser']['is_' . $cssfix])
-			echo '
-	<link rel="stylesheet" type="text/css" href="', $settings['default_theme_url'], '/css/', $cssfix, '.css" />';
+	//foreach (array('ie7', 'ie6', 'webkit') as $cssfix)
+	//	if ($context['browser']['is_' . $cssfix])
+	//		echo '
+	//<link rel="stylesheet" type="text/css" href="', $settings['default_theme_url'], '/css/', $cssfix, '.css" />';
 
 	// RTL languages require an additional stylesheet.
 	if ($context['right_to_left'])
@@ -172,7 +172,7 @@ function template_body_above()
 {
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
-	echo '<div id="mcard" style="display:none;"><div id="mcard_close"><a href="#">Close</a></div><div id="mcard_inner">foo</div></div>
+	echo '<div id="ajaxbusy" style="display:none;"><img src="',$settings['images_url'],'/ajax-loader.gif" alt="loader" /></div><div id="mcard" style="display:none;"><div id="mcard_close">X</div><div id="mcard_inner"></div></div>
 	<header><div id="header"><div class="frame">
 		<div id="upper_section" class="middletext"><img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" /><div style="float:left;color:white;font-size:22px;padding:20px 30px;">SMF pLayGround</div>';
 
