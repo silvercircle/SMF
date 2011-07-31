@@ -123,7 +123,7 @@ function template_main()
 
 	if (!empty($options['show_board_desc']) && $context['description'] != '')
 		echo '
-	<p class="description_board">', $context['description'], '</p>';
+	<p class="orange_container">', $context['description'], '</p>';
 
 	// Create the button set...
 	$normal_buttons = array(
@@ -251,20 +251,24 @@ function template_main()
 							echo '
 								<a href="', $scripturl, '?action=profile;u=', $topic['first_post']['member']['id'], '">
 										', $topic['first_post']['member']['avatar'], '
-									</a>';
-							if($topic['is_posted_in'])
-								echo '<span class="avatar_overlay">',$context['user']['avatar']['image'],'</span>';
-							echo '</span>';
+								</a>';
 						}
 						else {
 							echo '
 								<a href="', $scripturl, '?action=profile;u=', $topic['first_post']['member']['id'], '">
 									<img src="',$settings['images_url'],'/unknown.png" alt="avatar" />
 								</a>';
-							if($topic['is_posted_in'])
-								echo '<span class="avatar_overlay">',$context['user']['avatar']['image'],'</span>';
-							echo '</span>';
 						}
+						/*
+						 * own avatar as overlay when 
+						 * a) avatar is set
+						 * b) we have posted in this topic
+						 * c) we have NOT started the topic
+						 */
+						if($topic['is_posted_in'] && ($topic['first_post']['member']['id'] != $context['user']['id']) && isset($context['user']['avatar']['image']))
+							echo '<span class="avatar_overlay">',$context['user']['avatar']['image'],'</span>';
+				
+						echo '</span>';
 					}
 					else 
 						echo '
@@ -275,7 +279,7 @@ function template_main()
 						<img src="', $topic['first_post']['icon_url'], '" alt="" />
 					</td>
 					<td class="subject ', $alternate_class, '">
-						<div ', (!empty($topic['quick_mod']['modify']) ? 'id="topic_' . $topic['first_post']['id'] . '" onmouseout="mouse_on_div = 0;" onmouseover="mouse_on_div = 1;" ondblclick="modify_topic(\'' . $topic['id'] . '\', \'' . $topic['first_post']['id'] . '\');"' : ''), '>
+						<div ', (!empty($topic['quick_mod']['modify']) ? 'id="topic_' . $topic['first_post']['id'] . '" ondblclick="modify_topic(\'' . $topic['id'] . '\', \'' . $topic['first_post']['id'] . '\');"' : ''), '>
 							', $topic['is_sticky'] ? '<strong>' : '', '<span class="tpeek" data-id="'.$topic['id'].'" id="msg_' . $topic['first_post']['id'] . '">', $topic['first_post']['link'], (!$context['can_approve_posts'] && !$topic['approved'] ? '&nbsp;<em>(' . $txt['awaiting_approval'] . ')</em>' : ''), '</span>', $topic['is_sticky'] ? '</strong>' : '';
 
 			// Is this topic new? (assuming they are logged in!)

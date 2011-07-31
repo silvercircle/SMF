@@ -127,7 +127,6 @@ function template_main()
 		echo '
 			</div>';
 	}
-
 	// Does this topic have some events linked to it?
 	if (!empty($context['linked_calendar_events']))
 	{
@@ -154,7 +153,6 @@ function template_main()
 				</div>
 			</div>';
 	}
-
 	// Build the normal button array.
 	$normal_buttons = array(
 		'reply' => array('test' => 'can_reply', 'text' => 'reply', 'image' => 'reply.gif', 'lang' => true, 'url' => $scripturl . '?action=post;topic=' . $context['current_topic'] . '.' . $context['start'] . ';last_msg=' . $context['topic_last_message'], 'active' => true),
@@ -171,8 +169,27 @@ function template_main()
 	// Show the page index... "Pages: [1]".
 	echo '
 			<div class="pagesection">
-				<div class="nextlinks">', $context['previous_next'], '</div>', template_button_strip($normal_buttons, 'right'), '
-				<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . ' &nbsp;&nbsp;<a href="#lastPost"><strong>' . $txt['go_down'] . '</strong></a>' : '', '</div>
+				<div class="nextlinks">', $context['previous_next'], '</div>', template_button_strip($normal_buttons, 'right');
+				// Tagging System
+				echo '
+					<div class="clearfix largepadding smallfont"><b>', $txt['smftags_topic'], '</b>';
+				foreach ($context['topic_tags'] as $i => $tag)
+				{
+					echo '<a href="' . $scripturl . '?action=tags;tagid=' . $tag['ID_TAG']  . '">' . $tag['tag'] . '</a>&nbsp;';
+					if(!$context['user']['is_guest'] && allowedTo('smftags_del'))
+					echo '<a href="' . $scripturl . '?action=tags;sa=deletetag;tagid=' . $tag['ID']  . '"><font color="#FF0000">[X]</font></a>&nbsp;';
+
+				}
+
+				global $topic;
+				if(!$context['user']['is_guest'] && allowedTo('smftags_add'))
+					echo '
+						&nbsp;<a class="addtag" data-id="',$topic,'" href="' . $scripturl . '?action=tags;sa=addtag;topic=',$topic, '">' . $txt['smftags_addtag'] . '</a>';
+
+				echo '
+					</div>';
+				
+				echo '<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . ' &nbsp;&nbsp;<a href="#lastPost"><strong>' . $txt['go_down'] . '</strong></a>' : '', '</div>
 			</div>';
 
 	// Show the topic information - icon, subject, etc.
@@ -237,7 +254,7 @@ function template_main()
 		// Show information about the poster of this message.
 		echo '
 						<div class="poster">
-						<div class="poster_details">
+						<div class="orange_container poster_details">
 							<h4>';
 
 		// Show online and offline buttons?
@@ -511,12 +528,12 @@ function template_main()
 		// Maybe they want to report this post to the moderator(s)?
 		if ($context['can_report_moderator'])
 			echo '
-								<a href="', $scripturl, '?action=reporttm;topic=', $context['current_topic'], '.', $message['counter'], ';msg=', $message['id'], '">', $txt['report_to_mod'], '</a> | ';
+								<a href="', $scripturl, '?action=reporttm;topic=', $context['current_topic'], '.', $message['counter'], ';msg=', $message['id'], '">', $txt['report'], '</a>&nbsp;&nbsp;';
 
 		// Can we issue a warning because of this post?  Remember, we can't give guests warnings.
 		if ($context['can_issue_warning'] && !$message['is_message_author'] && !$message['member']['is_guest'])
 			echo '
-								<a href="', $scripturl, '?action=profile;area=issuewarning;u=', $message['member']['id'], ';msg=', $message['id'], '">', $txt['issue_warning_post'], '</a> | ';
+								<a href="', $scripturl, '?action=profile;area=issuewarning;u=', $message['member']['id'], ';msg=', $message['id'], '">', $txt['issue_warning'], '</a>&nbsp;&nbsp;';
 
 		// Show the IP to this user for this post - because you can moderate?
 		if ($context['can_moderate_forum'] && !empty($message['member']['ip']))
@@ -527,14 +544,9 @@ function template_main()
 			echo '
 								IP: <a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $message['member']['ip'], '</a>';
 		// Okay, are you at least logged in?  Then we can show something about why IPs are logged...
-		elseif (!$context['user']['is_guest'])
-			echo '
-								<a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $txt['logged'], '</a>';
-		// Otherwise, you see NOTHING!
-		else
-			echo '
-								', $txt['logged'];
-
+		//elseif (!$context['user']['is_guest'])
+		//	echo '
+		//						<a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $txt['logged'], '</a>';
 		echo '
 							</div>';
 
@@ -569,7 +581,7 @@ function template_main()
 
 		echo '
 						</div>';
-						if($message['likes_count'] > 0 || $message['likelink'] != '') 
+						if($message['likes_count'] > 0 || isset($message['likelink'])) 
 							echo '<div style="clear:both;"></div><div class="likebar">
 							<div style="float:right;">',$message['likelink'],'</div>
 							<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
@@ -582,7 +594,9 @@ function template_main()
 	echo '
 				</form>
 			</div>
-			<a id="lastPost"></a>
+			<a id="lastPost"></a>';
+			if(isset($txt['like_label'])) 
+				echo '				
 			<script type="text/javascript">
 				<!-- // --><![CDATA[
 				var smf_likelabel = \'',$txt['like_label'],'\';
@@ -597,45 +611,8 @@ function template_main()
 				<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . ' &nbsp;&nbsp;<a href="#top"><strong>' . $txt['go_up'] . '</strong></a>' : '', '</div>
 				<div class="nextlinks_bottom">', $context['previous_next'], '</div>
 			</div>';
-
-	
-		
-		
-		// Tagging System
-			echo '
-			<div class="clearfix windowbg largepadding">
-
-
-				<b>', $txt['smftags_topic'], '</b>';
-
-
-
-				foreach ($context['topic_tags'] as $i => $tag)
-				{
-					echo '<a href="' . $scripturl . '?action=tags;tagid=' . $tag['ID_TAG']  . '">' . $tag['tag'] . '</a>&nbsp;';
-					if(!$context['user']['is_guest'] && allowedTo('smftags_del'))
-					echo '<a href="' . $scripturl . '?action=tags;sa=deletetag;tagid=' . $tag['ID']  . '"><font color="#FF0000">[X]</font></a>&nbsp;';
-
-				}
-
-				global $topic;
-				if(!$context['user']['is_guest'] && allowedTo('smftags_add'))
-				echo '
-				&nbsp;<a href="' . $scripturl . '?action=tags;sa=addtag;topic=',$topic, '">' . $txt['smftags_addtag'] . '</a>';
-
-			echo '
-				</div>';
-		
-		
-		
-		
-		// End Tagging System
-		
 		// Show the lower breadcrumbs.
-		
-		
 	theme_linktree();
-
 	$mod_buttons = array(
 		'move' => array('test' => 'can_move', 'text' => 'move_topic', 'image' => 'admin_move.gif', 'lang' => true, 'url' => $scripturl . '?action=movetopic;topic=' . $context['current_topic'] . '.0'),
 		'delete' => array('test' => 'can_delete', 'text' => 'remove_topic', 'image' => 'admin_rem.gif', 'lang' => true, 'custom' => 'onclick="return confirm(\'' . $txt['are_sure_remove_topic'] . '\');"', 'url' => $scripturl . '?action=removetopic2;topic=' . $context['current_topic'] . '.0;' . $context['session_var'] . '=' . $context['session_id']),

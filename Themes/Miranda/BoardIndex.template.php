@@ -318,7 +318,7 @@ function template_info_center()
 		elseif (!empty($context['latest_posts']))
 		{
 			echo '
-				<dl id="ic_recentposts" class="middletext">';
+				<dl id="ic_recentposts" class="smalltext">';
 
 			/* Each post in latest_posts has:
 					board (with an id, name, and link.), topic (the topic's id.), poster (with id, name, and link.),

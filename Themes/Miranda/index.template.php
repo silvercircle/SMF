@@ -173,7 +173,7 @@ function template_body_above()
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
 	echo '<div id="ajaxbusy" style="display:none;"><img src="',$settings['images_url'],'/ajax-loader.gif" alt="loader" /></div><div id="mcard" style="display:none;"><div id="mcard_close">X</div><div id="mcard_inner"></div></div>
-	<header><div id="header"><div class="frame">
+	<div id="wrap"><header><div id="header">
 		<div id="upper_section" class="middletext"><img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" /><div style="float:left;color:white;font-size:22px;padding:20px 30px;">SMF pLayGround</div>';
 
 	// If the user is logged in, display stuff like their name, new messages, etc.
@@ -255,34 +255,37 @@ function template_body_above()
 
 	echo '</nav>
 		<br class="clear" />
-	</div></div></header>';
+	</div></header>';
 
 	// The main content should go here.
 	echo '
-	<div id="content_section"><div class="frame">
+	<div id="content_section">
 		<div id="main_content_section">';
 
 	// Custom banners and shoutboxes should be placed here, before the linktree.
 
-	echo '<table style="margin-bottom:10px;width:100%;"><tr><td style="width:100%">';
 	theme_linktree();
-	echo '</td><td style="white-space:nowrap;">';
 	// Show the navigation tree.
-	echo '<form style="float:right;margin-right:10px;" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">
-					<input type="text" name="search" value="" class="input_text" />&nbsp;
-					<input type="submit" name="submit" value="', $txt['search'], '" class="button_submit" />
+	echo '<form style="float:right;margin-right:10px;margin-bottom:-20px;" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
+			// Search within current topic?
+			$search_label = 'Search';
+			if (!empty($context['current_topic'])) {
+				echo '
+					<input type="hidden" name="topic" value="', $context['current_topic'], '" />';
+				$search_label = 'Search this topic';
+			}
+			// If we're on a certain board, limit it to this board ;).
+			elseif (!empty($context['current_board'])) {
+				echo '
+					<input type="hidden" name="brd[', $context['current_board'], ']" value="', $context['current_board'], '" />';
+				$search_label = 'Search this board';
+			}
+				echo '<input style="padding-left:26px;margin:0;" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" size="30" name="search" value="',$search_label,'" class="searchfield" />
+					<input style="margin:0;" type="submit" name="submit" value="', $txt['go'], '" class="button_submit" />
 					<input type="hidden" name="advanced" value="0" />';
 
-	// Search within current topic?
-	if (!empty($context['current_topic']))
-		echo '
-					<input type="hidden" name="topic" value="', $context['current_topic'], '" />';
-	// If we're on a certain board, limit it to this board ;).
-	elseif (!empty($context['current_board']))
-		echo '
-					<input type="hidden" name="brd[', $context['current_board'], ']" value="', $context['current_board'], '" />';
 
-	echo '</form></td></tr></table>';
+	echo '</form><div style="clear:both;"></div>';
 }
 
 function template_body_below()
@@ -290,8 +293,7 @@ function template_body_below()
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
 	echo '
-		</div>
-	</div></div>';
+		</div></div>';
 
 	// Show the "Powered by" and "Valid" logos, as well as the copyright. Remember, the copyright must be somewhere!
 	echo '
@@ -327,7 +329,7 @@ function template_html_below()
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
 	echo '
-</body></html>';
+</div></body></html>';
 }
 
 // Show a linktree. This is that thing that shows "My Community | General Category | General Discussion"..
@@ -390,6 +392,8 @@ function template_menu()
 
 	foreach ($context['menu_buttons'] as $act => $button)
 	{
+		if(!isset($button['active_button']))
+			$button['active_button'] = false;
 		echo '
 				<li id="button_', $act, '">
 					<a class="', $button['active_button'] ? 'active ' : '', 'firstlevel" href="', $button['href'], '"', isset($button['target']) ? ' target="' . $button['target'] . '"' : '', '>
