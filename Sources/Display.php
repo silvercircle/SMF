@@ -998,7 +998,7 @@ function Display()
 		$messages_request = $smcFunc['db_query']('', '
 			SELECT
 				m.id_msg, m.icon, m.subject, m.poster_time, m.poster_ip, m.id_member, m.modified_time, m.modified_name, m.body,
-				m.smileys_enabled, m.poster_name, m.poster_email, m.approved, c.likes_count, c.like_status, l.id_user AS liked,
+				m.smileys_enabled, m.poster_name, m.poster_email, m.approved, c.likes_count, c.like_status, c.updated AS like_updated, l.id_user AS liked,
 				m.id_msg_modified < {int:new_from} AS is_read
 			FROM {db_prefix}messages AS m
 			LEFT JOIN {db_prefix}likes AS l ON l.id_msg = m.id_msg AND l.id_user = '.$user_info['id'].'
@@ -1232,12 +1232,12 @@ function prepareDisplayContext($reset = false)
 		$have_liked_it = false;
 		if($can_give_like) {
 			if(intval($output['liked']) > 0) {
-				$output['likelink'] = '<a rel="nofollow" class="givelike" data-board="'.$board.'" data-fn="remove" href="#" data-id="'.$message['id_msg'].'">'.$txt['unlike_label'].'</a>';
+				$output['likelink'] = '<a rel="nofollow" class="givelike" data-fn="remove" href="#" data-id="'.$message['id_msg'].'">'.$txt['unlike_label'].'</a>';
 				$have_liked_it = true;
 			}
 			else if(!$user_info['is_guest']) {
 				if($message['id_member'] != $user_info['id'])
-					$output['likelink'] = '<a rel="nofollow" class="givelike" data-board="'.$board.'" data-fn="give" href="#" data-id="'.$message['id_msg'].'">'.$txt['like_label'].'</a>';
+					$output['likelink'] = '<a rel="nofollow" class="givelike" data-fn="give" href="#" data-id="'.$message['id_msg'].'">'.$txt['like_label'].'</a>';
 				else
 					$output['likelink'] = '&nbsp;';
 			}
@@ -1249,9 +1249,16 @@ function prepareDisplayContext($reset = false)
 		}
 			
 		if($user_info['is_admin'])
-			$output['likelink'] .= ' <a rel="nofollow" class="givelike" data-board="'.$board.'" data-fn="repair" href="#" data-id="'.$message['id_msg'].'">Repair Likes</a>';
-			
-		LikesGenerateOutput($message['like_status'], &$output['likers'], $output['likes_count'], $message['id_msg'], $have_liked_it);
+			$output['likelink'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$message['id_msg'].'">Repair Likes</a>';
+		
+		if($output['likes_count'] > 0) {
+			if(time() - $message['like_updated'] > 86400) {
+				$result = LikesUpdate($message['id_msg']);
+				LikesGenerateOutput($result['status'], $output['likers'], $result['count'], $message['id_msg'], $have_liked_it);
+			}
+			else
+				LikesGenerateOutput($message['like_status'], $output['likers'], $output['likes_count'], $message['id_msg'], $have_liked_it);
+		}
 	}
 	else
 		$output['likes_count'] = 0;

@@ -1162,6 +1162,16 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'block_level' => true,
 			),
 			array(
+				'tag' => 'code',
+            	'type' => 'unparsed_equals_content',
+            	'test' => '[A-Za-z0-9_,\-\s]+?\]',
+            	'validate' =>  create_function('&$tag, &$data, $disabled', '
+               $data[0] = parse_bbc($data[0], ' . ($smileys ? 'true' : 'false') . ', \'' . $cache_id . '\');
+			   global $txt;
+               $tag[\'content\'] = "<div class=\"codeheader\">" . $txt[\'smf238\'] . ": (" . $data[1] . ") </div><pre name=\"code\" class=\"" . $data[1] . "\">" . $data[0] . "</pre>";
+            	'),
+			),			
+			array(
 				'tag' => 'color',
 				'type' => 'unparsed_equals',
 				'test' => '(#[\da-fA-F]{3}|#[\da-fA-F]{6}|[A-Za-z]{1,20}|rgb\(\d{1,3}, ?\d{1,3}, ?\d{1,3}\))\]',
@@ -1387,7 +1397,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			),
 			array(
 				'tag' => 'pre',
-				'before' => '<pre>',
+				'before' => '<pre class="brush:js;">',
 				'after' => '</pre>',
 			),
 			array(

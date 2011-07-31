@@ -77,7 +77,6 @@ function ListMessageIcons()
 
 /*
  * output the member card
- * todo: make it use the template system
  */
  
 function GetMcard()
@@ -90,42 +89,34 @@ function GetMcard()
 	if(!$is_xmlreq)
 		die;
 		
-	$uid = (int)$_REQUEST['u'];
-	
-	if(allowedTo('profile_view_any')) {
-		loadMemberData($uid);
-		loadMemberContext($uid);
-		$member = $memberContext[$uid];
-		if(!empty($member['avatar']['image']))
-			echo '<div style="float:left;margin:5px 10px 0 0;">',$member['avatar']['image'],'</div>';
-		else
-			echo '<div style="float:left;margin:5px 10px 0 0;"><img src="',$settings['images_url'], '/unknown.png" alt="avatar" /></div>';
-		echo '<div style="float:left;"><div style="float:right;margin-left:10px;">',
-		$member['group_stars'],'<br /><strong>',$member['blurb'],'</strong></div><span style="font-size:22px;font-weight:bold;">',$member['name'],'</span><hr />';
-		echo $member['group'],' ',$member['post_group'],'<br />';
-		echo $member['gender']['name'];
-		if(!empty($member['location']))
-			echo ', from ',$member['location'];
-		
-		echo '<br />Member since: ', $member['registered'];
-		echo '</div>';
-		echo '<div style="position:absolute;bottom:-2px;right:5px;"><a href="',$scripturl,'?action=profile;u=',$uid,'">View full profile</a></div><div style="clear:both;"></div>';
+	if(!isset($_REQUEST['u']))
 		die;
+		
+	$uid = intval($_REQUEST['u']);
+	
+	if(allowedTo('profile_view_any') && $uid) {
+		loadMemberData($uid, false, 'profile');
+		loadMemberContext($uid);
+		loadTemplate('MemberCard');
+		loadLanguage('Profile');
+		loadLanguage('Like');
+		$context['member'] = $memberContext[$uid];
 	}
-	loadLanguage('Login');
-	echo '<div style="text-align:center;font-size:15px;margin:10px 0;">'.$txt['only_members_can_access'].'</div>';
-	die;
+	else {
+		loadLanguage('Errors');
+		$context['forbidden'] = true;
+	}
 }
 
 /*
  * handle a like. _REQUEST['m'] is the message id that is to receive the
- * like, 'b' is the board number (needed to check permissions)
+ * like
  * 
- * todo: remove likes from the database when a user is deleted
- * todo: make it work without AJAX and JavaScript
- * todo: error responses
- * todo: disallow like for posts by banned users
- * todo: use language packs to make it fully translatable
+ * TODO: remove likes from the database when a user is deleted
+ * TODO: make it work without AJAX and JavaScript
+ * TODO: error responses
+ * TODO: disallow like for posts by banned users
+ * TODO: use language packs to make it fully translatable
  */
  
 function GiveLike()
@@ -134,24 +125,27 @@ function GiveLike()
 	global $settings, $user_info, $sourcedir, $smcFunc;
 	$total = array();
 	
-	$mid = intval($_REQUEST['m']);
-	$bid = intval($_REQUEST['b']);
+	if(isset($_REQUEST['m']))
+		$mid = intval($_REQUEST['m']);
+	else
+		$mid = 0;
 	
 	if($mid > 0) {
 		$uid = $user_info['id'];
-		$remove_it = intval($_REQUEST['remove']) == 1 ? true : false;
+		$remove_it = isset($_REQUEST['remove']) ? true : false;
 		$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
 		
 		require_once($sourcedir . '/LikeSystem.php');
 
-		$allowed = allowedTo('like_give', $bid);
-		if(!$allowed || $user_info['is_guest'])
+		if($user_info['is_guest'])
 			LikesError("Permission denied", $is_xmlreq);
 
 		/* check for dupes */
 		$request = $smcFunc['db_query']('', '
 			SELECT COUNT(id_msg) as count, id_user 
-				FROM {db_prefix}likes AS l WHERE l.id_msg = '.$mid.' AND l.id_user = '.$uid);
+				FROM {db_prefix}likes AS l WHERE l.id_msg = {int:id_message} AND l.id_user = {int:id_user}',
+				array('id_message' => $mid, 'id_user' => $uid));
+				
 		$count = $smcFunc['db_fetch_row']($request);
 		$smcFunc['db_free_result']($request);
 		
@@ -162,7 +156,7 @@ function GiveLike()
 		 * the likes for a post.
 		 * it may go away at a later time.
 		 */
-		if(intval($_REQUEST['repair']) == 1) {
+		if(isset($_REQUEST['repair'])) {
 			if(!$user_info['is_admin'])
 				die;
 			$total = LikesUpdate($mid);
@@ -170,6 +164,8 @@ function GiveLike()
 			LikesGenerateOutput($total['status'], $output, $total['count'], $mid, $c > 0 ? true : false);
 			if($is_xmlreq)
 				echo $output;
+			else
+				LikesError("The like status cache for post ".$mid."was rebuilt successfully");
 			die;
 		}
 		
@@ -183,20 +179,43 @@ function GiveLike()
 		
 		$request = $smcFunc['db_query']('', '
 			SELECT id_member, id_board FROM {db_prefix}messages AS m WHERE m.id_msg = '.$mid);
-		
+
 		$m = $smcFunc['db_fetch_row']($request);
 		$smcFunc['db_free_result']($request);
-		if(intval($m[0]) == $uid || $m[1] != $bid)
-			LikesError('Verification failed', $is_xmlreq);
+		$like_receiver = intval($m[0]);
 		
-		if($remove_it && $c > 0) {
+		if($like_receiver == $uid)
+			LikesError('Cannot like own posts.', $is_xmlreq);
+		
+		if(!allowedTo('like_give', $m[1]))
+			LikesError('You cannot use this feature.', $is_xmlreq);
+
+		if($remove_it && $c > 0) {   	// TODO: remove a like, $c must indicate a duplicate (existing) like
+										// and you must be the owner of the like or admin
 			LikesError('Removing is ok', $is_xmlreq);
 		}
 		else {
-			$smcFunc['db_query']('', '
-				INSERT INTO {db_prefix}likes values('.$mid.', ' . $uid . ', ' . time() . ')');
+			/* store the like */
+			global $memberContext;
+			
+			if($like_receiver) {
+				loadMemberData($like_receiver);
+				loadMemberContext($like_receiver);
+				if(!$memberContext[$like_receiver]['is_banned']) {
+					$smcFunc['db_query']('', '
+						INSERT INTO {db_prefix}likes values({int:id_message}, {int:id_user}, {int:updated})',
+						array('id_message' => $mid, 'id_user' => $uid, 'updated' => time()));
+					
+					$smcFunc['db_query']('', 'UPDATE {db_prefix}members SET likes_received = likes_received + 1 WHERE id_member = {int:id_member}',
+						array('id_member' => $like_receiver));
+					
+					$smcFunc['db_query']('', 'UPDATE {db_prefix}members SET likes_given = likes_given + 1 WHERE id_member = '.$uid);
+				}
+			}
+			else
+				LikesError('Cannot like this post', $is_xmlreq);
+				
 		}
-		
 		$total = LikesUpdate($mid);
 		$output = '';
 		LikesGenerateOutput($total['status'], $output, $total['count'], $mid, true);
@@ -211,18 +230,39 @@ function TopicPeek()
 	global $settings, $user_info, $sourcedir, $smcFunc, $board;
 	
 	$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
-	$mid = intval($_REQUEST['m']);
 	
-	echo "hahaha";
-	if($mid) {
+	if(isset($_REQUEST['t']))
+		$tid = intval($_REQUEST['t']);
+	else
+		$tid = 0;
 	
-		/*
-		censorText($message['body']);
-		censorText($message['subject']);
+	if(!$is_xmlreq)
+		redirectexit();
+		
+	if($tid) {
+		global $memberContext;
+		loadTemplate('TopicPreview');
+		loadLanguage('index');
+		loadLanguage('Like');
+		$result = $smcFunc['db_query']('', '
+			SELECT t.id_topic, t.id_board, t.id_first_msg, t.id_last_msg, m.id_member AS member_started, m1.id_member AS member_lastpost, m.subject AS first_subject, m.poster_name AS starter_name, m1.subject AS last_subject,
+			m1.poster_name AS last_name, m.body as first_body, m1.body AS last_body FROM {db_prefix}topics AS t
+			LEFT JOIN {db_prefix}messages AS m ON m.id_msg = t.id_first_msg 
+			LEFT JOIN {db_prefix}messages AS m1 ON m1.id_msg = t.id_last_msg WHERE t.id_topic = {int:topic_id}',
+			array('topic_id' => $tid));
+			
+		$row = $smcFunc['db_fetch_assoc']($result);
+		$smcFunc['db_free_result']($result);
+		
+		$context['preview'] = $row;
+		
+		censorText($context['preview']['first_subject']);
+		censorText($context['preview']['last_subject']);
 
-		$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
-		*/
+		$context['preview']['first_body'] = parse_bbc($context['preview']['first_body'], false, $context['preview']['id_first_msg']);
+		$context['preview']['first_body'] = $smcFunc['substr']($context['preview']['first_body'], 0, 500) . '...';
+
+		$context['preview']['last_body'] = parse_bbc($context['preview']['last_body'], false, $context['preview']['id_first_msg']);
 	}
-	die;
 }
 ?>

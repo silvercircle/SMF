@@ -20,8 +20,8 @@ function LikesUpdate($mid)
 	$likers = array();
 	
 	$request = $smcFunc['db_query']('', '
-		SELECT l.id_msg AS like_message, l.id_user AS like_user, m.member_name FROM {db_prefix}likes AS l
-			LEFT JOIN {db_prefix}members AS m on m.id_member = l.id_user WHERE l.id_msg = '.$mid.' AND m.id_member <> 0 ORDER BY l.updated DESC LIMIT 4');
+		SELECT l.id_msg AS like_message, l.id_user AS like_user, m.real_name AS member_name FROM {db_prefix}likes AS l
+			LEFT JOIN {db_prefix}members AS m on m.id_member = l.id_user WHERE l.id_msg = {int:id_message} AND m.id_member <> 0 ORDER BY l.updated DESC LIMIT 4', array('id_message' => $mid));
 
 	while ($row = $smcFunc['db_fetch_assoc']($request)) {
 		if(empty($row['member_name']))
@@ -37,14 +37,18 @@ function LikesUpdate($mid)
 	
 	$request = $smcFunc['db_query']('', '
 		SELECT COUNT(id_msg) as count
-			FROM {db_prefix}likes AS l WHERE l.id_msg = '.$mid);
+			FROM {db_prefix}likes AS l WHERE l.id_msg = {int:id_msg}', array('id_msg' => $mid));
+	
 	$count = $smcFunc['db_fetch_row']($request);
 	$smcFunc['db_free_result']($request);
 	$totalcount = $count[0];
+
+	$time = time();	
 	
 	$smcFunc['db_query']('', '
-		INSERT INTO {db_prefix}like_cache VALUES('.$mid.', '.$totalcount.', "'.$like_string.'") 
-			ON DUPLICATE KEY UPDATE likes_count = '.$totalcount.', like_status = "'.$like_string.'"');
+		INSERT INTO {db_prefix}like_cache VALUES({int:id_msg}, {int:total}, {string:like_status}, {int:updated}) 
+			ON DUPLICATE KEY UPDATE updated = {int:updated}, likes_count = {int:total}, like_status = {string:like_status}',
+			array('id_msg' => $mid, 'total' => $totalcount, 'updated' => $time, 'like_status' => $like_string));
 
 	$result['count'] = $totalcount;
 	$result['status'] = $like_string;
@@ -52,9 +56,9 @@ function LikesUpdate($mid)
 }
 
 /*
- * generate readable output from the like_status database field
+ * generate readable output from the cached like status
  * store it in $output
- * $have liked indicates that the current user has liked the post.
+ * $have_liked indicates that the current user has liked the post.
  */
 function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_liked)
 {
@@ -73,17 +77,23 @@ function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_l
 	foreach($likers as $liker) {
 		if(!empty($liker)) {
 			$liker_components = explode("[**]", $liker);
-			if($liker_components[1] === $user_info['name']) {
-				$results[0] = $txt['you_liker'];
-				continue;
+			if(isset($liker_components[0]) && isset($liker_components[1])) {
+				if($liker_components[1] === $user_info['name']) {
+					$results[0] = $txt['you_liker'];
+					continue;
+				}
+				$results[$n++] = '<a rel="nofollow" class="mcard" data-id="'.$liker_components[0].'" href="'.$scripturl.'?action=profile;u='.intval($liker_components[0]).'">'.$liker_components[1].'</a>';
 			}
-			$results[$n++] = '<a rel="nofollow" class="mcard" data-id="'.$liker_components[0].'" href="'.$scripturl.'?action=profile;u='.intval($liker_components[0]).'">'.$liker_components[1].'</a>';
 		}
 	}
 	$count = count($results);
 	if($count == 0)
 		return($output);
 		
+	/*
+	 * we have liked it but our entry is too old to be in the top 4, so move 
+	 * it to the front and remove the oldest
+	 */
 	if($have_liked && !isset($results[0])) {
 		array_pop($results);
 		$results[0] = $txt['you_liker'];

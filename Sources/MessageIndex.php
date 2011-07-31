@@ -543,7 +543,8 @@ function MessageIndex()
 			loadMemberData($first_posters);
 			foreach($context['topics'] as &$_topic) {
 				loadMemberContext($first_posters[$_topic['id']], true);
-				$_topic['first_post']['member']['avatar'] = $memberContext[$first_posters[$_topic['id']]]['avatar']['image'];
+				if(isset($memberContext[$first_posters[$_topic['id']]]['avatar']['image']))
+					$_topic['first_post']['member']['avatar'] = $memberContext[$first_posters[$_topic['id']]]['avatar']['image'];
 			}
 		}
 		$smcFunc['db_free_result']($result);

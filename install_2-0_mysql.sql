@@ -1252,7 +1252,8 @@ CREATE TABLE {$db_prefix}members (
   warning tinyint(4) NOT NULL default '0',
   passwd_flood varchar(12) NOT NULL default '',
   pm_receive_from tinyint(4) unsigned NOT NULL default '1',
-  likes_received tinyint(4) unsigned NOT NULL default '0',
+  likes_received int(4) unsigned NOT NULL default '0',
+  likes_given int(4) unsigned NOT NULL default '0',
   PRIMARY KEY (id_member),
   KEY member_name (member_name),
   KEY real_name (real_name),
@@ -1321,7 +1322,7 @@ CREATE TABLE {$db_prefix}messages (
   smileys_enabled tinyint(4) NOT NULL default '1',
   modified_time int(10) unsigned NOT NULL default '0',
   modified_name varchar(255) NOT NULL default '',
-  body text NOT NULL,
+  body mediumtext NOT NULL,
   icon varchar(16) NOT NULL default 'xx',
   approved tinyint(3) NOT NULL default '1',
   PRIMARY KEY (id_msg),
@@ -1358,8 +1359,9 @@ CREATE TABLE {$db_prefix}likes (
 
 CREATE TABLE {$db_prefix}like_cache (
 	id_msg int(10) unsigned NOT NULL default '0',
-  	likes_count tinyint(4) NOT NULL default '0',
+  	likes_count int(4) NOT NULL default '0',
   	like_status varchar(150) NOT NULL default '',
+  	updated int(4) NOT NULL default '0',
   	PRIMARY KEY (id_msg)
 ) ENGINE=MyISAM;
 

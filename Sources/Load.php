@@ -507,6 +507,7 @@ function loadUserSettings()
 		'ignoreboards' => !empty($user_settings['ignore_boards']) && !empty($modSettings['allow_ignore_boards']) ? explode(',', $user_settings['ignore_boards']) : array(),
 		'ignoreusers' => !empty($user_settings['pm_ignore_list']) ? explode(',', $user_settings['pm_ignore_list']) : array(),
 		'warning' => isset($user_settings['warning']) ? $user_settings['warning'] : 0,
+		'likesgiven' => isset($user_settings['likes_given']) ? $user_settings['likes_given'] : 0,
 		'permissions' => array(),
 	);
 	$user_info['groups'] = array_unique($user_info['groups']);
@@ -973,7 +974,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 			mem.time_format, mem.secret_question, mem.is_activated, mem.additional_groups, mem.smiley_set, mem.show_online,
 			mem.total_time_logged_in, mem.id_post_group, mem.notify_announcements, mem.notify_regularity, mem.notify_send_body,
 			mem.notify_types, lo.url, mg.online_color AS member_group_color, IFNULL(mg.group_name, {string:blank_string}) AS member_group,
-			pg.online_color AS post_group_color, IFNULL(pg.group_name, {string:blank_string}) AS post_group, mem.ignore_boards, mem.warning,
+			pg.online_color AS post_group_color, likes_received AS liked, likes_given AS likesgiven, IFNULL(pg.group_name, {string:blank_string}) AS post_group, mem.ignore_boards, mem.warning,
 			CASE WHEN mem.id_group = 0 OR mg.stars = {string:blank_string} THEN pg.stars ELSE mg.stars END AS stars, mem.password_salt, mem.pm_prefs';
 		$select_tables = '
 			LEFT JOIN {db_prefix}log_online AS lo ON (lo.id_member = mem.id_member)
@@ -1216,6 +1217,8 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'warning' => $profile['warning'],
 		'warning_status' => !empty($modSettings['warning_mute']) && $modSettings['warning_mute'] <= $profile['warning'] ? 'mute' : (!empty($modSettings['warning_moderate']) && $modSettings['warning_moderate'] <= $profile['warning'] ? 'moderate' : (!empty($modSettings['warning_watch']) && $modSettings['warning_watch'] <= $profile['warning'] ? 'watch' : (''))),
 		'local_time' => timeformat(time() + ($profile['time_offset'] - $user_info['time_offset']) * 3600, false),
+		'liked' => isset($profile['liked']) ? $profile['liked'] : 0,
+		'likesgiven' => isset($profile['likesgiven']) ? $profile['likesgiven'] : 0,
 	);
 
 	// First do a quick run through to make sure there is something to be shown.

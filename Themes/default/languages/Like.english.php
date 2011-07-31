@@ -9,4 +9,5 @@
 	$txt['you_liker'] = "You";
 	$txt['like_label'] = "Like";
 	$txt['unlike_label'] = "Unlike";
+	$txt['like_profile_report'] = "%s has liked %d posts and received %d likes on %d posts.";
 ?>
