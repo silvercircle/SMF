@@ -1484,6 +1484,14 @@ function template_profile_theme_settings()
 							<li>
 								<input type="hidden" name="default_options[show_no_signatures]" value="0" />
 								<label for="show_no_signatures"><input type="checkbox" name="default_options[show_no_signatures]" id="show_no_signatures" value="1"', !empty($context['member']['options']['show_no_signatures']) ? ' checked="checked"' : '', ' class="input_check" /> ', $txt['show_no_signatures'], '</label>
+							</li>
+							<li>
+								<input type="hidden" name="default_options[use_share_bar]" value="0" />
+								<label for="use_share_bar"><input type="checkbox" name="default_options[use_share_bar]" id="use_share_bar" value="1"', !empty($context['member']['options']['use_share_bar']) ? ' checked="checked"' : '', ' class="input_check" /> ', "Disable social sharing buttons.", '</label>
+							</li>
+							<li>
+								<input type="hidden" name="default_options[use_mcards]" value="0" />
+								<label for="use_mcards"><input type="checkbox" name="default_options[use_mcards]" id="use_mcards" value="1"', !empty($context['member']['options']['use_mcards']) ? ' checked="checked"' : '', ' class="input_check" /> ', "Disable member cards to view profiles.", '</label>
 							</li>';
 
 	if ($settings['allow_no_censored'])

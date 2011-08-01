@@ -103,8 +103,10 @@ function GetMcard()
 		$context['member'] = $memberContext[$uid];
 	}
 	else {
+		loadTemplate('MemberCard');
 		loadLanguage('Errors');
-		$context['forbidden'] = true;
+		echo "Forbidden";
+		die;
 	}
 }
 
@@ -187,7 +189,7 @@ function GiveLike()
 		if($like_receiver == $uid)
 			LikesError('Cannot like own posts.', $is_xmlreq);
 		
-		if(!allowedTo('like_give', $m[1]))
+		if(!allowedTo('like_give', $m[1]))			// no permission to give likes in this board
 			LikesError('You cannot use this feature.', $is_xmlreq);
 
 		if($remove_it && $c > 0) {   	// TODO: remove a like, $c must indicate a duplicate (existing) like

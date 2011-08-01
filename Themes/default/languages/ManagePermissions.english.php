@@ -346,4 +346,8 @@ $txt['permissiongroup_like'] = 'Like system';
 $txt['permissiongroup_simple_like'] = 'Like system';
 $txt['permissionname_like_see'] = "See likes on posts";
 $txt['permissionname_like_give'] = "Gives likes on posts";
+$txt['permissiongroup_share'] = 'Enable share links';
+$txt['permissiongroup_simple_share'] = 'Enable share links';
+$txt['permissionname_use_share'] = "Use social media share bar";
+
 ?>

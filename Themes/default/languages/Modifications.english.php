@@ -1,7 +1,7 @@
 <?php
 // Version: 2.0; Modifications
-$txt['report'] = 'Report&nbsp;&nbsp;';
-$txt['issue_warning'] = 'Issue warning&nbsp;&nbsp;';
+$txt['report'] = 'Report';
+$txt['issue_warning'] = 'Issue warning';
 
 $txt['smftags_menu'] = 'Tags';
 $txt['smftags_admin'] = 'Tags Configuration';

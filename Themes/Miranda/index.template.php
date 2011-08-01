@@ -107,6 +107,7 @@ function template_html_above()
 		var smf_theme_url = "', $settings['theme_url'], '";
 		var smf_default_theme_url = "', $settings['default_theme_url'], '";
 		var smf_images_url = "', $settings['images_url'], '";
+		var smf_use_mcards = "', $options['use_mcards'], '";
 		var smf_scripturl = "', $scripturl, '";
 		var smf_iso_case_folding = ', $context['server']['iso_case_folding'] ? 'true' : 'false', ';
 		var smf_charset = "', $context['character_set'], '";', $context['show_pm_popup'] ? '
@@ -290,14 +291,14 @@ function template_body_above()
 
 function template_body_below()
 {
-	global $context, $settings, $options, $scripturl, $txt, $modSettings;
+	global $context, $settings, $options, $scripturl, $txt, $modSettings, $fbxml, $twitter_widgets, $plusone;
 
 	echo '
 		</div></div>';
 
 	// Show the "Powered by" and "Valid" logos, as well as the copyright. Remember, the copyright must be somewhere!
 	echo '
-  	<script type="text/javascript">
+  	<div id="fb-root"></div><script type="text/javascript">
 	// <![CDATA[
 
     var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
@@ -305,7 +306,43 @@ function template_body_below()
 	t2.type = "text/javascript";
 	t2.async = true;
 	t2.src = "',$settings['theme_url'],'/scripts/footer.js?ver=1.1.0";
-	anchor.parentNode.insertBefore(t2, anchor);
+	anchor.parentNode.insertBefore(t2, anchor);';
+	
+	if(1) {
+		if($fbxml) {
+			echo '
+			window.fbAsyncInit = function() {
+   				FB.init({appId: \'109862169045977\', status: true, cookie: true, xfbml: true});
+  			};
+  			(function() {
+    			var e = document.createElement(\'script\'); e.async = true;
+    			e.src = \'http://connect.facebook.net/en_US/all.js\';
+				document.getElementById(\'fb-root\').appendChild(e);
+  			}());
+			';
+		}
+		if($twitter_widgets) {
+			echo '
+			var t1 = document.createElement(\'SCRIPT\');
+
+			t1.src = \'http://platform.twitter.com/widgets.js\'; 
+			t1.type = "text/javascript"; 
+			t1.async = true;
+			anchor.parentNode.insertBefore(t1, anchor);
+			';
+		}
+	}
+	if($plusone) {
+		echo '
+			var t3 = document.createElement(\'SCRIPT\');
+
+			t3.src = \'http://apis.google.com/js/plusone.js\'; 
+			t3.type = "text/javascript"; 
+			t3.async = true;
+			anchor.parentNode.insertBefore(t3, anchor);
+			';
+	}
+	echo '
 	// ]]>
 	</script>
 	<div id="footer_section">';
@@ -494,6 +531,90 @@ function my_theme_copyright($get_it = false)
 	echo '
 			<span class="smalltext" style="display: inline; visibility: visible;">' . $forum_copyright . '
 			</span>';
+}
+
+/**
+ * create JavaScript to inject asynchronous and XHTML compliant
+ * facebook "like" and Twitter "tweet" buttons
+ * @params:
+ * 	$l:	article permalink to share
+ *	$fb:	if true, generate facebook button
+ *	$tw:	if true, generate tweet button
+ */
+function async_like_and_tweet($l, $fb = true, $tw = true, $layout="standard")
+{
+    global $fbxml, $twitter_widgets, $social_privacy, $plusone;
+    
+    echo '
+	<script type="text/javascript">
+	//<![CDATA[
+	';
+    if($fb) {
+       $fbxml = 1;
+       echo '(function() {
+ 
+        document.write(\'<fb:like style="min-width:500px;min-height:21px;" width="500" href="',$l,'" layout="',$layout,'" send="true" show_faces="false" action="recommend" font="verdana"></fb:like>\');
+    	})();';
+    }
+    if($tw) {
+	$twitter_widgets = 1;
+	$plusone++;
+	echo '
+		document.write(\'<div style="float:right;max-width:65px;overflow:hidden;"><div style="max-width:65px;" class="g-plusone" data-href="',$l,'" data-size="medium" data-count="true"></div></div>\');
+   	    document.write(\'<a href="http://twitter.com/share" style="border:none;" class="twitter-share-button" data-count="horizontal" data-url="',$l,'"></a>\');
+	';
+    }	
+    echo '//]]>
+       </script>';
+}
+
+function socialbar($l)
+{
+	global $social_privacy;
+	
+	if(1|| $social_privacy) {
+		socialbar_passive($l);
+		return;
+	}
+	echo '<div class="bmbar">';
+	async_like_and_tweet($l);
+	echo '<div style="clear:both;"></div></div>';	
+}
+
+function socialbar_passive($l)
+{
+	global $social_privacy, $plusone;
+	
+	echo '<div class="bmbar"><div class="title">Share this topic: </div>';
+		$url = $l;
+		$title = urlencode($post->post_title);
+		$plusone++;
+		
+		//$fb = "<span class=\"share_button share_fb\" onclick=\"share_popup(\'http://www.facebook.com/sharer.php?u=".$url."\', 500,400);\">Share</span>";
+		//$tw = "<span class=\"share_button share_tw\" onclick=\"share_popup(\'http://twitter.com/share?url=".$url."&amp;text=".$title."\', 550,300);\">Tweet</span>";
+		echo '<div style="float:left;"><a role="button" rel="nofollow" class="share_button share_fb" href="http://www.facebook.com/sharer.php?u=',$url,'">Share</a>
+			<a role="button" rel="nofollow" class="share_button share_tw" href="http://twitter.com/share?url=',$url,'&amp;text=',$title,'">Tweet</a>
+			<a role="button" rel="nofollow" class="share_button share_digg" href="http://digg.com/submit?phase=2&amp;title=',$title,'&amp;url=',$url,'">Digg</a>
+			<a role="button" rel="nofollow" class="share_button share_buzz" href="http://www.google.com/buzz/post?url=',$url,'">Buzz</a></div>&nbsp;&nbsp;
+			<script type="text/javascript">
+			//<![CDATA[
+            	document.write(\'<div style="float:right;max-width:65px;overflow:hidden;"><g:plusone href="',$url,'" size="medium"></g:plusone></div>\');
+    		//]]>
+       		</script>
+       		<div style="clear:both;"></div>';
+			
+		/*	
+		echo '<script type="text/javascript">
+			//<![CDATA[
+			document.write(\'',$fb,'&nbsp;&nbsp;',$tw,'\');
+			//]]>			
+			</script>
+			<noscript>
+			<a class="share_button share_fb" href="http://www.facebook.com/sharer.php?u=',$url,'">Share</a>
+			<a class="share_button share_tw" href="http://twitter.com/share?url=',$url,'">Tweet</a>
+			</noscript>';
+			*/
+	echo '</div><div style="clear:both;"></div>';
 }
 
 ?>

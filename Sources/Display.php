@@ -68,7 +68,8 @@ function Display()
 	
 	$can_see_like = allowedTo('like_see', $board);
 	$can_give_like = allowedTo('like_give', $board);
-
+	$context['use_share'] = allowedTo('use_share', $board);
+	
 	// What are you gonna display if these are empty?!
 	if (empty($topic))
 		fatal_lang_error('no_board', false);

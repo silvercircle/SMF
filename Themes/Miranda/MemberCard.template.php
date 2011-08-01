@@ -3,8 +3,6 @@ function template_main()
 {
 		global $context, $user_info, $scripturl, $settings, $txt;
 	
-		//if(isset($context['forbidden']))
-		//	echo 
 		$member = $context['member'];
 	    $loc = array();
 	    

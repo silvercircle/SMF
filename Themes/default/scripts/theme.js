@@ -92,5 +92,5 @@ var smf_addListItemHoverEvents = function()
 }
 
 // Add hover events to list items if the browser requires it.
-if (is_ie7down && 'attachEvent' in window)
-	window.attachEvent('onload', smf_addListItemHoverEvents);
+//if (is_ie7down && 'attachEvent' in window)
+//	window.attachEvent('onload', smf_addListItemHoverEvents);

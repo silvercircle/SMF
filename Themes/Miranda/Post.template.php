@@ -109,19 +109,17 @@ function template_main()
 	// If the user wants to see how their message looks - the preview section is where it's at!
 	echo '
 			<div id="preview_section"', isset($context['preview_message']) ? '' : ' style="display: none;"', '>
-				<div class="cat_bar">
+				<div class="cat_bar rounded_top">
 					<h3 class="catbg">
 						<span id="preview_subject">', empty($context['preview_subject']) ? '' : $context['preview_subject'], '</span>
 					</h3>
 				</div>
-				<div class="windowbg">
-					<span class="topslice"><span></span></span>
+				<div class="generic_container">
 					<div class="content">
 						<div class="post" id="preview_body">
 							', empty($context['preview_message']) ? '<br />' : $context['preview_message'], '
 						</div>
 					</div>
-					<span class="botslice"><span></span></span>
 				</div>
 			</div><br />';
 
@@ -131,12 +129,11 @@ function template_main()
 
 	// Start the main table.
 	echo '
-			<div class="cat_bar">
+			<div class="cat_bar rounded_top">
 				<h3 class="catbg">', $context['page_title'], '</h3>
 			</div>
-			<div>
-				<span class="upperframe"><span></span></span>
-				<div class="roundframe">', isset($context['current_topic']) ? '
+			<div class="generic_container"><br />
+				<div class="blue_container" style="margin:0 20px;padding:10px;">', isset($context['current_topic']) ? '
 					<input type="hidden" name="topic" value="' . $context['current_topic'] . '" />' : '';
 
 	// If an error occurred, explain what happened.
@@ -556,8 +553,7 @@ function template_main()
 
 	echo '
 					</p>
-				</div>
-				<span class="lowerframe"><span></span></span>
+				</div><br />
 			</div>
 			<br class="clear" />';
 
@@ -802,7 +798,7 @@ function template_main()
 	{
 		echo '
 		<div id="recent" class="flow_hidden main_section">
-			<div class="cat_bar">
+			<div class="cat_bar rounded_top">
 				<h3 class="catbg">', $txt['topic_summary'], '</h3>
 			</div>
 			<span id="new_replies"></span>';
@@ -815,8 +811,7 @@ function template_main()
 				$ignored_posts[] = $ignoring = $post['id'];
 
 			echo '
-				<div class="', $post['alternate'] == 0 ? 'windowbg' : 'windowbg2', ' core_posts">
-				<span class="topslice"><span></span></span>
+				<div class="post_wrapper ', $post['alternate'] == 0 ? 'windowbg' : 'windowbg2', ' core_posts">
 				<div class="content" id="msg', $post['id'], '">
 					<div class="floatleft">
 						<h5>', $txt['posted_by'], ': ', $post['poster'], '</h5>
@@ -846,7 +841,6 @@ function template_main()
 			echo '
 					<div class="list_posts smalltext" id="msg_', $post['id'], '_body">', $post['message'], '</div>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>';
 		}
 

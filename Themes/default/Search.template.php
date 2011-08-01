@@ -16,11 +16,12 @@ function template_main()
 
 	echo '
 	<form action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '" name="searchform" id="searchform">
-		<div class="cat_bar">
+		<div class="cat_bar rounded_top">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft">', !empty($settings['use_buttons']) ? '<img src="' . $settings['images_url'] . '/buttons/search.gif" alt="" class="icon" />' : ' ', $txt['set_parameters'], '</span>
+				<span class="ie6_header floatleft">', $txt['set_parameters'], '</span>
 			</h3>
-		</div>';
+		</div>
+		<div class="generic_container rounded_bottom">';
 
 	if (!empty($context['search_errors']))
 		echo '
@@ -31,8 +32,7 @@ function template_main()
 	{
 		echo '
 		<fieldset id="simple_search">
-			<span class="upperframe"><span></span></span>
-			<div class="roundframe">
+			<div>
 				<div id="search_term_input">
 					<strong>', $txt['search_for'], ':</strong>
 					<input type="text" name="search"', !empty($context['search_params']['search']) ? ' value="' . $context['search_params']['search'] . '"' : '', ' maxlength="', $context['search_string_limit'], '" size="40" class="input_text" />
@@ -64,8 +64,7 @@ function template_main()
 	{
 		echo '
 		<fieldset id="advanced_search">
-			<span class="upperframe"><span></span></span>
-			<div class="roundframe">
+			<div>
 				<input type="hidden" name="advanced" value="1" />
 				<span class="enhanced">
 					<strong>', $txt['search_for'], ':</strong>
@@ -130,15 +129,13 @@ function template_main()
 
 		echo '
 			</div>
-			<span class="lowerframe"><span></span></span>
 		</fieldset>';
 
 		if (empty($context['search_params']['topic']))
 		{
 			echo '
 		<fieldset class="flow_hidden">
-			<span class="upperframe"><span></span></span>
-			<div class="roundframe">
+			<div>
 				<div class="title_bar">
 					<h4 class="titlebg">
 						<a href="javascript:void(0);" onclick="expandCollapseBoards(); return false;"><img src="', $settings['images_url'], '/expand.gif" id="expandBoardsIcon" alt="" /></a> <a href="javascript:void(0);" onclick="expandCollapseBoards(); return false;"><strong>', $txt['choose_board'], '</strong></a>
@@ -193,14 +190,13 @@ function template_main()
 				</div>
 				<br class="clear" />
 			</div>
-			<span class="lowerframe"><span></span></span>
 		</fieldset>';
 		}
 
 	}
 
 	echo '
-	</form>
+	</div></form>
 
 	<script type="text/javascript"><!-- // --><![CDATA[
 		function selectBoards(ids)

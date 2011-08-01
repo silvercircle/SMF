@@ -12,7 +12,7 @@
 
 function template_main()
 {
-	global $context, $settings, $options, $txt, $scripturl, $modSettings;
+	global $context, $settings, $options, $txt, $scripturl, $modSettings, $topic;
 
 	// Let them know, if their report was a success!
 	if ($context['report_sent'])
@@ -132,11 +132,10 @@ function template_main()
 	{
 		echo '
 			<div class="linked_events">
-				<div class="title_bar">
-					<h3 class="titlebg headerpadding">', $txt['calendar_linked_events'], '</h3>
+				<div class="title_bar rounded_top">
+					<h4 class="titlebg">', $txt['calendar_linked_events'], '</h4>
 				</div>
-				<div class="windowbg">
-					<span class="topslice"><span></span></span>
+				<div class="generic_container">
 					<div class="content">
 						<ul class="reset">';
 
@@ -149,7 +148,6 @@ function template_main()
 		echo '
 						</ul>
 					</div>
-					<span class="botslice"><span></span></span>
 				</div>
 			</div>';
 	}
@@ -165,14 +163,14 @@ function template_main()
 
 	// Allow adding new buttons easily.
 	call_integration_hook('integrate_display_buttons', array(&$normal_buttons));
-
+	
 	// Show the page index... "Pages: [1]".
 	echo '
-			<div class="pagesection">
+			<div class="pagesection yellow_container top">
 				<div class="nextlinks">', $context['previous_next'], '</div>', template_button_strip($normal_buttons, 'right');
 				// Tagging System
 				echo '
-					<div class="clearfix largepadding smallfont"><b>', $txt['smftags_topic'], '</b>';
+					<div class="tagstrip"><b>', $txt['smftags_topic'], '</b>';
 				foreach ($context['topic_tags'] as $i => $tag)
 				{
 					echo '<a href="' . $scripturl . '?action=tags;tagid=' . $tag['ID_TAG']  . '">' . $tag['tag'] . '</a>&nbsp;';
@@ -181,7 +179,6 @@ function template_main()
 
 				}
 
-				global $topic;
 				if(!$context['user']['is_guest'] && allowedTo('smftags_add'))
 					echo '
 						&nbsp;<a class="addtag" data-id="',$topic,'" href="' . $scripturl . '?action=tags;sa=addtag;topic=',$topic, '">' . $txt['smftags_addtag'] . '</a>';
@@ -195,14 +192,17 @@ function template_main()
 	// Show the topic information - icon, subject, etc.
 	echo '
 			<div id="forumposts">
-				<div class="cat_bar">
-					<h3 class="catbg">
-						<img src="', $settings['images_url'], '/topic/', $context['class'], '.gif" alt="" />
-						<span id="author">', $txt['author'], '</span>
+				<div>
+					<h1 class="bigheader">
 						', $txt['topic'], ': ', $context['subject'], ' &nbsp;(', $txt['read'], ' ', $context['num_views'], ' ', $txt['times'], ')
 					</h3>
 				</div>';
 
+	// social share bar
+	if($context['use_share'] && ($context['user']['is_guest'] || !$options['use_share_bar'])) {
+		socialbar($scripturl . '?topic=' . $topic);
+	}
+				
 	if (!empty($settings['display_who_viewing']))
 	{
 		echo '
@@ -606,12 +606,13 @@ function template_main()
 			
 	// Show the page index... "Pages: [1]".
 	echo '
-			<div class="pagesection">
+			<div class="pagesection yellow_container bottom">
 				', template_button_strip($normal_buttons, 'right'), '
 				<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . ' &nbsp;&nbsp;<a href="#top"><strong>' . $txt['go_up'] . '</strong></a>' : '', '</div>
 				<div class="nextlinks_bottom">', $context['previous_next'], '</div>
 			</div>';
-		// Show the lower breadcrumbs.
+			
+	// Show the lower breadcrumbs.
 	theme_linktree();
 	$mod_buttons = array(
 		'move' => array('test' => 'can_move', 'text' => 'move_topic', 'image' => 'admin_move.gif', 'lang' => true, 'url' => $scripturl . '?action=movetopic;topic=' . $context['current_topic'] . '.0'),
@@ -641,18 +642,17 @@ function template_main()
 		echo '
 			<a id="quickreply"></a>
 			<div class="tborder" id="quickreplybox">
-				<div class="cat_bar">
-					<h3 class="catbg">
+				<div class="title_bar rounded_top">
+					<h4 class="titlebg">
 						<span class="ie6_header floatleft"><a href="javascript:oQuickReply.swap();">
 							<img src="', $settings['images_url'], '/', $options['display_quick_reply'] == 2 ? 'collapse' : 'expand', '.gif" alt="+" id="quickReplyExpand" class="icon" />
 						</a>
 						<a href="javascript:oQuickReply.swap();">', $txt['quick_reply'], '</a>
 						</span>
-					</h3>
+					</h4>
 				</div>
-				<div id="quickReplyOptions"', $options['display_quick_reply'] == 2 ? '' : ' style="display: none"', '>
-					<span class="upperframe"><span></span></span>
-					<div class="roundframe">
+				<div class="generic_container largepadding" id="quickReplyOptions"', $options['display_quick_reply'] == 2 ? '' : ' style="display: none"', '>
+					<div>
 						<p class="smalltext lefttext">', $txt['quick_reply_desc'], '</p>
 						', $context['is_locked'] ? '<p class="alert smalltext">' . $txt['quick_reply_warning'] . '</p>' : '',
 						$context['oldTopicError'] ? '<p class="alert smalltext">' . sprintf($txt['error_old_topic'], $modSettings['oldTopicDays']) . '</p>' : '', '
@@ -697,7 +697,6 @@ function template_main()
 							</div>
 						</form>
 					</div>
-					<span class="lowerframe"><span></span></span>
 				</div>
 			</div>';
 	}

@@ -205,7 +205,7 @@ function template_main()
 						', $board['is_redirect'] ? '' : comma_format($board['topics']) . ' ' . $txt['board_topics'], '
 						</p>
 					</td>
-					<td class="lastpost" style="padding:3px 5px;">';
+					<td class="lastpost">';
 
 				/* The board's and children's 'last_post's have:
 				time, timestamp (a number that represents the time.), id (of the post), topic (topic id.),
@@ -214,7 +214,7 @@ function template_main()
 				if (!empty($board['last_post']['id']))
 					echo '<img src="',$board['first_post']['icon_url'],'" alt="icon" />
 					<strong>',$txt['in'], ': </strong>', $board['last_post']['topiclink'], '<br />
-						<div style="float:right;">',$board['last_post']['time'],'<a title="',$txt['last_post'],'" href="',$board['last_post']['href'],'"><img style="margin-left:6px;" src="',$settings['images_url'],'/icons/last_post.gif" alt="lastpost" /></a></div>
+						<a class="lp_link" title="',$txt['last_post'],'" href="',$board['last_post']['href'],'">',$board['last_post']['time'], '</a>
 						<strong style="padding-left:17px;">', $txt['by'], ': </strong>', $board['last_post']['member']['link'];
 				else
 					echo $txt['not_applicable'];

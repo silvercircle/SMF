@@ -36,11 +36,6 @@ function template_options()
 			'default' => true,
 		),
 		array(
-			'id' => 'use_mcards',
-			'label' => 'Use Ajax member cards to preview profiles',
-			'default' => true,
-		),
-		array(
 			'id' => 'show_no_signatures',
 			'label' => $txt['show_no_signatures'],
 			'default' => true,
@@ -191,11 +186,6 @@ function template_settings()
 		array(
 			'id' => 'linktree_link',
 			'label' => $txt['current_pos_text_img'],
-		),
-		array(
-			'id' => 'use_mcards',
-			'label' => 'Use Ajax member cards to preview profiles',
-			'default' => true,
 		),
 		array(
 			'id' => 'show_mark_read',

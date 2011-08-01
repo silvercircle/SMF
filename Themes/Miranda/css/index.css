@@ -31,7 +31,7 @@ table
 body
 {
 	background: #f0f0f0 url(../images/bodybg-blue2.png) left -45px repeat-x;
-	font-family: "Candara", "Trebuchet MS", "Verdana", "Arial", "Helvetica", "sans-serif";
+	font-family: "Trebuchet MS", "Verdana", "Arial", "Helvetica", "sans-serif";
 	font-size:10pt;
 	margin: 0 auto;
 	padding: 0;
@@ -73,7 +73,7 @@ form
 	.input_file    - covers input[type=file] throughout all browsers
 */
 
-#search_form {margin-bottom:0px;position:relative;top:-55px;padding:5px 10px 0 10px;background-color:white;border-top-left-radius:6px;border-top-right-radius:6px;}
+#search_form {margin-bottom:0px;position:relative;top:-60px;padding:5px 10px 0 10px;background-color:white;border-top-left-radius:6px;border-top-right-radius:6px;}
 .searchfield {background:#fff url(../images/theme/sicon.png) 3px center no-repeat;font-weight:bold;font-size:12px;border:1px solid #A3B2D0;}
 
 input, select, textarea
@@ -160,9 +160,10 @@ h1, h2, h3, h4, h5, h6
 /* Fieldsets are used to group elements. */
 fieldset
 {
-	border: 1px solid #c4c4c4;
+	background-color:#f2f5fe;
+	border:1px solid #d5ecfa;
 	padding: 1em;
-	margin: 0 0 0.5em 0;
+	margin: 10px;
 }
 fieldset legend
 {
@@ -425,7 +426,7 @@ code.bbc_code
 	color: #222;
 	font-size: 1.1em;
 	font-weight: bold;
-	background: #485B7D url(../images/theme/cellpic.gif) repeat-x;
+	background: #ccc url(../images/theme/cellpic.gif) repeat-x;
 }
 .catbg, .catbg2, tr.catbg td, tr.catbg2 td, tr.catbg th, tr.catbg2 th
 {
@@ -475,18 +476,19 @@ tr.catbg th a:link, tr.catbg th a:visited, tr.catbg2 td a:link, tr.catbg2 td a:v
 	font-size: 0.9em;
 	padding: 0.2em;
 	overflow: hidden;
-	margin-bottom: 1px;
+	margin:3px 0;
+}
+
+.pagesection .buttonlist {
+	clear:right;
 }
 div.pagesection div.floatright input
 {
 	margin-top: 3px;
 }
-
-.pagelinks
-{
-	padding: 0.6em 0 0.4em 0;
+.tagstrip {
+	margin-bottom:5px;
 }
-
 /* Colors for background of posts requiring approval */
 .approvebg
 {
@@ -536,7 +538,6 @@ div.pagesection div.floatright input
 /* Posts and personal messages displayed throughout the forum. */
 .post, .personalmessage
 {
-	overflow: auto;
 	line-height: 1.4em;
 	padding: 0.1em 0;
 }
@@ -785,8 +786,8 @@ h4.catbg, h4.catbg2 , h3.catbg , h3.catbg2 , .table_list tbody.header td.catbg
 }
 h4.titlebg, h3.titlebg
 {
-	background: #ccc url(../images/theme/cellpic.gif) repeat-x;
-	padding-right: 9px;
+	/*background: #ccc url(../images/theme/cellpic.gif) repeat-x;*/
+	margin-right: 9px;
 }
 h4.titlebg img.icon
 {
@@ -806,7 +807,6 @@ div.title_bar
 	padding-left: 9px;
 	height: 26px;
 	overflow: hidden;
-	margin-bottom: 1px;
 }
 
 /* rounded bars needs a different background here */
@@ -1091,8 +1091,7 @@ span.lowerframe span
 	float: left;
 	margin-top: 2px;
 	background-color:#333355;
-	font-family:Verdana, sans-serif;
-	font-size:11px;
+	font-size:12px;
 }
 
 .dropmenu, .dropmenu ul
@@ -1107,11 +1106,13 @@ span.lowerframe span
 {
 	padding: 0 0.5em;
 }
-.dropmenu a
+.dropmenu  > li > a
 {
-	display: block;
+	float:left;
+}
+
+.dropmenu li a {
 	color: white;
-	font-weight:bold;
 	text-decoration: none;
 }
 .dropmenu a span
@@ -1123,7 +1124,7 @@ span.lowerframe span
 /* the background's first level only */
 .dropmenu li a.firstlevel
 {
-	margin-right: 8px;
+	margin-right: 4px;
 }
 .dropmenu li a.firstlevel span.firstlevel
 {
@@ -1133,8 +1134,9 @@ span.lowerframe span
 	line-height: 20px;
 	white-space: pre;
 	padding:2px 5px 2px 5px;
+	font-weight:bold;
 }
-.dropmenu li
+.dropmenu > li
 {
 	float: left;
 	padding: 0;
@@ -1146,23 +1148,28 @@ span.lowerframe span
 	z-index: 90;
 	display: none;
 	position: absolute;
-	width: 19.2em;
+	width: auto;
 	font-weight: normal;
-	border-bottom: 1px solid #999;
 	background-color:#3333355;
-	padding: 7px 0 0 0;
+	padding: 0 0 0 0;
+	margin-top:22px;
+	width:15em;
 }
+
 .dropmenu li li
 {
-	width: 19em;
 	margin: 0;
-	border-left: 1px solid #999;
-	border-right: 1px solid #999;
+	padding:2px;
+}
+.dropmenu li li a
+{
+	display:block !important;
 }
 .dropmenu li li a span
 {
 	display: block;
-	padding: 8px;
+	padding: 5px;
+	white-space:nowrap;
 }
 .dropmenu li ul ul
 {
@@ -1213,7 +1220,18 @@ span.lowerframe span
 }
 .dropmenu li li.additional_items
 {
-	background-color: #fff;
+	background-color: #555588;
+}
+
+span.m_downarrow {
+    padding:6px 12px 6px 0px;
+    margin-left:-4px;
+    margin-right:4px;
+    float:left;
+    background:transparent url(../images/theme/sprite.png) 0 7px no-repeat;
+}
+span.m_downarrow:hover {
+	background-color:#aaa !important;
 }
 
 /* The dropdown menu toggle image */
@@ -1348,6 +1366,13 @@ h1.forumtitle
 	padding: 0;
 	float: left;
 }
+h1.bigheader {
+	display:block;
+	font-size:18px;
+	font-weight:bold;
+	border-bottom:3px solid #ccc;
+	padding:4px 20px;
+}
 h3, h4
 {
 	padding-bottom: 3px;
@@ -1437,10 +1462,10 @@ div#upper_section div.news form
 }
 
 /* The navigation list (i.e. linktree) */
-.navigate_section
+div.navigate_section
 {
 	padding: 0;
-	margin: 0;
+	margin-top:10px;
 	background-color:#f2f5fe;
 	border:1px solid #d5ecfa;
 	border-radius:3px;
@@ -1495,7 +1520,7 @@ table.table_list
 	width: 100%;
 }
 
-table.table_list tr {
+table.table_list tr, tr.frow {
 	background:#f0f0f5 url(../images/frow.png) bottom left repeat-x;
 }
 
@@ -1518,12 +1543,6 @@ table.table_list tbody.content td.stats
 	text-align: center;
 	white-space:nowrap;
 }
-table.table_list tbody.content td.lastpost
-{
-	line-height: 1.3em;
-	font-size: 90%;
-	white-space:nowrap;
-}
 table.table_list tbody.content td.icon
 {
 	text-align: center;
@@ -1540,7 +1559,7 @@ table.table_list tbody.content td.icon
 .table_list tbody.content td.info a.subject
 {
 	font-weight: bold;
-	font-size: 105%;
+	font-size: 1.1em;
 	color:#777799;
 }
 .table_list tbody.content td.children
@@ -1582,7 +1601,7 @@ p.moderators
 }
 .nextlinks
 {
-	text-align: right;
+	float: right;
 	margin-top: -1px;
 }
 .nextlinks_bottom
@@ -1717,12 +1736,6 @@ div.table_frame .table_list
 #childboards .table_list
 {
 	margin-bottom: 1em;
-}
-.lastpost img
-{
-	vertical-align: middle;
-	width:15px;
-	height:15px;
 }
 
 /* Styles for the display template (topic view).
@@ -2631,9 +2644,9 @@ tr.titlebg td
 }
 #admin_menu
 {
-	min-height: 2em;
 	padding-left: 0;
 	background-color:#555;
+	min-height:24px;
 }
 #admin_content
 {
@@ -2727,21 +2740,44 @@ tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td
 	border-bottom: 1px solid #fff;
 }
 /* the subject column */
-.topic_table td
+.topic_table td.subject
 {
-	font-size: 1em;
+	width:100%;
+	font-size:1.0em;
 }
+.topic_table span.tpeek {
+	font-size:1.1em;
+}
+.topic_table span.tpeek > a.tpeek {
+	font-size:11px;
+}
+
 .topic_table td.subject p, .topic_table td.stats
 {
-	font-size: 0.85em;
 	padding: 0;
 	margin: 0;
+	font-size:11px;
 }
+
+td.lastpost img {
+	width:15px;
+	height:15px;
+	vertical-align:middle;
+}
+td.lastpost > a.lp_link {
+	line-height:16px;
+	background: transparent url(../images/theme/sprite.png) 4px -457px no-repeat !important;
+	padding-left:20px;
+	float:right;
+	text-decoration:none;
+	font-size:11px;
+}
+td.lastpost {white-space:nowrap;}
 .topic_table td.lastpost
 {
-	font-size: 0.85em;
-	line-height: 1.3em;
-	padding: 4px;
+	line-height: 1.1em;
+	padding: 4px 10px;
+	font-size:1.0em;
 }
 .topic_table td.stickybg2
 {
@@ -2760,10 +2796,6 @@ tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td
 	background-image: url(../images/icons/quick_sticky_lock.gif);
 	background-repeat: no-repeat;
 	background-position: 98% 4px;
-}
-.topic_table td.lastpost
-{
-	background-image: none;
 }
 
 /* Styles for (fatal) errors.
@@ -3523,7 +3555,6 @@ span.hidelink
 #simple_search, #simple_search p, #advanced_search
 {
 	text-align: center !important;
-	margin: 0;
 }
 #search_error
 {
@@ -3538,12 +3569,6 @@ span.hidelink
 
 /* Styles for the advanced search section.
 ------------------------------------------------- */
-#searchform fieldset
-{
-	text-align: left;
-	padding: 0;
-	border: none;
-}
 #advanced_search dl#search_options
 {
 	margin: 0 auto;
@@ -3620,7 +3645,13 @@ span.hidelink
 	border:1px solid #f8da8b;
 	padding:2px 4px;
 	border-radius:3px;
-	/*box-shadow: 1px 1px 2px 1px #f8da8b;*/
+}
+.yellow_container {
+	
+	background-color:#F9F9e0;
+	border:1px solid #F2F2A5;
+	padding:2px 4px;
+	border-radius:3px;
 }
 /* page links (navpages) */
 
@@ -3725,7 +3756,71 @@ div#ajaxbusy {
 .light_shadow {	box-shadow: 2px 2px 12px 0px #bbb;}
 
 a.tpeek {margin-left:10px;}
+abbr.date {border:0;}
 
+.generic_container {
+	border:1px solid #ccc;
+	border-top:0;
+	background-color:#f0f0f0;
+}
+.largepadding {padding:20px;}
+/*
+ * social sharing widgets
+ */
+ 
+div.bmbar {
+	border-bottom:1px solid #aac;
+	border-right:1px solid #aac;
+	background:#eeeefa;
+	border-radius:4px;
+	box-shadow:1px 1px 5px 2px #cce;
+	margin:8px 0;
+    font-size:10px !important;
+    line-height:100% !important;
+    font-family:Verdana,helvetica,sans-serif;
+    /*padding:3px 0 0 3px;*/
+    padding:3px 5px;
+}
+
+div.bmbar > div.title {
+	float:left;
+	font-size:16px;
+	color:#8888aa;
+	margin-right:20px;
+	padding:0;
+	line-height:20px;
+}
+.share_button {
+	padding:5px 5px 5px 24px;
+	border-radius:2px;
+	cursor:pointer;
+	display:inline-block;
+	font-size:10px;
+	line-height:100%;
+	border: 1px solid #6b81ab;
+	background-color:#D8DFEA;
+	
+}
+.share_button:hover {background-color:#ccc !important;border-color:#888;}
+
+.share_fb {background:#D8DFEA url(../images/theme/sprite.png) 0 -327px no-repeat;}
+.share_tw {background:#D8DFEA url(../images/theme/sprite.png) 0 -357px no-repeat;}
+.share_buzz {background:#D8DFEA url(../images/theme/sprite.png) 0 -390px no-repeat;}
+.share_digg {background:#D8DFEA url(../images/theme/sprite.png) 0 -421px no-repeat;}
+
+div.fb_tweet {
+    vertical-align:bottom;
+    padding:3px;
+}
+
+.twitter-share-button {
+/*    max-height:25px !important;
+    min-height:25px !important;*/
+    border:0 !important;
+    vertical-align:top;
+    float:right;
+}
+ 
 /* syntaxhighlighter and colorbox */
 
 /**
@@ -4087,22 +4182,22 @@ a.tpeek {margin-left:10px;}
 #cboxOverlay{background:#000;}
 #colorbox{}
 
-#cboxTopLeft{width:14px; height:14px; background:url(images/controls.png) no-repeat 0 0;}
-#cboxTopCenter{height:14px; background:url(images/border.png) repeat-x top left;}
-#cboxTopRight{width:14px; height:14px; background:url(images/controls.png) no-repeat -36px 0;}
-#cboxBottomLeft{width:14px; height:43px; background:url(images/controls.png) no-repeat 0 -32px;}
-#cboxBottomCenter{height:43px; background:url(images/border.png) repeat-x bottom left;}
-#cboxBottomRight{width:14px; height:43px; background:url(images/controls.png) no-repeat -36px -32px;}
-#cboxMiddleLeft{width:14px; background:url(images/controls.png) repeat-y -175px 0;}
-#cboxMiddleRight{width:14px; background:url(images/controls.png) repeat-y -211px 0;}
+#cboxTopLeft{width:14px; height:14px; background:url(../images/cbox/controls.png) no-repeat 0 0;}
+#cboxTopCenter{height:14px; background:url(../images/cbox/border.png) repeat-x top left;}
+#cboxTopRight{width:14px; height:14px; background:url(../images/cbox/controls.png) no-repeat -36px 0;}
+#cboxBottomLeft{width:14px; height:43px; background:url(../images/cbox/controls.png) no-repeat 0 -32px;}
+#cboxBottomCenter{height:43px; background:url(../images/cbox/border.png) repeat-x bottom left;}
+#cboxBottomRight{width:14px; height:43px; background:url(../images/cbox/controls.png) no-repeat -36px -32px;}
+#cboxMiddleLeft{width:14px; background:url(../images/cbox/controls.png) repeat-y -175px 0;}
+#cboxMiddleRight{width:14px; background:url(../images/cbox/controls.png) repeat-y -211px 0;}
 #cboxContent{background:#fff; overflow:visible;}
 #cboxLoadedContent{margin-bottom:5px;}
-#cboxLoadingOverlay{background:url(images/loading_background.png) no-repeat center center;}
-#cboxLoadingGraphic{background:url(images/loading.gif) no-repeat center center;}
+#cboxLoadingOverlay{background:url(../images/cbox/loading_background.png) no-repeat center center;}
+#cboxLoadingGraphic{background:url(../images/cbox/loading.gif) no-repeat center center;}
 #cboxTitle{position:absolute; bottom:-25px; left:0; text-align:center; width:100%; font-weight:bold; color:#7C7C7C;}
 #cboxCurrent{position:absolute; bottom:-25px; left:58px; font-weight:bold; color:#7C7C7C;}
         
-#cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow{position:absolute; bottom:-29px; background:url(images/controls.png) no-repeat 0px 0px; width:23px; height:23px; text-indent:-9999px;}
+#cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow{position:absolute; bottom:-29px; background:url(../images/cbox/controls.png) no-repeat 0px 0px; width:23px; height:23px; text-indent:-9999px;}
 #cboxPrevious{left:0px; background-position: -51px -25px;}
 #cboxPrevious.hover{background-position:-51px 0px;}
 #cboxNext{left:27px; background-position:-75px -25px;}

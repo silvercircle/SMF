@@ -1529,6 +1529,7 @@ function loadAllPermissions($loadType = 'classic')
 			'post_attachment' => array(false, 'attachment', 'attach'),
 			'like_see' => array(false, 'like', 'like'),
 			'like_give' => array(false, 'like', 'like'),
+			'use_share' => array(false, 'share', 'share'),
 		),
 	);
 
