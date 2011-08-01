@@ -1,0 +1,18 @@
+[b][url=http://custom.simplemachines.org/mods/index.php?mod=636]Pretty URLs[/url][/b] is a URL management package for Simple Machine Forums (SMF).
+
+It is simple, powerful, extensible and free. Most of all, it is pretty! Its main purpose is to rewrite the important SMF URLs, like these:
+[list]
+[li][nobbc]http://domain.com/board/topic/[/nobbc][/li]
+[li][nobbc]http://domain.com/profile/user/[/nobbc][/li]
+[li][nobbc]http://domain.com/unreadreplies/[/nobbc][/li]
+[/list]
+Pretty URLs will work with SMF 1.1 and 2.0. It requires an Apache webserver with support for mod_rewrite and .htaccess files.
+
+[url=http://code.google.com/p/prettyurls/]Project home page[/url]
+
+[b][url=http://code.google.com/p/prettyurls/wiki/Overview]Overview and installation info[/url][/b]
+
+Need help? [b][url=http://code.google.com/p/prettyurls/wiki/TroubleShooting]Check the trouble shooting page first![/url][/b] 
+
+Pretty URLs is released under a [url=http://prettyurls.googlecode.com/svn/trunk/LICENCE]new BSD licence[/url]
+Copyright (c) 2006-2009 [url=http://prettyurls.googlecode.com/svn/trunk/CONTRIBUTORS]The Pretty URLs Contributors[/url]
