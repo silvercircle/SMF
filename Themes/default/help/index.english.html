@@ -1,0 +1,382 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Version: 1.0; help/index-->
+<head>
+	<meta name="generator" content="HTML Tidy for Windows (vers 1st June 2004), see www.w3.org" />
+	<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<script language="JavaScript" type="text/javascript" src="../script.js">
+</script>
+<script language="JavaScript" type="text/javascript">
+//<![CDATA[
+														var smf_theme_url = "..";
+														var smf_images_url = "../images";
+//]]>
+</script>
+	<title>SMF User Help: Introduction</title>
+	<link type="text/css" rel="stylesheet" href="../style.css" />
+	<link type="text/css" rel="stylesheet" href="help.css" />
+</head>
+<body>
+	<table summary="two simple cells for layout purposes" width="100%">
+		<tr>
+			<td width="1%"><a href="http://www.simplemachines.org/"><img src="../images/helplogo.jpg" alt="Visit Simple Machines!" title="Visit Simple Machines!" border="0" /></a></td>
+			<td valign="top">
+				<a href="http://www.simplemachines.org/"><img src="../images/smflogo.gif" align="right" alt="Visit Simple Machines!" title="Visit Simple Machines!" border="0" /></a>
+				<h1 style="margin-top: 12px;">SMF User Help: Introduction</h1><br clear="right" />
+				<hr />
+				<p><strong>Introduction</strong> &bull; <a href="registering.english.html">Registering</a> &bull; <a href="loginout.english.html">Logging&nbsp;In</a> &bull; <a href="profile.english.html">Profile</a> &bull; <a href="posting.english.html">Posting</a> &bull; <a href="pm.english.html">Personal&nbsp;Message</a> &bull; <a href="searching.english.html">Searching</a></p>
+				<hr />
+			</td>
+		</tr>
+	</table>
+	<p>So you've arrived at this <a href="http://www.simplemachines.org/">Simple Machines Forum</a> (SMF)! Perhaps you've been looking at the <a href="#board">board index</a> or a screen telling you that you need to register before you can read it and you're wondering what to do next?</p>
+	<p>Well, some forums permit guests to read and post, some permit guests to read only and some are restricted to registered members. We'd recommend <a href="registering.english.html">registering</a> at any forum that you see yourself using regularly because many of the most useful features will only become available to you when you do so. Since SMF, however, is such a flexible system that few forums are likely to be identical, we will start by describing four key areas that we'd normally expect to be there for you:</p>
+	<ol>
+		<li><a href="#main">The Main Menu</a></li>
+		<li><a href="#board">The Board Index</a></li>
+		<li><a href="#message">The Message Index</a></li>
+		<li><a href="#topic">The Topic</a></li>
+	</ol>
+	<h2 id="main">The Main Menu</h2>
+	<p>Supposing you've arrived here as a guest (or have registered but are currently logged out), the main menu (which appears on every page) should normally comprise five or six buttons (or text links):</p>
+	<ul>
+		<li><strong>Home</strong>, which takes you back to the <a href="#board">board index</a>.</li>
+		<li><strong>Help</strong>, which brings you to this guide.</li>
+		<li><strong>Search</strong>, which allows you to <a href="searching.english.html">search</a> the forums for whatever you're looking for.</li>
+		<li><strong>Calendar</strong>, which links to the forum <a href="posting.english.html#calendar">calendar</a> (if enabled).</li>
+		<li><strong>Login</strong>, which allows you to <a href="loginout.english.html">login</a> if already registered.</li>
+		<li><strong>Register</strong>, which allows you to <a href="registering.english.html">register</a> (or sometimes apply for registration) when you wish to do so.</li>
+	</ul>
+	<p>Once you've registered and logged in, however, the main menu should look a little different:</p>
+	<ul>
+		<li><strong>Home</strong> (as before).</li>
+		<li><strong>Help</strong> (as before).</li>
+		<li><strong>Search</strong> (as before).</li>
+		<li><strong>Profile</strong>, which allows you to make changes to your <a href="profile.english.html">profile</a> settings.</li>
+		<li><strong>Calendar</strong> (as before).</li>
+		<li><strong>Logout</strong>, which allows you to <a href="loginout.english.html#logout">logout</a> again if desired.</li>
+	</ul>
+	<p>Forum administrators should also note the presence of an additional <strong>Admin</strong> button.</p>
+	<h2 id="board">The Board Index</h2>
+	<p>While the board index (forum home page) is packed with all kinds of information and links, the core of the interface (at least in the SMF default theme) normally looks something like this:</p>
+	<div style="background-color: #D0D0D0;">
+		<div style="padding: 2px 30px;">
+			<table summary="SMF layout" width="100%" cellpadding="3" cellspacing="0">
+				<tr>
+					<td valign="bottom"><span class="nav"><img src="../images/icons/folder_open.gif" alt="+" border="0" />&nbsp; <b><a href="#board" class="nav">Forum Name</a></b></span></td>
+				</tr>
+			</table><script language="JavaScript1.2" type="text/javascript">
+//<![CDATA[
+														var collapseExpand = false;
+														function collapseExpandCategory()
+														{
+																document.getElementById("collapseArrow").src = smf_images_url + "/" + (collapseExpand ? "collapse.gif" : "expand.gif");
+																document.getElementById("collapseArrow").alt = collapseExpand ? "-" : "+";
+																document.getElementById("collapseCategory").style.display = collapseExpand ? "" : "none";
+																collapseExpand = !collapseExpand;
+														}
+														function markBoardRead()
+														{
+																document.getElementById("board-new-or-not").src = smf_images_url + "/" + "off.gif";
+																document.getElementById("board-new-or-not").alt = "No New Posts";
+														}
+//]]>
+</script>
+			<div class="tborder">
+				<table summary="SMF layout" border="0" width="100%" cellspacing="1" cellpadding="5">
+					<tr>
+						<td colspan="4" class="catbg" height="18"><a href="javascript:collapseExpandCategory();"><img src="../images/collapse.gif" alt="-" border="0" id="collapseArrow" name="collapseArrow" /></a>&nbsp; <a href="javascript:collapseExpandCategory();" class="board">Category Name</a></td>
+					</tr>
+					<tr id="collapseCategory" class="windowbg2">
+						<td class="windowbg" width="6%" align="center" valign="top"><img src="../images/on.gif" id="board-new-or-not" alt="New Posts" name="board-new-or-not" /></td>
+						<td align="left" style="background-color: #F0F0F0;"><b><a href="#message" class="board">Board Name</a></b><br />
+						Board Description</td>
+						<td class="windowbg" valign="middle" align="center" style="width: 12ex;"><span class="smalltext">Number of topics and posts in this board</span></td>
+						<td class="smalltext" valign="middle" width="22%" style="background-color: #F0F0F0;">Date, time, subject and author of last post</td>
+					</tr>
+				</table>
+			</div><br />
+			<div class="tborder" style="padding: 3px;">
+				<table summary="SMF layout" border="0" width="100%" cellspacing="0" cellpadding="5">
+					<tr class="titlebg">
+						<td align="left" class="smalltext"><img src="../images/new_some.gif" alt="" align="middle" />&nbsp; New Posts<img src="../images/new_none.gif" alt="" align="middle" style="margin-left: 4ex;" />&nbsp; No New Posts</td>
+						<td align="right" class="smalltext"><a href="javascript:markBoardRead();"><img src="../images/english/markread.gif" border="0" alt="Mark ALL messages as read" /></a></td>
+					</tr>
+				</table>
+			</div><br />
+		</div>
+	</div><br />
+	<ul>
+		<li>The <strong>forum name</strong> links back to the top of the board index.</li>
+		<li>If the <strong>category</strong> is collapsable (shown by the little arrow symbol), clicking the category name collapses or expands the category as appropriate.</li>
+		<li>The <strong>board name</strong> links to the <a href="#message">message index</a> for that board.</li>
+		<li>The <strong>board description</strong> describes the board's content, and may also include links to child boards and/or specify the board's moderator(s).</li>
+		<li>The <strong>New Posts</strong> and <strong>No New Posts</strong> icons in the leftmost column show registered members whether there have been any new posts to the board since they last read it.</li>
+		<li>The <strong>Mark as Read</strong> button enables registered members to mark all posts in the entire forum as 'read'.</li>
+	</ul>
+	<h2 id="message">The Message Index</h2>
+	<p>Like the board index, the message index interface is quite straightforward when reduced to its essential components:</p>
+	<div style="background-color: #D0D0D0;">
+		<div style="padding: 2px 30px;">
+			<script language="JavaScript1.2" type="text/javascript">
+//<![CDATA[
+														var currentSort = false;
+														function sortLastPost()
+														{
+																document.getElementById("sort-arrow").src = smf_images_url + "/" + (currentSort ? "sort_down.gif" : "sort_up.gif");
+																document.getElementById("sort-arrow").alt = "";
+																currentSort = !currentSort;
+														}
+														function markMessageRead()
+														{
+																document.getElementById("message-new-or-not").style.display = "none";
+														}
+//]]>
+</script>
+			<table summary="SMF layout" width="100%" cellpadding="3" cellspacing="0">
+				<tr>
+					<td><span class="nav"><img src="../images/icons/folder_open.gif" alt="+" border="0" />&nbsp; <b><a href="#board" class="nav">Forum Name</a></b><br />
+					<img src="../images/icons/linktree_side.gif" alt="|-" border="0" /> <img src="../images/icons/folder_open.gif" alt="+" border="0" />&nbsp; <b><a href="#board" class="nav">Category Name</a></b><br />
+					<img src="../images/icons/linktree_main.gif" alt="| " border="0" /> <img src="../images/icons/linktree_side.gif" alt="|-" border="0" /> <img src="../images/icons/folder_open.gif" alt="+" border="0" />&nbsp; <b><a href="#message" class="nav">Board Name</a></b></span></td>
+				</tr>
+			</table>
+			<table summary="SMF layout" width="100%" cellpadding="3" cellspacing="0" border="0" class="tborder" style="margin-bottom: 1ex;">
+				<tr>
+					<td align="left" class="catbg" width="100%" height="30">
+						<table summary="SMF layout" cellpadding="3" cellspacing="0" width="100%">
+							<tr>
+								<td><b>Pages:</b> [<b>1</b>]</td>
+								<td align="right" nowrap="nowrap" style="font-size: smaller;"><a href="javascript:markMessageRead();"><img src="../images/english/markread.gif" border="0" alt="Mark Topics as Read for this Board" /></a> <a href="#message" onclick="return confirm('Are you sure you wish to enable notification of new topics for this board?');"><img src="../images/english/notify.gif" border="0" alt="Notify of Replies" /></a> <a href="posting.english.html#newtopic"><img src="../images/english/new_topic.gif" border="0" alt="Start new topic" /></a> <a href="posting.english.html#newpoll"><img src="../images/english/new_poll.gif" border="0" alt="Post New Poll" /></a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<table summary="SMF layout" border="0" width="100%" cellspacing="1" cellpadding="4" class="bordercolor">
+				<tr class="titlebg">
+					<td width="9%" colspan="2"></td>
+					<td><a href="#message">Subject</a></td>
+					<td width="14%"><a href="#message">Started by</a></td>
+					<td width="4%" align="center"><a href="#message">Replies</a></td>
+					<td width="4%" align="center"><a href="#message">Views</a></td>
+					<td width="22%"><a href="javascript:sortLastPost();">Last post &nbsp; <img id="sort-arrow" src="../images/sort_down.gif" alt="" border="0" name="sort-arrow" /></a></td>
+				</tr>
+				<tr>
+					<td class="windowbg2" valign="middle" align="center" width="5%"><img src="../images/topic/my_normal_poll.gif" alt="" /></td>
+					<td class="windowbg2" valign="middle" align="center" width="4%"><img src="../images/post/xx.gif" alt="" align="middle" /></td>
+					<td class="windowbg" valign="middle"><a href="#topic" class="board">Topic Subject</a> <a href="#topic"><img id="message-new-or-not" src="../images/english/new.gif" border="0" alt="New" name="message-new-or-not" /></a></td>
+					<td class="windowbg2" valign="middle" width="14%"><a href="profile.english.html" class="board">Topic Starter</a></td>
+					<td class="windowbg" valign="middle" width="4%" align="center">0</td>
+					<td class="windowbg" valign="middle" width="4%" align="center">0</td>
+					<td class="windowbg2" valign="middle" width="22%"><span class="smalltext">Date, time and author of last post</span></td>
+				</tr>
+			</table>
+			<table summary="SMF layout" width="100%" cellpadding="3" cellspacing="0" border="0" class="tborder" style="margin-top: 1ex;">
+				<tr>
+					<td align="left" class="catbg" width="100%" height="30">
+						<table summary="SMF layout" cellpadding="3" cellspacing="0" width="100%">
+							<tr>
+								<td><b>Pages:</b> [<b>1</b>]</td>
+								<td align="right" nowrap="nowrap" style="font-size: smaller;"><a href="javascript:markMessageRead();"><img src="../images/english/markread.gif" border="0" alt="Mark Topics as Read for this Board" /></a> <a href="#message" onclick="return confirm('Are you sure you wish to enable notification of new topics for this board?');"><img src="../images/english/notify.gif" border="0" alt="Notify of Replies" /></a> <a href="posting.english.html#newtopic"><img src="../images/english/new_topic.gif" border="0" alt="Start new topic" /></a> <a href="posting.english.html#newpoll"><img src="../images/english/new_poll.gif" border="0" alt="Post New Poll" /></a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<table summary="SMF layout" cellpadding="0" cellspacing="0" width="100%">
+				<tr>
+					<td class="smalltext" align="left" style="padding-top: 1ex;"><img src="../images/topic/my_normal_post.gif" alt="" align="middle" />&nbsp; Topic you have posted in<br />
+					<img src="../images/topic/normal_post.gif" alt="" align="middle" />&nbsp; Normal Topic<br />
+					<img src="../images/topic/hot_post.gif" alt="" align="middle" />&nbsp; Hot Topic (More than 15 Replies)<br />
+					<img src="../images/topic/veryhot_post.gif" alt="" align="middle" />&nbsp; Very Hot Topic (More than 25 Replies)</td>
+					<td class="smalltext" align="left" valign="top" style="padding-top: 1ex;"><img src="../images/topic/normal_post_locked.gif" alt="" align="middle" />&nbsp; Locked Topic<br />
+					<img src="../images/topic/normal_post_sticky.gif" alt="" align="middle" />&nbsp; Sticky Topic<br />
+					<img src="../images/topic/normal_poll.gif" alt="" align="middle" />&nbsp; Poll</td>
+					<td class="smalltext" align="right" valign="middle">
+						<form action="index.english.html" method="get" name="jumptoForm" id="jumptoForm">
+							<label for="jumpto">Jump to</label>: <select name="jumpto" id="jumpto" onchange="if (this.options[this.selectedIndex].value) window.location.href='index.english.html' + this.options[this.selectedIndex].value;">
+								<option value="">
+									Please select a destination:
+								</option>
+								<option value="">
+									-----------------------------
+								</option>
+								<option value="#board">
+									Category Name
+								</option>
+								<option value="">
+									-----------------------------
+								</option>
+								<option value="#message">
+									=&gt; Board Name
+								</option>
+								<option value="#message">
+									=&gt; Another Board
+								</option>
+							</select>&nbsp; <input type="button" onclick="if (document.jumptoForm.jumpto.options[document.jumptoForm.jumpto.selectedIndex].value) window.location.href = 'index.english.html' + document.jumptoForm.jumpto.options[document.jumptoForm.jumpto.selectedIndex].value;" value="go" />
+						</form>
+					</td>
+				</tr>
+			</table><br />
+		</div>
+	</div><br />
+	<ul>
+		<li>Some forums show the <strong>navigation tree</strong> at the top in a space-saving horizontal mode.</li>
+		<li>The <strong>page numbers</strong> link to further pages of the board, and may be accompanied by <strong>Go Up</strong> and <strong>Go Down</strong> buttons linking to the top and bottom of the current page.</li>
+		<li>The <strong>Mark as Read</strong> button enables registered members to mark all posts in this board as 'read'.</li>
+		<li>The <strong>Notify</strong> button enables registered members to subscribe to email notification of replies to topics in this board.</li>
+		<li>The <strong>New Topic</strong> and <strong>New Poll</strong> buttons are for starting new topics and polls, as described in the <a href="posting.english.html">posting help</a>.</li>
+		<li>The <strong>Subject</strong>, <strong>Started by</strong>, <strong>Replies</strong>, <strong>Views</strong> and <strong>Last post</strong> links enable you to sort the columns by these parameters (with <strong>Last post</strong> also toggling between descending and ascending order as indicated by the little arrow).</li>
+		<li>The <strong>topic icons</strong> in the leftmost column are explained by the key below.</li>
+		<li>The <strong>post icons</strong> in the next column are sometimes used to draw attention to the mood or purpose of the topic.</li>
+		<li>The <strong>topic subject</strong> links to the start of the <a href="#topic">topic</a>, with extra links for subsequent pages and <strong>new</strong> buttons to take registered members straight to their first unread post of the topic.</li>
+		<li>Where the <strong>topic</strong> has been started or last replied to by a registered member, their names link to their respective <a href="profile.english.html">profiles</a>.</li>
+		<li>The <strong>Jump to</strong> menu provides a convenient quick method of navigating the forum.</li>
+	</ul>
+	<h2 id="topic">The Topic</h2>
+	<p>Sometimes referred to as <strong>threads</strong>, <strong>topics</strong> are where you find the actual messages:</p>
+	<div style="background-color: #D0D0D0;">
+		<div style="padding: 2px 30px;">
+			<table summary="SMF layout" width="100%" cellpadding="3" cellspacing="0">
+				<tr>
+					<td valign="bottom"><span class="nav"><img src="../images/icons/folder_open.gif" alt="+" border="0" />&nbsp; <b><a href="#board" class="nav">Forum Name</a></b><br />
+					<img src="../images/icons/linktree_side.gif" alt="|-" border="0" /> <img src="../images/icons/folder_open.gif" alt="+" border="0" />&nbsp; <b><a href="#board" class="nav">Category Name</a></b><br />
+					<img src="../images/icons/linktree_main.gif" alt="| " border="0" /> <img src="../images/icons/linktree_side.gif" alt="|-" border="0" /> <img src="../images/icons/folder_open.gif" alt="+" border="0" />&nbsp; <b><a href="#message" class="nav">Board Name</a></b><br />
+					<img src="../images/icons/linktree_main.gif" alt="| " border="0" /> <img src="../images/icons/linktree_main.gif" alt="| " border="0" /> <img src="../images/icons/linktree_side.gif" alt="|-" border="0" /> <img src="../images/icons/folder_open.gif" alt="+" border="0" />&nbsp; <b><a href="#topic" class="nav">Topic Subject</a></b></span></td>
+				</tr>
+			</table>
+			<table summary="SMF layout" width="100%" cellpadding="3" cellspacing="0" border="0" class="tborder" style="margin-bottom: 1ex;">
+				<tr>
+					<td align="left" class="catbg" width="100%" height="35">
+						<table summary="SMF layout" cellpadding="3" cellspacing="0" width="100%">
+							<tr>
+								<td><b>Pages:</b> [<b>1</b>]</td>
+								<td align="right" style="font-size: smaller;"><a href="posting.english.html#reply"><img src="../images/english/reply.gif" border="0" alt="Reply" /></a> <a href="#topic" onclick="return confirm('Are you sure you wish to enable notification of new replies for this topic?');"><img src="../images/english/notify.gif" border="0" alt="Notify of Replies" /></a> <a href="#topic"><img src="../images/english/markunread.gif" border="0" alt="Mark unread" /></a> <a href="#topic"><img src="../images/english/sendtopic.gif" border="0" alt="Send this topic" /></a> <a href="#topic"><img src="../images/english/print.gif" border="0" alt="Print" /></a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<table summary="SMF layout" width="100%" cellpadding="3" cellspacing="0" border="0" class="tborder" style="border-bottom: 0;">
+				<tr class="titlebg">
+					<td valign="middle" align="left" width="15%" style="padding-left: 6px;"><img src="../images/topic/normal_post.gif" alt="" align="middle" />&nbsp;Author</td>
+					<td valign="middle" align="left" width="85%" style="padding-left: 6px;">Topic: Topic Subject &nbsp;(Read x times)</td>
+				</tr>
+			</table>
+			<table summary="SMF layout" cellpadding="0" cellspacing="0" border="0" width="100%" class="bordercolor">
+				<tr>
+					<td style="padding: 1px;">
+						<table summary="SMF layout" cellpadding="3" cellspacing="0" border="0" width="100%">
+							<tr>
+								<td class="windowbg">
+									<table summary="SMF layout" width="100%" cellpadding="5" cellspacing="0" style="table-layout: fixed;">
+										<tr>
+											<td valign="top" width="15%" rowspan="2" style="overflow: hidden;"><b><a href="profile.english.html" class="board" title="View the profile of Author">Author</a></b><br />
+											<span class="smalltext">Member Group<br />
+											Post Group<br />
+											<img src="../images/star.gif" alt="*" border="0" /><br />
+											Post Count<br />
+											<br />
+											<br />
+											<br />
+											<a href="profile.english.html" title="View Profile"><img src="../images/icons/profile_sm.gif" border="0" alt="View Profile" /></a> <a href="mailto:author@some.address" title="Email"><img src="../images/email_sm.gif" border="0" alt="Email" /></a> <a href="pm.english.html" title="Personal Message (Offline)"><img src="../images/im_off.gif" border="0" alt="Personal Message (Offline)" /></a></span></td>
+											<td valign="top" width="85%" height="100%">
+												<table summary="SMF layout" width="100%" border="0">
+													<tr>
+														<td width="20" align="left" valign="middle"><a href="index.php?topic=2.msg2#msg2"><img src="../images/post/xx.gif" alt="" border="0" /></a></td>
+														<td align="left" valign="middle">
+															<b><a href="#topic" class="board">Topic Subject</a></b>
+															<div class="smalltext">
+																&laquo; Date and Time of Post &raquo;
+															</div>
+														</td>
+														<td align="right" valign="bottom" height="20" nowrap="nowrap" style="font-size: smaller;"><a href="posting.english.html#quote"><img src="../images/english/quote.gif" border="0" alt="Reply with quote" /></a></td>
+													</tr>
+												</table>
+												<hr width="100%" size="1" class="hrcolor" />
+												<div style="overflow: auto; width: 100%;">
+													Here is the text of the message, which is ultimately what we're all here for!&nbsp;<img src="../../../Smileys/default/smiley.gif" border="0" alt="Smiley" />
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td valign="bottom" class="smalltext">
+												<table summary="SMF layout" width="100%" border="0" style="table-layout: fixed;">
+													<tr>
+														<td align="right" valign="bottom" class="smalltext"><a href="#topic" class="board" style="font-size: x-small;">Report to moderator</a>&nbsp;&nbsp; <img src="../images/ip.gif" alt="" border="0" />&nbsp; Logged</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table><a name="lastPost" id="lastPost"></a>
+			<table summary="SMF layout" width="100%" cellpadding="3" cellspacing="0" border="0" class="tborder" style="margin-top: 1ex;">
+				<tr>
+					<td align="left" class="catbg" width="100%" height="30">
+						<table summary="SMF layout" cellpadding="3" cellspacing="0" width="100%">
+							<tr>
+								<td><b>Pages:</b> [<b>1</b>]</td>
+								<td align="right" style="font-size: smaller;"><a href="posting.english.html#reply"><img src="../images/english/reply.gif" border="0" alt="Reply" /></a> <a href="#topic" onclick="return confirm('Are you sure you wish to enable notification of new replies for this topic?');"><img src="../images/english/notify.gif" border="0" alt="Notify of Replies" /></a> <a href="#topic"><img src="../images/english/markunread.gif" border="0" alt="Mark unread" /></a> <a href="#topic"><img src="../images/english/sendtopic.gif" border="0" alt="Send this topic" /></a> <a href="#topic"><img src="../images/english/print.gif" border="0" alt="Print" /></a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<div style="padding-top: 4px; padding-bottom: 4px;"></div>
+			<div align="right" style="float: right; margin-bottom: 1ex;">
+				<form action="index.english.html" method="get" name="jump2Form" id="jump2Form">
+					<label for="jump2">Jump to</label>: <select name="jump2" id="jump2" onchange="if (this.options[this.selectedIndex].value) window.location.href='index.english.html' + this.options[this.selectedIndex].value;">
+						<option value="">
+							Please select a destination:
+						</option>
+						<option value="">
+							-----------------------------
+						</option>
+						<option value="#board">
+							Category Name
+						</option>
+						<option value="">
+							-----------------------------
+						</option>
+						<option value="#message">
+							=&gt; Board Name
+						</option>
+						<option value="#message">
+							=&gt; Another Board
+						</option>
+					</select>&nbsp; <input type="button" onclick="if (document.jump2Form.jump2.options[document.jump2Form.jump2.selectedIndex].value) window.location.href = 'index.english.html' + document.jump2Form.jump2.options[document.jump2Form.jump2.selectedIndex].value;" value="go" />
+				</form>
+			</div><br />
+			<br clear="all" />
+		</div>
+	</div><br />
+	<ul>
+		<li>Some forums show the <strong>navigation tree</strong> at the top in a space-saving horizontal mode.</li>
+		<li>Some forums may also be configured with <strong>previous</strong> and <strong>next</strong> topic links.</li>
+		<li>The <strong>page numbers</strong> link to further pages of the topic, and may be accompanied by <strong>Go Up</strong> and <strong>Go Down</strong> buttons linking to the top and bottom of the current page.</li>
+		<li>The <strong>Reply</strong> button enables you to <a href="posting.english.html#reply">reply</a> to the topic.</li>
+		<li>The <strong>Notify</strong> button enables registered members to subscribe to email notification of replies to the topic.</li>
+		<li>The <strong>Mark Unread</strong> button enables registered members to mark the topic as 'unread', which means that it will still be listed as new and can be effectively 'saved for later'. Note that this button changes to <strong>Add Poll</strong> in the bottom button set for users with permission to add polls to existing topics.</li>
+		<li>The <strong>Send Topic</strong> button enables registered members to send a link to the topic by email.</li>
+		<li>The <strong>Print</strong> button creates a simplified, printer-friendly rendering of the page.</li>
+		<li>The <strong>author name</strong> links to the author's <a href="profile.english.html">profile</a></li>
+		<li>The <strong>author details</strong> in the lefthand column may be accompanied by further personal information.</li>
+		<li>The <strong>topic subject</strong> links back to the start of the topic.</li>
+		<li>The <strong>Quote</strong> button enables you to <a href="posting.english.html#quote">quote</a> the post.</li>
+		<li>Further <strong>Modify</strong> and <strong>Delete</strong> options are normally provided to enable registered members to <a href="posting.english.html#modify">edit</a> their own posts.</li>
+		<li><strong>Report to moderator</strong> enables you to report abusive or wrongly-placed posts to the forum staff.</li>
+		<li><strong>Logged</strong> indicates that the IP of the author has been logged. The actual IP is only available to board administrators</li>
+		<li>The <strong>Jump to</strong> menu provides a convenient quick method of navigating the forum.</li>
+	</ul>
+	<div class="footer">
+		<hr noshade="noshade" size="1" />
+		<p>Copyright &copy; 2001-2005 <a href="http://www.lewismedia.com/">Lewis Media</a>. All Rights Reserved.</p>
+	</div>
+</body>
+</html>

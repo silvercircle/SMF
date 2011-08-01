@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="style.xslt"?>
+<!DOCTYPE smf:helpfile [
+	<!ENTITY copyright "&#169;">
+	<!ENTITY space "&#160;">
+]>
+<!-- Don't translate tags, attributes or entities. -->
+<smf:helpfile subject="registering" xml:space="preserve" xmlns:smf="http://www.simplemachines.org/">
+	<!-- The language element should match the language directory in Themes/default/images and is case-sensitive. -->
+	<language>english</language>
+	<visit-simple-machines>Visit Simple Machines!</visit-simple-machines>
+	<title>SMF User Help: Registering</title>
+	<menu>
+		<help page="index">Introduction</help>
+		<help page="here">Registering</help>
+		<help page="loginout">Logging&space;In</help>
+		<help page="profile">Profile</help>
+		<help page="posting">Posting</help>
+		<help page="pm">Personal&space;Message</help>
+		<help page="searching">Searching</help>
+	</menu>
+	<intro>
+		<paragraph>When you have set up your SMF forum, or wish to join another SMF forum, you should register a username. This will enable you to maintain a consistent identity while posting and keep track of what you've read, no matter where you're working from or what computer you're using. You'll be able to fill out a personal <link page="profile">profile</link> and use the built-in <link page="pm">personal message system</link>. You'll be able to subscribe to email notifications, monitor your forum activity and more.</paragraph>
+	</intro>
+	<section id="how-to">
+		<secheading>How to Register</secheading>
+		<paragraph>Assuming you've arrived at the forum as a guest and wish to register, you should be looking at one of these two things:</paragraph>
+		<list>
+			<item>Any page of the forum, in which you case you should select <action>Register</action> from the <link page="index" ref="main">main menu</link>.</item>
+			<item>A login screen headed by a warning about access being restricted to registered members, in which case you should either use the registration link provided or select <action>Register</action> from the <link page="index" ref="main">main menu</link>.</item>
+		</list>
+		<register-warning-demo>
+		<!-- This data is used to demonstrate the registration warning box. -->
+			<warning>Warning!</warning>
+			<warning-text-1>Only registered members are allowed to access this section.</warning-text-1>
+			<warning-text-2>Please login below or </warning-text-2>
+			<warning-text-3>register an account</warning-text-3>
+			<warning-text-4> with Forum Name.</warning-text-4>
+		</register-warning-demo>
+	</section>
+	<section id="screen">
+		<secheading>The Registration Screen</secheading>
+		<!-- This data is used to demonstrate the registration screen. -->
+		<registration-screen-demo>
+			<required>Register - Required Information</required>
+			<choose-username>Choose username</choose-username>
+			<caption-username>Used only for identification by SMF. You can use special characters after logging in, by changing your displayed name in your profile.</caption-username>
+			<email>Email</email>
+			<caption-email>This must be a valid email address.</caption-email>
+			<hide-email>Hide email address from public?</hide-email>
+			<choose-password>Choose password</choose-password>
+			<verify-password>Verify password</verify-password>
+			<agreement>This is where the registration agreement should be if there is one!</agreement>
+			<i-agree>I Agree</i-agree>
+			<register>Register</register>
+		</registration-screen-demo>
+		<paragraph>When you arrive at the registration screen, you will need to enter a <term>username</term>, <term>email address</term> and <term>password</term>, and may be offered the option of hiding your email address. Since most forums also require you to agree to their terms of use before your registration is accepted, you will normally have to read the agreement and check <check>I Agree</check> before continuing. What happens next depends on how the forum is configured, but, if the next thing you see is a <link page="loginout" ref="screen">login screen</link> headed by a message inviting you to proceed, that's it, you're through and you can proceed to login! If not, there are two further possibilities:</paragraph>
+		<list>
+			<item>If registration has been configured to require email activation, the next screen will tell you so and you should receive an immediate email with instructions about how to proceed. But there's also a useful link ('Did you miss your activation email?') in the <term>User Info</term> box in case you miss this email or mistype your email address.</item>
+			<item>If registration has been configured to require approval from a forum administrator, the next screen will tell you so and you should receive both an acknowledgement by email and another email later to inform you whether or not your application has been approved.</item>
+		</list>
+	</section>
+	<copyright>
+		Copyright &copyright; 2001-2005 <link site="http://www.lewismedia.com/">Lewis Media</link>. All Rights Reserved.
+	</copyright>
+</smf:helpfile>

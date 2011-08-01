@@ -10,7 +10,7 @@ function template_main()
 	global $txt, $context, $scripturl;
 
 	echo '
-	<table border="1" cellpadding="0" cellspacing="0" align="center" width="95%">
+	<table border="0" cellpadding="0" cellspacing="0" align="center" width="95%">
   <tr>
   	<td align="center"  class="catbg">',$txt['smftags_popular'], '
 
@@ -29,7 +29,7 @@ function template_main()
   	</tr>
   	</table>
   	<br />
-  	<table border="1" cellpadding="0" cellspacing="0" align="center" width="95%">
+  	<table border="0" cellpadding="0" cellspacing="0" align="center" width="95%">
   <tr>
   	<td align="center"  class="catbg">',$txt['smftags_latest'], '
 
@@ -40,6 +40,7 @@ function template_main()
   	<table border="0" width="100%" cellspacing="1" cellpadding="4" class="bordercolor">
 					<tr>
 						<td class="catbg3">',$txt['smftags_subject'],'</td>
+						<td class="catbg3" width="11%">',$txt['smftags_topictag'],'</td>
 						<td class="catbg3" width="11%">',$txt['smftags_startedby'],'</td>
 						<td class="catbg3" width="4%" align="center">',$txt['smftags_replies'],'</td>
 						<td class="catbg3" width="4%" align="center">', $txt['smftags_views'], '</td>
@@ -48,6 +49,7 @@ function template_main()
 		{
 				echo '<tr>';
 					echo '<td class="windowbg2"><a href="' . $scripturl . '?topic=' . $topic['id_topic'] . '.0">' . $topic['subject'] . '</a></td>';
+					echo '<td class="windowbg2"><a href="' . $scripturl . '?action=tags;tagid=' . $topic['ID_TAG'] . '">' . $topic['tag'] . '</a></td>';
 					echo '<td class="windowbg"><a href="' . $scripturl . '?action=profile;u=' . $topic['id_member'] . '">' . $topic['poster_name'] . '</a></td>';
 					echo '<td class="windowbg2">' . $topic['num_replies'] . '</td>';
 					echo '<td class="windowbg2">' . $topic['num_views'] . '</td>';
@@ -70,7 +72,7 @@ function template_results()
 {
 	global $scripturl, $txt, $context;
 echo '
-	<table border="1" cellpadding="0" cellspacing="0"  align="center" width="95%">
+	<table border="0" cellpadding="0" cellspacing="0"  align="center" width="95%">
   <tr>
   	<td align="center" class="catbg">' . $txt['smftags_resultsfor'] . $context['tag_search'] . '</td>
   	</tr>
@@ -94,7 +96,8 @@ echo '
 
 		}
 echo '
-
+	<tr>
+	<td colspan="4">' . $txt['smftags_pages'] . $context['page_index'] . '</td>
   	</tr>
   	</table></td></tr></table><br />
   	';
@@ -108,7 +111,7 @@ function template_addtag()
 		global $scripturl, $txt, $context;
 
 	echo '
-<form method="POST" action="', $scripturl, '?action=tags;sa=addtag2">
+<form method="post" action="', $scripturl, '?action=tags;sa=addtag2">
 <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%">
   <tr>
     <td width="50%" colspan="2"  align="center" class="catbg">

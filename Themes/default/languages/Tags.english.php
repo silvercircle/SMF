@@ -57,4 +57,6 @@ $txt['smftags_startedby'] = 'Started by';
 $txt['smftags_replies'] = 'Replies';
 $txt['smftags_views'] = 'Views';
 $txt['smftags_guest'] = 'Guest';
+
+$txt['smftags_topictag'] = 'Tag';
 ?>

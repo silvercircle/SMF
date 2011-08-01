@@ -27,13 +27,13 @@ function template_main()
 	{
 		echo '
 	<div id="newsfader">
-		<div class="cat_bar">
+		<div class="cat_bar rounded_top">
 			<h3 class="catbg">
-				<img id="newsupshrink" src="', $settings['images_url'], '/collapse.gif" alt="*" title="', $txt['upshrink_description'], '" align="bottom" style="display: none;" />
+				<img id="newsupshrink" src="', $settings['images_url'], '/collapse.gif" alt="*" title="', $txt['upshrink_description'], '" style="display: none;" />
 				', $txt['news'], '
 			</h3>
 		</div>
-		<ul class="reset" id="smfFadeScroller"', empty($options['collapse_news_fader']) ? '' : ' style="display: none;"', '>';
+		<ul class="windowbg rounded_bottom reset" id="smfFadeScroller"', empty($options['collapse_news_fader']) ? '' : ' style="display: none;"', '>';
 
 			foreach ($context['news_lines'] as $news)
 				echo '
@@ -101,7 +101,7 @@ function template_main()
 			<tbody class="header" id="category_', $category['id'], '">
 				<tr>
 					<td colspan="4">
-						<div class="cat_bar">
+						<div class="cat_bar rounded_top">
 							<h3 class="catbg">';
 
 		// If this category even can collapse, show a link to collapse it.
@@ -135,7 +135,7 @@ function template_main()
 			{
 				echo '
 				<tr id="board_', $board['id'], '" class="windowbg2">
-					<td class="icon windowbg"', !empty($board['children']) ? ' rowspan="2"' : '', '>
+					<td class="icon">
 						<a href="', ($board['is_redirect'] || $context['user']['is_guest'] ? $board['href'] : $scripturl . '?action=unread;board=' . $board['id'] . '.0;children'), '">';
 
 				// If the board or children is new, show an indicator.
@@ -155,7 +155,7 @@ function template_main()
 						</a>
 					</td>
 					<td class="info">
-						<a class="subject" href="', $board['href'], '" name="b', $board['id'], '">', $board['name'], '</a>';
+						<a href="',$scripturl,'?action=.xml;type=rss;board=',$board['id'],'"><img style="float:right" src="',$settings['images_url'],'/icons/rss.png" alt="rss" title="feed" /></a><a class="subject" href="', $board['href'], '" id="b', $board['id'], '">', $board['name'], '</a>';
 
 				// Has it outstanding posts for approval?
 				if ($board['can_approve_posts'] && ($board['unapproved_posts'] || $board['unapproved_topics']))
@@ -164,36 +164,13 @@ function template_main()
 
 				echo '
 
-						<p>', $board['description'] , '</p>';
+						<p class="smalltext">', $board['description'] , '</p>';
 
 				// Show the "Moderators: ". Each has name, href, link, and id. (but we're gonna use link_moderators.)
 				if (!empty($board['moderators']))
 					echo '
 						<p class="moderators">', count($board['moderators']) == 1 ? $txt['moderator'] : $txt['moderators'], ': ', implode(', ', $board['link_moderators']), '</p>';
 
-				// Show some basic information about the number of posts, etc.
-					echo '
-					</td>
-					<td class="stats windowbg">
-						<p>', comma_format($board['posts']), ' ', $board['is_redirect'] ? $txt['redirects'] : $txt['posts'], ' <br />
-						', $board['is_redirect'] ? '' : comma_format($board['topics']) . ' ' . $txt['board_topics'], '
-						</p>
-					</td>
-					<td class="lastpost">';
-
-				/* The board's and children's 'last_post's have:
-				time, timestamp (a number that represents the time.), id (of the post), topic (topic id.),
-				link, href, subject, start (where they should go for the first unread post.),
-				and member. (which has id, name, link, href, username in it.) */
-				if (!empty($board['last_post']['id']))
-					echo '
-						<p><strong>', $txt['last_post'], '</strong>  ', $txt['by'], ' ', $board['last_post']['member']['link'] , '<br />
-						', $txt['in'], ' ', $board['last_post']['link'], '<br />
-						', $txt['on'], ' ', $board['last_post']['time'],'
-						</p>';
-				echo '
-					</td>
-				</tr>';
 				// Show the "Child Boards: ". (there's a link_children but we're going to bold the new ones...)
 				if (!empty($board['children']))
 				{
@@ -215,12 +192,30 @@ function template_main()
 						$children[] = $child['new'] ? '<strong>' . $child['link'] . '</strong>' : $child['link'];
 					}
 					echo '
-					<tr id="board_', $board['id'], '_children">
-						<td colspan="3" class="children windowbg">
-							<strong>', $txt['parent_boards'], '</strong>: ', implode(', ', $children), '
-						</td>
-					</tr>';
+					<div class="td_children" id="board_', $board['id'], '_children">
+						<strong>', $txt['parent_boards'], '</strong>: ', implode(', ', $children), '
+					</div>';
 				}
+						
+				// Show some basic information about the number of posts, etc.
+					echo '
+					</td>
+					<td class="stats">
+						<p>', comma_format($board['posts']), ' ', $board['is_redirect'] ? $txt['redirects'] : $txt['posts'], ' <br />
+						', $board['is_redirect'] ? '' : comma_format($board['topics']) . ' ' . $txt['board_topics'], '
+						</p>
+					</td>
+					<td class="lastpost">';
+				if (!empty($board['last_post']['id']))
+					echo '<img src="',$board['first_post']['icon_url'],'" alt="icon" />
+					<strong>',$txt['in'], ': </strong>', $board['last_post']['topiclink'], '<br />
+						<a class="lp_link" title="',$txt['last_post'],'" href="',$board['last_post']['href'],'">',$board['last_post']['time'], '</a>
+						<strong style="padding-left:17px;">', $txt['by'], ': </strong>', $board['last_post']['member']['link'];
+				else
+					echo $txt['not_applicable'];
+				echo '
+					</td>
+				</tr>';
 			}
 		echo '
 			</tbody>';
@@ -277,16 +272,14 @@ function template_info_center()
 	global $context, $settings, $options, $txt, $scripturl, $modSettings;
 
 	// Here's where the "Info Center" starts...
-	echo '
-	<span class="clear upperframe"><span></span></span>
-	<div class="roundframe"><div class="innerframe">
-		<div class="cat_bar">
+	echo '<div class="clear"></div>
+		<div class="cat_bar rounded_top">
 			<h3 class="catbg">
 				<img class="icon" id="upshrink_ic" src="', $settings['images_url'], '/collapse.gif" alt="*" title="', $txt['upshrink_description'], '" style="display: none;" />
 				', sprintf($txt['info_center_title'], $context['forum_name_html_safe']), '
 			</h3>
 		</div>
-		<div id="upshrinkHeaderIC"', empty($options['collapse_header_ic']) ? '' : ' style="display: none;"', '>';
+		<div class="windowbg rounded_bottom" id="upshrinkHeaderIC"', empty($options['collapse_header_ic']) ? '' : ' style="display: none;"', '>';
 
 	// This is the "Recent Posts" bar.
 	if (!empty($settings['number_recent_posts']) && (!empty($context['latest_posts']) || !empty($context['latest_post'])))
@@ -303,7 +296,7 @@ function template_info_center()
 			<div class="hslice" id="recent_posts_content">
 				<div class="entry-title" style="display: none;">', $context['forum_name_html_safe'], ' - ', $txt['recent_posts'], '</div>
 				<div class="entry-content" style="display: none;">
-					<a rel="feedurl" href="', $scripturl, '?action=.xml;type=webslice">', $txt['subscribe_webslice'], '</a>
+					<a rel="alternate" type="application/rss+xml" href="', $scripturl, '?action=.xml;type=webslice">', $txt['subscribe_webslice'], '</a>
 				</div>';
 
 		// Only show one post.
@@ -320,7 +313,7 @@ function template_info_center()
 		elseif (!empty($context['latest_posts']))
 		{
 			echo '
-				<dl id="ic_recentposts" class="middletext">';
+				<dl id="ic_recentposts" class="smalltext">';
 
 			/* Each post in latest_posts has:
 					board (with an id, name, and link.), topic (the topic's id.), poster (with id, name, and link.),
@@ -470,9 +463,7 @@ function template_info_center()
 	}
 
 	echo '
-		</div>
-	</div></div>
-	<span class="lowerframe"><span></span></span>';
+		</div>';
 
 	// Info center collapse object.
 	echo '

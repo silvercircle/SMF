@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Version: 1.0; help/loginout-->
+<head>
+	<meta name="generator" content="HTML Tidy for Windows (vers 1st June 2004), see www.w3.org" />
+	<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<script language="JavaScript" type="text/javascript" src="../script.js">
+</script>
+<script language="JavaScript" type="text/javascript">
+//<![CDATA[
+														var smf_theme_url = "..";
+														var smf_images_url = "../images";
+//]]>
+</script>
+	<title>SMF User Help: Logging In and Out</title>
+	<link type="text/css" rel="stylesheet" href="../style.css" />
+	<link type="text/css" rel="stylesheet" href="help.css" />
+</head>
+<body>
+	<table summary="two simple cells for layout purposes" width="100%">
+		<tr>
+			<td width="1%"><a href="http://www.simplemachines.org/"><img src="../images/helplogo.jpg" alt="Visit Simple Machines!" title="Visit Simple Machines!" border="0" /></a></td>
+			<td valign="top">
+				<a href="http://www.simplemachines.org/"><img src="../images/smflogo.gif" align="right" alt="Visit Simple Machines!" title="Visit Simple Machines!" border="0" /></a>
+				<h1 style="margin-top: 12px;">SMF User Help: Logging In and Out</h1><br clear="right" />
+				<hr />
+				<p><a href="index.english.html">Introduction</a> &bull; <a href="registering.english.html">Registering</a> &bull; <strong>Logging&nbsp;In</strong> &bull; <a href="profile.english.html">Profile</a> &bull; <a href="posting.english.html">Posting</a> &bull; <a href="pm.english.html">Personal&nbsp;Message</a> &bull; <a href="searching.english.html">Searching</a></p>
+				<hr />
+			</td>
+		</tr>
+	</table>
+	<p>Once you have completed the <a href="registering.english.html">registration</a> process, you will be able to login to the site for the first time. After that, you can choose whether to stay logged in indefinitely or logout at the end of your visit.</p>
+	<ol>
+		<li>
+			<a href="#login">Logging In</a>
+			<ol class="la">
+				<li><a href="#screen">The Login Screen</a></li>
+				<li><a href="#quick">The Quick Login</a></li>
+			</ol>
+		</li>
+		<li><a href="#logout">Logging Out</a></li>
+		<li><a href="#reminder">Password Reminder</a></li>
+	</ol>
+	<h2 id="login">Logging In</h2>
+	<p>So you might be newly registered or you might simply have been logged out from a previous visit, but there's normally a choice between the login screen and the quick login in either case.</p>
+	<h3 id="screen">The Login Screen</h3>
+	<p>Since this screen (accessed from the <strong>Login</strong> option of the <a href="index.english.html#main">main menu</a>) is not only where you'll normally be taken on completing registration but also the first thing you'll see in any 'members only' forum, we will describe it first:</p>
+	<form name="frmLogin" action="loginout.english.html" method="post" style="margin-top: 4ex;" id="frmLogin">
+		<table summary="SMF layout" width="400" cellspacing="0" cellpadding="4" class="tborder" align="center">
+			<tr class="titlebg">
+				<td colspan="2"><img src="../images/icons/login_sm.gif" alt="" align="top" />&nbsp; Login</td>
+			</tr>
+			<tr class="windowbg">
+				<td width="50%" align="right" style="background-color: #e1e1e1;"><b>Username:</b></td>
+				<td style="background-color: #e1e1e1;"><input type="text" size="20" value="" /></td>
+			</tr>
+			<tr class="windowbg">
+				<td align="right" style="background-color: #e1e1e1;"><b>Password:</b></td>
+				<td style="background-color: #e1e1e1;"><input type="password" value="" size="20" /></td>
+			</tr>
+			<tr class="windowbg">
+				<td align="right" style="background-color: #e1e1e1;"><b>Minutes to stay logged in:</b></td>
+				<td style="background-color: #e1e1e1;"><input name="cookielength" type="text" size="4" maxlength="4" value="60" /></td>
+			</tr>
+			<tr class="windowbg">
+				<td align="right" style="background-color: #e1e1e1;"><b>Always stay logged in:</b></td>
+				<td style="background-color: #e1e1e1;"><input type="checkbox" class="check" onclick="document.frmLogin.cookielength.disabled = this.checked;" /></td>
+			</tr>
+			<tr class="windowbg">
+				<td align="center" colspan="2" style="background-color: #e1e1e1;"><input type="button" style="margin-top: 2ex;" value="Login" /></td>
+			</tr>
+			<tr class="windowbg">
+				<td align="center" colspan="2" class="smalltext" style="background-color: #e1e1e1;"><a href="#reminder" style="font-size: x-small;" class="board">Forgot your password?</a><br />
+				<br /></td>
+			</tr>
+		</table>
+	</form><br />
+	<p>While the <strong>Username</strong> and <strong>Password</strong> fields should be self-explanatory, <strong>Minutes to stay logged in</strong> simply means the number of minutes the cookie that keeps you logged in will last before expiring and requiring you to login again. So it's not advisable to enter a long time here if you share a computer and are likely to forget to logout, but you might prefer to check <strong>Always stay logged in</strong> if no-one else has access to your computer.</p>
+	<h3 id="quick">The Quick Login</h3>
+	<p>Although many forums also have a quick login box to allow you to login direct from any screen, its position on the page may vary considerably from forum to forum. In the SMF default theme, for example, it's in the collapsable section at the top, whereas it's more likely to be at the bottom in themes based on the older YaBB SE forum. If you can't see it and it hasn't simply been collapsed, it's either not enabled at all (in which case you should still be able to access the login screen from the <a href="index.english.html#main">main menu</a>) or you're already logged in (in which case the main menu should include a <strong>Logout</strong> rather than <strong>Login</strong> link!).</p>
+	<table summary="SMF layout" cellspacing="0" cellpadding="0" border="0" align="center" width="400" class="tborder">
+		<tr>
+			<td style="background-color: #efefef;">
+				<table summary="SMF layout" width="99%" cellpadding="0" cellspacing="5" border="0">
+					<tr>
+						<td width="100%" valign="top" class="smalltext" style="font-family: verdana, arial, sans-serif;">
+							<form action="loginout.english.html" method="post" style="margin: 3px 1ex 1px 0; text-align:right;">
+								<input type="text" size="10" /> <input type="password" size="10" /> <select>
+									<option>
+										1 Hour
+									</option>
+									<option>
+										1 Day
+									</option>
+									<option>
+										1 Week
+									</option>
+									<option>
+										1 Month
+									</option>
+									<option selected="selected">
+										Forever
+									</option>
+								</select> <input type="button" value="Login" /><br />
+								Login with username, password and session length
+							</form>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table><br />
+	<p>To use the quick login box, enter your username and password, select your session length from the drop-down menu and click <strong>Login</strong>. Please note that <strong>Forever</strong>, like <strong>Always stay logged in</strong>, simply means that the computer should remember you until you next choose to logout, and not that you actually need to be online all of that time!</p>
+	<h2 id="logout">Logging Out</h2>
+	<p>When you have finished browsing the forum, you may decide to logout. Perhaps you share a workstation with someone else, in which case leaving yourself logged in would not be a good idea. So select the <strong>Logout</strong> option from the <a href="index.english.html#main">main menu</a> and the forum should log you out, turning you into an instant guest, clearing your name from the list of users online and safeguarding your forum identity until you choose to login again.</p>
+	<h2 id="reminder">Password Reminder</h2>
+	<p>If you're trying to login to the forum but have forgetten or lost your password, you can retrieve it with the lost password tool by following the <strong>Forgot your password?</strong> link from the <a href="#screen">login</a> screen.</p>
+	<form action="loginout.english.html" method="post">
+		<table summary="SMF layout" border="0" width="400" cellspacing="0" cellpadding="3" align="center" class="tborder">
+			<tr class="titlebg">
+				<td colspan="2">Password reminder</td>
+			</tr>
+			<tr class="windowbg">
+				<td colspan="2" style="background-color: #e1e1e1;">Username/email:&nbsp; <input type="text" size="30" /> <input type="button" value="Send" /></td>
+			</tr>
+			<tr class="windowbg">
+				<td align="center" style="background-color: #e1e1e1;"><input type="radio" name="searchtype" checked="checked" class="check" />by User</td>
+				<td align="center" style="background-color: #e1e1e1;"><input type="radio" name="searchtype" class="check" />by Email</td>
+			</tr>
+			<tr class="windowbg" style="background-color: #e1e1e1;">
+				<td colspan="2" align="center" style="background-color: #e1e1e1;"><input type="checkbox" class="check" />Ask me my question</td>
+			</tr>
+			<tr class="windowbg" style="background-color: #e1e1e1;">
+				<td colspan="2" align="center" class="smalltext" style="background-color: #e1e1e1;">You can't retrieve your password, but you can set a new one by following a link sent to you by email. You also have the option of setting a new password by answering your secret question.</td>
+			</tr>
+		</table>
+	</form>
+	<p>You can enter either your username or your email address so long as you check the appropriate option, then click the <strong>Send</strong> button to send yourself an email containing a link to reset your password. It's also possible to avoid the email altogether if you've set yourself a secret question and answer in your profile, but please beware of questions that anyone could answer or guess (like 'what is the first color of the rainbow?', which would be a very bad choice)!</p>
+	<div class="footer">
+		<hr noshade="noshade" size="1" />
+		<p>Copyright &copy; 2001-2005 <a href="http://www.lewismedia.com/">Lewis Media</a>. All Rights Reserved.</p>
+	</div>
+</body>
+</html>

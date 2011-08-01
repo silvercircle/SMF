@@ -119,7 +119,7 @@ jQuery(document).ready(function() {
 	});
 	jQuery('#menu_nav ul').hover(function() {
 	}, function() {
-		jQuery(this).fadeOut();
+		jQuery(this).hide();
 	});
 	jQuery('#menu_nav').hover(function() {
 	}, function() {
@@ -128,11 +128,11 @@ jQuery(document).ready(function() {
 	});
 	jQuery('#menu_nav li').hover(function() {
 		if (menu_active) {
-			jQuery(this).children('ul').fadeIn();
+			jQuery(this).children('ul').show();
 		}
 	}, function() {
 		if (menu_active) {
-			jQuery(this).children('ul').fadeOut();
+			jQuery(this).children('ul').hide();
 		}
 	});
 	$('a.vbox').colorbox({
@@ -229,25 +229,7 @@ jQuery(document).ready(function() {
 			$(this).find('a[class=tpeek]:first').remove();			
 		});
 		
-	$('abbr.date').each(function() {
-		var time = parseInt($(this).attr('data-time'));
-		var now = parseInt($(this).attr('data-now'));
-		var diff = now - time;
-		
-		if(diff > 365 * 86400 || time > now)		// more than a year old, print the normal time stamp
-			return;
-		else {
-			if(diff < 60)
-				$(this).html('seconds ago');
-			else if(diff < 3600) {
-				$(this).html(parseInt(diff / 60) + ' minutes ago');
-			}
-			else if(diff < 86400) {
-				$(this).attr('title', $(this).html());
-				$(this).html(parseInt(diff / 3600) + ' hours ago');
-			}
-		}
-	});
+	$('abbr.timeago').timeago();
 });
 
 function firePreview(topic_id, ele)

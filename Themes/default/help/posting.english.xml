@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="style.xslt"?>
+<!DOCTYPE smf:helpfile [
+	<!ENTITY copyright "&#169;">
+	<!ENTITY space "&#160;">
+]>
+<!-- Don't translate tags, attributes or entities. -->
+<smf:helpfile subject="posting" xml:space="preserve" xmlns:smf="http://www.simplemachines.org/">
+	<!-- The language element should match the language directory in Themes/default/images and is case-sensitive. -->
+	<language>english</language>
+	<visit-simple-machines>Visit Simple Machines!</visit-simple-machines>
+	<title>SMF User Help: Posting</title>
+	<menu>
+		<help page="index">Introduction</help>
+		<help page="registering">Registering</help>
+		<help page="loginout">Logging&space;In</help>
+		<help page="profile">Profile</help>
+		<help page="here">Posting</help>
+		<help page="pm">Personal&space;Message</help>
+		<help page="searching">Searching</help>
+	</menu>
+	<intro>
+		<paragraph>Since posting messages is basically what forums are all about, we will spend some time looking at the various options and techniques available. Those who are familiar with forum software, HTML or bulletin board code in general may prefer to skip straight to the <link ref="bbcref">Bulletin Board Code</link> and <link ref="smileysref">Smileys</link> references.</paragraph>
+		<paragraph><strong>Please note that, because an SMF forum may be customized extensively by its administrator(s), the presence of a feature in this documentation does not necessarily mean that it will be available to all users in all forums.</strong></paragraph>
+	</intro>
+	<section id="basics">
+		<secheading>Posting Basics</secheading>
+		<subsection id="newtopic">
+			<subheading>Starting a New Topic</subheading>
+			<paragraph>Browse to the board where you wish to post and click the <action>New Topic</action> button (positioned by default at both the top and the bottom of the board, as shown in the <link page="index" ref="message">User Help Introduction</link>), which should take you to the <screen>Start new topic</screen> screen. While this presents a number of options, the two most important are the <field>Subject</field> field and main <field>Message</field> field (not labeled as such, but obvious by its size). So enter your subject and start to type (or paste) your message into the main text area, noting that a message missing either a subject or a body will not be accepted for posting until it has both. If you're happy with your plain text message, you can then post it by clicking the <action>Post</action> button and/or preview it first by clicking the <action>Preview</action> button, but there are many further <link ref="standard">options</link> available to make things that little bit more interesting.</paragraph>
+			<!-- This data is used to demonstrate the basics of the post screen. -->
+			<post-screen-demo>
+				<forum-name>Forum Name</forum-name>
+				<category-name>Category Name</category-name>
+				<board-name>Board Name</board-name>
+				<start-new-topic>Start new topic</start-new-topic>
+				<standard-options>Standard Options</standard-options>
+				<additional-options>Additional Options</additional-options>
+				<omitted-for-clarity>omitted for clarity and demonstrated below.</omitted-for-clarity>
+				<subject>Subject</subject>
+				<shortcuts>shortcuts: hit alt+s to submit/post or alt+p to preview</shortcuts>
+				<post>Post</post>
+				<preview>Preview</preview>
+			</post-screen-demo>
+			<list>
+				<item>Some forums show the <term>navigation tree</term> at the top in a space-saving horizontal mode.</item>
+				<item>Some forums may be configured to offer an additional <action>Spell Check</action> button alongside the <action>Post</action> and <action>Preview</action> options.</item>
+			</list>
+		</subsection>
+		<subsection id="newpoll">
+			<subheading>Starting a New Poll</subheading>
+			<paragraph>A poll is basically a topic with an added question and voting options, started by clicking <action>New Poll</action> instead of <action>New Topic</action> <link ref="newtopic">as described above</link>. To post a poll it is necessary to fill out the <field>Question</field> field and at least two of the <field>Option</field> fields in addition to the <field>Subject</field> and <field>Message</field> fields required by a standard topic. Further options to configure how many choices the user may vote for, how long the poll should run, whether users can change their votes and what conditions must be fulfilled for the results to be displayed should be self-explanatory.</paragraph>
+			<paragraph>To offer more than five choices in a poll, simply click <action>Add Option</action> as many times as necessary.</paragraph>
+			<paragraph>Note that it may also be possible for some users in some forums to add a poll to an existing topic.</paragraph>
+		</subsection>
+		<subsection id="calendar">
+			<subheading>Posting an Event to the Calendar</subheading>
+			<paragraph>Where this option has been configured (it's not standard 'out of the box'), you can post an event by selecting <action>Calendar</action> from the <link page="index" ref="main">main menu</link> followed by <action>Post Event</action> from the calendar screen. What you see now is a <screen>Start new topic</screen> screen with supplementary fields for the event title, date and target board, which simply add your event to the calendar and create a link back to your post in that board.</paragraph>
+		</subsection>
+		<subsection id="reply">
+			<subheading>Replying to a Topic or Poll</subheading>
+			<paragraph>Replying to a topic or poll is basically the same as <link ref="newtopic">starting a new topic</link>, but it's not necessary to enter anything in the <field>Subject</field> field unless you wish to change what's already there. To vote in a poll, you simply have to select your chosen option(s) and click <action>Submit Vote</action>.</paragraph>
+			<paragraph>If 'Quick Reply' has been enabled, a simple reply field will also appear after the post(s) on a page, but you'll have to type your <link ref="bbc">Bulletin Board Code</link> and <link ref="smileys">Smileys</link> manually if you choose to use it.</paragraph>
+		</subsection>
+		<subsection id="quote">
+			<subheading>Quoting a Post</subheading>
+			<paragraph>To reply to a post by quoting it, you can either click the <action>Quote</action> button for the relevant post and add your own message to the quoted text or click the <action>Reply</action> button followed by <action>Insert Quote</action> from the relevant post in the 'Topic Summary' below, but note that:</paragraph>
+			<list>
+				<item>Both these options add a link to the original post showing the name of the poster and the date and time of the post, whereas the <link ref="bbc">Bulletin Board Code</link> <action>quote</action> tag simply quotes the relevant post without this additional information.</item>
+				<item>You can also retain or add the 'author' attribute independently of the full <action>Quote</action> function, as demonstrated in the <link ref="bbcref">SMF Bulletin Board Code Reference</link> below.</item>
+			</list>
+		</subsection>
+		<subsection id="modify">
+			<subheading>Modifying or Deleting a Post</subheading>
+			<paragraph>To modify a post, click the <action>Modify</action> button and make your changes. Note that most forums are likely to be configured to show the date and time of the last edit, but the administrator(s) may also allow a short period to elapse before this happens.</paragraph>
+			<paragraph>To delete a post, click the <action>Delete</action> button followed by <action>OK</action> from the <dialog>Remove this message?</dialog> box that appears. Some forums may also allow you to remove topics or polls that you start, but the buttons for these are usually at the bottom of the page.</paragraph>
+		</subsection>
+	</section>
+	<section id="standard">
+		<secheading>Standard Posting Options</secheading>
+			<!-- This data is used to demonstrate the standard posting options. -->
+		<standard-options-demo>
+			<message-icon>Message icon</message-icon>
+			<message-selected>Standard</message-selected>
+			<message-thumbup>Thumb Up</message-thumbup>
+			<message-thumbdown>Thumb Down</message-thumbdown>
+			<message-exclamation>Exclamation point</message-exclamation>
+			<message-question>Question mark</message-question>
+			<message-lamp>Lamp</message-lamp>
+			<message-smiley>Smiley</message-smiley>
+			<message-angry>Angry</message-angry>
+			<message-cheesy>Cheesy</message-cheesy>
+			<message-grin>Grin</message-grin>
+			<message-sad>Sad</message-sad>
+			<message-wink>Wink</message-wink>
+			<bbc row="1">
+				<bold example="'[b]', '[/b]'">Bold</bold>
+				<italicize example="'[i]', '[/i]'">Italicized</italicize>
+				<underline example="'[u]', '[/u]'">Underline</underline>
+				<strike example="'[s]', '[/s]'">Strikethrough</strike>
+				<divider />
+				<glow example="'[glow=red,2,300]', '[/glow]'">Glow</glow>
+				<shadow example="'[shadow=red,left]', '[/shadow]'">Shadow</shadow>
+				<move example="'[move]', '[/move]'">Marquee</move>
+				<divider />
+				<pre example="'[pre]', '[/pre]'">Preformatted Text</pre>
+				<left example="'[left]', '[/left]'">Left Align</left>
+				<center example="'[center]', '[/center]'">Centered</center>
+				<right example="'[right]', '[/right]'">Right Align</right>
+				<divider />
+				<hr example="'[hr]', ''">Horizontal Rule</hr>
+				<divider />
+				<size example="'[size=10pt]', '[/size]'">Font Size</size>
+				<face example="'[font=Verdana]', '[/font]'">Font Face</face>
+			</bbc>
+			<bbc row="2">
+				<flash example="'[flash=200,200]', '[/flash]'">Insert Flash</flash>
+				<img example="'[img]', '[/img]'">Insert Image</img>
+				<url example="'[url]', '[/url]'">Insert Hyperlink</url>
+				<email example="'[email]', '[/email]'">Insert Email</email>
+				<ftp example="'[ftp]', '[/ftp]'">Insert FTP Link</ftp>
+				<divider />
+				<table example="'[table]', '[/table]'">Insert Table</table>
+				<tr example="'[tr]', '[/tr]'">Insert Table Row</tr>
+				<td example="'[td]', '[/td]'">Insert Table Column</td>
+				<divider />
+				<sup example="'[sup]', '[/sup]'">Superscript</sup>
+				<sub example="'[sub]', '[/sub]'">Subscript</sub>
+				<tele example="'[tt]', '[/tt]'">Teletype</tele>
+				<divider />
+				<code example="'[code]', '[/code]'">Insert Code</code>
+				<quote example="'[quote]', '[/quote]'">Insert Quote</quote>
+				<divider />
+				<list example="'[list][li]', '[/li][li][/li][/list]'">Insert List</list>
+			</bbc>
+			<color>
+				<color-selected>Change Color</color-selected>
+				<color-black>Black</color-black>
+				<color-red>Red</color-red>
+				<color-yellow>Yellow</color-yellow>
+				<color-pink>Pink</color-pink>
+				<color-green>Green</color-green>
+				<color-orange>Orange</color-orange>
+				<color-purple>Purple</color-purple>
+				<color-blue>Blue</color-blue>
+				<color-beige>Beige</color-beige>
+				<color-brown>Brown</color-brown>
+				<color-teal>Teal</color-teal>
+				<color-navy>Navy</color-navy>
+				<color-maroon>Maroon</color-maroon>
+				<color-limegreen>Lime Green</color-limegreen>
+			</color>
+			<smileys>
+				<smiley code=":)">Smiley</smiley>
+				<wink code=";)">Wink</wink>
+				<cheesy code=":D">Cheesy</cheesy>
+				<grin code=";D">Grin</grin>
+				<angry code=">:(">Angry</angry>
+				<sad code=":(">Sad</sad>
+				<shocked code=":o">Shocked</shocked>
+				<cool code="8)">Cool</cool>
+				<huh code="???">Huh</huh>
+				<rolleyes code="::)">Roll Eyes</rolleyes>
+				<tongue code=":P">Tongue</tongue>
+				<embarassed code=":-[">Embarrassed</embarassed>
+				<lipsrsealed code=":-X">Lips Sealed</lipsrsealed>
+				<undecided code=":-\\">Undecided</undecided>
+				<kiss code=":-*">Kiss</kiss>
+				<cry code=":\'(">Cry</cry>
+			</smileys>
+		</standard-options-demo>
+		<subsection id="messageicon">
+			<subheading>Message Icon</subheading>
+			<paragraph>This drop-down menu allows you to change the default icon for the subject line to something matching the mood or purpose of your post.</paragraph>
+		</subsection>
+		<subsection id="bbc">
+			<subheading>Bulletin Board Code</subheading>
+			<paragraph>Bulletin Board Code (or BBC) is the essential tool for formatting and changing the appearance of your post. While it affects the plain text in much the same way as the formatting tools in any word processor, the main <field>Message</field> field does not behave in a WYSIWYG manner, so you should preview your message if you need to see what it will look like when posted.</paragraph>
+			<paragraph>A complete <link ref="bbcref">SMF Bulletin Board Code Reference</link> is provided below.</paragraph>
+		</subsection>
+		<subsection id="smileys">
+			<subheading>Smileys</subheading>
+			<paragraph>While smileys can be viewed as purely whimsical in nature, they can also play a valuable role in clarifying the written word in much the same way as vocal inflections and/or facial expressions clarify the spoken word. Like most forum software, SMF provides a standard range of smiley images which can be added to posts by clicking the relevant icons or typing the relevant codes. A <link ref="nosmileys">don't use smileys</link> option is naturally also provided for those occasions when you don't want typed character combinations that would normally be displayed as smileys to be converted to the expected images!</paragraph>
+			<paragraph>A complete <link ref="smileysref">SMF Smileys Reference</link> is provided below.</paragraph>
+		</subsection>
+	</section>
+	<section id="tags">
+		<secheading>Tags and Nesting (for beginners)</secheading>
+		<paragraph>Before listing the available <link ref="bbcref">BBC buttons</link> and their purposes, let's see how they work by imagining that we want to post some text in bold type. While we can start by clicking the <action>B</action> (Bold) button and typing our text between the tags it produces, it's often more practical to type the text first, highlight it and then click the button. So typing 'text', highlighting it and clicking the 'B' button should produce '[b]text[/b]', which renders as <html-b>text</html-b> when posted or previewed. (NB This doesn't work in Opera, which inserts the tags at the end of the post.) Subsequently highlighting '[b]text[/b]' and clicking the <action>I</action> (Italicized) button will produce '[i][b]text[/b][/i]', which not only renders as <html-i><html-b>text</html-b></html-i> when posted or previewed but also introduces the concept of nesting, which means that each new set of tags in a case like this should be seen as a new 'box' containing both the original text <emphasis>and</emphasis> any tags already applied to it.</paragraph>
+		<paragraph>Note that the BBC tags can also be typed and edited direct instead of clicking the buttons.</paragraph>
+	</section>
+	<section id="additional">
+		<secheading>Additional Options</secheading>
+		<paragraph>The following options may appear by default in some forums but be contained within an expanding/collapsing panel (try clicking the link with the arrow below!) in others:</paragraph>
+			<!--
+			This data is used to demonstrate the standard posting options.
+			The following elements are reused from post-screen-demo:
+				additional-options, shortcuts, post, preview
+			-->
+		<additional-options-demo>
+			<notify>Notify me of replies.</notify>
+			<return>Return to this topic.</return>
+			<no-smileys>Don't use smileys.</no-smileys>
+			<attach>Attach</attach>
+			<allowed-types>Allowed file types: txt, jpg, gif, pdf, mpg, png</allowed-types>
+			<max-size>Maximum attachment size allowed: 128 KB</max-size>
+		</additional-options-demo>
+		<subsection id="notify">
+			<subheading>Notify me of replies</subheading>
+			<paragraph>Check this to subscribe to email notification for the topic.</paragraph>
+		</subsection>
+		<subsection id="return">
+			<subheading>Return to this topic</subheading>
+			<paragraph>Check this to return to the topic (instead of the message index) after posting (NB you can also set this behaviour as a preference in your profile).</paragraph>
+		</subsection>
+		<subsection id="nosmileys">
+			<subheading>Don't use smileys</subheading>
+			<paragraph>Check this to prevent certain <link ref="smileysref">character combinations</link> in your post from being parsed and rendered as smileys.</paragraph>
+		</subsection>
+		<subsection id="attachments">
+		<subheading>Attachments</subheading>
+			<paragraph>If enabled, this feature allows you to attach files to your posts in much the same way as most email clients, so you simply have to browse to the relevant file(s) on your computer before clicking <action>Post</action>. You can delete your attachment(s) or add more by <link ref="modify">modifying your post</link>, but please note that:</paragraph>
+			<list>
+				<item>The permitted file types and sizes are set by the forum administrator(s).</item>
+				<item>Although most forums are likely be configured to display attached images as part of the post, it's not possible to <emphasis>preview</emphasis> attachments so you should always browse to and attach your files just before you finally <emphasis>post</emphasis> your message.</item>
+			</list>
+		</subsection>
+	</section>
+	<section id="references">
+		<secheading>References</secheading>
+		<subsection id="bbcref">
+			<subheading>SMF Bulletin Board Code</subheading>
+			<paragraph>The buttons shown belong to the SMF default theme and may differ from forum to forum.</paragraph>
+			<!--
+			This data is used to generate a table of bbc buttons, codes and their renderings.
+			The font-color drop-down menu is reused from post-screen-demo, but the BBC and smiley names are currently repeated here.
+			-->
+			<bbc-reference>
+				<bbc-heading>
+					<header-name>Tag Name</header-name>
+					<header-button>Button</header-button>
+					<header-code>Code</header-code>
+					<header-output>Output</header-output>
+					<header-comments>Comments</header-comments>
+				</bbc-heading>
+				<bbc-help>
+					<bbc-name>Bold</bbc-name>
+					<bbc-button translate="no">bold</bbc-button>
+					<bbc-code>[b]bold[/b]</bbc-code>
+					<html-open translate="no"><![CDATA[<b>]]></html-open>
+					<html-output>bold</html-output>
+					<html-close translate="no"><![CDATA[</b>]]></html-close>
+					<bbc-comments>*</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Italicized</bbc-name>
+					<bbc-button translate="no">italicize</bbc-button>
+					<bbc-code>[i]italicized[/i]</bbc-code>
+					<html-open translate="no"><![CDATA[<i>]]></html-open>
+					<html-output>italicized</html-output>
+					<html-close translate="no"><![CDATA[</i>]]></html-close>
+					<bbc-comments>*</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Underline</bbc-name>
+					<bbc-button translate="no">underline</bbc-button>
+					<bbc-code>[u]underline[/u]</bbc-code>
+					<html-open translate="no"><![CDATA[<u>]]></html-open>
+					<html-output>underline</html-output>
+					<html-close translate="no"><![CDATA[</u>]]></html-close>
+					<bbc-comments>*</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Strikethrough</bbc-name>
+					<bbc-button translate="no">strike</bbc-button>
+					<bbc-code>[s]strikethrough[/s]</bbc-code>
+					<html-open translate="no"><![CDATA[<s>]]></html-open>
+					<html-output>strikethrough</html-output>
+					<html-close translate="no"><![CDATA[</s>]]></html-close>
+					<bbc-comments>*</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Glow</bbc-name>
+					<bbc-button translate="no">glow</bbc-button>
+					<bbc-code>[glow=red,2,50]glow[/glow]</bbc-code>
+					<html-open translate="no"><![CDATA[<div style="filter: Glow(color=red, strength=2); width: 50px;">]]></html-open>
+					<html-output>glow</html-output>
+					<html-close translate="no"><![CDATA[</div>]]></html-close>
+					<bbc-comments>The three attributes (eg red, 2, 50) in the 'glow' tag are color, strength and width respectively.</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Shadow</bbc-name>
+					<bbc-button translate="no">shadow</bbc-button>
+					<bbc-code>[shadow=red,left]<![CDATA[<br />]]>shadow<![CDATA[<br />]]>[/shadow]</bbc-code>
+					<html-open translate="no"><![CDATA[<div style="filter: Shadow(color=red, direction=240); width: 50px;">]]></html-open>
+					<html-output>shadow</html-output>
+					<html-close translate="no"><![CDATA[</div>]]></html-close>
+					<bbc-comments>The two attributes (eg red, left) in the 'shadow' tag are color and direction respectively.</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Marquee</bbc-name>
+					<bbc-button translate="no">move</bbc-button>
+					<bbc-code>[move]move[/move]</bbc-code>
+					<html-open translate="no"><![CDATA[<marquee>]]></html-open>
+					<html-output>move</html-output>
+					<html-close translate="no"><![CDATA[</marquee>]]></html-close>
+					<bbc-comments>Not valid XHTML, but can also be used for images!</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Preformatted Text</bbc-name>
+					<bbc-button translate="no">pre</bbc-button>
+					<bbc-code translate="no" disable="yes">[pre]Simple<![CDATA[<br />]]>&space;&space;Machines<![CDATA[<br />]]>&space;&space;&space;&space;Forum[/pre]</bbc-code>
+					<html-open translate="no"><![CDATA[<pre>]]></html-open>
+					<html-output translate="no">Simple
+  Machines
+    Forum</html-output>
+					<html-close translate="no"><![CDATA[</pre>]]></html-close>
+					<bbc-comments>Preserves critical text formatting, rendered in a monospace font.</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Left Align</bbc-name>
+					<bbc-button translate="no">left</bbc-button>
+					<bbc-code>[left]left align[/left]</bbc-code>
+					<html-open translate="no"><![CDATA[<p align="left">]]></html-open>
+					<html-output>left align</html-output>
+					<html-close translate="no"><![CDATA[</p>]]></html-close>
+					<bbc-comments>*</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Centered</bbc-name>
+					<bbc-button translate="no">center</bbc-button>
+					<bbc-code>[center]centered[/center]</bbc-code>
+					<html-open translate="no"><![CDATA[<center>]]></html-open>
+					<html-output>centered</html-output>
+					<html-close translate="no"><![CDATA[</center>]]></html-close>
+					<bbc-comments>*</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Right Align</bbc-name>
+					<bbc-button translate="no">right</bbc-button>
+					<bbc-code>[right]right align[/right]</bbc-code>
+					<html-open translate="no"><![CDATA[<p align="right">]]></html-open>
+					<html-output>right align</html-output>
+					<html-close translate="no"><![CDATA[</p>]]></html-close>
+					<bbc-comments>*</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Right-to-Left</bbc-name>
+					<bbc-button translate="no">none</bbc-button>
+					<bbc-code>[rtl]right to left![/rtl]</bbc-code>
+					<html-open translate="no"><![CDATA[<div dir="rtl">]]></html-open>
+					<html-output>right to left!</html-output>
+					<html-close translate="no"><![CDATA[</div>]]></html-close>
+					<bbc-comments>Typical usage would be to post Arabic or Hebrew in an English document.</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Left-to-Right</bbc-name>
+					<bbc-button translate="no">none</bbc-button>
+					<bbc-code>[ltr]left to right![/ltr]</bbc-code>
+					<html-open translate="no"><![CDATA[<div dir="ltr">]]></html-open>
+					<html-output>left to right!</html-output>
+					<html-close translate="no"><![CDATA[</div>]]></html-close>
+					<bbc-comments>Typical usage would be to post English in an Arabic or Hebrew document.</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Horizontal Rule</bbc-name>
+					<bbc-button translate="no">hr</bbc-button>
+					<bbc-code>[hr]</bbc-code>
+					<html-open translate="no"><![CDATA[<hr />]]></html-open>
+					<html-output></html-output>
+					<html-close translate="no"></html-close>
+					<bbc-comments>*</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Font Size</bbc-name>
+					<bbc-button translate="no">size</bbc-button>
+					<bbc-code>[size=10pt]font size[/size]</bbc-code>
+					<html-open translate="no"><![CDATA[<span style="font-size: 10pt;">]]></html-open>
+					<html-output>font size</html-output>
+					<html-close translate="no"><![CDATA[</span>]]></html-close>
+					<bbc-comments>*</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Font Face</bbc-name>
+					<bbc-button translate="no">face</bbc-button>
+					<bbc-code>[font=Verdana]font face[/font]</bbc-code>
+					<html-open translate="no"><![CDATA[<span style="font-family: Verdana;">]]></html-open>
+					<html-output>font face</html-output>
+					<html-close translate="no"><![CDATA[</span>]]></html-close>
+					<bbc-comments>Only fonts installed on the user's computer will be displayed, so use with caution!</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Font Color</bbc-name>
+					<!-- The bbc-menu element presents a drop-down menu (data reused from post-screen-demo) instead of a BBC button. -->
+					<bbc-menu />
+					<bbc-code>[color=Red]red[/color]</bbc-code>
+					<html-open translate="no"><![CDATA[<span style="color: red;">]]></html-open>
+					<html-output>red</html-output>
+					<html-close translate="no"><![CDATA[</span>]]></html-close>
+					<bbc-comments>Select the color from the drop-down.</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Insert Flash</bbc-name>
+					<bbc-button translate="no">flash</bbc-button>
+					<bbc-code>[flash=200,200]<![CDATA[<br />]]>http://somesite/somefile.swf<![CDATA[<br />]]>[/flash]</bbc-code>
+					<html-open translate="no"><![CDATA[<a href="http://somesite/somefile.swf" class="board" target="_blank">]]></html-open>
+					<html-output>http://somesite/somefile.swf</html-output>
+					<html-close translate="no"><![CDATA[</a>]]></html-close>
+					<bbc-comments>Please note that, if embedded Flash has been disabled by the forum administrator(s), the Flash file will appear as a straight hyperlink as shown here. The two attributes in the 'flash' tag (where relevant) are width and height respectively.</bbc-comments>
+				</bbc-help>
+				<!-- The bbc-help-top and bbc-help-bottom elements are used to show alternative uses of the same tags. -->
+				<bbc-help-top>
+					<bbc-name>Insert Image</bbc-name>
+					<bbc-button translate="no">img</bbc-button>
+					<bbc-code>[img]<![CDATA[<br />]]>http://somesite/image.gif<![CDATA[<br />]]>[/img]</bbc-code>
+					<html-open translate="no"><![CDATA[<img src="../images/on.gif" alt="" />]]></html-open>
+					<html-output translate="no"><!-- no content --></html-output>
+					<html-close translate="no"><!-- no content --></html-close>
+					<bbc-comments>Type the width and height attributes to resize the image.</bbc-comments>
+				</bbc-help-top>
+				<bbc-help-bottom>
+					<bbc-code>[img width=48 height=48]<![CDATA[<br />]]>http://somesite/image.gif<![CDATA[<br />]]>[/img]</bbc-code>
+					<html-open translate="no"><![CDATA[<img src="../images/on.gif" width="48" height="48" alt="" />]]></html-open>
+					<html-output translate="no"><!-- no content --></html-output>
+					<html-close translate="no"><!-- no content --></html-close>
+				</bbc-help-bottom>
+				<bbc-help-top>
+					<bbc-name>Insert Hyperlink</bbc-name>
+					<bbc-button translate="no">url</bbc-button>
+					<bbc-code>[url]http://somesite/[/url]</bbc-code>
+					<html-open translate="no"><![CDATA[<a href="http://somesite" class="board" target="_blank">]]></html-open>
+					<html-output>http://somesite/</html-output>
+					<html-close translate="no"><![CDATA[</a>]]></html-close>
+					<bbc-comments>NB the 'url' tag opens in a new window, but you can type 'iurl' tags to open in the same window.</bbc-comments>
+				</bbc-help-top>
+				<bbc-help-bottom>
+					<bbc-code>[url=http://somesite/]<![CDATA[<br />]]>descriptive link<![CDATA[<br />]]>[/url]</bbc-code>
+					<html-open translate="no"><![CDATA[<a href="http://somesite" class="board" target="_blank">]]></html-open>
+					<html-output>descriptive link</html-output>
+					<html-close translate="no"><![CDATA[</a>]]></html-close>
+				</bbc-help-bottom>
+				<bbc-help>
+					<bbc-name>Insert Email</bbc-name>
+					<bbc-button translate="no">email</bbc-button>
+					<bbc-code>[email]<![CDATA[<br />]]>someone@somesite<![CDATA[<br />]]>[/email]</bbc-code>
+					<html-open translate="no"><![CDATA[<a href="mailto:someone@somesite" class="board">]]></html-open>
+					<html-output>someone@somesite</html-output>
+					<html-close translate="no"><![CDATA[</a>]]></html-close>
+					<bbc-comments>*</bbc-comments>
+				</bbc-help>
+				<bbc-help-top>
+					<bbc-name>Insert FTP Link</bbc-name>
+					<bbc-button translate="no">ftp</bbc-button>
+					<bbc-code>[ftp]<![CDATA[<br />]]>ftp://somesite/somefile<![CDATA[<br />]]>[/ftp]</bbc-code>
+					<html-open translate="no"><![CDATA[<a href="ftp://somesite/somefile" class="board" target="_blank">]]></html-open>
+					<html-output>ftp://somesite/somefile</html-output>
+					<html-close translate="no"><![CDATA[</a>]]></html-close>
+					<bbc-comments>*</bbc-comments>
+				</bbc-help-top>
+				<bbc-help-bottom>
+					<bbc-code>[ftp=ftp://somesite/somefile]<![CDATA[<br />]]>descriptive link<![CDATA[<br />]]>[/ftp]</bbc-code>
+					<html-open translate="no"><![CDATA[<a href="ftp://somesite/somefile" class="board" target="_blank">]]></html-open>
+					<html-output>descriptive link</html-output>
+					<html-close translate="no"><![CDATA[</a>]]></html-close>
+				</bbc-help-bottom>
+				<bbc-help>
+					<bbc-name>Insert Table</bbc-name>
+					<bbc-button translate="no">table</bbc-button>
+					<bbc-code>[table][/table]</bbc-code>
+					<html-open>*</html-open>
+					<html-output translate="no"><!-- no content --></html-output>
+					<html-close translate="no"><!-- no content --></html-close>
+					<bbc-comments>No meaningful output from the 'table' tags alone.</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Insert Table Row</bbc-name>
+					<bbc-button translate="no">tr</bbc-button>
+					<bbc-code>[table][tr][/tr][/table]</bbc-code>
+					<html-open>*</html-open>
+					<html-output translate="no"><!-- no content --></html-output>
+					<html-close translate="no"><!-- no content --></html-close>
+					<bbc-comments>No meaningful output from the 'table' and 'tr' tags alone.</bbc-comments>
+				</bbc-help>
+				<bbc-help-top>
+					<bbc-name>Insert Table Column</bbc-name>
+					<bbc-button translate="no">td</bbc-button>
+					<bbc-code>[table][tr][td]<![CDATA[<br />]]>content<![CDATA[<br />]]>[/td][/tr][/table]</bbc-code>
+					<html-open translate="no"><![CDATA[<table><tr><td valign="top">]]></html-open>
+					<html-output>content</html-output>
+					<html-close translate="no"><![CDATA[</td></tr></table>]]></html-close>
+					<bbc-comments>Note the correct nesting of the tags, so the 'table' tags contain the 'tr' tags, which each contain an equal number of 'td' tags!</bbc-comments>
+				</bbc-help-top>
+				<bbc-help-bottom>
+					<bbc-code>[table][tr][td]SMF[/td]<![CDATA[<br />]]>[td]Bulletin[/td][/tr]<![CDATA[<br />]]>[tr][td]Board[/td]<![CDATA[<br />]]>[td]Code[/td][/tr][/table]</bbc-code>
+					<html-open translate="no"><![CDATA[<table><tr><td valign="top">SMF</td><td valign="top">Bulletin</td></tr><tr><td valign="top">Board</td><td valign="top">Code</td></tr></table>]]></html-open>
+					<html-output translate="no"><!-- no content --></html-output>
+					<html-close translate="no"><!-- no content --></html-close>
+				</bbc-help-bottom>
+				<bbc-help>
+					<bbc-name>Superscript</bbc-name>
+					<bbc-button translate="no">sup</bbc-button>
+					<bbc-code>[sup]superscript[/sup]</bbc-code>
+					<html-open translate="no"><![CDATA[<sup>]]></html-open>
+					<html-output>superscript</html-output>
+					<html-close translate="no"><![CDATA[</sup>]]></html-close>
+					<bbc-comments>*</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Subscript</bbc-name>
+					<bbc-button translate="no">sub</bbc-button>
+					<bbc-code>[sub]subscript[/sub]</bbc-code>
+					<html-open translate="no"><![CDATA[<sub>]]></html-open>
+					<html-output>subscript</html-output>
+					<html-close translate="no"><![CDATA[</sub>]]></html-close>
+					<bbc-comments>*</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Teletype</bbc-name>
+					<bbc-button translate="no">tele</bbc-button>
+					<bbc-code>[tt]teletype[/tt]</bbc-code>
+					<html-open translate="no"><![CDATA[<tt>]]></html-open>
+					<html-output>teletype</html-output>
+					<html-close translate="no"><![CDATA[</tt>]]></html-close>
+					<bbc-comments>Monospace font.</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Insert Code</bbc-name>
+					<bbc-button translate="no">code</bbc-button>
+					<bbc-code translate="no" disable="no">[code]&lt;?php phpinfo(); ?&gt;[/code]</bbc-code>
+					<html-open translate="no"><![CDATA[<div class="codeheader">Code:</div><div class="code"><font color="#000000"><font color="#0000BB">&lt;?php phpinfo</font><font color="#007700">(); </font><font color="#0000BB">?&gt;</font></font></div>]]></html-open>
+					<html-output translate="no"><!-- no content --></html-output>
+					<html-close translate="no"><!-- no content --></html-close>
+					<bbc-comments>Always use to preserve formatting of code and avoid parsing as BBC and/or smileys!</bbc-comments>
+				</bbc-help>
+				<bbc-help-top>
+					<bbc-name>Insert Quote</bbc-name>
+					<bbc-button translate="no">quote</bbc-button>
+					<bbc-code>[quote]quote[/quote]</bbc-code>
+					<html-open><![CDATA[<div class="quoteheader">Quote</div><div class="quote">]]></html-open>
+					<html-output>quote</html-output>
+					<html-close translate="no"><![CDATA[</div>]]></html-close>
+					<bbc-comments>Note the optional 'author' attribute.</bbc-comments>
+				</bbc-help-top>
+				<bbc-help-bottom>
+					<bbc-code>[quote author=author]quote[/quote]</bbc-code>
+					<html-open><![CDATA[<div class="quoteheader">Quote from: author</div><div class="quote">]]></html-open>
+					<html-output>quote</html-output>
+					<html-close translate="no"><![CDATA[</div>]]></html-close>
+				</bbc-help-bottom>
+				<bbc-help-top>
+					<bbc-name>Insert List</bbc-name>
+					<bbc-button translate="no">list</bbc-button>
+					<bbc-code translate="no">[list]<![CDATA[<br />]]>[li]SMF[/li]<![CDATA[<br />]]>[li]YaBB SE[/li]<![CDATA[<br />]]>[/list]</bbc-code>
+					<html-open translate="no"><![CDATA[<ul><li>SMF</li><li>YaBB SE</li></ul>]]></html-open>
+					<html-output translate="no"><!-- no content --></html-output>
+					<html-close translate="no"><!-- no content --></html-close>
+					<bbc-comments>While you can add as many items as you wish, each item must be contained by the correct opening and closing tags. You can also style your list item bullets with special opening tags and no closing tags, but this option doesn't currently output valid XHTML.</bbc-comments>
+				</bbc-help-top>
+				<bbc-help-bottom>
+					<bbc-code translate="no">[list]<![CDATA[<br />]]>[o]circle<![CDATA[<br />]]>[O]circle<![CDATA[<br />]]>[0]circle<![CDATA[<br />]]>[*]disc<![CDATA[<br />]]>[@]disc<![CDATA[<br />]]>[+]square<![CDATA[<br />]]>[x]square<![CDATA[<br />]]>[#]square<![CDATA[<br />]]>[/list]</bbc-code>
+					<html-open translate="no"><![CDATA[<ul><li type="circle">circle<br /><li type="circle">circle<br /><li type="circle">circle<br /><li type="disc">disc<br /><li type="disc">disc<br /><li type="square">square<br /><li type="square">square<br /><li type="square">square<br /></ul>]]></html-open>
+					<html-output translate="no"><!-- no content --></html-output>
+					<html-close translate="no"><!-- no content --></html-close>
+				</bbc-help-bottom>
+				<bbc-help>
+					<bbc-name>Abbreviation</bbc-name>
+					<bbc-button translate="no">none</bbc-button>
+					<bbc-code translate="no">[abbr=exemlpi gratia]eg[/abbr]</bbc-code>
+					<html-open translate="no"><![CDATA[<abbr title="exempli gratia">]]></html-open>
+					<html-output translate="no">eg</html-output>
+					<html-close translate="no"><![CDATA[</abbr>]]></html-close>
+					<bbc-comments>Displays the full expression for the abbreviation on mouseover.</bbc-comments>
+				</bbc-help>
+				<bbc-help>
+					<bbc-name>Acronym</bbc-name>
+					<bbc-button translate="no">none</bbc-button>
+					<bbc-code translate="no">[acronym=Simple Machines Forum]SMF[/acronym]</bbc-code>
+					<html-open translate="no"><![CDATA[<acronym title="Simple Machines Forum">]]></html-open>
+					<html-output translate="no">SMF</html-output>
+					<html-close translate="no"><![CDATA[</acronym>]]></html-close>
+					<bbc-comments>Displays the full expression for the acronym on mouseover.</bbc-comments>
+				</bbc-help>
+			</bbc-reference>
+		</subsection>
+		<subsection id="smileysref">
+			<subheading>SMF Smileys</subheading>
+			<paragraph>The smileys shown here are the standard set from the SMF default theme and may differ from forum to forum.</paragraph>
+			<!-- This data is used to generate a table of smileys and their codes. -->
+			<smileys-reference>
+				<smiley-heading>
+					<header-name>Name</header-name>
+					<header-image>Image (click to insert)</header-image>
+					<header-code>Code (type to insert)</header-code>
+				</smiley-heading>
+				<smiley-help>
+					<smiley-name>Smiley</smiley-name>
+					<smiley-image translate="no">smiley</smiley-image>
+					<smiley-code translate="no"> :)</smiley-code>
+				</smiley-help>
+				<smiley-help>
+					<smiley-name>Wink</smiley-name>
+					<smiley-image translate="no">wink</smiley-image>
+					<smiley-code translate="no"> ;)</smiley-code>
+				</smiley-help>
+				<smiley-help>
+					<smiley-name>Cheesy</smiley-name>
+					<smiley-image translate="no">cheesy</smiley-image>
+					<smiley-code translate="no"> :D</smiley-code>
+				</smiley-help>
+				<smiley-help>
+					<smiley-name>Grin</smiley-name>
+					<smiley-image translate="no">grin</smiley-image>
+					<smiley-code translate="no"> ;D</smiley-code>
+				</smiley-help>
+				<smiley-help>
+					<smiley-name>Angry</smiley-name>
+					<smiley-image translate="no">angry</smiley-image>
+					<smiley-code translate="no"> >:(</smiley-code>
+				</smiley-help>
+				<smiley-help>
+					<smiley-name>Sad</smiley-name>
+					<smiley-image translate="no">sad</smiley-image>
+					<smiley-code translate="no"> :(</smiley-code>
+				</smiley-help>
+				<smiley-help>
+					<smiley-name>Shocked</smiley-name>
+					<smiley-image translate="no">shocked</smiley-image>
+					<smiley-code translate="no"> :o</smiley-code>
+				</smiley-help>
+				<smiley-help>
+					<smiley-name>Cool</smiley-name>
+					<smiley-image translate="no">cool</smiley-image>
+					<smiley-code translate="no"> 8)</smiley-code>
+				</smiley-help>
+				<smiley-help>
+					<smiley-name>Huh</smiley-name>
+					<smiley-image translate="no">huh</smiley-image>
+					<smiley-code translate="no"> ???</smiley-code>
+				</smiley-help>
+				<smiley-help>
+					<smiley-name>Roll Eyes</smiley-name>
+					<smiley-image translate="no">rolleyes</smiley-image>
+					<smiley-code translate="no"> ::)</smiley-code>
+				</smiley-help>
+				<smiley-help>
+					<smiley-name>Tongue</smiley-name>
+					<smiley-image translate="no">tongue</smiley-image>
+					<smiley-code translate="no"> :P</smiley-code>
+				</smiley-help>
+				<smiley-help>
+					<smiley-name>Embarrassed</smiley-name>
+					<smiley-image translate="no">embarassed</smiley-image>
+					<!-- Spelling of embarassed.gif still needs correcting! -->
+					<smiley-code translate="no"> :-[</smiley-code>
+				</smiley-help>
+				<smiley-help>
+					<smiley-name>Lips Sealed</smiley-name>
+					<smiley-image translate="no">lipsrsealed</smiley-image>
+					<smiley-code translate="no"> :-X</smiley-code>
+				</smiley-help>
+				<smiley-help>
+					<smiley-name>Undecided</smiley-name>
+					<smiley-image translate="no">undecided</smiley-image>
+					<smiley-code translate="no"> :-\</smiley-code>
+				</smiley-help>
+				<smiley-help>
+					<smiley-name>Kiss</smiley-name>
+					<smiley-image translate="no">kiss</smiley-image>
+					<smiley-code translate="no"> :-*</smiley-code>
+				</smiley-help>
+				<smiley-help>
+					<smiley-name>Cry</smiley-name>
+					<smiley-image translate="no">cry</smiley-image>
+					<smiley-code translate="no"> :'(</smiley-code>
+				</smiley-help>
+			</smileys-reference>
+			<paragraph>Please note that not all of the smiley codes will be correctly parsed and converted to images unless their opening spaces are present.</paragraph>
+		</subsection>
+	</section>
+	<copyright>
+		Copyright &copyright; 2001-2005 <link site="http://www.lewismedia.com/">Lewis Media</link>. All Rights Reserved.
+	</copyright>
+</smf:helpfile>

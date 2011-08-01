@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Version: 1.0; help/pm-->
+<head>
+	<meta name="generator" content="HTML Tidy for Windows (vers 1st June 2004), see www.w3.org" />
+	<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<script language="JavaScript" type="text/javascript" src="../script.js">
+</script>
+<script language="JavaScript" type="text/javascript">
+//<![CDATA[
+														var smf_theme_url = "..";
+														var smf_images_url = "../images";
+//]]>
+</script>
+	<title>SMF Benutzer Hilfe: Private Mitteilungen</title>
+	<link type="text/css" rel="stylesheet" href="../style.css" />
+	<link type="text/css" rel="stylesheet" href="help.css" />
+</head>
+<body>
+	<table summary="two simple cells for layout purposes" width="100%">
+		<tr>
+			<td width="1%"><a href="http://www.simplemachines.org/"><img src="../images/helplogo.jpg" alt="Besuche Simple Machines!" title="Besuche Simple Machines!" border="0" /></a></td>
+			<td valign="top">
+				<a href="http://www.simplemachines.org/"><img src="../images/smflogo.gif" align="right" alt="Besuche Simple Machines!" title="Besuche Simple Machines!" border="0" /></a>
+				<h1 style="margin-top: 12px;">SMF Benutzer Hilfe: Private Mitteilungen</h1><br clear="right" />
+				<hr />
+				<p><a href="index.german.html">&Uuml;bersicht</a> &bull; <a href="registering.german.html">Registrieren</a> &bull; <a href="loginout.german.html">Ein-/Ausloggen</a> &bull; <a href="profile.german.html">Profil</a> &bull; <a href="posting.german.html">Schreiben</a> &bull; <strong>Private&nbsp;Mitteilungen</strong> &bull; <a href="searching.german.html">Suchen</a></p>
+				<hr />
+			</td>
+		</tr>
+	</table>
+	<p>SMF dreht sich um Gemeinschaft und Kommunikation. Es gibt viele M&ouml;glichkeiten zu kommunizieren, zum Beispiel in den Foren schreiben, Private Mitteilungen, E-Mail, ICQ, AIM und YIM. Diese Funktionen sind nur f&uuml;r registrierte Mitglieder zug&auml;nglich, die Forum Administratoren k&ouml;nnen jedoch auch festlegen, dass unregistrierte G&auml;ste in den Foren schreiben d&uuml;rfen. In diesem Fall sind die einzigen Funktionen, die unregistrierte Benutzer <em>nicht</em> nutzen k&ouml;nnen die Mitgliederliste und Private Mitteilungen.</p>
+	<ol>
+		<li>
+			<a href="#pm">Private Mitteilungen</a>
+			<ol class="la">
+				<li><a href="#description">Beschreibung</a></li>
+				<li><a href="#reading">Nachrichten lesen</a></li>
+			</ol>
+		</li>
+		<li>
+			<a href="#interface">Die PM Oberfl&auml;che</a>
+			<ol class="la">
+				<li><a href="#starting">Eine neue Mitteilung schreiben oder auf Mitteilungen antworten</a></li>
+			</ol>
+		</li>
+	</ol>
+	<h2 id="pm">Private Mitteilungen</h2>
+	<h3 id="description">Beschreibung</h3>
+	<p>W&auml;hrend E-Mails eine gute Methode sind um mit Mitgliedern direkt zu kommunizieren hat sie auch einige Nachteile, z.B. muss man sein E-Mail Postfach &ouml;ffnen um E-Mails zu schreiben und zu senden, der Empf&auml;nger muss ebenfalls sein Postfach &ouml;ffnen um die E-Mails zu erhalten. Ihre Nachricht wird unter die anderen E-Mails gemischt und es kann zwischen einigen Minuten bis zu einer Stunde dauern bis eine Mail ankommt.</p>
+	<p>Als Alternative zu E-Mails bietet SMF eine schnellere, privatere Methode an. Eine Private Mitteilung wird sofort in der Posteingangsbox des Empf&auml;ngers angezeigt. Die Nachricht wird nur durch SMF versendet und empfangen, also m&uuml;ssen weder Sender noch Empf&auml;nger ihr E-Mail Postfach &ouml;ffnen oder SMF verlassen. Ausserdem bietet eine Private Mitteilung mehr Sicherheit und Privatsph&auml;re, da die E-Mail Adressen von Sender und Empf&auml;nger nicht angezeigt werden. Private Mitteilungen zeigen nur den Benutzernamen beider Parteien an.</p>
+	<p>Wenn ein Empf&auml;nger nicht online ist, warten die Privaten Mitteilungen in seiner/ihrer PM Box bis er/sie sich wieder einloggt und sie liest oder l&ouml;scht. Das Private Mitteilungen System von SMF ist ein eingebautes, privates E-Mail System.</p>
+	<h3 id="reading">Nachrichten lesen</h3>
+	<p>Um Ihre Privaten Nachrichten lesen zu k&ouml;nnen, m&uuml;ssen Sie <a href="loginout.german.html">eingeloggt</a>sein. Dann folgen Sie einfach dem Link, der in etwa so aussieht: 'Hallo, [Benutzername], Sie haben <a href="#interface">x Nachrichten</a>, x sind neu'.</p>
+	<h2 id="interface">Die PM Oberfl&auml;che</h2>
+	<p>Die PM Oberfl&auml;che arbeitet &auml;hnlich wie die <a href="index.german.html#message">Themen &Uuml;bersicht</a>. Wir zeigen hier nur die Eingangsbox, die Ausgangsbox funktioniert praktisch genauso:</p>
+	<div style="background-color: #D0D0D0;">
+		<div style="padding: 2px 30px;">
+			<script language="JavaScript1.2" type="text/javascript">
+//<![CDATA[
+														var currentSort = false;
+														function sortLastPM()
+														{
+																document.getElementById("sort-arrow").src = smf_images_url + "/" + (currentSort ? "sort_up.gif" : "sort_down.gif");
+																document.getElementById("sort-arrow").alt = "";
+																currentSort = !currentSort;
+														}
+//]]>
+</script>
+			<form action="pm.german.html" method="post">
+				<table summary="SMF layout" border="0" width="100%" cellspacing="0" cellpadding="3">
+					<tr>
+						<td valign="bottom"><span class="nav"><img src="../images/icons/folder_open.gif" alt="+" border="0" />&nbsp; <b><a href="index.german.html#board" class="nav">Forum Name</a></b><br />
+						<img src="../images/icons/linktree_side.gif" alt="|-" border="0" /> <img src="../images/icons/folder_open.gif" alt="+" border="0" />&nbsp; <b><a href="#interface" class="nav">Private Mitteilungen</a></b><br />
+						<img src="../images/icons/linktree_main.gif" alt="| " border="0" /> <img src="../images/icons/linktree_side.gif" alt="|-" border="0" /> <img src="../images/icons/folder_open.gif" alt="+" border="0" />&nbsp; <b><a href="#interface" class="nav">Posteingang</a></b></span></td>
+					</tr>
+				</table>
+				<table summary="SMF layout" cellpadding="0" cellspacing="0" border="0" width="100%" class="bordercolor" align="center">
+					<tr>
+						<td>
+							<table summary="SMF layout" border="0" width="100%" cellspacing="1" class="bordercolor">
+								<tr>
+									<td align="right" valign="bottom" class="catbg" colspan="4" style="font-size: smaller;"><a href="#interface"><img src="../images/german/im_delete.gif" border="0" alt="Alle Mitteilungen im Posteingang l&ouml;schen" /></a> <a href="#interface"><img src="../images/german/im_outbox.gif" border="0" alt="Postausgang" /></a> <a href="#interface"><img src="../images/german/im_new.gif" border="0" alt="Neue Mitteilung" /></a> <a href="#interface"><img src="../images/german/im_reload.gif" border="0" alt="Auf neue Mitteilungen &uuml;berpr&uuml;fen" /></a></td>
+								</tr>
+								<tr class="titlebg">
+									<td style="width: 32ex;"><a href="javascript:sortLastPM();">Datum&nbsp; <img id="sort-arrow" src="../images/sort_up.gif" alt="" border="0" name="sort-arrow" /></a></td>
+									<td width="46%"><a href="#interface">Betreff</a></td>
+									<td><a href="#interface">Von</a></td>
+									<td align="center" width="24"><input type="checkbox" onclick="invertAll(this, this.form);" class="check" /></td>
+								</tr>
+								<tr class="windowbg">
+									<td>Datum und Uhrzeit der Mitteilung</td>
+									<td><a href="#interface" class="board">Betreff der Mitteilung</a></td>
+									<td>Anderes Mitglied</td>
+									<td align="center"><input type="checkbox" class="check" /></td>
+								</tr>
+								<tr>
+									<td class="windowbg" style="padding: 2px;" align="right" colspan="5"><input type="button" value="L&ouml;schen" /></td>
+								</tr>
+								<tr>
+									<td colspan="5" class="catbg" height="25">
+										<table summary="SMF layout" width="100%" cellpadding="2" cellspacing="0" border="0">
+											<tr>
+												<td><b>Seite:</b> [<b>1</b>]</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table><br />
+				<br />
+			</form>
+		</div>
+	</div><br />
+	<ul>
+		<li>Einige Foren zeigen die <strong>Navigation</strong> oben in einem platzsparenden horizontal Modus.</li>
+		<li>Die Seitennummern f&uuml;hren zu weiteren Seiten mit Mitteilungen (falls vorhanden).</li>
+		<li>Der obere <strong>L&ouml;schen</strong> Button l&ouml;scht alle Mitteilungen in Ihrem Posteingang (oder Postausgang wenn ge&ouml;ffnet). Beachten Sie, dass die Checkboxen und der untere <strong>Button</strong> Button Ihnen auch die M&ouml;glichkeit geben nur ausgew&auml;hlte Mitteilungen zu l&ouml;schen, die obere Checkbox markiert alle Mitteilungen.</li>
+		<li>Der <strong>Postausgang</strong> Button bringt Sie zu Ihrem Postausgang, wo der Button ein <strong>Posteingang</strong> Button wird.</li>
+		<li>Der <strong>Neue Mitteilung</strong> Button l&auml;sst Sie eine neue Mitteilung schreiben, was &auml;hnlich funktioniert wie das <a href="posting.german.html#newtopic">Starten eines neuen Themas</a>.</li>
+		<li>Der <strong>Neu laden</strong> Button &uuml;berpr&uuml;ft ob neue Mitteilungen angekommen sind indem er die Seite aktualisiert.</li>
+		<li>Die <strong>Datum</strong>, <strong>Betreff</strong> und <strong>Von</strong> Links erm&ouml;glichen es Ihnen, ihre Mitteilungen nach diesen Kriterien neu zu sortieren (das Datum l&auml;sst sich auch absteigend oder aufsteigend sortieren, wie der kleine Pfeil neben dem Wort anzeigt).</li>
+		<li>Das Anklicken des Betreffs einer Mitteilung f&uuml;hrt Sie direkt zur jeweiligen Mitteilung, welche weiter unten auf der Seite beginnt.</li>
+	</ul>
+	<h3 id="starting">Eine neue Mitteilung schreiben oder auf Mitteilungen antworten</h3>
+	<p>Es gibt verschiedenen Methoden eine neue Mitteilung zu schreiben, alle Methoden erfordern es jedoch, dass Sie <a href="loginout.german.html">eingeloggt</a> sind:</p>
+	<ul>
+		<li>Sie k&ouml;nnen dem Link folgen, der in etwa so aussieht: 'Hallo, [Benutzername], Sie haben <a href="#interface">x Mitteilungen</a>, x sind neu', dann klicken Sie den <strong>Neue Mitteilung</strong> Button in Ihrem Posteingang.</li>
+		<li>Sie k&ouml;nnen auf den Namen eines anderen Mitglieds klicken und dann im <a href="profile.german.html#info-all">Profil</a> die Option <strong>Diesem Mitglied eine Private Mitteilung senden.</strong> ausw&auml;hlen.</li>
+		<li>Sie k&ouml;nnen direkt eine neue Mitteilung schreiben, indem Sie auf das <strong>On/Offline Symbol</strong> in der Informationsbox unter dem Benutzernamen neben jedem Beitrag klicken.</li>
+		<li>Sie k&ouml;nnen direkt eine neue Mitteilung schreiben, indem Sie auf das <strong>On/Offline Symbol</strong> neben <strong>Dieses Mitglied ist:</strong> in seinem/ihrem <a href="profile.german.html#info-all">Profil</a> klicken. (Dieses Symbol ist oft auch in der oben beschriebenen Informationsbox vorhanden.)</li>
+		<li>Auf eine Mitteilung antworten ist sehr &auml;hnlich wie <a href="posting.german.html#reply">auf ein Thema antworten</a>.</li>
+	</ul>
+	<div class="footer">
+		<hr noshade="noshade" size="1" />
+		<p>Copyright &copy; 2001-2005 <a href="http://www.lewismedia.com/">Lewis Media</a>. Alle Rechte vorbehalten.</p>
+	</div>
+</body>
+</html>

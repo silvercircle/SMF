@@ -80,8 +80,7 @@ function template_html_above()
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
 	// Show right to left and the character set for ease of translating.
-	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"', $context['right_to_left'] ? ' dir="rtl"' : '', '>
+	echo '<!DOCTYPE html ', $context['right_to_left'] ? ' dir="rtl"' : '', '>
 <head>';
 
 	// The ?fin20 part of this link is just here to make sure browsers don't cache it wrongly.
@@ -89,10 +88,10 @@ function template_html_above()
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css?fin20" />';
 
 	// Some browsers need an extra stylesheet due to bugs/compatibility issues.
-	foreach (array('ie7', 'ie6', 'webkit') as $cssfix)
-		if ($context['browser']['is_' . $cssfix])
-			echo '
-	<link rel="stylesheet" type="text/css" href="', $settings['default_theme_url'], '/css/', $cssfix, '.css" />';
+	//foreach (array('ie7', 'ie6', 'webkit') as $cssfix)
+	//	if ($context['browser']['is_' . $cssfix])
+	//		echo '
+	//<link rel="stylesheet" type="text/css" href="', $settings['default_theme_url'], '/css/', $cssfix, '.css" />';
 
 	// RTL languages require an additional stylesheet.
 	if ($context['right_to_left'])
@@ -101,12 +100,14 @@ function template_html_above()
 
 	// Here comes the JavaScript bits!
 	echo '
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js?fin20"></script>
 	<script type="text/javascript" src="', $settings['theme_url'], '/scripts/theme.js?fin20"></script>
 	<script type="text/javascript"><!-- // --><![CDATA[
 		var smf_theme_url = "', $settings['theme_url'], '";
 		var smf_default_theme_url = "', $settings['default_theme_url'], '";
 		var smf_images_url = "', $settings['images_url'], '";
+		var smf_use_mcards = "', $options['use_mcards'], '";
 		var smf_scripturl = "', $scripturl, '";
 		var smf_iso_case_folding = ', $context['server']['iso_case_folding'] ? 'true' : 'false', ';
 		var smf_charset = "', $context['character_set'], '";', $context['show_pm_popup'] ? '
@@ -118,6 +119,9 @@ function template_html_above()
 		addLoadEvent(fPmPopup);' : '', '
 		var ajax_notification_text = "', $txt['ajax_in_progress'], '";
 		var ajax_notification_cancel_text = "', $txt['modify_cancel'], '";
+		var sSessionId = \'', $context['session_id'], '\';
+		var sSessionVar = \'', $context['session_var'], '\';
+
 	// ]]></script>';
 
 	echo '
@@ -154,9 +158,8 @@ function template_html_above()
 	<link rel="next" href="', $scripturl, '?topic=', $context['current_topic'], '.0;prev_next=next" />';
 
 	// If we're in a board, or a topic for that matter, the index will be the board's index.
-	if (!empty($context['current_board']))
-		echo '
-	<link rel="index" href="', $scripturl, '?board=', $context['current_board'], '.0" />';
+	//if (!empty($context['current_board']))
+		//echo '<link rel="index" href="', $scripturl, '?board=', $context['current_board'], '.0" />';
 
 	// Output any remaining HTML headers. (from mods, maybe?)
 	echo $context['html_headers'];
@@ -170,35 +173,26 @@ function template_body_above()
 {
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
-	echo !empty($settings['forum_width']) ? '
-<div id="wrapper" style="width: ' . $settings['forum_width'] . '">' : '', '
-	<div id="header"><div class="frame">
-		<div id="top_section">
-			<h1 class="forumtitle">
-				<a href="', $scripturl, '">', empty($context['header_logo_url_html_safe']) ? $context['forum_name'] : '<img src="' . $context['header_logo_url_html_safe'] . '" alt="' . $context['forum_name'] . '" />', '</a>
-			</h1>';
-
-	// the upshrink image, right-floated
-	echo '
-			<img id="upshrink" src="', $settings['images_url'], '/upshrink.png" alt="*" title="', $txt['upshrink_description'], '" style="display: none;" />';
-	echo '
-			', empty($settings['site_slogan']) ? '<img id="smflogo" src="' . $settings['images_url'] . '/smflogo.png" alt="Simple Machines Forum" title="Simple Machines Forum" />' : '<div id="siteslogan" class="floatright">' . $settings['site_slogan'] . '</div>', '
-		</div>
-		<div id="upper_section" class="middletext"', empty($options['collapse_header']) ? '' : ' style="display: none;"', '>
-			<div class="user">';
+	echo '<div id="ajaxbusy" style="display:none;"><img src="',$settings['images_url'],'/ajax-loader.gif" alt="loader" /></div><div id="mcard" style="display:none;"><div id="mcard_close">X</div><div id="mcard_inner"></div></div>
+	<div id="wrap"><header><div id="header">
+		<div id="upper_section" class="middletext"><img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" /><div style="float:left;color:white;font-size:22px;padding:20px 30px;">SMF pLayGround</div>';
 
 	// If the user is logged in, display stuff like their name, new messages, etc.
 	if ($context['user']['is_logged'])
 	{
+		echo '<div class="user" style="padding:5px 5px 0 0;">';
+
 		if (!empty($context['user']['avatar']))
 			echo '
-				<p class="avatar">', $context['user']['avatar']['image'], '</p>';
+				<div class="avatar">', $context['user']['avatar']['image'], '</div>';
 		echo '
-				<ul class="reset">
+				<div><ul class="reset">
 					<li class="greeting">', $txt['hello_member_ndt'], ' <span>', $context['user']['name'], '</span></li>
 					<li><a href="', $scripturl, '?action=unread">', $txt['unread_since_visit'], '</a></li>
-					<li><a href="', $scripturl, '?action=unreadreplies">', $txt['show_unread_replies'], '</a></li>';
+					<li><a href="', $scripturl, '?action=unreadreplies">', $txt['show_unread_replies'], '</a></li>
+					<li>', $context['current_time'], '</li></ul></div>';
 
+		echo '<div style="margin-top:3px;"><ul class="reset"><li></li>';
 		// Is the forum in maintenance mode?
 		if ($context['in_maintenance'] && $context['user']['is_admin'])
 			echo '
@@ -213,18 +207,17 @@ function template_body_above()
 			echo '
 					<li><a href="', $scripturl, '?action=moderate;area=reports">', sprintf($txt['mod_reports_waiting'], $context['open_mod_reports']), '</a></li>';
 
-		echo '
-					<li>', $context['current_time'], '</li>
-				</ul>';
+		echo '</ul></div></div>';
 	}
 	// Otherwise they're a guest - this time ask them to either register or login - lazy bums...
 	elseif (!empty($context['show_login_bar']))
 	{
 		echo '
+				<div class="user">
 				<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/sha1.js"></script>
-				<form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
-					<div class="info">', sprintf($txt['welcome_guest'], $txt['guest_title']), '</div>
-					<input type="text" name="user" size="10" class="input_text" />
+				<div class="loginbar"><form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
+					<div style="float:left;margin:5px;">', sprintf($txt['welcome_guest'], $txt['guest_title']), '</div>
+					<div style="margin:5px;"><input type="text" name="user" size="10" class="input_text" />
 					<input type="password" name="passwrd" size="10" class="input_password" />
 					<select name="cookielength">
 						<option value="60">', $txt['one_hour'], '</option>
@@ -234,7 +227,7 @@ function template_body_above()
 						<option value="-1" selected="selected">', $txt['forever'], '</option>
 					</select>
 					<input type="submit" value="', $txt['login'], '" class="button_submit" /><br />
-					<div class="info">', $txt['quick_login_dec'], '</div>';
+					<div class="info">', $txt['quick_login_dec'], '</div></div>';
 
 		if (!empty($modSettings['enableOpenID']))
 			echo '
@@ -242,28 +235,11 @@ function template_body_above()
 
 		echo '
 					<input type="hidden" name="hash_passwrd" value="" />
-				</form>';
+				</form></div></div>';
 	}
 
 	echo '
-			</div>
-			<div class="news normaltext">
-				<form id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">
-					<input type="text" name="search" value="" class="input_text" />&nbsp;
-					<input type="submit" name="submit" value="', $txt['search'], '" class="button_submit" />
-					<input type="hidden" name="advanced" value="0" />';
-
-	// Search within current topic?
-	if (!empty($context['current_topic']))
-		echo '
-					<input type="hidden" name="topic" value="', $context['current_topic'], '" />';
-	// If we're on a certain board, limit it to this board ;).
-	elseif (!empty($context['current_board']))
-		echo '
-					<input type="hidden" name="brd[', $context['current_board'], ']" value="', $context['current_board'], '" />';
-
-	echo '</form>';
-
+			<div class="news normaltext">';
 	// Show a random news item? (or you could pick one from news_lines...)
 	if (!empty($settings['enable_news']))
 		echo '
@@ -272,84 +248,117 @@ function template_body_above()
 
 	echo '
 			</div>
-		</div>
-		<br class="clear" />';
+		</div><nav>';
 
-	// Define the upper_section toggle in JavaScript.
-	echo '
-		<script type="text/javascript"><!-- // --><![CDATA[
-			var oMainHeaderToggle = new smc_Toggle({
-				bToggleEnabled: true,
-				bCurrentlyCollapsed: ', empty($options['collapse_header']) ? 'false' : 'true', ',
-				aSwappableContainers: [
-					\'upper_section\'
-				],
-				aSwapImages: [
-					{
-						sId: \'upshrink\',
-						srcExpanded: smf_images_url + \'/upshrink.png\',
-						altExpanded: ', JavaScriptEscape($txt['upshrink_description']), ',
-						srcCollapsed: smf_images_url + \'/upshrink2.png\',
-						altCollapsed: ', JavaScriptEscape($txt['upshrink_description']), '
-					}
-				],
-				oThemeOptions: {
-					bUseThemeSettings: ', $context['user']['is_guest'] ? 'false' : 'true', ',
-					sOptionName: \'collapse_header\',
-					sSessionVar: ', JavaScriptEscape($context['session_var']), ',
-					sSessionId: ', JavaScriptEscape($context['session_id']), '
-				},
-				oCookieOptions: {
-					bUseCookie: ', $context['user']['is_guest'] ? 'true' : 'false', ',
-					sCookieName: \'upshrink\'
-				}
-			});
-		// ]]></script>';
 
 	// Show the menu here, according to the menu sub template.
 	template_menu();
 
-	echo '
+	echo '</nav>
 		<br class="clear" />
-	</div></div>';
+	</div></header>';
 
 	// The main content should go here.
 	echo '
-	<div id="content_section"><div class="frame">
+	<div id="content_section">
 		<div id="main_content_section">';
 
 	// Custom banners and shoutboxes should be placed here, before the linktree.
 
-	// Show the navigation tree.
 	theme_linktree();
+	// Show the navigation tree.
+	echo '<form style="float:right;margin-right:10px;margin-bottom:-20px;" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
+			// Search within current topic?
+			$search_label = 'Search';
+			if (!empty($context['current_topic'])) {
+				echo '
+					<input type="hidden" name="topic" value="', $context['current_topic'], '" />';
+				$search_label = 'Search this topic';
+			}
+			// If we're on a certain board, limit it to this board ;).
+			elseif (!empty($context['current_board'])) {
+				echo '
+					<input type="hidden" name="brd[', $context['current_board'], ']" value="', $context['current_board'], '" />';
+				$search_label = 'Search this board';
+			}
+				echo '<input style="padding-left:26px;margin:0;" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" size="30" name="search" value="',$search_label,'" class="searchfield" />
+					<input style="margin:0;" type="submit" name="submit" value="', $txt['go'], '" class="button_submit" />
+					<input type="hidden" name="advanced" value="0" />';
+
+
+	echo '</form><div style="clear:both;"></div>';
 }
 
 function template_body_below()
 {
-	global $context, $settings, $options, $scripturl, $txt, $modSettings;
+	global $context, $settings, $options, $scripturl, $txt, $modSettings, $fbxml, $twitter_widgets, $plusone;
 
 	echo '
-		</div>
-	</div></div>';
+		</div></div>';
 
 	// Show the "Powered by" and "Valid" logos, as well as the copyright. Remember, the copyright must be somewhere!
 	echo '
-	<div id="footer_section"><div class="frame">
-		<ul class="reset">
-			<li class="copyright">', theme_copyright(), '</li>
-			<li><a id="button_xhtml" href="http://validator.w3.org/check?uri=referer" target="_blank" class="new_win" title="', $txt['valid_xhtml'], '"><span>', $txt['xhtml'], '</span></a></li>
-			', !empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']) ? '<li><a id="button_rss" href="' . $scripturl . '?action=.xml;type=rss" class="new_win"><span>' . $txt['rss'] . '</span></a></li>' : '', '
-			<li class="last"><a id="button_wap2" href="', $scripturl , '?wap2" class="new_win"><span>', $txt['wap2'], '</span></a></li>
-		</ul>';
+  	<div id="fb-root"></div><script type="text/javascript">
+	// <![CDATA[
 
+    var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
+	var t2 = document.createElement(\'SCRIPT\');
+	t2.type = "text/javascript";
+	t2.async = true;
+	t2.src = "',$settings['theme_url'],'/scripts/footer.js?ver=1.1.0";
+	anchor.parentNode.insertBefore(t2, anchor);';
+	
+	if(1) {
+		if($fbxml) {
+			echo '
+			window.fbAsyncInit = function() {
+   				FB.init({appId: \'109862169045977\', status: true, cookie: true, xfbml: true});
+  			};
+  			(function() {
+    			var e = document.createElement(\'script\'); e.async = true;
+    			e.src = \'http://connect.facebook.net/en_US/all.js\';
+				document.getElementById(\'fb-root\').appendChild(e);
+  			}());
+			';
+		}
+		if($twitter_widgets) {
+			echo '
+			var t1 = document.createElement(\'SCRIPT\');
+
+			t1.src = \'http://platform.twitter.com/widgets.js\'; 
+			t1.type = "text/javascript"; 
+			t1.async = true;
+			anchor.parentNode.insertBefore(t1, anchor);
+			';
+		}
+	}
+	if($plusone) {
+		echo '
+			var t3 = document.createElement(\'SCRIPT\');
+
+			t3.src = \'http://apis.google.com/js/plusone.js\'; 
+			t3.type = "text/javascript"; 
+			t3.async = true;
+			anchor.parentNode.insertBefore(t3, anchor);
+			';
+	}
+	echo $txt['jquery_timeago_loc'],'
+	// ]]>
+	</script>
+	<div id="footer_section">';
 	// Show the load time?
 	if ($context['show_load_time'])
 		echo '
-		<p>', $txt['page_created'], $context['load_time'], $txt['seconds_with'], $context['load_queries'], $txt['queries'], '</p>';
+		<div style="float:right;" class="smalltext">',$txt['page_created'], $context['load_time'], $txt['seconds_with'], $context['load_queries'], $txt['queries'],'</div>';
+	
+	echo '	<div class="copyright">', my_theme_copyright(), '</div>
+			<div><a id="button_xhtml" href="http://validator.w3.org/check?uri=referer" target="_blank" class="new_win" title="Valid HTML"><span>HTML</span></a> | 
+			', !empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']) ? '<a id="button_rss" href="' . $scripturl . '?action=.xml;type=rss" class="new_win"><span>' . $txt['rss'] . '</span></a> | ' : '', '
+			<a id="button_wap2" href="', $scripturl , '?wap2" class="new_win"><span>', $txt['wap2'], '</span></a>
+			</div>';
 
 	echo '
-	</div></div>', !empty($settings['forum_width']) ? '
-</div>' : '';
+	</div>';
 }
 
 function template_html_below()
@@ -357,7 +366,7 @@ function template_html_below()
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
 	echo '
-</body></html>';
+</div></body></html>';
 }
 
 // Show a linktree. This is that thing that shows "My Community | General Category | General Discussion"..
@@ -393,7 +402,7 @@ function theme_linktree($force_show = false)
 
 		// Don't show a separator for the last one.
 		if ($link_num != count($context['linktree']) - 1)
-			echo ' &#187;';
+			echo '<span class="arrow"> &#187;</span>';
 
 		echo '
 			</li>';
@@ -410,12 +419,18 @@ function template_menu()
 {
 	global $context, $settings, $options, $scripturl, $txt;
 
+	$context['menu_buttons']['blog']['title'] = "Blog";
+	$context['menu_buttons']['blog']['show'] = true;
+	$context['menu_buttons']['blog']['href'] = "http://blog.miranda.or.at";
+	
 	echo '
 		<div id="main_menu">
 			<ul class="dropmenu" id="menu_nav">';
 
 	foreach ($context['menu_buttons'] as $act => $button)
 	{
+		if(!isset($button['active_button']))
+			$button['active_button'] = false;
 		echo '
 				<li id="button_', $act, '">
 					<a class="', $button['active_button'] ? 'active ' : '', 'firstlevel" href="', $button['href'], '"', isset($button['target']) ? ' target="' . $button['target'] . '"' : '', '>
@@ -500,6 +515,105 @@ function template_button_strip($button_strip, $direction = 'top', $strip_options
 				implode('', $buttons), '
 			</ul>
 		</div>';
+}
+function my_theme_copyright($get_it = false)
+{
+	global $forum_copyright, $context, $boardurl, $forum_version, $txt, $modSettings;
+
+	// Don't display copyright for things like SSI.
+	if (!isset($forum_version))
+		return;
+
+	// Put in the version...
+	//$forum_copyright = sprintf($forum_copyright, $forum_version);
+	$forum_copyright = 'Forum software based on SMF 2.0, &copy;2011 by <a href="http://www.simplemachines.org">Simple Machines</a> and contributors. <a href="http://www.simplemachines.org/about/smf/license.php">License terms.</a>';
+
+	echo '
+			<span class="smalltext" style="display: inline; visibility: visible;">' . $forum_copyright . '
+			</span>';
+}
+
+/**
+ * create JavaScript to inject asynchronous and XHTML compliant
+ * facebook "like" and Twitter "tweet" buttons
+ * @params:
+ * 	$l:	article permalink to share
+ *	$fb:	if true, generate facebook button
+ *	$tw:	if true, generate tweet button
+ */
+function async_like_and_tweet($l, $fb = true, $tw = true, $layout="standard")
+{
+    global $fbxml, $twitter_widgets, $social_privacy, $plusone;
+    
+    echo '
+	<script type="text/javascript">
+	//<![CDATA[
+	';
+    if($fb) {
+       $fbxml = 1;
+       echo '(function() {
+ 
+        document.write(\'<fb:like style="min-width:500px;min-height:21px;" width="500" href="',$l,'" layout="',$layout,'" send="true" show_faces="false" action="recommend" font="verdana"></fb:like>\');
+    	})();';
+    }
+    if($tw) {
+	$twitter_widgets = 1;
+	$plusone++;
+	echo '
+		document.write(\'<div style="float:right;max-width:65px;overflow:hidden;"><div style="max-width:65px;" class="g-plusone" data-href="',$l,'" data-size="medium" data-count="true"></div></div>\');
+   	    document.write(\'<a href="http://twitter.com/share" style="border:none;" class="twitter-share-button" data-count="horizontal" data-url="',$l,'"></a>\');
+	';
+    }	
+    echo '//]]>
+       </script>';
+}
+
+function socialbar($l, $t)
+{
+	global $social_privacy;
+	
+	if(1|| $social_privacy) {
+		socialbar_passive($l, $t);
+		return;
+	}
+	echo '<div class="bmbar">';
+	async_like_and_tweet($l);
+	echo '<div style="clear:both;"></div></div>';	
+}
+
+function socialbar_passive($l, $t)
+{
+	global $social_privacy, $plusone;
+	
+	echo '<div class="bmbar"><div class="title">Share this topic: </div>';
+		$url = $l;
+		$plusone++;
+		
+		//$fb = "<span class=\"share_button share_fb\" onclick=\"share_popup(\'http://www.facebook.com/sharer.php?u=".$url."\', 500,400);\">Share</span>";
+		//$tw = "<span class=\"share_button share_tw\" onclick=\"share_popup(\'http://twitter.com/share?url=".$url."&amp;text=".$title."\', 550,300);\">Tweet</span>";
+		echo '<div style="float:left;"><a role="button" rel="nofollow" class="share_button share_fb" href="http://www.facebook.com/sharer.php?u=',$url,'">Share</a>
+			<a role="button" rel="nofollow" class="share_button share_tw" href="http://twitter.com/share?url=',$url,'&amp;text=',$t,'">Tweet</a>
+			<a role="button" rel="nofollow" class="share_button share_digg" href="http://digg.com/submit?phase=2&amp;title=',$t,'&amp;url=',$url,'">Digg</a>
+			<a role="button" rel="nofollow" class="share_button share_buzz" href="http://www.google.com/buzz/post?url=',$url,'">Buzz</a></div>&nbsp;&nbsp;
+			<script type="text/javascript">
+			//<![CDATA[
+            	document.write(\'<div style="float:right;max-width:65px;overflow:hidden;"><g:plusone href="',$url,'" size="medium"></g:plusone></div>\');
+    		//]]>
+       		</script>
+       		<div style="clear:both;"></div>';
+			
+		/*	
+		echo '<script type="text/javascript">
+			//<![CDATA[
+			document.write(\'',$fb,'&nbsp;&nbsp;',$tw,'\');
+			//]]>			
+			</script>
+			<noscript>
+			<a class="share_button share_fb" href="http://www.facebook.com/sharer.php?u=',$url,'">Share</a>
+			<a class="share_button share_tw" href="http://twitter.com/share?url=',$url,'">Tweet</a>
+			</noscript>';
+			*/
+	echo '</div><div style="clear:both;"></div>';
 }
 
 ?>

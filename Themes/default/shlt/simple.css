@@ -1,0 +1,1502 @@
+/*
+Theme Name: Miranda
+Theme URI: http://blog.miranda.or.at
+Description: Simple, clean.
+Author: SilverCircle
+Version: 2.1
+*/
+
+* {
+	margin:0;
+	padding:0;
+}
+body {
+    background:#EBEBED;
+    line-height:110%;
+    color:#333;
+    font-size:10pt;
+    line-height:110%;
+}
+
+/*
+iframe {
+    background-color:transparent !important;
+}
+*/
+h1 {font-size:140%;}
+h2 {font-size:120%;}
+h3 {font-size:110%;}
+h4 {font-size:100%;}
+
+img, a img {
+	border:none;
+}
+
+.inline {
+	display:inline;
+}
+.sided {
+	background:#FFF;
+	border:1px solid #899EA6;
+	padding:3px;
+}
+.wp-caption {
+	background:#F1F5F6;
+	border:1px solid #DCE3E9;
+	padding:5px 0;
+	margin-bottom:5px;
+	text-align:center;
+}
+.wp-caption img {
+	margin:0 5px;
+}
+.wp-caption-text {
+	text-align:center;
+	padding:0 5px !important;
+	padding:3px 5px 0;
+}
+.post .content .wp-caption p {
+	margin:3px 0 0;
+}
+a .sided:hover {
+    border-color:#496370;
+}
+a {
+    color:#3C7A9B;
+    text-decoration:none;
+}
+a:hover {
+    text-decoration:underline;
+    color:black;
+}
+
+.content > blockquote, .comment blockquote {
+    margin:10px 12px;
+    padding:5px 10px 0 10px;
+}
+
+pre {
+    background:#F1F5F6;
+    border:1px dashed #B0BEC7;
+    padding:8px 10px;
+    margin:5px 10px;
+    font-family:monospace, Courier New, Courier, Fixed;
+    overflow:auto;
+}
+
+.content > blockquote > p, .comment blockquote {
+    background: transparent url(images/zitat.gif) no-repeat;
+    padding-left:8px;
+    font-size:90%;
+    color:#888;
+}
+.content > blockquote > p:after {
+    content: url(images/iv_end.gif);
+}
+
+.textfield,
+textarea {
+	border:2px solid #DEECBE;
+	padding:1px;
+	font-size:12px;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+}
+.textfield:focus,
+textarea:focus {
+	border-color:#A4B97F;
+}
+.button {
+	text-decoration:none;
+	padding:2px 5px;
+	background:#D5E396;
+	border-top:1px solid #D5E396;
+	border-right:1px solid #B5C98F;
+	border-bottom:1px solid #B5C98F;
+	border-left:1px solid #D5E396;
+	color:#84985D;
+}
+.button:hover {
+	text-decoration:none;
+	background:#C8DE9D;
+	border-top:1px solid #B5C98F;
+	border-right:1px solid #D5E396;
+	border-bottom:1px solid #D5E396;
+	border-left:1px solid #B5C98F;
+	color:#60743A;
+}
+.strike {
+	text-decoration:line-through;
+}
+.alignleft {
+	float:left;
+	text-align:left;
+	margin-right:4px;
+}
+.alignright {
+	float:right;
+	text-align:right;
+	margin-left: 4px;
+}
+.aligncenter {
+	text-align:center;
+	display:inline-block;
+}
+.floatleft {
+	float:left;
+}
+.floatright {
+	float:right;
+}
+.left {
+	float:left;
+	margin-right:10px !important;
+	margin-right:7px;
+}
+.right {
+	float:right;
+	margin-left:10px !important;
+	margin-left:7px;
+}
+.feed,
+.feed a {
+	color:#E05C23;
+}
+.fixed,
+.clear {
+	clear:both;
+}
+.fontthin {
+	font-weight:normal;
+}
+small,
+.small,
+.more-link {
+    font-size:10px;
+    padding: 1px 3px 1px 3px;
+}
+.more-link {
+    color: green;
+    padding-left: 5px;
+}
+.boxcaption {
+	background:#E9EEF1;
+	border-bottom:1px solid #FFF;
+}
+.boxcaption h3 {
+	padding:5px 10px;
+	font-size:12px;
+	color:#258;
+}
+.boxcaption a {
+	text-decoration:none;
+}
+.box {
+	background:#F1F5F6;
+	border-top:none;
+	padding:5px 10px;
+	margin-bottom:10px;
+}
+.errorbox {
+	background:#F1E9E1;
+	padding:5px 10px 5px 15px;
+	margin-bottom:10px;
+	font-size:10px;
+	color:#E05C23;
+}
+.messagebox {
+	padding:5px 10px 5px 15px;
+	margin-bottom:10px;
+	font-size:11px;
+	color:#84985D;
+	font-weight:bold;
+}
+.w3c {
+	color:#080;
+	font-size:10px;
+}
+.normalfont {
+	font-size:12px;
+}
+
+/* layout START */
+#wrap {
+    text-align:left;
+    margin:0 auto;
+    font-family:Verdana,Helvetica,sans-serif !important;
+    font-size:10px;
+}
+
+/* layout END */
+
+/* header START */
+#title {
+	float:left;
+	margin:0;
+	margin-top:10px;
+}
+#tagline {
+    font-size:12px;
+    font-weight:bold;
+}
+#header {
+    background: url(images/moon.jpg) no-repeat;
+    background-color:#00000a;
+    height:75px;
+    color:#666;
+    font-weight:bold;
+}
+
+.searchbox {
+	background:#FFF;
+	border:1px solid #B0BEC7;
+	border-top:none;
+	float:right;
+}
+.searchbox .content {
+	background:#F6F9E7;
+	padding:7px 10px;
+	margin:0 1px 1px;
+}
+.searchbox .button {
+	font-size:10px;
+	text-transform:uppercase;
+	padding:4px 5px 3px !important;
+	padding:2px 5px;
+	cursor:pointer;
+}
+*+html .searchbox .button {
+	padding:2px 5px !important;
+}
+.searchbox .textfield {
+	width:200px;
+}
+.searchbox .content img {
+	margin:0 3px -3px 0 !important;
+	margin:0 3px 0 0;
+}
+*+html .searchbox .content img {
+	margin:0 3px -1px 0 !important;
+}
+#cse-search-box .content {
+	background:#F6F9E7 url(images/search_background.png) no-repeat;
+	background-position:0% 100%;
+}
+#wp-search-box .content {
+	background:#F6F9E7 url(images/search_background.png) no-repeat;
+	background-position:-400px 100%;
+}
+/* header END */
+
+/* content START */
+#content {
+	background:#d9dee1;
+	margin-bottom:0px;
+	padding:0;
+}
+
+div.content_table_wrapper {
+    min-width: 650px;
+    max-width:1200px;
+    margin-left:auto;
+    margin-right:auto;
+    padding-left:35px;
+    padding-right:35px;
+    width:auto;
+    margin-top:10px;
+}
+table.content_table {
+    border:1px solid #ccc;
+    border-top:0;
+    background-color:#e5e5e5;
+    box-shadow: 0px 1px 4px 1px #ccc;
+}
+
+/* content END */
+
+/* menus START */
+
+#access {
+	background:#d9dEe1 url(images/sprite.png) repeat-x;
+	background-position:0 -170px;
+	font-size:10px;
+	border-bottom:2px solid #888;
+}
+*+html #access {
+	border-top:0 !important;
+}
+
+#access ul ul {
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+    display: none;
+    position: absolute;
+    width: auto;
+    z-index: 99999;
+    background:#d9dee1;
+    border:1px solid #ccc;
+    border-top:0;
+}
+
+.menu {
+	float:left;
+	padding:0;
+	font-weight:bold;
+	text-shadow:1px 1px white;
+}
+
+.menu ul {float:left;}
+
+.menu li  {
+	background:#d9dEe1 url(images/sprite.png) repeat-x;
+	background-position:0 -170px;
+	list-style:none;
+	float:left;
+	margin-left:-1px;
+	white-space:nowrap;
+}
+
+.menu ul li {
+    background:#bcc2ca;
+}
+.menu li a {
+	display:inline-block;
+	text-decoration:none;
+	padding:5px 8px;
+}
+.menu li:hover {
+	background: #ddd;
+}
+
+.menu li.current_page_item, .menu li.current_page_ancestor {
+	font-weight:bold;
+	background:#aaa;
+}
+
+.menu li li
+{
+	float:none;
+	list-style:none;
+	margin:0;
+	padding:0;
+	border:0;
+}
+.menu li li a
+{
+	display:block;
+	padding:5px 10px;
+	text-decoration:none;
+	overflow:hidden;
+}
+span.m_downarrow {
+    padding:5px 12px 5px 0px;
+    margin-left:-4px;
+    margin-right:4px;
+    background:transparent url(images/sprite.png) 0 7px no-repeat;
+}
+span.m_downarrow:hover {
+/*    background-color:#babaff !important;*/
+background-color:black !important;
+}
+
+#copyright,
+.feedlink,
+.greedlink,
+.twitterlink {
+	float:right;
+	padding:5px 10px;
+	position:relative;
+}
+#copyright {
+	color:#B0BEC7;
+}
+a.feedlink {
+	text-decoration:none;
+}
+a.feedlink:hover {
+	background:#EDC;
+	text-decoration:none;
+}
+a.greedlink {
+	text-decoration:none;
+	text-shadow:1px 1px white;
+}
+a.greedlink:hover {
+	background:#babaff;
+	text-decoration:none;
+}
+a.twitterlink {
+	background:#DEECF3;
+	border-left:1px solid #FFF;
+	text-decoration:none;
+	color:#38A;
+}
+a.twitterlink:hover {
+	background:#D0E1EF;
+	text-decoration:none;
+}
+/* menus END */
+
+/* main START */
+
+.post .title, h2.title {
+	background:#eaeaea url(images/sprite.png) 0 -108px repeat-x;
+	padding:5px 10px 5px 10px;
+	color:#448;
+	font-variant:small-caps;
+	font-size:16px;
+	border-bottom: 3px solid #aac;
+	text-shadow: 1px 1px white;
+}
+.post .title a:hover {
+	color:#333;
+	text-decoration:none;
+}
+.post .meta {
+	background:#F1F5F6;
+	padding:3px 10px 1px 15px;
+	margin-bottom:10px;
+	border-bottom:1px dashed #ccc;
+}
+
+.indent {padding-left:50px;margin-left:5px;}
+
+.post .meta .info {
+	font-size:10px;
+	float:left;
+}
+.post .meta .comments {
+	font-size:10px;
+	float:right;
+}
+.post .tags {
+	font-size:90%;
+	margin:5px 0;
+	background:transparent url(images/sprite.png) 0 -240px no-repeat;
+	padding:5px 20px;
+	vertical-align:center;
+}
+.post .content {
+	padding:0px 15px 0px 15px;
+}
+.post .content img {
+	max-width:600px;
+}
+.post .content p {
+	margin-bottom:8px;
+}
+.post .content ul,
+.post .content ol {
+	padding-bottom:8px;
+}
+.post .content ul li,
+.post .content ol li {
+	list-style-position:outside;
+	margin-left:20px;
+	margin-bottom:5px;
+}
+.post .content table {
+	border-collapse:collapse;
+	background:#FFF;
+	margin:5px 0 10px;
+	border:1px solid #E1E7E9;
+}
+.post .content table tr td,
+.post .content table tr th {
+	border-left:1px dotted #FFF;
+	border-right:1px dotted #FFF;
+	border-bottom:1px solid #FFF;
+	text-align:left;
+	vertical-align:middle;
+	padding:5px 10px;
+}
+.post .content table tr td {
+	background:#F1F5F6;
+}
+.post .content table tr th {
+	background:#E1E7E9;
+}
+
+.post {
+    margin-bottom:15px;
+    background-color:#f0f0f0;
+}
+
+div.post {
+    border:1px solid #d0d0d0;
+}
+
+#pagenavi,
+#postnavi {
+	padding:1px 10px 1px 15px;
+	font-size:10px;
+	font-weight:bold;
+	margin-bottom:6px;
+}
+#commentnavi {
+	background:#F6F9E7;
+	padding:6px 10px 6px 15px;
+	font-size:10px;
+}
+#postnavi,
+#commentnavi {
+	margin-bottom:10px;
+}
+#pagenavi span,
+#postnavi span,
+#commentnavi span {
+	margin:-1px 0;
+}
+#pagenavi span a,
+#postnavi span a,
+#commentnavi span a {
+	display:block;
+	text-decoration:none;
+	padding:2px 10px;
+}
+#pagenavi span a:hover,
+#postnavi span a:hover,
+#commentnavi span a:hover {
+	background:#ECF3D3;
+}
+/* main END */
+
+
+/* comments START */
+
+.commentlist {
+    margin-bottom:10px;
+    padding:0px 10px;
+    background-color:#f0f0f0 !important;
+}
+.commentlist li {
+	list-style-type:none;
+	margin:10px 0px;
+}
+.commentlist li .info {
+	background:#eaeaea; /* url(images/sprite.png) 0 -170px repeat-x; */
+	padding:4px;
+	margin: 0px 5px;
+	margin-left:40px;
+	border:1px solid #ccc;
+	border-radius:3px;
+	border-bottom:2px solid #aac;
+	font-size:11px;
+}
+.commentlist li.pingcomment {
+    border-bottom:0;
+}
+
+.commentlist li.pingcomment a {
+	color:#E05C23;
+}
+.commentlist li.pingcomment .info {
+	background:#F1E9E1;
+}
+.commentlist li.admincomment .info {
+	color:#a66;
+}
+.commentlist li.regularcomment .info {
+	color:#444;
+}
+.commentlist li .content {
+	padding:5px 10px 0 0px;
+	margin-left:45px;
+}
+.commentlist li .content p {
+	margin-bottom:8px;
+/*	overflow:hidden;*/
+}
+.commentlist .pic {
+	float:left;
+	width:34px;
+	height:auto;
+	max-height:150px;
+	padding:1px;
+	border: 1px solid #ccc;
+	margin-bottom:1px;
+}
+
+.commentlist .pic img {
+	background:#FFF;
+	padding:0px;
+	border:1px solid #999;
+        max-width:32px;
+        max-height:148px;
+        width:100%;
+        height:auto;
+	float:left;
+}
+.info .author {
+	margin-right:10px;
+	float:left;
+}
+.info .count {
+	float:right;
+	text-align:right;
+	font-size:10px;
+	color:#666;
+}
+.info .date {
+	color:#666;
+}
+.info .authorname {
+	font-weight:bold;
+}
+#respond {
+	background:#f0f0f0;
+	padding:10px 0 10px 15px;
+	font-size:10px;
+	margin-bottom:10px;
+}
+#respond #cancel-comment-reply-link {
+	float:right;
+	padding-right:10px;
+	position:relative;
+}
+#respond .row {
+	margin-bottom:5px;
+	border:0;
+	border-spacing:0;
+	padding:0;
+	width:100%;
+}
+#respond .textfield {
+	width:200px;
+}
+#respond .feed {
+	float:left;
+}
+#submit {
+	font-size:10px;
+	margin-right:10px;
+	cursor:pointer;
+	float:right;
+}
+#emoticon {
+	float:right;
+	margin-top:3px;
+	margin-right:10px;
+}
+#comment {
+	width:auto;
+	min-height:120px !important;
+}
+#commentnavi a.page-numbers {
+	padding:6px 8px;
+	text-decoration:none;
+	margin:0 -2px;
+}
+#commentnavi a.page-numbers:hover {
+	text-decoration:none;
+	background:#ECF3D3;
+}
+#commentnavi span.pages {
+	padding:0 10px 0 0;
+	float:left;
+}
+#commentnavi span.current {
+	background:#FFF;
+	padding:6px 8px;
+	font-weight:bold;
+	margin:0 -2px;
+}
+.commentlist ul.children {
+	padding-left:5px;
+	margin:0;
+}
+.commentlist .children li.comment,
+.commentlist .children #respond {
+	border-right:0;
+	margin-left:0;
+	border-bottom:0;
+}
+.commentlist .children div.pinginfo {
+	background:#F1E9E1;
+}
+.commentlist .children #commentform #comment {
+	width:624px;
+}
+.commentlist .children .children #commentform #comment {
+	width:609px;
+}
+.commentlist .children .children .children #commentform #comment {
+	width:594px;
+}
+.commentlist .children .children .children .children #commentform #comment {
+	width:579px;
+}
+.commentlist .children .children .children .children .children #commentform #comment {
+	width:564px;
+}
+.commentlist .children .children .children .children .children .children #commentform #comment {
+	width:549px;
+}
+.commentlist .children .children .children .children .children .children .children #commentform #comment {
+	width:534px;
+}
+.commentlist .children .children .children .children .children .children .children .children #commentform #comment {
+	width:519px;
+}
+/* comments END */
+
+/* sidebar START */
+#sidebar {
+	width:270px;
+	margin:0px 0 0;
+	float:right;
+	overflow:hidden;
+	font-size:90%;
+	line-height:120%;
+}
+.widget {
+	background:#F1F5F6;
+	margin-bottom:10px;
+	padding:0 10px 5px;
+	border:1px solid #ccc;
+	border-radius:3px;
+}
+.widget h3 {
+	background:#eaeaea url(images/sprite.png) 0 -108px repeat-x;
+	margin:0 -10px;
+	padding:5px 10px;
+	font-size:13px;
+	font-variant:small-caps;
+	border-bottom:1px solid #aac;
+	color:#448;
+	text-shadow: 1px 1px white;
+}
+.widget ul {
+	list-style-image: url(images/round-gray.gif);
+	list-style-position:outside;
+	margin-left:8px;
+}
+.widget li {
+	padding:1px 2px;
+	line-height:130%;
+}
+.widget li li {
+    list-style-type:none;
+}
+.widget div.itembox {
+	padding: 5px 0 0;
+}
+
+/* sidebar END */
+
+/* footer START */
+#footer {
+	background:#224;
+	font-size:10px;
+	color:#ddd;
+	font-size:8px;
+}
+#footer li {
+	float:left;
+	list-style-type:none;
+}
+#footer a {
+	color: #88a;
+}
+
+#about {
+	float:left;
+	padding:5px 10px;
+}
+#admin {
+	float:right;
+}
+#admin li a {
+	display:block;
+	text-decoration:none;
+	padding:5px 10px;
+}
+#admin li a:hover {
+	background:#aac;
+}
+#admin li#gotop a:hover {
+	background:#aac;
+}
+/* footer END */
+
+/* calendar START */
+#calendar_wrap {
+	background:#F1F5F6;
+	margin:0 -10px;
+}
+.widget_calendar h3 {
+	display:none;
+}
+#wp-calendar {
+	width:100%;
+	border-collapse:collapse;
+}
+#wp-calendar #today {
+	font-weight:bold;
+}
+#wp-calendar tbody a {
+	text-decoration:underline;
+	font-weight:bold;
+}
+#wp-calendar caption {
+	background:#E1E7E9;
+	padding:5px 10px;
+	font-size:11px;
+	font-weight:bold;
+	margin-bottom:1px;
+	text-decoration:none;
+	text-align:left;
+}
+#wp-calendar th,
+#wp-calendar td {
+	text-align:center;
+	font-size:10px;
+}
+#wp-calendar th {
+	background:#E9EEF1;
+	padding:4px 0;
+	border:solid #FFF;
+	border-width:1px 0;
+}
+#wp-calendar td {
+	font-size:11px;
+	padding:4px 0 0;
+}
+#wp-calendar td#prev {
+	text-align:left;
+	padding:10px 0 5px 10px;
+	font-size:10px;
+}
+#wp-calendar td#next {
+	text-align:right;
+	padding:10px 10px 5px 0;
+	font-size:10px;
+}
+/* calendar END */
+
+/* links START */
+.post .content .linkcat li{
+	float:left;
+	list-style:none;
+	padding-left:0;
+	width:33%;
+}
+/* links END */
+
+/* wp_addbookmarks START */
+.wp_addbookmarks a img {
+	border:1px solid #B0BEC7;
+	padding:2px;
+}
+.wp_addbookmarks a:hover img {
+	border-color:#258;
+}
+/* wp_addbookmarks END */
+
+/* related posts START */
+
+#related-posts {
+    margin:10px 0 5px 0;
+    border:1px solid #888;
+    border-radius:4px;
+    background-color:transparent;
+}
+#related-posts h4 {
+    padding:2px 10px 2px 15px;
+    margin:0;
+    color:white;
+    background:#888;
+}
+#related-posts ul {
+    padding:5px 10px 2px 0px;
+    font-size:90%;
+}
+#related-posts ul li {
+    list-style:none;
+    padding:0;
+}
+.related-post li small {
+    display:block;
+    color:#999;
+}
+/* related posts END */
+
+.post .content h2, .post .content h3, .post .content h1, .post .content h4 {
+    margin-bottom:6px;
+    margin-top:14px;
+    margin-left:10px;
+    color: #666;
+    font-weight:bold !important;
+}
+
+.post .content h2, .post .content h3, .post .content h1 {
+    padding-bottom:2px;
+}
+
+.post .content h4 {
+    padding: 2px 0 0 0;
+}
+
+.single_print {
+    background-image: url(images/print.gif);
+    background-position: left center;
+}
+
+.datewidget {
+    float:left;
+    text-align:center;
+    width:50px;
+    height:50px;
+    margin-right: 10px !important;
+    margin-left:5px;
+    margin-top:3px;
+    border: 1px solid #3a60a4;
+    border-radius:3px;
+    background-color:white;
+}
+
+.datewidget > .month {
+    font-size:10px;
+    font-weight:bold;
+    color:white;
+    padding:1px 0;
+    background-color:#3a60a4;
+}
+.datewidget > .day {
+    font-size:14px;
+    font-weight:bold;
+    color: #888;
+    padding-top:6px;
+}
+
+.datewidget > span {
+    display:block;
+}
+
+.videothumb {
+    border: 1px solid #aaa;
+    padding: 4px;
+    text-align:center;
+}
+
+.content, .excerpt {
+    font-size:10pt;
+    line-height:120%;
+    color:#555;
+    font-family:Constantia,Verdana,helvetica,sans-serif;
+}
+
+.roundedbox {
+    border:1px solid #ccc;
+    background-color:#eaeaea;
+    border-radius:3px;
+}
+
+/*
+ * ui tabs
+ */
+ 
+ul.ui-tabs-nav {
+    padding-bottom: 0 !important;
+}
+.ui-tabs-nav li {
+    margin-bottom: 0 !important;
+}
+
+.prev_arrow_large, .next_arrow_large {
+    min-width: 29px !important;
+    min-height:45px;
+    background: url(images/arrows.png) top left no-repeat;
+    border:1px solid red;
+    display:inline-block;
+}
+div.socialbar {
+    padding:2px 5px;
+    border-radius:4px;
+    background-color: #F2F5FE;
+    border: 1px solid #D5ECFA;
+}
+
+div.bmbar {
+	border-top:3px solid #aac;
+	border-bottom:3px solid #aac;
+}
+div.fb_tweet {
+    vertical-align:bottom;
+    font-size:10px !important;
+    line-height:100% !important;
+    font-family:Verdana,helvetica,sans-serif;
+    padding:3px;
+}
+
+.twitter-share-button {
+/*    max-height:25px !important;
+    min-height:25px !important;*/
+    border:0 !important;
+    vertical-align:top;
+    float:right;
+}
+
+/*
+ * overrides for syntax highlighting
+ */
+ 
+.syntaxhighlighter .line {
+    line-height:130% !important;
+    font-size:11px !important;
+}
+
+.content > p.intro:first-letter {
+    font-size : 150%;
+    font-weight : bold;
+    float : left;
+}
+
+.comment-title {font-weight:bold;}
+
+/*
+ * custom styles, used for content mainly
+ */
+ 
+.small-rounded {border-radius:2px;}
+.rounded {border-radius:4px;}
+.bordered {border:1px solid #bbb;}
+
+div.contentbox {
+    padding:0;
+}
+
+div.contentbox > h4 {
+    background-color:#bbb;
+    padding:3px 6px !important;
+    font-weight:bold;
+    text-align:left;
+    margin:0 !important;
+    margin-bottom:5px !important;
+    color:black;
+}
+div.contentbox > p, div.contentbox > ul, div.contentbox > ol {padding-left:5px;padding-right:5px;}
+#fontinc {background:transparent url(images/sprite.png) 0 -43px no-repeat;padding: 5px 8px;}
+#fontdec {background:transparent url(images/sprite.png) 0 -15px no-repeat;padding: 5px 8px;}
+#fonttoggle {background:transparent url(images/sprite.png) 0 -70px no-repeat;padding: 5px 8px;}
+
+a.gallerypic{
+  width:140px;
+  text-decoration:none;
+  position:relative;
+  display:block;
+  border:1px solid #666;
+  padding:3px;
+  margin-right:5px;
+  float:left;
+}
+
+a.gallerypic span.play {
+  visibility:hidden;
+  position:absolute;
+  left:40%;
+  top:35%;
+  opacity: 0.5;
+}
+
+a.gallerypic:hover span.zoom-icon{
+  visibility:visible;
+}
+
+div.vthumb {
+    display:block;
+    background:transparent url(images/play.png) center center no-repeat;
+}
+div.vthumb img {
+    opacity: 0.7;
+    display:block;
+    clear:both;
+    border:0;
+    cursor:pointer;
+}
+
+/**
+ * SyntaxHighlighter
+ * http://alexgorbatchev.com/SyntaxHighlighter
+ *
+ * SyntaxHighlighter is donationware. If you are using it, please donate.
+ * http://alexgorbatchev.com/SyntaxHighlighter/donate.html
+ *
+ * @version
+ * 3.0.83 (July 02 2010)
+ * 
+ * @copyright
+ * Copyright (C) 2004-2010 Alex Gorbatchev.
+ *
+ * @license
+ * Dual licensed under the MIT and GPL licenses.
+ * shCore.css and shThemeDefault.css combined
+ */
+.syntaxhighlighter a,
+.syntaxhighlighter div,
+.syntaxhighlighter code,
+.syntaxhighlighter table,
+.syntaxhighlighter table td,
+.syntaxhighlighter table tr,
+.syntaxhighlighter table tbody,
+.syntaxhighlighter table thead,
+.syntaxhighlighter table caption,
+.syntaxhighlighter textarea {
+  background: none !important;
+  border: 0 !important;
+  bottom: auto !important;
+  float: none !important;
+  height: auto !important;
+  left: auto !important;
+  line-height: 1.1em !important;
+  margin: 0 !important;
+  outline: 0 !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  position: static !important;
+  right: auto !important;
+  text-align: left !important;
+  top: auto !important;
+  vertical-align: baseline !important;
+  width: auto !important;
+  box-sizing: content-box !important;
+  font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  font-size: 1em !important;
+  min-height: inherit !important;
+  /* min-height: auto !important; */
+}
+
+.syntaxhighlighter {
+  width: 100% !important;
+  margin: 1em 0 1em 0 !important;
+  position: relative !important;
+  overflow: auto !important;
+  font-size: 1em !important;
+}
+.syntaxhighlighter.source {
+  overflow: hidden !important;
+}
+.syntaxhighlighter .bold {
+  font-weight: bold !important;
+}
+.syntaxhighlighter .italic {
+  font-style: italic !important;
+}
+.syntaxhighlighter .line {
+  white-space: pre !important;
+}
+.syntaxhighlighter table {
+  width: 100% !important;
+}
+.syntaxhighlighter table caption {
+  text-align: left !important;
+  padding: .5em 0 0.5em 1em !important;
+}
+.syntaxhighlighter table td.code {
+  width: 100% !important;
+}
+.syntaxhighlighter table td.code .container {
+  position: relative !important;
+}
+.syntaxhighlighter table td.code .container textarea {
+  box-sizing: border-box !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  background: white !important;
+  padding-left: 1em !important;
+  overflow: hidden !important;
+  white-space: pre !important;
+}
+.syntaxhighlighter table td.gutter .line {
+  text-align: right !important;
+  padding: 0 0.5em 0 1em !important;
+}
+.syntaxhighlighter table td.code .line {
+  padding: 0 1em !important;
+}
+.syntaxhighlighter.nogutter td.code .container textarea, .syntaxhighlighter.nogutter td.code .line {
+  padding-left: 0em !important;
+}
+.syntaxhighlighter.show {
+  display: block !important;
+}
+.syntaxhighlighter.collapsed table {
+  display: none !important;
+}
+.syntaxhighlighter.collapsed .toolbar {
+  padding: 0.1em 0.8em 0em 0.8em !important;
+  font-size: 1em !important;
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+}
+.syntaxhighlighter.collapsed .toolbar span {
+  display: inline !important;
+  margin-right: 1em !important;
+}
+.syntaxhighlighter.collapsed .toolbar span a {
+  padding: 0 !important;
+  display: none !important;
+}
+.syntaxhighlighter.collapsed .toolbar span a.expandSource {
+  display: inline !important;
+}
+.syntaxhighlighter .toolbar {
+  position: absolute !important;
+  right: 1px !important;
+  top: 1px !important;
+  width: 11px !important;
+  height: 11px !important;
+  font-size: 10px !important;
+  z-index: 10 !important;
+}
+.syntaxhighlighter .toolbar span.title {
+  display: inline !important;
+}
+.syntaxhighlighter .toolbar a {
+  display: block !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  padding-top: 1px !important;
+}
+.syntaxhighlighter .toolbar a.expandSource {
+  display: none !important;
+}
+.syntaxhighlighter.ie {
+  font-size: .9em !important;
+  padding: 1px 0 1px 0 !important;
+}
+.syntaxhighlighter.ie .toolbar {
+  line-height: 8px !important;
+}
+.syntaxhighlighter.ie .toolbar a {
+  padding-top: 0px !important;
+}
+.syntaxhighlighter.printing .line.alt1 .content,
+.syntaxhighlighter.printing .line.alt2 .content,
+.syntaxhighlighter.printing .line.highlighted .number,
+.syntaxhighlighter.printing .line.highlighted.alt1 .content,
+.syntaxhighlighter.printing .line.highlighted.alt2 .content {
+  background: none !important;
+}
+.syntaxhighlighter.printing .line .number {
+  color: #bbbbbb !important;
+}
+.syntaxhighlighter.printing .line .content {
+  color: black !important;
+}
+.syntaxhighlighter.printing .toolbar {
+  display: none !important;
+}
+.syntaxhighlighter.printing a {
+  text-decoration: none !important;
+}
+.syntaxhighlighter.printing .plain, .syntaxhighlighter.printing .plain a {
+  color: black !important;
+}
+.syntaxhighlighter.printing .comments, .syntaxhighlighter.printing .comments a {
+  color: #008200 !important;
+}
+.syntaxhighlighter.printing .string, .syntaxhighlighter.printing .string a {
+  color: blue !important;
+}
+.syntaxhighlighter.printing .keyword {
+  color: #006699 !important;
+  font-weight: bold !important;
+}
+.syntaxhighlighter.printing .preprocessor {
+  color: gray !important;
+}
+.syntaxhighlighter.printing .variable {
+  color: #aa7700 !important;
+}
+.syntaxhighlighter.printing .value {
+  color: #009900 !important;
+}
+.syntaxhighlighter.printing .functions {
+  color: #ff1493 !important;
+}
+.syntaxhighlighter.printing .constants {
+  color: #0066cc !important;
+}
+.syntaxhighlighter.printing .script {
+  font-weight: bold !important;
+}
+.syntaxhighlighter.printing .color1, .syntaxhighlighter.printing .color1 a {
+  color: gray !important;
+}
+.syntaxhighlighter.printing .color2, .syntaxhighlighter.printing .color2 a {
+  color: #ff1493 !important;
+}
+.syntaxhighlighter.printing .color3, .syntaxhighlighter.printing .color3 a {
+  color: red !important;
+}
+.syntaxhighlighter.printing .break, .syntaxhighlighter.printing .break a {
+  color: black !important;
+}
+
+/**
+ * shThemeDefault.css included
+ */
+.syntaxhighlighter {
+  background-color: transparent !important;
+  overflow-y:hidden !important;
+  border:1px dotted #aaa !important;
+  padding: 1px !important;
+}
+.syntaxhighlighter table td {
+  line-height:130% !important;
+}
+.syntaxhighlighter .line.alt1 {
+  background-color: #eef !important;
+}
+.syntaxhighlighter .line.alt2 {
+  background-color: white !important;
+}
+.syntaxhighlighter .line.highlighted.alt1, .syntaxhighlighter .line.highlighted.alt2 {
+  background-color: #e0e0e0 !important;
+}
+.syntaxhighlighter .line.highlighted.number {
+  color: black !important;
+}
+.syntaxhighlighter table caption {
+  color: black !important;
+}
+.syntaxhighlighter .gutter {
+  color: #afafaf !important;
+}
+.syntaxhighlighter .gutter .line {
+  border-right: 3px solid #6ce26c !important;
+}
+.syntaxhighlighter .gutter .line.highlighted {
+  background-color: #6ce26c !important;
+  color: white !important;
+}
+.syntaxhighlighter.printing .line .content {
+  border: none !important;
+}
+.syntaxhighlighter.collapsed {
+  overflow: visible !important;
+}
+.syntaxhighlighter.collapsed .toolbar {
+  color: blue !important;
+  background: white !important;
+  border: 1px solid #6ce26c !important;
+}
+.syntaxhighlighter.collapsed .toolbar a {
+  color: blue !important;
+}
+.syntaxhighlighter.collapsed .toolbar a:hover {
+  color: red !important;
+}
+.syntaxhighlighter .toolbar {
+  color: white !important;
+  background: #6ce26c !important;
+  border: none !important;
+}
+.syntaxhighlighter .toolbar a {
+  color: white !important;
+}
+.syntaxhighlighter .toolbar a:hover {
+  color: black !important;
+}
+.syntaxhighlighter .plain, .syntaxhighlighter .plain a {
+  color: black !important;
+}
+.syntaxhighlighter .comments, .syntaxhighlighter .comments a {
+  color: #008200 !important;
+}
+.syntaxhighlighter .string, .syntaxhighlighter .string a {
+  color: blue !important;
+}
+.syntaxhighlighter .keyword {
+  color: #006699 !important;
+}
+.syntaxhighlighter .preprocessor {
+  color: gray !important;
+}
+.syntaxhighlighter .variable {
+  color: #aa7700 !important;
+}
+.syntaxhighlighter .value {
+  color: #009900 !important;
+}
+.syntaxhighlighter .functions {
+  color: #ff1493 !important;
+}
+.syntaxhighlighter .constants {
+  color: #0066cc !important;
+}
+.syntaxhighlighter .script {
+  font-weight: bold !important;
+  color: #006699 !important;
+  background-color: transparent !important;
+}
+.syntaxhighlighter .color1, .syntaxhighlighter .color1 a {
+  color: gray !important;
+}
+.syntaxhighlighter .color2, .syntaxhighlighter .color2 a {
+  color: #ff1493 !important;
+}
+.syntaxhighlighter .color3, .syntaxhighlighter .color3 a {
+  color: red !important;
+}
+
+.syntaxhighlighter .keyword {
+  font-weight: bold !important;
+}
+
+/*
+    ColorBox Core Style:
+    The following CSS is consistent between example themes and should not be altered.
+*/
+#colorbox, #cboxOverlay, #cboxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}
+#cboxOverlay{position:fixed; width:100%; height:100%;}
+#cboxMiddleLeft, #cboxBottomLeft{clear:left;}
+#cboxContent{position:relative;}
+#cboxLoadedContent{overflow:auto;}
+#cboxTitle{margin:0;}
+#cboxLoadingOverlay, #cboxLoadingGraphic{position:absolute; top:0; left:0; width:100%;}
+#cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow{cursor:pointer;}
+.cboxPhoto{float:left; margin:auto; border:0; display:block;}
+.cboxIframe{width:100%; height:100%; display:block; border:0;}
+
+/* 
+    User Style:
+    Change the following styles to modify the appearance of ColorBox.  They are
+    ordered & tabbed in a way that represents the nesting of the generated HTML.
+*/
+#cboxOverlay{background:#000;}
+#colorbox{}
+
+#cboxTopLeft{width:14px; height:14px; background:url(images/controls.png) no-repeat 0 0;}
+#cboxTopCenter{height:14px; background:url(images/border.png) repeat-x top left;}
+#cboxTopRight{width:14px; height:14px; background:url(images/controls.png) no-repeat -36px 0;}
+#cboxBottomLeft{width:14px; height:43px; background:url(images/controls.png) no-repeat 0 -32px;}
+#cboxBottomCenter{height:43px; background:url(images/border.png) repeat-x bottom left;}
+#cboxBottomRight{width:14px; height:43px; background:url(images/controls.png) no-repeat -36px -32px;}
+#cboxMiddleLeft{width:14px; background:url(images/controls.png) repeat-y -175px 0;}
+#cboxMiddleRight{width:14px; background:url(images/controls.png) repeat-y -211px 0;}
+#cboxContent{background:#fff; overflow:visible;}
+#cboxLoadedContent{margin-bottom:5px;}
+#cboxLoadingOverlay{background:url(images/loading_background.png) no-repeat center center;}
+#cboxLoadingGraphic{background:url(images/loading.gif) no-repeat center center;}
+#cboxTitle{position:absolute; bottom:-25px; left:0; text-align:center; width:100%; font-weight:bold; color:#7C7C7C;}
+#cboxCurrent{position:absolute; bottom:-25px; left:58px; font-weight:bold; color:#7C7C7C;}
+        
+#cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow{position:absolute; bottom:-29px; background:url(images/controls.png) no-repeat 0px 0px; width:23px; height:23px; text-indent:-9999px;}
+#cboxPrevious{left:0px; background-position: -51px -25px;}
+#cboxPrevious.hover{background-position:-51px 0px;}
+#cboxNext{left:27px; background-position:-75px -25px;}
+#cboxNext.hover{background-position:-75px 0px;}
+#cboxClose{right:0; background-position:-100px -25px;}
+#cboxClose.hover{background-position:-100px 0px;}
+        
+.cboxSlideshow_on #cboxSlideshow{background-position:-125px 0px; right:27px;}
+.cboxSlideshow_on #cboxSlideshow.hover{background-position:-150px 0px;}
+.cboxSlideshow_off #cboxSlideshow{background-position:-150px -25px; right:27px;}
+.cboxSlideshow_off #cboxSlideshow.hover{background-position:-125px 0px;}

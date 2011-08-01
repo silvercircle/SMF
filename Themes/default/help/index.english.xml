@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="style.xslt"?>
+<!DOCTYPE smf:helpfile [
+	<!ENTITY copyright "&#169;">
+	<!ENTITY space "&#160;">
+]>
+<!-- Don't translate tags, attributes or entities. -->
+<smf:helpfile subject="index" xml:space="preserve" xmlns:smf="http://www.simplemachines.org/">
+	<!-- The language element should match the language directory in Themes/default/images and is case-sensitive. -->
+	<language>english</language>
+	<visit-simple-machines>Visit Simple Machines!</visit-simple-machines>
+	<title>SMF User Help: Introduction</title>
+	<menu>
+		<help page="here">Introduction</help>
+		<help page="registering">Registering</help>
+		<help page="loginout">Logging&space;In</help>
+		<help page="profile">Profile</help>
+		<help page="posting">Posting</help>
+		<help page="pm">Personal&space;Message</help>
+		<help page="searching">Searching</help>
+	</menu>
+	<intro>
+		<paragraph>So you've arrived at this <link site="http://www.simplemachines.org/">Simple Machines Forum</link> (SMF)! Perhaps you've been looking at the <link ref="board">board index</link> or a screen telling you that you need to register before you can read it and you're wondering what to do next?</paragraph>
+		<paragraph>Well, some forums permit guests to read and post, some permit guests to read only and some are restricted to registered members. We'd recommend <link page="registering">registering</link> at any forum that you see yourself using regularly because many of the most useful features will only become available to you when you do so. Since SMF, however, is such a flexible system that few forums are likely to be identical, we will start by describing four key areas that we'd normally expect to be there for you:</paragraph>
+	</intro>
+	<section id="main">
+		<secheading>The Main Menu</secheading>
+		<paragraph>Supposing you've arrived here as a guest (or have registered but are currently logged out), the main menu (which appears on every page) should normally comprise five or six buttons (or text links):</paragraph>
+		<list>
+			<item><action>Home</action>, which takes you back to the <link ref="board">board index</link>.</item>
+			<item><action>Help</action>, which brings you to this guide.</item>
+			<item><action>Search</action>, which allows you to <link page="searching">search</link> the forums for whatever you're looking for.</item>
+			<item><action>Calendar</action>, which links to the forum <link page="posting" ref="calendar">calendar</link> (if enabled).</item>
+			<item><action>Login</action>, which allows you to <link page="loginout">login</link> if already registered.</item>
+			<item><action>Register</action>, which allows you to <link page="registering">register</link> (or sometimes apply for registration) when you wish to do so.</item>
+		</list>
+		<paragraph>Once you've registered and logged in, however, the main menu should look a little different:</paragraph>
+		<list>
+			<item><action>Home</action> (as before).</item>
+			<item><action>Help</action> (as before).</item>
+			<item><action>Search</action> (as before).</item>
+			<item><action>Profile</action>, which allows you to make changes to your <link page="profile">profile</link> settings.</item>
+			<item><action>Calendar</action> (as before).</item>
+			<item><action>Logout</action>, which allows you to <link page="loginout" ref="logout">logout</link> again if desired.</item>
+		</list>
+		<paragraph>Forum administrators should also note the presence of an additional <action>Admin</action> button.</paragraph>
+	</section>
+	<section id="board">
+		<secheading>The Board Index</secheading>
+		<paragraph>While the board index (forum home page) is packed with all kinds of information and links, the core of the interface (at least in the SMF default theme) normally looks something like this:</paragraph>
+		<board-index-demo>
+			<!-- This data is used to demonstrate the default board index interface. -->
+			<forum-name>Forum Name</forum-name>
+			<category-name>Category Name</category-name>
+			<board-name>Board Name</board-name>
+			<board-description>Board Description</board-description>
+			<post-info>Number of topics and posts in this board</post-info>
+			<last-post>Date, time, subject and author of last post</last-post>
+			<new-posts>New Posts</new-posts>
+			<no-new-posts>No New Posts</no-new-posts>
+			<alt-mark-as-read>Mark ALL messages as read</alt-mark-as-read>
+		</board-index-demo>
+		<list>
+			<item>The <term>forum name</term> links back to the top of the board index.</item>
+			<item>If the <term>category</term> is collapsable (shown by the little arrow symbol), clicking the category name collapses or expands the category as appropriate.</item>
+			<item>The <term>board name</term> links to the <link ref="message">message index</link> for that board.</item>
+			<item>The <term>board description</term> describes the board's content, and may also include links to child boards and/or specify the board's moderator(s).</item>
+			<item>The <icon>New Posts</icon> and <icon>No New Posts</icon> icons in the leftmost column show registered members whether there have been any new posts to the board since they last read it.</item>
+			<item>The <action>Mark as Read</action> button enables registered members to mark all posts in the entire forum as 'read'.</item>
+		</list>
+	</section>
+	<section id="message">
+		<secheading>The Message Index</secheading>
+		<paragraph>Like the board index, the message index interface is quite straightforward when reduced to its essential components:</paragraph>
+		<message-index-demo>
+			<!--
+			This data is used to demonstrate the default message index interface.
+			The following elements are reused from board-index-demo:
+				forum-name, category-name, board-name
+			-->
+			<pages>Pages</pages>
+			<alt-mark-as-read>Mark Topics as Read for this Board</alt-mark-as-read>
+			<notification-confirm>Are you sure you wish to enable notification of new topics for this board?</notification-confirm>
+			<alt-notify>Notify of Replies</alt-notify>
+			<alt-new-topic>Start new topic</alt-new-topic>
+			<alt-new-poll>Post New Poll</alt-new-poll>
+			<subject>Subject</subject>
+			<started-by>Started by</started-by>
+			<replies>Replies</replies>
+			<views>Views</views>
+			<last-post>Last post</last-post>
+			<topic-subject>Topic Subject</topic-subject>
+			<alt-new>New</alt-new>
+			<topic-starter>Topic Starter</topic-starter>
+			<last-poster>Date, time and author of last post</last-poster>
+			<my-normal-post>Topic you have posted in</my-normal-post>
+			<normal-post>Normal Topic</normal-post>
+			<hot-post>Hot Topic (More than 15 Replies)</hot-post>
+			<very-hot-post>Very Hot Topic (More than 25 Replies)</very-hot-post>
+			<normal-post-locked>Locked Topic</normal-post-locked>
+			<normal-post-sticky>Sticky Topic</normal-post-sticky>
+			<normal-poll>Poll</normal-poll>
+			<jump-to>Jump to</jump-to>
+			<destination>Please select a destination</destination>
+			<board-name-2>Another Board</board-name-2>
+			<go>go</go>
+		</message-index-demo>
+		<list>
+			<item>Some forums show the <term>navigation tree</term> at the top in a space-saving horizontal mode.</item>
+			<item>The <term>page numbers</term> link to further pages of the board, and may be accompanied by <action>Go Up</action> and <action>Go Down</action> buttons linking to the top and bottom of the current page.</item>
+			<item>The <action>Mark as Read</action> button enables registered members to mark all posts in this board as 'read'.</item>
+			<item>The <action>Notify</action> button enables registered members to subscribe to email notification of replies to topics in this board.</item>
+			<item>The <action>New Topic</action> and <action>New Poll</action> buttons are for starting new topics and polls, as described in the <link page="posting">posting help</link>.</item>
+			<item>The <sort-by>Subject</sort-by>, <sort-by>Started by</sort-by>, <sort-by>Replies</sort-by>, <sort-by>Views</sort-by> and <sort-by>Last post</sort-by> links enable you to sort the columns by these parameters (with <sort-by>Last post</sort-by> also toggling between descending and ascending order as indicated by the little arrow).</item>
+			<item>The <term>topic icons</term> in the leftmost column are explained by the key below.</item>
+			<item>The <term>post icons</term> in the next column are sometimes used to draw attention to the mood or purpose of the topic.</item>
+			<item>The <term>topic subject</term> links to the start of the <link ref="topic">topic</link>, with extra links for subsequent pages and <action>new</action> buttons to take registered members straight to their first unread post of the topic.</item>
+			<item>Where the <term>topic</term> has been started or last replied to by a registered member, their names link to their respective <link page="profile">profiles</link>.</item>
+			<item>The <action>Jump to</action> menu provides a convenient quick method of navigating the forum.</item>
+		</list>
+	</section>
+	<section id="topic">
+		<secheading>The Topic</secheading>
+		<paragraph>Sometimes referred to as <term>threads</term>, <term>topics</term> are where you find the actual messages:</paragraph>
+		<topic-demo>
+			<!--
+			This data is used to demonstrate the topic interface.
+			The following elements are reused from board-index-demo:
+				forum-name, category-name, board-name
+			The following elements are reused from message-index-demo:
+				topic-subject, alt-notify, jump-to, destination, board-name-2, go
+			-->
+			<alt-reply>Reply</alt-reply>
+			<notification-confirm>Are you sure you wish to enable notification of new replies for this topic?</notification-confirm>
+			<alt-mark-unread>Mark unread</alt-mark-unread>
+			<alt-send-topic>Send this topic</alt-send-topic>
+			<alt-print>Print</alt-print>
+			<author>Author</author>
+			<topic>Topic</topic>
+			<read>Read x times</read>
+			<title-author>View the profile of Author</title-author>
+			<member-group>Member Group</member-group>
+			<post-rank-group>Post Group</post-rank-group>
+			<post-count>Post Count</post-count>
+			<post-date-time>Date and Time of Post</post-date-time>
+			<alt-reply-with-quote>Reply with quote</alt-reply-with-quote>
+			<topic-text>Here is the text of the message, which is ultimately what we're all here for!</topic-text>
+			<alt-smiley>Smiley</alt-smiley>
+			<report-to-mod>Report to moderator</report-to-mod>
+			<logged>Logged</logged>
+			<alt-view-profile>View Profile</alt-view-profile>
+			<alt-email>Email</alt-email>
+			<alt-pm>Personal Message (Offline)</alt-pm>
+		</topic-demo>
+		<list>
+			<item>Some forums show the <term>navigation tree</term> at the top in a space-saving horizontal mode.</item>
+			<item>Some forums may also be configured with <term>previous</term> and <term>next</term> topic links.</item>
+			<item>The <term>page numbers</term> link to further pages of the topic, and may be accompanied by <action>Go Up</action> and <action>Go Down</action> buttons linking to the top and bottom of the current page.</item>
+			<item>The <action>Reply</action> button enables you to <link page="posting" ref="reply">reply</link> to the topic.</item>
+			<item>The <action>Notify</action> button enables registered members to subscribe to email notification of replies to the topic.</item>
+			<item>The <action>Mark Unread</action> button enables registered members to mark the topic as 'unread', which means that it will still be listed as new and can be effectively 'saved for later'. Note that this button changes to <action>Add Poll</action> in the bottom button set for users with permission to add polls to existing topics.</item>
+			<item>The <action>Send Topic</action> button enables registered members to send a link to the topic by email.</item>
+			<item>The <action>Print</action> button creates a simplified, printer-friendly rendering of the page.</item>
+			<item>The <action>author name</action> links to the author's <link page="profile">profile</link></item>
+			<item>The <term>author details</term> in the lefthand column may be accompanied by further personal information.</item>
+			<item>The <action>topic subject</action> links back to the start of the topic.</item>
+			<item>The <action>Quote</action> button enables you to <link page="posting" ref="quote">quote</link> the post.</item>
+			<item>Further <action>Modify</action> and <action>Delete</action> options are normally provided to enable registered members to <link page="posting" ref="modify">edit</link> their own posts.</item>
+			<item><action>Report to moderator</action> enables you to report abusive or wrongly-placed posts to the forum staff.</item>
+			<item><term>Logged</term> indicates that the IP of the author has been logged. The actual IP is only available to board administrators</item>
+			<item>The <action>Jump to</action> menu provides a convenient quick method of navigating the forum.</item>
+		</list>
+	</section>
+	<copyright>
+		Copyright &copyright; 2001-2005 <link site="http://www.lewismedia.com/">Lewis Media</link>. All Rights Reserved.
+	</copyright>
+</smf:helpfile>

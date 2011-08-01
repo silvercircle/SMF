@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="style.xslt"?>
+<!DOCTYPE smf:helpfile [
+	<!ENTITY copyright "&#169;">
+	<!ENTITY space "&#160;">
+	<!ENTITY Uuml "&#220;">
+	<!ENTITY Ouml "&#214;">
+	<!ENTITY Auml "&#196;">
+	<!ENTITY uuml "&#252;">
+	<!ENTITY ouml "&#246;">
+	<!ENTITY auml "&#228;">
+]>
+<!-- Don't translate tags, attributes or entities. -->
+<smf:helpfile subject="registering" xml:space="preserve" xmlns:smf="http://www.simplemachines.org/">
+	<!-- The language element should match the language directory in Themes/default/images and is case-sensitive. -->
+	<language>german</language>
+	<visit-simple-machines>Besuche Simple Machines!</visit-simple-machines>
+	<title>SMF Benutzer Hilfe: Registrieren</title>
+	<menu>
+		<help page="index">&Uuml;bersicht</help>
+		<help page="here">Registrieren</help>
+		<help page="loginout">Ein-/Ausloggen</help>
+		<help page="profile">Profil</help>
+		<help page="posting">Schreiben</help>
+		<help page="pm">Private&space;Mitteilungen</help>
+		<help page="searching">Suchen</help>
+	</menu>
+	<intro>
+		<paragraph>Wenn Sie Ihr SMF Forum installiert haben oder einem anderen SMF Forum beitreten m&ouml;chten, sollten Sie einen Benutzernamen registrieren. Dies erm&ouml;glicht es Ihnen, eine gleichbleibende Identit&auml;t f&uuml;r Ihre Beitr&auml;ge zu nutzen und zu sehen, was Sie schon gelesen haben, egal von wo Sie arbeiten und welchen Computer Sie benutzen. Sie werden in der Lage sein, ein pers&ouml;nliches <link page="profile">Profil</link> zu erstellen und das eingebaute System f&uuml;r <link page="pm">Private Mitteilungen</link> zu benutzen. Ausserdem k&ouml;nnen Sie sich Benachrichtigungen schicken lassen, Ihre Aktivit&auml;ten im Forum kontrollieren und vieles mehr.</paragraph>
+	</intro>
+	<section id="how-to">
+		<secheading>Wie Sie sich registrieren k&ouml;nnen</secheading>
+		<paragraph>Wenn Sie als Gast in einem Forum sind, sollten Sie eine dieser beiden Dinge sehen k&ouml;nnen:</paragraph>
+		<list>
+			<item>Irgendeine Seite des Forums, in diesem Fall sollten Sie den <action>Registrieren</action> Button aus dem <link page="index" ref="main">Hauptmen&uuml;</link>.</item>
+			<item>Ein Login-Bildschirm mit einer Warnung dar&uuml;ber, dass nur registrierte Mitglieder das Forum nutzen k&ouml;nnen. In diesem Fall sollten Sie entweder den dort befindlichen Registrations-Link benutzen, oder den <action>Registrieren</action> Button aus dem <link page="index" ref="main">Hauptmen&uuml;</link>.</item>
+		</list>
+		<register-warning-demo>
+		<!-- This data is used to demonstrate the registration warning box. -->
+			<warning>Warnung!</warning>
+			<warning-text-1>Nur registrierte Mitglieder haben Zugriff auf diesen Bereich.</warning-text-1>
+			<warning-text-2>Bitte einloggen oder </warning-text-2>
+			<warning-text-3>registrieren Sie einen neuen Zugang</warning-text-3>
+			<warning-text-4> mit Forum Name.</warning-text-4>
+		</register-warning-demo>
+	</section>
+	<section id="screen">
+		<secheading>Der Registrierungs Bildschirm</secheading>
+		<!-- This data is used to demonstrate the registration screen. -->
+		<registration-screen-demo>
+			<required>Registrierung - Notwendige Angaben</required>
+			<choose-username>W&auml;hle Benutzername:</choose-username>
+			<caption-username>Wird nur zur Identifizierung von SMF verwendet. Spezialzeichen k&ouml;nnen Sie nach dem Login verwenden, indem Sie den Benutzernamen im Profil &auml;ndern.</caption-username>
+			<email>E-Mail</email>
+			<caption-email>Es muss eine g&uuml;ltige E-Mail Adresse sein.</caption-email>
+			<hide-email>E-Mail Adresse nicht anzeigen?</hide-email>
+			<choose-password>Passwort w&auml;hlen:</choose-password>
+			<verify-password>Passwort wiederholen:</verify-password>
+			<agreement>Hier werden die Nutzungsbedingungen angezeigt, sofern welche vorhanden sind!</agreement>
+			<i-agree>Ich bin einverstanden</i-agree>
+			<register>Registieren</register>
+		</registration-screen-demo>
+		<paragraph>Wenn Sie den Registrierungs Bildschirm sehen, m&uuml;ssen Sie einen <term>Benutzernamen</term>, eine <term>E-Mail Adresse</term> und ein <term>Passwort</term> eingeben und k&ouml;nnten die M&ouml;glichkeit haben, Ihre E-Mail Adresse nicht anzeigen zu lassen. Da Sie in den meisten Foren einer Nutzungsbedingung zustimmen m&uuml;sssen um sich registrieren zu k&ouml;nnen, lesen Sie die Bedingungen und klicken dann <check>Ich bin einverstanden</check> bevor Sie den <action>Registrieren</action> Button bet&auml;tigen. Was nun passiert h&auml;ngt, von den Einstellungen des Forums ab. Falls Sie einen <link page="loginout" ref="screen">Login Bildschirm</link> sehen sind Sie registriert und k&ouml;nnen sich nun Einloggen. Ist dies nicht der Fall, bestehen zwei weitere M&ouml;glichkeiten:</paragraph>
+		<list>
+			<item>Wenn die Registrierung so eingestellt ist, dass eine E-Mail Aktivierung n&ouml;tig ist, dann sollte Ihnen dies nun auf dem Bildschirm mitgeteilt werden und Sie sollten eine E-Mail mit weiteren Anweisungen erhalten haben.</item>
+			<item>Wenn die Registrierung so eingestellt ist, dass eine Genehmigung von einem Forum Administrator n&ouml;tig ist, dann sollte Ihnen dies nun auf dem Bildschirm mitgeteilt werden und Sie sollten eine Mitteilung per E-Mail erhalten haben. Sp&auml;ter werden Sie eine E-Mail erhalten, in der Ihnen mitgeteilt wird, ob Ihre Registrierung genehmigt wurde oder nicht.</item>
+		</list>
+	</section>
+	<copyright>
+		Copyright &copyright; 2001-2005 <link site="http://www.lewismedia.com/">Lewis Media</link>. Alle Rechte vorbehalten.
+	</copyright>
+</smf:helpfile>

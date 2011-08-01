@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="style.xslt"?>
+<!DOCTYPE smf:helpfile [
+	<!ENTITY copyright "&#169;">
+	<!ENTITY space "&#160;">
+]>
+<!-- Don't translate tags, attributes or entities. -->
+<smf:helpfile subject="profile" xml:space="preserve" xmlns:smf="http://www.simplemachines.org/">
+	<!-- The language element should match the language directory in Themes/default/images and is case-sensitive. -->
+	<language>english</language>
+	<visit-simple-machines>Visit Simple Machines!</visit-simple-machines>
+	<title>SMF User Help: Profile</title>
+	<menu>
+		<help page="index">Introduction</help>
+		<help page="registering">Registering</help>
+		<help page="loginout">Logging&space;In</help>
+		<help page="here">Profile</help>
+		<help page="posting">Posting</help>
+		<help page="pm">Personal&space;Message</help>
+		<help page="searching">Searching</help>
+	</menu>
+	<intro>
+		<paragraph>The profile screen in the default theme normally consists of a single main pane, with an additional menu to the left to lead you through the editing options for your own profile. Please note that, because an SMF forum may be customized extensively by its administrator(s), the features and user permissions described here are typical rather than definitive.</paragraph>
+		<paragraph>To edit your own profile, start by selecting <action>Profile</action> from the <link page="index" ref="main">main menu</link> or clicking your own username. You can also view (but not edit) other members' profiles by clicking on their names.</paragraph>
+	</intro>
+	<section id="all">
+		<secheading>Information Normally Available to all Members</secheading>
+		<subsection id="info-all">
+			<subheading>Profile Info</subheading>
+			<!-- This data is used to demonstrate the profile summary screen. -->
+			<profile-all-demo>
+				<username>Username</username>
+				<login-name>Member's login name</login-name>
+				<picture-text>Picture/Text</picture-text>
+				<name>Name</name>
+				<screen-name>Member's screen name</screen-name>
+				<posts>Posts</posts>
+				<post-count>Member's number of posts</post-count>
+				<position>Position</position>
+				<position-user>Member's member group or post group</position-user>
+				<date-reg>Date Registered</date-reg>
+				<date-time-reg>Date and time of registration</date-time-reg>
+				<last-active>Last Active</last-active>
+				<date-time-active>Date and time last active</date-time-active>
+				<!-- ICQ, AIM, MSN, YIM not translated. -->
+				<email>Email</email>
+				<email-user>member@their.address</email-user>
+				<website>Website</website>
+				<current-status>Current Status</current-status>
+				<personal-message>Personal Message</personal-message>
+				<online>Online</online>
+				<gender>Gender</gender>
+				<age>Age</age>
+				<n-a>N/A</n-a>
+				<location>Location</location>
+				<local-time>Local Time</local-time>
+				<local-time-user>Current date and time in member's time zone</local-time-user>
+				<language>Language</language>
+				<signature>Signature</signature>
+				<additional-info>Additional Information</additional-info>
+				<send-pm>Send this member a personal message.</send-pm>
+				<show-posts>Show the last posts of this person.</show-posts>
+				<show-stats>Show general statistics for this member.</show-stats>
+			</profile-all-demo>
+			<list>
+				<item>This <screen>Summary</screen> screen is not only there to tell you about others, but also the first screen that you see when <link ref="owners">editing your own profile</link>.</item>
+				<item>Members may choose to hide their <term>email address</term> and/or <term>online status</term>.</item>
+				<item>The fields left empty here are not filled in by default, so you should <link ref="owners">edit your profile</link> if you wish to display this information.</item>
+				<item>You can send the profile owner a <link page="pm">Personal Message</link> by clicking the <term>Current Status</term> <icon>On/Offline Icon</icon> or following the link from <term>Additional Information</term> below.</item>
+				<item><action>Show the last posts of this person</action> links to a complete paginated listing of the member's posts.</item>
+				<item><action>Show general statistics for this member</action> links to a screen of statistics about the member's time online and posting activity.</item>
+			</list>
+		</subsection>
+	</section>
+	<section id="owners">
+		<secheading>Settings Normally Available to Profile Owners</secheading>
+		<paragraph>While the <screen>Summary</screen> screen is the same as the one shown above and the <action>Show Posts</action> and <action>Show Stats</action> links are effectively duplicates, profile owners are also provided with the tools to customize their own profiles:</paragraph>
+		<subsection id="edit-owners">
+			<subheading>Modify Profile</subheading>
+			<list>
+				<item><screen>Account Related Settings</screen> enables you to make changes to your <term>display name</term> (your <term>login</term> or <term>username</term> can only be changed by an administrator), preferred <term>language</term> (if the forum administrators have installed alternative language packs), <term>email</term> and <term>password</term> settings.</item>
+				<item><screen>Forum Profile Information</screen> enables you to enter optional personal details such as <term>gender</term>, <term>birthdate</term>, <term>location</term>, <term>website</term> and <term>instant messenger</term> contact information. It's also where you go to enter your own <term>personal text</term> and <term>signature</term> and select an <term>avatar</term> (personal picture) from a list (if provided by the forum administrators) or link to one of your own on the web.</item>
+				<item><screen>Look and Layout Preferences</screen> enables you to select your preferred <term>theme</term> (forum skin), time zone and format and other personal choices for <term>layout settings</term>. Note that the currently selected option in the menu pane is highlighted in bold type:</item>
+			</list>
+		<look-and-layout-demo>
+			<!-- This data is used to demonstrate the profile menu and look and layout preferences screen. -->
+			<profile-info>Profile Info</profile-info>
+			<summary>Summary</summary>
+			<show-stats>Show Stats</show-stats>
+			<show-posts>Show Posts</show-posts>
+			<modify-profile>Modify Profile</modify-profile>
+			<edit-profile>Edit Profile</edit-profile>
+			<account-settings>Account Related Settings</account-settings>
+			<forum-profile>Forum Profile Information</forum-profile>
+			<look-and-layout>Look and Layout Preferences</look-and-layout>
+			<notification>Notifications and Email</notification>
+			<pm-options>Personal Message Options</pm-options>
+			<actions>Actions</actions>
+			<delete-account>Delete this account</delete-account>
+			<caption-screen>This section allows you to customize the look and layout of the forum.</caption-screen>
+			<current-theme>Current Theme</current-theme>
+			<board-default>Forum or Board Default</board-default>
+			<change>change</change>
+			<time-format>Time Format</time-format>
+			<help>Help</help>
+			<caption-date>The format here will be used to show dates throughout this forum.</caption-date>
+			<date-option-selected>Forum Default</date-option-selected>
+			<date-option-1>Month Day, Year, HH:MM:SS a/pm</date-option-1>
+			<date-option-2>Month Day, Year, HH:MM:SS (army time.)</date-option-2>
+			<date-option-3>YYYY-MM-DD, HH:MM:SS</date-option-3>
+			<date-option-4>DD Month YYYY, HH:MM:SS</date-option-4>
+			<date-option-5>DD-MM-YYYY, HH:MM:SS</date-option-5>
+			<time-offset>Time Offset</time-offset>
+			<number-hours>Number of hours to +/- to make displayed time equal to your local time.</number-hours>
+			<current-forum>Current forum time should be displayed here.</current-forum>
+			<show-descriptions>Show board descriptions inside boards.</show-descriptions>
+			<show-child>Show child boards on every page inside boards, not just the first.</show-child>
+			<no-avatars>Don't show other user's avatars.</no-avatars>
+			<no-signatures>Don't show other user's signatures.</no-signatures>
+			<return-to-topics>Return to topics after posting by default.</return-to-topics>
+			<recent-posts>Show most recent posts at the top.</recent-posts>
+			<recent-pms>Show most recent personal messages at top.</recent-pms>
+			<quick-reply>Use quick reply on topic display</quick-reply>
+			<not-at-all>don't show at all</not-at-all>
+			<off-default>show, off by default</off-default>
+			<on-default>show, on by default</on-default>
+			<quick-mod>Show quick-moderation on message index as</quick-mod>
+			<no-quick-mod>don't show</no-quick-mod>
+			<check-quick-mod>checkboxes</check-quick-mod>
+			<icon-quick-mod>icons</icon-quick-mod>
+			<first-day-of-week>First day of the week on the calendar:</first-day-of-week>
+			<sunday>Sunday</sunday>
+			<monday>Monday</monday>
+			<change-profile>Change profile</change-profile>
+		</look-and-layout-demo>
+			<list>
+				<item><screen>Notifications and Email</screen> enables you to select personal preferences for <term>notifications</term> (emails about new topics/replies) and lists any notifications that you have set up.</item>
+				<item><screen>Personal Message Options</screen> enables you to set up an <term>ignore list</term> (blacklist) for <link page="pm">Personal Messages</link>, to request <term>notification</term> of new PMs by email and to <term>save copies</term> of your outgoing PMs by default.</item>
+			</list>
+		</subsection>
+		<subsection id="actions-owners">
+			<subheading>Actions</subheading>
+			<list>
+				<item><screen>Delete this account</screen> does exactly what it says! Yes, there's a <term>confirmation screen</term>, but it really does <term>delete your own account</term>, so be careful...</item>
+			</list>
+		</subsection>
+	</section>
+	<section id="admins">
+		<secheading>Settings Normally Restricted to Admins</secheading>
+		<paragraph>As well as being able to view/edit any of the details above from other members' profiles, some further options are normally visible to (and executable by) admins only:</paragraph>
+		<profile-xslt-div-1>
+			<profile-admin-demo>
+			<!--
+			This data is used to demonstrate the profile menu for admins.
+			The following elements are reused from look-and-layout-demo:
+				profile-info, summary, show-stats, show-posts
+				modify-profile, account-settings, forum-profile, look-and-layout, notification, pm-options
+				actions, delete-account
+			-->
+				<track-user>Track User</track-user>
+				<track-ip>Track IP</track-ip>
+				<show-permissions>Show Permissions</show-permissions>
+				<ban-user>Ban this user</ban-user>
+			</profile-admin-demo>
+			<profile-xslt-div-2>
+				<subsection id="info-admins">
+					<subheading>Profile Info</subheading>
+					<list>
+						<item><screen>Track User</screen> provides a list of <term>IP numbers</term> used by the member, other members who might be in the same <term>IP range</term> and <term>error messages</term> generated/experienced by the member.</item>
+						<item><screen>Track IP</screen> provides tools for tracking <term>members</term>, <term>messages</term> and <term>errors</term> from any specified <term>IP range</term>.</item>
+						<item><screen>Show Permissions</screen> lists the <term>board permissions</term> that have been granted to the member and who gave them.</item>
+					</list>
+				</subsection>
+				<subsection id="edit-admins">
+					<subheading>Modify Profile</subheading>
+					<list>
+						<item><screen>Account Related Settings</screen> is basically the same screen as shown to profile owners, but with the additional option to assign members to <term>member groups</term>.</item>
+						<item><screen>Forum Profile Information</screen> is basically the same screen as shown to profile owners, but with the additional option to specify <term>custom titles</term> for members.</item>
+					</list>
+				</subsection>
+				<subsection id="actions-admins">
+					<subheading>Actions</subheading>
+					<list>
+						<item><screen>Ban this user</screen> provides tools for <term>banning</term> users, configuring the <term>level</term> of the ban and maintaining a <term>ban list</term> noting the details of any bans in force.</item>
+						<item><screen>Delete this account</screen> is similar to the screen of the same name available to all members, but the <term>confirmation question</term> is different when it's not your own account that's about to be deleted.</item>
+					</list>
+				</subsection>
+			</profile-xslt-div-2>
+		</profile-xslt-div-1>
+	</section>
+	<copyright>
+		Copyright &copyright; 2001-2005 <link site="http://www.lewismedia.com/">Lewis Media</link>. All Rights Reserved.
+	</copyright>
+</smf:helpfile>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="style.xslt"?>
+<!DOCTYPE smf:helpfile [
+	<!ENTITY copyright "&#169;">
+	<!ENTITY space "&#160;">
+]>
+<!-- Don't translate tags, attributes or entities. -->
+<smf:helpfile subject="pm" xml:space="preserve" xmlns:smf="http://www.simplemachines.org/">
+	<!-- The language element should match the language directory in Themes/default/images and is case-sensitive. -->
+	<language>english</language>
+	<visit-simple-machines>Visit Simple Machines!</visit-simple-machines>
+	<title>SMF User Help: Personal Message</title>
+	<menu>
+		<help page="index">Introduction</help>
+		<help page="registering">Registering</help>
+		<help page="loginout">Logging&space;In</help>
+		<help page="profile">Profile</help>
+		<help page="posting">Posting</help>
+		<help page="here">Personal&space;Message</help>
+		<help page="searching">Searching</help>
+	</menu>
+	<intro>
+		<paragraph>SMF is about community and communication. And there are many ways to communicate, such as posting to the boards, personal messaging, email, ICQ, AIM and YIM. But SMF's own personal message system, as available to registered members in most forums, is sometimes a more suitable option than any of these.</paragraph>
+	</intro>
+	<section id="pm">
+		<secheading>Personal Messaging</secheading>
+		<subsection id="description">
+			<subheading>Description</subheading>
+				<paragraph>While email is a good way to correspond directly with members, it also has several drawbacks for forum purposes: you must open your email application to write and send the message, the recipient must open his/her email application and check his/her mail, your message will be mixed in with all the other mail and it can sometimes take several minutes to an hour for mail to reach the recipient.</paragraph>
+				<paragraph>As an alternative to email, SMF offers a faster, more private method. Personal messaging on the boards provides instantaneous delivery to the recipient's private mailbox. The mail is sent and received entirely through SMF, so neither you nor the recipient have to open another program or leave SMF. Personal messaging also offers both the sender and the recipient greater privacy because no-one's real email address is revealed. Personal messages show only the handle and name of both parties.</paragraph>
+				<paragraph>If a recipient isn't online, personal messages wait in the member's PM box until the next time he/she logs in and reads and/or deletes them. SMF Personal Messages is a self-contained, highly private email system.</paragraph>
+		</subsection>
+		<subsection id="reading">
+			<subheading>Reading Your Messages</subheading>
+				<paragraph>To read your personal messages, you need to be <link page="loginout">logged in</link>, then follow the link that says something like 'Hey, [username], you have <link ref="interface">x messages</link>, x are new'.</paragraph>
+		</subsection>
+	</section>
+	<section id="interface">
+		<secheading>The PM Interface</secheading>
+			<paragraph>The PM interface is similar in operation to that of the <link page="index" ref="message">message index</link>. While we are showing the inbox interface here, the outbox works in much the same way:</paragraph>
+			<pm-demo>
+				<!-- This data is used to demonstrate the personal message interface -->
+				<forum-name>Forum Name</forum-name>
+				<personal-messages>Personal Messages</personal-messages>
+				<inbox>Inbox</inbox>
+				<alt-delete>Delete all messages in your Inbox</alt-delete>
+				<alt-outbox>Outbox</alt-outbox>
+				<alt-new-message>New Message</alt-new-message>
+				<alt-reload>Check for new messages</alt-reload>
+				<date>Date</date>
+				<subject>Subject</subject>
+				<from>From</from>
+				<date-time>Date and time of message</date-time>
+				<member>Another Member</member>
+				<about>Message Subject</about>
+				<delete>Delete Selected</delete>
+				<pages>Pages</pages>
+			</pm-demo>
+			<list>
+				<item>Some forums show the <term>navigation tree</term> at the top in a space-saving horizontal mode.</item>
+				<item>The main <action>Delete</action> button deletes all messages in your inbox (or outbox if open). Note that the checkbox and lower <action>Delete</action> button also allow you to delete selected messages, with the top checkbox selecting all.</item>
+				<item>The <action>Outbox</action> button toggles to your outbox, where it obviously becomes an <action>Inbox</action> button.</item>
+				<item>The <action>New Message</action> button enables you to start a new message, which is similar to <link page="posting" ref="newtopic">starting a new topic</link> but adds 'To:' and 'Bcc:' (blind carbon copy) fields and the option to save to your outbox.</item>
+				<item>The <action>Reload</action> button checks for new messages by refreshing the page.</item>
+				<item>The <sort-by>Date</sort-by>, <sort-by>Subject</sort-by>, and <sort-by>From</sort-by> links enable you to sort the columns by these parameters (with <sort-by>Date</sort-by> also toggling between descending and ascending order as indicated by the little arrow).</item>
+				<item>The main subject title links to the start of the message, which will be further down the same page.</item>
+				<item>The page numbers link to further pages of messages as applicable.</item>
+			</list>
+		<subsection id="starting">
+			<subheading>Starting or Replying to a Message</subheading>
+				<paragraph>There are actually several different ways to start a new personal message, but all require you to be <link page="loginout">logged in</link>:</paragraph>
+			<list>
+				<item>You can follow the link that says something like 'Hey, [username], you have <link ref="interface">x messages</link>, x are new', then click the <action>New Message</action> button in your inbox.</item>
+				<item>You can click another member's name, followed by <action>Send this member a personal message</action> from his/her <link page="profile" ref="info-all">profile</link> summary screen.</item>
+				<item>You can start a new message direct by clicking the <icon>IM on/offline</icon> icon from the user info accompanying all of his/her posts.</item>
+				<item>You can start a new message direct by clicking the <icon>PM on/offline</icon> icon from the <term>Current Status</term> in his/her <link page="profile" ref="info-all">profile</link> summary screen. (This icon/link is often duplicated in the user info described above.) </item>
+				<item>Replying to a message is very similar to <link page="posting" ref="reply">replying to a topic</link>.</item>
+			</list>
+		</subsection>
+	</section>
+	<copyright>
+		Copyright &copyright; 2001-2005 <link site="http://www.lewismedia.com/">Lewis Media</link>. All Rights Reserved.
+	</copyright>
+</smf:helpfile>

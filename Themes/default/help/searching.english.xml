@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="style.xslt"?>
+<!DOCTYPE smf:helpfile [
+	<!ENTITY copyright "&#169;">
+	<!ENTITY space "&#160;">
+]>
+<!-- Don't translate tags, attributes or entities. -->
+<smf:helpfile subject="searching" xml:space="preserve" xmlns:smf="http://www.simplemachines.org/">
+	<!-- The language element should match the language directory in Themes/default/images and is case-sensitive. -->
+	<language>english</language>
+	<visit-simple-machines>Visit Simple Machines!</visit-simple-machines>
+	<title>SMF User Help: Searching</title>
+	<menu>
+		<help page="index">Introduction</help>
+		<help page="registering">Registering</help>
+		<help page="loginout">Logging&space;In</help>
+		<help page="profile">Profile</help>
+		<help page="posting">Posting</help>
+		<help page="pm">Personal&space;Message</help>
+		<help page="here">Searching</help>
+	</menu>
+	<intro>
+		<paragraph>While SMF naturally incorporates a powerful search engine, knowing how to use it is not surprisingly the key to returning successful results!</paragraph>
+	</intro>
+	<section id="starting">
+		<secheading>Starting a Search</secheading>
+		<paragraph>Assuming the forum is running the SMF default theme (or a derivative of it), there should be both a simple <field>Search</field> field (partnered by an <action>Advanced search</action> text link) in the collapsable top section and a <action>Search</action> option in the <link page="index" ref="main">main menu</link>. If not, the main menu <action>Search</action> option should still lead straight to the advanced search screen.</paragraph>
+	</section>
+	<section id="syntax">
+		<secheading>Syntax</secheading>
+		<paragraph>While you can just type (and search for) any combination of characters, you should consider using quotes<!-- and/or wildcards --> to make your search really work for you:</paragraph>
+		<subsection id="quotes">
+			<subheading>Quote Marks</subheading>
+			<paragraph>To put this in a nutshell, searching for <strong>simple machines forum</strong> will return any or all of these three words, but enclosing the search string in <emphasis>double</emphasis> quote marks (ie <strong>"simple machines forum"</strong>) will return only the entire phrase.</paragraph>
+		</subsection>
+<!--
+		<subsection id="wild">
+			<subheading>Wildcards</subheading>
+			<paragraph>To be equally brief, searching for <strong>machines</strong> will return only that exact word, but searching for <strong>mach*</strong> will return 'machine', 'machines' and any other <emphasis>word</emphasis> beginning with 'mach'. Likewise <strong>*ines</strong> will return both 'machines' and 'magazines', and <strong>*chin*</strong> will return 'machines' and 'caching' but <emphasis>not</emphasis> 'chin' or 'china'.</paragraph>
+		</subsection>
+-->
+	</section>
+	<section id="searching">
+		<secheading>Simple or Advanced?</secheading>
+		<subsection id="simple">
+			<subheading>Simple Search</subheading>
+				<paragraph>To use the simple search (if enabled), the basic syntax outlined above is all you really need to know. But you might also like to know that this tool searches the entire forum for any or all of what you specify that's been posted during the last 9999 days (which is more than 27 years)! So, to take more control of your search, you should use the advanced search feature.</paragraph>
+		</subsection>
+		<subsection id="advanced">
+			<subheading>Advanced Search</subheading>
+				<paragraph>Although the advanced search screen might initially seem a little intimidating if a forum has many boards and child boards, it's surprisingly straightforward when reduced to its basic components:</paragraph>
+			<search-demo>
+				<!-- This data is used to demonstrate the advanced search screen. -->
+				<forum-name>Forum Name</forum-name>
+				<search>Search</search>
+				<parameters>Set Search Parameters</parameters>
+				<search-for>Search for</search-for>
+				<match-all>Match all words</match-all>
+				<match-any>Match any words</match-any>
+				<by-user>by user</by-user>
+				<options>Options</options>
+				<age>Message age</age>
+				<messages>Show results as messages</messages>
+				<subjects-only>Topic subjects only</subjects-only>
+				<between>Between </between>
+				<and> and </and>
+				<days> days</days>
+				<search-order>Search order</search-order>
+				<relevant-first>Most relevant results first</relevant-first>
+				<big-first>Largest topics first</big-first>
+				<small-first>Smallest topics first</small-first>
+				<recent-first>Most recent topics first</recent-first>
+				<oldest-first>Oldest topics first</oldest-first>
+				<choose>Choose a board to search in, or search all</choose>
+				<category>Category name</category>
+				<board-name>Board Name</board-name>
+				<another-board>Another Board</another-board>
+				<check-all>Check all</check-all>
+			</search-demo>
+			<list>
+				<item>Some forums show the <term>navigation tree</term> at the top in a space-saving horizontal mode.</item>
+				<item>Despite initial appearances, there are really <emphasis>three</emphasis> options for how to search, with <option>Match all words</option> and <option>Match any words</option> being available from the drop-down, and <term>"Match as phrase"</term><!-- and <term>*wildcards</term> --> still being available as <link ref="syntax">described</link> above.</item>
+				<item>The default * in the <field>by user</field> field is essentially a wildcard matching any poster. Please note that, while you can replace this with any <emphasis>single</emphasis> username for a more specific search, it's not currently possible to search for posts by multiple users except as that single wildcard.</item>
+				<item><check>Show results as messages</check> returns the full message containing the search string (with a reply option) instead of the usual linked excerpt, but will naturally result in much larger results pages which might be significant if you are searching for a popular word or phrase.</item>
+				<item><field>Message age</field> sets the minimum and maximum ages of posts to search.</item>
+				<item><check>Choose a board to search in</check> provides you with another tool to narrow the scope of the search, with the default being 'all' (the whole forum or, more properly, all the boards to which you have read access).</item>
+				<item>The <action>Search</action> button not surprisingly sets the whole thing in motion, but hitting 'Enter' direct from any of the search fields is sometimes more convenient.</item>
+			</list>
+		</subsection>
+	</section>
+	<copyright>
+		Copyright &copyright; 2001-2005 <link site="http://www.lewismedia.com/">Lewis Media</link>. All Rights Reserved.
+	</copyright>
+</smf:helpfile>

@@ -1,0 +1,84 @@
+body, td
+{
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 12px;
+}
+body
+{
+	margin: 20px;
+	line-height: 1.5;
+}
+h1, h2, h3, h4, h5, h6
+{
+	font-family: arial, helvetica, sans-serif;
+}
+h1, h2
+{
+	font-size: 18px;
+	margin-bottom: 0.5em;
+}
+h3, h4, h5, h6
+{
+	font-size: 16px;
+	margin: 0;
+}
+p
+{
+	margin: 0 0 1.5em 0;
+}
+a:link, a:visited, a:active, a:hover
+{
+	color: #0000cc;
+	background-color : transparent;
+}
+.board, .board:link
+{
+	color: #000000;
+	text-decoration: underline;
+}
+.board:visited, .board:hover
+{
+	color: #323232;
+	text-decoration: underline;
+}
+div.footer
+{
+	text-align: center;
+	color: #6f6f6f;
+	padding: 3pt;
+}
+.smalltext
+{
+	font-size: 10px;
+}
+#menu
+{
+	line-height: 1;
+}
+#menu p
+{
+	margin: 0 0 1em 0;
+	line-height: 2;
+}
+table#reference1, table#reference2
+{
+	border: 1px solid #cccccc;
+}
+table#reference1 td, table#reference2 td
+{
+	vertical-align: top;
+	background-color: #efefef;
+	border: 1px solid #cccccc;
+}
+th
+{
+	color: white;
+	background-color: #6b8eae;
+	border: 1px solid #6b8eae;
+	font-weight: bold;
+	text-align: left;
+}
+ol.la
+{
+	list-style-type: lower-alpha;
+}

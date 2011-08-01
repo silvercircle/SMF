@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="style.xslt"?>
+<!DOCTYPE smf:helpfile [
+	<!ENTITY copyright "&#169;">
+	<!ENTITY space "&#160;">
+]>
+<!-- Don't translate tags, attributes or entities. -->
+<smf:helpfile subject="loginout" xml:space="preserve" xmlns:smf="http://www.simplemachines.org/">
+	<!-- The language element should match the language directory in Themes/default/images and is case-sensitive. -->
+	<language>english</language>
+	<visit-simple-machines>Visit Simple Machines!</visit-simple-machines>
+	<title>SMF User Help: Logging In and Out</title>
+	<menu>
+		<help page="index">Introduction</help>
+		<help page="registering">Registering</help>
+		<help page="here">Logging&space;In</help>
+		<help page="profile">Profile</help>
+		<help page="posting">Posting</help>
+		<help page="pm">Personal&space;Message</help>
+		<help page="searching">Searching</help>
+	</menu>
+	<intro>
+		<paragraph>Once you have completed the <link page="registering">registration</link> process, you will be able to login to the site for the first time. After that, you can choose whether to stay logged in indefinitely or logout at the end of your visit.</paragraph>
+	</intro>
+	<section id="login">
+		<secheading>Logging In</secheading>
+		<paragraph>So you might be newly registered or you might simply have been logged out from a previous visit, but there's normally a choice between the login screen and the quick login in either case.</paragraph>
+		<subsection id="screen">
+			<subheading>The Login Screen</subheading>
+			<paragraph>Since this screen (accessed from the <action>Login</action> option of the <link page="index" ref="main">main menu</link>) is not only where you'll normally be taken on completing registration but also the first thing you'll see in any 'members only' forum, we will describe it first:</paragraph>
+			<login-screen-demo>
+				<!-- This data is used to demonstrate the standard login screen. -->
+				<login>Login</login>
+				<username>Username</username>
+				<password>Password</password>
+				<minutes>Minutes to stay logged in</minutes>
+				<always>Always stay logged in</always>
+				<forgot>Forgot your password</forgot>
+			</login-screen-demo>
+			<paragraph>While the <field>Username</field> and <field>Password</field> fields should be self-explanatory, <check>Minutes to stay logged in</check> simply means the number of minutes the cookie that keeps you logged in will last before expiring and requiring you to login again. So it's not advisable to enter a long time here if you share a computer and are likely to forget to logout, but you might prefer to check <check>Always stay logged in</check> if no-one else has access to your computer.</paragraph>
+		</subsection>
+		<subsection id="quick">
+			<subheading>The Quick Login</subheading>
+			<paragraph>Although many forums also have a quick login box to allow you to login direct from any screen, its position on the page may vary considerably from forum to forum. In the SMF default theme, for example, it's in the collapsable section at the top, whereas it's more likely to be at the bottom in themes based on the older YaBB SE forum. If you can't see it and it hasn't simply been collapsed, it's either not enabled at all (in which case you should still be able to access the login screen from the <link page="index" ref="main">main menu</link>) or you're already logged in (in which case the main menu should include a <action>Logout</action> rather than <action>Login</action> link!).</paragraph>
+			<quick-login-demo>
+				<!-- This data used to demonstrate the quick login box. -->
+				<hour>1 Hour</hour>
+				<day>1 Day</day>
+				<week>1 Week</week>
+				<month>1 Month</month>
+				<forever>Forever</forever>
+				<caption>Login with username, password and session length</caption>
+			</quick-login-demo>
+			<paragraph>To use the quick login box, enter your username and password, select your session length from the drop-down menu and click <action>Login</action>. Please note that <option>Forever</option>, like <check>Always stay logged in</check>, simply means that the computer should remember you until you next choose to logout, and not that you actually need to be online all of that time!</paragraph>
+		</subsection>
+	</section>
+	<section id="logout">
+		<secheading>Logging Out</secheading>
+		<paragraph>When you have finished browsing the forum, you may decide to logout. Perhaps you share a workstation with someone else, in which case leaving yourself logged in would not be a good idea. So select the <action>Logout</action> option from the <link page="index" ref="main">main menu</link> and the forum should log you out, turning you into an instant guest, clearing your name from the list of users online and safeguarding your forum identity until you choose to login again.</paragraph>
+	</section>
+	<section id="reminder">
+		<secheading>Password Reminder</secheading>
+		<paragraph>If you're trying to login to the forum but have forgetten or lost your password, you can retrieve it with the lost password tool by following the <action>Forgot your password?</action> link from the <link ref="screen">login</link> screen.</paragraph>
+		<password-reminder-demo>
+			<!-- This data is used to demonstrate the password reminder screen. -->
+			<password-reminder>Password reminder</password-reminder>
+			<username-email>Username/email</username-email>
+			<send>Send</send>
+			<user>by User</user>
+			<email>by Email</email>
+			<question>Ask me my question</question>
+			<help-text>You can't retrieve your password, but you can set a new one by following a link sent to you by email.  You also have the option of setting a new password by answering your secret question.</help-text>
+		</password-reminder-demo>
+		<paragraph>You can enter either your username or your email address so long as you check the appropriate option, then click the <action>Send</action> button to send yourself an email containing a link to reset your password. It's also possible to avoid the email altogether if you've set yourself a secret question and answer in your profile, but please beware of questions that anyone could answer or guess (like 'what is the first color of the rainbow?', which would be a very bad choice)!</paragraph>
+	</section>
+	<copyright>
+		Copyright &copyright; 2001-2005 <link site="http://www.lewismedia.com/">Lewis Media</link>. All Rights Reserved.
+	</copyright>
+</smf:helpfile>

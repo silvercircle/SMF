@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Version: 1.0; help/loginout-->
+<head>
+	<meta name="generator" content="HTML Tidy for Windows (vers 1st June 2004), see www.w3.org" />
+	<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<script language="JavaScript" type="text/javascript" src="../script.js">
+</script>
+<script language="JavaScript" type="text/javascript">
+//<![CDATA[
+														var smf_theme_url = "..";
+														var smf_images_url = "../images";
+//]]>
+</script>
+	<title>SMF Benutzer Hilfe: Ein- und Ausloggen</title>
+	<link type="text/css" rel="stylesheet" href="../style.css" />
+	<link type="text/css" rel="stylesheet" href="help.css" />
+</head>
+<body>
+	<table summary="two simple cells for layout purposes" width="100%">
+		<tr>
+			<td width="1%"><a href="http://www.simplemachines.org/"><img src="../images/helplogo.jpg" alt="Besuche Simple Machines!" title="Besuche Simple Machines!" border="0" /></a></td>
+			<td valign="top">
+				<a href="http://www.simplemachines.org/"><img src="../images/smflogo.gif" align="right" alt="Besuche Simple Machines!" title="Besuche Simple Machines!" border="0" /></a>
+				<h1 style="margin-top: 12px;">SMF Benutzer Hilfe: Ein- und Ausloggen</h1><br clear="right" />
+				<hr />
+				<p><a href="index.german.html">&Uuml;bersicht</a> &bull; <a href="registering.german.html">Registrieren</a> &bull; <strong>Ein-/Ausloggen</strong> &bull; <a href="profile.german.html">Profil</a> &bull; <a href="posting.german.html">Schreiben</a> &bull; <a href="pm.german.html">Private&nbsp;Mitteilungen</a> &bull; <a href="searching.german.html">Suchen</a></p>
+				<hr />
+			</td>
+		</tr>
+	</table>
+	<p>Sobald Sie sich <a href="registering.german.html">registriert</a> haben, k&ouml;nnen Sie sich zum ersten Mal in das Forum einloggen. Sp&auml;ter k&ouml;nnen Sie dann w&auml;hlen, ob Sie sich am Ende Ihres Besuches ausloggen oder auf unbestimmte Zeit eingeloggt bleiben m&ouml;chten.</p>
+	<ol>
+		<li>
+			<a href="#login">Einloggen</a>
+			<ol class="la">
+				<li><a href="#screen">Der Login Bildschirm</a></li>
+				<li><a href="#quick">Die Schnell-Login Option</a></li>
+			</ol>
+		</li>
+		<li><a href="#logout">Ausloggen</a></li>
+		<li><a href="#reminder">Passwort Erinnerung</a></li>
+	</ol>
+	<h2 id="login">Einloggen</h2>
+	<p>Ob Sie sich neu registriert haben oder nach einem vorherigen Besuch ausgeloggt sind, es gibt normalerweise immer zwei M&ouml;glichkeiten, wie Sie sich einloggen k&ouml;nnen: den Login Bildschirm und die Schnell-Login Option.</p>
+	<h3 id="screen">Der Login Bildschirm</h3>
+	<p>Da dieser Bildschirm (erreichbar durch klicken des <strong>Login</strong> Button im <a href="index.german.html#main">Hauptmen&uuml;</a>) nicht nur der Bildschirm ist, den Sie nach dem Registrieren als erstes sehen sollten, sondern auch in 'nur f&uuml;r Mitglieder' Foren als erstes angezeigt wird, wird er hier auch als erstes beschrieben:</p>
+	<form name="frmLogin" action="loginout.german.html" method="post" style="margin-top: 4ex;" id="frmLogin">
+		<table summary="SMF layout" width="400" cellspacing="0" cellpadding="4" class="tborder" align="center">
+			<tr class="titlebg">
+				<td colspan="2"><img src="../images/icons/login_sm.gif" alt="" align="top" />&nbsp; Login</td>
+			</tr>
+			<tr class="windowbg">
+				<td width="50%" align="right" style="background-color: #e1e1e1;"><b>Benutzername:</b></td>
+				<td style="background-color: #e1e1e1;"><input type="text" size="20" value="" /></td>
+			</tr>
+			<tr class="windowbg">
+				<td align="right" style="background-color: #e1e1e1;"><b>Passwort:</b></td>
+				<td style="background-color: #e1e1e1;"><input type="password" value="" size="20" /></td>
+			</tr>
+			<tr class="windowbg">
+				<td align="right" style="background-color: #e1e1e1;"><b>Sitzungsl&auml;nge in Minuten:</b></td>
+				<td style="background-color: #e1e1e1;"><input name="cookielength" type="text" size="4" maxlength="4" value="60" /></td>
+			</tr>
+			<tr class="windowbg">
+				<td align="right" style="background-color: #e1e1e1;"><b>Immer eingeloggt bleiben:</b></td>
+				<td style="background-color: #e1e1e1;"><input type="checkbox" class="check" onclick="document.frmLogin.cookielength.disabled = this.checked;" /></td>
+			</tr>
+			<tr class="windowbg">
+				<td align="center" colspan="2" style="background-color: #e1e1e1;"><input type="button" style="margin-top: 2ex;" value="Login" /></td>
+			</tr>
+			<tr class="windowbg">
+				<td align="center" colspan="2" class="smalltext" style="background-color: #e1e1e1;"><a href="#reminder" style="font-size: x-small;" class="board">Passwort vergessen?</a><br />
+				<br /></td>
+			</tr>
+		</table>
+	</form><br />
+	<p>Die <strong>Benutzername</strong> und <strong>Passwort</strong> Felder sollten selbsterkl&auml;rend sein, <strong>Sitzungsl&auml;nge in Minuten</strong> ist ganz einfach die Zeitspanne, f&uuml;r die der Login-Cookie gelten soll bevor er abl&auml;uft und Sie sich erneut einloggen m&uuml;ssen. Also ist es nicht ratsam hier eine lange Zeitspanne einzugeben, wenn Sie einen Computer mit anderen Personen teilen und m&ouml;glicherweise vergessen sich auszuloggen. Wenn niemand sonst Zugang zu Ihrem Computer hat, m&ouml;chten Sie vielleicht die <strong>Immer eingeloggt bleiben</strong> Option aktivieren, um sich sp&auml;ter nicht erneut einloggen zu m&uuml;ssen.</p>
+	<h3 id="quick">Die Schnell-Login Option</h3>
+	<p>Obwohl die meisten Foren eine Schnell-Login Option auf der Startseite haben, kann die Position dieser Option von Forum zu Forum stark variieren. Zum Beispiel im SMF Standard Theme befindet sich diese Option im zusammenklappbaren Bereich ganz oben auf der Seite, w&auml;hrend sie bei Themes - die auf alten YaBB SE Forum Layouts basieren - wahrscheinlich unten zu finden ist. Wenn Sie die Option nicht sehen und kein Bereich des Forums einfach zugeklappt ist, dann ist die Funktion entweder nicht eingeschaltet (in diesem Fall sollten Sie dennoch in der Lage sein den Login Bildschirm aus dem <a href="index.german.html#main">Hauptmen&uuml;</a> aufzurufen) oder Sie sind bereits eingeloggt (in diesem Fall sollten Sie im Hauptmen&uuml; einen <strong>Logout</strong> Button anstelle des <strong>Login</strong> Buttons sehen!).</p>
+	<table summary="SMF layout" cellspacing="0" cellpadding="0" border="0" align="center" width="400" class="tborder">
+		<tr>
+			<td style="background-color: #efefef;">
+				<table summary="SMF layout" width="99%" cellpadding="0" cellspacing="5" border="0">
+					<tr>
+						<td width="100%" valign="top" class="smalltext" style="font-family: verdana, arial, sans-serif;">
+							<form action="loginout.german.html" method="post" style="margin: 3px 1ex 1px 0; text-align:right;">
+								<input type="text" size="10" /> <input type="password" size="10" /> <select>
+									<option>
+										1 Stunde
+									</option>
+									<option>
+										1 Tag
+									</option>
+									<option>
+										1 Woche
+									</option>
+									<option>
+										1 Monat
+									</option>
+									<option selected="selected">
+										Immer
+									</option>
+								</select> <input type="button" value="Login" /><br />
+								Einloggen mit Benutzername, Passwort und Session L&auml;nge
+							</form>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table><br />
+	<p>Um diese Option zu benutzen, geben Sie einfach Ihren Benutzernamen und Ihr Passwort ein, w&auml;hlen die Session L&auml;nger aus dem Drop-down Men&uuml; und klicken auf <strong>Login</strong>. Beachten Sie, dass <strong>Immer</strong> - genau wie <strong>Immer eingeloggt bleiben</strong> - einfach bedeutet, dass Ihr Computer die Login Daten speichert bis Sie sich das n&auml;chste man ausloggen. Es heisst jedoch nicht, dass Sie die ganze Zeit online sein m&uuml;ssen!</p>
+	<h2 id="logout">Ausloggen</h2>
+	<p>Wenn Sie Ihren Besuch im Forum beendet haben, m&ouml;chten Sie sich vielleicht ausloggen. Sollten Sie einen Computer mit anderen Personen teilen, ist es ratsam sich immer auszuloggen, da sonst jeder Nutzer des Computers Zugriff auf Ihr Benutzerkonto im Forum h&auml;tte. Klicken Sie einfach den <strong>Logout</strong> Button im <a href="index.german.html#main">Hauptmen&uuml;</a> und das Forum sollte Sie automatisch ausloggen, wodurch Sie als Gast angezeigt werden, Ihr Benutzername aus der Benutzer Online Liste entfernt wird und Ihr Benutzerkonto gesichert wird bis Sie sich das n&auml;chste Mal einloggen.</p>
+	<h2 id="reminder">Passwort Erinnerung</h2>
+	<p>Wenn Sie sich einloggen m&ouml;chten, jedoch Ihr Passwort vergessen oder verloren haben, k&ouml;nnen Sie die Passwort Erinnerungs Option nutzen um es wiederzubekommen. W&auml;hlen Sie einfach den <strong>Passwort vergessen?</strong> Link auf dem <a href="#screen">Login</a> Bildschirm.</p>
+	<form action="loginout.german.html" method="post">
+		<table summary="SMF layout" border="0" width="400" cellspacing="0" cellpadding="3" align="center" class="tborder">
+			<tr class="titlebg">
+				<td colspan="2">Passwort Erinnern</td>
+			</tr>
+			<tr class="windowbg">
+				<td colspan="2" style="background-color: #e1e1e1;">Benutzername/E-Mail:&nbsp; <input type="text" size="30" /> <input type="button" value="Senden" /></td>
+			</tr>
+			<tr class="windowbg">
+				<td align="center" style="background-color: #e1e1e1;"><input type="radio" name="searchtype" checked="checked" class="check" />nach Benutzername</td>
+				<td align="center" style="background-color: #e1e1e1;"><input type="radio" name="searchtype" class="check" />nach E-Mail</td>
+			</tr>
+			<tr class="windowbg" style="background-color: #e1e1e1;">
+				<td colspan="2" align="center" style="background-color: #e1e1e1;"><input type="checkbox" class="check" />Stellen Sie mir meine geheime Frage</td>
+			</tr>
+			<tr class="windowbg" style="background-color: #e1e1e1;">
+				<td colspan="2" align="center" class="smalltext" style="background-color: #e1e1e1;">You can't retrieve your password, but you can set a new one by following a link sent to you by email. You also have the option of setting a new password by answering your secret question.</td>
+			</tr>
+		</table>
+	</form>
+	<p>Sie k&ouml;nnen entweder Ihren Benutzernamen oder Ihre E-Mail Adresse eingeben und dann die entsprechende Option aktivieren. Danach klicken Sie auf den <strong>Senden</strong> Button um eine E-Mail mit einem Link zu erhalten, &uuml;ber den Sie ein neues Passwort eingeben k&ouml;nnen. Ausserdem ist es noch m&ouml;glich, in Ihrem Profil eine geheime Frage und dazugeh&ouml;rige Antwort anzugeben um zu vermeiden, dass Sie eine E-Mail erhalten m&uuml;ssen. Vermeiden Sie es jedoch Fragen zu nehmen, die leicht zu erratene oder offensichtliche Antworten haben (z.B. 'Was ist die erste Farbe des Regenbogens', was offensichtlich eine schlechte Wahl w&auml;re)!</p>
+	<div class="footer">
+		<hr noshade="noshade" size="1" />
+		<p>Copyright &copy; 2001-2005 <a href="http://www.lewismedia.com/">Lewis Media</a>. Alle Rechte vorbehalten.</p>
+	</div>
+</body>
+</html>

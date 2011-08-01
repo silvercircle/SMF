@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="style.xslt"?>
+<!DOCTYPE smf:helpfile [
+	<!ENTITY copyright "&#169;">
+	<!ENTITY space "&#160;">
+	<!ENTITY Uuml "&#220;">
+	<!ENTITY Ouml "&#214;">
+	<!ENTITY Auml "&#196;">
+	<!ENTITY uuml "&#252;">
+	<!ENTITY ouml "&#246;">
+	<!ENTITY auml "&#228;">
+]>
+<!-- Don't translate tags, attributes or entities. -->
+<smf:helpfile subject="searching" xml:space="preserve" xmlns:smf="http://www.simplemachines.org/">
+	<!-- The language element should match the language directory in Themes/default/images and is case-sensitive. -->
+	<language>german</language>
+	<visit-simple-machines>Besuche Simple Machines!</visit-simple-machines>
+	<title>SMF Benutzer Hilfe: Suchen</title>
+	<menu>
+		<help page="index">&Uuml;bersicht</help>
+		<help page="registering">Registrierung</help>
+		<help page="loginout">Ein-/Ausloggen</help>
+		<help page="profile">Profil</help>
+		<help page="posting">Schreiben</help>
+		<help page="pm">Private&space;Mitteilungen</help>
+		<help page="here">Suchen</help>
+	</menu>
+	<intro>
+		<paragraph>SMF besitzt eine leistungsf&auml;hige Suchmaschine, zu wissen wie man diese richtig benutzt ist der Schl&uuml;ssel um erfolgreiche Ergebnisse zu bekommen!</paragraph>
+	</intro>
+	<section id="starting">
+		<secheading>Eine Suchabfrage starten</secheading>
+		<paragraph>Vorausgesetzt das Forum benutzt das SMF Standard Theme (oder ein davon abgeleitetes Theme), sollte es zwei M&ouml;glichkeiten geben, das einfache <field>Suche</field> Feld (neben einem <action>Erweiterte Suche</action> Text Link) in der zusammenklappbaren obersten Section und eine <action>Suche</action> Option im <link page="index" ref="main">Hauptmen&uuml;</link>. Wird ein anderes Theme benutzt, sollte dennoch die <action>Suche</action> Option direkt zum Suche-Bildschirm f&uuml;hren.</paragraph>
+	</section>
+	<section id="syntax">
+		<secheading>Schreibweise</secheading>
+		<paragraph>Sie k&ouml;nnen zwar jede Zeichenkombination eingeben (und danach suchen), sollten jedoch Anf&uuml;rungszeichen<!-- and/or wildcards --> nutzen, damit Sie wirklich finden was sie suchen:</paragraph>
+		<subsection id="quotes">
+			<subheading>Anf&uuml;hrungszeichen</subheading>
+			<paragraph>Um es mit wenigen Worten zu sagen, wenn Sie nach <strong>simple machines forum</strong> suchen, wird das Ergebnis alle Treffer mit mindestens einem dieser W&ouml;rter anzeigen. Setzen Sie Ihre W&ouml;rter jedoch in <emphasis>zwei</emphasis> Anf&uuml;hrungszeichen (<strong>"simple machines forum"</strong>) werden nur Treffer mit dem gesamten Satz angezeigt.</paragraph>
+		</subsection>
+<!--
+		<subsection id="wild">
+			<subheading>Platzhalter</subheading>
+			<paragraph>Kurzgesagt, wenn Sie nach <strong>machines</strong> suchen, wird das Ergebnis alle Treffer anzeigen, die genau dieses Wort enthalten, suchen Sie jedoch nach <strong>mach*</strong>, werden auch 'machine', 'machines' und jedes andere <emphasis>Wort</emphasis> das mit 'mach' beginnt als Treffer angezeigt. Also wird eine Suche nach <strong>*ines</strong> unter anderem 'machines' und 'magazines' als Treffer zeigen, genau wie <strong>*chin*</strong> 'machines' und 'caching' anzeigen wird, deoch <emphasis>nicht</emphasis> 'chin' oder 'china'.</paragraph>
+		</subsection>
+-->
+	</section>
+	<section id="searching">
+		<secheading>Einfach oder Erweitert?</secheading>
+		<subsection id="simple">
+			<subheading>Einfache Suche</subheading>
+				<paragraph>Um die einfache Suche zu nutzen (wenn sie aktiviert ist), m&uuml;ssen Sie nur die oben genannten Dinge ber&uuml;cksichtigen. Sie sollten jedoch wissen, dass die einfache Suche das gesamte Forum und alle Beitr&auml;ge die innerhalb der letzten 9999 Tage (was mehr als 27 Jahre sind) durchsucht! Um Ihre Suchoptionen besser zu kontrollieren sollten Sie also die erweiterte Suche nutzen.</paragraph>
+		</subsection>
+		<subsection id="advanced">
+			<subheading>Erweiterte Suche</subheading>
+				<paragraph>Obwohl der erweiterte Suche Bildschirm anf&auml;nglich recht einsch&uuml;chternd wirken kann wenn das Forum viele Boards und Unterforen besitzt, ist es &uuml;berraschend einfach, wenn man es auf seine einzelnen Bausteine reduziert:</paragraph>
+			<search-demo>
+				<!-- This data is used to demonstrate the advanced search screen. -->
+				<forum-name>Forum Name</forum-name>
+				<search>Suchen</search>
+				<parameters>Suchparameter setzen</parameters>
+				<search-for>Suchen nach</search-for>
+				<match-all>&Uuml;bereinstimmung aller W&ouml;rter</match-all>
+				<match-any>&Uuml;bereinstimmung eines Wortes</match-any>
+				<by-user>Nach Benutzer</by-user>
+				<options>Optionen</options>
+				<age>Alter des Beitrags</age>
+				<messages>Zeige Ergebnisse als Beitr&auml;ge</messages>
+				<!-- Untranslated! -->
+				<subjects-only>Topic subjects only</subjects-only>
+				<between>Zwischen </between>
+				<and> und </and>
+				<days> Tagen</days>
+				<!-- Untranslated! -->
+				<search-order>Search order</search-order>
+				<relevant-first>Most relevant results first</relevant-first>
+				<big-first>Largest topics first</big-first>
+				<small-first>Smallest topics first</small-first>
+				<recent-first>Most recent topics first</recent-first>
+				<oldest-first>Oldest topics first</oldest-first>
+				<choose>W&auml;hlen Sie eine Kategorie aus, in welcher gesucht werden soll oder durchsuchen Sie alle</choose>
+				<category>Kategorie Name</category>
+				<board-name>Board Name</board-name>
+				<another-board>Anderes Board</another-board>
+				<check-all>Alle markieren</check-all>
+			</search-demo>
+			<list>
+				<item>Einige Foren zeigen die <term>Navigation</term> oben in einem platzsparenden horizontal Modus.</item>
+				<item>Obwohl es auf den ersten Blick nicht danach aussieht, gibt es tats&auml;chlich <emphasis>drei</emphasis> verschiedene Suchoptionen: <option>&Uuml;bereinstimmung aller W&ouml;rter</option> und <option>&Uuml;bereinstimmung eines Wortes</option> aus dem drop-down Men&uuml;, und <term>"&Uuml;bereinstimmung als Satz"</term><!-- und <term>*Platzhalter</term> --> wie <link ref="syntax">oben beschrieben</link>.</item>
+				<item>Das * im <field>Nach Benutzer</field> Feld ist ein Platzhalter der Beitr&auml;ge aller benutzer durchsucht. Bitte beachten Sie: Sie k&ouml;nnen den Platzhalter durch <emphasis>einen</emphasis> Benutzernamen erstetzen um nur Beitr&auml;ge dieses Benutzers zu durchsuchen, es ist zur Zeit jedoch nicht m&ouml;glich die Beitr&auml;ge mehrerer Benutzer gleichzeitig zu durchsuchen, ausser mit nur dem oben genannten Platzhalter.</item>
+				<item><check>Zeige Ergebnisse als Beitr&auml;ge</check> zeigt das Suchergebnis als normale Beitr&auml;ge mit Antwort-Option an anstelle des normalen verlinkten Auszugs. Dies f&uuml;hrt jedoch dazu, dass die Suchergebnis Seite wesentlich gr&ouml;ßer ist, was bei der Suche nach sehr popul&auml;ren W&ouml;rtern oder S&auml;tzen eine lange Ladezeit hervorrufen kann.</item>
+				<item><field>Alter des Beitrags</field> bestimmt das minimale und maximale Alter der zu durchsuchenden Beitr&auml;ge.</item>
+				<item><check>W&auml;hlen Sie eine Kategorie aus, in welcher gesucht werden soll oder durchsuchen Sie alle</check> gibt Ihnen eine weitere M&ouml;glichkeit Ihre Suche effektiver zu machen. Die Standard-Option ist das Durchsuchen aller Boards (das gesamte Forum, oder um genauer zu sein, alle Boards zu denen Sie Leserechte haben).</item>
+				<item>Um die Suche zu starten k&ouml;nnen Sie entweder den <action>Suche</action> Button anklicken oder in einem der Eingabefelder einfach 'Enter' dr&uuml;cken.</item>
+			</list>
+		</subsection>
+	</section>
+	<copyright>
+		Copyright &copyright; 2001-2005 <link site="http://www.lewismedia.com/">Lewis Media</link>. Alle Rechte vorbehalten.
+	</copyright>
+</smf:helpfile>

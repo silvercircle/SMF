@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="style.xslt"?>
+<!DOCTYPE smf:helpfile [
+	<!ENTITY copyright "&#169;">
+	<!ENTITY space "&#160;">
+	<!ENTITY Uuml "&#220;">
+	<!ENTITY Ouml "&#214;">
+	<!ENTITY Auml "&#196;">
+	<!ENTITY uuml "&#252;">
+	<!ENTITY ouml "&#246;">
+	<!ENTITY auml "&#228;">
+]>
+<!-- Don't translate tags, attributes or entities. -->
+<smf:helpfile subject="loginout" xml:space="preserve" xmlns:smf="http://www.simplemachines.org/">
+	<!-- The language element should match the language directory in Themes/default/images and is case-sensitive. -->
+	<language>german</language>
+	<visit-simple-machines>Besuche Simple Machines!</visit-simple-machines>
+	<title>SMF Benutzer Hilfe: Ein- und Ausloggen</title>
+	<menu>
+		<help page="index">&Uuml;bersicht</help>
+		<help page="registering">Registrieren</help>
+		<help page="here">Ein-/Ausloggen</help>
+		<help page="profile">Profil</help>
+		<help page="posting">Schreiben</help>
+		<help page="pm">Private&space;Mitteilungen</help>
+		<help page="searching">Suchen</help>
+	</menu>
+	<intro>
+		<paragraph>Sobald Sie sich <link page="registering">registriert</link> haben, k&ouml;nnen Sie sich zum ersten Mal in das Forum einloggen. Sp&auml;ter k&ouml;nnen Sie dann w&auml;hlen, ob Sie sich am Ende Ihres Besuches ausloggen oder auf unbestimmte Zeit eingeloggt bleiben m&ouml;chten.</paragraph>
+	</intro>
+	<section id="login">
+		<secheading>Einloggen</secheading>
+		<paragraph>Ob Sie sich neu registriert haben oder nach einem vorherigen Besuch ausgeloggt sind, es gibt normalerweise immer zwei M&ouml;glichkeiten, wie Sie sich einloggen k&ouml;nnen: den Login Bildschirm und die Schnell-Login Option.</paragraph>
+		<subsection id="screen">
+			<subheading>Der Login Bildschirm</subheading>
+			<paragraph>Da dieser Bildschirm (erreichbar durch klicken des <action>Login</action> Button im <link page="index" ref="main">Hauptmen&uuml;</link>) nicht nur der Bildschirm ist, den Sie nach dem Registrieren als erstes sehen sollten, sondern auch in 'nur f&uuml;r Mitglieder' Foren als erstes angezeigt wird, wird er hier auch als erstes beschrieben:</paragraph>
+			<login-screen-demo>
+				<!-- This data is used to demonstrate the standard login screen. -->
+				<login>Login</login>
+				<username>Benutzername</username>
+				<password>Passwort</password>
+				<minutes>Sitzungsl&auml;nge in Minuten</minutes>
+				<always>Immer eingeloggt bleiben</always>
+				<forgot>Passwort vergessen</forgot>
+			</login-screen-demo>
+			<paragraph>Die <field>Benutzername</field> und <field>Passwort</field> Felder sollten selbsterkl&auml;rend sein, <check>Sitzungsl&auml;nge in Minuten</check> ist ganz einfach die Zeitspanne, f&uuml;r die der Login-Cookie gelten soll bevor er abl&auml;uft und Sie sich erneut einloggen m&uuml;ssen. Also ist es nicht ratsam hier eine lange Zeitspanne einzugeben, wenn Sie einen Computer mit anderen Personen teilen und m&ouml;glicherweise vergessen sich auszuloggen. Wenn niemand sonst Zugang zu Ihrem Computer hat, m&ouml;chten Sie vielleicht die <check>Immer eingeloggt bleiben</check> Option aktivieren, um sich sp&auml;ter nicht erneut einloggen zu m&uuml;ssen.</paragraph>
+		</subsection>
+		<subsection id="quick">
+			<subheading>Die Schnell-Login Option</subheading>
+			<paragraph>Obwohl die meisten Foren eine Schnell-Login Option auf der Startseite haben, kann die Position dieser Option von Forum zu Forum stark variieren. Zum Beispiel im SMF Standard Theme befindet sich diese Option im zusammenklappbaren Bereich ganz oben auf der Seite, w&auml;hrend sie bei Themes - die auf alten YaBB SE Forum Layouts basieren - wahrscheinlich unten zu finden ist. Wenn Sie die Option nicht sehen und kein Bereich des Forums einfach zugeklappt ist, dann ist die Funktion entweder nicht eingeschaltet (in diesem Fall sollten Sie dennoch in der Lage sein den Login Bildschirm aus dem <link page="index" ref="main">Hauptmen&uuml;</link> aufzurufen) oder Sie sind bereits eingeloggt (in diesem Fall sollten Sie im Hauptmen&uuml; einen <action>Logout</action> Button anstelle des <action>Login</action> Buttons sehen!).</paragraph>
+			<quick-login-demo>
+				<!-- This data used to demonstrate the quick login box. -->
+				<hour>1 Stunde</hour>
+				<day>1 Tag</day>
+				<week>1 Woche</week>
+				<month>1 Monat</month>
+				<forever>Immer</forever>
+				<caption>Einloggen mit Benutzername, Passwort und Session L&auml;nge</caption>
+			</quick-login-demo>
+			<paragraph>Um diese Option zu benutzen, geben Sie einfach Ihren Benutzernamen und Ihr Passwort ein, w&auml;hlen die Session L&auml;nger aus dem Drop-down Men&uuml; und klicken auf <action>Login</action>. Beachten Sie, dass <option>Immer</option> - genau wie <check>Immer eingeloggt bleiben</check> - einfach bedeutet, dass Ihr Computer die Login Daten speichert bis Sie sich das n&auml;chste man ausloggen. Es heisst jedoch nicht, dass Sie die ganze Zeit online sein m&uuml;ssen!</paragraph>
+		</subsection>
+	</section>
+	<section id="logout">
+		<secheading>Ausloggen</secheading>
+		<paragraph>Wenn Sie Ihren Besuch im Forum beendet haben, m&ouml;chten Sie sich vielleicht ausloggen. Sollten Sie einen Computer mit anderen Personen teilen, ist es ratsam sich immer auszuloggen, da sonst jeder Nutzer des Computers Zugriff auf Ihr Benutzerkonto im Forum h&auml;tte. Klicken Sie einfach den <action>Logout</action> Button im <link page="index" ref="main">Hauptmen&uuml;</link> und das Forum sollte Sie automatisch ausloggen, wodurch Sie als Gast angezeigt werden, Ihr Benutzername aus der Benutzer Online Liste entfernt wird und Ihr Benutzerkonto gesichert wird bis Sie sich das n&auml;chste Mal einloggen.</paragraph>
+	</section>
+	<section id="reminder">
+		<secheading>Passwort Erinnerung</secheading>
+		<paragraph>Wenn Sie sich einloggen m&ouml;chten, jedoch Ihr Passwort vergessen oder verloren haben, k&ouml;nnen Sie die Passwort Erinnerungs Option nutzen um es wiederzubekommen. W&auml;hlen Sie einfach den <action>Passwort vergessen?</action> Link auf dem <link ref="screen">Login</link> Bildschirm.</paragraph>
+		<password-reminder-demo>
+			<!-- This data is used to demonstrate the password reminder screen. -->
+			<password-reminder>Passwort Erinnern</password-reminder>
+			<username-email>Benutzername/E-Mail</username-email>
+			<send>Senden</send>
+			<user>nach Benutzername</user>
+			<email>nach E-Mail</email>
+			<question>Stellen Sie mir meine geheime Frage</question>
+			<help-text>You can't retrieve your password, but you can set a new one by following a link sent to you by email.  You also have the option of setting a new password by answering your secret question.</help-text>
+		</password-reminder-demo>
+		<paragraph>Sie k&ouml;nnen entweder Ihren Benutzernamen oder Ihre E-Mail Adresse eingeben und dann die entsprechende Option aktivieren. Danach klicken Sie auf den <action>Senden</action> Button um eine E-Mail mit einem Link zu erhalten, &uuml;ber den Sie ein neues Passwort eingeben k&ouml;nnen. Ausserdem ist es noch m&ouml;glich, in Ihrem Profil eine geheime Frage und dazugeh&ouml;rige Antwort anzugeben um zu vermeiden, dass Sie eine E-Mail erhalten m&uuml;ssen. Vermeiden Sie es jedoch Fragen zu nehmen, die leicht zu erratene oder offensichtliche Antworten haben (z.B. 'Was ist die erste Farbe des Regenbogens', was offensichtlich eine schlechte Wahl w&auml;re)!</paragraph>
+	</section>
+	<copyright>
+		Copyright &copyright; 2001-2005 <link site="http://www.lewismedia.com/">Lewis Media</link>. Alle Rechte vorbehalten.
+	</copyright>
+</smf:helpfile>

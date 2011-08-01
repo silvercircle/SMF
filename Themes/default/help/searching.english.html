@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Version: 1.0; help/searching-->
+<head>
+	<meta name="generator" content="HTML Tidy for Windows (vers 1st June 2004), see www.w3.org" />
+	<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<script language="JavaScript" type="text/javascript" src="../script.js">
+</script>
+<script language="JavaScript" type="text/javascript">
+//<![CDATA[
+														var smf_theme_url = "..";
+														var smf_images_url = "../images";
+//]]>
+</script>
+	<title>SMF User Help: Searching</title>
+	<link type="text/css" rel="stylesheet" href="../style.css" />
+	<link type="text/css" rel="stylesheet" href="help.css" />
+</head>
+<body>
+	<table summary="two simple cells for layout purposes" width="100%">
+		<tr>
+			<td width="1%"><a href="http://www.simplemachines.org/"><img src="../images/helplogo.jpg" alt="Visit Simple Machines!" title="Visit Simple Machines!" border="0" /></a></td>
+			<td valign="top">
+				<a href="http://www.simplemachines.org/"><img src="../images/smflogo.gif" align="right" alt="Visit Simple Machines!" title="Visit Simple Machines!" border="0" /></a>
+				<h1 style="margin-top: 12px;">SMF User Help: Searching</h1><br clear="right" />
+				<hr />
+				<p><a href="index.english.html">Introduction</a> &bull; <a href="registering.english.html">Registering</a> &bull; <a href="loginout.english.html">Logging&nbsp;In</a> &bull; <a href="profile.english.html">Profile</a> &bull; <a href="posting.english.html">Posting</a> &bull; <a href="pm.english.html">Personal&nbsp;Message</a> &bull; <strong>Searching</strong></p>
+				<hr />
+			</td>
+		</tr>
+	</table>
+	<p>While SMF naturally incorporates a powerful search engine, knowing how to use it is not surprisingly the key to returning successful results!</p>
+	<ol>
+		<li><a href="#starting">Starting a Search</a></li>
+		<li>
+			<a href="#syntax">Syntax</a>
+			<ol class="la">
+				<li><a href="#quotes">Quote Marks</a></li>
+			</ol>
+		</li>
+		<li>
+			<a href="#searching">Simple or Advanced?</a>
+			<ol class="la">
+				<li><a href="#simple">Simple Search</a></li>
+				<li><a href="#advanced">Advanced Search</a></li>
+			</ol>
+		</li>
+	</ol>
+	<h2 id="starting">Starting a Search</h2>
+	<p>Assuming the forum is running the SMF default theme (or a derivative of it), there should be both a simple <strong>Search</strong> field (partnered by an <strong>Advanced search</strong> text link) in the collapsable top section and a <strong>Search</strong> option in the <a href="index.english.html#main">main menu</a>. If not, the main menu <strong>Search</strong> option should still lead straight to the advanced search screen.</p>
+	<h2 id="syntax">Syntax</h2>
+	<p>While you can just type (and search for) any combination of characters, you should consider using quotes to make your search really work for you:</p>
+	<h3 id="quotes">Quote Marks</h3>
+	<p>To put this in a nutshell, searching for <strong>simple machines forum</strong> will return any or all of these three words, but enclosing the search string in <em>double</em> quote marks (ie <strong>"simple machines forum"</strong>) will return only the entire phrase.</p>
+	<h2 id="searching">Simple or Advanced?</h2>
+	<h3 id="simple">Simple Search</h3>
+	<p>To use the simple search (if enabled), the basic syntax outlined above is all you really need to know. But you might also like to know that this tool searches the entire forum for any or all of what you specify that's been posted during the last 9999 days (which is more than 27 years)! So, to take more control of your search, you should use the advanced search feature.</p>
+	<h3 id="advanced">Advanced Search</h3>
+	<p>Although the advanced search screen might initially seem a little intimidating if a forum has many boards and child boards, it's surprisingly straightforward when reduced to its basic components:</p>
+	<div style="background-color: #D0D0D0;">
+		<div style="padding: 2px 30px;">
+			<form action="searching.english.html" method="post" name="searchform" id="searchform">
+				<table summary="SMF layout" width="80%" border="0" cellspacing="0" cellpadding="3" align="center">
+					<tr>
+						<td><span class="nav"><img src="../images/icons/folder_open.gif" alt="+" border="0" />&nbsp; <b><a href="index.english.html#board" class="nav">Forum Name</a></b><br />
+						<img src="../images/icons/linktree_side.gif" alt="|-" border="0" /> <img src="../images/icons/folder_open.gif" alt="+" border="0" />&nbsp; <b><a href="#advanced" class="nav">Search</a></b></span></td>
+					</tr>
+				</table>
+				<table summary="SMF layout" width="80%" border="0" cellspacing="0" cellpadding="4" align="center" class="tborder">
+					<tr class="titlebg">
+						<td>Set Search Parameters</td>
+					</tr>
+					<tr>
+						<td class="windowbg">
+							<table summary="SMF layout">
+								<tr>
+									<td><b>Search for:</b></td>
+									<td>&nbsp;</td>
+									<td><b>by user:</b></td>
+								</tr>
+								<tr>
+									<td><input type="text" size="40" /></td>
+									<td><select>
+										<option selected="selected">
+											Match all words
+										</option>
+										<option>
+											Match any words
+										</option>
+									</select>&nbsp;&nbsp;&nbsp;</td>
+									<td><input type="text" value="*" size="40" />&nbsp;</td>
+								</tr>
+								<tr>
+									<td colspan="3">&nbsp;</td>
+								</tr>
+								<tr>
+									<td colspan="2"><b>Options:</b></td>
+									<td><b>Message age:</b></td>
+								</tr>
+								<tr>
+									<td colspan="2"><input type="checkbox" class="check" /> <label>Show results as messages</label><br />
+									<input type="checkbox" class="check" /> <label>Topic subjects only</label><br /></td>
+									<td>Between <input type="text" value="0" size="5" maxlength="5" /> and <input type="text" value="9999" size="5" maxlength="5" /> days.</td>
+								</tr>
+								<tr>
+									<td colspan="3" style="padding-top: 2ex;"><b>Search order:</b></td>
+								</tr>
+								<tr>
+									<td colspan="3"><select>
+										<option selected="selected=">
+											Most relevant results first
+										</option>
+										<option>
+											Largest topics first
+										</option>
+										<option>
+											Smallest topics first
+										</option>
+										<option>
+											Most recent topics first
+										</option>
+										<option>
+											Oldest topics first
+										</option>
+									</select></td>
+								</tr>
+							</table><br />
+							<b>Choose a board to search in, or search all:</b><br />
+							<br />
+							<table summary="SMF layout" width="80%" border="0" cellpadding="1" cellspacing="0">
+								<tr>
+									<td width="50%"><span style="text-decoration: underline;">Category name</span></td>
+									<td width="50%"><input type="checkbox" id="brd2" name="brd[2]" value="2" checked="checked" class="check" /> <label for="brd2">Another Board</label></td>
+								</tr>
+								<tr>
+									<td width="50%"><input type="checkbox" id="brd1" name="brd[1]" value="1" checked="checked" class="check" /> <label for="brd1">Board Name</label></td>
+								</tr>
+							</table><br />
+							<input type="checkbox" name="all" id="check_all" value="" checked="checked" onclick="invertAll(this, this.form, 'brd');" class="check" /><i><label for="check_all">Check all</label></i><br />
+							<br />
+							<table summary="SMF layout" border="0" cellpadding="2" cellspacing="0" align="left">
+								<tr>
+									<td valign="bottom"><input type="button" value="Search" /></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table><br />
+			</form>
+		</div>
+	</div><br />
+	<ul>
+		<li>Some forums show the <strong>navigation tree</strong> at the top in a space-saving horizontal mode.</li>
+		<li>Despite initial appearances, there are really <em>three</em> options for how to search, with <strong>Match all words</strong> and <strong>Match any words</strong> being available from the drop-down, and <strong>"Match as phrase"</strong> still being available as <a href="#syntax">described</a> above.</li>
+		<li>The default * in the <strong>by user</strong> field is essentially a wildcard matching any poster. Please note that, while you can replace this with any <em>single</em> username for a more specific search, it's not currently possible to search for posts by multiple users except as that single wildcard.</li>
+		<li><strong>Show results as messages</strong> returns the full message containing the search string (with a reply option) instead of the usual linked excerpt, but will naturally result in much larger results pages which might be significant if you are searching for a popular word or phrase.</li>
+		<li><strong>Message age</strong> sets the minimum and maximum ages of posts to search.</li>
+		<li><strong>Choose a board to search in</strong> provides you with another tool to narrow the scope of the search, with the default being 'all' (the whole forum or, more properly, all the boards to which you have read access).</li>
+		<li>The <strong>Search</strong> button not surprisingly sets the whole thing in motion, but hitting 'Enter' direct from any of the search fields is sometimes more convenient.</li>
+	</ul>
+	<div class="footer">
+		<hr noshade="noshade" size="1" />
+		<p>Copyright &copy; 2001-2005 <a href="http://www.lewismedia.com/">Lewis Media</a>. All Rights Reserved.</p>
+	</div>
+</body>
+</html>

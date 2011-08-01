@@ -24,7 +24,7 @@ a.new_win:hover
 table
 {
 	empty-cells: show;
-	border-spacing:0;
+	border-spacing:1px;
 }
 
 /* Set a fontsize that will look the same in all browsers. */
@@ -1709,12 +1709,11 @@ img.new_posts
 ---------------------------------------------------- */
 div.table_frame .table_list
 {
-	border-collapse: collapse;
-	margin: 2px 0;
+	/*border-collapse: collapse;*/
+	margin: 0;
 }
 .table_frame .table_list td.icon, .table_frame .table_list td.info, .table_frame .table_list td.stats
 {
-	border-right: 2px solid white;
 }
 #messageindex
 {
@@ -2766,13 +2765,14 @@ td.lastpost img {
 }
 td.lastpost > a.lp_link {
 	line-height:16px;
-	background: transparent url(../images/theme/sprite.png) 4px -457px no-repeat !important;
-	padding-left:20px;
+	background: transparent url(../images/theme/sprite.png) right -457px no-repeat !important;
+	margin-right:-20px;
+	padding-right:30px;
 	float:right;
 	text-decoration:none;
 	font-size:11px;
 }
-td.lastpost {white-space:nowrap;}
+td.lastpost {white-space:nowrap;padding-right:10px !important;}
 .topic_table td.lastpost
 {
 	line-height: 1.1em;
@@ -3756,7 +3756,7 @@ div#ajaxbusy {
 .light_shadow {	box-shadow: 2px 2px 12px 0px #bbb;}
 
 a.tpeek {margin-left:10px;}
-abbr.date {border:0;}
+abbr.timeago {border:0;}
 
 .generic_container {
 	border:1px solid #ccc;
