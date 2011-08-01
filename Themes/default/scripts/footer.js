@@ -57,7 +57,6 @@ function setBusy(mode)
     if(mode) {
     	_is_locked = true;
     	el.css("position","absolute");
-		//el.css("top", (($(window).height() - el.outerHeight()) / 2) + $(window).scrollTop() -100 + "px");
 		el.css("top", $(window).scrollTop() + "px");
 		el.css("left", (($(window).width() - el.outerWidth()) / 2) + $(window).scrollLeft() + "px");
 		el.show();
