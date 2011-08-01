@@ -64,15 +64,6 @@ form
 	margin: 0;
 }
 
-/* We can style the different types of input buttons to be uniform throughout different browsers and their color themes.
-	.button_submit - covers input[type=submit], input[type=button], button[type=submit] and button[type=button] in all browsers
-	.button_reset  - covers input[type=reset] and button[type=reset] throughout all browsers
-	.input_check   - covers input[type=checkbox] throughout all browsers
-	.input_radio   - covers input[type=radio] throughout all browsers
-	.input_text    - covers input[type=text] throughout all browsers
-	.input_file    - covers input[type=file] throughout all browsers
-*/
-
 #search_form {margin-bottom:0px;position:relative;top:-60px;padding:5px 10px 0 10px;background-color:white;border-top-left-radius:6px;border-top-right-radius:6px;}
 .searchfield {background:#fff url(../images/theme/sicon.png) 3px center no-repeat;font-weight:bold;font-size:12px;border:1px solid #A3B2D0;}
 
