@@ -1,10 +1,6 @@
-/* Styles for the general looks for the Curve theme.
-------------------------------------------------------- */
-
-/* Normal, standard links. */
 a:link, a:visited
 {
-	color: #346;
+	color: #56b;
 	text-decoration: none;
 }
 a:hover
@@ -28,15 +24,17 @@ a.new_win:hover
 table
 {
 	empty-cells: show;
+	border-spacing:1px;
 }
 
 /* Set a fontsize that will look the same in all browsers. */
 body
 {
-	background: #E9EEF2 url(../images/theme/backdrop.png) repeat-x;
-	font: 78%/130% "Verdana", "Arial", "Helvetica", sans-serif;
+	background: #f0f0f0 url(../images/bodybg-blue2.png) left -45px repeat-x;
+	font-family: "Trebuchet MS", "Verdana", "Arial", "Helvetica", "sans-serif";
+	font-size:10pt;
 	margin: 0 auto;
-	padding: 15px 0;
+	padding: 0;
 }
 
 /* Help popups require a different styling of the body element. */
@@ -75,53 +73,53 @@ form
 	.input_file    - covers input[type=file] throughout all browsers
 */
 
-input, button, select, textarea
+#search_form {margin-bottom:0px;position:relative;top:-60px;padding:5px 10px 0 10px;background-color:white;border-top-left-radius:6px;border-top-right-radius:6px;}
+.searchfield {background:#fff url(../images/theme/sicon.png) 3px center no-repeat;font-weight:bold;font-size:12px;border:1px solid #A3B2D0;}
+
+input, select, textarea
 {
-	font: 95%/115% verdana, Helvetica, sans-serif;
 	color: #000;
-	background: #fff;
-	border: 1px solid #7f9db9;
-	padding: 2px;
+	border: 1px solid #6b81ab;
+	padding: 3px;
+	background-color: #E7EBF1;
+	font-size:11px;
 }
 
-/* Select elements look horrible with the extra padding, so leave them unpadded. */
-select
+select {padding:2px;}
+input[type=button], .button_submit, .button_reset {
+	border: 2px solid #6b81ab;
+	font-weight:bold;
+	font-size:11px;
+	padding: 2px 5px;
+	background-color:#D8DFEA;
+	cursor:pointer;
+}
+
+/* Buttons should be styled a bit differently, in order to make them look more button'ish. */
+input:hover, textarea:hover, select:hover
 {
-	padding: 0;
+	border: 1px solid #454545;
+}
+input:focus, textarea:focus, select:focus
+{
+	border: 1px solid #454545;
+}
+.button_submit:hover, .button_reset:hover, button:hover, input[type=button]:hover
+{
+	border: 2px solid #6b81ab !important;
+	background-color:#c8cfda;
 }
 
 /* Add some padding to the options instead. */
 select option
 {
-	padding: 1px;
+	padding: 0px;
 }
 
 /* The font size of textareas should be just a little bit larger. */
 textarea
 {
 	font: 100%/130% verdana, Helvetica, sans-serif;
-}
-
-/* Buttons should be styled a bit differently, in order to make them look more button'ish. */
-.button_submit, .button_reset
-{
-	background: #cde7ff url(../images/theme/submit_bg.png) no-repeat;
-	border: 1px solid #aaa;
-	cursor: pointer;
-	font-weight: normal;
-}
-input:hover, textarea:hover, button:hover, select:hover
-{
-	border: 1px solid #454545;
-}
-.button_submit:hover, .button_reset:hover
-{
-	border: 1px solid #aaa;
-	background: url(../images/theme/submit_bg.png) no-repeat 0 -140px #cde7ff;
-}
-input:focus, textarea:focus, button:focus, select:focus
-{
-	border: 1px solid #454545;
 }
 
 /* All input elements that are checkboxes or radio buttons shouldn't have a border around them. */
@@ -162,9 +160,10 @@ h1, h2, h3, h4, h5, h6
 /* Fieldsets are used to group elements. */
 fieldset
 {
-	border: 1px solid #c4c4c4;
+	background-color:#f2f5fe;
+	border:1px solid #d5ecfa;
 	padding: 1em;
-	margin: 0 0 0.5em 0;
+	margin: 10px;
 }
 fieldset legend
 {
@@ -233,14 +232,12 @@ em
 /* Default font sizes: small (8pt), normal (10pt), and large (14pt). */
 .smalltext, tr.smalltext th
 {
-	font-size: 0.85em;
-	font-family: verdana, sans-serif;
+	font-size: 0.95em;
 }
 .middletext
 {
-	font-size: 0.9em;
+	font-size: 0.95em;
 	line-height: 1em;
-	font-family: verdana, sans-serif;
 }
 .normaltext
 {
@@ -295,42 +292,42 @@ ul.reset, ul.reset li
 /* A quote, perhaps from another post. */
 blockquote.bbc_standard_quote, blockquote.bbc_alternate_quote
 {
-	font-size: x-small;
+	font-size:95%;
+	font-style:italic;
 	color: #000;
 	line-height: 1.4em;
 	background: url(../images/theme/quote.png) 0.1em 0.1em no-repeat;
-	border-top: 2px solid #99A;
-	border-bottom: 2px solid #99A;
 	padding: 1.1em 1.4em;
 	margin: 0.1em 0 0.3em 0;
 	overflow: auto;
+	border:1px solid #ddd;
+	border-radius:5px;
 }
 
 /* Alterate blockquote stylings */
 blockquote.bbc_standard_quote
 {
-	background-color: #d7daec;
+	background-color: #eee;
 }
 blockquote.bbc_alternate_quote
 {
-	background-color: #e7eafc;
+	background-color: #eee;
 }
 
 /* A code block - maybe PHP ;). */
 code.bbc_code
 {
 	display: block;
-	font-family: "dejavu sans mono", "monaco", "lucida console", "courier new", monospace;
-	font-size: x-small;
+	font-family: "consolas", "lucida console", "courier new", monospace;
+	font-size: 12px;
 	background: #eef;
-	border-top: 2px solid #999;
-	border-bottom: 2px solid #999;
-	line-height: 1.5em;
+	line-height: 1.2em;
 	padding: 3px 1em;
 	overflow: auto;
 	white-space: nowrap;
+	border:1px solid #ddd;
+	border-radius:5px;
 	/* Show a scrollbar after about 24 lines. */
-	max-height: 24em;
 }
 
 /* The "Quote:" and "Code:" header parts... */
@@ -427,18 +424,16 @@ code.bbc_code
 .titlebg, .titlebg2, tr.titlebg th, tr.titlebg td, tr.titlebg2 td
 {
 	color: #222;
-	font-family: arial, helvetica, sans-serif;
 	font-size: 1.1em;
 	font-weight: bold;
-	background: #e3e9ef url(../images/theme/main_block.png) no-repeat -10px -380px;
+	background: #ccc url(../images/theme/cellpic.gif) repeat-x;
 }
 .catbg, .catbg2, tr.catbg td, tr.catbg2 td, tr.catbg th, tr.catbg2 th
 {
 	color: #fff;
-	font-family: arial, helvetica, sans-serif;
 	font-size: 1.1em;
 	font-weight: bold;
-	background: #a7b9cd url(../images/theme/main_block.png) no-repeat -10px -280px;
+	background: #485B7D url(../images/theme/graph.png) repeat-x;
 }
 
 /* adjust the table versions of headers */
@@ -456,20 +451,18 @@ tr.catbg th a:link, tr.catbg th a:visited, tr.catbg2 td a:link, tr.catbg2 td a:v
 }
 .catbg select
 {
-	height: 1.5em;
-	font-size: 0.85em;
 }
 
 /* Alternating backgrounds for posts, and several other sections of the forum. */
 .windowbg, #preview_body
 {
 	color: #000;
-	background-color: #e7eaef;
+	background-color: #f0f0f0;
 }
 .windowbg2
 {
 	color: #000;
-	background-color: #f0f4f7;
+	background-color: #f6f6ff;
 }
 .windowbg3
 {
@@ -483,18 +476,19 @@ tr.catbg th a:link, tr.catbg th a:visited, tr.catbg2 td a:link, tr.catbg2 td a:v
 	font-size: 0.9em;
 	padding: 0.2em;
 	overflow: hidden;
-	margin-bottom: 1px;
+	margin:3px 0;
+}
+
+.pagesection .buttonlist {
+	clear:right;
 }
 div.pagesection div.floatright input
 {
 	margin-top: 3px;
 }
-
-.pagelinks
-{
-	padding: 0.6em 0 0.4em 0;
+.tagstrip {
+	margin-bottom:5px;
 }
-
 /* Colors for background of posts requiring approval */
 .approvebg
 {
@@ -544,7 +538,6 @@ div.pagesection div.floatright input
 /* Posts and personal messages displayed throughout the forum. */
 .post, .personalmessage
 {
-	overflow: auto;
 	line-height: 1.4em;
 	padding: 0.1em 0;
 }
@@ -745,9 +738,9 @@ dl.settings dt a img
 h3.catbg, h3.catbg2, h3.titlebg, h4.titlebg, h4.catbg
 {
 	overflow: hidden;
-	height: 31px;
-	line-height: 31px;
-	font-size: 1.2em;
+	height: 26px;
+	line-height: 26px;
+	font-size: 1.05em;
 	font-weight: bold;
 }
 h3.catbg a:link, h3.catbg a:visited, h4.catbg a:link, h4.catbg a:visited, h3.catbg, .table_list tbody.header td, .table_list tbody.header td a
@@ -780,7 +773,7 @@ h3.titlebg a:hover, h4.titlebg a:hover
 h3.catbg img.icon, h4.titlebg img.icon
 {
 	vertical-align: middle;
-	margin: -2px 5px 0 0;
+	margin: 0 5px 5px 0;
 }
 h4.catbg a.toggle img
 {
@@ -789,13 +782,12 @@ h4.catbg a.toggle img
 }
 h4.catbg, h4.catbg2 , h3.catbg , h3.catbg2 , .table_list tbody.header td.catbg
 {
-	background: url(../images/theme/main_block.png) no-repeat 100% -160px;
 	padding-right: 9px;
 }
 h4.titlebg, h3.titlebg
 {
-	background: url(../images/theme/main_block.png) no-repeat 100% -200px;
-	padding-right: 9px;
+	/*background: #ccc url(../images/theme/cellpic.gif) repeat-x;*/
+	margin-right: 9px;
 }
 h4.titlebg img.icon
 {
@@ -804,19 +796,17 @@ h4.titlebg img.icon
 }
 div.cat_bar
 {
-	background: #99abbf url(../images/theme/main_block.png) no-repeat 0 -160px;
-	padding-left: 9px;
-	height: 31px;
+	background: #485B7D url(../images/theme/graph.png) repeat-x;
+	padding: 0 9px;
+	height: 26px;
 	overflow: hidden;
-	margin-bottom: 1px;
 }
 div.title_bar
 {
-	background: #e3e9ef url(../images/theme/main_block.png) no-repeat 0 -200px;
+	background: #ccc url(../images/theme/cellpic.gif) repeat-x;
 	padding-left: 9px;
-	height: 31px;
+	height: 26px;
 	overflow: hidden;
-	margin-bottom: 1px;
 }
 
 /* rounded bars needs a different background here */
@@ -832,15 +822,15 @@ div.roundframe div.cat_bar h3.catbg
 }
 div.title_barIC
 {
-	background: #dadfe6 url(../images/theme/main_block.png) no-repeat 0 -120px;
+	background: #485B7D url(../images/theme/cellpic.gif) repeat-x;
 	padding-left: 9px;
-	height: 31px;
+	height: 26px;
 	overflow: hidden;
 	margin-bottom: 1px;
 }
 div.title_barIC h4.titlebg
 {
-	background: url(../images/theme/main_block.png) no-repeat 100% -120px;
+	background: #485B7D url(../images/theme/cellpic.gif) repeat-x;
 }
 #upshrinkHeaderIC p.pminfo
 {
@@ -850,7 +840,7 @@ div.title_barIC h4.titlebg
 img#upshrink_ic, img#newsupshrink
 {
 	float: right;
-	margin: 10px 5px 0 0;
+	margin: 5px 5px 0 0;
 }
 table.table_list a.unreadlink, table.table_list a.collapse
 {
@@ -858,9 +848,7 @@ table.table_list a.unreadlink, table.table_list a.collapse
 }
 table.table_list a.collapse
 {
-	margin: 10px 5px 0 1em;
-	height: 31px;
-	line-height: 31px;
+	margin: 0 5px 0 1em;
 }
 
 /* The half-round header bars for some tables. */
@@ -876,19 +864,19 @@ table.table_list a.collapse
 }
 tr.catbg th.first_th
 {
-	background: #a7b9cd url(../images/theme/main_block.png) no-repeat 0 -280px;
+	background: #485B7D url(../images/theme/graph.png) repeat-x;
 }
 tr.catbg th.last_th
 {
-	background: #a7b9cd url(../images/theme/main_block.png) no-repeat 100% -280px;
+	background: #485B7D url(../images/theme/graph.png) repeat-x;
 }
 tr.titlebg th.first_th
 {
-	background: #e3e9ef url(../images/theme/main_block.png) no-repeat 0 -380px;
+	background: #485B7D url(../images/theme/graph.png) repeat-x;
 }
 tr.titlebg th.last_th
 {
-	background: #e3e9ef url(../images/theme/main_block.png) no-repeat 100% -380px;
+	background: #485B7D url(../images/theme/graph.png) repeat-x;
 }
 .table_grid th.last_th input
 {
@@ -1101,8 +1089,9 @@ span.lowerframe span
 {
 	padding: 0 0.5em;
 	float: left;
-	margin: 0;
-	width: 98%;
+	margin-top: 2px;
+	background-color:#333355;
+	font-size:12px;
 }
 
 .dropmenu, .dropmenu ul
@@ -1111,15 +1100,19 @@ span.lowerframe span
 	line-height: 1em;
 	padding: 0;
 	margin: 0;
+	background-color:#333355;
 }
 .dropmenu
 {
 	padding: 0 0.5em;
 }
-.dropmenu a
+.dropmenu  > li > a
 {
-	display: block;
-	color: #000;
+	float:left;
+}
+
+.dropmenu li a {
+	color: white;
 	text-decoration: none;
 }
 .dropmenu a span
@@ -1131,19 +1124,19 @@ span.lowerframe span
 /* the background's first level only */
 .dropmenu li a.firstlevel
 {
-	margin-right: 8px;
+	margin-right: 4px;
 }
 .dropmenu li a.firstlevel span.firstlevel
 {
 	display: block;
 	position: relative;
-	left: -5px;
-	padding-left: 5px;
-	height: 22px;
-	line-height: 19px;
+	height: 20px;
+	line-height: 20px;
 	white-space: pre;
+	padding:2px 5px 2px 5px;
+	font-weight:bold;
 }
-.dropmenu li
+.dropmenu > li
 {
 	float: left;
 	padding: 0;
@@ -1155,23 +1148,28 @@ span.lowerframe span
 	z-index: 90;
 	display: none;
 	position: absolute;
-	width: 19.2em;
+	width: auto;
 	font-weight: normal;
-	border-bottom: 1px solid #999;
-	background: url(../images/theme/menu_gfx.png) 0 -130px no-repeat;
-	padding: 7px 0 0 0;
+	background-color:#3333355;
+	padding: 0 0 0 0;
+	margin-top:22px;
+	width:15em;
 }
+
 .dropmenu li li
 {
-	width: 19em;
 	margin: 0;
-	border-left: 1px solid #999;
-	border-right: 1px solid #999;
+	padding:2px;
+}
+.dropmenu li li a
+{
+	display:block !important;
 }
 .dropmenu li li a span
 {
 	display: block;
-	padding: 8px;
+	padding: 5px;
+	white-space:nowrap;
 }
 .dropmenu li ul ul
 {
@@ -1181,25 +1179,25 @@ span.lowerframe span
 /* the active button */
 .dropmenu li a.active
 {
-	background: url(../images/theme/menu_gfx.png) no-repeat 100% 0;
-	color: #fff;
+	color: black;
 	font-weight: bold;
+	background-color:#B5B6B9;
 }
 .dropmenu li a.active span.firstlevel
 {
-	background: url(../images/theme/menu_gfx.png) no-repeat 0 0;
+	background: #B5B6B9;
 }
 /* the hover effects */
 .dropmenu li a.firstlevel:hover, .dropmenu li:hover a.firstlevel
 {
-	background: url(../images/theme/menu_gfx.png) no-repeat 100% -30px;
-	color: #fff;
+	color: #ccc;
 	cursor: pointer;
 	text-decoration: none;
 }
 .dropmenu li a.firstlevel:hover span.firstlevel, .dropmenu li:hover a.firstlevel span.firstlevel
 {
-	background: url(../images/theme/menu_gfx.png) no-repeat 0 -30px;
+	background-color:#ccc;
+	color:black;
 }
 /* the hover effects on level2 and 3 */
 .dropmenu li li a:hover, .dropmenu li li:hover>a
@@ -1222,7 +1220,18 @@ span.lowerframe span
 }
 .dropmenu li li.additional_items
 {
-	background-color: #fff;
+	background-color: #555588;
+}
+
+span.m_downarrow {
+    padding:6px 12px 6px 0px;
+    margin-left:-4px;
+    margin-right:4px;
+    float:left;
+    background:transparent url(../images/theme/sprite.png) 0 7px no-repeat;
+}
+span.m_downarrow:hover {
+	background-color:#aaa !important;
 }
 
 /* The dropdown menu toggle image */
@@ -1256,51 +1265,39 @@ span.lowerframe span
 }
 .buttonlist ul li a
 {
-	display: block;
-	font-size: 0.8em;
-	color: #000;
-	background: #e8e8e8 url(../images/theme/menu_gfx.png) no-repeat 0 -60px;
-	padding: 0 0 0 8px;
-	margin-left: 12px;
-	text-transform: uppercase;
-	cursor: pointer;
+	float: left;
+	display: inline;
+	margin: 0 0 0 8px;
+	padding:0 4px;
+	box-shadow: 2px 2px 4px #ccc;
+	border: 1px solid #6b81ab;
+	border-radius:2px;
+	background-color:#D8DFEA !important;
+	cursor:pointer;
+	font-size:11px;
+	color:black;
 }
 .buttonlist ul li a:hover
 {
-	background: url(../images/theme/menu_gfx.png) no-repeat 0 0;
-	color: #fff;
 	text-decoration: none;
+	background-color:orange !important;
 }
 .buttonlist ul li a span
 {
-	background: url(../images/theme/menu_gfx.png) no-repeat 100% -60px;
 	display: block;
 	height: 19px;
 	line-height: 19px;
-	padding: 0 8px 0 0;
-}
-.buttonlist ul li a:hover span
-{
-	background: #fff url(../images/theme/menu_gfx.png) no-repeat 100% 0;
 }
 /* the active one */
 .buttonlist ul li a.active
 {
-	background: #5a6c85 url(../images/theme/menu_gfx.png) no-repeat 0 -90px;
-	color: #fff;
+	background-color:#a8aFbA !important;
+	color: white;
 	font-weight: bold;
-}
-.buttonlist ul li a.active span
-{
-	background: url(../images/theme/menu_gfx.png) no-repeat 100% -90px;
 }
 .buttonlist ul li a.active
 {
 	font-weight: bold;
-}
-.buttonlist ul li a.active:hover
-{
-	color: #ddf;
 }
 .align_top ul li a, .align_bottom ul li a
 {
@@ -1325,6 +1322,7 @@ ul#navigation li
 {
 	padding-left: 2em;
 	overflow: hidden;
+	background-color:#555;
 }
 
 /* Styles for the general looks for the Curve theme.
@@ -1333,31 +1331,29 @@ ul#navigation li
 /* the framing graphics */
 #header
 {
-	background: url(../images/theme/main_block.png) #fefefe no-repeat 0 -480px;
-	padding-left: 20px;
 }
-#header div.frame
-{
-	background: url(../images/theme/main_block.png) no-repeat 100% -480px;
-	display: block;
-	padding: 5px 20px 1em 0;
-}
-/* the content section */
+/* the content section, wrapper for everything between header and footer */
 #content_section
 {
-	background: #FFFFFF url(../images/theme/frame_repeat.png) repeat-y top left;
-	padding-left: 20px;
+    padding-left:35px;
+    padding-right:35px;
+    padding-top:10px;
+    padding-bottom:5px;
 }
-#content_section div.frame
-{
-	background: url(../images/theme/frame_repeat.png) repeat-y top right;
-	display: block;
-	padding: 0 20px 0 0;
-}
+
+/* inner content section, defines the width for the forum itself (but not the header or footer)*/
 #main_content_section
 {
-	width: 100%;
+	min-width:800px;
+	max-width:1200px;
+	background-color:#fff;
 	min-height: 200px;
+	margin-left:auto;
+	margin-right:auto;
+	border:1px solid #aaa;
+	padding:10px;
+	border-top-left-radius:10px;
+	border-top-right-radius:10px;
 }
 
 /* the main title, always stay at 45 pixels in height! */
@@ -1370,34 +1366,26 @@ h1.forumtitle
 	padding: 0;
 	float: left;
 }
-/* float these items to the right */
-#siteslogan, img#smflogo
-{
-	margin: 0;
-	padding: 0;
-	float: right;
-	line-height: 3em;
+h1.bigheader {
+	display:block;
+	font-size:18px;
+	font-weight:bold;
+	border-bottom:3px solid #ccc;
+	padding:4px 20px;
 }
 h3, h4
 {
 	padding-bottom: 3px;
 }
-/* the upshrink image needs some tweaking */
-img#upshrink
-{
-	float: right;
-	margin: 1em;
-}
-/* ..so does the SMF logo */
-img#smflogo
-{
-	margin-left: 1em;
-}
 /* the upper_section, float the two each way */
 #upper_section
 {
-	padding: 5px;
-	margin-bottom: 1.5em;
+	background-color:black;
+	height:75px;
+	max-height:75px;
+	min-height:75px;
+	overflow:hidden;
+	font-size:12px;
 }
 #upper_section ul li.greeting
 {
@@ -1411,6 +1399,11 @@ img#smflogo
 	float: right;
 	text-align: right;
 }
+
+#upper_section a
+{
+	color:#a0a0c0;
+}
 #guest_form
 {
 	overflow: hidden;
@@ -1422,14 +1415,25 @@ img#smflogo
 }
 div#upper_section div.user
 {
-	width: 50%;
-	float: left;
-	overflow: auto;
+	float: right;
+	color:white;
+	white-space: nowrap;
+	font-size:11px;
+	width:auto;
 }
-div#upper_section div.user p
+div.user .avatar img {
+	border:1px solid blue;
+	padding:1px;
+	background-color:#aaa;
+	border-radius:0;
+	max-height:63px;
+	width:auto;
+	margin-left:10px;
+}
+div#upper_section div.user div
 {
-	float: left;
-	margin: 0 1em 1em 0;
+	float: right;
+	margin: 0;
 	padding: 0;
 }
 div#upper_section div.user ul
@@ -1456,24 +1460,23 @@ div#upper_section div.news form
 	overflow: hidden;
 	margin-bottom: 3px;
 }
-#upper_section
-{
-	overflow: hidden;
-}
 
 /* The navigation list (i.e. linktree) */
-.navigate_section
+div.navigate_section
 {
-	padding: 0.5em;
-	margin: 0 0 0 0;
+	padding: 0;
+	margin-top:10px;
+	background-color:#f2f5fe;
+	border:1px solid #d5ecfa;
+	border-radius:3px;
+	padding-left:10px;
+	font-size:14px;
 }
 .navigate_section ul
 {
-	display: block;
 	margin: 0;
 	font-size: 0.9em;
-	padding: 1em 0 0.5em 0;
-	border-top: 1px solid #ccc;
+	padding: 0.2em 0 0.2em 0;
 	overflow: hidden;
 	list-style: none;
 	clear: both;
@@ -1493,33 +1496,13 @@ div#upper_section div.news form
 /* The footer wih copyright links etc. */
 #footer_section
 {
-	text-align: center;
-	background: url(../images/theme/main_block.png) no-repeat 0 -820px;
-	padding-left: 20px;
+	background: #333355;
+	color:#ddd;
+	font-size:10px;
+	text-align:left;
+	padding:3px 10px;
 }
-#footer_section span.smalltext
-{
-	font-size: 100%;
-}
-#footer_section div.frame
-{
-	background: url(../images/theme/main_block.png) no-repeat 100% -820px;
-	display: block;
-	padding: 60px 0 0 0;
-}
-#footer_section ul li, #footer_section p
-{
-	font-size: 0.8em;
-}
-#footer_section ul li
-{
-	display: inline;
-	padding-right: 5px;
-}
-#footer_section ul li.copyright
-{
-	display: block;
-}
+#footer_section a {color:#ccccee;}
 select.qaction, input.qaction
 {
 	font-size: 0.85em;
@@ -1536,6 +1519,11 @@ table.table_list
 {
 	width: 100%;
 }
+
+table.table_list tr, tr.frow {
+	background:#f0f0f5 url(../images/frow.png) bottom left repeat-x;
+}
+
 table.table_list p
 {
 	padding: 0;
@@ -1543,7 +1531,7 @@ table.table_list p
 }
 table.table_list td, table.table_list th
 {
-	padding: 5px;
+	padding: 4px;
 }
 table.table_list tbody.header td
 {
@@ -1552,35 +1540,32 @@ table.table_list tbody.header td
 table.table_list tbody.content td.stats
 {
 	font-size: 90%;
-	width: 15%;
 	text-align: center;
-}
-table.table_list tbody.content td.lastpost
-{
-	line-height: 1.3em;
-	font-size: 85%;
-	width: 24%;
+	white-space:nowrap;
 }
 table.table_list tbody.content td.icon
 {
 	text-align: center;
-	width: 6%;
+	width: 28px;
 }
 
 /* Styles for the board index.
 ------------------------------------------------- */
 
 /* the board title! */
+.table_list tbody.content td.info {
+	width:100%;
+}
 .table_list tbody.content td.info a.subject
 {
 	font-weight: bold;
-	font-size: 110%;
-	color: #d97b33;
+	font-size: 1.1em;
+	color:#777799;
 }
 .table_list tbody.content td.children
 {
 	color: #555;
-	font-size: 85%;
+	font-size: 90%;
 }
 p.moderators
 {
@@ -1616,7 +1601,7 @@ p.moderators
 }
 .nextlinks
 {
-	text-align: right;
+	float: right;
 	margin-top: -1px;
 }
 .nextlinks_bottom
@@ -1632,14 +1617,14 @@ p.moderators
 /* the newsfader */
 #newsfader
 {
-	margin: 0 2px;
+	margin: 0 0 10px 0;
 }
 #smfFadeScroller
 {
-	text-align: center;
-	padding: 0 2em;
+	text-align: left;
+	padding: 5px 2em;
 	overflow: auto;
-	margin: 1em 0;
+	margin: 0;
 	color: #575757; /* shouldn't be shorthand style due to a JS bug in IE! */
 }
 
@@ -1724,12 +1709,11 @@ img.new_posts
 ---------------------------------------------------- */
 div.table_frame .table_list
 {
-	border-collapse: collapse;
-	margin: 2px 0;
+	/*border-collapse: collapse;*/
+	margin: 0;
 }
 .table_frame .table_list td.icon, .table_frame .table_list td.info, .table_frame .table_list td.stats
 {
-	border-right: 2px solid white;
 }
 #messageindex
 {
@@ -1751,11 +1735,6 @@ div.table_frame .table_list
 #childboards .table_list
 {
 	margin-bottom: 1em;
-}
-.lastpost img
-{
-	float: right;
-	padding: 4px;
 }
 
 /* Styles for the display template (topic view).
@@ -1918,35 +1897,53 @@ p#whoisviewing
 {
 	float:left;
 	width:100%;
+	border:1px solid #ddd;
+	padding:5px 0 0 0;
+	margin-bottom:10px;
+	border-radius:4px;
 }
+.windowbg .post_wrapper {background-color:#f5f5ff;}
 .poster
 {
 	float: left;
-	width: 15em;
+	width: 200px;
+	max-width:200px;
+	min-width:200px;
+}
+.poster_details
+{
+	text-align:center;
+	/*background-color:#f2f5fe;
+	border:1px solid #d5ecfa;*/
+	width:180px;
+	max-width:180px;
+	min-width:180px;
+	margin: 0 10px 5px 5px;
+	padding:2px 2px 5px 2px !important;
 }
 .postarea, .moderatorbar
 {
-	margin: 0 0 0 16em;
+	margin: 0 0 5px 205px;
 }
 .postarea div.flow_hidden
 {
-	width: 100%;
+	margin-right:10px;
 }
 
 .moderatorbar
 {
+	font-size:12px;
 	clear: right;
 }
 /* poster details and list of items */
 .poster h4, .poster ul
 {
 	padding: 0;
-	margin: 0 1em 0 1.5em;
 }
 .poster h4
 {
-	margin: 0.2em 0 0.4em 1.1em;
-	font-size: 120%;
+	font-size: 115%;
+	padding:1px 3px;
 }
 .poster h4, .poster h4 a
 {
@@ -1968,6 +1965,14 @@ p#whoisviewing
 .poster li.avatar
 {
 	overflow: hidden;
+}
+.poster li.avatar img, #mcard_inner img.avatar {
+	width:auto;
+	height:auto;
+	border:1px solid blue;
+	background-color:#aaa;
+	padding:1px;
+	max-width:100px;
 }
 .poster li.warning
 {
@@ -1991,7 +1996,8 @@ p#whoisviewing
 .keyinfo
 {
 	float: left;
-	width: 50%;
+	font-size:90%;
+	white-space:nowrap;
 }
 .modifybutton
 {
@@ -2013,66 +2019,77 @@ div.quickbuttons_wrap
 
 ul.quickbuttons
 {
-	margin: 0.9em 11px 0 0;
+	margin: 0.2em 4px 0 0;
 	clear: right;
 	float: right;
 	text-align: right;
-	font: bold 0.85em arial, sans-serif;
+	font-size:11px;
+	line-height:20px;
 }
 ul.quickbuttons li
 {
 	float: left;
 	display: inline;
-	margin: 0 0 0 11px;
+	margin: 0 0 0 8px;
+	padding:0 4px;
+	/*box-shadow: 2px 2px 4px #ccc;
+	border: 1px solid #6b81ab;
+	border-radius:2px;
+	background-color:#D8DFEA !important;*/
+	cursor:pointer;
 }
 ul.quickbuttons li a
 {
-	padding: 0 0 0 20px;
+	/*padding: 0 0 0 20px;*/
 	display: block;
 	height: 20px;
-	line-height: 18px;
+	line-height: 20px;
 	float: left;
+	color:black;
+	text-decoration: none;
+	font-weight:bold;
 }
-ul.quickbuttons a:hover
-{
-	color: #a70;
+ul.quickbuttons li a:hover {
+	text-decoration: underline !important;
 }
+/*
 ul.quickbuttons li.quote_button
 {
-	background: url(../images/theme/quickbuttons.png) no-repeat 0 0;
+	background: url(../images/theme/quickbuttons.png) no-repeat 3px 0;
 }
 ul.quickbuttons li.remove_button
 {
-	background: url(../images/theme/quickbuttons.png) no-repeat 0 -30px;
+	background: url(../images/theme/quickbuttons.png) no-repeat 3px -31px;
 }
 ul.quickbuttons li.modify_button
 {
-	background: url(../images/theme/quickbuttons.png) no-repeat 0 -60px;
+	background: url(../images/theme/quickbuttons.png) no-repeat 3px -61px;
 }
 ul.quickbuttons li.approve_button
 {
-	background: url(../images/theme/quickbuttons.png) no-repeat 0 -90px;
+	background: url(../images/theme/quickbuttons.png) no-repeat 3px -91px;
 }
 ul.quickbuttons li.restore_button
 {
-	background: url(../images/theme/quickbuttons.png) no-repeat 0 -120px;
+	background: url(../images/theme/quickbuttons.png) no-repeat 3px -121px;
 }
 ul.quickbuttons li.split_button
 {
-	background: url(../images/theme/quickbuttons.png) no-repeat 0 -150px;
+	background: url(../images/theme/quickbuttons.png) no-repeat 3px -151px;
 }
 ul.quickbuttons li.reply_button
 {
-	background: url(../images/theme/quickbuttons.png) no-repeat 0 -180px;
+	background: url(../images/theme/quickbuttons.png) no-repeat 3px -181px;
 }
 ul.quickbuttons li.reply_all_button
 {
-	background: url(../images/theme/quickbuttons.png) no-repeat 0 -180px;
+	background: url(../images/theme/quickbuttons.png) no-repeat 3px -181px;
 }
 ul.quickbuttons li.notify_button
 {
-	background: url(../images/theme/quickbuttons.png) no-repeat 0 -210px;
+	background: url(../images/theme/quickbuttons.png) no-repeat 3 -211px;
 }
+*/
 ul.quickbuttons li.inline_mod_check
 {
 	margin: 0 0 0 5px;
@@ -2085,9 +2102,8 @@ ul.quickbuttons li.inline_mod_check
 }
 .inner
 {
-	padding: 1em 1em 2px 0;
-	margin: 0 1em 0 0;
-	border-top: 1px solid #99a;
+	padding: 1px 10px 2px 0;
+	margin: 0;
 }
 img.smiley
 {
@@ -2156,7 +2172,7 @@ img.smiley
 /* Separator of posts. More useful in the print stylesheet. */
 #forumposts .post_separator
 {
-	display: none;
+	display:none;
 }
 
 /* Styles for edit post section
@@ -2627,8 +2643,9 @@ tr.titlebg td
 }
 #admin_menu
 {
-	min-height: 2em;
 	padding-left: 0;
+	background-color:#555;
+	min-height:24px;
 }
 #admin_content
 {
@@ -2690,7 +2707,7 @@ tr.titlebg td
 
 tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td
 {
-	padding: 0.3em 0.7em;
+	padding: 2px 0.7em;
 }
 #credits p
 {
@@ -2722,21 +2739,45 @@ tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td
 	border-bottom: 1px solid #fff;
 }
 /* the subject column */
-.topic_table td
+.topic_table td.subject
 {
-	font-size: 1em;
+	width:100%;
+	font-size:1.0em;
 }
+.topic_table span.tpeek {
+	font-size:1.1em;
+}
+.topic_table span.tpeek > a.tpeek {
+	font-size:11px;
+}
+
 .topic_table td.subject p, .topic_table td.stats
 {
-	font-size: 0.85em;
 	padding: 0;
 	margin: 0;
+	font-size:11px;
 }
+
+td.lastpost img {
+	width:15px;
+	height:15px;
+	vertical-align:middle;
+}
+td.lastpost > a.lp_link {
+	line-height:16px;
+	background: transparent url(../images/theme/sprite.png) right -457px no-repeat !important;
+	margin-right:-20px;
+	padding-right:30px;
+	float:right;
+	text-decoration:none;
+	font-size:11px;
+}
+td.lastpost {white-space:nowrap;padding-right:10px !important;}
 .topic_table td.lastpost
 {
-	font-size: 0.85em;
-	line-height: 1.3em;
-	padding: 4px;
+	line-height: 1.1em;
+	padding: 4px 10px;
+	font-size:1.0em;
 }
 .topic_table td.stickybg2
 {
@@ -2755,10 +2796,6 @@ tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td
 	background-image: url(../images/icons/quick_sticky_lock.gif);
 	background-repeat: no-repeat;
 	background-position: 98% 4px;
-}
-.topic_table td.lastpost
-{
-	background-image: none;
 }
 
 /* Styles for (fatal) errors.
@@ -3518,7 +3555,6 @@ span.hidelink
 #simple_search, #simple_search p, #advanced_search
 {
 	text-align: center !important;
-	margin: 0;
 }
 #search_error
 {
@@ -3533,12 +3569,6 @@ span.hidelink
 
 /* Styles for the advanced search section.
 ------------------------------------------------- */
-#searchform fieldset
-{
-	text-align: left;
-	padding: 0;
-	border: none;
-}
 #advanced_search dl#search_options
 {
 	margin: 0 auto;
@@ -3603,6 +3633,582 @@ span.hidelink
 {
 	line-height: 1.5em;
 }
+
+.blue_container {
+	background-color:#f2f5fe;
+	border:1px solid #d5ecfa;
+	padding:2px 4px;
+	border-radius:3px;
+}
+.orange_container {
+	background-color: #fff6e2;
+	border:1px solid #f8da8b;
+	padding:2px 4px;
+	border-radius:3px;
+}
+.yellow_container {
+	
+	background-color:#F9F9e0;
+	border:1px solid #F2F2A5;
+	padding:2px 4px;
+	border-radius:3px;
+}
+/* page links (navpages) */
+
+a.navPages {
+	padding:0 4px;
+	border:1px solid #ccc;
+	border-radius:3px;
+}
+
+div.loginbar {
+	background-color:#485B7D;
+	border-bottom-left-radius:10px;
+}
+span.small_avatar img {
+	max-height:32px;
+	max-width:32px;
+	width:auto;
+	height:auto;
+	padding:1px;
+	border:1px solid orange;
+	background-color:#ccc;
+}
+span.small_avatar {display:block;position:relative;}
+span.avatar_overlay {background-color:white;display:block;position:absolute;bottom:-2px;right:-1px;border:1px solid white;}
+span.avatar_overlay img {
+	max-height:20px;
+	max-width:20px;
+	width:auto;
+	height:auto;
+	background-color:#ccc;
+	padding:0;
+	border:0;
+	padding:0;
+}
+
+tbody.divider tr {background:white;}
+.td_children {font-size:90%;padding:1px 10px;border-top:1px solid #ccc;margin-top:3px;}
+#quick_search form {padding-top:1px !important;}
+
+/* member card */
+div#mcard, .tcard {
+	background: #485B7D url(../images/theme/graph.png) repeat-x;
+	padding:0;
+	position:absolute;
+	font-size:12px;
+	color:#225;
+	text-align:left;
+	border:4px solid #888;
+	border-bottom-width:6px;
+	border-right-width:6px;
+	border-radius:4px;
+	box-shadow: 3px 3px 12px 4px #aaa;
+}
+div#mcard_inner, .tcard_inner {
+	background-color:#ddd;
+	padding:5px 0px 0px 0px;
+	margin-top:27px;
+}
+div#mcard_inner {
+	max-width:450px;
+}
+div#mcard_close, div#tcard_close {
+	float:right;
+	color:black;
+	font-size:10px;
+	padding:5px;
+	margin-right:10px;
+	background-color:#444;
+	color:white;
+	position:absolute;
+	top:-4px;
+	right:-13px;
+	cursor:pointer;
+	font-weight:bold;
+	border-bottom-left-radius:5px;
+	z-index:10;
+}
+
+div.likebar {
+	background-color:#f2f5fe;
+	border-top:1px solid #d5ecfa;
+	font-size:11px;
+	padding:2px 10px;
+	margin-top:3px;
+	min-height:18px;
+	line-height:18px;
+}
+
+div#ajaxbusy {
+	border:3px solid orange;
+	border-bottom-left-radius:8px;
+	border-bottom-right-radius:8px;
+	background-color:#ddd;
+	padding:10px 20px;
+}
+/*
+ * some generic classes
+ */
+ 
+.rounded_top {border-top-left-radius:5px !important;border-top-right-radius:5px !important;}
+.rounded_bottom {border-bottom-left-radius:5px !important;border-bottom-right-radius:5px !important;}
+.light_shadow {	box-shadow: 2px 2px 12px 0px #bbb;}
+
+a.tpeek {margin-left:10px;}
+abbr.timeago {border:0;}
+
+.generic_container {
+	border:1px solid #ccc;
+	border-top:0;
+	background-color:#f0f0f0;
+}
+.largepadding {padding:20px;}
+/*
+ * social sharing widgets
+ */
+ 
+div.bmbar {
+	border-bottom:1px solid #aac;
+	border-right:1px solid #aac;
+	background:#eeeefa;
+	border-radius:4px;
+	box-shadow:1px 1px 5px 2px #cce;
+	margin:8px 0;
+    font-size:10px !important;
+    line-height:100% !important;
+    font-family:Verdana,helvetica,sans-serif;
+    /*padding:3px 0 0 3px;*/
+    padding:3px 5px;
+}
+
+div.bmbar > div.title {
+	float:left;
+	font-size:16px;
+	color:#8888aa;
+	margin-right:20px;
+	padding:0;
+	line-height:20px;
+}
+.share_button {
+	padding:5px 5px 5px 24px;
+	border-radius:2px;
+	cursor:pointer;
+	display:inline-block;
+	font-size:10px;
+	line-height:100%;
+	border: 1px solid #6b81ab;
+	background-color:#D8DFEA;
+	
+}
+.share_button:hover {background-color:#ccc !important;border-color:#888;}
+
+.share_fb {background:#D8DFEA url(../images/theme/sprite.png) 0 -327px no-repeat;}
+.share_tw {background:#D8DFEA url(../images/theme/sprite.png) 0 -357px no-repeat;}
+.share_buzz {background:#D8DFEA url(../images/theme/sprite.png) 0 -390px no-repeat;}
+.share_digg {background:#D8DFEA url(../images/theme/sprite.png) 0 -421px no-repeat;}
+
+div.fb_tweet {
+    vertical-align:bottom;
+    padding:3px;
+}
+
+.twitter-share-button {
+/*    max-height:25px !important;
+    min-height:25px !important;*/
+    border:0 !important;
+    vertical-align:top;
+    float:right;
+}
+ 
+/* syntaxhighlighter and colorbox */
+
+/**
+ * SyntaxHighlighter
+ * http://alexgorbatchev.com/SyntaxHighlighter
+ *
+ * SyntaxHighlighter is donationware. If you are using it, please donate.
+ * http://alexgorbatchev.com/SyntaxHighlighter/donate.html
+ *
+ * @version
+ * 3.0.83 (July 02 2010)
+ * 
+ * @copyright
+ * Copyright (C) 2004-2010 Alex Gorbatchev.
+ *
+ * @license
+ * Dual licensed under the MIT and GPL licenses.
+ * shCore.css and shThemeDefault.css combined
+ */
+.syntaxhighlighter a,
+.syntaxhighlighter div,
+.syntaxhighlighter code,
+.syntaxhighlighter table,
+.syntaxhighlighter table td,
+.syntaxhighlighter table tr,
+.syntaxhighlighter table tbody,
+.syntaxhighlighter table thead,
+.syntaxhighlighter table caption,
+.syntaxhighlighter textarea {
+  background: none !important;
+  border: 0 !important;
+  bottom: auto !important;
+  float: none !important;
+  height: auto !important;
+  left: auto !important;
+  line-height: 1.1em !important;
+  margin: 0 !important;
+  outline: 0 !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  position: static !important;
+  right: auto !important;
+  text-align: left !important;
+  top: auto !important;
+  vertical-align: baseline !important;
+  width: auto !important;
+  box-sizing: content-box !important;
+  font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  font-size: 1em !important;
+  min-height: inherit !important;
+  /* min-height: auto !important; */
+}
+
+.syntaxhighlighter {
+  width: 100% !important;
+  margin: 1em 0 1em 0 !important;
+  position: relative !important;
+  overflow: auto !important;
+  font-size: 1em !important;
+}
+.syntaxhighlighter.source {
+  overflow: hidden !important;
+}
+.syntaxhighlighter .bold {
+  font-weight: bold !important;
+}
+.syntaxhighlighter .italic {
+  font-style: italic !important;
+}
+.syntaxhighlighter .line {
+  white-space: pre !important;
+}
+.syntaxhighlighter table {
+  width: 100% !important;
+}
+.syntaxhighlighter table caption {
+  text-align: left !important;
+  padding: .5em 0 0.5em 1em !important;
+}
+.syntaxhighlighter table td.code {
+  width: 100% !important;
+}
+.syntaxhighlighter table td.code .container {
+  position: relative !important;
+}
+.syntaxhighlighter table td.code .container textarea {
+  box-sizing: border-box !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  background: white !important;
+  padding-left: 1em !important;
+  overflow: hidden !important;
+  white-space: pre !important;
+}
+.syntaxhighlighter table td.gutter .line {
+  text-align: right !important;
+  padding: 0 0.5em 0 1em !important;
+}
+.syntaxhighlighter table td.code .line {
+  padding: 0 1em !important;
+}
+.syntaxhighlighter.nogutter td.code .container textarea, .syntaxhighlighter.nogutter td.code .line {
+  padding-left: 0em !important;
+}
+.syntaxhighlighter.show {
+  display: block !important;
+}
+.syntaxhighlighter.collapsed table {
+  display: none !important;
+}
+.syntaxhighlighter.collapsed .toolbar {
+  padding: 0.1em 0.8em 0em 0.8em !important;
+  font-size: 1em !important;
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+}
+.syntaxhighlighter.collapsed .toolbar span {
+  display: inline !important;
+  margin-right: 1em !important;
+}
+.syntaxhighlighter.collapsed .toolbar span a {
+  padding: 0 !important;
+  display: none !important;
+}
+.syntaxhighlighter.collapsed .toolbar span a.expandSource {
+  display: inline !important;
+}
+.syntaxhighlighter .toolbar {
+  position: absolute !important;
+  right: 1px !important;
+  top: 1px !important;
+  width: 11px !important;
+  height: 11px !important;
+  font-size: 10px !important;
+  z-index: 10 !important;
+}
+.syntaxhighlighter .toolbar span.title {
+  display: inline !important;
+}
+.syntaxhighlighter .toolbar a {
+  display: block !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  padding-top: 1px !important;
+}
+.syntaxhighlighter .toolbar a.expandSource {
+  display: none !important;
+}
+.syntaxhighlighter.ie {
+  font-size: .9em !important;
+  padding: 1px 0 1px 0 !important;
+}
+.syntaxhighlighter.ie .toolbar {
+  line-height: 8px !important;
+}
+.syntaxhighlighter.ie .toolbar a {
+  padding-top: 0px !important;
+}
+.syntaxhighlighter.printing .line.alt1 .content,
+.syntaxhighlighter.printing .line.alt2 .content,
+.syntaxhighlighter.printing .line.highlighted .number,
+.syntaxhighlighter.printing .line.highlighted.alt1 .content,
+.syntaxhighlighter.printing .line.highlighted.alt2 .content {
+  background: none !important;
+}
+.syntaxhighlighter.printing .line .number {
+  color: #bbbbbb !important;
+}
+.syntaxhighlighter.printing .line .content {
+  color: black !important;
+}
+.syntaxhighlighter.printing .toolbar {
+  display: none !important;
+}
+.syntaxhighlighter.printing a {
+  text-decoration: none !important;
+}
+.syntaxhighlighter.printing .plain, .syntaxhighlighter.printing .plain a {
+  color: black !important;
+}
+.syntaxhighlighter.printing .comments, .syntaxhighlighter.printing .comments a {
+  color: #008200 !important;
+}
+.syntaxhighlighter.printing .string, .syntaxhighlighter.printing .string a {
+  color: blue !important;
+}
+.syntaxhighlighter.printing .keyword {
+  color: #006699 !important;
+  font-weight: bold !important;
+}
+.syntaxhighlighter.printing .preprocessor {
+  color: gray !important;
+}
+.syntaxhighlighter.printing .variable {
+  color: #aa7700 !important;
+}
+.syntaxhighlighter.printing .value {
+  color: #009900 !important;
+}
+.syntaxhighlighter.printing .functions {
+  color: #ff1493 !important;
+}
+.syntaxhighlighter.printing .constants {
+  color: #0066cc !important;
+}
+.syntaxhighlighter.printing .script {
+  font-weight: bold !important;
+}
+.syntaxhighlighter.printing .color1, .syntaxhighlighter.printing .color1 a {
+  color: gray !important;
+}
+.syntaxhighlighter.printing .color2, .syntaxhighlighter.printing .color2 a {
+  color: #ff1493 !important;
+}
+.syntaxhighlighter.printing .color3, .syntaxhighlighter.printing .color3 a {
+  color: red !important;
+}
+.syntaxhighlighter.printing .break, .syntaxhighlighter.printing .break a {
+  color: black !important;
+}
+
+/**
+ * shThemeDefault.css included
+ */
+.syntaxhighlighter {
+  background-color: transparent !important;
+  overflow-y:hidden !important;
+  padding: 1px !important;
+}
+.syntaxhighlighter table td {
+  line-height:130% !important;
+}
+.syntaxhighlighter .line.alt1 {
+  background-color: #eef !important;
+}
+.syntaxhighlighter .line.alt2 {
+  background-color: white !important;
+}
+.syntaxhighlighter .line.highlighted.alt1, .syntaxhighlighter .line.highlighted.alt2 {
+  background-color: #e0e0e0 !important;
+}
+.syntaxhighlighter .line.highlighted.number {
+  color: black !important;
+}
+.syntaxhighlighter table caption {
+  color: black !important;
+}
+.syntaxhighlighter .gutter {
+  color: #afafaf !important;
+}
+.syntaxhighlighter .gutter .line {
+  border-right: 3px solid #6ce26c !important;
+}
+.syntaxhighlighter .gutter .line.highlighted {
+  background-color: #6ce26c !important;
+  color: white !important;
+}
+.syntaxhighlighter.printing .line .content {
+  border: none !important;
+}
+.syntaxhighlighter.collapsed {
+  overflow: visible !important;
+}
+.syntaxhighlighter.collapsed .toolbar {
+  color: blue !important;
+  background: white !important;
+  border: 1px solid #6ce26c !important;
+}
+.syntaxhighlighter.collapsed .toolbar a {
+  color: blue !important;
+}
+.syntaxhighlighter.collapsed .toolbar a:hover {
+  color: red !important;
+}
+.syntaxhighlighter .toolbar {
+  color: white !important;
+  background: #6ce26c !important;
+  border: none !important;
+}
+.syntaxhighlighter .toolbar a {
+  color: white !important;
+}
+.syntaxhighlighter .toolbar a:hover {
+  color: black !important;
+}
+.syntaxhighlighter .plain, .syntaxhighlighter .plain a {
+  color: black !important;
+}
+.syntaxhighlighter .comments, .syntaxhighlighter .comments a {
+  color: #008200 !important;
+}
+.syntaxhighlighter .string, .syntaxhighlighter .string a {
+  color: blue !important;
+}
+.syntaxhighlighter .keyword {
+  color: #006699 !important;
+}
+.syntaxhighlighter .preprocessor {
+  color: gray !important;
+}
+.syntaxhighlighter .variable {
+  color: #aa7700 !important;
+}
+.syntaxhighlighter .value {
+  color: #009900 !important;
+}
+.syntaxhighlighter .functions {
+  color: #ff1493 !important;
+}
+.syntaxhighlighter .constants {
+  color: #0066cc !important;
+}
+.syntaxhighlighter .script {
+  font-weight: bold !important;
+  color: #006699 !important;
+  background-color: transparent !important;
+}
+.syntaxhighlighter .color1, .syntaxhighlighter .color1 a {
+  color: gray !important;
+}
+.syntaxhighlighter .color2, .syntaxhighlighter .color2 a {
+  color: #ff1493 !important;
+}
+.syntaxhighlighter .color3, .syntaxhighlighter .color3 a {
+  color: red !important;
+}
+
+.syntaxhighlighter .keyword {
+  font-weight: bold !important;
+}
+
+/*
+    ColorBox Core Style:
+    The following CSS is consistent between example themes and should not be altered.
+*/
+#colorbox, #cboxOverlay, #cboxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}
+#cboxOverlay{position:fixed; width:100%; height:100%;}
+#cboxMiddleLeft, #cboxBottomLeft{clear:left;}
+#cboxContent{position:relative;}
+#cboxLoadedContent{overflow:auto;}
+#cboxTitle{margin:0;}
+#cboxLoadingOverlay, #cboxLoadingGraphic{position:absolute; top:0; left:0; width:100%;}
+#cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow{cursor:pointer;}
+.cboxPhoto{float:left; margin:auto; border:0; display:block;}
+.cboxIframe{width:100%; height:100%; display:block; border:0;}
+
+/* 
+    User Style:
+    Change the following styles to modify the appearance of ColorBox.  They are
+    ordered & tabbed in a way that represents the nesting of the generated HTML.
+*/
+#cboxOverlay{background:#000;}
+#colorbox{}
+
+#cboxTopLeft{width:14px; height:14px; background:url(../images/cbox/controls.png) no-repeat 0 0;}
+#cboxTopCenter{height:14px; background:url(../images/cbox/border.png) repeat-x top left;}
+#cboxTopRight{width:14px; height:14px; background:url(../images/cbox/controls.png) no-repeat -36px 0;}
+#cboxBottomLeft{width:14px; height:43px; background:url(../images/cbox/controls.png) no-repeat 0 -32px;}
+#cboxBottomCenter{height:43px; background:url(../images/cbox/border.png) repeat-x bottom left;}
+#cboxBottomRight{width:14px; height:43px; background:url(../images/cbox/controls.png) no-repeat -36px -32px;}
+#cboxMiddleLeft{width:14px; background:url(../images/cbox/controls.png) repeat-y -175px 0;}
+#cboxMiddleRight{width:14px; background:url(../images/cbox/controls.png) repeat-y -211px 0;}
+#cboxContent{background:#fff; overflow:visible;}
+#cboxLoadedContent{margin-bottom:5px;}
+#cboxLoadingOverlay{background:url(../images/cbox/loading_background.png) no-repeat center center;}
+#cboxLoadingGraphic{background:url(../images/cbox/loading.gif) no-repeat center center;}
+#cboxTitle{position:absolute; bottom:-25px; left:0; text-align:center; width:100%; font-weight:bold; color:#7C7C7C;}
+#cboxCurrent{position:absolute; bottom:-25px; left:58px; font-weight:bold; color:#7C7C7C;}
+        
+#cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow{position:absolute; bottom:-29px; background:url(../images/cbox/controls.png) no-repeat 0px 0px; width:23px; height:23px; text-indent:-9999px;}
+#cboxPrevious{left:0px; background-position: -51px -25px;}
+#cboxPrevious.hover{background-position:-51px 0px;}
+#cboxNext{left:27px; background-position:-75px -25px;}
+#cboxNext.hover{background-position:-75px 0px;}
+#cboxClose{right:0; background-position:-100px -25px;}
+#cboxClose.hover{background-position:-100px 0px;}
+        
+.cboxSlideshow_on #cboxSlideshow{background-position:-125px 0px; right:27px;}
+.cboxSlideshow_on #cboxSlideshow.hover{background-position:-150px 0px;}
+.cboxSlideshow_off #cboxSlideshow{background-position:-150px -25px; right:27px;}
+.cboxSlideshow_off #cboxSlideshow.hover{background-position:-125px 0px;}
 
 /* Styles for print media.
 ------------------------------------------------------- */
