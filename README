@@ -1,0 +1,23 @@
+
+	About this repo:
+	----------------
+	
+It is a modified version of the well known SMF forum software that is now released
+under a open source compatible BSD license.
+
+http://www.simplemachines.org/ is where the original SMF can be found.
+
+The goal of this project is to create a more modern version of SMF with an emphasize
+on enduser usability. 
+
+Some things that are already implemented or planned are:
+
+* A like system
+* A tagging system
+* Topic rating
+* A completely new theme, HTML 5 compliant and targeted at modern 
+  browsers
+* Ajax enhancements for previewing member profiles, topics and more.
+* dynamic auto-refreshing relative time stamps.
+
+You can follow the development here: http://forum.miranda.or.at
