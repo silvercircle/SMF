@@ -743,86 +743,6 @@ function comma_format($number, $override_decimal_count = false)
 }
 
 // Format a time to make it look purdy.
-/*
-function timeformat($log_time, $show_today = true, $offset_type = false)
-{
-	global $context, $user_info, $txt, $modSettings, $smcFunc;
-	static $non_twelve_hour;
-
-	// Offset the time.
-	if (!$offset_type)
-		$time = $log_time + ($user_info['time_offset'] + $modSettings['time_offset']) * 3600;
-	// Just the forum offset?
-	elseif ($offset_type == 'forum')
-		$time = $log_time + $modSettings['time_offset'] * 3600;
-	else
-		$time = $log_time;
-
-	// We can't have a negative date (on Windows, at least.)
-	if ($log_time < 0)
-		$log_time = 0;
-
-	// Today and Yesterday?
-	if ($modSettings['todayMod'] >= 1 && $show_today === true)
-	{
-		// Get the current time.
-		$nowtime = forum_time();
-
-		$then = @getdate($time);
-		$now = @getdate($nowtime);
-
-		// Try to make something of a time format string...
-		$s = strpos($user_info['time_format'], '%S') === false ? '' : ':%S';
-		if (strpos($user_info['time_format'], '%H') === false && strpos($user_info['time_format'], '%T') === false)
-		{
-			$h = strpos($user_info['time_format'], '%l') === false ? '%I' : '%l';
-			$today_fmt = $h . ':%M' . $s . ' %p';
-		}
-		else
-			$today_fmt = '%H:%M' . $s;
-
-		// Same day of the year, same year.... Today!
-		if ($then['yday'] == $now['yday'] && $then['year'] == $now['year'])
-			return $txt['today'] . timeformat($log_time, $today_fmt, $offset_type);
-
-		// Day-of-year is one less and same year, or it's the first of the year and that's the last of the year...
-		if ($modSettings['todayMod'] == '2' && (($then['yday'] == $now['yday'] - 1 && $then['year'] == $now['year']) || ($now['yday'] == 0 && $then['year'] == $now['year'] - 1) && $then['mon'] == 12 && $then['mday'] == 31))
-			return $txt['yesterday'] . timeformat($log_time, $today_fmt, $offset_type);
-	}
-
-	$str = !is_bool($show_today) ? $show_today : $user_info['time_format'];
-
-	if (setlocale(LC_TIME, $txt['lang_locale']))
-	{
-		if (!isset($non_twelve_hour))
-			$non_twelve_hour = trim(strftime('%p')) === '';
-		if ($non_twelve_hour && strpos($str, '%p') !== false)
-			$str = str_replace('%p', (strftime('%H', $time) < 12 ? $txt['time_am'] : $txt['time_pm']), $str);
-
-		foreach (array('%a', '%A', '%b', '%B') as $token)
-			if (strpos($str, $token) !== false)
-				$str = str_replace($token, !empty($txt['lang_capitalize_dates']) ? $smcFunc['ucwords'](strftime($token, $time)) : strftime($token, $time), $str);
-	}
-	else
-	{
-		// Do-it-yourself time localization.  Fun.
-		foreach (array('%a' => 'days_short', '%A' => 'days', '%b' => 'months_short', '%B' => 'months') as $token => $text_label)
-			if (strpos($str, $token) !== false)
-				$str = str_replace($token, $txt[$text_label][(int) strftime($token === '%a' || $token === '%A' ? '%w' : '%m', $time)], $str);
-
-		if (strpos($str, '%p') !== false)
-			$str = str_replace('%p', (strftime('%H', $time) < 12 ? $txt['time_am'] : $txt['time_pm']), $str);
-	}
-
-	// Windows doesn't support %e; on some versions, strftime fails altogether if used, so let's prevent that.
-	if ($context['server']['is_windows'] && strpos($str, '%e') !== false)
-		$str = str_replace('%e', ltrim(strftime('%d', $time), '0'), $str);
-
-	// Format any other characters..
-	return strftime($str, $time);
-}
-*/
-// Format a time to make it look purdy.
 function timeformat($log_time, $show_today = true, $offset_type = false)
 {
 	global $context, $user_info, $txt, $modSettings, $smcFunc;
@@ -897,8 +817,7 @@ function timeformat($log_time, $show_today = true, $offset_type = false)
 	if ($context['server']['is_windows'] && strpos($str, '%e') !== false)
 		$str = str_replace('%e', ltrim(strftime('%d', $time), '0'), $str);
 
-	// Format any other characters..
-	return '<abbr class="date" data-now="'.$nowtime.'" data-time="'.$time.'">'.strftime($str, $time).'</abbr>';
+	return '<abbr class="timeago" title="'.date('c', $time).'">'.strftime($str, $time).'</abbr>';
 }
 
 // Removes special entities from strings.  Compatibility...
@@ -1153,7 +1072,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			),
 			array(
 				'tag' => 'center',
-				'before' => '<div align="center">',
+				'before' => '<div style="text-align:center;">',
 				'after' => '</div>',
 				'block_level' => true,
 			),
