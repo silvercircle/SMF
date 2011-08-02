@@ -242,9 +242,8 @@ function template_main()
 		}
 
 		// Show the message anchor and a "new" anchor if this message is new.
-		echo '
-				<div class="', $message['approved'] ? ($message['alternate'] == 0 ? 'windowbg' : 'windowbg2') : 'approvebg', '">
-					<div class="post_wrapper light_shadow">';
+		$cclass = $message['approved'] ? ($message['alternate'] == 0 ? 'windowbg ' : 'windowbg2 ') : 'approvebg ';
+					echo '<div class="',$cclass,'post_wrapper light_shadow">';
 
 		if ($message['id'] != $context['first_message'])
 			echo '
@@ -586,7 +585,6 @@ function template_main()
 							<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
 							<div style="clear:both;"></div></div>';
 					echo '</div>
-				</div>
 				<hr class="post_separator" />';
 	}
 

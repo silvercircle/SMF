@@ -64,7 +64,7 @@ form
 	margin: 0;
 }
 
-#search_form {margin-bottom:0px;position:relative;top:-60px;padding:5px 10px 0 10px;background-color:white;border-top-left-radius:6px;border-top-right-radius:6px;}
+#search_form {margin-bottom:0px;position:relative;top:-70px;padding:5px 10px 0 10px;background-color:white;border-top-left-radius:6px;border-top-right-radius:6px;}
 .searchfield {background:#fff url(../images/theme/sicon.png) 3px center no-repeat;font-weight:bold;font-size:12px;border:1px solid #A3B2D0;}
 
 input, select, textarea
@@ -417,14 +417,14 @@ code.bbc_code
 	color: #222;
 	font-size: 1.1em;
 	font-weight: bold;
-	background: #ccc url(../images/theme/sprite.png) 0 -108px repeat-x;
+	background: #ccc url(../images/theme/sprite.png) 0 -171px repeat-x;
 }
 .catbg, .catbg2, tr.catbg td, tr.catbg2 td, tr.catbg th, tr.catbg2 th
 {
 	color: #222;
 	font-size: 1.1em;
 	font-weight: bold;
-	background: #485B7D url(../images/theme/sprite.png) 0 -171px repeat-x;
+	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
 }
 
 /* adjust the table versions of headers */
@@ -773,14 +773,14 @@ h4.titlebg img.icon
 }
 div.cat_bar
 {
-	background: #485B7D url(../images/theme/sprite.png) 0 -171px repeat-x;
+	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
 	padding: 0 9px;
 	height: 26px;
 	overflow: hidden;
 }
 div.title_bar
 {
-	background: #ccc url(../images/theme/sprite.png) 0 -108px repeat-x;
+	background: #ccc url(../images/theme/sprite.png) 0 -171px repeat-x;
 	padding-left: 9px;
 	height: 26px;
 	overflow: hidden;
@@ -788,7 +788,7 @@ div.title_bar
 
 div.title_barIC
 {
-	background: #ccc url(../images/theme/sprite.png) 0 -108px repeat-x;
+	background: #ccc url(../images/theme/sprite.png) 0 -171px repeat-x;
 	padding-left: 9px;
 	height: 26px;
 	overflow: hidden;
@@ -796,7 +796,7 @@ div.title_barIC
 }
 div.title_barIC h4.titlebg
 {
-	background: #ccc url(../images/theme/sprite.png) 0 -108px repeat-x;
+	background: #ccc url(../images/theme/sprite.png) 0 -171px repeat-x;
 }
 #upshrinkHeaderIC p.pminfo
 {
@@ -830,19 +830,19 @@ table.table_list a.collapse
 }
 tr.catbg th.first_th
 {
-	background: #485B7D url(../images/theme/sprite.png) 0 -171px repeat-x;
+	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
 }
 tr.catbg th.last_th
 {
-	background: #485B7D url(../images/theme/sprite.png) 0 -171px repeat-x;
+	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
 }
 tr.titlebg th.first_th
 {
-	background: #485B7D url(../images/theme/sprite.png) 0 -171px repeat-x;
+	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
 }
 tr.titlebg th.last_th
 {
-	background: #485B7D url(../images/theme/sprite.png) 0 -171px repeat-x;
+	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
 }
 .table_grid th.last_th input
 {
@@ -926,9 +926,7 @@ table.table_grid thead tr.catbg th
 #main_menu
 {
 	padding: 0 0.5em;
-	float: left;
-	margin-top: 2px;
-	background-color:#333355;
+	background-color:#98AABA;
 	font-size:12px;
 }
 
@@ -988,7 +986,7 @@ table.table_grid thead tr.catbg th
 	position: absolute;
 	width: auto;
 	font-weight: normal;
-	background-color:#3333355;
+	background-color:#98AABA;
 	padding: 0 0 0 0;
 	margin-top:22px;
 	width:15em;
@@ -1017,13 +1015,13 @@ table.table_grid thead tr.catbg th
 /* the active button */
 .dropmenu li a.active
 {
-	color: black;
+	color: white;
 	font-weight: bold;
-	background-color:#B5B6B9;
+	background-color:#333355;
 }
 .dropmenu li a.active span.firstlevel
 {
-	background: #B5B6B9;
+	background-color:#333355;
 }
 /* the hover effects */
 .dropmenu li a.firstlevel:hover, .dropmenu li:hover a.firstlevel
@@ -1058,7 +1056,7 @@ table.table_grid thead tr.catbg th
 }
 .dropmenu li li.additional_items
 {
-	background-color: #555588;
+	background-color: #98AABA;
 }
 
 span.m_downarrow {
@@ -1069,7 +1067,7 @@ span.m_downarrow {
     background:transparent url(../images/theme/sprite.png) 0 7px no-repeat;
 }
 span.m_downarrow:hover {
-	background-color:#aaa !important;
+	background-color:#ccc !important;
 }
 
 /* The dropdown menu toggle image */
@@ -1160,7 +1158,7 @@ ul#navigation li
 {
 	padding-left: 2em;
 	overflow: hidden;
-	background-color:#555;
+	background-color:#98AABA;
 }
 
 /* Styles for the general looks for the Curve theme.
@@ -1218,7 +1216,7 @@ h3, h4
 /* the upper_section, float the two each way */
 #upper_section
 {
-	background-color:black;
+	background-color:#576D82;
 	height:75px;
 	max-height:75px;
 	min-height:75px;
@@ -1469,10 +1467,6 @@ p.moderators
 /* Styles for the info center on the board index.
 ---------------------------------------------------- */
 
-#upshrinkHeaderIC
-{
-	margin-top: 4px;
-}
 dl#ic_recentposts
 {
 	margin: 0 0 0.5em 0;
@@ -1491,6 +1485,7 @@ dl#ic_recentposts dd
 {
 	margin: 0 0 0.5em 0;
 	padding: 0.5em;
+	font-size: 0.9em;
 }
 #upshrinkHeaderIC p.last
 {
@@ -1506,7 +1501,7 @@ dl#ic_recentposts dd
 }
 #upshrinkHeaderIC p.stats
 {
-	font-size: 1.1em;
+	font-size: 0.9em;
 	padding-top: 8px;
 }
 form#ic_login
@@ -2482,7 +2477,7 @@ tr.titlebg td
 #admin_menu
 {
 	padding-left: 0;
-	background-color:#555;
+	background-color:#98AABA;
 	min-height:24px;
 }
 #admin_content
@@ -3549,7 +3544,7 @@ div#mcard_inner, .tcard_inner {
 	margin-top:27px;
 }
 div#mcard_inner {
-	max-width:450px;
+	max-width:500px;
 }
 div#mcard_close, div#tcard_close {
 	float:right;
@@ -3591,6 +3586,7 @@ div#ajaxbusy {
  
 .rounded_top {border-top-left-radius:5px !important;border-top-right-radius:5px !important;}
 .rounded_bottom {border-bottom-left-radius:5px !important;border-bottom-right-radius:5px !important;}
+.rounded_tl {border-top-left-radius:5px !important;}
 .light_shadow {	box-shadow: 2px 2px 12px 0px #bbb;}
 
 a.tpeek {margin-left:10px;}
@@ -3604,6 +3600,7 @@ abbr.timeago {border:0;}
 }
 .mediumpadding {padding:10px;}
 .largepadding {padding:20px;}
+.smallpadding {padding:5px;}
 /*
  * social sharing widgets
  */

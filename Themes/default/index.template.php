@@ -255,7 +255,6 @@ function template_body_above()
 	template_menu();
 
 	echo '</nav>
-		<br class="clear" />
 	</div></header>';
 
 	// The main content should go here.
@@ -481,7 +480,7 @@ function template_menu()
 	}
 
 	echo '
-			</ul>
+			</ul><div style="clear:both;"></div>
 		</div>';
 }
 

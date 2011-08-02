@@ -109,7 +109,7 @@ function template_main()
 			echo '
 								<a class="collapse" href="', $category['collapse_href'], '">', $category['collapse_image'], '</a>';
 
-		if (!$context['user']['is_guest'] && !empty($category['show_unread']))
+		if (!$context['user']['is_guest'] && $category['new'])
 			echo '
 								<a class="unreadlink" href="', $scripturl, '?action=unread;c=', $category['id'], '">', $txt['view_unread_category'], '</a>';
 
