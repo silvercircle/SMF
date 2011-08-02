@@ -1491,6 +1491,7 @@ function loadAllPermissions($loadType = 'classic')
 			'profile_server_avatar' => array(false, 'profile', 'use_avatar'),
 			'profile_upload_avatar' => array(false, 'profile', 'use_avatar'),
 			'profile_remote_avatar' => array(false, 'profile', 'use_avatar'),
+			'profile_signature' => array(false, 'profile', 'use_signature'),
 			'smftags_add' => array(false, 'smftags', 'smftags'),
 			'smftags_del' => array(false, 'smftags', 'smftags'),
 			'smftags_manage' => array(false, 'smftags', 'smftags'),

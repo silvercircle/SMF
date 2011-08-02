@@ -417,14 +417,14 @@ code.bbc_code
 	color: #222;
 	font-size: 1.1em;
 	font-weight: bold;
-	background: #ccc url(../images/theme/cellpic.gif) repeat-x;
+	background: #ccc url(../images/theme/sprite.png) 0 -108px repeat-x;
 }
 .catbg, .catbg2, tr.catbg td, tr.catbg2 td, tr.catbg th, tr.catbg2 th
 {
-	color: #fff;
+	color: #222;
 	font-size: 1.1em;
 	font-weight: bold;
-	background: #485B7D url(../images/theme/graph.png) repeat-x;
+	background: #485B7D url(../images/theme/sprite.png) 0 -171px repeat-x;
 }
 
 /* adjust the table versions of headers */
@@ -436,14 +436,15 @@ tr.titlebg th a:link, tr.titlebg th a:visited, tr.titlebg2 td a:link, tr.titlebg
 {
 	color: #222;
 }
-tr.catbg th a:link, tr.catbg th a:visited, tr.catbg2 td a:link, tr.catbg2 td a:visited
+.catbg a:link, .catbg a:visited
 {
-	color: #fff;
+	color: #222;
+	text-decoration:none;
 }
-.catbg select
-{
+.catbg a:hover {
+	color:maroon;
+	text-decoration:none;
 }
-
 /* Alternating backgrounds for posts, and several other sections of the forum. */
 .windowbg, #preview_body
 {
@@ -734,23 +735,9 @@ h3.catbg, h3.catbg2, h3.titlebg, h4.titlebg, h4.catbg
 	font-size: 1.05em;
 	font-weight: bold;
 }
-h3.catbg a:link, h3.catbg a:visited, h4.catbg a:link, h4.catbg a:visited, h3.catbg, .table_list tbody.header td, .table_list tbody.header td a
-{
-	color: #fff;
-}
 h3.catbg2 a, h3.catbg2
 {
 	color: #feb;
-}
-h3.catbg a:hover, h4.catbg a:hover, .table_list tbody.header td a:hover
-{
-	color: #fd9;
-	text-decoration: none;
-}
-h3.catbg2 a:hover
-{
-	color: #fff;
-	text-decoration: none;
 }
 h3.titlebg a, h3.titlebg, h4.titlebg, h4.titlebg a
 {
@@ -777,7 +764,6 @@ h4.catbg, h4.catbg2 , h3.catbg , h3.catbg2 , .table_list tbody.header td.catbg
 }
 h4.titlebg, h3.titlebg
 {
-	/*background: #ccc url(../images/theme/cellpic.gif) repeat-x;*/
 	margin-right: 9px;
 }
 h4.titlebg img.icon
@@ -787,33 +773,22 @@ h4.titlebg img.icon
 }
 div.cat_bar
 {
-	background: #485B7D url(../images/theme/graph.png) repeat-x;
+	background: #485B7D url(../images/theme/sprite.png) 0 -171px repeat-x;
 	padding: 0 9px;
 	height: 26px;
 	overflow: hidden;
 }
 div.title_bar
 {
-	background: #ccc url(../images/theme/cellpic.gif) repeat-x;
+	background: #ccc url(../images/theme/sprite.png) 0 -108px repeat-x;
 	padding-left: 9px;
 	height: 26px;
 	overflow: hidden;
 }
 
-/* rounded bars needs a different background here */
-
-div.roundframe div.cat_bar
-{
-	background: #99abbf url(../images/theme/main_block.png) no-repeat 0 -240px;
-	margin-bottom: 0;
-}
-div.roundframe div.cat_bar h3.catbg
-{
-	background: url(../images/theme/main_block.png) no-repeat 100% -240px;
-}
 div.title_barIC
 {
-	background: #485B7D url(../images/theme/cellpic.gif) repeat-x;
+	background: #ccc url(../images/theme/sprite.png) 0 -108px repeat-x;
 	padding-left: 9px;
 	height: 26px;
 	overflow: hidden;
@@ -821,7 +796,7 @@ div.title_barIC
 }
 div.title_barIC h4.titlebg
 {
-	background: #485B7D url(../images/theme/cellpic.gif) repeat-x;
+	background: #ccc url(../images/theme/sprite.png) 0 -108px repeat-x;
 }
 #upshrinkHeaderIC p.pminfo
 {
@@ -855,19 +830,19 @@ table.table_list a.collapse
 }
 tr.catbg th.first_th
 {
-	background: #485B7D url(../images/theme/graph.png) repeat-x;
+	background: #485B7D url(../images/theme/sprite.png) 0 -171px repeat-x;
 }
 tr.catbg th.last_th
 {
-	background: #485B7D url(../images/theme/graph.png) repeat-x;
+	background: #485B7D url(../images/theme/sprite.png) 0 -171px repeat-x;
 }
 tr.titlebg th.first_th
 {
-	background: #485B7D url(../images/theme/graph.png) repeat-x;
+	background: #485B7D url(../images/theme/sprite.png) 0 -171px repeat-x;
 }
 tr.titlebg th.last_th
 {
-	background: #485B7D url(../images/theme/graph.png) repeat-x;
+	background: #485B7D url(../images/theme/sprite.png) 0 -171px repeat-x;
 }
 .table_grid th.last_th input
 {
@@ -908,138 +883,10 @@ table.table_grid thead tr.catbg th
 	cursor: default;
 } 
 
-/* Common styles used to add corners to divisions.
-------------------------------------------------------- */
-.windowbg span.topslice
-{
-	display: block;
-	padding-left: 20px;
-	background: url(../images/theme/main_block.png) 0 -30px no-repeat;
-}
-.windowbg span.topslice span
-{
-	display: block;
-	background: url(../images/theme/main_block.png) 100% -30px no-repeat;
-	height: 11px;
-}
-.windowbg span.botslice
-{
-	display: block;
-	padding-left: 20px;
-	background: url(../images/theme/main_block.png) 0 -40px no-repeat;
-	font-size: 5px;
-	line-height: 5px;
-	margin-bottom: 0.2em;
-}
-.windowbg span.botslice span
-{
-	display: block;
-	background: url(../images/theme/main_block.png) 100% -40px no-repeat;
-	height: 11px;
-}
-
-.windowbg2 span.topslice
-{
-	display: block;
-	padding-left: 20px;
-	background: url(../images/theme/main_block.png) 0 -60px no-repeat;
-}
-.windowbg2 span.topslice span
-{
-	display: block;
-	background: url(../images/theme/main_block.png) 100% -60px no-repeat;
-	height: 11px;
-}
-.windowbg2 span.botslice
-{
-	display: block;
-	padding-left: 20px;
-	background: url(../images/theme/main_block.png) 0 -71px no-repeat;
-	font-size: 5px;
-	line-height: 5px;
-	margin-bottom: 0.2em;
-}
-.windowbg2 span.botslice span
-{
-	display: block;
-	background: url(../images/theme/main_block.png) 100% -71px no-repeat;
-	height: 11px;
-}
-.approvebg span.topslice
-{
-	display: block;
-	padding-left: 20px;
-	background: url(../images/theme/main_block.png) 0 0 no-repeat;
-}
-.approvebg span.topslice span
-{
-	display: block;
-	background: url(../images/theme/main_block.png) 100% 0 no-repeat;
-	height: 11px;
-}
-.approvebg span.botslice
-{
-	display: block;
-	padding-left: 20px;
-	background: url(../images/theme/main_block.png) 0 -11px no-repeat;
-	margin-bottom: 0.2em;
-}
-.approvebg span.botslice span
-{
-	display: block;
-	background: url(../images/theme/main_block.png) 100% -11px no-repeat;
-	height: 11px;
-}
 .postbg
 {
 	border-left: 1px solid #7f7f7f;
 	border-right: 1px solid #7f7f7f;
-}
-
-/* Used for sections that need somewhat larger corners.
------------------------------------------------------------ */
-.roundframe
-{
-	padding: 0 10px;
-	background: #f5f5f5;
-	border-left: 1px solid #c5c5c5;
-	border-right: 1px solid #c5c5c5;
-}
-.roundframe dl, .roundframe dt, .roundframe p
-{
-	margin: 0;
-}
-.roundframe p
-{
-	padding: 0.5em;
-}
-span.upperframe
-{
-	padding: 0;
-	display: block;
-	background: url(../images/theme/main_block.png) 0 -90px no-repeat;
-	padding-left: 20px;
-}
-span.upperframe span
-{
-	padding: 0;
-	height: 12px;
-	display: block;
-	background: url(../images/theme/main_block.png) 100% -90px no-repeat;
-}
-span.lowerframe
-{
-	padding: 0;
-	display: block;
-	background: url(../images/theme/main_block.png) 0 -102px no-repeat;
-	padding-left: 20px;
-}
-span.lowerframe span
-{
-	padding: 0;
-	height: 12px;
-	display: block;
-	background: url(../images/theme/main_block.png) 100% -102px no-repeat;
 }
 
 /* The main content area.
@@ -3608,8 +3455,8 @@ span.hidelink
 
 #help_container
 {
-	margin: 4px 0 0 0;
-	padding: 0 0 8px 0;
+	margin: 0;
+	padding: 0;
 }
 #helpmain
 {
@@ -3753,7 +3600,9 @@ abbr.timeago {border:0;}
 	border:1px solid #ccc;
 	border-top:0;
 	background-color:#f0f0f0;
+	padding:1px;
 }
+.mediumpadding {padding:10px;}
 .largepadding {padding:20px;}
 /*
  * social sharing widgets

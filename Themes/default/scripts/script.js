@@ -48,7 +48,7 @@ var ajax_indicator_ele = null;
 if (!('getElementById' in document) && 'all' in document)
 	document.getElementById = function (sId) {
 		return document.all[sId];
-	}
+	};
 
 // Define XMLHttpRequest for IE 5 and above. (don't bother for IE 4 :/.... works in Opera 7.6 and Safari 1.2!)
 else if (!('XMLHttpRequest' in window) && 'ActiveXObject' in window)
@@ -60,7 +60,7 @@ else if (!('XMLHttpRequest' in window) && 'ActiveXObject' in window)
 if (!'getElementsByTagName' in document && 'all' in document)
 	document.getElementsByTagName = function (sName) {
 		return document.all.tags[sName];
-	}
+	};
 
 // Some older versions of Mozilla don't have this, for some reason.
 if (!('forms' in document))
@@ -101,7 +101,7 @@ function getXMLDocument(sUrl, funcCallback)
 	oMyDoc.send(null);
 
 	return oMyDoc;
-}
+};
 
 // Send a post form to the server using XMLHttpRequest.
 function sendXMLDocument(sUrl, sContent, funcCallback)
@@ -129,7 +129,7 @@ function sendXMLDocument(sUrl, sContent, funcCallback)
 	oSendDoc.send(sContent);
 
 	return true;
-}
+};
 
 // A property we'll be needing for php_to8bit.
 String.prototype.oCharsetConversion = {
@@ -148,7 +148,7 @@ String.prototype.php_to8bit = function ()
 		{
 			n = this.charCodeAt(i);
 			if (n < 128)
-				sReturn += String.fromCharCode(n)
+				sReturn += String.fromCharCode(n);
 			else if (n < 2048)
 				sReturn += String.fromCharCode(192 | n >> 6) + String.fromCharCode(128 | n & 63);
 			else if (n < 65536)
@@ -258,8 +258,8 @@ String.prototype.php_to8bit = function ()
 		sReturn += iOffsetFrom > -1 ? this.oCharsetConversion.to.charAt(iOffsetFrom) : (this.charCodeAt(i) > 127 ? '&#' + this.charCodeAt(i) + ';' : this.charAt(i));
 	}
 
-	return sReturn
-}
+	return sReturn;
+};
 
 // Character-level replacement function.
 String.prototype.php_strtr = function (sFrom, sTo)
@@ -267,7 +267,7 @@ String.prototype.php_strtr = function (sFrom, sTo)
 	return this.replace(new RegExp('[' + sFrom + ']', 'g'), function (sMatch) {
 		return sTo.charAt(sFrom.indexOf(sMatch));
 	});
-}
+};
 
 // Simulate PHP's strtolower (in SOME cases PHP uses ISO-8859-1 case folding).
 String.prototype.php_strtolower = function ()
@@ -276,37 +276,37 @@ String.prototype.php_strtolower = function ()
 		'ABCDEFGHIJKLMNOPQRSTUVWXYZ\x8a\x8c\x8e\x9f\xc0\xc1\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd0\xd1\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xdb\xdc\xdd\xde',
 		'abcdefghijklmnopqrstuvwxyz\x9a\x9c\x9e\xff\xe0\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe'
 	) : this.php_strtr('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz');
-}
+};
 
 String.prototype.php_urlencode = function()
 {
 	return escape(this).replace(/\+/g, '%2b').replace('*', '%2a').replace('/', '%2f').replace('@', '%40');
-}
+};
 
 String.prototype.php_htmlspecialchars = function()
 {
 	return this.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
+};
 
 String.prototype.php_unhtmlspecialchars = function()
 {
 	return this.replace(/&quot;/g, '"').replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&amp;/g, '&');
-}
+};
 
 String.prototype.php_addslashes = function()
 {
 	return this.replace(/\\/g, '\\\\').replace(/'/g, '\\\'');
-}
+};
 
 String.prototype._replaceEntities = function(sInput, sDummy, sNum)
 {
 	return String.fromCharCode(parseInt(sNum));
-}
+};
 
 String.prototype.removeEntities = function()
 {
 	return this.replace(/&(amp;)?#(\d+);/g, this._replaceEntities);
-}
+};
 
 String.prototype.easyReplace = function (oReplacements)
 {
@@ -315,7 +315,7 @@ String.prototype.easyReplace = function (oReplacements)
 		sResult = sResult.replace(new RegExp('%' + sSearch + '%', 'g'), oReplacements[sSearch]);
 
 	return sResult;
-}
+};
 
 
 // Open a new window.
@@ -334,7 +334,7 @@ function reqWin(desktopURL, alternateWidth, alternateHeight, noScrollbars)
 
 	// Return false so the click won't follow the link ;).
 	return false;
-}
+};
 
 // Remember the current position.
 function storeCaret(oTextHandle)
@@ -342,7 +342,7 @@ function storeCaret(oTextHandle)
 	// Only bother if it will be useful.
 	if ('createTextRange' in oTextHandle)
 		oTextHandle.caretPos = document.selection.createRange().duplicate();
-}
+};
 
 // Replaces the currently selected text with the passed text.
 function replaceText(text, oTextHandle)
@@ -378,7 +378,7 @@ function replaceText(text, oTextHandle)
 		oTextHandle.value += text;
 		oTextHandle.focus(oTextHandle.value.length - 1);
 	}
-}
+};
 
 // Surrounds the selected text with text1 and text2.
 function surroundText(text1, text2, oTextHandle)
@@ -427,7 +427,7 @@ function surroundText(text1, text2, oTextHandle)
 		oTextHandle.value += text1 + text2;
 		oTextHandle.focus(oTextHandle.value.length - 1);
 	}
-}
+};
 
 // Checks if the passed input's value is nothing.
 function isEmptyText(theField)
@@ -446,7 +446,7 @@ function isEmptyText(theField)
 		return true;
 	else
 		return false;
-}
+};
 
 // Only allow form submission ONCE.
 function submitonce(theform)
@@ -456,7 +456,7 @@ function submitonce(theform)
 	// If there are any editors warn them submit is coming!
 	for (var i = 0; i < smf_editorArray.length; i++)
 		smf_editorArray[i].doSubmit();
-}
+};
 function submitThisOnce(oControl)
 {
 	// Hateful, hateful fix for Safari 1.3 beta.
@@ -471,18 +471,18 @@ function submitThisOnce(oControl)
 		aTextareas[i].readOnly = true;
 
 	return !smf_formSubmitted;
-}
+};
 
 // Deprecated, as innerHTML is supported everywhere.
 function setInnerHTML(oElement, sToValue)
 {
 	oElement.innerHTML = sToValue;
-}
+};
 
 function getInnerHTML(oElement)
 {
 	return oElement.innerHTML;
-}
+};
 
 // Set the "outer" HTML of an element.
 function setOuterHTML(oElement, sToValue)
@@ -495,7 +495,7 @@ function setOuterHTML(oElement, sToValue)
 		range.setStartBefore(oElement);
 		oElement.parentNode.replaceChild(range.createContextualFragment(sToValue), oElement);
 	}
-}
+};
 
 // Checks for variable in theArray.
 function in_array(variable, theArray)
@@ -505,7 +505,7 @@ function in_array(variable, theArray)
 			return true;
 
 	return false;
-}
+};
 
 // Checks for variable in theArray.
 function array_search(variable, theArray)
@@ -515,7 +515,7 @@ function array_search(variable, theArray)
 			return i;
 
 	return null;
-}
+};
 
 // Find a specific radio button in its group and select it.
 function selectRadioByName(oRadioGroup, sName)
@@ -528,7 +528,7 @@ function selectRadioByName(oRadioGroup, sName)
 			return oRadioGroup[i].checked = true;
 
 	return false;
-}
+};
 
 // Invert all checkboxes at once by clicking a single checkbox.
 function invertAll(oInvertCheckbox, oForm, sMask, bIgnoreDisabled)
@@ -541,7 +541,7 @@ function invertAll(oInvertCheckbox, oForm, sMask, bIgnoreDisabled)
 		if (!oForm[i].disabled || (typeof(bIgnoreDisabled) == 'boolean' && bIgnoreDisabled))
 			oForm[i].checked = oInvertCheckbox.checked;
 	}
-}
+};
 
 // Keep the session alive - always!
 var lastKeepAliveCheck = new Date().getTime();
@@ -558,7 +558,7 @@ function smf_sessionKeepAlive()
 	}
 
 	window.setTimeout('smf_sessionKeepAlive();', 1200000);
-}
+};
 window.setTimeout('smf_sessionKeepAlive();', 1200000);
 
 // Set a theme option through javascript.
@@ -575,7 +575,7 @@ function smf_setThemeOption(option, value, theme, cur_session_id, cur_session_va
 
 	var tempImage = new Image();
 	tempImage.src = smf_prepareScriptUrl(smf_scripturl) + 'action=jsoption;var=' + option + ';val=' + value + ';' + cur_session_var + '=' + cur_session_id + additional_vars + (theme == null ? '' : '&th=' + theme) + ';time=' + (new Date().getTime());
-}
+};
 
 function smf_avatarResize()
 {
@@ -605,7 +605,7 @@ function smf_avatarResize()
 				this.avatar.width = (smf_avatarMaxHeight * this.avatar.width) / this.avatar.height;
 				this.avatar.height = smf_avatarMaxHeight;
 			}
-		}
+		};
 		tempAvatars[j].src = possibleAvatars[i].src;
 		j++;
 	}
@@ -615,7 +615,7 @@ function smf_avatarResize()
 		window_oldAvatarOnload();
 		window_oldAvatarOnload = null;
 	}
-}
+};
 
 
 function hashLoginPassword(doForm, cur_session_id)
@@ -641,7 +641,7 @@ function hashLoginPassword(doForm, cur_session_id)
 		doForm.passwrd.value = '';
 	else
 		doForm.passwrd.value = doForm.passwrd.value.replace(/./g, '*');
-}
+};
 
 function hashAdminPassword(doForm, username, cur_session_id)
 {
@@ -654,7 +654,7 @@ function hashAdminPassword(doForm, username, cur_session_id)
 
 	doForm.admin_hash_pass.value = hex_sha1(hex_sha1(username.php_to8bit().php_strtolower() + doForm.admin_pass.value.php_to8bit()) + cur_session_id);
 	doForm.admin_pass.value = doForm.admin_pass.value.replace(/./g, '*');
-}
+};
 
 // Shows the page numbers by clicking the dots (in compact view).
 function expandPages(spanNode, baseURL, firstPage, lastPage, perPage)
@@ -682,7 +682,7 @@ function expandPages(spanNode, baseURL, firstPage, lastPage, perPage)
 
 	// Replace the dots by the new page links.
 	setInnerHTML(spanNode, replacement);
-}
+};
 
 function smc_preCacheImage(sSrc)
 {
@@ -694,7 +694,7 @@ function smc_preCacheImage(sSrc)
 		var oImage = new Image();
 		oImage.src = sSrc;
 	}
-}
+};
 
 
 // *** smc_Cookie class.
@@ -703,7 +703,7 @@ function smc_Cookie(oOptions)
 	this.opt = oOptions;
 	this.oCookies = {};
 	this.init();
-}
+};
 
 smc_Cookie.prototype.init = function()
 {
@@ -716,17 +716,17 @@ smc_Cookie.prototype.init = function()
 			this.oCookies[aNameValuePair[0].replace(/^\s+|\s+$/g, '')] = decodeURIComponent(aNameValuePair[1]);
 		}
 	}
-}
+};
 
 smc_Cookie.prototype.get = function(sKey)
 {
 	return sKey in this.oCookies ? this.oCookies[sKey] : null;
-}
+};
 
 smc_Cookie.prototype.set = function(sKey, sValue)
 {
 	document.cookie = sKey + '=' + encodeURIComponent(sValue);
-}
+};
 
 
 // *** smc_Toggle class.
@@ -736,7 +736,7 @@ function smc_Toggle(oOptions)
 	this.bCollapsed = false;
 	this.oCookie = null;
 	this.init();
-}
+};
 
 smc_Toggle.prototype.init = function ()
 {
@@ -751,7 +751,7 @@ smc_Toggle.prototype.init = function ()
 		this.oCookie = new smc_Cookie({});
 
 		// Check if the cookie is set.
-		var cookieValue = this.oCookie.get(this.opt.oCookieOptions.sCookieName)
+		var cookieValue = this.oCookie.get(this.opt.oCookieOptions.sCookieName);
 		if (cookieValue != null)
 			this.opt.bCurrentlyCollapsed = cookieValue == '1';
 	}
@@ -776,7 +776,7 @@ smc_Toggle.prototype.init = function ()
 				oImage.onclick = function () {
 					this.instanceRef.toggle();
 					this.blur();
-				}
+				};
 				oImage.style.cursor = 'pointer';
 
 				// Preload the collapsed image.
@@ -802,11 +802,11 @@ smc_Toggle.prototype.init = function ()
 					this.instanceRef.toggle();
 					this.blur();
 					return false;
-				}
+				};
 			}
 		}
 	}
-}
+};
 
 // Collapse or expand the section.
 smc_Toggle.prototype.changeState = function(bCollapse, bInit)
@@ -879,13 +879,13 @@ smc_Toggle.prototype.changeState = function(bCollapse, bInit)
 
 	if ('oThemeOptions' in this.opt && this.opt.oThemeOptions.bUseThemeSettings)
 		smf_setThemeOption(this.opt.oThemeOptions.sOptionName, this.bCollapsed ? '1' : '0', 'sThemeId' in this.opt.oThemeOptions ? this.opt.oThemeOptions.sThemeId : null, this.opt.oThemeOptions.sSessionId, this.opt.oThemeOptions.sSessionVar, 'sAdditionalVars' in this.opt.oThemeOptions ? this.opt.oThemeOptions.sAdditionalVars : null);
-}
+};
 
 smc_Toggle.prototype.toggle = function()
 {
 	// Change the state by reversing the current state.
 	this.changeState(!this.bCollapsed);
-}
+};
 
 
 function ajax_indicator(turn_on)
@@ -910,7 +910,7 @@ function ajax_indicator(turn_on)
 
 		ajax_indicator_ele.style.display = turn_on ? 'block' : 'none';
 	}
-}
+};
 
 function create_ajax_indicator_ele()
 {
@@ -941,7 +941,7 @@ function create_ajax_indicator_ele()
 
 	// Finally attach the element to the body.
 	document.body.appendChild(ajax_indicator_ele);
-}
+};
 
 function createEventListener(oTarget)
 {
@@ -951,22 +951,22 @@ function createEventListener(oTarget)
 		{
 			oTarget.addEventListener = function (sEvent, funcHandler, bCapture) {
 				oTarget.attachEvent('on' + sEvent, funcHandler);
-			}
+			};
 			oTarget.removeEventListener = function (sEvent, funcHandler, bCapture) {
 				oTarget.detachEvent('on' + sEvent, funcHandler);
-			}
+			};
 		}
 		else
 		{
 			oTarget.addEventListener = function (sEvent, funcHandler, bCapture) {
 				oTarget['on' + sEvent] = funcHandler;
-			}
+			};
 			oTarget.removeEventListener = function (sEvent, funcHandler, bCapture) {
 				oTarget['on' + sEvent] = null;
-			}
+			};
 		}
 	}
-}
+};
 
 // This function will retrieve the contents needed for the jump to boxes.
 function grabJumpToContent()
@@ -987,7 +987,7 @@ function grabJumpToContent()
 				name: items[i].firstChild.nodeValue.removeEntities(),
 				is_current: false,
 				childLevel: parseInt(items[i].getAttribute('childlevel'))
-			}
+			};
 		}
 	}
 
@@ -995,7 +995,7 @@ function grabJumpToContent()
 
 	for (var i = 0, n = aJumpTo.length; i < n; i++)
 		aJumpTo[i].fillSelect(aBoardsAndCategories);
-}
+};
 
 // This'll contain all JumpTo objects on the page.
 var aJumpTo = new Array();
@@ -1006,7 +1006,7 @@ function JumpTo(oJumpToOptions)
 	this.opt = oJumpToOptions;
 	this.dropdownList = null;
 	this.showSelect();
-}
+};
 
 // Show the initial select box (onload). Method of the JumpTo class.
 JumpTo.prototype.showSelect = function ()
@@ -1016,7 +1016,7 @@ JumpTo.prototype.showSelect = function ()
 		sChildLevelPrefix += this.opt.sBoardChildLevelIndicator;
 	setInnerHTML(document.getElementById(this.opt.sContainerId), this.opt.sJumpToTemplate.replace(/%select_id%/, this.opt.sContainerId + '_select').replace(/%dropdown_list%/, '<select name="' + this.opt.sContainerId + '_select" id="' + this.opt.sContainerId + '_select" ' + ('implementation' in document ? '' : 'onmouseover="grabJumpToContent();" ') + ('onbeforeactivate' in document ? 'onbeforeactivate' : 'onfocus') + '="grabJumpToContent();"><option value="?board=' + this.opt.iCurBoardId + '.0">' + sChildLevelPrefix + this.opt.sBoardPrefix + this.opt.sCurBoardName.removeEntities() + '</option></select>&nbsp;<input type="button" value="' + this.opt.sGoButtonLabel + '" onclick="window.location.href = \'' + smf_prepareScriptUrl(smf_scripturl) + 'board=' + this.opt.iCurBoardId + '.0\';" />'));
 	this.dropdownList = document.getElementById(this.opt.sContainerId + '_select');
-}
+};
 
 // Fill the jump to box with entries. Method of the JumpTo class.
 JumpTo.prototype.fillSelect = function (aBoardsAndCategories)
@@ -1091,8 +1091,8 @@ JumpTo.prototype.fillSelect = function (aBoardsAndCategories)
 	this.dropdownList.onchange = function() {
 		if (this.selectedIndex > 0 && this.options[this.selectedIndex].value)
 			window.location.href = smf_scripturl + this.options[this.selectedIndex].value.substr(smf_scripturl.indexOf('?') == -1 || this.options[this.selectedIndex].value.substr(0, 1) != '?' ? 0 : 1);
-	}
-}
+	};
+};
 
 // A global array containing all IconList objects.
 var aIconLists = new Array();
@@ -1116,7 +1116,7 @@ function IconList(oOptions)
 		this.opt.sSessionVar = 'sesc';
 
 	this.initIcons();
-}
+};
 
 // Replace all message icons by icons with hoverable and clickable div's.
 IconList.prototype.initIcons = function ()
@@ -1124,15 +1124,15 @@ IconList.prototype.initIcons = function ()
 	for (var i = document.images.length - 1, iPrefixLength = this.opt.sIconIdPrefix.length; i >= 0; i--)
 		if (document.images[i].id.substr(0, iPrefixLength) == this.opt.sIconIdPrefix)
 			setOuterHTML(document.images[i], '<div title="' + this.opt.sLabelIconList + '" onclick="' + this.opt.sBackReference + '.openPopup(this, ' + document.images[i].id.substr(iPrefixLength) + ')" onmouseover="' + this.opt.sBackReference + '.onBoxHover(this, true)" onmouseout="' + this.opt.sBackReference + '.onBoxHover(this, false)" style="background: ' + this.opt.sBoxBackground + '; cursor: ' + (is_ie && !is_ie6up ? 'hand' : 'pointer') + '; padding: 3px; text-align: center;"><img src="' + document.images[i].src + '" alt="' + document.images[i].alt + '" id="' + document.images[i].id + '" style="margin: 0px; padding: ' + (is_ie ? '3px' : '3px 0px 3px 0px') + ';" /></div>');
-}
+};
 
 // Event for the mouse hovering over the original icon.
 IconList.prototype.onBoxHover = function (oDiv, bMouseOver)
 {
 	oDiv.style.border = bMouseOver ? this.opt.iBoxBorderWidthHover + 'px solid ' + this.opt.sBoxBorderColorHover : '';
 	oDiv.style.background = bMouseOver ? this.opt.sBoxBackgroundHover : this.opt.sBoxBackground;
-	oDiv.style.padding = bMouseOver ? (3 - this.opt.iBoxBorderWidthHover) + 'px' : '3px'
-}
+	oDiv.style.padding = bMouseOver ? (3 - this.opt.iBoxBorderWidthHover) + 'px' : '3px';
+};
 
 // Show the list of icons after the user clicked the original icon.
 IconList.prototype.openPopup = function (oDiv, iMessageId)
@@ -1176,7 +1176,7 @@ IconList.prototype.openPopup = function (oDiv, iMessageId)
 		this.oContainerDiv.style.display = 'block';
 
 	document.body.addEventListener('mousedown', this.onWindowMouseDown, false);
-}
+};
 
 // Setup the list of icons once it is received through xmlHTTP.
 IconList.prototype.onIconsReceived = function (oXMLDoc)
@@ -1195,7 +1195,7 @@ IconList.prototype.onIconsReceived = function (oXMLDoc)
 		this.oContainerDiv.style.width = this.oContainerDiv.clientWidth + 'px';
 
 	ajax_indicator(false);
-}
+};
 
 // Event handler for hovering over the icons.
 IconList.prototype.onItemHover = function (oDiv, bMouseOver)
@@ -1208,7 +1208,7 @@ IconList.prototype.onItemHover = function (oDiv, bMouseOver)
 		this.onBoxHover(this.oClickedIcon, true);
 	else
 		this.iCurTimeout = window.setTimeout(this.opt.sBackReference + '.collapseList();', 500);
-}
+};
 
 // Event handler for clicking on one of the icons.
 IconList.prototype.onItemMouseDown = function (oDiv, sNewIcon)
@@ -1229,7 +1229,7 @@ IconList.prototype.onItemMouseDown = function (oDiv, sNewIcon)
 			this.oClickedIcon.getElementsByTagName('img')[0].src = oDiv.getElementsByTagName('img')[0].src;
 		}
 	}
-}
+};
 
 // Event handler for clicking outside the list (will make the list disappear).
 IconList.prototype.onWindowMouseDown = function ()
@@ -1240,7 +1240,7 @@ IconList.prototype.onWindowMouseDown = function ()
 		aIconLists[i].funcParent.tmpMethod();
 		delete aIconLists[i].funcParent.tmpMethod;
 	}
-}
+};
 
 // Collapse the list of icons.
 IconList.prototype.collapseList = function()
@@ -1249,7 +1249,7 @@ IconList.prototype.collapseList = function()
 	this.oContainerDiv.style.display = 'none';
 	this.iCurMessageId = 0;
 	document.body.removeEventListener('mousedown', this.onWindowMouseDown, false);
-}
+};
 
 // Handy shortcuts for getting the mouse position on the screen - only used for IE at the moment.
 function smf_mousePose(oEvent)
@@ -1269,7 +1269,7 @@ function smf_mousePose(oEvent)
 	}
 
 	return [x, y];
-}
+};
 
 // Short function for finding the actual position of an item.
 function smf_itemPos(itemHandle)
@@ -1295,13 +1295,13 @@ function smf_itemPos(itemHandle)
 	}
 
 	return [itemX, itemY];
-}
+};
 
 // This function takes the script URL and prepares it to allow the query string to be appended to it.
 function smf_prepareScriptUrl(sUrl)
 {
 	return sUrl.indexOf('?') == -1 ? sUrl + '?' : sUrl + (sUrl.charAt(sUrl.length - 1) == '?' || sUrl.charAt(sUrl.length - 1) == '&' || sUrl.charAt(sUrl.length - 1) == ';' ? '' : ';');
-}
+};
 
 var aOnloadEvents = new Array();
 function addLoadEvent(fNewOnload)
@@ -1329,12 +1329,12 @@ function addLoadEvent(fNewOnload)
 	// This isn't the first event function, add it to the list.
 	else
 		aOnloadEvents[aOnloadEvents.length] = fNewOnload;
-}
+};
 
 function smfFooterHighlight(element, value)
 {
 	element.src = smf_images_url + '/' + (value ? 'h_' : '') + element.id + '.gif';
-}
+};
 
 // Get the text in a code tag.
 function smfSelectText(oCurElement, bActOnElement)
@@ -1376,7 +1376,7 @@ function smfSelectText(oCurElement, bActOnElement)
 	}
 
 	return false;
-}
+};
 
 // A function needed to discern HTML entities from non-western characters.
 function smc_saveEntities(sFormName, aElementNames, sMask)
@@ -1393,7 +1393,7 @@ function smc_saveEntities(sFormName, aElementNames, sMask)
 		if (aElementNames[i] in document.forms[sFormName])
 			document.forms[sFormName][aElementNames[i]].value = document.forms[sFormName][aElementNames[i]].value.replace(/&#/g, '&#38;#');
 	}
-}
+};
 
 // A function used to clean the attachments on post page
 function cleanFileInput(idElement)
@@ -1409,4 +1409,242 @@ function cleanFileInput(idElement)
 		document.getElementById(idElement).type = 'input';
 		document.getElementById(idElement).type = 'file';
 	}
-}
+};
+
+// The purpose of this code is to fix the height of overflow: auto blocks, because some browsers can't figure it out for themselves.
+function smf_codeBoxFix()
+{
+	var codeFix = document.getElementsByTagName('code');
+	for (var i = codeFix.length - 1; i >= 0; i--)
+	{
+		if (is_webkit && codeFix[i].offsetHeight < 20)
+			codeFix[i].style.height = (codeFix[i].offsetHeight + 20) + 'px';
+
+		else if (is_ff && (codeFix[i].scrollWidth > codeFix[i].clientWidth || codeFix[i].clientWidth == 0))
+			codeFix[i].style.overflow = 'scroll';
+
+		else if ('currentStyle' in codeFix[i] && codeFix[i].currentStyle.overflow == 'auto' && (codeFix[i].currentStyle.height == '' || codeFix[i].currentStyle.height == 'auto') && (codeFix[i].scrollWidth > codeFix[i].clientWidth || codeFix[i].clientWidth == 0) && (codeFix[i].offsetHeight != 0))
+			codeFix[i].style.height = (codeFix[i].offsetHeight + 24) + 'px';
+	}
+};
+
+// Add a fix for code stuff?
+if ((is_ie && !is_ie4) || is_webkit || is_ff)
+	addLoadEvent(smf_codeBoxFix);
+
+// Toggles the element height and width styles of an image.
+function smc_toggleImageDimensions()
+{
+	var oImages = document.getElementsByTagName('IMG');
+	for (oImage in oImages)
+	{
+		// Not a resized image? Skip it.
+		if (oImages[oImage].className == undefined || oImages[oImage].className.indexOf('bbc_img resized') == -1)
+			continue;
+
+		oImages[oImage].style.cursor = 'pointer';
+		oImages[oImage].onclick = function() {
+			this.style.width = this.style.height = this.style.width == 'auto' ? null : 'auto';
+		};
+	}
+};
+
+// Add a load event for the function above.
+addLoadEvent(smc_toggleImageDimensions);
+
+// Adds a button to a certain button strip.
+function smf_addButton(sButtonStripId, bUseImage, oOptions)
+{
+	var oButtonStrip = document.getElementById(sButtonStripId);
+	var aItems = oButtonStrip.getElementsByTagName('span');
+
+	// Remove the 'last' class from the last item.
+	if (aItems.length > 0)
+	{
+		var oLastSpan = aItems[aItems.length - 1];
+		oLastSpan.className = oLastSpan.className.replace(/\s*last/, 'position_holder');
+	}
+
+	// Add the button.
+	var oButtonStripList = oButtonStrip.getElementsByTagName('ul')[0];
+	var oNewButton = document.createElement('li');
+	setInnerHTML(oNewButton, '<a href="' + oOptions.sUrl + '" ' + ('sCustom' in oOptions ? oOptions.sCustom : '') + '><span class="last"' + ('sId' in oOptions ? ' id="' + oOptions.sId + '"': '') + '>' + oOptions.sText + '</span></a>');
+
+	oButtonStripList.appendChild(oNewButton);
+};
+
+// Adds hover events to list items. Used for a versions of IE that don't support this by default.
+var smf_addListItemHoverEvents = function()
+{
+	var cssRule, newSelector;
+
+	// Add a rule for the list item hover event to every stylesheet.
+	for (var iStyleSheet = 0; iStyleSheet < document.styleSheets.length; iStyleSheet ++)
+		for (var iRule = 0; iRule < document.styleSheets[iStyleSheet].rules.length; iRule ++)
+		{
+			oCssRule = document.styleSheets[iStyleSheet].rules[iRule];
+			if (oCssRule.selectorText.indexOf('LI:hover') != -1)
+			{
+				sNewSelector = oCssRule.selectorText.replace(/LI:hover/gi, 'LI.iehover');
+				document.styleSheets[iStyleSheet].addRule(sNewSelector, oCssRule.style.cssText);
+			}
+		}
+
+	// Now add handling for these hover events.
+	var oListItems = document.getElementsByTagName('LI');
+	for (oListItem in oListItems)
+	{
+		oListItems[oListItem].onmouseover = function() {
+			this.className += ' iehover';
+		};
+
+		oListItems[oListItem].onmouseout = function() {
+			this.className = this.className.replace(new RegExp(' iehover\\b'), '');
+		};
+	}
+};
+
+// Add hover events to list items if the browser requires it.
+if (is_ie7down && 'attachEvent' in window)
+	window.attachEvent('onload', smf_addListItemHoverEvents);
+
+/*
+ * timeago: a jQuery plugin, version: 0.9.3 (2011-01-21)
+ * @requires jQuery v1.2.3 or later
+ *
+ * Timeago is a jQuery plugin that makes it easy to support automatically
+ * updating fuzzy timestamps (e.g. "4 minutes ago" or "about 1 day ago").
+ *
+ * For usage and examples, visit:
+ * http://timeago.yarp.com/
+ *
+ * Licensed under the MIT:
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * Copyright (c) 2008-2011, Ryan McGeary (ryanonjavascript -[at]- mcgeary [*dot*] org)
+ */
+(function($) {
+  $.timeago = function(timestamp) {
+    if (timestamp instanceof Date) {
+      return inWords(timestamp);
+    } else if (typeof timestamp === "string") {
+      return inWords($.timeago.parse(timestamp));
+    } else {
+      return inWords($.timeago.datetime(timestamp));
+    }
+  };
+  var $t = $.timeago;
+
+  $.extend($.timeago, {
+    settings: {
+      refreshMillis: 60000,
+      allowFuture: false,
+    },
+    inWords: function(distanceMillis) {
+      var $l = this.settings.strings;
+      var prefix = $l.prefixAgo;
+      var suffix = $l.suffixAgo;
+      if (this.settings.allowFuture) {
+        if (distanceMillis < 0) {
+          prefix = $l.prefixFromNow;
+          suffix = $l.suffixFromNow;
+        }
+        distanceMillis = Math.abs(distanceMillis);
+      }
+
+      var seconds = distanceMillis / 1000;
+      var minutes = seconds / 60;
+      var hours = minutes / 60;
+      var days = hours / 24;
+      var years = days / 365;
+
+      function substitute(stringOrFunction, number) {
+        var string = $.isFunction(stringOrFunction) ? stringOrFunction(number, distanceMillis) : stringOrFunction;
+        var value = ($l.numbers && $l.numbers[number]) || number;
+        return string.replace(/%d/i, value);
+      };
+
+      var words = seconds < 45 && substitute($l.seconds, Math.round(seconds)) ||
+        seconds < 90 && substitute($l.minute, 1) ||
+        minutes < 45 && substitute($l.minutes, Math.round(minutes)) ||
+        minutes < 90 && substitute($l.hour, 1) ||
+        hours < 24 && substitute($l.hours, Math.round(hours)) ||
+        hours < 48 && substitute($l.day, 1) ||
+        days < 30 && substitute($l.days, Math.floor(days)) ||
+        days < 60 && substitute($l.month, 1) ||
+        days < 365 && substitute($l.months, Math.floor(days / 30)) ||
+        years < 2 && substitute($l.year, 1) ||
+        substitute($l.years, Math.floor(years));
+
+      return $.trim([prefix, words, suffix].join(" "));
+    },
+    parse: function(iso8601) {
+      var s = $.trim(iso8601);
+      s = s.replace(/\.\d\d\d+/,""); // remove milliseconds
+      s = s.replace(/-/,"/").replace(/-/,"/");
+      s = s.replace(/T/," ").replace(/Z/," UTC");
+      s = s.replace(/([\+\-]\d\d)\:?(\d\d)/," $1$2"); // -04:00 -> -0400
+      return new Date(s);
+    },
+    datetime: function(elem) {
+      // jQuery's `is()` doesn't play well with HTML5 in IE
+      var isTime = $(elem).get(0).tagName.toLowerCase() === "time"; // $(elem).is("time");
+      var iso8601 = isTime ? $(elem).attr("datetime") : $(elem).attr("title");
+      return $t.parse(iso8601);
+    }
+  });
+
+  $.fn.timeago = function() {
+    var self = this;
+    self.each(refresh);
+    var $s = $t.settings;
+    if ($s.refreshMillis > 0) {
+      setInterval(function() { self.each(refresh); }, $s.refreshMillis);
+    }
+    return self;
+  };
+
+  function refresh() {
+    var data = prepareData(this);
+    if (!isNaN(data.datetime)) {
+      $(this).text(inWords(data.datetime));
+    }
+    return this;
+  };
+
+  function prepareData(element) {
+    element = $(element);
+    if (!element.data("timeago")) {
+      element.data("timeago", { datetime: $t.datetime(element) });
+      var text = $.trim(element.text());
+      if (text.length > 0) {
+        element.attr("title", text);
+      }
+    }
+    return element.data("timeago");
+  };
+
+  function inWords(date) {
+    var now = new Date();
+    var ref = (date.getTime() + (now.getTimezoneOffset() * 60 * 1000));
+    var dist = now.getTime() - ref;
+    
+    now.setHours(0);
+    now.setMinutes(0);
+    
+    var todayref = now.getTime() - ref;
+    var onehour = 3600 * 1000;
+    var hours = todayref / onehour;
+    if(hours > 24 && hours < 144 )
+    	return($t.settings.strings.weekdays[date.getUTCDay()] + ', ' + date.getUTCHours() + ':'+ date.getUTCMinutes());
+	if(hours > 0 && hours < 24)
+    	return($t.settings.strings.yesterday + ', ' + date.getUTCHours() + ':'+ date.getUTCMinutes());
+    	
+    return($t.inWords(dist));
+  };
+
+  function distance(date) {
+  	  var d = new Date();
+      return (d.getTime() - (date.getTime() + (d.getTimezoneOffset() * 60 * 1000) ));
+  };
+}(jQuery));

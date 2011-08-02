@@ -620,7 +620,7 @@ function loadProfileFields($force_reload = false)
 		'signature' => array(
 			'type' => 'callback',
 			'callback_func' => 'signature_modify',
-			'permission' => 'profile_extra',
+			'permission' => 'profile_signature',
 			'enabled' => substr($modSettings['signature_settings'], 0, 1) == 1,
 			'preload' => 'profileLoadSignatureData',
 			'input_validate' => 'profileValidateSignature',

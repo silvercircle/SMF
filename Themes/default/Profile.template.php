@@ -2514,6 +2514,9 @@ function template_profile_signature_modify()
 {
 	global $txt, $context, $settings;
 
+	//if(!isset($context['allow_signature']) || $context['allow_signature'] == 0)
+	//	return;
+		
 	echo '
 							<dt>
 								<strong>', $txt['signature'], ':</strong><br />

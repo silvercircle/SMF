@@ -349,5 +349,5 @@ $txt['permissionname_like_give'] = "Gives likes on posts";
 $txt['permissiongroup_share'] = 'Enable share links';
 $txt['permissiongroup_simple_share'] = 'Enable share links';
 $txt['permissionname_use_share'] = "Use social media share bar";
-
+$txt['permissionname_profile_signature'] = "Change signature";
 ?>

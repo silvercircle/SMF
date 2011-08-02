@@ -1084,7 +1084,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
             	'validate' =>  create_function('&$tag, &$data, $disabled', '
                $data[0] = strtr(parse_bbc($data[0], ' . ($smileys ? 'true' : 'false') . ', \'' . $cache_id . '\'), array(\'<brdd />\' => ""));
 			   global $txt;
-               $tag[\'content\'] = "<div class=\"codeheader\">" . Code . ": (" . $data[1] . ") </div><pre name=\"code\" class=\"brush:" . $data[1] . "\">" . $data[0] . "</pre>";
+               $tag[\'content\'] = "<div class=\"codeheader\">" . "Code" . ": (" . $data[1] . ") </div><pre name=\"code\" class=\"brush:" . $data[1] . "\">" . $data[0] . "</pre>";
             	'),
 			),			
 			array(

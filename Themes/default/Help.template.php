@@ -70,13 +70,12 @@ function template_find_members()
 	</head>
 	<body id="help_popup">
 		<form action="', $scripturl, '?action=findmember;', $context['session_var'], '=', $context['session_id'], '" method="post" accept-charset="', $context['character_set'], '" class="padding description">
-			<span class="upperframe"><span></span></span>
-			<div class="roundframe">
+			<div>
 				<div class="innerframe">
-					<div class="cat_bar">
+					<div class="cat_bar rounded_top">
 						<h3 class="catbg">', $txt['find_members'], '</h3>
 					</div>
-					<div class="padding">
+					<div class="generic_container">
 						<strong>', $txt['find_username'], ':</strong><br />
 						<input type="text" name="search" id="search" value="', isset($context['last_search']) ? $context['last_search'] : '', '" style="margin-top: 4px; width: 96%;" class="input_text" /><br />
 						<span class="smalltext"><em>', $txt['find_wildcards'], '</em></span><br />';
@@ -94,9 +93,7 @@ function template_find_members()
 					</div>
 				</div>
 			</div>
-			<span class="lowerframe"><span></span></span>
 			<br />
-			<span class="upperframe"><span></span></span>
 			<div class="roundframe">
 				<div class="innerframe">
 					<div class="cat_bar">
@@ -156,12 +153,11 @@ function template_manual()
 	global $context, $scripturl, $txt;
 
 	echo '
-			<div class="cat_bar">
+			<div class="cat_bar rounded_top">
 				<h3 class="catbg">', $txt['manual_smf_user_help'], '</h3>
 			</div>
 			<div id="help_container">
-				<div class="windowbg2">
-					<span class="topslice"><span></span></span>
+				<div class="generic_container">
 					<div id="helpmain">
 						<p>', sprintf($txt['manual_welcome'], $context['forum_name']), '</p>
 						<p>', $txt['manual_introduction'], '</p>
@@ -177,7 +173,6 @@ function template_manual()
 						</ul>
 						<p>', sprintf($txt['manual_docs_and_credits'], $context['wiki_url'], $scripturl . '?action=credits'), '</p>
 					</div>
-					<span class="botslice"><span></span></span>
 				</div>
 			</div>';
 }

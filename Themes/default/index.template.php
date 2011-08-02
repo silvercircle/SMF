@@ -101,9 +101,9 @@ function template_html_above()
 	// Here comes the JavaScript bits!
 	echo '
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js?fin20"></script>
-	<script type="text/javascript" src="', $settings['theme_url'], '/scripts/theme.js?fin20"></script>
-	<script type="text/javascript"><!-- // --><![CDATA[
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script-min.js?fin20"></script>
+	<script type="text/javascript">
+		// <![CDATA[
 		var smf_theme_url = "', $settings['theme_url'], '";
 		var smf_default_theme_url = "', $settings['default_theme_url'], '";
 		var smf_images_url = "', $settings['images_url'], '";
@@ -348,8 +348,12 @@ function template_body_below()
 	<div id="footer_section">';
 	// Show the load time?
 	if ($context['show_load_time'])
-		echo '
-		<div style="float:right;" class="smalltext">',$txt['page_created'], $context['load_time'], $txt['seconds_with'], $context['load_queries'], $txt['queries'],'</div>';
+		$loadtime = $context['load_time']. 's CPU, '.$context['load_queries'] . $txt['queries'];
+		
+	$time_now = forum_time(false);
+	$tz = date_default_timezone_get();
+	echo '<div style="float:right;text-align:right;" class="smalltext">',$loadtime,'<br />Forum time: ',strftime($modSettings['time_format'], $time_now) . ' '. $tz,'</div>';
+	
 	
 	echo '	<div class="copyright">', my_theme_copyright(), '</div>
 			<div><a id="button_xhtml" href="http://validator.w3.org/check?uri=referer" target="_blank" class="new_win" title="Valid HTML"><span>HTML</span></a> | 

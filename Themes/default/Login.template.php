@@ -20,13 +20,12 @@ function template_login()
 
 		<form action="', $scripturl, '?action=login2" name="frmLogin" id="frmLogin" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
 		<div class="tborder login">
-			<div class="cat_bar">
+			<div class="cat_bar rounded_top">
 				<h3 class="catbg">
 					<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/login_sm.gif" alt="" class="icon" /> ', $txt['login'], '</span>
 				</h3>
 			</div>
-			<span class="upperframe"><span></span></span>
-			<div class="roundframe"><br class="clear" />';
+			<div class="generic_container rounded_bottom"><br class="clear" />';
 
 	// Did they make a mistake last time?
 	if (!empty($context['login_errors']))
@@ -72,7 +71,6 @@ function template_login()
 				<p class="smalltext"><a href="', $scripturl, '?action=reminder">', $txt['forgot_your_password'], '</a></p>
 				<input type="hidden" name="hash_passwrd" value="" />
 			</div>
-			<span class="lowerframe"><span></span></span>
 		</div></form>';
 
 	// Focus on the correct input - username or password.
@@ -201,13 +199,12 @@ function template_admin_login()
 
 <form action="', $scripturl, $context['get_data'], '" method="post" accept-charset="', $context['character_set'], '" name="frmLogin" id="frmLogin" onsubmit="hashAdminPassword(this, \'', $context['user']['username'], '\', \'', $context['session_id'], '\');">
 	<div class="tborder login" id="admin_login">
-		<div class="cat_bar">
+		<div class="cat_bar rounded_top">
 			<h3 class="catbg">
 				<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/login_sm.gif" alt="" class="icon" /> ', $txt['login'], '</span>
 			</h3>
 		</div>
-		<span class="upperframe"><span></span></span>
-		<div class="roundframe centertext">';
+		<div class="generic_container rounded_bottom centertext">';
 
 	if (!empty($context['incorrect_password']))
 		echo '
@@ -222,7 +219,6 @@ function template_admin_login()
 	// Make sure to output all the old post data.
 	echo $context['post_data'], '
 		</div>
-		<span class="lowerframe"><span></span></span>
 	</div>
 	<input type="hidden" name="admin_hash_pass" value="" />
 </form>';

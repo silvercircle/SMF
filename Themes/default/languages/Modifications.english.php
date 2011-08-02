@@ -36,8 +36,6 @@ $txt['smftags_set_cloud_tags_per_row'] = 'Number of tags to show per row';
 $txt['smftags_set_cloud_max_font_size_precent'] = 'Max tag cloud font size in percent';
 $txt['smftags_set_cloud_min_font_size_precent'] = 'Min tag cloud font size in percent';
 
-
-
 $txt['smftags_err_deletetag'] = 'You do not have permission to delete the tag.';
 $txt['smftags_err_notopic'] = 'No topic selected.';
 $txt['smftags_err_notag'] = 'You need to enter a tag.';
@@ -48,11 +46,32 @@ $txt['smftags_err_toomaxtag'] = 'Tag limit per topic exceeded.';
 $txt['smftags_err_permaddtags'] = 'You are not allowed to add tags to that topic.';
 $txt['smftags_err_alreadyexists'] = 'That tag for that topic already exists.';
 
-$txt['smftags_settings'] = 'Tags Settings';
-
 $txt['smftags_pages'] = 'Pages: ';
-
 $txt['smftags_savesettings'] = 'Save Settings';
+$txt['smftags_settings'] = 'Settings';
+
+$txt['smftags_addtag'] = '[Add Tag]';
+$txt['smftags_addtag2'] = 'Add Tag';
+$txt['smftags_seperate'] = 'Seperate each tag by a comma';
+
+$txt['smftags_topic'] = 'Tags: ';
+$txt['permissiongroup_smftags'] = 'SMF Tags';
+$txt['permissiongroup_simple_smftags'] = 'SMF Tags';
+$txt['permissionname_smftags_suggest'] = 'Suggest Tags';
+$txt['permissionhelp_smftags_suggest'] = 'Users can suggest tags to add';
+$txt['cannot_smftags_suggest'] = 'You are not allowed to suggest tags.';
+
+$txt['permissionname_smftags_add'] = 'Add Tags to Own Topics';
+$txt['permissionhelp_smftags_add'] = 'Users can add tags';
+$txt['cannot_smftags_add'] = 'You are not allowed to add tags to topics';
+
+$txt['permissionname_smftags_del'] = 'Delete Tags to Own Topics';
+$txt['permissionhelp_smftags_del'] = 'Users can delete tags from topics they open';
+$txt['cannot_smftags_del'] = 'You are not allowed to delete this tags';
+
+$txt['permissionname_smftags_manage'] = 'Manage Tags';
+$txt['permissionhelp_smftags_manage'] = 'Users can modify the tag settings and add and remove ANY tags. This permission is normally given to forum admins only.';
+$txt['cannot_smftags_manage'] = 'You are not allowed to manage tags.';
 
 ///Results Display
 $txt['smftags_subject'] = 'Subject';
