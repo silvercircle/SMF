@@ -168,24 +168,6 @@ function template_main()
 	echo '
 			<div class="pagesection yellow_container top">
 				<div class="nextlinks">', $context['previous_next'], '</div>', template_button_strip($normal_buttons, 'right');
-				// Tagging System
-				echo '
-					<div class="tagstrip"><b>', $txt['smftags_topic'], '</b>';
-				foreach ($context['topic_tags'] as $i => $tag)
-				{
-					echo '<a href="' . $scripturl . '?action=tags;tagid=' . $tag['ID_TAG']  . '">' . $tag['tag'] . '</a>&nbsp;';
-					if(!$context['user']['is_guest'] && allowedTo('smftags_del'))
-					echo '<a href="' . $scripturl . '?action=tags;sa=deletetag;tagid=' . $tag['ID']  . '"><font color="#FF0000">[X]</font></a>&nbsp;';
-
-				}
-
-				if(!$context['user']['is_guest'] && allowedTo('smftags_add'))
-					echo '
-						&nbsp;<a class="addtag" data-id="',$topic,'" href="' . $scripturl . '?action=tags;sa=addtag;topic=',$topic, '">' . $txt['smftags_addtag'] . '</a>';
-
-				echo '
-					</div>';
-				
 				echo '<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . ' &nbsp;&nbsp;<a href="#lastPost"><strong>' . $txt['go_down'] . '</strong></a>' : '', '</div>
 			</div>';
 
@@ -202,6 +184,25 @@ function template_main()
 	if($context['use_share'] && ($context['user']['is_guest'] || !$options['use_share_bar']))
 		socialbar($scripturl . '?topic=' . $topic, urlencode($context['subject']));
 				
+	// Tagging System
+	echo '
+		<div class="tagstrip"><b>', $txt['smftags_topic'], '</b>';
+	foreach ($context['topic_tags'] as $i => $tag)
+	{
+		echo '<a href="' . $scripturl . '?action=tags;tagid=' . $tag['ID_TAG']  . '">' . $tag['tag'] . '</a>&nbsp;';
+		if(!$context['user']['is_guest'] && allowedTo('smftags_del'))
+		echo '<a href="' . $scripturl . '?action=tags;sa=deletetag;tagid=' . $tag['ID']  . '"><font color="#FF0000">[X]</font></a>&nbsp;';
+
+	}
+
+	if(!$context['user']['is_guest'] && allowedTo('smftags_add'))
+		echo '
+			&nbsp;<a class="addtag" data-id="',$topic,'" href="' . $scripturl . '?action=tags;sa=addtag;topic=',$topic, '">' . $txt['smftags_addtag'] . '</a>';
+
+	echo '
+		</div>';
+				
+
 	if (!empty($settings['display_who_viewing']))
 	{
 		echo '

@@ -141,7 +141,7 @@ jQuery(document).ready(function() {
 		opacity : 0.5,
 		transition : 'fade'
 	});
-	$('a.bbc_link', 'img.bbc_image').colorbox({
+	$('a.bbc_img, img.bbc_img').colorbox({
 		maxWidth : '100%',
 		maxHeight : '100%',
 		opacity : 0.6,
@@ -294,11 +294,11 @@ function response(ele)
 			if(req.status == 200) {
 				setBusy(0);
 				if(ele.attr('class') == 'tpeek') {
-					//$('body').append(req.responseText);
     				$('#wrap').css('opacity', '0.6');
 					$('#mcard_inner').html(req.responseText);
 					var el = $('#mcard');
-    				el.css("top", (($(window).height() - el.outerHeight()) / 2) + $(window).scrollTop() -100 + "px");
+			    	el.css("position","fixed");
+    				el.css("top", (($(window).height() - el.outerHeight()) / 2) -200 + "px");
     				el.css("left", (($(window).width() - el.outerWidth()) / 2) + $(window).scrollLeft() + "px");
 					el.fadeIn();
     				el.css('z-index', '100');

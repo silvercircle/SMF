@@ -737,6 +737,17 @@ function loadBoard()
 	if (!empty($topic))
 		$_GET['board'] = (int) $board;
 
+	$stored_topicstart = 0;
+	if(isset($_COOKIE['topicstart']) && !empty($topic)) {
+		$topicstart_cookie = $_COOKIE['topicstart'];
+		$_t = explode('_', $topicstart_cookie);
+		if(isset($_t[0]) && isset($_t[1]) && intval($_t[1]) > 0) {
+			if($_t[0] == $board)
+				$stored_topicstart = $_t[1];
+				$topics_per_page = 	empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) && !WIRELESS ? $options['topics_per_page'] : $modSettings['defaultMaxTopics'];
+		}
+	}
+	
 	if (!empty($board))
 	{
 		// Now check if the user is a moderator.
@@ -754,8 +765,8 @@ function loadBoard()
 			)),
 			array_reverse($board_info['parent_boards']),
 			array(array(
-				'url' => $scripturl . '?board=' . $board . '.0',
-				'name' => $board_info['name']
+				'url' => $scripturl . '?board=' . $board . ($stored_topicstart > 0 ? '.'. $stored_topicstart : '.0'),
+				'name' => $board_info['name'] . ($stored_topicstart > 0 ? ' ['. ($stored_topicstart / $topics_per_page + 1) . ']' : ''),
 			))
 		);
 	}

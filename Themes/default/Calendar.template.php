@@ -130,7 +130,6 @@ function template_event_post()
 
 	echo '
 			<div class="windowbg">
-				<span class="upperframe"><span></span></span>
 				<div class="roundframe">
 					<fieldset id="event_main">
 						<legend><span', isset($context['post_error']['no_event']) ? ' class="error"' : '', '>', $txt['calendar_event_title'], '</span></legend>
@@ -238,7 +237,6 @@ function template_event_post()
 						<input type="hidden" name="eventid" value="', $context['event']['eventid'], '" />
 					</div>
 				</div>
-				<span class="lowerframe"><span></span></span>
 			</div>
 			</div>
 		</form>
@@ -259,7 +257,7 @@ function template_show_month_grid($grid_name)
 	if (empty($calendar_data['disable_title']))
 	{
 		echo '
-			<div class="cat_bar">
+			<div class="cat_bar rounded_top">
 				<h3 class="catbg centertext" style="font-size: ', $calendar_data['size'] == 'large' ? 'large' : 'small', ';">';
 
 		if (empty($calendar_data['previous_calendar']['disabled']) && $calendar_data['show_next_prev'])
@@ -283,7 +281,7 @@ function template_show_month_grid($grid_name)
 	}
 
 	echo '
-				<table cellspacing="1" class="calendar_table">';
+				<table class="calendar_table generic_container">';
 
 	// Show each day of the week.
 	if (empty($calendar_data['disable_day_titles']))
@@ -313,7 +311,7 @@ function template_show_month_grid($grid_name)
 
 		if (!empty($calendar_data['show_week_links']))
 			echo '
-						<td class="windowbg2 weeks">
+						<td class="weeks orange_container">
 							<a href="', $scripturl, '?action=calendar;viewweek;year=', $calendar_data['current_year'], ';month=', $calendar_data['current_month'], ';day=', $week['days'][0]['day'], '">&#187;</a>
 						</td>';
 
@@ -324,7 +322,7 @@ function template_show_month_grid($grid_name)
 		{
 			// If this is today, make it a different color and show a border.
 			echo '
-						<td style="height: ', $calendar_data['size'] == 'small' ? '20' : '100', 'px; padding: 2px;', $calendar_data['size'] == 'small' ? 'font-size: x-small;' : '', '" class="', $day['is_today'] ? 'calendar_today' : 'windowbg', ' days">';
+						<td style="height: ', $calendar_data['size'] == 'small' ? '20' : '100', 'px; padding: 2px;', $calendar_data['size'] == 'small' ? 'font-size: x-small;' : '', '" class="', $day['is_today'] ? 'red_container' : 'blue_container', ' days">';
 
 			// Skip it if it should be blank - it's not a day if it has no number.
 			if (!empty($day['day']))

@@ -89,6 +89,7 @@ function MessageIndex()
 	else
 		$context['page_index'] = constructPageIndex($scripturl . '?board=' . $board . '.%1$d', $_REQUEST['start'], $board_info['total_topics'], $maxindex, true);
 	$context['start'] = &$_REQUEST['start'];
+	setcookie('topicstart', intval($board) . '_'. intval($_REQUEST['start']));
 
 	// Set a canonical URL for this page.
 	$context['canonical_url'] = $scripturl . '?board=' . $board . '.' . $context['start'];

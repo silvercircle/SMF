@@ -3,6 +3,7 @@ function template_main()
 {
 		global $context, $user_info, $scripturl, $settings, $txt;
 	
+		if($context['preview']) {
 		echo '<table style="border:0;width:100%;max-width:600px;position:relative;top:-32px;margin-bottom:-32px;"><tr><td style="vertical-align:top;text-align:center;">';
 		/*if(!empty($member_started['avatar']['image']))
 			echo $member_started['avatar']['image'];
@@ -31,5 +32,8 @@ function template_main()
 		}
 		echo '<div class="title_bar">
 			<div style="position:absolute;bottom:3px;right:8px;">bottom links</div><div style="clear:both;"></div></div>';
+		}
+		else
+			echo '<div style="text-alig:center;padding:20px 10px;">',$txt['no_access'], '</div>';
 }
 ?>

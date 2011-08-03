@@ -247,47 +247,52 @@ function TopicPeek()
 		loadLanguage('index');
 		loadLanguage('Like');
 		$result = $smcFunc['db_query']('', '
-			SELECT t.id_topic, t.id_board, t.id_first_msg, t.id_last_msg, m.id_member AS member_started, m1.id_member AS member_lastpost, m.subject AS first_subject, m.poster_name AS starter_name, m1.subject AS last_subject,
+			SELECT b.*, t.id_topic, t.id_board, t.id_first_msg, t.id_last_msg, m.id_member AS member_started, m1.id_member AS member_lastpost, m.subject AS first_subject, m.poster_name AS starter_name, m1.subject AS last_subject,
 			m1.poster_name AS last_name, m.body as first_body, m1.body AS last_body, 
 			m.poster_time AS first_time, m1.poster_time AS last_time FROM {db_prefix}topics AS t
+			LEFT JOIN {db_prefix}boards AS b ON b.id_board = t.id_board
 			LEFT JOIN {db_prefix}messages AS m ON m.id_msg = t.id_first_msg 
-			LEFT JOIN {db_prefix}messages AS m1 ON m1.id_msg = t.id_last_msg WHERE t.id_topic = {int:topic_id}',
+			LEFT JOIN {db_prefix}messages AS m1 ON m1.id_msg = t.id_last_msg WHERE t.id_topic = {int:topic_id} AND {query_see_board}',
 			array('topic_id' => $tid));
 			
 		$row = $smcFunc['db_fetch_assoc']($result);
-		$smcFunc['db_free_result']($result);
-
-		$m = array();
-		$m[0] = $row['member_started'];
-
-		if(($row['id_first_msg'] != $row['id_last_msg']) && $row['member_lastpost'])
-			$m[1] = $row['member_lastpost'];
-
-		loadMemberData($m);
-		loadMemberContext($m[0]);
-		$context['member_started'] = $memberContext[$row['member_started']];
 		
-		if(isset($m[1])) {
-			loadMemberContext($m[1]);
-			$context['member_lastpost'] = $memberContext[$row['member_lastpost']];
-		}
+		if(!$row)
+			$context['preview'] = null;			// no access or other error
 		else {
-			$context['member_lastpost'] = null;
-		}
-		
-		$context['preview'] = $row;
-		
-		censorText($context['preview']['first_subject']);
+			$smcFunc['db_free_result']($result);
+			$m = array();
+			$m[0] = $row['member_started'];
 
-		$context['preview']['first_body'] = parse_bbc($context['preview']['first_body'], false, $context['preview']['id_first_msg']);
-		$context['preview']['first_body'] = $smcFunc['substr']($context['preview']['first_body'], 0, 300) . '...';
-		$context['preview']['first_time'] = timeformat($row['first_time']);
+			if(($row['id_first_msg'] != $row['id_last_msg']) && $row['member_lastpost'])
+				$m[1] = $row['member_lastpost'];
+
+			loadMemberData($m);
+			loadMemberContext($m[0]);
+			$context['member_started'] = $memberContext[$row['member_started']];
 		
-		if($context['member_lastpost']) {
-			censorText($context['preview']['last_subject']);
-			$context['preview']['last_body'] = parse_bbc($context['preview']['last_body'], false, $context['preview']['id_last_msg']);
-			$context['preview']['last_body'] = $smcFunc['substr']($context['preview']['last_body'], 0, 300) . '...';
-			$context['preview']['last_time'] = timeformat($row['last_time']);
+			if(isset($m[1])) {
+				loadMemberContext($m[1]);
+				$context['member_lastpost'] = $memberContext[$row['member_lastpost']];
+			}
+			else {
+				$context['member_lastpost'] = null;
+			}
+		
+			$context['preview'] = $row;
+		
+			censorText($context['preview']['first_subject']);
+
+			$context['preview']['first_body'] = parse_bbc($context['preview']['first_body'], false, $context['preview']['id_first_msg']);
+			$context['preview']['first_body'] = $smcFunc['substr']($context['preview']['first_body'], 0, 300) . '...';
+			$context['preview']['first_time'] = timeformat($row['first_time']);
+		
+			if($context['member_lastpost']) {
+				censorText($context['preview']['last_subject']);
+				$context['preview']['last_body'] = parse_bbc($context['preview']['last_body'], false, $context['preview']['id_last_msg']);
+				$context['preview']['last_body'] = $smcFunc['substr']($context['preview']['last_body'], 0, 300) . '...';
+				$context['preview']['last_time'] = timeformat($row['last_time']);
+			}
 		}
 	}
 }

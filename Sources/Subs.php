@@ -743,7 +743,64 @@ function comma_format($number, $override_decimal_count = false)
 }
 
 // Format a time to make it look purdy.
-function timeformat($log_time, $show_today = true, $offset_type = false)
+function timeformat($log_time, $show_today = false, $offset_type = false)
+{
+	global $context, $user_info, $txt, $modSettings, $smcFunc;
+	static $non_twelve_hour;
+
+	// Offset the time.
+	if (!$offset_type)
+		$time = $log_time + ($user_info['time_offset'] + $modSettings['time_offset']) * 3600;
+	// Just the forum offset?
+	elseif ($offset_type == 'forum')
+		$time = $log_time + $modSettings['time_offset'] * 3600;
+	else
+		$time = $log_time;
+
+	// We can't have a negative date (on Windows, at least.)
+	if ($log_time < 0)
+		$log_time = 0;
+
+	// Today and Yesterday?
+	// Get the current time.
+	$nowtime = forum_time();
+	$now = @getdate($nowtime);
+
+	$str = $user_info['time_format'];
+
+	if (setlocale(LC_TIME, $txt['lang_locale']))
+	{
+		if (!isset($non_twelve_hour))
+			$non_twelve_hour = trim(strftime('%p')) === '';
+		if ($non_twelve_hour && strpos($str, '%p') !== false)
+			$str = str_replace('%p', (strftime('%H', $time) < 12 ? $txt['time_am'] : $txt['time_pm']), $str);
+
+		foreach (array('%a', '%A', '%b', '%B') as $token)
+			if (strpos($str, $token) !== false)
+				$str = str_replace($token, !empty($txt['lang_capitalize_dates']) ? $smcFunc['ucwords'](strftime($token, $time)) : strftime($token, $time), $str);
+	}
+	else
+	{
+		// Do-it-yourself time localization.  Fun.
+		foreach (array('%a' => 'days_short', '%A' => 'days', '%b' => 'months_short', '%B' => 'months') as $token => $text_label)
+			if (strpos($str, $token) !== false)
+				$str = str_replace($token, $txt[$text_label][(int) strftime($token === '%a' || $token === '%A' ? '%w' : '%m', $time)], $str);
+
+		if (strpos($str, '%p') !== false)
+			$str = str_replace('%p', (strftime('%H', $time) < 12 ? $txt['time_am'] : $txt['time_pm']), $str);
+	}
+
+	// Windows doesn't support %e; on some versions, strftime fails altogether if used, so let's prevent that.
+	if ($context['server']['is_windows'] && strpos($str, '%e') !== false)
+		$str = str_replace('%e', ltrim(strftime('%d', $time), '0'), $str);
+
+	return '<abbr class="timeago" title="'.date('c', $time).'">'.strftime($str, $time).'</abbr>';
+}
+
+// Format a time to make it look purdy.
+// old version of time format, it's being used to format time stamps that should NOT
+// be dynamic (for example: local time display in the user's profile)
+function timeformat_static($log_time, $show_today = true, $offset_type = false)
 {
 	global $context, $user_info, $txt, $modSettings, $smcFunc;
 	static $non_twelve_hour;
@@ -817,7 +874,7 @@ function timeformat($log_time, $show_today = true, $offset_type = false)
 	if ($context['server']['is_windows'] && strpos($str, '%e') !== false)
 		$str = str_replace('%e', ltrim(strftime('%d', $time), '0'), $str);
 
-	return '<abbr class="timeago" title="'.date('c', $time).'">'.strftime($str, $time).'</abbr>';
+	return '<abbr>'.strftime($str, $time).'</abbr>';
 }
 
 // Removes special entities from strings.  Compatibility...
@@ -1274,7 +1331,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 					'width' => array('optional' => true, 'value' => ' width="$1"', 'match' => '(\d+)'),
 					'height' => array('optional' => true, 'value' => ' height="$1"', 'match' => '(\d+)'),
 				),
-				'content' => '<img src="$1" alt="{alt}"{width}{height} class="bbc_img resized" />',
+				'content' => '<a href="$1" class="bbc_img"><img src="$1" alt="{alt}"{width}{height} class="bbc_img resized" /></a>',
 				'validate' => create_function('&$tag, &$data, $disabled', '
 					$data = strtr($data, array(\'<br />\' => \'\'));
 					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
@@ -1282,17 +1339,18 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'),
 				'disabled_content' => '($1)',
 			),
+			/*
 			array(
 				'tag' => 'img',
 				'type' => 'unparsed_content',
-				'content' => '<img src="$1" alt="" class="bbc_img" />',
+				'content' => '<a href="$1" class="bbc_img"><img src="$1" alt="" class="bbc_img" /></a>',
 				'validate' => create_function('&$tag, &$data, $disabled', '
 					$data = strtr($data, array(\'<br />\' => \'\'));
 					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
 						$data = \'http://\' . $data;
 				'),
 				'disabled_content' => '($1)',
-			),
+			),*/
 			array(
 				'tag' => 'iurl',
 				'type' => 'unparsed_content',

@@ -479,7 +479,9 @@ div.pagesection div.floatright input
 	margin-top: 3px;
 }
 .tagstrip {
-	margin-bottom:5px;
+	font-size:12px;
+	float:right;
+	padding:5px 0.5em;
 }
 /* Colors for background of posts requiring approval */
 .approvebg
@@ -1018,6 +1020,8 @@ table.table_grid thead tr.catbg th
 	color: white;
 	font-weight: bold;
 	background-color:#333355;
+	border-top:2px solid #FFC6C6;
+	margin-top:-2px;
 }
 .dropmenu li a.active span.firstlevel
 {
@@ -1089,7 +1093,6 @@ span.m_downarrow:hover {
 .buttonlist ul
 {
 	z-index: 100;
-	padding: 5px;
 	margin: 0 0.2em 5px 0;
 }
 .buttonlist ul li
@@ -1354,6 +1357,7 @@ select.qaction, input.qaction
 table.table_list
 {
 	width: 100%;
+	line-height:110%;
 }
 
 table.table_list tr, tr.frow {
@@ -1437,13 +1441,15 @@ p.moderators
 }
 .nextlinks
 {
-	float: right;
 	margin-top: -1px;
+	text-align:right;
+	padding:3px;
 }
 .nextlinks_bottom
 {
 	clear: right;
 	text-align: right;
+	padding:3px;
 }
 .mark_read
 {
@@ -1723,7 +1729,7 @@ div#pollmoderation
 p#whoisviewing
 {
 	margin: 0;
-	padding: 0.5em;
+	padding: 5px 0.5em;
 }
 /* poster and postarea + moderation area underneath */
 .post_wrapper
@@ -2231,6 +2237,10 @@ ul.post_options li
 {
 	padding-top: 1em;
 }
+.pagelinks {
+	height:24px;
+	line-height: 24px;
+}
 #recent
 {
 	clear: both;
@@ -2513,6 +2523,10 @@ tr.titlebg td
 	float: left;
 	padding-right: 10px;
 }
+#left_admsection .cat_bar, #main_admsection .cat_bar, #admin_content .cat_bar {
+	border-top-left-radius:5px;
+	border-top-right-radius:5px;
+}
 .adm_section h4.titlebg
 {
 	font-size: 95%;
@@ -2611,6 +2625,7 @@ td.lastpost {white-space:nowrap;padding-right:10px !important;}
 	line-height: 1.1em;
 	padding: 4px 10px;
 	font-size:1.0em;
+	min-width:160px;
 }
 .topic_table td.stickybg2
 {
@@ -2631,6 +2646,7 @@ td.lastpost {white-space:nowrap;padding-right:10px !important;}
 	background-position: 98% 4px;
 }
 
+table.table_list td.lastpost {font-size:12px;}
 /* Styles for (fatal) errors.
 ------------------------------------------------- */
 
@@ -3480,9 +3496,15 @@ span.hidelink
 	border-radius:3px;
 }
 .yellow_container {
-	
 	background-color:#F9F9e0;
 	border:1px solid #F2F2A5;
+	padding:2px 4px;
+	border-radius:3px;
+}
+
+.red_container {
+	background-color:#FFF2F2;
+	border:1px solid #FFCACA;
 	padding:2px 4px;
 	border-radius:3px;
 }
@@ -3592,7 +3614,7 @@ div#ajaxbusy {
 a.tpeek {margin-left:10px;}
 abbr.timeago {border:0;}
 
-.generic_container {
+.generic_container, ul.left_admmenu {
 	border:1px solid #ccc;
 	border-top:0;
 	background-color:#f0f0f0;

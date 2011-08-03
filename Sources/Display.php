@@ -65,7 +65,7 @@ function Display()
 	global $scripturl, $txt, $modSettings, $context, $settings;
 	global $options, $sourcedir, $user_info, $board_info, $topic, $board;
 	global $attachments, $messages_request, $topicinfo, $language, $smcFunc, $can_see_like, $can_give_like;
-	
+
 	$can_see_like = allowedTo('like_see', $board);
 	$can_give_like = allowedTo('like_give', $board);
 	$context['use_share'] = allowedTo('use_share', $board);
