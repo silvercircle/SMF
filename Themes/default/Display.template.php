@@ -176,7 +176,7 @@ function template_main()
 			<div id="forumposts">
 				<div>
 					<h1 class="bigheader">
-						', $txt['topic'], ': ', $context['subject'], ' &nbsp;(', $txt['read'], ' ', $context['num_views'], ' ', $txt['times'], ')
+						', $txt['topic'], ': ', $context['prefix'], $context['subject'], ' &nbsp;(', $txt['read'], ' ', $context['num_views'], ' ', $txt['times'], ')
 					</h1>
 				</div>';
 
@@ -221,14 +221,14 @@ function template_main()
 	}
 
 	echo '
-				<form action="', $scripturl, '?action=quickmod2;topic=', $context['current_topic'], '.', $context['start'], '" method="post" accept-charset="', $context['character_set'], '" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave(\'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\') : false">';
+				<div style="clear:both;"></div><form action="', $scripturl, '?action=quickmod2;topic=', $context['current_topic'], '.', $context['start'], '" method="post" accept-charset="', $context['character_set'], '" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave(\'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\') : false">';
 
 	$ignoredMsgs = array();
 	$removableMessageIDs = array();
 	$alternate = false;
 
 	// Get all the messages...
-	while ($message = $context['get_message']())
+  	while ($message = $context['get_message']())
 	{
 		$ignoring = false;
 		$alternate = !$alternate;
@@ -254,16 +254,7 @@ function template_main()
 		echo '
 						<div class="poster">
 						<div class="orange_container poster_details">
-							<h4>';
-
-		// Show online and offline buttons?
-		if (!empty($modSettings['onlineEnable']) && !$message['member']['is_guest'])
-			echo '', $context['can_send_pm'] ? '<a href="' . $message['member']['online']['href'] . '" title="' . $message['member']['online']['label'] . '">' : '', '<img src="', $message['member']['online']['image_href'], '" alt="', $message['member']['online']['text'], '" />', $context['can_send_pm'] ? '</a>' : '';
-
-		// Show a link to the member's profile.
-		echo '
-								', $message['member']['link'], '
-							</h4>
+							<h4>', $message['member']['link'], '</h4>
 							<ul class="reset smalltext" id="msg_', $message['id'], '_extra_info">';
 
 		// Show the member's custom title, if they have one.
@@ -521,32 +512,6 @@ function template_main()
 								&#171; <em>', $txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'], '</em> &#187;';
 
 		echo '
-							</div>
-							<div class="smalltext reportlinks">';
-
-		// Maybe they want to report this post to the moderator(s)?
-		if ($context['can_report_moderator'])
-			echo '
-								<a href="', $scripturl, '?action=reporttm;topic=', $context['current_topic'], '.', $message['counter'], ';msg=', $message['id'], '">', $txt['report'], '</a>&nbsp;&nbsp;';
-
-		// Can we issue a warning because of this post?  Remember, we can't give guests warnings.
-		if ($context['can_issue_warning'] && !$message['is_message_author'] && !$message['member']['is_guest'])
-			echo '
-								<a href="', $scripturl, '?action=profile;area=issuewarning;u=', $message['member']['id'], ';msg=', $message['id'], '">', $txt['issue_warning'], '</a>&nbsp;&nbsp;';
-
-		// Show the IP to this user for this post - because you can moderate?
-		if ($context['can_moderate_forum'] && !empty($message['member']['ip']))
-			echo '
-								IP: <a href="', $scripturl, '?action=', !empty($message['member']['is_guest']) ? 'trackip' : 'profile;area=tracking;sa=ip;u=' . $message['member']['id'], ';searchip=', $message['member']['ip'], '">', $message['member']['ip'], '</a> <a href="', $scripturl, '?action=helpadmin;help=see_admin_ip" onclick="return reqWin(this.href);" class="help">(?)</a>';
-		// Or, should we show it because this is you?
-		elseif ($message['can_see_ip'])
-			echo '
-								IP: <a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $message['member']['ip'], '</a>';
-		// Okay, are you at least logged in?  Then we can show something about why IPs are logged...
-		//elseif (!$context['user']['is_guest'])
-		//	echo '
-		//						<a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $txt['logged'], '</a>';
-		echo '
 							</div>';
 
 		// Are there any custom profile fields for above the signature?
@@ -580,15 +545,43 @@ function template_main()
 
 		echo '
 						</div>';
-						if($message['likes_count'] > 0 || isset($message['likelink'])) 
-							echo '<div style="clear:both;"></div><div class="likebar">
+						if($message['likes_count'] > 0 || !empty($message['likelink'])) 
+							echo '<div class="likebar">
 							<div style="float:right;">',$message['likelink'],'</div>
 							<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
 							<div style="clear:both;"></div></div>';
-					echo '</div>
-				<hr class="post_separator" />';
-	}
+						
+						echo '<div class="post_bottom">
+							<div style="float:left;font-size:11px;">';
+							// Show online and offline buttons?
+							if (!empty($modSettings['onlineEnable']) && !$message['member']['is_guest'])
+								echo '', $context['can_send_pm'] ? '<a href="' . $message['member']['online']['href'] . '">' : '', $message['member']['online']['text'], $context['can_send_pm'] ? '</a>' : '';
 
+							echo '</div>
+							<div class="reportlinks">';
+
+		// Maybe they want to report this post to the moderator(s)?
+		if ($context['can_report_moderator'])
+			echo '<a href="', $scripturl, '?action=reporttm;topic=', $context['current_topic'], '.', $message['counter'], ';msg=', $message['id'], '">', $txt['report'], '</a>';
+
+		// Can we issue a warning because of this post?  Remember, we can't give guests warnings.
+		if ($context['can_issue_warning'] && !$message['is_message_author'] && !$message['member']['is_guest'])
+			echo '&nbsp;&nbsp;&nbsp;<a href="', $scripturl, '?action=profile;area=issuewarning;u=', $message['member']['id'], ';msg=', $message['id'], '">', $txt['issue_warning'], '</a>';
+
+		// Show the IP to this user for this post - because you can moderate?
+		if ($context['can_moderate_forum'] && !empty($message['member']['ip']))
+			echo '&nbsp;&nbsp;&nbsp;IP: <a href="', $scripturl, '?action=', !empty($message['member']['is_guest']) ? 'trackip' : 'profile;area=tracking;sa=ip;u=' . $message['member']['id'], ';searchip=', $message['member']['ip'], '">', $message['member']['ip'], '</a> <a href="', $scripturl, '?action=helpadmin;help=see_admin_ip" onclick="return reqWin(this.href);" class="help">(?)</a>';
+		// Or, should we show it because this is you?
+		elseif ($message['can_see_ip'])
+			echo '&nbsp;&nbsp;&nbsp;IP: <a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $message['member']['ip'], '</a>';
+		// Okay, are you at least logged in?  Then we can show something about why IPs are logged...
+		//elseif (!$context['user']['is_guest'])
+		//	echo '
+		//						<a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $txt['logged'], '</a>';
+		echo '
+							</div><div class="clear"></div></div></div>';
+	}
+	
 	echo '
 				</form>
 			</div>

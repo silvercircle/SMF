@@ -153,6 +153,32 @@ if (!defined('SMF'))
 	---------------------------------------------------------------------------
 		// !!!
 */
+/*
+ * creates the dropdown of available prefixes for $board
+ * optionally preselects the given prefix id (if we modify a first post)
+ */
+function getPrefixSelector($board, $id = 0)
+{
+	global $user_info, $modSettings, $smcFunc, $context;
+	$header = false;
+	$out = '';
+	
+	$result = $smcFunc['db_query']('', '
+		SELECT id_prefix, name FROM {db_prefix}prefixes WHERE boards = ""');
+		
+		while($row = $smcFunc['db_fetch_assoc']($result)) {
+			if(!$header) {
+				$header = true;
+				$out = '<select name="topic_prefix" id="topic_prefix">';
+			}
+			$out .= ('<option value="'.$row['id_prefix'].'"'. ($id > 0 && $id == $row['id_prefix'] ? ' selected="selected"' : '').'>'.html_entity_decode($row['name']).'</option>');
+		}
+		$smcFunc['db_free_result']($result);
+		if($header)
+			$out .= '</select>&nbsp;&nbsp;';
+		
+		$context['prefix_selector'] = $out;
+}
 
 // Parses some bbc before sending into the database...
 function preparsecode(&$message, $previewing = false)
@@ -1848,12 +1874,13 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			array(
 				'id_board' => 'int', 'id_member_started' => 'int', 'id_member_updated' => 'int', 'id_first_msg' => 'int',
 				'id_last_msg' => 'int', 'locked' => 'int', 'is_sticky' => 'int', 'num_views' => 'int',
-				'id_poll' => 'int', 'unapproved_posts' => 'int', 'approved' => 'int',
+				'id_poll' => 'int', 'unapproved_posts' => 'int', 'approved' => 'int', 'id_prefix' => 'int'
 			),
 			array(
 				$topicOptions['board'], $posterOptions['id'], $posterOptions['id'], $msgOptions['id'],
 				$msgOptions['id'], $topicOptions['lock_mode'] === null ? 0 : $topicOptions['lock_mode'], $topicOptions['sticky_mode'] === null ? 0 : $topicOptions['sticky_mode'], 0,
 				$topicOptions['poll'] === null ? 0 : $topicOptions['poll'], $msgOptions['approved'] ? 0 : 1, $msgOptions['approved'],
+				$topicOptions['topic_prefix'],
 			),
 			array('id_topic')
 		);
@@ -2474,7 +2501,20 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			)
 		);
 	}
-
+	
+	if($topicOptions['topic_prefix'] != null) {
+		$smcFunc['db_query']('', '
+			UPDATE {db_prefix}topics
+			SET
+				id_prefix = {int:id_prefix}
+			WHERE id_topic = {int:id_topic}',
+			array(
+				'id_prefix' => $topicOptions['topic_prefix'],
+				'id_topic' => $topicOptions['id']
+			)
+		);
+	}
+	
 	// Mark the edited post as read.
 	if (!empty($topicOptions['mark_as_read']) && !$user_info['is_guest'])
 	{

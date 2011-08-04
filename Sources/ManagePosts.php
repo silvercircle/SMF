@@ -379,13 +379,14 @@ function getPrefixes()
 	
 	while($row = $smcFunc['db_fetch_assoc']($request)) {
 		$context['prefixes'][$row['id_prefix']] = $row;
+		$context['prefixes'][$row['id_prefix']]['preview'] = html_entity_decode($row['name']);
 	}
 	$smcFunc['db_free_result']($request);
 }
 
 function ModifyPrefixSettings()
 {
-	global $context, $txt, $modSettings, $sourcedir, $scripturl;
+	global $context, $txt, $modSettings, $sourcedir, $scripturl, $smcFunc;
 	
 	$context['page_title'] = $txt['manageposts_prefix_settings'];
 	$context['settings_title'] = $txt['manageposts_prefix_settings'];
@@ -396,7 +397,39 @@ function ModifyPrefixSettings()
 	if (isset($_GET['save']))
 	{
 		checkSession();
-
+		// check existing ones for changes...
+		foreach($context['prefixes'] as $prefix) {
+			$id = $prefix['id_prefix'];
+			if(isset($_POST['name_'.$id]) && strlen($_POST['name_'.$id]) >= 2) {
+				/*if($_POST['name_'.$id] != $prefix['name'] || $_POST['html_before_'.$id] != $prefix['html_before'] ||
+					$_POST['html_after_'.$id] != $prefix['html_after'] || $_POST['boards_'.$id] != $prefix['boards']) {
+						$smcFunc['db_query']('', '
+							UPDATE {db_prefix}prefixes SET name = {string:name}, html_before = {string:html_before},
+							html_after = {string:html_after}, boards = {string:boards} WHERE id_prefix = {int:id_prefix}',
+							array('id_prefix' => $id, 'name' => $_POST['name_'.$id], 'html_before' => htmlentities($_POST['html_before_'.$id]), 
+								'html_after' => htmlentities($_POST['html_after_'.$id]), 'boards' => $_POST['boards_'.$id]));*/
+				if($_POST['name_'.$id] != $prefix['name'] || $_POST['boards_'.$id] != $prefix['boards']) {
+						$smcFunc['db_query']('', '
+							UPDATE {db_prefix}prefixes SET name = {string:name}, boards = {string:boards} WHERE id_prefix = {int:id_prefix}',
+							array('id_prefix' => $id, 'name' => htmlentities($_POST['name_'.$id]),
+								'boards' => $_POST['boards_'.$id]));
+				}
+			}
+		}
+		// check the new fields
+		for($i = 0; $i < 5; $i++) {
+			if(isset($_POST['name_new_'.$i]) && strlen($_POST['name_new_'.$i]) >= 2) {
+				/*$smcFunc['db_query']('', '
+					INSERT INTO {db_prefix}prefixes (name, html_before, html_after, boards) VALUES({string:name},
+					{string:html_before}, {string:html_after}, {string:boards})',
+					array('name' => $_POST['name_new_'.$i], 'html_before' => htmlentities($_POST['html_before_new_'.$i]),
+						'html_after' => htmlentities($_POST['html_after_new_'.$i]), 'boards' => $_POST['boards_new_'.$i]));*/
+				$smcFunc['db_query']('', '
+					INSERT INTO {db_prefix}prefixes (name, boards) VALUES({string:name},
+					{string:boards})',
+					array('name' => htmlentities($_POST['name_new_'.$i]), 'boards' => $_POST['boards_new_'.$i]));
+			}
+		}
 		redirectexit('action=admin;area=postsettings;sa=prefixes');
 	}
 }

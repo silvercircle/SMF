@@ -2121,22 +2121,40 @@ function template_prefix_settings()
 		<div class="generic_container mediumpadding">
 		<table class="table_grid">
 		<thead><tr>
-			<td style="white-space:nowrap;">',$txt['prefix_name'],'</td>
-			<td style="white-space:nowrap;">',$txt['prefix_html_before'],'</td>
-			<td style="white-space:nowrap;">',$txt['prefix_html_after'],'</td>
+			<td style="white-space:nowrap;">',$txt['prefix_name'],'</td>';
+			//<td style="white-space:nowrap;">',$txt['prefix_html_before'],'</td>
+			//<td style="white-space:nowrap;">',$txt['prefix_html_after'],'</td>
+		echo '<td style="white-space:nowrap;"></td>
 			<td style="width:100%;text-align:right;">',$txt['prefix_boards'],'</td>
-		</tr></thead>
+		</tr></thead>';
+	foreach($context['prefixes'] as $prefix) {
+		echo '<tr><td>
+			<input type="hidden" name="id_', $prefix['id_prefix'], '" value="1" />
+			<input type="text" size="100" value="',$prefix['name'],'" name="name_',$prefix['id_prefix'],'" />
+			</td>';
+			//<td><input type="text" size="40" value="',$prefix['html_before'],'" name="html_before_',$prefix['id_prefix'],'" /></td>
+			//<td><input type="text" size="40" value="',$prefix['html_after'],'" name="html_after_',$prefix['id_prefix'],'" /></td>
+			echo '<td style="white-space:nowrap;">',$prefix['preview'],'</td>
+				<td style="text-align:right;"><input type="text" size="40" value="',$prefix['boards'],'" name="boards_',$prefix['id_prefix'],'" /></td>
+			</tr>';
+	}
+	for($i = 0; $i < 5; $i++) {
+		echo '<tr><td>
+			<input type="hidden" name="id_', $i, '" value="1" />
+			<input type="text" size="100" name="name_new_',$i,'" />
+			</td><td></td>';
+			//<td><input type="text" size="40" name="html_before_new_',$i,'" /></td>
+			//<td><input type="text" size="40" name="html_after_new_',$i,'" /></td>
+			echo '<td style="text-align:right;"><input type="text" size="40" name="boards_new_',$i,'" /></td>
+			</tr>';
+	}
+	
+	echo '
 		</table><br />
 		<input style="float:right;" type="submit" value="', $txt['save'], '" class="button_submit" />
 		<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 		<div style="clear:both;">
 		</div>
 		</form>';
-	foreach($context['prefixes'] as $prefix) {
-		
-	}
-	for($i = 0; $i < 10; $i++) {
-		
-	}
 }
 ?>

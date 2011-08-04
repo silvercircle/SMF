@@ -717,7 +717,7 @@ function Post()
 				m.id_member, m.modified_time, m.smileys_enabled, m.body,
 				m.poster_name, m.poster_email, m.subject, m.icon, m.approved,
 				IFNULL(a.size, -1) AS filesize, a.filename, a.id_attach,
-				a.approved AS attachment_approved, t.id_member_started AS id_member_poster,
+				a.approved AS attachment_approved, t.id_member_started AS id_member_poster, t.id_prefix,
 				m.poster_time
 			FROM {db_prefix}messages AS m
 				INNER JOIN {db_prefix}topics AS t ON (t.id_topic = {int:current_topic})
@@ -795,6 +795,7 @@ function Post()
 		// Set the destinaton.
 		$context['destination'] = 'post2;start=' . $_REQUEST['start'] . ';msg=' . $_REQUEST['msg'] . ';' . $context['session_var'] . '=' . $context['session_id'] . (isset($_REQUEST['poll']) ? ';poll' : '');
 		$context['submit_label'] = $txt['save'];
+		$context['id_prefix'] = $row['id_prefix'];
 	}
 	// Posting...
 	else
@@ -802,6 +803,7 @@ function Post()
 		// By default....
 		$context['use_smileys'] = true;
 		$context['icon'] = 'xx';
+		$context['id_prefix'] = 0;
 
 		if(!$context['make_event']) {
 			$request = $smcFunc['db_query']('', 'SELECT b.allow_topics FROM {db_prefix}boards AS b WHERE b.id_board = {int:board}',
@@ -1185,6 +1187,9 @@ function Post()
 	$context['is_new_post'] = !isset($_REQUEST['msg']);
 	$context['is_first_post'] = $context['is_new_topic'] || (isset($_REQUEST['msg']) && $_REQUEST['msg'] == $id_first_msg);
 
+	if($context['is_first_post'])
+		getPrefixSelector($board, $context['id_prefix']);
+
 	// Do we need to show the visual verification image?
 	$context['require_verification'] = !$user_info['is_mod'] && !$user_info['is_admin'] && !empty($modSettings['posts_require_captcha']) && ($user_info['posts'] < $modSettings['posts_require_captcha'] || ($user_info['is_guest'] && $modSettings['posts_require_captcha'] == -1));
 	if ($context['require_verification'])
@@ -1278,7 +1283,7 @@ function Post2()
 	if (!empty($topic))
 	{
 		$request = $smcFunc['db_query']('', '
-			SELECT locked, is_sticky, id_poll, approved, id_first_msg, id_last_msg, id_member_started, id_board
+			SELECT locked, is_sticky, id_poll, approved, id_first_msg, id_last_msg, id_member_started, id_board, id_prefix
 			FROM {db_prefix}topics
 			WHERE id_topic = {int:current_topic}
 			LIMIT 1',
@@ -1886,6 +1891,7 @@ function Post2()
 		'lock_mode' => isset($_POST['lock']) ? (int) $_POST['lock'] : null,
 		'sticky_mode' => isset($_POST['sticky']) && !empty($modSettings['enableStickyTopics']) ? (int) $_POST['sticky'] : null,
 		'mark_as_read' => true,
+		'topic_prefix' => isset($_REQUEST['topic_prefix']) ? intval($_REQUEST['topic_prefix']) : null,
 		'is_approved' => !$modSettings['postmod_active'] || empty($topic) || !empty($board_info['cur_topic_approved']),
 	);
 	$posterOptions = array(

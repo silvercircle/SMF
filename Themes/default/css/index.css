@@ -1741,6 +1741,11 @@ p#whoisviewing
 	margin-bottom:10px;
 	border-radius:4px;
 }
+.post_bottom {
+	padding:2px 10px;
+	background-color:#ddd;
+	clear:both;
+}
 .windowbg .post_wrapper {background-color:#f5f5ff;}
 .poster
 {
@@ -1840,10 +1845,10 @@ p#whoisviewing
 }
 .modifybutton
 {
-	clear: right;
 	float: right;
-	margin: 6px 20px 10px 0;
+	margin: 0;
 	text-align: right;
+	margin-right:10px;
 	font: bold 0.85em arial, sans-serif;
 	color: #334466;	
 }
@@ -1954,9 +1959,9 @@ img.smiley
 }
 #forumposts .reportlinks
 {
-	margin-right: 1.5em;
 	text-align: right;
 	clear: right;
+	font-size:11px;
 }
 #forumposts .signature, .post .signature
 {
@@ -3591,9 +3596,9 @@ div.likebar {
 	border-top:1px solid #d5ecfa;
 	font-size:11px;
 	padding:2px 10px;
-	margin-top:3px;
 	min-height:18px;
 	line-height:18px;
+	clear:both;
 }
 
 div#ajaxbusy {

@@ -1373,10 +1373,8 @@ CREATE TABLE {$db_prefix}like_cache (
 #
 
 CREATE TABLE {$db_prefix}prefixes (
-	id_prefix smallint unsigned NOT NULL auto_increment,
-	name varchar(50) NOT NULL default '',
-	html_before varchar(100) NOT NULL default '',
-	html_after  varchar(50) NOT NULL default '',
+	id_prefix smallint(5) unsigned NOT NULL auto_increment,
+	name varchar(255) NOT NULL default '',
 	boards varchar(200) NOT NULL default '',
 	PRIMARY KEY (id_prefix)
 ) ENGINE=MyISAM;
@@ -2012,6 +2010,7 @@ CREATE TABLE {$db_prefix}topics (
   locked tinyint(4) NOT NULL default '0',
   unapproved_posts smallint(5) NOT NULL default '0',
   approved tinyint(3) NOT NULL default '1',
+  id_prefix smallint(5) unsigned NOT NULL default '0',
   PRIMARY KEY (id_topic),
   UNIQUE last_message (id_last_msg, id_board),
   UNIQUE first_message (id_first_msg, id_board),

@@ -204,11 +204,13 @@ function Display()
 			t.num_replies, t.num_views, t.locked, ms.subject, t.is_sticky, t.id_poll,
 			t.id_member_started, t.id_first_msg, t.id_last_msg, t.approved, t.unapproved_posts,
 			' . ($user_info['is_guest'] ? 't.id_last_msg + 1' : 'IFNULL(lt.id_msg, IFNULL(lmr.id_msg, -1)) + 1') . ' AS new_from
-			' . (!empty($modSettings['recycle_board']) && $modSettings['recycle_board'] == $board ? ', id_previous_board, id_previous_topic' : '') . '
+			' . (!empty($modSettings['recycle_board']) && $modSettings['recycle_board'] == $board ? ', id_previous_board, id_previous_topic' : '') . ',
+			p.name AS prefix_name
 		FROM {db_prefix}topics AS t
 			INNER JOIN {db_prefix}messages AS ms ON (ms.id_msg = t.id_first_msg)' . ($user_info['is_guest'] ? '' : '
 			LEFT JOIN {db_prefix}log_topics AS lt ON (lt.id_topic = {int:current_topic} AND lt.id_member = {int:current_member})
 			LEFT JOIN {db_prefix}log_mark_read AS lmr ON (lmr.id_board = {int:current_board} AND lmr.id_member = {int:current_member})') . '
+			LEFT JOIN {db_prefix}prefixes as p ON p.id_prefix = t.id_prefix
 		WHERE t.id_topic = {int:current_topic}
 		LIMIT 1',
 		array(
@@ -225,6 +227,7 @@ function Display()
 	$context['real_num_replies'] = $context['num_replies'] = $topicinfo['num_replies'];
 	$context['topic_first_message'] = $topicinfo['id_first_msg'];
 	$context['topic_last_message'] = $topicinfo['id_last_msg'];
+	$context['prefix'] = html_entity_decode($topicinfo['prefix_name']) .'&nbsp;';
 
 	// Add up unapproved replies to get real number of replies...
 	if ($modSettings['postmod_active'] && allowedTo('approve_posts'))
