@@ -462,7 +462,7 @@ function template_main()
 		{
 			echo '
 							<div id="msg_', $message['id'], '_footer" class="attachments smalltext">
-								<div style="overflow: ', $context['browser']['is_firefox'] ? 'visible' : 'auto', ';">';
+								<div style="overflow: visible;">';
 
 			$last_approved_state = 1;
 			foreach ($message['attachment'] as $attachment)

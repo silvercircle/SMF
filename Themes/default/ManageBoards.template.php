@@ -17,10 +17,7 @@ function template_main()
 
 	// Table header.
 	echo '
-	<div id="manage_boards">
-		<div class="title_bar">
-			<h3 class="titlebg">', $txt['boardsEdit'], '</h3>
-		</div>';
+	<div id="manage_boards">';
 
 	if (!empty($context['move_board']))
 		echo '
@@ -315,6 +312,15 @@ function template_modify_board()
 						</dd>';
 	}
 
+	echo '
+						<dt>
+							<strong>', $txt['board_act_as_cat'], ':</strong><br />
+							<span class="smalltext">', $txt['board_act_as_cat_desc'], '</span>
+						</dt>
+						<dd>
+							<input type="checkbox" name="act_as_cat" ', $context['board']['allow_topics'] ? '' : ' checked="checked"', ' class="input_check" />
+						</dd>';
+	
 	// Options for board name and description.
 	echo '
 						<dt>
@@ -449,6 +455,7 @@ function template_modify_board()
 						</dl>
 					</div>';
 
+					
 	// Here the user can choose to force this board to use a theme other than the default theme for the forum.
 	echo '
 					<div id="board_theme_div">

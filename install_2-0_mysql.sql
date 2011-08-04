@@ -487,6 +487,7 @@ CREATE TABLE {$db_prefix}boards (
   unapproved_posts smallint(5) NOT NULL default '0',
   unapproved_topics smallint(5) NOT NULL default '0',
   redirect varchar(255) NOT NULL default '',
+  allow_topics tinyint(4) NOT NULL default '1',
   PRIMARY KEY (id_board),
   UNIQUE categories (id_cat, id_board),
   KEY id_parent (id_parent),
@@ -1346,10 +1347,12 @@ CREATE TABLE {$db_prefix}messages (
 CREATE TABLE {$db_prefix}likes (
 	id_msg int(10) unsigned NOT NULL default '0',
   	id_user mediumint(8) unsigned NOT NULL default '0',
+  	id_receiver mediumint(8) unsigned NOT NULL default '0',
   	updated int(4) unsigned NOT NULL default '0',
   	UNIQUE liked (id_msg, id_user),
   	KEY id_msg (id_msg),
   	KEY id_user (id_user),
+  	KEY id_receiver (id_receiver),
   	KEY ordering (id_msg, updated)
 ) ENGINE=MyISAM;
 
@@ -1363,6 +1366,19 @@ CREATE TABLE {$db_prefix}like_cache (
   	like_status varchar(150) NOT NULL default '',
   	updated int(4) NOT NULL default '0',
   	PRIMARY KEY (id_msg)
+) ENGINE=MyISAM;
+
+#
+# Table structure for table `prefixes`
+#
+
+CREATE TABLE {$db_prefix}prefixes (
+	id_prefix smallint unsigned NOT NULL auto_increment,
+	name varchar(50) NOT NULL default '',
+	html_before varchar(100) NOT NULL default '',
+	html_after  varchar(50) NOT NULL default '',
+	boards varchar(200) NOT NULL default '',
+	PRIMARY KEY (id_prefix)
 ) ENGINE=MyISAM;
 
 #

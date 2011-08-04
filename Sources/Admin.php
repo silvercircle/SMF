@@ -241,6 +241,7 @@ function AdminMain()
 						'bbc' => array($txt['manageposts_bbc_settings']),
 						'censor' => array($txt['admin_censored_words']),
 						'topics' => array($txt['manageposts_topic_settings']),
+						'prefixes' => array($txt['manageposts_prefix_settings']),
 					),
 				),
 				'managecalendar' => array(

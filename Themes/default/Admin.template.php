@@ -2109,4 +2109,34 @@ function template_repair_boards()
 	}
 }
 
+function template_prefix_settings()
+{
+	global $context, $txt, $modSettings, $sourcedir, $scripturl;
+	
+	echo '
+		<form action="', $scripturl, '?action=admin;area=postsettings;sa=prefixes;save" method="post" accept-charset="', $context['character_set'], '">
+		<div class="cat_bar">
+		<h3 class="catbg">',$txt['manageposts_prefix_settings'],'</h3>
+		</div>
+		<div class="generic_container mediumpadding">
+		<table class="table_grid">
+		<thead><tr>
+			<td style="white-space:nowrap;">',$txt['prefix_name'],'</td>
+			<td style="white-space:nowrap;">',$txt['prefix_html_before'],'</td>
+			<td style="white-space:nowrap;">',$txt['prefix_html_after'],'</td>
+			<td style="width:100%;text-align:right;">',$txt['prefix_boards'],'</td>
+		</tr></thead>
+		</table><br />
+		<input style="float:right;" type="submit" value="', $txt['save'], '" class="button_submit" />
+		<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
+		<div style="clear:both;">
+		</div>
+		</form>';
+	foreach($context['prefixes'] as $prefix) {
+		
+	}
+	for($i = 0; $i < 10; $i++) {
+		
+	}
+}
 ?>

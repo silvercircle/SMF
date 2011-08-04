@@ -94,5 +94,6 @@ $txt['mboards_cancel_moving'] = 'Cancel moving';
 $txt['mboards_move'] = 'move';
 
 $txt['mboards_no_cats'] = 'There are currently no categories or boards configured.';
-
+$txt['board_act_as_cat'] = 'Act as a category';
+$txt['board_act_as_cat_desc'] = 'If this is checked, the board will act as a sub-category. Such a board can not have its own topics, but can hold any number of child boards.';
 ?>

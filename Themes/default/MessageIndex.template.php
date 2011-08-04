@@ -124,6 +124,8 @@ function template_main()
 		echo '
 	<p class="orange_container">', $context['description'], '</p>';
 
+	if(!$context['act_as_cat']) {
+	
 	// Create the button set...
 	$normal_buttons = array(
 		'new_topic' => array('test' => 'can_post_new', 'text' => 'new_topic', 'image' => 'new_topic.gif', 'lang' => true, 'url' => $scripturl . '?action=post;board=' . $context['current_board'] . '.0', 'active' => true),
@@ -401,8 +403,9 @@ function template_main()
 	}
 
 	// Show breadcrumbs at the bottom too.
+	}
 	theme_linktree();
-
+	
 	echo '
 	<div class="tborder" id="topic_icons">
 		<div class="description">

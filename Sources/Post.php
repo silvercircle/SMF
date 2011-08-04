@@ -803,6 +803,17 @@ function Post()
 		$context['use_smileys'] = true;
 		$context['icon'] = 'xx';
 
+		if(!$context['make_event']) {
+			$request = $smcFunc['db_query']('', 'SELECT b.allow_topics FROM {db_prefix}boards AS b WHERE b.id_board = {int:board}',
+				array('board' => $board));
+		
+			$row = $smcFunc['db_fetch_row']($request);
+			$smcFunc['db_free_result']($request);
+		
+			if($row[0] == 0)
+				fatal_lang_error('no_board', false);
+		}
+		
 		if ($user_info['is_guest'])
 		{
 			$context['name'] = isset($_SESSION['guest_name']) ? $_SESSION['guest_name'] : '';

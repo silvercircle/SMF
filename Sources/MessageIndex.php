@@ -52,6 +52,7 @@ function MessageIndex()
 	else
 		loadTemplate('MessageIndex');
 
+	$context['act_as_cat'] = $board_info['allow_topics'] ? false : true;
 	$context['name'] = $board_info['name'];
 	$context['description'] = $board_info['description'];
 	// How many topics do we have in total?
@@ -89,7 +90,7 @@ function MessageIndex()
 	else
 		$context['page_index'] = constructPageIndex($scripturl . '?board=' . $board . '.%1$d', $_REQUEST['start'], $board_info['total_topics'], $maxindex, true);
 	$context['start'] = &$_REQUEST['start'];
-	setcookie('topicstart', intval($board) . '_'. intval($_REQUEST['start']));
+	setcookie('smf_topicstart', intval($board) . '_'. intval($_REQUEST['start']));
 
 	// Set a canonical URL for this page.
 	$context['canonical_url'] = $scripturl . '?board=' . $board . '.' . $context['start'];
@@ -364,7 +365,7 @@ function MessageIndex()
 		$context['pageindex_multiplier'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) && !WIRELESS ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
 
 		$result = $smcFunc['db_query']('substring', '
-			SELECT
+			SELECT 
 				t.id_topic, t.num_replies, t.locked, t.num_views, t.is_sticky, t.id_poll, t.id_previous_board,
 				' . ($user_info['is_guest'] ? '0' : 'IFNULL(lt.id_msg, IFNULL(lmr.id_msg, -1)) + 1') . ' AS new_from,
 				t.id_last_msg, t.approved, t.unapproved_posts, ml.poster_time AS last_poster_time,
@@ -375,7 +376,7 @@ function MessageIndex()
 				mf.poster_name AS first_member_name, mf.id_member AS first_id_member,
 				IFNULL(memf.real_name, mf.poster_name) AS first_display_name, SUBSTRING(ml.body, 1, 385) AS last_body,
 				SUBSTRING(mf.body, 1, 385) AS first_body, ml.smileys_enabled AS last_smileys, mf.smileys_enabled AS first_smileys
-			FROM {db_prefix}topics AS t
+			FROM {db_prefix}topics AS t	
 				INNER JOIN {db_prefix}messages AS ml ON (ml.id_msg = t.id_last_msg)
 				INNER JOIN {db_prefix}messages AS mf ON (mf.id_msg = t.id_first_msg)
 				LEFT JOIN {db_prefix}members AS meml ON (meml.id_member = ml.id_member)
@@ -401,7 +402,6 @@ function MessageIndex()
 		$first_posters = array();
 		while ($row = $smcFunc['db_fetch_assoc']($result))
 		{
-			
 			if ($row['id_poll'] > 0 && $modSettings['pollMode'] == '0')
 				continue;
 

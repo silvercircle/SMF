@@ -205,8 +205,8 @@ function GiveLike()
 				loadMemberContext($like_receiver);
 				if(!$memberContext[$like_receiver]['is_banned']) {
 					$smcFunc['db_query']('', '
-						INSERT INTO {db_prefix}likes values({int:id_message}, {int:id_user}, {int:updated})',
-						array('id_message' => $mid, 'id_user' => $uid, 'updated' => time()));
+						INSERT INTO {db_prefix}likes values({int:id_message}, {int:id_user}, {int:id_receiver}, {int:updated})',
+						array('id_message' => $mid, 'id_user' => $uid, 'id_receiver' => $like_receiver, 'updated' => time()));
 					
 					$smcFunc['db_query']('', 'UPDATE {db_prefix}members SET likes_received = likes_received + 1 WHERE id_member = {int:id_member}',
 						array('id_member' => $like_receiver));
@@ -245,7 +245,6 @@ function TopicPeek()
 		global $memberContext;
 		loadTemplate('TopicPreview');
 		loadLanguage('index');
-		loadLanguage('Like');
 		$result = $smcFunc['db_query']('', '
 			SELECT b.*, t.id_topic, t.id_board, t.id_first_msg, t.id_last_msg, m.id_member AS member_started, m1.id_member AS member_lastpost, m.subject AS first_subject, m.poster_name AS starter_name, m1.subject AS last_subject,
 			m1.poster_name AS last_name, m.body as first_body, m1.body AS last_body, 
@@ -260,7 +259,6 @@ function TopicPeek()
 		if(!$row)
 			$context['preview'] = null;			// no access or other error
 		else {
-			$smcFunc['db_free_result']($result);
 			$m = array();
 			$m[0] = $row['member_started'];
 
@@ -283,17 +281,18 @@ function TopicPeek()
 		
 			censorText($context['preview']['first_subject']);
 
-			$context['preview']['first_body'] = parse_bbc($context['preview']['first_body'], false, $context['preview']['id_first_msg']);
+			$context['preview']['first_body'] = parse_bbc($context['preview']['first_body'], false);
 			$context['preview']['first_body'] = $smcFunc['substr']($context['preview']['first_body'], 0, 300) . '...';
 			$context['preview']['first_time'] = timeformat($row['first_time']);
 		
 			if($context['member_lastpost']) {
 				censorText($context['preview']['last_subject']);
-				$context['preview']['last_body'] = parse_bbc($context['preview']['last_body'], false, $context['preview']['id_last_msg']);
+				$context['preview']['last_body'] = parse_bbc($context['preview']['last_body'], false);
 				$context['preview']['last_body'] = $smcFunc['substr']($context['preview']['last_body'], 0, 300) . '...';
 				$context['preview']['last_time'] = timeformat($row['last_time']);
 			}
 		}
+		$smcFunc['db_free_result']($result);
 	}
 }
 ?>

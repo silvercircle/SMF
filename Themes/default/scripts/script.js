@@ -1632,14 +1632,17 @@ if (is_ie7down && 'attachEvent' in window)
     now.setHours(0);
     now.setMinutes(0);
     
-    var todayref = now.getTime() - ref;
-    var onehour = 3600 * 1000;
-    var hours = todayref / onehour;
-    if(hours > 24 && hours < 144 )
-    	return($t.settings.strings.weekdays[date.getUTCDay()] + ', ' + date.getUTCHours() + ':'+ date.getUTCMinutes());
-	if(hours > 0 && hours < 24)
-    	return($t.settings.strings.yesterday + ', ' + date.getUTCHours() + ':'+ date.getUTCMinutes());
-    	
+    var todayref = now.getTime();
+    
+    if(ref < todayref) {
+    	todayref -= ref;
+    	var onehour = 3600 * 1000;
+    	var hours = todayref / onehour;
+    	if(hours > 24 && hours < 144 )
+    		return($t.settings.strings.weekdays[date.getUTCDay()] + ', ' + date.getUTCHours() + ':'+ date.getUTCMinutes());
+		if(hours > 0 && hours < 24)
+    		return($t.settings.strings.yesterday + ', ' + date.getUTCHours() + ':'+ date.getUTCMinutes());
+	}
     return($t.inWords(dist));
   };
 

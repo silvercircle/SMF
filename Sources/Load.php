@@ -628,7 +628,7 @@ function loadBoard()
 				c.id_cat, b.name AS bname, b.description, b.num_topics, b.member_groups,
 				b.id_parent, c.name AS cname, IFNULL(mem.id_member, 0) AS id_moderator,
 				mem.real_name' . (!empty($topic) ? ', b.id_board' : '') . ', b.child_level,
-				b.id_theme, b.override_theme, b.count_posts, b.id_profile, b.redirect,
+				b.id_theme, b.override_theme, b.count_posts, b.id_profile, b.redirect, b.allow_topics,
 				b.unapproved_topics, b.unapproved_posts' . (!empty($topic) ? ', t.approved, t.id_member_started' : '') . '
 			FROM {db_prefix}boards AS b' . (!empty($topic) ? '
 				INNER JOIN {db_prefix}topics AS t ON (t.id_topic = {int:current_topic})' : '') . '
@@ -659,6 +659,7 @@ function loadBoard()
 					'name' => $row['cname']
 				),
 				'name' => $row['bname'],
+				'allow_topics' => $row['allow_topics'],
 				'description' => $row['description'],
 				'num_topics' => $row['num_topics'],
 				'unapproved_topics' => $row['unapproved_topics'],
@@ -737,9 +738,15 @@ function loadBoard()
 	if (!empty($topic))
 		$_GET['board'] = (int) $board;
 
+	/*
+	 * if we are in topic view, set up the breadcrumb so that it
+	 * gives a link back to the last active message index page instead of
+	 * always pointing back to page one, but ignore the cookie when the board has changed.
+	 * the cookie is set in MessageIndex.php
+	 */
 	$stored_topicstart = 0;
-	if(isset($_COOKIE['topicstart']) && !empty($topic)) {
-		$topicstart_cookie = $_COOKIE['topicstart'];
+	if(isset($_COOKIE['smf_topicstart']) && !empty($topic)) {
+		$topicstart_cookie = $_COOKIE['smf_topicstart'];
 		$_t = explode('_', $topicstart_cookie);
 		if(isset($_t[0]) && isset($_t[1]) && intval($_t[1]) > 0) {
 			if($_t[0] == $board)

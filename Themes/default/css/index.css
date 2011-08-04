@@ -1974,6 +1974,7 @@ img.smiley
 .attachments
 {
 	padding: 1em 0 2em 0;
+	overflow:hidden !important;
 }
 .attachments div
 {
@@ -3530,7 +3531,7 @@ span.small_avatar img {
 	background-color:#ccc;
 }
 span.small_avatar {display:block;position:relative;}
-span.avatar_overlay {background-color:white;display:block;position:absolute;bottom:-2px;right:-1px;border:1px solid white;}
+span.avatar_overlay {max-height:20px;background-color:transparent;display:block;position:absolute;bottom:-2px;right:-1px;}
 span.avatar_overlay img {
 	max-height:20px;
 	max-width:20px;
@@ -3538,7 +3539,7 @@ span.avatar_overlay img {
 	height:auto;
 	background-color:#ccc;
 	padding:0;
-	border:0;
+	border:1px solid white;
 	padding:0;
 }
 

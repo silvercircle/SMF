@@ -408,6 +408,7 @@ function EditBoard()
 			'redirect' => '',
 			'category' => (int) $_REQUEST['cat'],
 			'no_children' => true,
+			'allow_topics' => 1,
 		);
 	}
 	else
@@ -593,6 +594,7 @@ function EditBoard2()
 		}
 
 		// Checkboxes....
+		$boardOptions['allow_topics'] = !isset($_POST['act_as_cat']);
 		$boardOptions['posts_count'] = isset($_POST['count']);
 		$boardOptions['override_theme'] = isset($_POST['override_theme']);
 		$boardOptions['board_theme'] = (int) $_POST['boardtheme'];
@@ -657,7 +659,8 @@ function EditBoard2()
 				$boardOptions['target_category'] = (int) $_POST['cur_cat'];
 			if (!isset($boardOptions['move_to']))
 				$boardOptions['move_to'] = 'bottom';
-
+			
+			$boardOptions['allow_topics'] = 1;
 			createBoard($boardOptions);
 		}
 

@@ -65,6 +65,7 @@ function ManagePostSettings()
 		'bbc' => 'ModifyBBCSettings',
 		'censor' => 'SetCensor',
 		'topics' => 'ModifyTopicSettings',
+		'prefixes' => 'ModifyPrefixSettings',
 	);
 
 	// Default the sub-action to 'posts'.
@@ -369,4 +370,34 @@ function ModifyTopicSettings($return_config = false)
 	prepareDBSettingContext($config_vars);
 }
 
+function getPrefixes()
+{
+	global $context, $smcFunc;
+	
+	$request = $smcFunc['db_query']('', '
+		SELECT * FROM {db_prefix}prefixes');
+	
+	while($row = $smcFunc['db_fetch_assoc']($request)) {
+		$context['prefixes'][$row['id_prefix']] = $row;
+	}
+	$smcFunc['db_free_result']($request);
+}
+
+function ModifyPrefixSettings()
+{
+	global $context, $txt, $modSettings, $sourcedir, $scripturl;
+	
+	$context['page_title'] = $txt['manageposts_prefix_settings'];
+	$context['settings_title'] = $txt['manageposts_prefix_settings'];
+	$context['sub_template'] = 'prefix_settings';
+
+	getPrefixes();
+	
+	if (isset($_GET['save']))
+	{
+		checkSession();
+
+		redirectexit('action=admin;area=postsettings;sa=prefixes');
+	}
+}
 ?>
