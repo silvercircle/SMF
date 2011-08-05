@@ -489,6 +489,7 @@ $txt['enableEmbeddedFlash_warning'] = 'may be a security risk!';
 $txt['enableSpellChecking'] = 'Enable spell checking';
 $txt['enableSpellChecking_warning'] = 'this does not work on all servers!';
 $txt['disable_wysiwyg'] = 'Disable WYSIWYG editor';
+$txt['use_post_cache'] = 'Cache parsed posts. This can improve topic view performance at the cost of extra database space requirements.';
 $txt['max_messageLength'] = 'Maximum allowed post size';
 $txt['max_messageLength_zero'] = '0 for no max.';
 $txt['fixLongWords'] = 'Break up words with more letters than';

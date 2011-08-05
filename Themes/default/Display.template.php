@@ -370,8 +370,6 @@ function template_main()
 									<div id="msg_', $message['id'], '_quick_mod"></div>
 								</div>';
 
-		// If this is the first post, (#0) just say when it was posted - otherwise give the reply #.
-		if ($message['can_approve'] || $context['can_reply'] || $message['can_modify'] || $message['can_remove'] || $context['can_split'] || $context['can_restore_msg'])
 			echo '
 								<ul class="reset smalltext quickbuttons">';
 
@@ -415,7 +413,6 @@ function template_main()
 			echo '
 									<li class="inline_mod_check" style="display: none;" id="in_topic_mod_check_', $message['id'], '"></li>';
 
-		if ($message['can_approve'] || $context['can_reply'] || $message['can_modify'] || $message['can_remove'] || $context['can_split'] || $context['can_restore_msg'])
 			echo '
 								</ul>';
 

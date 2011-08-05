@@ -196,7 +196,7 @@ function template_main()
 							<span', isset($context['post_error']['no_subject']) ? ' class="error"' : '', ' id="caption_subject">', $txt['subject'], ':</span>
 						</dt>
 						<dd>
-							',$context['prefix_selector'],'<input type="text" name="subject"', $context['subject'] == '' ? '' : ' value="' . $context['subject'] . '"', ' tabindex="', $context['tabindex']++, '" size="80" maxlength="80" class="input_text" />
+							',isset($context['prefix_selector']) ? $context['prefix_selector'] : '','<input type="text" name="subject"', $context['subject'] == '' ? '' : ' value="' . $context['subject'] . '"', ' tabindex="', $context['tabindex']++, '" size="80" maxlength="80" class="input_text" />
 						</dd>
 		';
 		// Tagging system Mod
@@ -414,9 +414,8 @@ function template_main()
 	}
 
 	// What about smileys?
-	if (!empty($context['smileys']['postform']) || !empty($context['smileys']['popup']))
-		echo '
-					<div id="smileyBox_message"></div>';
+	//if (!empty($context['smileys']['postform']) || !empty($context['smileys']['popup']))
+		//echo '<div id="smileyBox_message"></div>';
 
 	echo '
 					', template_control_richedit($context['post_box_name'], 'smileyBox_message', 'bbcBox_message');

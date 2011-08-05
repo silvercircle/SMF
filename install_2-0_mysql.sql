@@ -1340,6 +1340,12 @@ CREATE TABLE {$db_prefix}messages (
   KEY related_ip (id_member, poster_ip, id_msg)
 ) ENGINE=MyISAM;
 
+CREATE TABLE {$db_prefix}messages_cache (
+  id_msg int(10) unsigned NOT NULL auto_increment,
+  body mediumtext NOT NULL,
+  PRIMARY KEY (id_msg)
+) ENGINE=MyISAM;
+
 #
 # Table structure for table `likes`
 #

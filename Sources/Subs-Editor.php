@@ -1595,35 +1595,6 @@ function create_control_richedit($editorOptions)
 				'after' => '[/email]',
 				'description' => $txt['insert_email']
 			),
-			array(
-				'image' => 'ftp',
-				'code' => 'ftp',
-				'before' => '[ftp]',
-				'after' => '[/ftp]',
-				'description' => $txt['ftp']
-			),
-			array(),
-			array(
-				'image' => 'glow',
-				'code' => 'glow',
-				'before' => '[glow=red,2,300]',
-				'after' => '[/glow]',
-				'description' => $txt['glow']
-			),
-			array(
-				'image' => 'shadow',
-				'code' => 'shadow',
-				'before' => '[shadow=red,left]',
-				'after' => '[/shadow]',
-				'description' => $txt['shadow']
-			),
-			array(
-				'image' => 'move',
-				'code' => 'move',
-				'before' => '[move]',
-				'after' => '[/move]',
-				'description' => $txt['marquee']
-			),
 			array(),
 			array(
 				'image' => 'sup',

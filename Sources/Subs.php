@@ -1293,13 +1293,13 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'disallow_children' => array('email', 'ftp', 'url', 'iurl'),
 				'disabled_after' => ' ($1)',
 			),
-			array(
+			/*array(
 				'tag' => 'glow',
 				'type' => 'unparsed_commas',
 				'test' => '[#0-9a-zA-Z\-]{3,12},([012]\d{1,2}|\d{1,2})(,[^]]+)?\]',
 				'before' => $context['browser']['is_ie'] ? '<table border="0" cellpadding="0" cellspacing="0" style="display: inline; vertical-align: middle; font: inherit;"><tr><td style="filter: Glow(color=$1, strength=$2); font: inherit;">' : '<span style="text-shadow: $1 1px 1px 1px">',
 				'after' => $context['browser']['is_ie'] ? '</td></tr></table> ' : '</span>',
-			),
+			),*/
 			array(
 				'tag' => 'green',
 				'before' => '<span style="color: green;" class="bbc_color">',
@@ -1339,7 +1339,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'),
 				'disabled_content' => '($1)',
 			),
-			/*
 			array(
 				'tag' => 'img',
 				'type' => 'unparsed_content',
@@ -1350,7 +1349,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 						$data = \'http://\' . $data;
 				'),
 				'disabled_content' => '($1)',
-			),*/
+			),
 			array(
 				'tag' => 'iurl',
 				'type' => 'unparsed_content',
@@ -1426,13 +1425,13 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'disabled_before' => '/me ',
 				'disabled_after' => '<br />',
 			),
-			array(
+			/*array(
 				'tag' => 'move',
 				'before' => '<marquee>',
 				'after' => '</marquee>',
 				'block_level' => true,
 				'disallow_children' => array('move'),
-			),
+			),*/
 			array(
 				'tag' => 'nobbc',
 				'type' => 'unparsed_content',

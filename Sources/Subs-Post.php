@@ -157,7 +157,7 @@ if (!defined('SMF'))
  * creates the dropdown of available prefixes for $board
  * optionally preselects the given prefix id (if we modify a first post)
  */
-function getPrefixSelector($board, $id = 0)
+function getPrefixSelector($board, $id = 0, $mandatory = 0)
 {
 	global $user_info, $modSettings, $smcFunc, $context;
 	$header = false;
@@ -170,6 +170,8 @@ function getPrefixSelector($board, $id = 0)
 			if(!$header) {
 				$header = true;
 				$out = '<select name="topic_prefix" id="topic_prefix">';
+				if(!$mandatory)
+					$out .= '<option value="0">No prefix</option>';
 			}
 			$out .= ('<option value="'.$row['id_prefix'].'"'. ($id > 0 && $id == $row['id_prefix'] ? ' selected="selected"' : '').'>'.html_entity_decode($row['name']).'</option>');
 		}
@@ -2439,14 +2441,14 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		if (!empty($modSettings['search_custom_index_config']))
 		{
 			$request = $smcFunc['db_query']('', '
-				SELECT body
+				SELECT body, smileys_enabled
 				FROM {db_prefix}messages
 				WHERE id_msg = {int:id_msg}',
 				array(
 					'id_msg' => $msgOptions['id'],
 				)
 			);
-			list ($old_body) = $smcFunc['db_fetch_row']($request);
+			list ($old_body, $old_smileys_enabled) = $smcFunc['db_fetch_row']($request);
 			$smcFunc['db_free_result']($request);
 		}
 	}
@@ -2456,8 +2458,12 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		$messages_columns['modified_name'] = $msgOptions['modify_name'];
 		$messages_columns['id_msg_modified'] = $modSettings['maxMsgID'];
 	}
-	if (isset($msgOptions['smileys_enabled']))
+	if (isset($msgOptions['smileys_enabled'])) {
 		$messages_columns['smileys_enabled'] = empty($msgOptions['smileys_enabled']) ? 0 : 1;
+		$smileys_enabled = $msgOptions['smileys_enabled'];
+	}
+	else
+		$smileys_enabled = $old_smileys_enabled;
 
 	// Which columns need to be ints?
 	$messageInts = array('modified_time', 'id_msg_modified', 'smileys_enabled');
@@ -2482,6 +2488,14 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		WHERE id_msg = {int:id_msg}',
 		$update_parameters
 	);
+	
+	if (isset($modSettings['use_post_cache']) && $modSettings['use_post_cache']) {
+		$body = parse_bbc($msgOptions['body'], $smileys_enabled, $msgOptions['id']);
+		$smcFunc['db_insert']('replace', '{db_prefix}messages_cache',
+			array('id_msg' => 'int', 'body' => 'string'),
+			array($msgOptions['id'], $body),
+			array('id_msg', 'body'));
+	}
 
 	// Lock and or sticky the post.
 	if ($topicOptions['sticky_mode'] !== null || $topicOptions['lock_mode'] !== null || $topicOptions['poll'] !== null)
@@ -2502,7 +2516,7 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		);
 	}
 	
-	if($topicOptions['topic_prefix'] != null) {
+	if(isset($topicOptions['topic_prefix']) && $topicOptions['topic_prefix'] != null) {
 		$smcFunc['db_query']('', '
 			UPDATE {db_prefix}topics
 			SET

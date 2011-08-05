@@ -19,9 +19,13 @@ function template_control_richedit($editor_id, $smileyContainer = null, $bbcCont
 
 	echo '
 		<div>
-			<div style="width: 98.8%;">
+			<div>
 				<div>
+					<div style="float:right;max-width:15%;" id="smileyBox_message"></div>
+					<div style="min-width:10%;max-width:80%;width:80%;">
 					<textarea class="editor" name="', $editor_id, '" id="', $editor_id, '" rows="', $editor_context['rows'], '" cols="600" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onchange="storeCaret(this);" tabindex="', $context['tabindex']++, '" style="height: ', $editor_context['height'], '; ', isset($context['post_error']['no_message']) || isset($context['post_error']['long_message']) ? 'border: 1px solid red;' : '', '">', $editor_context['value'], '</textarea>
+					</div>
+					<div class="clear"></div>
 				</div>
 				<div id="', $editor_id, '_resizer" class="richedit_resize"></div>
 			</div>
@@ -124,7 +128,7 @@ function template_control_richedit($editor_id, $smileyContainer = null, $bbcCont
 							{
 								sType: \'button\',
 								bEnabled: ', empty($context['disabled_tags'][$tag['code']]) ? 'true' : 'false', ',
-								sImage: ', JavaScriptEscape($settings['images_url'] . '/bbc/' . $tag['image'] . '.gif'), ',
+								sImage: ', JavaScriptEscape($settings['images_url'] . '/bbc/' . $tag['image'] . '.png'), ',
 								sCode: ', JavaScriptEscape($tag['code']), ',
 								sBefore: ', JavaScriptEscape($tag['before']), ',
 								sAfter: ', isset($tag['after']) ? JavaScriptEscape($tag['after']) : 'null', ',
@@ -213,11 +217,11 @@ function template_control_richedit($editor_id, $smileyContainer = null, $bbcCont
 			echo '
 					],
 					sButtonTemplate: ', JavaScriptEscape('
-						<img id="%buttonId%" src="%buttonSrc%" align="bottom" width="23" height="22" alt="%buttonDescription%" title="%buttonDescription%" />
+						<img id="%buttonId%" src="%buttonSrc%" class="bbc_editor_button" align="bottom" alt="%buttonDescription%" title="%buttonDescription%" />
 					'), ',
-					sButtonBackgroundImage: ', JavaScriptEscape($settings['images_url'] . '/bbc/bbc_bg.gif'), ',
-					sButtonBackgroundImageHover: ', JavaScriptEscape($settings['images_url'] . '/bbc/bbc_hoverbg.gif'), ',
-					sActiveButtonBackgroundImage: ', JavaScriptEscape($settings['images_url'] . '/bbc/bbc_hoverbg.gif'), ',
+					sButtonBackgroundImage: ', JavaScriptEscape(''), ',
+					sButtonBackgroundImageHover: ', JavaScriptEscape(''), ',
+					sActiveButtonBackgroundImage: ', JavaScriptEscape(''), ',
 					sDividerTemplate: ', JavaScriptEscape('
 						<img src="' . $settings['images_url'] . '/bbc/divider.gif" alt="|" style="margin: 0 3px 0 3px;" />
 					'), ',

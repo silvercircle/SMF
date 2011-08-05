@@ -64,11 +64,12 @@ function Display()
 {
 	global $scripturl, $txt, $modSettings, $context, $settings;
 	global $options, $sourcedir, $user_info, $board_info, $topic, $board;
-	global $attachments, $messages_request, $topicinfo, $language, $smcFunc, $can_see_like, $can_give_like;
+	global $attachments, $messages_request, $topicinfo, $language, $smcFunc, $can_see_like, $can_give_like, $cache_parsed;
 
-	$can_see_like = allowedTo('like_see', $board);
-	$can_give_like = allowedTo('like_give', $board);
-	$context['use_share'] = allowedTo('use_share', $board);
+	$can_see_like = allowedTo('like_see');
+	$can_give_like = allowedTo('like_give');
+	$context['use_share'] = allowedTo('use_share');
+	$cache_parsed = (isset($modSettings['use_post_cache']) && $modSettings['use_post_cache']);
 	
 	// What are you gonna display if these are empty?!
 	if (empty($topic))
@@ -1001,12 +1002,13 @@ function Display()
 			loadMemberData($posters);
 		$messages_request = $smcFunc['db_query']('', '
 			SELECT
-				m.id_msg, m.icon, m.subject, m.poster_time, m.poster_ip, m.id_member, m.modified_time, m.modified_name, m.body,
+				m.id_msg, m.icon, m.subject, m.poster_time, m.poster_ip, m.id_member, m.modified_time, m.modified_name, m.body, mc.body AS cached_body,
 				m.smileys_enabled, m.poster_name, m.poster_email, m.approved, c.likes_count, c.like_status, c.updated AS like_updated, l.id_user AS liked,
 				m.id_msg_modified < {int:new_from} AS is_read
 			FROM {db_prefix}messages AS m
 			LEFT JOIN {db_prefix}likes AS l ON l.id_msg = m.id_msg AND l.id_user = '.$user_info['id'].'
 			LEFT JOIN {db_prefix}like_cache AS c ON c.id_msg = m.id_msg
+			LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg
 			WHERE m.id_msg IN ({array_int:message_list})
 			ORDER BY m.id_msg' . (empty($options['view_newest_first']) ? '' : ' DESC'),
 			array(
@@ -1119,7 +1121,7 @@ function Display()
 function prepareDisplayContext($reset = false)
 {
 	global $settings, $txt, $modSettings, $scripturl, $options, $user_info, $smcFunc, $sourcedir, $board;
-	global $memberContext, $context, $messages_request, $topic, $attachments, $topicinfo, $can_see_like, $can_give_like;
+	global $memberContext, $context, $messages_request, $topic, $attachments, $topicinfo, $can_see_like, $can_give_like, $cache_parsed;
 
 	static $counter = null;
 
@@ -1193,8 +1195,21 @@ function prepareDisplayContext($reset = false)
 	censorText($message['body']);
 	censorText($message['subject']);
 
+	if($cache_parsed) {
+		if(empty($message['cached_body'])) {
+			$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
+			$smcFunc['db_insert']('replace', '{db_prefix}messages_cache',
+				array('id_msg' => 'int', 'body' => 'string'),
+				array($message['id_msg'], $message['body']),
+				array('id_msg', 'body'));
+		}
+		else
+			$message['body'] = $message['cached_body'];
+	}
+	else
+		$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
+	
 	// Run BBC interpreter on the message.
-	$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
 
 	// Compose the memory eat- I mean message array.
 	$output = array(
