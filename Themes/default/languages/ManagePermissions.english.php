@@ -350,4 +350,18 @@ $txt['permissiongroup_share'] = 'Enable share links';
 $txt['permissiongroup_simple_share'] = 'Enable share links';
 $txt['permissionname_use_share'] = "Use social media share bar";
 $txt['permissionname_profile_signature'] = "Change signature";
+
+$txt['permissiongroup_smftags'] = 'SMF Tags';
+$txt['permissiongroup_simple_smftags'] = 'SMF Tags';
+$txt['permissionname_smftags_suggest'] = 'Suggest Tags';
+$txt['permissionhelp_smftags_suggest'] = 'Users can suggest tags to add';
+
+$txt['permissionname_smftags_add'] = 'Add Tags to Own Topics';
+$txt['permissionhelp_smftags_add'] = 'Users can add tags';
+$txt['permissionname_smftags_del'] = 'Delete Tags to Own Topics';
+$txt['permissionhelp_smftags_del'] = 'Users can delete tags from topics they open';
+
+$txt['permissionname_smftags_manage'] = 'Manage Tags';
+$txt['permissionhelp_smftags_manage'] = 'Users can modify the tag settings and add and remove ANY tags. This permission is normally given to forum admins only.';
+
 ?>

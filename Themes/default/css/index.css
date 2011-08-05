@@ -478,10 +478,25 @@ div.pagesection div.floatright input
 {
 	margin-top: 3px;
 }
-.tagstrip {
+#tagstrip {
 	font-size:12px;
 	float:right;
-	padding:5px 0.5em;
+	padding:5px;
+	padding-left:18px;
+	background: transparent url(../images/theme/sprite.png) 0 -239px no-repeat;
+}
+span.xtag {
+	width:14px;
+	min-width:16px;
+	max-width:16px;
+	background: transparent url(../images/theme/sprite.png) 0 -586px no-repeat;
+	cursor:pointer;
+	display:inline-block;
+	margin-right:4px;
+	margin-left:2px;
+}
+span.xtag:hover {
+	background: transparent url(../images/theme/sprite.png) -22px -586px no-repeat;
 }
 /* Colors for background of posts requiring approval */
 .approvebg
@@ -779,6 +794,7 @@ div.cat_bar
 	padding: 0 9px;
 	height: 26px;
 	overflow: hidden;
+	text-shadow:1px 1px #ccc;
 }
 div.title_bar
 {
@@ -3554,7 +3570,7 @@ tbody.divider tr {background:white;}
 
 /* member card */
 div#mcard, .tcard {
-	background: #485B7D url(../images/theme/graph.png) repeat-x;
+	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
 	padding:0;
 	position:absolute;
 	font-size:12px;
@@ -3590,7 +3606,15 @@ div#mcard_close, div#tcard_close {
 	border-bottom-left-radius:5px;
 	z-index:10;
 }
-
+span.mcard {
+	width:14px;
+	min-width:16px;
+	max-width:16px;
+	background: transparent url(../images/theme/sprite.png) 0 -561px no-repeat;
+	cursor:pointer;
+	display:inline-block;
+	margin-left:4px;
+}
 div.likebar {
 	background-color:#f2f5fe;
 	border-top:1px solid #d5ecfa;
@@ -3602,9 +3626,7 @@ div.likebar {
 }
 
 div#ajaxbusy {
-	border:3px solid orange;
-	border-bottom-left-radius:8px;
-	border-bottom-right-radius:8px;
+	border:2px solid #ccc;
 	background-color:#ddd;
 	padding:10px 20px;
 }
@@ -3629,6 +3651,7 @@ abbr.timeago {border:0;}
 .mediumpadding {padding:10px;}
 .largepadding {padding:20px;}
 .smallpadding {padding:5px;}
+.mediummargin {margin:5px;}
 /*
  * social sharing widgets
  */

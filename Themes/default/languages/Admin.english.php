@@ -478,6 +478,8 @@ $txt['manageposts_topic_settings_description'] = 'Here you can set all settings 
 $txt['manageposts_topic_settings_submit'] = 'Save';
 
 $txt['manageposts_prefix_settings'] = 'Topic prefixes';
+$txt['manageposts_tag_settings'] = 'Topic tagging';
+
 $txt['prefix_name'] = 'Prefix name';
 $txt['prefix_html_before'] = 'HTML before';
 $txt['prefix_html_after'] = 'HTML after';

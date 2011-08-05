@@ -1538,7 +1538,7 @@ if (is_ie7down && 'attachEvent' in window)
   $.extend($.timeago, {
     settings: {
       refreshMillis: 60000,
-      allowFuture: false,
+      allowFuture: true,
     },
     inWords: function(distanceMillis) {
       var $l = this.settings.strings;
@@ -1639,9 +1639,9 @@ if (is_ie7down && 'attachEvent' in window)
     	var onehour = 3600 * 1000;
     	var hours = todayref / onehour;
     	if(hours > 24 && hours < 144 )
-    		return($t.settings.strings.weekdays[date.getUTCDay()] + ', ' + date.getUTCHours() + ':'+ date.getUTCMinutes());
+    		return($t.settings.strings.weekdays[date.getUTCDay()] + ', ' + pad(date.getUTCHours()) + ':'+ pad(date.getUTCMinutes()));
 		if(hours > 0 && hours < 24)
-    		return($t.settings.strings.yesterday + ', ' + date.getUTCHours() + ':'+ date.getUTCMinutes());
+    		return($t.settings.strings.yesterday + ', ' + pad(date.getUTCHours()) + ':'+ pad(date.getUTCMinutes()));
 	}
     return($t.inWords(dist));
   };
@@ -1650,4 +1650,11 @@ if (is_ie7down && 'attachEvent' in window)
   	  var d = new Date();
       return (d.getTime() - (date.getTime() + (d.getTimezoneOffset() * 60 * 1000) ));
   };
+  
+  function pad(n) {
+    var s = n+"";
+    while (s.length < 2) 
+    	s = "0" + s;
+    return s;
+  }
 }(jQuery));

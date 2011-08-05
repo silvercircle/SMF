@@ -181,7 +181,7 @@ function Display()
 		$_SESSION['last_read_topic'] = $topic;
 	}
 
-	//Tagging System
+	// get the tags for this topic
 	$dbresult= $smcFunc['db_query']('', "
         SELECT
                 t.tag,l.ID,t.ID_TAG
@@ -197,7 +197,6 @@ function Display()
                                 );
                 }
 	$smcFunc['db_free_result']($dbresult);
-	//End Tagging System
         	
 	// Get all the important topic info.
 	$request = $smcFunc['db_query']('', '

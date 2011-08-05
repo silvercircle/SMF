@@ -2157,4 +2157,38 @@ function template_prefix_settings()
 		</div>
 		</form>';
 }
+
+function template_tag_admin_settings()
+{
+	global $scripturl, $txt, $modSettings, $context;
+
+	echo '
+		<div class="cat_bar">
+		<h3 class="catbg">',$txt['manageposts_tag_settings'],'</h3>
+		</div>
+	<table border="0" width="80%" cellspacing="0" align="center" cellpadding="4" class="tborder">
+		<tr class="windowbg">
+			<td>
+			<b>' . $txt['smftags_settings']. '</b><br />
+				<form action="', $scripturl, '?action=admin;area=postsettings;sa=tags;save" method="post" accept-charset="', $context['character_set'], '">
+				<table border="0" width="100%" cellspacing="0" align="center" cellpadding="4">
+				<tr><td width="30%">' . $txt['smftags_set_mintaglength'] . '</td><td><input type="text" name="smftags_set_mintaglength" value="' .  $modSettings['smftags_set_mintaglength'] . '" /></td></tr>
+				<tr><td width="30%">' . $txt['smftags_set_maxtaglength'] . '</td><td><input type="text" name="smftags_set_maxtaglength" value="' .  $modSettings['smftags_set_maxtaglength'] . '" /></td></tr>
+				<tr><td width="30%">' . $txt['smftags_set_maxtags'] . '</td><td><input type="text" name="smftags_set_maxtags" value="' .  $modSettings['smftags_set_maxtags'] . '" /></td></tr>
+				<tr>
+				<td clospan="2"><b>',$txt['smftags_tagcloud_settings'],'</b></td>
+				</tr>
+				<tr><td width="30%">' . $txt['smftags_set_cloud_tags_to_show'] . '</td><td><input type="text" name="smftags_set_cloud_tags_to_show" value="' .  $modSettings['smftags_set_cloud_tags_to_show'] . '" /></td></tr>
+				<tr><td width="30%">' . $txt['smftags_set_cloud_tags_per_row'] . '</td><td><input type="text" name="smftags_set_cloud_tags_per_row" value="' .  $modSettings['smftags_set_cloud_tags_per_row'] . '" /></td></tr>
+				<tr><td width="30%">' . $txt['smftags_set_cloud_max_font_size_precent'] . '</td><td><input type="text" name="smftags_set_cloud_max_font_size_precent" value="' .  $modSettings['smftags_set_cloud_max_font_size_precent'] . '" /></td></tr>
+				<tr><td width="30%">' . $txt['smftags_set_cloud_min_font_size_precent'] . '</td><td><input type="text" name="smftags_set_cloud_min_font_size_precent" value="' .  $modSettings['smftags_set_cloud_min_font_size_precent'] . '" /></td></tr>
+				</table>
+
+				<input type="submit" name="savesettings" value="', $txt['smftags_savesettings'],  '" />
+			</form>
+			</td>
+		</tr>
+</table>';
+}
+
 ?>

@@ -232,6 +232,12 @@ jQuery(document).ready(function() {
 	$('abbr.timeago').timeago();
 });
 
+function submitTagForm(ele)
+{
+	sendRequest(smf_scripturl, 'action=xmlhttp&sa=tags&submittag=1&topic=' + $('#tagtopic').val() + '&tag=' + encodeURIComponent($('#newtags').val()), ele);
+	
+	$('#tagform').remove();
+}
 function firePreview(topic_id, ele)
 {
 	sendRequest(smf_scripturl, 'action=xmlhttp&sa=mpeek&t=' + topic_id, ele);
@@ -270,8 +276,7 @@ function sendRequest(uri, request, anchor_element)
 			sSessionVar = 'sesc';
 		
 		request = request + '&' + sSessionVar + '='	+ sSessionId + '&xml=1';
-		//alert(uri + request);
-		setTimeOut(3000);
+		setTimeOut(10000);
 		req = xmlrequest;
 		xmlrequest.onreadystatechange = function() { response(anchor_element) };
 		xmlrequest.open('POST', uri, true);
@@ -315,6 +320,14 @@ function response(ele)
 						ele.attr('data-fn', 'give');
 						ele.html(smf_likelabel);
 					}
+					return;
+				}
+				if(ele.attr('id') == 'addtag') {
+					$('#addtag').before(req.responseText);
+					return;
+				}
+				if(ele.attr('id') == 'tags') {
+					ele.html(req.responseText);
 					return;
 				}
 				var el = $('#mcard');

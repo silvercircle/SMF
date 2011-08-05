@@ -184,20 +184,21 @@ function template_main()
 	if($context['use_share'] && ($context['user']['is_guest'] || !$options['use_share_bar']))
 		socialbar($scripturl . '?topic=' . $topic, urlencode($context['subject']));
 				
-	// Tagging System
+	// Tags
 	echo '
-		<div class="tagstrip"><b>', $txt['smftags_topic'], '</b>';
+		<div id="tagstrip"><span id="tags">';
 	foreach ($context['topic_tags'] as $i => $tag)
 	{
-		echo '<a href="' . $scripturl . '?action=tags;tagid=' . $tag['ID_TAG']  . '">' . $tag['tag'] . '</a>&nbsp;';
-		if(!$context['user']['is_guest'] && allowedTo('smftags_del'))
-		echo '<a href="' . $scripturl . '?action=tags;sa=deletetag;tagid=' . $tag['ID']  . '"><font color="#FF0000">[X]</font></a>&nbsp;';
+		echo '<a href="' . $scripturl . '?action=tags;tagid=' . $tag['ID_TAG']  . '">' . $tag['tag'] . '</a>';
+		if(!$context['user']['is_guest'])
+			echo '<a href="' . $scripturl . '?action=tags;sa=deletetag;tagid=' . $tag['ID']  . '"><span class="xtag">&nbsp;&nbsp;</span></a>';
 
 	}
-
-	if(!$context['user']['is_guest'] && allowedTo('smftags_add'))
+	echo '</span>';
+		
+	if(!$context['user']['is_guest'])
 		echo '
-			&nbsp;<a class="addtag" data-id="',$topic,'" href="' . $scripturl . '?action=tags;sa=addtag;topic=',$topic, '">' . $txt['smftags_addtag'] . '</a>';
+			&nbsp;<a rel="nofollow" id="addtag" onclick="$(\'#tagform\').remove();sendRequest(smf_scripturl, \'action=xmlhttp&sa=tags&addtag=1&topic=',$topic,'\', $(\'#addtag\'));return(false);" data-id="',$topic,'" href="' . $scripturl . '?action=tags;sa=addtag;topic=',$topic, '">' . $txt['smftags_addtag'] . '</a>';
 
 	echo '
 		</div>';
@@ -583,52 +584,12 @@ function template_main()
 				</form>
 			</div>
 			<a id="lastPost"></a>';
-			if(isset($txt['like_label'])) 
-				echo '				
-			<script type="text/javascript">
-				<!-- // --><![CDATA[
-				var smf_likelabel = \'',$txt['like_label'],'\';
-				var smf_unlikelabel = \'',$txt['unlike_label'],'\';
-				// ]]>
-			</script>';
 			
-	// Show the page index... "Pages: [1]".
-	echo '
-			<div class="pagesection yellow_container bottom">
-				', template_button_strip($normal_buttons, 'right'), '
-				<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . ' &nbsp;&nbsp;<a href="#top"><strong>' . $txt['go_up'] . '</strong></a>' : '', '</div>
-				<div class="nextlinks_bottom">', $context['previous_next'], '</div>
-			</div>';
-			
-	// Show the lower breadcrumbs.
-	theme_linktree();
-	$mod_buttons = array(
-		'move' => array('test' => 'can_move', 'text' => 'move_topic', 'image' => 'admin_move.gif', 'lang' => true, 'url' => $scripturl . '?action=movetopic;topic=' . $context['current_topic'] . '.0'),
-		'delete' => array('test' => 'can_delete', 'text' => 'remove_topic', 'image' => 'admin_rem.gif', 'lang' => true, 'custom' => 'onclick="return confirm(\'' . $txt['are_sure_remove_topic'] . '\');"', 'url' => $scripturl . '?action=removetopic2;topic=' . $context['current_topic'] . '.0;' . $context['session_var'] . '=' . $context['session_id']),
-		'lock' => array('test' => 'can_lock', 'text' => empty($context['is_locked']) ? 'set_lock' : 'set_unlock', 'image' => 'admin_lock.gif', 'lang' => true, 'url' => $scripturl . '?action=lock;topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
-		'sticky' => array('test' => 'can_sticky', 'text' => empty($context['is_sticky']) ? 'set_sticky' : 'set_nonsticky', 'image' => 'admin_sticky.gif', 'lang' => true, 'url' => $scripturl . '?action=sticky;topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
-		'merge' => array('test' => 'can_merge', 'text' => 'merge', 'image' => 'merge.gif', 'lang' => true, 'url' => $scripturl . '?action=mergetopics;board=' . $context['current_board'] . '.0;from=' . $context['current_topic']),
-		'calendar' => array('test' => 'calendar_post', 'text' => 'calendar_link', 'image' => 'linktocal.gif', 'lang' => true, 'url' => $scripturl . '?action=post;calendar;msg=' . $context['topic_first_message'] . ';topic=' . $context['current_topic'] . '.0'),
-	);
-
-	// Restore topic. eh?  No monkey business.
-	if ($context['can_restore_topic'])
-		$mod_buttons[] = array('text' => 'restore_topic', 'image' => '', 'lang' => true, 'url' => $scripturl . '?action=restoretopic;topics=' . $context['current_topic'] . ';' . $context['session_var'] . '=' . $context['session_id']);
-
-	// Allow adding new mod buttons easily.
-	call_integration_hook('integrate_mod_buttons', array(&$mod_buttons));
-
-	echo '
-			<div id="moderationbuttons">', template_button_strip($mod_buttons, 'bottom', array('id' => 'moderationbuttons_strip')), '</div>';
-
-	// Show the jumpto box, or actually...let Javascript do it.
-	echo '
-			<div class="plainbox" id="display_jump_to">&nbsp;</div>';
-
 	if ($context['can_reply'] && !empty($options['display_quick_reply']))
 	{
 		echo '
 			<a id="quickreply"></a>
+			<div class="clear"></div>
 			<div class="tborder" id="quickreplybox">
 				<div class="title_bar rounded_top">
 					<h4 class="titlebg">
@@ -689,105 +650,47 @@ function template_main()
 			</div>';
 	}
 	else
-		echo '
-		<br class="clear" />';
+			if(isset($txt['like_label'])) 
+				echo '				
+			<script type="text/javascript">
+				<!-- // --><![CDATA[
+				var smf_likelabel = \'',$txt['like_label'],'\';
+				var smf_unlikelabel = \'',$txt['unlike_label'],'\';
+				// ]]>
+			</script>';
+			
+	// Show the page index... "Pages: [1]".
+	echo '
+			<div class="pagesection yellow_container bottom">
+				', template_button_strip($normal_buttons, 'right'), '
+				<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . ' &nbsp;&nbsp;<a href="#top"><strong>' . $txt['go_up'] . '</strong></a>' : '', '</div>
+				<div class="nextlinks_bottom">', $context['previous_next'], '</div>
+			</div>';
+			
+	// Show the lower breadcrumbs.
+	theme_linktree();
+	$mod_buttons = array(
+		'move' => array('test' => 'can_move', 'text' => 'move_topic', 'image' => 'admin_move.gif', 'lang' => true, 'url' => $scripturl . '?action=movetopic;topic=' . $context['current_topic'] . '.0'),
+		'delete' => array('test' => 'can_delete', 'text' => 'remove_topic', 'image' => 'admin_rem.gif', 'lang' => true, 'custom' => 'onclick="return confirm(\'' . $txt['are_sure_remove_topic'] . '\');"', 'url' => $scripturl . '?action=removetopic2;topic=' . $context['current_topic'] . '.0;' . $context['session_var'] . '=' . $context['session_id']),
+		'lock' => array('test' => 'can_lock', 'text' => empty($context['is_locked']) ? 'set_lock' : 'set_unlock', 'image' => 'admin_lock.gif', 'lang' => true, 'url' => $scripturl . '?action=lock;topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
+		'sticky' => array('test' => 'can_sticky', 'text' => empty($context['is_sticky']) ? 'set_sticky' : 'set_nonsticky', 'image' => 'admin_sticky.gif', 'lang' => true, 'url' => $scripturl . '?action=sticky;topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
+		'merge' => array('test' => 'can_merge', 'text' => 'merge', 'image' => 'merge.gif', 'lang' => true, 'url' => $scripturl . '?action=mergetopics;board=' . $context['current_board'] . '.0;from=' . $context['current_topic']),
+		'calendar' => array('test' => 'calendar_post', 'text' => 'calendar_link', 'image' => 'linktocal.gif', 'lang' => true, 'url' => $scripturl . '?action=post;calendar;msg=' . $context['topic_first_message'] . ';topic=' . $context['current_topic'] . '.0'),
+	);
 
+	// Restore topic. eh?  No monkey business.
+	if ($context['can_restore_topic'])
+		$mod_buttons[] = array('text' => 'restore_topic', 'image' => '', 'lang' => true, 'url' => $scripturl . '?action=restoretopic;topics=' . $context['current_topic'] . ';' . $context['session_var'] . '=' . $context['session_id']);
 
-	// Added by Related Topics
-	if (!empty($context['related_topics'])) // TODO: Have ability to display no related topics?
-	{
-		echo '
-			<div class="cat_bar">
-				<h3 class="catbg">', $txt['related_topics'], '</h3>
-			</div>
-			<div class="tborder topic_table" id="messageindex">
-				<table class="table_grid" cellspacing="0">
-					<thead>
-						<tr class="catbg">';
+	// Allow adding new mod buttons easily.
+	call_integration_hook('integrate_mod_buttons', array(&$mod_buttons));
 
-		// Are there actually any topics to show?
-		if (!empty($context['related_topics']))
-		{
-			echo '
-							<th scope="col" class="smalltext first_th" width="8%" colspan="2">&nbsp;</th>
-							<th scope="col" class="smalltext">', $txt['subject'], ' / ', $txt['started_by'], '</th>
-							<th scope="col" class="smalltext center" width="14%">', $txt['replies'], '</th>
-							<th scope="col" class="smalltext last_th" width="22%">', $txt['last_post'], '</th>';
-		}
-		// No topics.... just say, "sorry bub".
-		else
-			echo '
-							<th scope="col" class="smalltext first_th" width="8%">&nbsp;</th>
-							<th class="smalltext" colspan="3"><strong>', $txt['msg_alert_none'], '</strong></th>
-							<th scope="col" class="smalltext last_th" width="8%">&nbsp;</th>';
+	echo '
+			<div id="moderationbuttons">', template_button_strip($mod_buttons, 'bottom', array('id' => 'moderationbuttons_strip')), '</div>';
 
-		echo '
-						</tr>
-					</thead>
-					<tbody>';
-
-		foreach ($context['related_topics'] as $topic)
-		{
-			// Is this topic pending approval, or does it have any posts pending approval?
-			if ($topic['board']['can_approve_posts'] && $topic['unapproved_posts'])
-				$color_class = !$topic['approved'] ? 'approvetbg' : 'approvebg';
-			// We start with locked and sticky topics.
-			elseif ($topic['is_sticky'] && $topic['is_locked'])
-				$color_class = 'stickybg locked_sticky';
-			// Sticky topics should get a different color, too.
-			elseif ($topic['is_sticky'])
-				$color_class = 'stickybg';
-			// Locked topics get special treatment as well.
-			elseif ($topic['is_locked'])
-				$color_class = 'lockedbg';
-			// Last, but not least: regular topics.
-			else
-				$color_class = 'windowbg';
-
-			// Some columns require a different shade of the color class.
-			$alternate_class = $color_class . '2';
-
-			echo '
-						<tr>
-							<td class="icon1 ', $color_class, '">
-								<img src="', $settings['images_url'], '/topic/', $topic['class'], '.gif" alt="" />
-							</td>
-							<td class="icon2 ', $color_class, '">
-								<img src="', $topic['first_post']['icon_url'], '" alt="" />
-							</td>
-							<td class="subject ', $alternate_class, '">
-								<div ', (!empty($topic['quick_mod']['modify']) ? 'id="topic_' . $topic['first_post']['id'] . '" onmouseout="mouse_on_div = 0;" onmouseover="mouse_on_div = 1;" ondblclick="modify_topic(\'' . $topic['id'] . '\', \'' . $topic['first_post']['id'] . '\', \'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\');"' : ''), '>
-									', $topic['is_sticky'] ? '<strong>' : '', '<span id="msg_' . $topic['first_post']['id'] . '">', $topic['first_post']['link'], (!$topic['board']['can_approve_posts'] && !$topic['approved'] ? '&nbsp;<em>(' . $txt['awaiting_approval'] . ')</em>' : ''), '</span>', $topic['is_sticky'] ? '</strong>' : '' ;
-
-			// Is this topic new? (assuming they are logged in!)
-			if ($topic['new'] && $context['user']['is_logged'])
-					echo '
-									<a href="', $topic['new_href'], '" id="newicon' . $topic['first_post']['id'] . '"><img src="', $settings['lang_images_url'], '/new.gif" alt="', $txt['new'], '" /></a>';
-
-			echo '
-									<p>', $txt['started_by'], ' ', $topic['first_post']['member']['link'], '
-										<small id="pages' . $topic['first_post']['id'] . '">', $topic['pages'], '</small>
-										<small>', $topic['board']['link'], '</small>
-									</p>
-								</div>
-							</td>
-							<td class="stats ', $color_class, '">
-								', $topic['replies'], ' ', $txt['replies'], '
-								<br />
-								', $topic['views'], ' ', $txt['views'], '
-							</td>
-							<td class="lastpost ', $alternate_class, '">
-								<a href="', $topic['last_post']['href'], '"><img src="', $settings['images_url'], '/icons/last_post.gif" alt="', $txt['last_post'], '" title="', $txt['last_post'], '" /></a>
-								', $topic['last_post']['time'], '<br />
-								', $txt['by'], ' ', $topic['last_post']['member']['link'], '
-							</td>
-						</tr>';
-		}
-
-		echo '
-				</table>
-			</div><br />';
-	}
+	// Show the jumpto box, or actually...let Javascript do it.
+	echo '
+			<div class="plainbox" id="display_jump_to">&nbsp;</div>';
 
 	if ($context['show_spellchecking'])
 		echo '

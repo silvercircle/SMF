@@ -326,7 +326,7 @@ function smf_main()
 		'.xml' => array('News.php', 'ShowXmlFeed'),
 		'xmlhttp' => array('Xml.php', 'XMLhttpMain'),
 		'like' => array('Xml.php', 'GiveLike'),
-		'tags' => array('Tags2.php', 'TagsMain'),
+		'tags' => array('Tagging.php', 'TagsMain'),
 	);
 
 	// Allow modifying $actionArray easily.

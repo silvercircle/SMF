@@ -33,7 +33,8 @@ function XMLhttpMain()
 		),
 		'mcard' => array('function' => 'GetMcard'),
 		'givelike' => array('function' => 'GiveLike'),
-		'mpeek' => array('function' => 'TopicPeek')
+		'mpeek' => array('function' => 'TopicPeek'),
+		'tags' => array('function' => 'TagsDispatcher')
 	);
 	if (!isset($_REQUEST['sa'], $sub_actions[$_REQUEST['sa']]))
 		fatal_lang_error('no_access', false);
@@ -294,5 +295,16 @@ function TopicPeek()
 		}
 		$smcFunc['db_free_result']($result);
 	}
+}
+
+function TagsDispatcher()
+{
+	global $sourcedir;
+	
+	require_once($sourcedir . '/Tagging.php');
+	if(isset($_REQUEST['addtag']))
+		TaggingSystem_Add();
+	if(isset($_REQUEST['submittag']))
+		TaggingSystem_Submit();
 }
 ?>

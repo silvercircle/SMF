@@ -164,9 +164,14 @@ function getPrefixSelector($board, $id = 0, $mandatory = 0)
 	$out = '';
 	
 	$result = $smcFunc['db_query']('', '
-		SELECT id_prefix, name FROM {db_prefix}prefixes WHERE boards = ""');
+		SELECT id_prefix, name, boards FROM {db_prefix}prefixes');
 		
 		while($row = $smcFunc['db_fetch_assoc']($result)) {
+			if(strlen(trim($row['boards']))) {
+				$b = explode(',', $row['boards']);
+				if(!array_search($board, $b))
+					continue;
+			}
 			if(!$header) {
 				$header = true;
 				$out = '<select name="topic_prefix" id="topic_prefix">';
@@ -2462,7 +2467,7 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		$messages_columns['smileys_enabled'] = empty($msgOptions['smileys_enabled']) ? 0 : 1;
 		$smileys_enabled = $msgOptions['smileys_enabled'];
 	}
-	else
+	else if (isset($msgOptions['body']))
 		$smileys_enabled = $old_smileys_enabled;
 
 	// Which columns need to be ints?
@@ -2488,8 +2493,11 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		WHERE id_msg = {int:id_msg}',
 		$update_parameters
 	);
-	
-	if (isset($modSettings['use_post_cache']) && $modSettings['use_post_cache']) {
+
+	/*
+	 * always update the cache on modify so we never get outdated cache entries
+	 */	
+	if(isset($msgOptions['body'])) {
 		$body = parse_bbc($msgOptions['body'], $smileys_enabled, $msgOptions['id']);
 		$smcFunc['db_insert']('replace', '{db_prefix}messages_cache',
 			array('id_msg' => 'int', 'body' => 'string'),
@@ -2516,7 +2524,7 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		);
 	}
 	
-	if(isset($topicOptions['topic_prefix']) && $topicOptions['topic_prefix'] != null) {
+	if(isset($topicOptions['topic_prefix']) /*&& $topicOptions['topic_prefix'] != null*/) {
 		$smcFunc['db_query']('', '
 			UPDATE {db_prefix}topics
 			SET

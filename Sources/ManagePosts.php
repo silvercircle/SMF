@@ -66,6 +66,7 @@ function ManagePostSettings()
 		'censor' => 'SetCensor',
 		'topics' => 'ModifyTopicSettings',
 		'prefixes' => 'ModifyPrefixSettings',
+		'tags' => 'ModifyTagSettings',
 	);
 
 	// Default the sub-action to 'posts'.
@@ -385,6 +386,19 @@ function getPrefixes()
 	$smcFunc['db_free_result']($request);
 }
 
+function normalizeBoards($b)
+{
+	$_b = explode(',', $b);
+	$bnew = array();
+	
+	foreach($_b as $board) {
+		$btemp = intval(trim($board));
+		if($btemp)
+			array_push($bnew, $btemp);
+	}
+	return(implode(',', $bnew));
+}
+
 function ModifyPrefixSettings()
 {
 	global $context, $txt, $modSettings, $sourcedir, $scripturl, $smcFunc;
@@ -410,10 +424,11 @@ function ModifyPrefixSettings()
 							array('id_prefix' => $id, 'name' => $_POST['name_'.$id], 'html_before' => htmlentities($_POST['html_before_'.$id]), 
 								'html_after' => htmlentities($_POST['html_after_'.$id]), 'boards' => $_POST['boards_'.$id]));*/
 				if($_POST['name_'.$id] != $prefix['name'] || $_POST['boards_'.$id] != $prefix['boards']) {
-						$smcFunc['db_query']('', '
-							UPDATE {db_prefix}prefixes SET name = {string:name}, boards = {string:boards} WHERE id_prefix = {int:id_prefix}',
-							array('id_prefix' => $id, 'name' => htmlentities($_POST['name_'.$id]),
-								'boards' => $_POST['boards_'.$id]));
+					$boards = normalizeBoards($_POST['boards_'.$id]);
+					$smcFunc['db_query']('', '
+						UPDATE {db_prefix}prefixes SET name = {string:name}, boards = {string:boards} WHERE id_prefix = {int:id_prefix}',
+						array('id_prefix' => $id, 'name' => htmlentities($_POST['name_'.$id]),
+						'boards' => $boards));
 				}
 			}
 		}
@@ -425,13 +440,51 @@ function ModifyPrefixSettings()
 					{string:html_before}, {string:html_after}, {string:boards})',
 					array('name' => $_POST['name_new_'.$i], 'html_before' => htmlentities($_POST['html_before_new_'.$i]),
 						'html_after' => htmlentities($_POST['html_after_new_'.$i]), 'boards' => $_POST['boards_new_'.$i]));*/
+				$boards = normalizeBoards($_POST['boards_new_'.$id]);
 				$smcFunc['db_query']('', '
 					INSERT INTO {db_prefix}prefixes (name, boards) VALUES({string:name},
 					{string:boards})',
-					array('name' => htmlentities($_POST['name_new_'.$i]), 'boards' => $_POST['boards_new_'.$i]));
+					array('name' => htmlentities($_POST['name_new_'.$i]), 'boards' => $boards));
 			}
 		}
 		redirectexit('action=admin;area=postsettings;sa=prefixes');
+	}
+}
+
+function ModifyTagSettings()
+{
+	global $context, $txt, $modSettings, $sourcedir, $scripturl, $smcFunc;
+
+	// Check permission
+	isAllowedTo('smftags_manage');
+
+	$context['page_title'] = $txt['manageposts_tag_settings'];
+	$context['settings_title'] = $txt['manageposts_tag_settings'];
+	$context['sub_template']  = 'tag_admin_settings';
+	
+	if (isset($_GET['save'])) {
+
+		isAllowedTo('smftags_manage');
+
+		$smftags_set_mintaglength = (int) $_REQUEST['smftags_set_mintaglength'];
+		$smftags_set_maxtaglength =  (int) $_REQUEST['smftags_set_maxtaglength'];
+		$smftags_set_maxtags =  (int) $_REQUEST['smftags_set_maxtags'];
+
+		$smftags_set_cloud_tags_per_row = (int) $_REQUEST['smftags_set_cloud_tags_per_row'];
+		$smftags_set_cloud_tags_to_show = (int) $_REQUEST['smftags_set_cloud_tags_to_show'];
+		$smftags_set_cloud_max_font_size_precent = (int) $_REQUEST['smftags_set_cloud_max_font_size_precent'];
+		$smftags_set_cloud_min_font_size_precent = (int) $_REQUEST['smftags_set_cloud_min_font_size_precent'];
+
+		updateSettings(
+			array('smftags_set_maxtags' => $smftags_set_maxtags,
+				'smftags_set_mintaglength' => $smftags_set_mintaglength,
+				'smftags_set_maxtaglength' => $smftags_set_maxtaglength,
+				'smftags_set_cloud_tags_per_row' => $smftags_set_cloud_tags_per_row,
+				'smftags_set_cloud_tags_to_show' => $smftags_set_cloud_tags_to_show,
+				'smftags_set_cloud_max_font_size_precent' => $smftags_set_cloud_max_font_size_precent,
+				'smftags_set_cloud_min_font_size_precent' => $smftags_set_cloud_min_font_size_precent,
+				));
+		redirectexit('action=admin;area=postsettings;sa=tags');
 	}
 }
 ?>

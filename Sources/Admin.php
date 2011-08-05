@@ -169,17 +169,6 @@ function AdminMain()
 						'loads' => array($txt['load_balancing_settings']),
 					),
 				),
-
-				'tags' => array(
-					'label' => $txt['smftags_admin'],
-					'file' => 'Tags2.php',
-					'function' => 'TagsMain',
-					'custom_url' => $scripturl . '?action=admin;area=tags;sa=admin',
-					'icon' => 'server.gif',
-					'subsections' => array(
-						'admin' => array($txt['smftags_settings']),
-					),
-				),
 				'current_theme' => array(
 					'label' => $txt['theme_current_settings'],
 					'file' => 'Themes.php',
@@ -242,6 +231,7 @@ function AdminMain()
 						'censor' => array($txt['admin_censored_words']),
 						'topics' => array($txt['manageposts_topic_settings']),
 						'prefixes' => array($txt['manageposts_prefix_settings']),
+						'tags' => array($txt['manageposts_tag_settings']),
 					),
 				),
 				'managecalendar' => array(
