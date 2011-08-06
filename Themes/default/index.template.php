@@ -280,7 +280,8 @@ function template_body_above()
 					<input type="hidden" name="brd[', $context['current_board'], ']" value="', $context['current_board'], '" />';
 				$search_label = 'Search this board';
 			}
-				echo '<input style="padding-left:26px;margin:0;" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" size="30" name="search" value="',$search_label,'" class="searchfield" />
+				echo '<input style="width:220px;padding-left:26px;margin:0;" onclick="openAdvSearch();return(false);" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" name="search" value="',$search_label,'" class="searchfield" />
+					<div id="adv_search" style="position:absolute;width:246px;display:none;" class="generic_container">foo</div>
 					<input style="margin:0;" type="submit" name="submit" value="', $txt['go'], '" class="button_submit" />
 					<input type="hidden" name="advanced" value="0" />';
 

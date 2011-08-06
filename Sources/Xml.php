@@ -306,5 +306,7 @@ function TagsDispatcher()
 		TaggingSystem_Add();
 	if(isset($_REQUEST['submittag']))
 		TaggingSystem_Submit();
+	if(isset($_REQUEST['deletetag']))
+		TaggingSystem_Delete();
 }
 ?>

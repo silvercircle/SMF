@@ -164,13 +164,29 @@ function getPrefixSelector($board, $id = 0, $mandatory = 0)
 	$out = '';
 	
 	$result = $smcFunc['db_query']('', '
-		SELECT id_prefix, name, boards FROM {db_prefix}prefixes');
-		
+		SELECT id_prefix, name, boards, groups FROM {db_prefix}prefixes');
+
 		while($row = $smcFunc['db_fetch_assoc']($result)) {
-			if(strlen(trim($row['boards']))) {
-				$b = explode(',', $row['boards']);
-				if(!array_search($board, $b))
-					continue;
+			if(!$user_info['is_admin']) {			// admin can always use all prefixes in all boards
+				if(strlen(trim($row['boards']))) {
+					$b = explode(',', $row['boards']);
+					if(false === array_search($board, $b))
+						continue;
+				}
+				// we've found at least one prefix that is allowed in this group, now check if the user does
+				// have access to this
+				if(strlen(trim($row['groups']))) {
+					$group_found = 0;
+					$g = explode(',', $row['groups']);
+					foreach($user_info['groups'] as $current_group) {
+						if(false !== array_search($current_group, $g)) {
+							$group_found = 1;
+							break;
+						}
+					}
+					if(!$group_found)
+						continue;
+				}
 			}
 			if(!$header) {
 				$header = true;
@@ -1778,6 +1794,8 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	$posterOptions['id'] = empty($posterOptions['id']) ? 0 : (int) $posterOptions['id'];
 	$posterOptions['ip'] = empty($posterOptions['ip']) ? $user_info['ip'] : $posterOptions['ip'];
 
+	$msgOptions['has_img'] = preg_match('/\[\/img\]/i', $msgOptions['body']);
+	
 	// We need to know if the topic is approved. If we're told that's great - if not find out.
 	if (!$modSettings['postmod_active'])
 		$topicOptions['is_approved'] = true;
@@ -1846,12 +1864,12 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		array(
 			'id_board' => 'int', 'id_topic' => 'int', 'id_member' => 'int', 'subject' => 'string-255', 'body' => (!empty($modSettings['max_messageLength']) && $modSettings['max_messageLength'] > 65534 ? 'string-' . $modSettings['max_messageLength'] : 'string-65534'),
 			'poster_name' => 'string-255', 'poster_email' => 'string-255', 'poster_time' => 'int', 'poster_ip' => 'string-255',
-			'smileys_enabled' => 'int', 'modified_name' => 'string', 'icon' => 'string-16', 'approved' => 'int',
+			'smileys_enabled' => 'int', 'modified_name' => 'string', 'icon' => 'string-16', 'approved' => 'int', 'has_img' => 'int',
 		),
 		array(
 			$topicOptions['board'], $topicOptions['id'], $posterOptions['id'], $msgOptions['subject'], $msgOptions['body'],
 			$posterOptions['name'], $posterOptions['email'], time(), $posterOptions['ip'],
-			$msgOptions['smileys_enabled'] ? 1 : 0, '', $msgOptions['icon'], $msgOptions['approved'],
+			$msgOptions['smileys_enabled'] ? 1 : 0, '', $msgOptions['icon'], $msgOptions['approved'], $msgOptions['has_img'],
 		),
 		array('id_msg')
 	);
@@ -2476,6 +2494,9 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		'id_msg' => $msgOptions['id'],
 	);
 
+	$messages_columns['has_img'] = preg_match('/\[\/img\]/i', $msgOptions['body']);
+	$has_img = $messages_columns['has_img'];
+	
 	foreach ($messages_columns as $var => $val)
 	{
 		$messages_columns[$var] = $var . ' = {' . (in_array($var, $messageInts) ? 'int' : 'string') . ':var_' . $var . '}';
@@ -2495,14 +2516,11 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	);
 
 	/*
-	 * always update the cache on modify so we never get outdated cache entries
+	 * always update or delete the parse cache on modify
 	 */	
 	if(isset($msgOptions['body'])) {
-		$body = parse_bbc($msgOptions['body'], $smileys_enabled, $msgOptions['id']);
-		$smcFunc['db_insert']('replace', '{db_prefix}messages_cache',
-			array('id_msg' => 'int', 'body' => 'string'),
-			array($msgOptions['id'], $body),
-			array('id_msg', 'body'));
+		$smcFunc['db_query']('', 'DELETE FROM {db_prefix}messages_cache WHERE id_msg = {int:id_msg}',
+			array('id_msg' => $msgOptions['id']));
 	}
 
 	// Lock and or sticky the post.

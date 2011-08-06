@@ -200,17 +200,9 @@ function template_main()
 						</dd>
 		';
 		// Tagging system Mod
-		if(!isset($context['num_replies']))
+		if (!(isset($context['previous_posts']) && count($context['previous_posts']) > 0))
 		{
-		echo '
-		<dt>
-											<b>', $txt['smftags_topic'], '</b>
-		</dt>
-		<dd>
-											<input type="text" name="tags"', ' tabindex="', $context['tabindex']++, '" size="80" maxlength="80" />
-											<br /><span class="smalltext">', $txt['smftags_seperate'], '</span>
-		</dd>';
-							
+			echo $context['tagging_ui'];
 		}
 		
 		

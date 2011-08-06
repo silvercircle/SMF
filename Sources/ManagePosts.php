@@ -192,6 +192,7 @@ function ModifyPostSettings($return_config = false)
 			array('check', 'enableSpellChecking', 'subtext' => (function_exists('pspell_new') ? $txt['enableSpellChecking_warning'] : ('<span class="alert">' . $txt['enableSpellChecking_warning'] . '</span>'))),
 			array('check', 'disable_wysiwyg'),
 			array('check', 'use_post_cache'),
+			array('int', 'post_cache_cutoff'),
 		'',
 			// Posting limits...
 			array('int', 'max_messageLength', 'subtext' => $txt['max_messageLength_zero'], 'postinput' => $txt['manageposts_characters']),
@@ -386,7 +387,7 @@ function getPrefixes()
 	$smcFunc['db_free_result']($request);
 }
 
-function normalizeBoards($b)
+function normalizeCommaDelimitedList($b)
 {
 	$_b = explode(',', $b);
 	$bnew = array();
@@ -423,12 +424,13 @@ function ModifyPrefixSettings()
 							html_after = {string:html_after}, boards = {string:boards} WHERE id_prefix = {int:id_prefix}',
 							array('id_prefix' => $id, 'name' => $_POST['name_'.$id], 'html_before' => htmlentities($_POST['html_before_'.$id]), 
 								'html_after' => htmlentities($_POST['html_after_'.$id]), 'boards' => $_POST['boards_'.$id]));*/
-				if($_POST['name_'.$id] != $prefix['name'] || $_POST['boards_'.$id] != $prefix['boards']) {
-					$boards = normalizeBoards($_POST['boards_'.$id]);
+				if($_POST['name_'.$id] != $prefix['name'] || $_POST['boards_'.$id] != $prefix['boards'] || $_POST['groups_'.$id] != $prefix['groups']) {
+					$boards = normalizeCommaDelimitedList($_POST['boards_'.$id]);
+					$groups = normalizeCommaDelimitedList($_POST['groups_'.$id]);
 					$smcFunc['db_query']('', '
-						UPDATE {db_prefix}prefixes SET name = {string:name}, boards = {string:boards} WHERE id_prefix = {int:id_prefix}',
+						UPDATE {db_prefix}prefixes SET name = {string:name}, boards = {string:boards}, groups = {string:groups} WHERE id_prefix = {int:id_prefix}',
 						array('id_prefix' => $id, 'name' => htmlentities($_POST['name_'.$id]),
-						'boards' => $boards));
+						'boards' => $boards, 'groups' => $groups));
 				}
 			}
 		}
@@ -440,11 +442,12 @@ function ModifyPrefixSettings()
 					{string:html_before}, {string:html_after}, {string:boards})',
 					array('name' => $_POST['name_new_'.$i], 'html_before' => htmlentities($_POST['html_before_new_'.$i]),
 						'html_after' => htmlentities($_POST['html_after_new_'.$i]), 'boards' => $_POST['boards_new_'.$i]));*/
-				$boards = normalizeBoards($_POST['boards_new_'.$id]);
+				$boards = normalizeCommaDelimitedList($_POST['boards_new_'.$id]);
+				$groups = normalizeCommaDelimitedList($_POST['groups_new_'.$id]);
 				$smcFunc['db_query']('', '
-					INSERT INTO {db_prefix}prefixes (name, boards) VALUES({string:name},
-					{string:boards})',
-					array('name' => htmlentities($_POST['name_new_'.$i]), 'boards' => $boards));
+					INSERT INTO {db_prefix}prefixes (name, boards, groups) VALUES({string:name},
+					{string:boards}, {string:groups})',
+					array('name' => htmlentities($_POST['name_new_'.$i]), 'boards' => $boards, 'groups' => $groups));
 			}
 		}
 		redirectexit('action=admin;area=postsettings;sa=prefixes');

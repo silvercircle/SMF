@@ -350,3 +350,8 @@ function response(ele)
 		setBusy(0);
 	}
 };
+
+function openAdvSearch()
+{
+	$('#adv_search').fadeIn();
+}

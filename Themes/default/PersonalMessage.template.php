@@ -133,28 +133,18 @@ function template_folder()
 	// ]]></script>';
 
 	echo '
-<form class="flow_hidden" action="', $scripturl, '?action=pm;sa=pmactions;', $context['display_mode'] == 2 ? 'conversation;' : '', 'f=', $context['folder'], ';start=', $context['start'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', '" method="post" accept-charset="', $context['character_set'], '" name="pmFolder">';
+<form style="padding-right:5px;" action="', $scripturl, '?action=pm;sa=pmactions;', $context['display_mode'] == 2 ? 'conversation;' : '', 'f=', $context['folder'], ';start=', $context['start'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', '" method="post" accept-charset="', $context['character_set'], '" name="pmFolder">';
 
 	// If we are not in single display mode show the subjects on the top!
-	if ($context['display_mode'] != 1)
+	if ($context['display_mode'] != 0)
 	{
 		template_subject_list();
-		echo '<div class="clear_right"><br /></div>';
+		echo '<div class="clear"><br /></div>';
 	}
 
 	// Got some messages to display?
 	if ($context['get_pmessage']('message', true))
 	{
-		// Show the helpful titlebar - generally.
-		if ($context['display_mode'] != 1)
-			echo '
-				<div class="cat_bar">
-					<h3 class="catbg">
-						<span id="author">', $txt['author'], '</span>
-						<span id="topic_title">', $txt[$context['display_mode'] == 0 ? 'messages' : 'conversation'], '</span>
-					</h3>
-				</div>';
-
 		// Show a few buttons if we are in conversation mode and outputting the first message.
 		if ($context['display_mode'] == 2)
 		{
@@ -179,170 +169,115 @@ function template_folder()
 			$window_class = $message['alternate'] == 0 ? 'windowbg' : 'windowbg2';
 
 			echo '
-	<div class="', $window_class, ' clear">
-		<span class="topslice"><span></span></span>
-		<div class="poster">
-			<a id="msg', $message['id'], '"></a>
-			<h4>';
+				<div class="post_wrapper light_shadow ',$window_class,'">
+						<div class="poster">
+						<div class="orange_container poster_details">
+							<h4>', $message['member']['link'], '</h4>
+							<ul class="reset smalltext" id="msg_', $message['id'], '_extra_info">';
 
-			// Show online and offline buttons?
-			if (!empty($modSettings['onlineEnable']) && !$message['member']['is_guest'])
-				echo '
-				<img src="', $message['member']['online']['image_href'], '" alt="', $message['member']['online']['text'], '" />';
-
+		// Show the member's custom title, if they have one.
+		if (!empty($message['member']['title']))
 			echo '
-				', $message['member']['link'], '
-			</h4>
-			<ul class="reset smalltext" id="msg_', $message['id'], '_extra_info">';
+								<li class="title">', $message['member']['title'], '</li>';
 
-			// Show the member's custom title, if they have one.
-			if (isset($message['member']['title']) && $message['member']['title'] != '')
+		// Show the member's primary group (like 'Administrator') if they have one.
+		if (!empty($message['member']['group']))
+			echo '
+								<li class="membergroup">', $message['member']['group'], '</li>';
+
+		// Don't show these things for guests.
+		if (!$message['member']['is_guest'])
+		{
+			// Show avatars, images, etc.?
+			if (!empty($settings['show_user_images']) && empty($options['show_no_avatars'])) {
+				if(!empty($message['member']['avatar']['image']))
+					echo '
+								<li class="avatar">
+									<a href="', $scripturl, '?action=profile;u=', $message['member']['id'], '">
+										', $message['member']['avatar']['image'], '
+									</a>
+								</li>';
+				else
+					echo '
+								<li class="avatar">
+									<a href="', $scripturl, '?action=profile;u=', $message['member']['id'], '">
+										<img src="',$settings['images_url'],'/unknown.png" alt="avatar" />
+									</a>
+								</li>';
+			}
+			// Show how many posts they have made.
+
+			// Is karma display enabled?  Total or +/-?
+			if ($modSettings['karmaMode'] == '1')
 				echo '
-				<li class="title">', $message['member']['title'], '</li>';
-
-			// Show the member's primary group (like 'Administrator') if they have one.
-			if (isset($message['member']['group']) && $message['member']['group'] != '')
+								<li class="karma">', $modSettings['karmaLabel'], ' ', $message['member']['karma']['good'] - $message['member']['karma']['bad'], '</li>';
+			elseif ($modSettings['karmaMode'] == '2')
 				echo '
-				<li class="membergroup">', $message['member']['group'], '</li>';
+								<li class="karma">', $modSettings['karmaLabel'], ' +', $message['member']['karma']['good'], '/-', $message['member']['karma']['bad'], '</li>';
 
-			// Don't show these things for guests.
-			if (!$message['member']['is_guest'])
+			// Is this user allowed to modify this member's karma?
+			if ($message['member']['karma']['allow'])
+				echo '
+								<li class="karma_allow">
+									<a href="', $scripturl, '?action=modifykarma;sa=applaud;uid=', $message['member']['id'], ';topic=', $context['current_topic'], '.' . $context['start'], ';m=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $modSettings['karmaApplaudLabel'], '</a>
+									<a href="', $scripturl, '?action=modifykarma;sa=smite;uid=', $message['member']['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';m=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $modSettings['karmaSmiteLabel'], '</a>
+								</li>';
+
+			// Show their personal text?
+			if (!empty($settings['show_blurb']) && $message['member']['blurb'] != '')
+				echo '
+								<li class="blurb">', $message['member']['blurb'], '</li>';
+
+			// Any custom fields to show as icons?
+			if (!empty($message['member']['custom_fields']))
 			{
-				// Show the post group if and only if they have no other group or the option is on, and they are in a post group.
-				if ((empty($settings['hide_post_group']) || $message['member']['group'] == '') && $message['member']['post_group'] != '')
-					echo '
-				<li class="postgroup">', $message['member']['post_group'], '</li>';
-				echo '
-				<li class="stars">', $message['member']['group_stars'], '</li>';
-
-				// Show avatars, images, etc.?
-				if (!empty($settings['show_user_images']) && empty($options['show_no_avatars']) && !empty($message['member']['avatar']['image']))
-					echo '
-				<li class="avatar">
-					<a href="', $scripturl, '?action=profile;u=', $message['member']['id'], '">
-						', $message['member']['avatar']['image'], '
-					</a>
-				</li>';
-
-				// Show how many posts they have made.
-				if (!isset($context['disabled_fields']['posts']))
-					echo '
-				<li class="postcount">', $txt['member_postcount'], ': ', $message['member']['posts'], '</li>';
-
-				// Is karma display enabled?  Total or +/-?
-				if ($modSettings['karmaMode'] == '1')
-					echo '
-				<li class="karma">', $modSettings['karmaLabel'], ' ', $message['member']['karma']['good'] - $message['member']['karma']['bad'], '</li>';
-				elseif ($modSettings['karmaMode'] == '2')
-					echo '
-				<li class="karma">', $modSettings['karmaLabel'], ' +', $message['member']['karma']['good'], '/-', $message['member']['karma']['bad'], '</li>';
-
-				// Is this user allowed to modify this member's karma?
-				if ($message['member']['karma']['allow'])
-					echo '
-				<li class="karma_allow">
-					<a href="', $scripturl, '?action=modifykarma;sa=applaud;uid=', $message['member']['id'], ';f=', $context['folder'], ';start=', $context['start'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pm=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $modSettings['karmaApplaudLabel'], '</a> <a href="', $scripturl, '?action=modifykarma;sa=smite;uid=', $message['member']['id'], ';f=', $context['folder'], ';start=', $context['start'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pm=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $modSettings['karmaSmiteLabel'], '</a>
-				</li>';
-
-				// Show the member's gender icon?
-				if (!empty($settings['show_gender']) && $message['member']['gender']['image'] != '' && !isset($context['disabled_fields']['gender']))
-					echo '
-				<li class="gender">', $txt['gender'], ': ', $message['member']['gender']['image'], '</li>';
-
-				// Show their personal text?
-				if (!empty($settings['show_blurb']) && $message['member']['blurb'] != '')
-					echo '
-				<li class="blurb">', $message['member']['blurb'], '</li>';
-
-				// Any custom fields to show as icons?
-				if (!empty($message['member']['custom_fields']))
+				$shown = false;
+				foreach ($message['member']['custom_fields'] as $custom)
 				{
-					$shown = false;
-					foreach ($message['member']['custom_fields'] as $custom)
+					if ($custom['placement'] != 1 || empty($custom['value']))
+						continue;
+					if (empty($shown))
 					{
-						if ($custom['placement'] != 1 || empty($custom['value']))
-							continue;
-						if (empty($shown))
-						{
-							$shown = true;
-							echo '
-				<li class="im_icons">
-					<ul>';
-						}
+						$shown = true;
 						echo '
-						<li>', $custom['value'], '</li>';
+								<li class="im_icons">
+									<ul>';
 					}
-					if ($shown)
 					echo '
-					</ul>
-				</li>';
+										<li>', $custom['value'], '</li>';
 				}
-
-				// This shows the popular messaging icons.
-				if ($message['member']['has_messenger'] && $message['member']['can_view_profile'])
+				if ($shown)
 					echo '
-				<li class="im_icons">
-					<ul>', !isset($context['disabled_fields']['icq']) && !empty($message['member']['icq']['link']) ? '
-						<li>' . $message['member']['icq']['link'] . '</li>' : '', !isset($context['disabled_fields']['msn']) && !empty($message['member']['msn']['link']) ? '
-						<li>' . $message['member']['msn']['link'] . '</li>' : '', !isset($context['disabled_fields']['aim']) && !empty($message['member']['aim']['link']) ? '
-						<li>' . $message['member']['aim']['link'] . '</li>' : '', !isset($context['disabled_fields']['yim']) && !empty($message['member']['yim']['link']) ? '
-						<li>' . $message['member']['yim']['link'] . '</li>' : '', '
-					</ul>
-				</li>';
-
-				// Show the profile, website, email address, and personal message buttons.
-				if ($settings['show_profile_buttons'])
-				{
-					echo '
-				<li class="profile">
-					<ul>';
-
-					// Show the profile button
-					echo '
-						<li><a href="', $message['member']['href'], '">', ($settings['use_image_buttons'] ? '<img src="' . $settings['images_url'] . '/icons/profile_sm.gif" alt="' . $txt['view_profile'] . '" title="' . $txt['view_profile'] . '" />' : $txt['view_profile']), '</a></li>';
-
-					// Don't show an icon if they haven't specified a website.
-					if ($message['member']['website']['url'] != '' && !isset($context['disabled_fields']['website']))
-						echo '
-						<li><a href="', $message['member']['website']['url'], '" title="' . $message['member']['website']['title'] . '" target="_blank" class="new_win">', ($settings['use_image_buttons'] ? '<img src="' . $settings['images_url'] . '/www_sm.gif" alt="' . $message['member']['website']['title'] . '" />' : $txt['www']), '</a></li>';
-
-					// Don't show the email address if they want it hidden.
-					if (in_array($message['member']['show_email'], array('yes', 'yes_permission_override', 'no_through_forum')))
-						echo '
-						<li><a href="', $scripturl, '?action=emailuser;sa=email;uid=', $message['member']['id'], '" rel="nofollow">', ($settings['use_image_buttons'] ? '<img src="' . $settings['images_url'] . '/email_sm.gif" alt="' . $txt['email'] . '" title="' . $txt['email'] . '" />' : $txt['email']), '</a></li>';
-
-					// Since we know this person isn't a guest, you *can* message them.
-					if ($context['can_send_pm'])
-						echo '
-						<li><a href="', $scripturl, '?action=pm;sa=send;u=', $message['member']['id'], '" title="', $message['member']['online']['is_online'] ? $txt['pm_online'] : $txt['pm_offline'], '">', $settings['use_image_buttons'] ? '<img src="' . $settings['images_url'] . '/im_' . ($message['member']['online']['is_online'] ? 'on' : 'off') . '.gif" alt="' . ($message['member']['online']['is_online'] ? $txt['pm_online'] : $txt['pm_offline']) . '" />' : ($message['member']['online']['is_online'] ? $txt['pm_online'] : $txt['pm_offline']), '</a></li>';
-
-					echo '
-					</ul>
-				</li>';
-				}
-
-				// Any custom fields for standard placement?
-				if (!empty($message['member']['custom_fields']))
-				{
-					foreach ($message['member']['custom_fields'] as $custom)
-						if (empty($custom['placement']) || empty($custom['value']))
-							echo '
-				<li class="custom">', $custom['title'], ': ', $custom['value'], '</li>';
-				}
-
-				// Are we showing the warning status?
-				if ($message['member']['can_see_warning'])
-				echo '
-				<li class="warning">', $context['can_issue_warning'] ? '<a href="' . $scripturl . '?action=profile;area=issuewarning;u=' . $message['member']['id'] . '">' : '', '<img src="', $settings['images_url'], '/warning_', $message['member']['warning_status'], '.gif" alt="', $txt['user_warn_' . $message['member']['warning_status']], '" />', $context['can_issue_warning'] ? '</a>' : '', '<span class="warn_', $message['member']['warning_status'], '">', $txt['warn_' . $message['member']['warning_status']], '</span></li>';
+									</ul>
+								</li>';
 			}
 
-			// Done with the information about the poster... on to the post itself.
+			// Any custom fields for standard placement?
+			if (!empty($message['member']['custom_fields']))
+			{
+				foreach ($message['member']['custom_fields'] as $custom)
+					if (empty($custom['placement']) || empty($custom['value']))
+						echo '
+								<li class="custom">', $custom['title'], ': ', $custom['value'], '</li>';
+			}
+
+			// Are we showing the warning status?
+			if ($message['member']['can_see_warning'])
+				echo '
+								<li class="warning">', $context['can_issue_warning'] ? '<a href="' . $scripturl . '?action=profile;area=issuewarning;u=' . $message['member']['id'] . '">' : '', '<img src="', $settings['images_url'], '/warning_', $message['member']['warning_status'], '.gif" alt="', $txt['user_warn_' . $message['member']['warning_status']], '" />', $context['can_issue_warning'] ? '</a>' : '', '<span class="warn_', $message['member']['warning_status'], '">', $txt['warn_' . $message['member']['warning_status']], '</span></li>';
+		}
+		// Otherwise, show the guest's email.
+		elseif (!empty($message['member']['email']) && in_array($message['member']['show_email'], array('yes', 'yes_permission_override', 'no_through_forum')))
 			echo '
-			</ul>
-		</div>
+								<li class="email"><a href="', $scripturl, '?action=emailuser;sa=email;msg=', $message['id'], '" rel="nofollow">', ($settings['use_image_buttons'] ? '<img src="' . $settings['images_url'] . '/email_sm.gif" alt="' . $txt['email'] . '" title="' . $txt['email'] . '" />' : $txt['email']), '</a></li>';
+
+		// Done with the information about the poster... on to the post itself.
+		echo '
+							</ul>
+						</div></div>
 		<div class="postarea">
 			<div class="flow_hidden">
-				<div class="keyinfo">
+				<div class="orange_container">
 					<h5 id="subject_', $message['id'], '">
 						', $message['subject'], '
 					</h5>';
@@ -490,7 +425,6 @@ function template_folder()
 		</div>
 		<div class="moderatorbar">
 		</div>
-		<span class="botslice"><span></span></span>
 	</div>';
 		}
 
@@ -537,22 +471,22 @@ function template_subject_list()
 	global $context, $options, $settings, $modSettings, $txt, $scripturl;
 
 	echo '
-	<table width="100%" class="table_grid">
+	<table width="100%" id="messageindex" class="topic_table mediumpadding">
 	<thead>
-		<tr class="catbg">
-			<th align="center" width="4%" class="first_th">
+		<tr>
+			<th align="center" width="4%" class="blue_container first_th">
 				<a href="', $scripturl, '?action=pm;view;f=', $context['folder'], ';start=', $context['start'], ';sort=', $context['sort_by'], ($context['sort_direction'] == 'up' ? '' : ';desc'), ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : ''), '"><img src="', $settings['images_url'], '/im_switch.gif" alt="', $txt['pm_change_view'], '" title="', $txt['pm_change_view'], '" width="16" height="16" /></a>
 			</th>
-			<th class="lefttext" width="22%">
+			<th class="blue_container lefttext" width="22%">
 				<a href="', $scripturl, '?action=pm;f=', $context['folder'], ';start=', $context['start'], ';sort=date', $context['sort_by'] == 'date' && $context['sort_direction'] == 'up' ? ';desc' : '', $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', '">', $txt['date'], $context['sort_by'] == 'date' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 			</th>
-			<th class="lefttext" width="46%">
+			<th class="blue_container lefttext" width="46%">
 				<a href="', $scripturl, '?action=pm;f=', $context['folder'], ';start=', $context['start'], ';sort=subject', $context['sort_by'] == 'subject' && $context['sort_direction'] == 'up' ? ';desc' : '', $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', '">', $txt['subject'], $context['sort_by'] == 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 			</th>
-			<th class="lefttext">
+			<th class="blue_container lefttext">
 				<a href="', $scripturl, '?action=pm;f=', $context['folder'], ';start=', $context['start'], ';sort=name', $context['sort_by'] == 'name' && $context['sort_direction'] == 'up' ? ';desc' : '', $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', '">', ($context['from_or_to'] == 'from' ? $txt['from'] : $txt['to']), $context['sort_by'] == 'name' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 			</th>
-			<th align="center" width="4%" class="last_th">
+			<th align="center" width="4%" class="blue_container last_th">
 				<input type="checkbox" onclick="invertAll(this, this.form);" class="input_check" />
 			</th>
 		</tr>

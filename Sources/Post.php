@@ -88,6 +88,8 @@ function Post()
 
 	loadLanguage('Post');
 
+	$context['tagging_ui'] = '';
+	
 	// You can't reply with a poll... hacker.
 	if (isset($_REQUEST['poll']) && !empty($topic) && !isset($_REQUEST['msg']))
 		unset($_REQUEST['poll']);
@@ -800,6 +802,14 @@ function Post()
 	// Posting...
 	else
 	{
+
+		$context['tagging_ui'] = '<dt><b>'. $txt['smftags_topic']. '</b>
+		</dt>
+		<dd>
+											<input type="text" name="tags"'. ' tabindex="'. $context['tabindex']++. '" size="80" maxlength="80" />
+											<br /><span class="smalltext">'. $txt['smftags_seperate']. '</span>
+		</dd>';
+		
 		// By default....
 		$context['use_smileys'] = true;
 		$context['icon'] = 'xx';
@@ -1188,7 +1198,7 @@ function Post()
 	$context['is_first_post'] = $context['is_new_topic'] || (isset($_REQUEST['msg']) && $_REQUEST['msg'] == $id_first_msg);
 
 	if($context['is_first_post'])
-		getPrefixSelector($board, $context['id_prefix']);
+		getPrefixSelector($board, !empty($context['id_prefix']) ? $context['id_prefix'] : 0);
 
 	// Do we need to show the visual verification image?
 	$context['require_verification'] = !$user_info['is_mod'] && !$user_info['is_admin'] && !empty($modSettings['posts_require_captcha']) && ($user_info['posts'] < $modSettings['posts_require_captcha'] || ($user_info['is_guest'] && $modSettings['posts_require_captcha'] == -1));

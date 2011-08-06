@@ -2126,26 +2126,29 @@ function template_prefix_settings()
 			//<td style="white-space:nowrap;">',$txt['prefix_html_after'],'</td>
 		echo '<td style="white-space:nowrap;"></td>
 			<td style="width:100%;text-align:right;">',$txt['prefix_boards'],'</td>
+			<td style="width:100%;text-align:right;white-space:nowrap;">',$txt['prefix_groups'],'</td>
 		</tr></thead>';
 	foreach($context['prefixes'] as $prefix) {
 		echo '<tr><td>
 			<input type="hidden" name="id_', $prefix['id_prefix'], '" value="1" />
-			<input type="text" size="100" value="',$prefix['name'],'" name="name_',$prefix['id_prefix'],'" />
+			<input type="text" size="80" value="',$prefix['name'],'" name="name_',$prefix['id_prefix'],'" />
 			</td>';
 			//<td><input type="text" size="40" value="',$prefix['html_before'],'" name="html_before_',$prefix['id_prefix'],'" /></td>
 			//<td><input type="text" size="40" value="',$prefix['html_after'],'" name="html_after_',$prefix['id_prefix'],'" /></td>
 			echo '<td style="white-space:nowrap;">',$prefix['preview'],'</td>
-				<td style="text-align:right;"><input type="text" size="40" value="',$prefix['boards'],'" name="boards_',$prefix['id_prefix'],'" /></td>
+				<td style="text-align:right;"><input type="text" size="25" value="',$prefix['boards'],'" name="boards_',$prefix['id_prefix'],'" /></td>
+				<td style="text-align:right;"><input type="text" size="25" value="',$prefix['groups'],'" name="groups_',$prefix['id_prefix'],'" /></td>
 			</tr>';
 	}
 	for($i = 0; $i < 5; $i++) {
 		echo '<tr><td>
 			<input type="hidden" name="id_', $i, '" value="1" />
-			<input type="text" size="100" name="name_new_',$i,'" />
+			<input type="text" size="80" name="name_new_',$i,'" />
 			</td><td></td>';
 			//<td><input type="text" size="40" name="html_before_new_',$i,'" /></td>
 			//<td><input type="text" size="40" name="html_after_new_',$i,'" /></td>
-			echo '<td style="text-align:right;"><input type="text" size="40" name="boards_new_',$i,'" /></td>
+			echo '<td style="text-align:right;"><input type="text" size="25" name="boards_new_',$i,'" /></td>
+				<td style="text-align:right;"><input type="text" size="25" name="groups_new_',$i,'" /></td>
 			</tr>';
 	}
 	
@@ -2164,31 +2167,45 @@ function template_tag_admin_settings()
 
 	echo '
 		<div class="cat_bar">
-		<h3 class="catbg">',$txt['manageposts_tag_settings'],'</h3>
+			<h3 class="catbg">',$txt['manageposts_tag_settings'],'</h3>
 		</div>
-	<table border="0" width="80%" cellspacing="0" align="center" cellpadding="4" class="tborder">
-		<tr class="windowbg">
-			<td>
-			<b>' . $txt['smftags_settings']. '</b><br />
-				<form action="', $scripturl, '?action=admin;area=postsettings;sa=tags;save" method="post" accept-charset="', $context['character_set'], '">
-				<table border="0" width="100%" cellspacing="0" align="center" cellpadding="4">
-				<tr><td width="30%">' . $txt['smftags_set_mintaglength'] . '</td><td><input type="text" name="smftags_set_mintaglength" value="' .  $modSettings['smftags_set_mintaglength'] . '" /></td></tr>
-				<tr><td width="30%">' . $txt['smftags_set_maxtaglength'] . '</td><td><input type="text" name="smftags_set_maxtaglength" value="' .  $modSettings['smftags_set_maxtaglength'] . '" /></td></tr>
-				<tr><td width="30%">' . $txt['smftags_set_maxtags'] . '</td><td><input type="text" name="smftags_set_maxtags" value="' .  $modSettings['smftags_set_maxtags'] . '" /></td></tr>
-				<tr>
+		<div class="generic_container largepadding">
+		<form action="', $scripturl, '?action=admin;area=postsettings;sa=tags;save" method="post" accept-charset="', $context['character_set'], '">
+		<table class="table_grid">
+			<tr>
+				<td style="white-space:nowrap;">',$txt['smftags_set_mintaglength'],'</td>
+				<td><input type="text" name="smftags_set_mintaglength" value="' .  $modSettings['smftags_set_mintaglength'] . '" /></td>
+			</tr>
+			<tr>
+				<td style="white-space:nowrap;">' . $txt['smftags_set_maxtaglength'] . '</td>
+				<td><input type="text" name="smftags_set_maxtaglength" value="' .  $modSettings['smftags_set_maxtaglength'] . '" /></td>
+			</tr>
+			<tr>
+				<td style="white-space:nowrap;">' . $txt['smftags_set_maxtags'] . '</td>
+				<td><input type="text" name="smftags_set_maxtags" value="' .  $modSettings['smftags_set_maxtags'] . '" /></td>
+			</tr>
+			<tr>
 				<td clospan="2"><b>',$txt['smftags_tagcloud_settings'],'</b></td>
-				</tr>
-				<tr><td width="30%">' . $txt['smftags_set_cloud_tags_to_show'] . '</td><td><input type="text" name="smftags_set_cloud_tags_to_show" value="' .  $modSettings['smftags_set_cloud_tags_to_show'] . '" /></td></tr>
-				<tr><td width="30%">' . $txt['smftags_set_cloud_tags_per_row'] . '</td><td><input type="text" name="smftags_set_cloud_tags_per_row" value="' .  $modSettings['smftags_set_cloud_tags_per_row'] . '" /></td></tr>
-				<tr><td width="30%">' . $txt['smftags_set_cloud_max_font_size_precent'] . '</td><td><input type="text" name="smftags_set_cloud_max_font_size_precent" value="' .  $modSettings['smftags_set_cloud_max_font_size_precent'] . '" /></td></tr>
-				<tr><td width="30%">' . $txt['smftags_set_cloud_min_font_size_precent'] . '</td><td><input type="text" name="smftags_set_cloud_min_font_size_precent" value="' .  $modSettings['smftags_set_cloud_min_font_size_precent'] . '" /></td></tr>
-				</table>
-
-				<input type="submit" name="savesettings" value="', $txt['smftags_savesettings'],  '" />
-			</form>
-			</td>
-		</tr>
-</table>';
+			</tr>
+			<tr>
+				<td style="white-space:nowrap;">' . $txt['smftags_set_cloud_tags_to_show'] . '</td>
+				<td><input type="text" name="smftags_set_cloud_tags_to_show" value="' .  $modSettings['smftags_set_cloud_tags_to_show'] . '" /></td>
+			</tr>
+			<tr>
+				<td style="white-space:nowrap;">' . $txt['smftags_set_cloud_tags_per_row'] . '</td>
+				<td><input type="text" name="smftags_set_cloud_tags_per_row" value="' .  $modSettings['smftags_set_cloud_tags_per_row'] . '" /></td>
+			</tr>
+			<tr>
+				<td style="white-space:nowrap;">' . $txt['smftags_set_cloud_max_font_size_precent'] . '</td>
+				<td><input type="text" name="smftags_set_cloud_max_font_size_precent" value="' .  $modSettings['smftags_set_cloud_max_font_size_precent'] . '" /></td>
+			</tr>
+			<tr>
+				<td style="white-space:nowrap;">' . $txt['smftags_set_cloud_min_font_size_precent'] . '</td>
+				<td><input type="text" name="smftags_set_cloud_min_font_size_precent" value="' .  $modSettings['smftags_set_cloud_min_font_size_precent'] . '" /></td>
+			</tr>
+		</table>
+		<input type="submit" class="button_submit" style="float:right;" name="savesettings" value="', $txt['smftags_savesettings'],  '" />
+		<div class="clear"></div>
+		</form></div>';
 }
-
 ?>

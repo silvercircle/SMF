@@ -63,13 +63,14 @@ if (!defined('SMF'))
 function Display()
 {
 	global $scripturl, $txt, $modSettings, $context, $settings;
-	global $options, $sourcedir, $user_info, $board_info, $topic, $board;
+	global $options, $sourcedir, $user_info, $board_info, $topic, $board, $time_now;
 	global $attachments, $messages_request, $topicinfo, $language, $smcFunc, $can_see_like, $can_give_like, $cache_parsed;
 
 	$can_see_like = allowedTo('like_see');
 	$can_give_like = allowedTo('like_give');
 	$context['use_share'] = allowedTo('use_share');
 	$cache_parsed = (isset($modSettings['use_post_cache']) && $modSettings['use_post_cache']);
+	$time_now = time();
 	
 	// What are you gonna display if these are empty?!
 	if (empty($topic))
@@ -1007,12 +1008,13 @@ function Display()
 			FROM {db_prefix}messages AS m
 			LEFT JOIN {db_prefix}likes AS l ON l.id_msg = m.id_msg AND l.id_user = '.$user_info['id'].'
 			LEFT JOIN {db_prefix}like_cache AS c ON c.id_msg = m.id_msg
-			LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg
+			LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg AND mc.style = {string:style}
 			WHERE m.id_msg IN ({array_int:message_list})
 			ORDER BY m.id_msg' . (empty($options['view_newest_first']) ? '' : ' DESC'),
 			array(
 				'message_list' => $messages,
 				'new_from' => $topicinfo['new_from'],
+				'style' => $user_info['smiley_set'],
 			)
 		);
 
@@ -1119,7 +1121,7 @@ function Display()
 // Callback for the message display.
 function prepareDisplayContext($reset = false)
 {
-	global $settings, $txt, $modSettings, $scripturl, $options, $user_info, $smcFunc, $sourcedir, $board;
+	global $settings, $txt, $modSettings, $scripturl, $options, $user_info, $smcFunc, $sourcedir, $board, $time_now;
 	global $memberContext, $context, $messages_request, $topic, $attachments, $topicinfo, $can_see_like, $can_give_like, $cache_parsed;
 
 	static $counter = null;
@@ -1194,13 +1196,17 @@ function prepareDisplayContext($reset = false)
 	censorText($message['body']);
 	censorText($message['subject']);
 
-	if($cache_parsed) {
+	// NEVER cache posts with [img] tags (security risk!)
+	// note: for img - heavy boards, it's best to disable the parsed post cache as the benefits would be minimal.
+	
+	$dateline = max($message['modified_time'], $message['poster_time']);
+	if($cache_parsed && (($time_now - $dateline) < (10 * 86400))) {
 		if(empty($message['cached_body'])) {
 			$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
 			$smcFunc['db_insert']('replace', '{db_prefix}messages_cache',
-				array('id_msg' => 'int', 'body' => 'string'),
-				array($message['id_msg'], $message['body']),
-				array('id_msg', 'body'));
+				array('id_msg' => 'int', 'body' => 'string', 'style' => 'string', 'updated' => 'int'),
+				array($message['id_msg'], $message['body'], $user_info['smiley_set'], $dateline),
+				array('id_msg', 'body', 'style', 'updated'));
 		}
 		else
 			$message['body'] = $message['cached_body'];

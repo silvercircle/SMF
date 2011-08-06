@@ -18,7 +18,7 @@ function TagsMain()
 		'suggest2' => 'SuggestTag2',
 		'addtag' => 'TaggingSystem_Add',
 		'submittag' => 'TaggingSystem_Submit',
-		'deletetag' => 'DeleteTag',
+		'deletetag' => 'TaggingSystem_Delete',
 		'admin' => 'TagsSettings',
 		'admin2' => 'TagsSettings2',
 		'cleanup' => 'TagCleanUp',
@@ -244,7 +244,7 @@ function TaggingSystem_Add()
 	$row = $smcFunc['db_fetch_assoc']($dbresult);
 	$smcFunc['db_free_result']($dbresult);
 
-	if ($user_info['id'] != $row['ID_MEMBER'] && $edit == false)
+	if ($user_info['id'] != $row['id_member'] && $edit == false)
 		fatal_error($txt['smftags_err_permaddtags'],false);
 
 	$context['tags_topic'] = $topic;
@@ -259,6 +259,27 @@ function TagErrorMsg($msg, $isajax)
 		echo $msg;
 		die;
 	}
+}
+
+function RegenerateTagList($topic)
+{
+	global $smcFunc, $scripturl;
+	
+	// construct the new tag list and return it for DOM insertion
+	$result= $smcFunc['db_query']('', 'SELECT t.tag, l.ID, t.ID_TAG
+       	FROM {db_prefix}tags_log as l, {db_prefix}tags as t
+       	WHERE t.ID_TAG = l.ID_TAG && l.ID_TOPIC = {int:topic}',
+       	array('topic' => $topic));
+        	
+	$tags = array();
+    $output = '';
+        
+    while($row = $smcFunc['db_fetch_assoc']($result)) {
+    	$output .= ' <a href="'.$scripturl.'?action=tags;tagid='.$row['ID_TAG'].'">'.$row['tag'].'</a>';
+        $output .= '<a href="'.$scripturl.'?action=tags;sa=deletetag;tagid='.$row['ID'].'"><span class="xtag">&nbsp;&nbsp;</span></a>';
+	}
+	$smcFunc['db_free_result']($result);
+	return($output);
 }
 
 /*
@@ -359,56 +380,54 @@ function TaggingSystem_Submit()
 		$smcFunc['db_free_result']($dbresult);
 	}
 	if($isajax) {
-		// construct the new tag list and return it for DOM insertion
-		$result= $smcFunc['db_query']('', 'SELECT t.tag, l.ID, t.ID_TAG
-        	FROM {db_prefix}tags_log as l, {db_prefix}tags as t
-        	WHERE t.ID_TAG = l.ID_TAG && l.ID_TOPIC = {int:topic}',
-        	array('topic' => $topic));
-        	
-        $tags = array();
-        $output = '';
-        
-        while($row = $smcFunc['db_fetch_assoc']($result)) {
-        	$output .= ' <a href="'.$scripturl.'?action=tags;tagid='.$row['ID_TAG'].'">'.$row['tag'].'</a>';
-        	$output .= '<a href="'.$scripturl.'?action=tags;sa=deletetag;tagid='.$row['ID'].'"><span class="xtag">&nbsp;&nbsp;</span></a>';
-		}
-		$smcFunc['db_free_result']($result);
+		$output = RegenerateTagList($topic);
 		echo $output;
 		die;
 	}
 	redirectexit('topic=' . $topic);
 }
 
-function DeleteTag()
+function TaggingSystem_Delete()
 {
 	global $txt, $smcFunc, $user_info;
 
-	isAllowedTo('smftags_del');
+	$isajax = $_REQUEST['action'] == 'xmlhttp' ? true : false;
 
+	if(!$isajax)
+		isAllowedTo('smftags_del');
+	else {
+		if(!allowedTo('smftags_del'))
+			TagErrorMsg('No permission');
+	}
+	
 	$id = (int) $_REQUEST['tagid'];
-	// Check permission
-	$a_manage = allowedTo('smftags_manage');
+	$edit = allowedTo('smftags_manage');
 
 	$dbresult = $smcFunc['db_query']('', "
 	SELECT
-		ID_MEMBER, ID_TOPIC, ID_TAG
+		id_member, id_topic, id_tag
 	FROM {db_prefix}tags_log 
 	WHERE ID = $id LIMIT 1");
 
 	$row = $smcFunc['db_fetch_assoc']($dbresult);
 	$smcFunc['db_free_result']($dbresult);
 
-	if ($row['ID_MEMBER'] != $user_info['id'] && $a_manage == false)
-		fatal_error($txt['smftags_err_deletetag'],false);
+	$topic = $row['id_topic'];
+	
+	if ($row['id_member'] != $user_info['id'] && $edit == false)
+		TagErrorMsg($txt['smftags_err_deletetag']);
 
-	// Delete the tag for the topic
-	$smcFunc['db_query']('', "DELETE FROM {db_prefix}tags_log WHERE ID = $id LIMIT 1");
+	$smcFunc['db_query']('', 'DELETE FROM {db_prefix}tags_log WHERE id = {int:id} LIMIT 1',
+		array('id' => $id));
 
-	// Tag Cleanup
-	TagCleanUp($row['ID_TAG']);
+	TagCleanUp($row['id_tag']);
 
-	// Redirect back to the topic
-	redirectexit('topic=' . $row['ID_TOPIC']);
+	if($isajax) {
+		$output = RegenerateTagList($topic);
+		echo $output;
+		die;
+	}
+	redirectexit('topic=' . $row['id_topic']);
 }
 
 function TagsSettings2()

@@ -1326,6 +1326,7 @@ CREATE TABLE {$db_prefix}messages (
   body mediumtext NOT NULL,
   icon varchar(16) NOT NULL default 'xx',
   approved tinyint(3) NOT NULL default '1',
+  has_img tinyint(3) NOT NULL default '0',
   PRIMARY KEY (id_msg),
   UNIQUE topic (id_topic, id_msg),
   UNIQUE id_board (id_board, id_msg),
@@ -1341,9 +1342,12 @@ CREATE TABLE {$db_prefix}messages (
 ) ENGINE=MyISAM;
 
 CREATE TABLE {$db_prefix}messages_cache (
-  id_msg int(10) unsigned NOT NULL auto_increment,
+  id_msg int(10) unsigned NOT NULL default '0',
   body mediumtext NOT NULL,
-  PRIMARY KEY (id_msg)
+  style char(20) NOT NULL default '0',
+  updated int(4) NOT NULL default '0',
+  PRIMARY KEY (id_msg, style),
+  KEY updated (updated)
 ) ENGINE=MyISAM;
 
 #
@@ -1382,6 +1386,7 @@ CREATE TABLE {$db_prefix}prefixes (
 	id_prefix smallint(5) unsigned NOT NULL auto_increment,
 	name varchar(255) NOT NULL default '',
 	boards varchar(200) NOT NULL default '',
+	groups varchar(100) NOT NULL default '',
 	PRIMARY KEY (id_prefix)
 ) ENGINE=MyISAM;
 

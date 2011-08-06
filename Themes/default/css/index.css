@@ -525,22 +525,22 @@ span.xtag:hover {
 /* Sticky topics get a different background */
 .stickybg
 {
-	background: #e8d8cf;
+	background: #fff5e5;
 }
 .stickybg2
 {
-	background: #f2e3d9;
+	background: #fff5e5;
 }
 
 /* Locked posts get a different shade, too! */
 .lockedbg
 {
-	background: #d4dce2;
+	background: #e4ecf2;
 	font-style: italic;
 }
 .lockedbg2
 {
-	background: #d8e1e7;
+	background: #e8f1f7;
 	font-style: italic;
 }
 
@@ -849,6 +849,7 @@ table.table_list a.collapse
 tr.catbg th.first_th
 {
 	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
+	border-top-left-radius:5px;
 }
 tr.catbg th.last_th
 {
@@ -1573,6 +1574,9 @@ div.table_frame .table_list
 #messageindex
 {
 	clear: both;
+	border:1px solid #aac;
+	border-radius:8px;
+	padding-top:3px;
 }
 /* the page navigation area */
 .childboards
@@ -1750,8 +1754,7 @@ p#whoisviewing
 /* poster and postarea + moderation area underneath */
 .post_wrapper
 {
-	float:left;
-	width:100%;
+	width:auto;
 	border:1px solid #ddd;
 	padding:5px 0 0 0;
 	margin-bottom:10px;
@@ -1829,9 +1832,8 @@ p#whoisviewing
 .poster li.avatar img, #mcard_inner img.avatar {
 	width:auto;
 	height:auto;
-	border:1px solid blue;
+	border:2px solid #ccc;
 	background-color:#aaa;
-	padding:1px;
 	max-width:100px;
 }
 .poster li.warning
@@ -2587,9 +2589,14 @@ tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td
 
 /* Styles for generic tables.
 ------------------------------------------------------- */
-.topic_table table
+table.topic_table
 {
 	width: 100%;
+	border-spacing:0px;
+}
+table.topic_table td {
+	padding:2px 5px;
+	border-bottom:1px solid #d5ecfa;
 }
 .topic_table .icon1, .topic_table .icon2, .topic_table .stats
 {
@@ -2602,10 +2609,6 @@ tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td
 #topic_icons .description
 {
 	margin: 0;
-}
-.topic_table table thead
-{
-	border-bottom: 1px solid #fff;
 }
 /* the subject column */
 .topic_table td.subject
@@ -3583,7 +3586,7 @@ div#mcard, .tcard {
 	box-shadow: 3px 3px 12px 4px #aaa;
 }
 div#mcard_inner, .tcard_inner {
-	background-color:#ddd;
+	background-color:#fafafa;
 	padding:5px 0px 0px 0px;
 	margin-top:27px;
 }
