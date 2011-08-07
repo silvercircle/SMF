@@ -751,6 +751,8 @@ $txt['debug_show_queries'] = '[Show Queries]';
 $txt['debug_hide_queries'] = '[Hide Queries]';
 $txt['no_access'] = 'Insufficient permissions to access this section';
 
+$txt['add_mq'] = '+Multi quote';
+$txt['remove_mq'] = '-Multi quote';
 $txt['smftags_menu'] = 'Tags';
 $txt['smftags_admin'] = 'Tags Configuration';
 $txt['smftags_seperate'] = 'Seperate each tag by a comma';

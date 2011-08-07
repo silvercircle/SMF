@@ -1196,11 +1196,10 @@ function prepareDisplayContext($reset = false)
 	censorText($message['body']);
 	censorText($message['subject']);
 
-	// NEVER cache posts with [img] tags (security risk!)
-	// note: for img - heavy boards, it's best to disable the parsed post cache as the benefits would be minimal.
-	
+	// create a cached (= parsed) version of the post on the fly
+	// but only if it's not older than the cutoff time.
 	$dateline = max($message['modified_time'], $message['poster_time']);
-	if($cache_parsed && (($time_now - $dateline) < (10 * 86400))) {
+	if($cache_parsed && (($time_now - $dateline) < ($modSettings['post_cache_cutoff'] * 86400))) {
 		if(empty($message['cached_body'])) {
 			$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
 			$smcFunc['db_insert']('replace', '{db_prefix}messages_cache',

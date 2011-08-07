@@ -1203,7 +1203,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 			'href' => $profile['avatar'] == '' ? ($profile['id_attach'] > 0 ? (empty($profile['attachment_type']) ? $scripturl . '?action=dlattach;attach=' . $profile['id_attach'] . ';type=avatar' : $modSettings['custom_avatar_url'] . '/' . $profile['filename']) : '') : (stristr($profile['avatar'], 'http://') ? $profile['avatar'] : $modSettings['avatar_url'] . '/' . $profile['avatar']),
 			'url' => $profile['avatar'] == '' ? '' : (stristr($profile['avatar'], 'http://') ? $profile['avatar'] : $modSettings['avatar_url'] . '/' . $profile['avatar'])
 		),
-		'last_login' => empty($profile['last_login']) ? $txt['never'] : timeformat($profile['last_login']),
+		'last_login' => empty($profile['last_login']) ? $txt['never'] : !empty($profile['show_online']) || allowedTo('moderate_forum') ? timeformat($profile['last_login']) : $txt['hidden'],
 		'last_login_timestamp' => empty($profile['last_login']) ? 0 : forum_time(0, $profile['last_login']),
 		'karma' => array(
 			'good' => $profile['karma_good'],
@@ -1239,6 +1239,9 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'likesgiven' => isset($profile['likesgiven']) ? $profile['likesgiven'] : 0,
 	);
 
+	if(empty($memberContext[$user]['avatar']['image'])) {
+		$memberContext[$user]['avatar']['image'] = '<img class="avatar" alt="avatar" src="http://www.gravatar.com/avatar/'.md5(strtolower(trim($memberContext[$user]['email']))).'" />';
+	}
 	// First do a quick run through to make sure there is something to be shown.
 	$memberContext[$user]['has_messenger'] = false;
 	foreach (array('icq', 'msn', 'aim', 'yim') as $messenger)

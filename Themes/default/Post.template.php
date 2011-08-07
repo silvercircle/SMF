@@ -876,6 +876,29 @@ function template_main()
 					text += XMLDoc.getElementsByTagName(\'quote\')[0].childNodes[i].nodeValue;
 				oEditorHandle_', $context['post_box_name'], '.insertText(text, false, true);
 			}
+			
+			var this_post = ',empty($context['quoted_id']) ? 0 : $context['quoted_id'],';
+			function getMultiQuotes()
+			{
+               var _m = document.cookie.split(\'; \');
+               for (var i = 0; i < _m.length; i++) {
+               		if(_m[i].substr(0, 6)== \'mquote\')
+						loadMultiQuoteById(_m[i].substr(0, _m[i].indexOf(\'=\')));
+               }
+               delete mquotes;               
+            }
+			function loadMultiQuoteById(mid)
+			{
+			   var message_id = (mid.replace("mquote",""));
+               var exdate = new Date();
+               exdate.setDate(exdate.getDate()- 1);
+               document.cookie = "mquote" + message_id + "=; expires="+exdate.toGMTString()+"; path=/";
+               if(parseInt(message_id) != parseInt(this_post))
+               	   insertQuoteFast(message_id);
+			}
+			$(document).ready(function() {
+				getMultiQuotes();
+			});
 		// ]]></script>';
 	}
 }

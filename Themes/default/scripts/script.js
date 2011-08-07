@@ -1643,6 +1643,10 @@ if (is_ie7down && 'attachEvent' in window)
 		if(hours > 0 && hours < 24)
     		return($t.settings.strings.yesterday + ', ' + pad(date.getUTCHours()) + ':'+ pad(date.getUTCMinutes()));
 	}
+	if(dist < 0 && Math.abs(dist) < 3600 * 1000)
+		$t.settings.allowFuture = false;
+	else
+		$t.settings.allowFuture = true;
     return($t.inWords(dist));
   };
 

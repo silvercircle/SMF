@@ -382,7 +382,9 @@ function template_main()
 		// Can they reply? Have they turned on quick reply?
 		if ($context['can_quote'] && !empty($options['display_quick_reply']))
 			echo '
-									<li class="quote_button"><a href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '" onclick="return oQuickReply.quote(', $message['id'], ');">', $txt['quote'], '</a></li>';
+									<li class="quote_button"><a href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '" onclick="return oQuickReply.quote(', $message['id'], ');">', $txt['quote'], '</a></li>
+									<li class="quote_button" id="mquote_' . $message['id'] . '"><a href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
+									<li class="quote_button" style="display:none;" id="mquote_remove_' . $message['id'] . '"><a href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
 
 		// So... quick reply is off, but they *can* reply?
 		elseif ($context['can_quote'])
@@ -829,6 +831,21 @@ function template_main()
 					});';
 		}
 	}
+	if ($context['can_reply']) {
+		echo '
+		function mquote(msg_id,remove) {
+				if (!window.XMLHttpRequest)
+					return true;
+				
+				var elementButton = "mquote_" + msg_id;
+				var elementButtonDelete = "mquote_remove_" + msg_id;
+				var exdate = new Date();
+				(remove == "remove") ? exdate.setDate(exdate.getDate() - 1) : exdate.setDate(exdate.getDate() + 1);
+				document.getElementById(elementButton).style.display = (remove == "remove") ? "inline" : "none";
+				document.getElementById(elementButtonDelete).style.display = (remove == "remove") ? "none" : "inline";
+	            document.cookie = "mquote" + msg_id + "=; expires="+exdate.toGMTString()+"; path=/";
+			}';
+	}		
 
 	echo '
 				// ]]></script>';

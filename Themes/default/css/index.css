@@ -1892,7 +1892,7 @@ ul.quickbuttons li
 {
 	float: left;
 	display: inline;
-	margin: 0 0 0 8px;
+	margin: 0 0 0 4px;
 	padding:0 4px;
 	/*box-shadow: 2px 2px 4px #ccc;
 	border: 1px solid #6b81ab;
@@ -1907,9 +1907,7 @@ ul.quickbuttons li a
 	height: 20px;
 	line-height: 20px;
 	float: left;
-	color:black;
 	text-decoration: none;
-	font-weight:bold;
 }
 ul.quickbuttons li a:hover {
 	text-decoration: underline !important;

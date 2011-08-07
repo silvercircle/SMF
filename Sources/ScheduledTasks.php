@@ -491,6 +491,16 @@ function scheduled_daily_maintenance()
 			)
 		);
 
+	// clean out old cached posts
+	
+	if($modSettings['post_cache_cutoff'] < 10)
+		$modSettings['post_cache_cutoff'] = 10;
+	
+	$cache_cutoff = time() - ($modSettings['post_cache_cutoff'] * 86400);
+	$smcFunc['db_query']('','
+		DELETE FROM {db_prefix}messages_cache WHERE updated < {int:cutoff}',
+		array('cutoff' => $cache_cutoff));
+
 	// Log we've done it...
 	return true;
 }
@@ -1554,7 +1564,6 @@ function scheduled_weekly_maintenance()
 			'last_update' => time() - 86400,
 		)
 	);
-
 	return true;
 }
 
