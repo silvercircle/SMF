@@ -34,7 +34,7 @@ function XMLhttpMain()
 		'mcard' => array('function' => 'GetMcard'),
 		'givelike' => array('function' => 'GiveLike'),
 		'mpeek' => array('function' => 'TopicPeek'),
-		'tags' => array('function' => 'TagsDispatcher')
+		'tags' => array('function' => 'TagsActionDispatcher')
 	);
 	if (!isset($_REQUEST['sa'], $sub_actions[$_REQUEST['sa']]))
 		fatal_lang_error('no_access', false);
@@ -227,6 +227,7 @@ function GiveLike()
 	die;
 }
 
+// todo: check permissions!!
 function TopicPeek()
 {
 	global $context;
@@ -240,7 +241,7 @@ function TopicPeek()
 		$tid = 0;
 	
 	if(!$is_xmlreq)
-		redirectexit();
+		redirectexit();			// this action is XMLHttp - only
 		
 	if($tid) {
 		global $memberContext;
@@ -297,7 +298,7 @@ function TopicPeek()
 	}
 }
 
-function TagsDispatcher()
+function TagsActionDispatcher()
 {
 	global $sourcedir;
 	

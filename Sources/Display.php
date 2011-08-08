@@ -1008,13 +1008,14 @@ function Display()
 			FROM {db_prefix}messages AS m
 			LEFT JOIN {db_prefix}likes AS l ON l.id_msg = m.id_msg AND l.id_user = '.$user_info['id'].'
 			LEFT JOIN {db_prefix}like_cache AS c ON c.id_msg = m.id_msg
-			LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg AND mc.style = {string:style}
+			LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang}
 			WHERE m.id_msg IN ({array_int:message_list})
 			ORDER BY m.id_msg' . (empty($options['view_newest_first']) ? '' : ' DESC'),
 			array(
 				'message_list' => $messages,
 				'new_from' => $topicinfo['new_from'],
-				'style' => $user_info['smiley_set'],
+				'style' => $user_info['smiley_set_id'],
+				'lang' => $user_info['language_id'],
 			)
 		);
 
@@ -1203,9 +1204,9 @@ function prepareDisplayContext($reset = false)
 		if(empty($message['cached_body'])) {
 			$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
 			$smcFunc['db_insert']('replace', '{db_prefix}messages_cache',
-				array('id_msg' => 'int', 'body' => 'string', 'style' => 'string', 'updated' => 'int'),
-				array($message['id_msg'], $message['body'], $user_info['smiley_set'], $dateline),
-				array('id_msg', 'body', 'style', 'updated'));
+				array('id_msg' => 'int', 'body' => 'string', 'style' => 'string', 'lang' => 'string', 'updated' => 'int'),
+				array($message['id_msg'], $message['body'], $user_info['smiley_set_id'], $user_info['language_id'], $dateline),
+				array('id_msg', 'body', 'style', 'lang', 'updated'));
 		}
 		else
 			$message['body'] = $message['cached_body'];

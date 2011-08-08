@@ -55,7 +55,7 @@ $txt['msn_email_address'] = 'Ihre MSN E-Mail Adresse';
 $txt['current_password'] = 'Aktuelles Passwort';
 $txt['smf243'] = 'Sie haben das Passwort nicht eingegeben. Um &Auml;nderungen an Ihrem Profil vorzunehmen, m&uuml;ssen Sie das aktuelle Passwort unbedingt eingeben.';
 // Don't use entities in the below string, except the main ones. (lt, gt, quot.)
-$txt['required_security_reasons'] = 'Aus Sicherheitsgründen muss bei jeder Änderung der Zugangseinstellungen das aktuelle Passwort angegeben werden.';
+$txt['required_security_reasons'] = 'Aus SicherheitsgrÃ¼nden muss bei jeder Ã„nderung der Zugangseinstellungen das aktuelle Passwort angegeben werden.';
 
 // Profile enhancements
 $txt['secret_question'] = 'Geheime Frage';
@@ -245,7 +245,7 @@ $txt['display_quick_mod_image'] = 'als Symbol anzeigen.';
 
 $txt['whois_title'] = 'Schaue nach Informationen zu der IP Adresse';
 $txt['whois_apnic'] = 'APNIC (Asien Pazifik Region)';
-$txt['whois_arin'] = 'ARIN (Nord Amerika, ein Teil Karibik und Afrika südl. der Sahara)';
+$txt['whois_arin'] = 'ARIN (Nord Amerika, ein Teil Karibik und Afrika s?dl. der Sahara)';
 $txt['whois_lacnic'] = 'LACNIC (Latein Amerika und Karibik)';
 $txt['whois_ripe'] = 'RIPE (Europa, der Mittlere Osten and Teile von Afrika und Asien)';
 

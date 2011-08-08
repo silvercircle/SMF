@@ -1344,9 +1344,10 @@ CREATE TABLE {$db_prefix}messages (
 CREATE TABLE {$db_prefix}messages_cache (
   id_msg int(10) unsigned NOT NULL default '0',
   body mediumtext NOT NULL,
-  style char(20) NOT NULL default '0',
+  style tinyint(2) NOT NULL default '0',
+  lang  tinyint(2) NOT NULL default '0',
   updated int(4) NOT NULL default '0',
-  PRIMARY KEY (id_msg, style),
+  PRIMARY KEY (id_msg, style, lang),
   KEY updated (updated)
 ) ENGINE=MyISAM;
 

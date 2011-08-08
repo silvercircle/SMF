@@ -300,7 +300,7 @@ function reloadSettings()
 function loadUserSettings()
 {
 	global $modSettings, $user_settings, $sourcedir, $smcFunc;
-	global $cookiename, $user_info, $language;
+	global $cookiename, $user_info, $language, $context;
 
 	// Check first the integration, then the cookie, and last the session.
 	if (count($integration_ids = call_integration_hook('integrate_verify_user')) > 0)
@@ -510,6 +510,7 @@ function loadUserSettings()
 		'likesgiven' => isset($user_settings['likes_given']) ? $user_settings['likes_given'] : 0,
 		'permissions' => array(),
 	);
+	
 	$user_info['groups'] = array_unique($user_info['groups']);
 	// Make sure that the last item in the ignore boards array is valid.  If the list was too long it could have an ending comma that could cause problems.
 	if (!empty($user_info['ignoreboards']) && empty($user_info['ignoreboards'][$tmp = count($user_info['ignoreboards']) - 1]))
@@ -528,6 +529,17 @@ function loadUserSettings()
 	elseif (!empty($modSettings['userLanguage']) && !empty($_SESSION['language']) && isset($languages[strtr($_SESSION['language'], './\\:', '____')]))
 		$user_info['language'] = strtr($_SESSION['language'], './\\:', '____');
 
+	// map language to a numeric id
+	
+	$n = 0;
+	if(isset($context['languages'])) {
+		foreach($context['languages'] as $key => $lang) {
+			if($key == $user_info['language'])
+				break;
+			$n++;
+		}
+	}
+	$user_info['language_id'] = $n + 1;
 	// Just build this here, it makes it easier to change/use - administrators can see all boards.
 	if ($user_info['is_admin'])
 		$user_info['query_see_board'] = '1=1';
@@ -1238,9 +1250,12 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'liked' => isset($profile['liked']) ? $profile['liked'] : 0,
 		'likesgiven' => isset($profile['likesgiven']) ? $profile['likesgiven'] : 0,
 	);
-
-	if(empty($memberContext[$user]['avatar']['image'])) {
-		$memberContext[$user]['avatar']['image'] = '<img class="avatar" alt="avatar" src="http://www.gravatar.com/avatar/'.md5(strtolower(trim($memberContext[$user]['email']))).'" />';
+	
+	if($memberContext[$user]['avatar']['name'] == 'gravatar') {
+		$hash = md5(strtolower(trim($memberContext[$user]['email'])));
+		$memberContext[$user]['avatar']['image'] = '<img class="avatar" alt="avatar" src="http://www.gravatar.com/avatar/'.$hash.'" />';
+		$memberContext[$user]['avatar']['href'] = 'http://www.gravatar.com/avatar/'.$hash;
+		$memberContext[$user]['avatar']['url'] = $memberContext[$user]['avatar']['href'];
 	}
 	// First do a quick run through to make sure there is something to be shown.
 	$memberContext[$user]['has_messenger'] = false;
@@ -1570,8 +1585,15 @@ function loadTheme($id_theme = 0, $initialize = true)
 	elseif ($context['user']['is_guest'] && !empty($txt['guest_title']))
 		$context['user']['name'] = $txt['guest_title'];
 
-	// Determine the current smiley set.
-	$user_info['smiley_set'] = (!in_array($user_info['smiley_set'], explode(',', $modSettings['smiley_sets_known'])) && $user_info['smiley_set'] != 'none') || empty($modSettings['smiley_sets_enable']) ? (!empty($settings['smiley_sets_default']) ? $settings['smiley_sets_default'] : $modSettings['smiley_sets_default']) : $user_info['smiley_set'];
+	// Determine the current smiley set and map it to a numeric id (parsed post cache needs this, because
+	// we don't want to left join with string matching
+	$smiley_sets = explode(',', $modSettings['smiley_sets_known']);
+	$user_info['smiley_set'] = (!in_array($user_info['smiley_set'], $smiley_sets) && $user_info['smiley_set'] != 'none') || empty($modSettings['smiley_sets_enable']) ? (!empty($settings['smiley_sets_default']) ? $settings['smiley_sets_default'] : $modSettings['smiley_sets_default']) : $user_info['smiley_set'];
+	if($user_info['smiley_set'] == 'none')
+		$user_info['smiley_set_id'] = 0;
+	else
+		$user_info['smiley_set_id'] = array_search($user_info['smiley_set'], $smiley_sets) + 1;
+	
 	$context['user']['smiley_set'] = $user_info['smiley_set'];
 
 	// Some basic information...

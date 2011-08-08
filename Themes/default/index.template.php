@@ -306,7 +306,19 @@ function template_body_below()
 	t2.type = "text/javascript";
 	t2.async = true;
 	t2.src = "',$settings['theme_url'],'/scripts/footer.js?ver=1.1.0";
-	anchor.parentNode.insertBefore(t2, anchor);';
+	anchor.parentNode.insertBefore(t2, anchor);
+	
+   	var _gaq = _gaq || [];
+   	_gaq.push([\'_setAccount\', \'UA-15512457-2\']);
+	_gaq.push([\'_setDomainName\', \'forum.miranda.or.at\']);
+   	_gaq.push([\'_trackPageview\']);
+	
+	var ga = document.createElement(\'script\');
+	var sa = document.getElementsByTagName(\'script\')[0];
+	ga.async = true;
+	ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\';
+	sa.parentNode.insertBefore(ga, sa);
+	';
 	
 	if(1) {
 		if($fbxml) {

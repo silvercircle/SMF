@@ -181,7 +181,7 @@ function template_main()
 				</div>';
 
 	// social share bar
-	if($context['use_share'] && ($context['user']['is_guest'] || !$options['use_share_bar']))
+	if($context['use_share'] && ($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar'])))
 		socialbar($scripturl . '?topic=' . $topic, urlencode($context['subject']));
 				
 	// Tags

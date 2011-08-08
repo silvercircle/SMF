@@ -3259,7 +3259,13 @@ function setupThemeContext($forceload = false)
 		$context['user']['avatar'] = array();
 
 		// Figure out the avatar... uploaded?
-		if ($user_info['avatar']['url'] == '' && !empty($user_info['avatar']['id_attach']))
+		if ($user_info['avatar']['url'] == 'gravatar') {
+			$hash = md5(strtolower(trim($user_info['email'])));
+			$context['user']['avatar']['image'] = '<img class="avatar" alt="avatar" src="http://www.gravatar.com/avatar/'.$hash.'" />';
+			$context['user']['avatar']['href'] = 'http://www.gravatar.com/avatar/'.$hash;
+			$context['user']['avatar']['url'] = $context['user']['avatar']['href'];
+		}
+		else if ($user_info['avatar']['url'] == '' && !empty($user_info['avatar']['id_attach']))
 			$context['user']['avatar']['href'] = $user_info['avatar']['custom_dir'] ? $modSettings['custom_avatar_url'] . '/' . $user_info['avatar']['filename'] : $scripturl . '?action=dlattach;attach=' . $user_info['avatar']['id_attach'] . ';type=avatar';
 		// Full URL?
 		elseif (substr($user_info['avatar']['url'], 0, 7) == 'http://')

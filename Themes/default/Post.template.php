@@ -133,7 +133,7 @@ function template_main()
 				<h3 class="catbg">', $context['page_title'], '</h3>
 			</div>
 			<div class="generic_container"><br />
-				<div class="blue_container" style="margin:0 20px;padding:10px;">', isset($context['current_topic']) ? '
+				<div class="blue_container" style="margin:0 auto;padding:10px;max-width:900px;">', isset($context['current_topic']) ? '
 					<input type="hidden" name="topic" value="' . $context['current_topic'] . '" />' : '';
 
 	// If an error occurred, explain what happened.

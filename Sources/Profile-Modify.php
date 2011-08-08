@@ -2397,6 +2397,7 @@ function profileLoadAvatarData()
 		'allow_external' => allowedTo('profile_remote_avatar') || (!$context['user']['is_owner'] && allowedTo('profile_extra_any')),
 	);
 
+	$context['member']['avatar']['allow_gravatar'] = $context['member']['avatar']['allow_upload'];
 	if ($cur_profile['avatar'] == '' && $cur_profile['id_attach'] > 0 && $context['member']['avatar']['allow_upload'])
 	{
 		$context['member']['avatar'] += array(
@@ -2418,6 +2419,14 @@ function profileLoadAvatarData()
 			'server_pic' => $cur_profile['avatar'] == '' ? 'blank.gif' : $cur_profile['avatar'],
 			'external' => 'http://'
 		);
+	else if ($cur_profile['avatar'] == 'gravatar') {
+		$context['member']['avatar'] += array(
+			'choice' => 'gravatar',
+			'server_pic' => '',
+			'external' => ''
+		);
+		$context['member']['avatar']['href'] = 'http://www.gravatar.com/avatar/'.md5(strtolower(trim($context['member']['email'])));
+	}
 	else
 		$context['member']['avatar'] += array(
 			'choice' => 'none',
@@ -2766,6 +2775,9 @@ function profileSaveAvatarData(&$value)
 		// Selected the upload avatar option and had one already uploaded before or didn't upload one.
 		else
 			$profile_vars['avatar'] = '';
+	}
+	else if($value == 'gravatar') {
+		$profile_vars['avatar'] = 'gravatar';
 	}
 	else
 		$profile_vars['avatar'] = '';

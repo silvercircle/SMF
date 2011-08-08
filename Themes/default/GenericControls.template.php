@@ -21,11 +21,8 @@ function template_control_richedit($editor_id, $smileyContainer = null, $bbcCont
 		<div>
 			<div>
 				<div>
-					<div style="float:right;max-width:15%;" id="smileyBox_message"></div>
-					<div style="min-width:10%;max-width:80%;width:80%;">
+					<div style="float:right;position:relative;top:-70px;margin-bottom:-70px;" id="smileyBox_message"></div>
 					<textarea class="editor" name="', $editor_id, '" id="', $editor_id, '" rows="', $editor_context['rows'], '" cols="600" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onchange="storeCaret(this);" tabindex="', $context['tabindex']++, '" style="height: ', $editor_context['height'], '; ', isset($context['post_error']['no_message']) || isset($context['post_error']['long_message']) ? 'border: 1px solid red;' : '', '">', $editor_context['value'], '</textarea>
-					</div>
-					<div class="clear"></div>
 				</div>
 				<div id="', $editor_id, '_resizer" class="richedit_resize"></div>
 			</div>
@@ -37,7 +34,7 @@ function template_control_richedit($editor_id, $smileyContainer = null, $bbcCont
 		if ((!empty($context['smileys']['postform']) || !empty($context['smileys']['popup'])) && !$editor_context['disable_smiley_box'] && $smileyContainer !== null)
 		{
 			echo '
-				var oSmileyBox_', $editor_id, ' = new smc_SmileyBox({
+					var oSmileyBox_', $editor_id, ' = new smc_SmileyBox({
 					sUniqueId: ', JavaScriptEscape('smileyBox_' . $editor_id), ',
 					sContainerDiv: ', JavaScriptEscape($smileyContainer), ',
 					sClickHandler: ', JavaScriptEscape('oEditorHandle_' . $editor_id . '.insertSmiley'), ',

@@ -173,7 +173,7 @@ function getPrefixSelector($board, $id = 0, $mandatory = 0)
 					if(false === array_search($board, $b))
 						continue;
 				}
-				// we've found at least one prefix that is allowed in this group, now check if the user does
+				// we've found at least one prefix that is allowed in this board, now check if the user does
 				// have access to this
 				if(strlen(trim($row['groups']))) {
 					$group_found = 0;
@@ -2516,7 +2516,7 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	);
 
 	/*
-	 * always update or delete the parse cache on modify
+	 * delete cached posts (they will update at the next view)
 	 */	
 	if(isset($msgOptions['body'])) {
 		$smcFunc['db_query']('', 'DELETE FROM {db_prefix}messages_cache WHERE id_msg = {int:id_msg}',
