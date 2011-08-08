@@ -465,6 +465,9 @@ function ModifyBasicSettings($return_config = false)
 			// SEO stuff
 			array('check', 'queryless_urls'),
 			array('text', 'meta_keywords', 'size' => 50),
+			array('check', 'embed_GA'),
+			array('text', "GA_tracker_id"),
+			array('text', 'GA_domain_name'),
 		'',
 			// Number formatting, timezones.
 			array('text', 'time_format'),
@@ -508,6 +511,18 @@ function ModifyBasicSettings($return_config = false)
 		if (isset($_POST['lastActive']))
 			$_POST['lastActive'] = min((int) $_POST['lastActive'], 1440);
 
+		if(isset($_POST['embed_GA']) && $_POST['embed_GA']) {
+			$_POST['GA_tracker_id'] = trim($_POST['GA_tracker_id']);
+			$_POST['GA_domain_name'] = trim($_POST['GA_domain_name']);
+
+			if(strlen($_POST['GA_tracker_id']) > 5 && strlen($_POST['GA_domain_name']) > 5)
+				$_POST['embed_GA'] = 1;
+			else
+				$_POST['embed_GA'] = 0;
+		}
+		else
+			$_POST['embed_GA'] = 0;
+			
 		saveDBSettings($config_vars);
 
 		writeLog();
@@ -1962,6 +1977,7 @@ function ModifyPruningSettings($return_config = false)
 			array('int', 'pruneSpiderHitLog', 'postinput' => $txt['days_word']), // Log of the scheduled tasks and how long they ran.
 			// If you add any additional logs make sure to add them after this point.  Additionally, make sure you add them to the weekly scheduled task.
 			// Mod Developers: Do NOT use the pruningOptions master variable for this as SMF Core may overwrite your setting in the future!
+			array('int', 'pruneSpiderStats', 'postinput' => $txt['days_word']),
 	);
 
 	if ($return_config)
@@ -2004,9 +2020,9 @@ function ModifyPruningSettings($return_config = false)
 
 	// Get the actual values
 	if (!empty($modSettings['pruningOptions']))
-		@list ($modSettings['pruneErrorLog'], $modSettings['pruneModLog'], $modSettings['pruneBanLog'], $modSettings['pruneReportLog'], $modSettings['pruneScheduledTaskLog'], $modSettings['pruneSpiderHitLog']) = explode(',', $modSettings['pruningOptions']);
+		@list ($modSettings['pruneErrorLog'], $modSettings['pruneModLog'], $modSettings['pruneBanLog'], $modSettings['pruneReportLog'], $modSettings['pruneScheduledTaskLog'], $modSettings['pruneSpiderHitLog'], $modSettings['pruneSpiderStats']) = explode(',', $modSettings['pruningOptions']);
 	else
-		$modSettings['pruneErrorLog'] = $modSettings['pruneModLog'] = $modSettings['pruneBanLog'] = $modSettings['pruneReportLog'] = $modSettings['pruneScheduledTaskLog'] = $modSettings['pruneSpiderHitLog'] = 0;
+		$modSettings['pruneErrorLog'] = $modSettings['pruneModLog'] = $modSettings['pruneBanLog'] = $modSettings['pruneReportLog'] = $modSettings['pruneScheduledTaskLog'] = $modSettings['pruneSpiderHitLog'] = $modSettings['pruneSpiderStats'] = 0;
 
 	prepareDBSettingContext($config_vars);
 }

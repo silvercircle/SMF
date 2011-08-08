@@ -1487,13 +1487,13 @@ function template_profile_theme_settings()
 							</li>
 							<li>
 								<input type="hidden" name="default_options[use_share_bar]" value="0" />
-								<label for="use_share_bar"><input type="checkbox" name="default_options[use_share_bar]" id="use_share_bar" value="1"', !empty($context['member']['options']['use_share_bar']) ? ' checked="checked"' : '', ' class="input_check" /> ', "Disable social sharing buttons.", '</label>
+								<label for="use_share_bar"><input type="checkbox" name="default_options[use_share_bar]" id="use_share_bar" value="1"', !empty($context['member']['options']['use_share_bar']) ? ' checked="checked"' : '', ' class="input_check" /> ', $txt['disable_share_bar'], '</label>
 							</li>
+							
 							<li>
-								<input type="hidden" name="default_options[use_mcards]" value="0" />
-								<label for="use_mcards"><input type="checkbox" name="default_options[use_mcards]" id="use_mcards" value="1"', !empty($context['member']['options']['use_mcards']) ? ' checked="checked"' : '', ' class="input_check" /> ', "Disable member cards to view profiles.", '</label>
+								<input type="hidden" name="default_options[disable_analytics]" value="0" />
+								<label for="disable_analytics"><input type="checkbox" name="default_options[disable_analytics]" id="disable_analytics" value="1"', !empty($context['member']['options']['disable_analytics']) ? ' checked="checked"' : '', ' class="input_check" /> ', $txt['disable_analytics'], '</label>
 							</li>';
-
 	if ($settings['allow_no_censored'])
 		echo '
 							<li>

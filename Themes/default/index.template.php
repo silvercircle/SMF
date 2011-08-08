@@ -152,7 +152,7 @@ function template_html_above()
 	<link rel="alternate" type="application/rss+xml" title="', $context['forum_name_html_safe'], ' - ', $txt['rss'], '" href="', $scripturl, '?type=rss;action=.xml" />';
 
 	// If we're viewing a topic, these should be the previous and next topics, respectively.
-	if (!empty($context['current_topic']))
+	if (isset($context['current_topic']))
 		echo '
 	<link rel="prev" href="', $scripturl, '?topic=', $context['current_topic'], '.0;prev_next=prev" />
 	<link rel="next" href="', $scripturl, '?topic=', $context['current_topic'], '.0;prev_next=next" />';
@@ -307,21 +307,23 @@ function template_body_below()
 	t2.async = true;
 	t2.src = "',$settings['theme_url'],'/scripts/footer.js?ver=1.1.0";
 	anchor.parentNode.insertBefore(t2, anchor);
-	
-   	var _gaq = _gaq || [];
-   	_gaq.push([\'_setAccount\', \'UA-15512457-2\']);
-	_gaq.push([\'_setDomainName\', \'forum.miranda.or.at\']);
-   	_gaq.push([\'_trackPageview\']);
-	
-	var ga = document.createElement(\'script\');
-	var sa = document.getElementsByTagName(\'script\')[0];
-	ga.async = true;
-	ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\';
-	sa.parentNode.insertBefore(ga, sa);
 	';
+
+	if(isset($modSettings['embed_GA']) && $modSettings['embed_GA'] && ($context['user']['is_guest'] || (empty($options['disable_analytics']) ? 1 : !$options['disable_analytics'])))	{
+		echo '
+   		var _gaq = _gaq || [];
+   		_gaq.push([\'_setAccount\', \'',$modSettings['GA_tracker_id'], '\']);
+		_gaq.push([\'_setDomainName\', \'',$modSettings['GA_domain_name'],'\']);
+   		_gaq.push([\'_trackPageview\']);
 	
-	if(1) {
-		if($fbxml) {
+		var ga = document.createElement(\'script\');
+		var sa = document.getElementsByTagName(\'script\')[0];
+		ga.async = true;
+		ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\';
+		sa.parentNode.insertBefore(ga, sa);
+		';
+	}
+	if($fbxml) {
 			echo '
 			window.fbAsyncInit = function() {
    				FB.init({appId: \'109862169045977\', status: true, cookie: true, xfbml: true});
@@ -332,8 +334,8 @@ function template_body_below()
 				document.getElementById(\'fb-root\').appendChild(e);
   			}());
 			';
-		}
-		if($twitter_widgets) {
+	}
+	if($twitter_widgets) {
 			echo '
 			var t1 = document.createElement(\'SCRIPT\');
 
@@ -342,7 +344,6 @@ function template_body_below()
 			t1.async = true;
 			anchor.parentNode.insertBefore(t1, anchor);
 			';
-		}
 	}
 	if($plusone) {
 		echo '
@@ -617,18 +618,6 @@ function socialbar_passive($l, $t)
     		//]]>
        		</script>
        		<div style="clear:both;"></div>';
-			
-		/*	
-		echo '<script type="text/javascript">
-			//<![CDATA[
-			document.write(\'',$fb,'&nbsp;&nbsp;',$tw,'\');
-			//]]>			
-			</script>
-			<noscript>
-			<a class="share_button share_fb" href="http://www.facebook.com/sharer.php?u=',$url,'">Share</a>
-			<a class="share_button share_tw" href="http://twitter.com/share?url=',$url,'">Tweet</a>
-			</noscript>';
-			*/
 	echo '</div><div style="clear:both;"></div>';
 }
 

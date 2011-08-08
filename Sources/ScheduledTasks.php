@@ -1424,7 +1424,7 @@ function scheduled_weekly_maintenance()
 	if (!empty($modSettings['pruningOptions']))
 	{
 		if (!empty($modSettings['pruningOptions']) && strpos($modSettings['pruningOptions'], ',') !== false)
-			list ($modSettings['pruneErrorLog'], $modSettings['pruneModLog'], $modSettings['pruneBanLog'], $modSettings['pruneReportLog'], $modSettings['pruneScheduledTaskLog'], $modSettings['pruneSpiderHitLog']) = explode(',', $modSettings['pruningOptions']);
+			list ($modSettings['pruneErrorLog'], $modSettings['pruneModLog'], $modSettings['pruneBanLog'], $modSettings['pruneReportLog'], $modSettings['pruneScheduledTaskLog'], $modSettings['pruneSpiderHitLog'], $modSettings['pruneSpiderStats']) = explode(',', $modSettings['pruningOptions']);
 
 		if (!empty($modSettings['pruneErrorLog']))
 		{
@@ -1538,6 +1538,15 @@ function scheduled_weekly_maintenance()
 					'log_time' => $t,
 				)
 			);
+		}
+		if (!empty($modSettings['pruneSpiderStats']))
+		{
+			$t = time() - $modSettings['pruneSpiderStats'] * 86400;
+			
+			$smcFunc['db_query']('', '
+				DELETE FROM {db_prefix}log_spider_stats
+				WHERE last_seen < {int:time_cutoff}',
+				array('time_cutoff' => $t));
 		}
 	}
 

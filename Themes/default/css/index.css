@@ -1837,6 +1837,9 @@ p#whoisviewing
 	background-color:#aaa;
 	max-width:100px;
 }
+
+#mcard_inner img {max-width:100px;}
+
 .poster li.warning
 {
 	line-height: 1.2em;
@@ -1983,10 +1986,6 @@ img.smiley
 #forumposts .signature, .post .signature
 {
 	margin: 1em 0 0 0;
-}
-#forumposts span.botslice
-{
-	clear: both;
 }
 .attachments hr
 {
@@ -2854,11 +2853,6 @@ dl
 	display: none;
 	clear: both;
 }
-#main_admsection #basicinfo .botslice
-{
-	clear: both;
-}
-
 /* Simple feedback messages */
 div#profile_error, div#profile_success
 {

@@ -43,6 +43,7 @@ $txt['pruneBanLog'] = 'Remove ban hit log entries older than<div class="smalltex
 $txt['pruneReportLog'] = 'Remove report to moderator log entries older than<div class="smalltext">(0 to disable)</div>';
 $txt['pruneScheduledTaskLog'] = 'Remove scheduled task log entries older than<div class="smalltext">(0 to disable)</div>';
 $txt['pruneSpiderHitLog'] = 'Remove search engine hit logs older than<div class="smalltext">(0 to disable)</div>';
+$txt['pruneSpiderStats'] = 'Remove search engine stats older than<div class="smalltext">(0 to disable)</div>';
 $txt['cookieTime'] = 'Default login cookies length (in minutes)';
 $txt['localCookies'] = 'Enable local storage of cookies<div class="smalltext">(SSI won\'t work well with this on.)</div>';
 $txt['globalCookies'] = 'Use subdomain independent cookies<div class="smalltext">(turn off local cookies first!)</div>';
@@ -55,6 +56,9 @@ $txt['autoFixDatabase'] = 'Automatically fix broken tables';
 $txt['allow_disableAnnounce'] = 'Allow users to disable announcements';
 $txt['disallow_sendBody'] = 'Don\'t allow post text in notifications';
 $txt['queryless_urls'] = 'Search engine friendly URLs<div class="smalltext"><strong>Apache/Lighttpd only!</strong></div>';
+$txt['embed_GA'] = 'Embed Google Analytics code into theme\'s footer<div class="smalltext">Note: you also MUST set the tracker ID and domain name in the next fields.</div>';
+$txt['GA_tracker_id'] = 'Your Google Analytics tracker id';
+$txt['GA_domain_name'] = 'Your Google Analytics domain name<div class="smallfont">Must match the domain you have set in GA. Specify this without the leading http:// and without trailing slashes.';
 $txt['max_image_width'] = 'Max width of posted pictures (0 = disable)';
 $txt['max_image_height'] = 'Max height of posted pictures (0 = disable)';
 $txt['enableReportPM'] = 'Enable reporting of personal messages';
