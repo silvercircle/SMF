@@ -67,19 +67,21 @@ function template_tagging_results()
 	global $scripturl, $txt, $context;
 echo '
 	<div style="width:80%;margin-left:auto;margin-right:auto;">
-	<div class="cat_bar">
+	<div class="cat_bar rounded_top">
 		<h3 class="catbg">',
 		$txt['smftags_resultsfor'] . $context['tag_search'],'
 		</h3>
 	</div>
 	<div class="generic_container mediumpadding">
-	<table class="blue_container">
-  		<tr class="orange_container">
-			<td class="catbg3" style="width:100%;">',$txt['smftags_subject'],'</td>
-			<td class="catbg3" style="white-space:nowrap;">',$txt['smftags_startedby'],'</td>
-			<td class="catbg3" style="text-align:center;">',$txt['smftags_replies'],'</td>
-			<td class="catbg3" style="text-align:center;">',$txt['smftags_views'], '</td>
-		</tr>';
+	<table class="table_grid">
+		<thead>
+  		<tr>
+			<th class="blue_container" style="width:100%;">',$txt['smftags_subject'],'</th>
+			<th class="blue_container" style="white-space:nowrap;">',$txt['smftags_startedby'],'</th>
+			<th class="blue_container" style="text-align:center;">',$txt['smftags_replies'],'</th>
+			<th class="blue_container" style="text-align:center;">',$txt['smftags_views'], '</th>
+		</tr>
+		</thead><tbody>';
 		foreach ($context['tags_topics'] as $i => $topic)
 		{
 			echo '<tr>';
@@ -91,9 +93,9 @@ echo '
 		}
 echo '
 	<tr>
-	<td colspan="4">' . $txt['smftags_pages'] . $context['page_index'] . '</td>
+	<td class="blue_container" colspan="4">' . $txt['smftags_pages'] . $context['page_index'] . '</td>
   	</tr>
-  	</table></div></div>';
+  	</tbody></table></div></div>';
 }
 
 function template_addtag()
@@ -127,11 +129,16 @@ function template_ajax_addtag()
 	global $scripturl, $txt, $context;
 
 	echo '<div id="tagform" class="blue_container lightshadow mediumpadding" style="padding-bottom:0px;position:absolute;right:50px;">
-		<form method="post" action=""><strong>',
-    	$txt['smftags_tagtoadd'],'</strong>&nbsp;&nbsp;<input type="text" name="tag" id="newtags" size="50" maxlength="100" />
-		<input type="hidden" name="topic" id="tagtopic" value="', $context['tags_topic'], '" />
-    	<input class="button_submit" type="submit" onclick="submitTagForm($(\'#tags\'));return(false);" value="', $txt['go'], '" name="submit" />
-		</form>
+		<form method="post" action=""><strong>';
+		if(isset($context['not_allowed'])) {
+			echo $txt['cannot_smftags_add'];
+		}
+		else {
+    		echo $txt['smftags_tagtoadd'],'</strong>&nbsp;&nbsp;<input type="text" name="tag" id="newtags" size="50" maxlength="100" />
+				<input type="hidden" name="topic" id="tagtopic" value="', $context['tags_topic'], '" />
+    			<input class="button_submit" type="submit" onclick="submitTagForm($(\'#tags\'));return(false);" value="', $txt['go'], '" name="submit" />';
+		}
+		echo '</form>
 		<div style="text-align:center;"><a href="#" onclick="$(\'#tagform\').remove();return(false);">Close</a></div>
 		</div>';
 }

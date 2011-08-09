@@ -12,7 +12,8 @@ if (!defined('SMF'))
 function TagsMain()
 {
 	loadtemplate('Tagging');
-
+	loadLanguage('Tagging');
+	
 	$subActions = array(
 		'suggest' => 'SuggestTag',
 		'suggest2' => 'SuggestTag2',
@@ -39,11 +40,8 @@ function ViewTags()
 		$id = (int) $_REQUEST['tagid'];
 
 		// Find Tag Name
-		$dbresult = $smcFunc['db_query']('', "
-		SELECT
-			tag
-		FROM {db_prefix}tags
-		WHERE ID_TAG = $id LIMIT 1");
+		$dbresult = $smcFunc['db_query']('', '
+			SELECT tag FROM {db_prefix}tags	WHERE ID_TAG = {int:id} LIMIT 1', array('id' => $id));
 		$row = $smcFunc['db_fetch_assoc']($dbresult);
 		$smcFunc['db_free_result']($dbresult);
 
@@ -83,16 +81,10 @@ function ViewTags()
 				'num_replies' => $row['num_replies'],
 
 				);
-
-
 		}
 		$smcFunc['db_free_result']($dbresult);
-
-
 		$context['sub_template']  = 'tagging_results';
-		
 		$context['page_index'] = constructPageIndex($scripturl . '?action=tags;tagid=' . $id, $_REQUEST['start'], $numofrows, 25);
-
 	}
 	else
 	{
@@ -106,17 +98,10 @@ function ViewTags()
 		  GROUP BY l.ID_TAG
 		  ORDER BY COUNT(l.ID_TAG) DESC, RAND() LIMIT " .  $modSettings['smftags_set_cloud_tags_to_show']);
 
-		// here we loop through the results and put them into a simple array:
-		// $tag['thing1'] = 12;
-		// $tag['thing2'] = 25;
-		// etc. so we can use all the nifty array functions
-		// to calculate the font-size of each tag
 		$tags = array();
-
 		$tags2 = array();
 
-		while ($row = $smcFunc['db_fetch_assoc']($result))
-		{
+		while ($row = $smcFunc['db_fetch_assoc']($result)) {
 		    $tags[$row['tag']] = $row['quantity'];
 		    $tags2[$row['tag']] = $row['ID_TAG'];
 		}
@@ -244,9 +229,12 @@ function TaggingSystem_Add()
 	$row = $smcFunc['db_fetch_assoc']($dbresult);
 	$smcFunc['db_free_result']($dbresult);
 
-	if ($user_info['id'] != $row['id_member'] && $edit == false)
-		fatal_error($txt['smftags_err_permaddtags'],false);
-
+	if ($user_info['id'] != $row['id_member'] && $edit == false) {
+		if($ajaxrequest)
+			$context['not_allowed'] = true;
+		else
+			fatal_error($txt['smftags_err_permaddtags'],false);
+	}
 	$context['tags_topic'] = $topic;
 	$context['page_title'] = $mbname . ' - ' . $txt['smftags_addtag'];
 }
@@ -296,7 +284,7 @@ function TaggingSystem_Submit()
 		isAllowedTo('smftags_add');
 	else {
 		if(!allowedTo('smftags_add'))
-			TagErrorMsg('No permission');
+			TagErrorMsg($txt['cannot_smftags_add']);
 	}
 	
 	$topic = (int) $_REQUEST['topic'];
@@ -397,7 +385,7 @@ function TaggingSystem_Delete()
 		isAllowedTo('smftags_del');
 	else {
 		if(!allowedTo('smftags_del'))
-			TagErrorMsg('No permission');
+			TagErrorMsg($txt['cannot_smftags_del'], $isajax);
 	}
 	
 	$id = (int) $_REQUEST['tagid'];
@@ -415,7 +403,7 @@ function TaggingSystem_Delete()
 	$topic = $row['id_topic'];
 	
 	if ($row['id_member'] != $user_info['id'] && $edit == false)
-		TagErrorMsg($txt['smftags_err_deletetag']);
+		TagErrorMsg($txt['smftags_err_deletetag'], $isajax);
 
 	$smcFunc['db_query']('', 'DELETE FROM {db_prefix}tags_log WHERE id = {int:id} LIMIT 1',
 		array('id' => $id));

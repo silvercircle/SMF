@@ -609,7 +609,7 @@ function socialbar_passive($l, $t)
 		//$fb = "<span class=\"share_button share_fb\" onclick=\"share_popup(\'http://www.facebook.com/sharer.php?u=".$url."\', 500,400);\">Share</span>";
 		//$tw = "<span class=\"share_button share_tw\" onclick=\"share_popup(\'http://twitter.com/share?url=".$url."&amp;text=".$title."\', 550,300);\">Tweet</span>";
 		echo '<div style="float:left;"><a role="button" rel="nofollow" class="share_button share_fb" href="http://www.facebook.com/sharer.php?u=',$url,'">Share</a>
-			<a role="button" rel="nofollow" class="share_button share_tw" href="http://twitter.com/share?url=',$url,'&amp;text=',$t,'">Tweet</a>
+			<a role="button" rel="nofollow" class="share_button share_tw" href="http://twitter.com/share?text=',$t,'&amp;url=',$url,'">Tweet</a>
 			<a role="button" rel="nofollow" class="share_button share_digg" href="http://digg.com/submit?phase=2&amp;title=',$t,'&amp;url=',$url,'">Digg</a>
 			<a role="button" rel="nofollow" class="share_button share_buzz" href="http://www.google.com/buzz/post?url=',$url,'">Buzz</a></div>&nbsp;&nbsp;
 			<script type="text/javascript">

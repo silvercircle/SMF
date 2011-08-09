@@ -87,7 +87,7 @@ function Post()
 	global $sourcedir, $options, $smcFunc, $language;
 
 	loadLanguage('Post');
-
+	loadLanguage('Tagging');
 	$context['tagging_ui'] = '';
 	
 	// You can't reply with a poll... hacker.

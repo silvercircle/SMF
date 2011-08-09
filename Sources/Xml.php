@@ -302,6 +302,7 @@ function TagsActionDispatcher()
 {
 	global $sourcedir;
 	
+	loadLanguage('Tagging');
 	require_once($sourcedir . '/Tagging.php');
 	if(isset($_REQUEST['addtag']))
 		TaggingSystem_Add();

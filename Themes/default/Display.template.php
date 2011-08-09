@@ -198,7 +198,7 @@ function template_main()
 		
 	if(!$context['user']['is_guest'])
 		echo '
-			&nbsp;<a rel="nofollow" id="addtag" onclick="$(\'#tagform\').remove();sendRequest(smf_scripturl, \'action=xmlhttp&sa=tags&addtag=1&topic=',$topic,'\', $(\'#addtag\'));return(false);" data-id="',$topic,'" href="' . $scripturl . '?action=tags;sa=addtag;topic=',$topic, '">' . $txt['smftags_addtag'] . '</a>';
+			&nbsp;<a rel="nofollow" id="addtag" onclick="$(\'#tagform\').remove();sendRequest(smf_scripturl, \'action=xmlhttp;sa=tags;addtag=1;topic=',$topic,'\', $(\'#addtag\'));return(false);" data-id="',$topic,'" href="' . $scripturl . '?action=tags;sa=addtag;topic=',$topic, '">' . $txt['smftags_addtag'] . '</a>';
 
 	echo '
 		</div>';
@@ -651,7 +651,7 @@ function template_main()
 				</div>
 			</div>';
 	}
-	else
+	//else
 			if(isset($txt['like_label'])) 
 				echo '				
 			<script type="text/javascript">

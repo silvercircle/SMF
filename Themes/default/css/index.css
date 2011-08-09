@@ -289,10 +289,12 @@ blockquote.bbc_standard_quote, blockquote.bbc_alternate_quote
 	line-height: 1.4em;
 	background: url(../images/theme/quote.png) 0.1em 0.1em no-repeat;
 	padding: 1.1em 1.4em;
-	margin: 0.1em 0 0.3em 0;
+	margin: 0 20px 0.3em 20px;
 	overflow: auto;
 	border:1px solid #ddd;
-	border-radius:5px;
+	border-top:0;
+	border-radius:0px 0px 5px 5px;
+	border-left:3px solid #a88;
 }
 
 /* Alterate blockquote stylings */
@@ -319,15 +321,6 @@ code.bbc_code
 	border:1px solid #ddd;
 	border-radius:5px;
 	/* Show a scrollbar after about 24 lines. */
-}
-
-/* The "Quote:" and "Code:" header parts... */
-.codeheader, .quoteheader
-{
-	color: #666;
-	font-size: x-small;
-	font-weight: bold;
-	padding: 0 0.3em;
 }
 
 /* For links to change the code stuff... */
@@ -485,6 +478,7 @@ div.pagesection div.floatright input
 	padding-left:18px;
 	background: transparent url(../images/theme/sprite.png) 0 -239px no-repeat;
 }
+#tagstrip a {text-decoration: none;}
 span.xtag {
 	width:14px;
 	min-width:16px;
@@ -3466,7 +3460,7 @@ span.hidelink
 
 /* Styles for the search results page.
 ------------------------------------------------- */
-.topic_table td blockquote, .topic_table td .quoteheader
+.topic_table td blockquote, .topic_table td
 {
 	margin: 0.5em;
 }
@@ -3520,11 +3514,21 @@ span.hidelink
 	border-radius:3px;
 }
 
-.red_container {
+.red_container, .quoteheader, codeheader{
 	background-color:#FFF2F2;
 	border:1px solid #FFCACA;
 	padding:2px 4px;
 	border-radius:3px;
+}
+
+.quoteheader, codeheader {
+	border-bottom:0;
+	border-bottom-left-radius:0;
+	border-bottom-right-radius:0;
+	border-left:3px solid #a88;
+	font-size:11px;
+	font-weight:bold;
+	margin:5px 20px 0 20px;
 }
 /* page links (navpages) */
 

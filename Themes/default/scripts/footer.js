@@ -275,14 +275,17 @@ function sendRequest(uri, request, anchor_element)
 		if(typeof(sSessionVar) == 'undefined')
 			sSessionVar = 'sesc';
 		
-		request = request + '&' + sSessionVar + '='	+ sSessionId + '&xml=1';
+		request = request + ';' + sSessionVar + '='	+ sSessionId + ';xml';
+		var sUrl = uri + '?' + request;
 		setTimeOut(10000);
 		req = xmlrequest;
 		xmlrequest.onreadystatechange = function() { response(anchor_element) };
-		xmlrequest.open('POST', uri, true);
-		xmlrequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		//xmlrequest.open('POST', uri, true);
+		xmlrequest.open('GET', sUrl, true);
+		//xmlrequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		setBusy(1);
-		xmlrequest.send(request);
+		//xmlrequest.send(request);
+		xmlrequest.send(null);
 	}
 };
 

@@ -466,7 +466,7 @@ function ModifyTagSettings()
 
 	// Check permission
 	isAllowedTo('smftags_manage');
-
+	loadLanguage('Tagging');
 	$context['page_title'] = $txt['manageposts_tag_settings'];
 	$context['settings_title'] = $txt['manageposts_tag_settings'];
 	$context['sub_template']  = 'tag_admin_settings';
