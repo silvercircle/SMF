@@ -15,8 +15,6 @@ function TagsMain()
 	loadLanguage('Tagging');
 	
 	$subActions = array(
-		'suggest' => 'SuggestTag',
-		'suggest2' => 'SuggestTag2',
 		'addtag' => 'TaggingSystem_Add',
 		'submittag' => 'TaggingSystem_Submit',
 		'deletetag' => 'TaggingSystem_Delete',
@@ -448,20 +446,4 @@ function TagCleanUp($ID_TAG)
 	//Redirect to the admin section
 	//redirectexit('action=tags;sa=admin');
 }
-
-function SuggestTag()
-{
-	global $context, $txt, $mbname;
-	// Check permission
-	isAllowedTo('smftags_suggest');
-
-	$context['sub_template']  = 'suggest';
-	$context['page_title'] = $mbname . ' - ' . $txt['smftags_suggest'];
-}
-function SuggestTag2()
-{
-	// Check permission
-	isAllowedTo('smftags_suggest');
-}
-
 ?>

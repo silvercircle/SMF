@@ -144,7 +144,7 @@ function template_main()
 	if (!$context['no_topic_listing'])
 	{
 		echo '
-	<div class="pagesection yellow_container top smallpadding">
+	<div class="pagesection top smallpadding">
 		<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a href="#bot"><strong>' . $txt['go_down'] . '</strong></a>' : '', '</div>
 		', template_button_strip($normal_buttons, 'right'), '
 	</div>';
@@ -395,7 +395,7 @@ function template_main()
 	</form>';
 
 		echo '
-	<div class="pagesection yellow_container bottom smallpadding">
+	<div class="pagesection bottom smallpadding">
 		', template_button_strip($normal_buttons, 'right'), '
 		<div class="pagelinks">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a href="#top"><strong>' . $txt['go_up'] . '</strong></a>' : '', '</div>
 	</div>';

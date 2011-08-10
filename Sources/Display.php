@@ -1079,6 +1079,8 @@ function Display()
 	foreach ($anyown_permissions as $contextual => $perm)
 		$context[$contextual] = allowedTo($perm . '_any') || ($context['user']['started'] && allowedTo($perm . '_own'));
 
+	$context['can_add_tags'] = (($context['user']['started'] && allowedTo('smftags_add')) || allowedTo('smftags_manage'));
+	$context['can_delete_tags'] = (($context['user']['started'] && allowedTo('smftags_del')) || allowedTo('smftags_manage'));
 	// Cleanup all the permissions with extra stuff...
 	$context['can_mark_notify'] &= !$context['user']['is_guest'];
 	$context['can_sticky'] &= !empty($modSettings['enableStickyTopics']);
@@ -1225,7 +1227,7 @@ function prepareDisplayContext($reset = false)
 		'link' => '<a href="' . $scripturl . '?topic=' . $topic . '.msg' . $message['id_msg'] . '#msg' . $message['id_msg'] . '" rel="nofollow">' . $message['subject'] . '</a>',
 		'member' => &$memberContext[$message['id_member']],
 		'icon' => $message['icon'],
-		'icon_url' => $settings[$context['icon_sources'][$message['icon']]] . '/post/' . $message['icon'] . '.gif',
+		'icon_url' => $settings[$context['icon_sources'][$message['icon']]] . '/post/' . $message['icon'] . '.png',
 		'subject' => $message['subject'],
 		'time' => timeformat($message['poster_time']),
 		'timestamp' => forum_time(true, $message['poster_time']),

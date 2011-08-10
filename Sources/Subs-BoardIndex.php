@@ -253,7 +253,7 @@ function getBoardIndex($boardIndexOptions)
 		$this_first_post = array(
 			'id' => $row_board['id_first_msg'],
 			'icon' => $row_board['icon'],
-			'icon_url' => $settings[$context['icon_sources'][$row_board['icon']]] . '/post/' . $row_board['icon'] . '.gif',
+			'icon_url' => $settings[$context['icon_sources'][$row_board['icon']]] . '/post/' . $row_board['icon'] . '.png',
 
 		);
 		// Provide the href and link.

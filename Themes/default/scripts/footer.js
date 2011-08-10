@@ -280,11 +280,8 @@ function sendRequest(uri, request, anchor_element)
 		setTimeOut(10000);
 		req = xmlrequest;
 		xmlrequest.onreadystatechange = function() { response(anchor_element) };
-		//xmlrequest.open('POST', uri, true);
 		xmlrequest.open('GET', sUrl, true);
-		//xmlrequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		setBusy(1);
-		//xmlrequest.send(request);
 		xmlrequest.send(null);
 	}
 };

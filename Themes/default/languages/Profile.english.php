@@ -40,6 +40,7 @@ $txt['your_icq'] = 'This is your ICQ number.';
 $txt['your_aim'] = 'This is your AOL Instant Messenger nickname.';
 $txt['your_yim'] = 'This is your Yahoo! Instant Messenger nickname.';
 $txt['sig_info'] = 'Signatures are displayed at the bottom of each post or personal message. BBCode and smileys may be used in your signature.';
+$txt['sig_no_permission'] = 'The permissions of the member group(s) you are currently a member of do not allow to use a signature';
 $txt['max_sig_characters'] = 'Max characters: %1$d; characters remaining: ';
 $txt['send_member_pm'] = 'Send this member a personal message';
 $txt['hidden'] = 'hidden';

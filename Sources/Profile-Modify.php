@@ -619,8 +619,8 @@ function loadProfileFields($force_reload = false)
 		),
 		'signature' => array(
 			'type' => 'callback',
-			'callback_func' => 'signature_modify',
-			'permission' => 'profile_signature',
+			'callback_func' => allowedTo('profile_signature') ? 'signature_modify' : 'signature_cannot_modify',
+			'permission' => 'profile_extra',
 			'enabled' => substr($modSettings['signature_settings'], 0, 1) == 1,
 			'preload' => 'profileLoadSignatureData',
 			'input_validate' => 'profileValidateSignature',
@@ -2798,6 +2798,11 @@ function profileValidateSignature(&$value)
 	// Admins can do whatever they hell they want!
 	if (!allowedTo('admin_forum'))
 	{
+		
+		if(!allowedTo('profile_signature')) {
+			$_POST['signature'] = $value = '';
+			return(false);
+		}
 		// Load all the signature limits.
 		list ($sig_limits, $sig_bbc) = explode(':', $modSettings['signature_settings']);
 		$sig_limits = explode(',', $sig_limits);

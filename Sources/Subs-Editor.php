@@ -968,7 +968,7 @@ function getMessageIcons($board_id)
 
 		foreach ($icons as $k => $dummy)
 		{
-			$icons[$k]['url'] = $settings['images_url'] . '/post/' . $dummy['value'] . '.gif';
+			$icons[$k]['url'] = $settings['images_url'] . '/post/' . $dummy['value'] . '.png';
 			$icons[$k]['is_last'] = false;
 		}
 	}

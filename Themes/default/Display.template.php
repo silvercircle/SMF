@@ -166,7 +166,7 @@ function template_main()
 	
 	// Show the page index... "Pages: [1]".
 	echo '
-			<div class="pagesection yellow_container top">
+			<div class="pagesection top">
 				<div class="nextlinks">', $context['previous_next'], '</div>', template_button_strip($normal_buttons, 'right');
 				echo '<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . ' &nbsp;&nbsp;<a href="#lastPost"><strong>' . $txt['go_down'] . '</strong></a>' : '', '</div>
 			</div>';
@@ -190,16 +190,20 @@ function template_main()
 	foreach ($context['topic_tags'] as $i => $tag)
 	{
 		echo '<a href="' . $scripturl . '?action=tags;tagid=' . $tag['ID_TAG']  . '">' . $tag['tag'] . '</a>';
-		if(!$context['user']['is_guest'])
+		if($context['can_delete_tags'])
 			echo '<a href="' . $scripturl . '?action=tags;sa=deletetag;tagid=' . $tag['ID']  . '"><span class="xtag">&nbsp;&nbsp;</span></a>';
+		else
+			echo '&nbsp;&nbsp;';
 
 	}
 	echo '</span>';
 		
-	if(!$context['user']['is_guest'])
+	if($context['can_add_tags'])
 		echo '
 			&nbsp;<a rel="nofollow" id="addtag" onclick="$(\'#tagform\').remove();sendRequest(smf_scripturl, \'action=xmlhttp;sa=tags;addtag=1;topic=',$topic,'\', $(\'#addtag\'));return(false);" data-id="',$topic,'" href="' . $scripturl . '?action=tags;sa=addtag;topic=',$topic, '">' . $txt['smftags_addtag'] . '</a>';
 
+	else
+		echo '&nbsp;';
 	echo '
 		</div>';
 				
@@ -254,19 +258,20 @@ function template_main()
 		// Show information about the poster of this message.
 		echo '
 						<div class="poster">
-						<div class="orange_container poster_details">
+						<div class="poster_details">
 							<h4>', $message['member']['link'], '</h4>
 							<ul class="reset smalltext" id="msg_', $message['id'], '_extra_info">';
-
-		// Show the member's custom title, if they have one.
-		if (!empty($message['member']['title']))
-			echo '
-								<li class="title">', $message['member']['title'], '</li>';
 
 		// Show the member's primary group (like 'Administrator') if they have one.
 		if (!empty($message['member']['group']))
 			echo '
 								<li class="membergroup">', $message['member']['group'], '</li>';
+		else
+			echo '<li><br /></li>';
+		// Show the member's custom title, if they have one.
+		if (!empty($message['member']['title']))
+			echo '
+								<li class="title">', $message['member']['title'], '</li>';
 
 		// Don't show these things for guests.
 		if (!$message['member']['is_guest'])
@@ -359,20 +364,8 @@ function template_main()
 							</ul>
 						</div></div>
 						<div class="postarea">
-							<div class="flow_hidden orange_container">
-								<div class="keyinfo">
-									<div class="messageicon">
-										<img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' id="msg_icon_' . $message['id'] . '"' : '', ' />
-									</div>
-									<h5 id="subject_', $message['id'], '">
-										<a href="', $message['href'], '" rel="nofollow">', $message['subject'], '</a>
-									</h5>
-									<div class="smalltext">&#171; ', !empty($message['counter']) ? $txt['reply_noun'] . ' #' . $message['counter'] . ', ' : '', ' ', $message['time'], ' &#187;</div>
-									<div id="msg_', $message['id'], '_quick_mod"></div>
-								</div>';
-
-			echo '
-								<ul class="reset smalltext quickbuttons">';
+							<div class="keyinfo orange_container">
+								<ul class="floatright reset smalltext quickbuttons">';
 
 		// Maybe we can approve it, maybe we should?
 		if ($message['can_approve'])
@@ -389,7 +382,9 @@ function template_main()
 		// So... quick reply is off, but they *can* reply?
 		elseif ($context['can_quote'])
 			echo '
-									<li class="quote_button"><a href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '">', $txt['quote'], '</a></li>';
+									<li class="quote_button"><a href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '">', $txt['quote'], '</a></li>
+									<li class="quote_button" id="mquote_' . $message['id'] . '"><a href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
+									<li class="quote_button" style="display:none;" id="mquote_remove_' . $message['id'] . '"><a href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
 
 		// Can the user modify the contents of this post?
 		if ($message['can_modify'])
@@ -417,8 +412,18 @@ function template_main()
 									<li class="inline_mod_check" style="display: none;" id="in_topic_mod_check_', $message['id'], '"></li>';
 
 			echo '
-								</ul>';
+								</ul>
+								<div>
+									<div class="messageicon">
+										<img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' id="msg_icon_' . $message['id'] . '"' : '', ' />
+									</div>
+									<h5 id="subject_', $message['id'], '">
+										<a href="', $message['href'], '" rel="nofollow">', $message['subject'], '</a>
+									</h5>
+									<div class="smalltext">&#171; ', !empty($message['counter']) ? $txt['reply_noun'] . ' #' . $message['counter'] . ', ' : '', ' ', $message['time'], ' &#187;</div>
+									<div id="msg_', $message['id'], '_quick_mod"></div>';
 
+			echo '				</div>';
 		echo '
 							</div>';
 
@@ -663,7 +668,7 @@ function template_main()
 			
 	// Show the page index... "Pages: [1]".
 	echo '
-			<div class="pagesection yellow_container bottom">
+			<div class="pagesection bottom">
 				', template_button_strip($normal_buttons, 'right'), '
 				<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . ' &nbsp;&nbsp;<a href="#top"><strong>' . $txt['go_up'] . '</strong></a>' : '', '</div>
 				<div class="nextlinks_bottom">', $context['previous_next'], '</div>

@@ -498,7 +498,7 @@ function MessageIndex()
 					'subject' => $row['first_subject'],
 					'preview' => $row['first_body'],
 					'icon' => $row['first_icon'],
-					'icon_url' => $settings[$context['icon_sources'][$row['first_icon']]] . '/post/' . $row['first_icon'] . '.gif',
+					'icon_url' => $settings[$context['icon_sources'][$row['first_icon']]] . '/post/' . $row['first_icon'] . '.png',
 					'href' => $scripturl . '?topic=' . $row['id_topic'] . '.0',
 					'link' => '<a href="' . $scripturl . '?topic=' . $row['id_topic'] . '.0">' . $row['first_subject'] . '</a>'
 				),

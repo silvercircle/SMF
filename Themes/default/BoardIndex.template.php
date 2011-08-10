@@ -124,7 +124,7 @@ function template_main()
 		// Assuming the category hasn't been collapsed...
 		if (!$category['is_collapsed'])
 		{
-
+		$alternate = 0;
 		echo '
 			<tbody class="content" id="category_', $category['id'], '_boards">';
 			/* Each board in each category's boards has:
@@ -133,8 +133,10 @@ function template_main()
 			topics (# of), posts (# of), link, href, and last_post. (see below.) */
 			foreach ($category['boards'] as $board)
 			{
+				$_c = $alternate ? 'windowbg' : 'windowbg2';
+				$alternate = !$alternate;
 				echo '
-				<tr id="board_', $board['id'], '" class="windowbg2">
+				<tr id="board_', $board['id'], '" class="',$_c,'">
 					<td class="icon">
 						<a href="', ($board['is_redirect'] || $context['user']['is_guest'] ? $board['href'] : $scripturl . '?action=unread;board=' . $board['id'] . '.0;children'), '">';
 

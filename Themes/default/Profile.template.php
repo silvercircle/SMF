@@ -2509,6 +2509,17 @@ function template_profile_birthdate()
 							</dd>';
 }
 
+function template_profile_signature_cannot_modify()
+{
+	global $txt;
+	
+	echo '<dt>
+			<strong>', $txt['signature'], ':</strong><br />
+			<span class="smalltext">', $txt['sig_no_permission'], '</span>
+	     </dt>
+	     <dd></dd>';
+}
+
 // Show the signature editing box?
 function template_profile_signature_modify()
 {

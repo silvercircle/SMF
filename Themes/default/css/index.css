@@ -289,7 +289,7 @@ blockquote.bbc_standard_quote, blockquote.bbc_alternate_quote
 	line-height: 1.4em;
 	background: url(../images/theme/quote.png) 0.1em 0.1em no-repeat;
 	padding: 1.1em 1.4em;
-	margin: 0 20px 0.3em 20px;
+	margin: 0 10px 0.8em 10px;
 	overflow: auto;
 	border:1px solid #ddd;
 	border-top:0;
@@ -349,6 +349,9 @@ code.bbc_code
 }
 .bbc_img
 {
+	max-width:100%;
+	width:auto;
+	height:auto;
 	border: 0;
 }
 .bbc_table
@@ -442,11 +445,11 @@ tr.titlebg th a:link, tr.titlebg th a:visited, tr.titlebg2 td a:link, tr.titlebg
 .windowbg, #preview_body
 {
 	color: #000;
-	background-color: #f0f0f0;
+	background-color: #f0f0f5;
 }
 .windowbg2
 {
-	color: #000;
+	color: #333;
 	background-color: #f6f6ff;
 }
 .windowbg3
@@ -1369,11 +1372,17 @@ table.table_list
 {
 	width: 100%;
 	line-height:110%;
+	border-collapse: separate;
+	border-spacing:1px 0px;
 }
 
-table.table_list tr, tr.frow {
-	background:#f0f0f5 url(../images/frow.png) bottom left repeat-x;
+table.table_list tbody.divider td {border:0;}
+
+tr.frow {
+	/*background:#f0f0f5 url(../images/frow.png) bottom left repeat-x;*/
+	background:#f0f0f5;
 }
+.table_list tr td {border-bottom: 1px solid #d5ecfa;}
 
 table.table_list p
 {
@@ -1561,9 +1570,6 @@ div.table_frame .table_list
 {
 	/*border-collapse: collapse;*/
 	margin: 0;
-}
-.table_frame .table_list td.icon, .table_frame .table_list td.info, .table_frame .table_list td.stats
-{
 }
 #messageindex
 {
@@ -1851,13 +1857,18 @@ p#whoisviewing
 }
 .messageicon img
 {
-	padding: 6px 3px;
+	padding:0;
+	width:16px;
+	height:16px;
 }
 .keyinfo
 {
-	float: left;
 	font-size:90%;
 	white-space:nowrap;
+	margin-left:-200px;
+	padding-left:200px;
+	margin-right:10px;
+	line-height:150%;
 }
 .modifybutton
 {
@@ -3528,7 +3539,7 @@ span.hidelink
 	border-left:3px solid #a88;
 	font-size:11px;
 	font-weight:bold;
-	margin:5px 20px 0 20px;
+	margin:10px 10px 0 10px;
 }
 /* page links (navpages) */
 
