@@ -290,8 +290,7 @@ function template_info_center()
 			<div class="title_barIC">
 				<h4 class="titlebg">
 					<span class="ie6_header floatleft">
-						<a href="', $scripturl, '?action=recent"><img class="icon" src="', $settings['images_url'], '/post/xx.gif" alt="', $txt['recent_posts'], '" /></a>
-						', $txt['recent_posts'], '
+						<a href="', $scripturl, '?action=recent">', $txt['recent_posts'], '</a>
 					</span>
 				</h4>
 			</div>
@@ -337,9 +336,8 @@ function template_info_center()
 		echo '
 			<div class="title_barIC">
 				<h4 class="titlebg">
-					<span class="ie6_header floatleft">
-						<a href="', $scripturl, '?action=calendar' . '"><img class="icon" src="', $settings['images_url'], '/icons/calendar.gif', '" alt="', $context['calendar_only_today'] ? $txt['calendar_today'] : $txt['calendar_upcoming'], '" /></a>
-						', $context['calendar_only_today'] ? $txt['calendar_today'] : $txt['calendar_upcoming'], '
+					<span class="floatleft">
+						<a href="', $scripturl, '?action=calendar' . '">', $context['calendar_only_today'] ? $txt['calendar_today'] : $txt['calendar_upcoming'], '</a>
 					</span>
 				</h4>
 			</div>
@@ -383,8 +381,7 @@ function template_info_center()
 			<div class="title_barIC">
 				<h4 class="titlebg">
 					<span class="ie6_header floatleft">
-						<a href="', $scripturl, '?action=stats"><img class="icon" src="', $settings['images_url'], '/icons/info.gif" alt="', $txt['forum_stats'], '" /></a>
-						', $txt['forum_stats'], '
+						<a href="', $scripturl, '?action=stats">', $txt['forum_stats'], '</a>
 					</span>
 				</h4>
 			</div>
@@ -401,8 +398,7 @@ function template_info_center()
 			<div class="title_barIC">
 				<h4 class="titlebg">
 					<span class="ie6_header floatleft">
-						', $context['show_who'] ? '<a href="' . $scripturl . '?action=who' . '">' : '', '<img class="icon" src="', $settings['images_url'], '/icons/online.gif', '" alt="', $txt['online_users'], '" />', $context['show_who'] ? '</a>' : '', '
-						', $txt['online_users'], '
+						', $context['show_who'] ? '<a href="' . $scripturl . '?action=who' . '">' : '', $txt['online_users'], $context['show_who'] ? '</a>' : '', '
 					</span>
 				</h4>
 			</div>

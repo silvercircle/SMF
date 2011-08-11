@@ -203,7 +203,7 @@ function Display()
 	$request = $smcFunc['db_query']('', '
 		SELECT
 			t.num_replies, t.num_views, t.locked, ms.subject, t.is_sticky, t.id_poll,
-			t.id_member_started, t.id_first_msg, t.id_last_msg, t.approved, t.unapproved_posts,
+			t.id_member_started, t.id_first_msg, t.id_last_msg, t.approved, t.unapproved_posts, t.id_layout,
 			' . ($user_info['is_guest'] ? 't.id_last_msg + 1' : 'IFNULL(lt.id_msg, IFNULL(lmr.id_msg, -1)) + 1') . ' AS new_from
 			' . (!empty($modSettings['recycle_board']) && $modSettings['recycle_board'] == $board ? ', id_previous_board, id_previous_topic' : '') . ',
 			p.name AS prefix_name
@@ -956,6 +956,13 @@ function Display()
 
 	$attachments = array();
 
+	// sticky post and we are not on the first page? push the 1st post in front.
+	if($topicinfo['id_layout']) {
+		if($topicinfo['id_layout'] > 0 && $_REQUEST['start'] > 0) {
+			array_unshift($messages, intval($topicinfo['id_first_msg']));
+		}
+		$context['id_layout'] = ($topicinfo['id_layout'] > 0 || $_REQUEST['start'] == 0 ? abs($topicinfo['id_layout']) : 0);
+	}
 	// If there _are_ messages here... (probably an error otherwise :!)
 	if (!empty($messages))
 	{

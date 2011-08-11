@@ -107,7 +107,6 @@ function template_html_above()
 		var smf_theme_url = "', $settings['theme_url'], '";
 		var smf_default_theme_url = "', $settings['default_theme_url'], '";
 		var smf_images_url = "', $settings['images_url'], '";
-		var smf_use_mcards = "', ($context['user']['is_guest'] ? 0 : $options['use_mcards']), '";
 		var smf_scripturl = "', $scripturl, '";
 		var smf_iso_case_folding = ', $context['server']['iso_case_folding'] ? 'true' : 'false', ';
 		var smf_charset = "', $context['character_set'], '";', $context['show_pm_popup'] ? '
@@ -266,26 +265,42 @@ function template_body_above()
 
 	theme_linktree();
 	// Show the navigation tree.
-	echo '<form style="float:right;margin-right:10px;margin-bottom:-20px;" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
+	$scope = 0;
+	echo '<form onmouseout="return false;" onsubmit="submitSearchBox();" style="float:right;margin-right:10px;margin-bottom:-20px;" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
 			// Search within current topic?
 			$search_label = 'Search';
 			if (!empty($context['current_topic'])) {
-				echo '
-					<input type="hidden" name="topic" value="', $context['current_topic'], '" />';
 				$search_label = 'Search this topic';
+				$scope = 2;
 			}
 			// If we're on a certain board, limit it to this board ;).
 			elseif (!empty($context['current_board'])) {
-				echo '
-					<input type="hidden" name="brd[', $context['current_board'], ']" value="', $context['current_board'], '" />';
 				$search_label = 'Search this board';
+				$scope = 1;
 			}
-				echo '<input style="width:220px;padding-left:26px;margin:0;" onclick="openAdvSearch();return(false);" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" name="search" value="',$search_label,'" class="searchfield" />
-					<div id="adv_search" style="position:absolute;width:246px;display:none;" class="generic_container">foo</div>
-					<input style="margin:0;" type="submit" name="submit" value="', $txt['go'], '" class="button_submit" />
-					<input type="hidden" name="advanced" value="0" />';
-
-
+			echo '<input style="width:220px;padding-left:26px;margin:0;" onclick="var s_event = arguments[0] || window.event;openAdvSearch(s_event);return(false);" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" name="search" value="',$search_label,'" class="searchfield" />
+				<div id="adv_search" style="width:240px;position:absolute;display:none;padding:5px;" class="orange_container smalltext">
+				&nbsp;&nbsp;&nbsp;Search posts by member<br />
+				<div style="text-align:center;margin-bottom:10px;"><input style="width:90%;" class="input_text" type="text" name="userspec" id="userspec" value="*" /></div>
+				<input type="checkbox" name="show_complete" id="show_complete" value="0" />Show results as messages<br />';
+				if($scope == 2) {
+					echo '<div style="padding-left:20px;"><input type="radio" name="type" id="i_topic" class="input_radio" checked="checked" />Search this topic<br />
+						<input type="radio" name="type" id="i_board" class="input_radio" />Search this board<br />
+						<input type="radio" name="type" id="i_site" class="input_radio" />Search everything
+						<input type="hidden" id="s_topic" name="topic" value="', $context['current_topic'], '" />
+						<input type="hidden" id="s_board" name="brd[', $context['current_board'], ']" value="', $context['current_board'], '" /></div>';
+				}
+				else if($scope == 1) {
+						echo '<div style="padding-left:20px;"><input name="type" type="radio" id="i_board" checked="checked" class="input_radio" />Search this board<br />
+						<input type="radio" name="type" id="i_site" class="input_radio" />Search everything
+						<input type="hidden" id="s_board" name="brd[', $context['current_board'], ']" value="', $context['current_board'], '" /></div>';
+				}
+				echo '<input style="width:100%;margin:10px 0;" type="submit" name="submit" value="', 'Search now', '" class="button_submit" />
+			 	  <div style="text-align:center;"><a href="',$scripturl,'?action=search" >Go advanced</a></div>';
+				echo '</div>
+				<noscript>
+				<input style="margin:0;" type="submit" name="submit" value="', $txt['go'], '" class="button_submit" />
+				</noscript>';
 	echo '</form><div style="clear:both;"></div>';
 }
 
