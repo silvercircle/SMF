@@ -441,6 +441,13 @@ tr.titlebg th a:link, tr.titlebg th a:visited, tr.titlebg2 td a:link, tr.titlebg
 	color:maroon;
 	text-decoration:none;
 }
+.glass {
+	background:#fff url(../images/theme/sprite.png) 0 -614px repeat-x;
+	color:#666;
+	font-size:11px;
+	font-weight:bold;
+	border:0 !important;
+}
 /* Alternating backgrounds for posts, and several other sections of the forum. */
 .windowbg, #preview_body
 {
@@ -1755,16 +1762,18 @@ p#whoisviewing
 .post_wrapper
 {
 	width:auto;
-	border:1px solid #ddd;
-	padding:5px 0 0 0;
+	border:1px solid #ccc;
+	padding:0 0 0 0;
 	margin-bottom:10px;
 	border-radius:4px;
 	background-color:#f5f5f5;
 }
 .post_bottom {
 	padding:2px 10px;
-	background-color:#ddd;
+	background-color:#e5e5f5;
 	clear:both;
+	font-size:11px;
+	line-height:20px;
 }
 .windowbg .post_wrapper {background-color:#f5f5ff;}
 .poster
@@ -1773,6 +1782,8 @@ p#whoisviewing
 	width: 200px;
 	max-width:200px;
 	min-width:200px;
+	text-align:center;
+	padding-top:3px;
 }
 .poster_details
 {
@@ -1830,7 +1841,7 @@ p#whoisviewing
 {
 	overflow: hidden;
 }
-.poster li.avatar img, #mcard_inner img.avatar {
+.poster li.avatar img, #mcard_inner img.avatar, .horizontal_userblock img.avatar {
 	width:auto;
 	height:auto;
 	border:2px solid #ccc;
@@ -1863,13 +1874,26 @@ p#whoisviewing
 }
 .keyinfo
 {
-	font-size:90%;
-	white-space:nowrap;
-	margin-left:-200px;
-	padding-left:200px;
-	margin-right:10px;
+	font-size:12px;
+	margin-left:-205px;
+	margin-top:1px;
+	padding:3px 10px;
+	padding-left:205px;
 	line-height:150%;
+	background:#ccc url(../images/theme/sprite.png) 0 -118px repeat-x;
+	border-bottom:2px solid #ccc;
 }
+.horizontal_userblock
+{
+	padding:3px 10px;
+	background:#ececec;
+	margin:23px 0 10px 15px;
+	border:1px solid #ccc;
+	border-top:0;
+	border-right:0;
+	border-bottom-left-radius:8px;
+}
+
 .modifybutton
 {
 	float: right;
@@ -1879,48 +1903,40 @@ p#whoisviewing
 	font: bold 0.85em arial, sans-serif;
 	color: #334466;	
 }
-
-/* The quick buttons */
-div.quickbuttons_wrap
-{
-	padding: 0.2em 0;
-	width: 100%;
-	float: left;
-}
-
 ul.quickbuttons
 {
-	margin: 0.2em 4px 0 0;
+	margin: 0 4px 0 0;
 	clear: right;
 	float: right;
 	text-align: right;
-	font-size:11px;
-	line-height:20px;
+	margin-left:20px;
 }
 ul.quickbuttons li
 {
 	float: left;
 	display: inline;
-	margin: 0 0 0 4px;
-	padding:0 4px;
-	/*box-shadow: 2px 2px 4px #ccc;
-	border: 1px solid #6b81ab;
-	border-radius:2px;
-	background-color:#D8DFEA !important;*/
+	margin: 0 0 0 7px;
+	padding:0;
 	cursor:pointer;
 }
 ul.quickbuttons li a
 {
 	/*padding: 0 0 0 20px;*/
 	display: block;
-	height: 20px;
-	line-height: 20px;
 	float: left;
+	font-size:11px;
+	line-height:18px !important;
 	text-decoration: none;
+	padding:0 4px;
+	color:black;
+	background:#d8dfea;
+	border:1px solid #9bb1db;
+	border-radius:2px;
 }
 ul.quickbuttons li a:hover {
-	text-decoration: underline !important;
+	background:white;
 }
+
 /*
 ul.quickbuttons li.quote_button
 {
@@ -1986,7 +2002,11 @@ img.smiley
 {
 	text-align: right;
 	clear: right;
+}
+#forumposts .reportlinks a
+{
 	font-size:11px;
+	line-height:20px;
 }
 #forumposts .signature, .post .signature
 {
@@ -3649,9 +3669,12 @@ div#ajaxbusy {
 .rounded_bottom {border-bottom-left-radius:5px !important;border-bottom-right-radius:5px !important;}
 .rounded_tl {border-top-left-radius:5px !important;}
 .light_shadow {	box-shadow: 2px 2px 12px 0px #bbb;}
-
+.borderless {border:0 !important;}
 a.tpeek {margin-left:10px;}
 abbr.timeago {border:0;}
+
+.fontinc {background:transparent url(../images/theme/sprite.png) 0 -47px no-repeat;padding: 1px 8px;cursor:pointer;}
+.fontdec {background:transparent url(../images/theme/sprite.png) 0 -19px no-repeat;padding: 1px 8px;cursor:pointer;}
 
 .generic_container, ul.left_admmenu {
 	border:1px solid #ccc;

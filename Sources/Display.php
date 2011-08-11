@@ -956,13 +956,19 @@ function Display()
 
 	$attachments = array();
 
-	// sticky post and we are not on the first page? push the 1st post in front.
+	// deal with possible sticky posts and different postbit layouts for
+	// the first post
+	$context['id_layout'] = 0;
 	if($topicinfo['id_layout']) {
-		if($topicinfo['id_layout'] > 0 && $_REQUEST['start'] > 0) {
-			array_unshift($messages, intval($topicinfo['id_first_msg']));
+		if(((int)$topicinfo['id_layout'] & 0x80)) {
+			if($_REQUEST['start'] > 0)
+				array_unshift($messages, intval($topicinfo['id_first_msg']));
+			$context['id_layout'] = (int)$topicinfo['id_layout'] & 0x7f ? 1 : 0;
 		}
-		$context['id_layout'] = ($topicinfo['id_layout'] > 0 || $_REQUEST['start'] == 0 ? abs($topicinfo['id_layout']) : 0);
+		else if((int)$topicinfo['id_layout'] & 0x7f)
+			$context['id_layout'] = $_REQUEST['start'] ? 0 : 1;
 	}
+		
 	// If there _are_ messages here... (probably an error otherwise :!)
 	if (!empty($messages))
 	{

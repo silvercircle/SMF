@@ -1899,13 +1899,13 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			array(
 				'id_board' => 'int', 'id_member_started' => 'int', 'id_member_updated' => 'int', 'id_first_msg' => 'int',
 				'id_last_msg' => 'int', 'locked' => 'int', 'is_sticky' => 'int', 'num_views' => 'int',
-				'id_poll' => 'int', 'unapproved_posts' => 'int', 'approved' => 'int', 'id_prefix' => 'int'
+				'id_poll' => 'int', 'unapproved_posts' => 'int', 'approved' => 'int', 'id_prefix' => 'int', 'id_layout' => 'int'
 			),
 			array(
 				$topicOptions['board'], $posterOptions['id'], $posterOptions['id'], $msgOptions['id'],
 				$msgOptions['id'], $topicOptions['lock_mode'] === null ? 0 : $topicOptions['lock_mode'], $topicOptions['sticky_mode'] === null ? 0 : $topicOptions['sticky_mode'], 0,
 				$topicOptions['poll'] === null ? 0 : $topicOptions['poll'], $msgOptions['approved'] ? 0 : 1, $msgOptions['approved'],
-				$topicOptions['topic_prefix'],
+				$topicOptions['topic_prefix'], $topicOptions['topic_layout'],
 			),
 			array('id_topic')
 		);
@@ -2554,7 +2554,20 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			)
 		);
 	}
-	
+
+	if(isset($topicOptions['topic_layout'])) {
+		$smcFunc['db_query']('', '
+			UPDATE {db_prefix}topics
+			SET
+				id_layout = {int:id_layout}
+			WHERE id_topic = {int:id_topic}',
+			array(
+				'id_layout' => $topicOptions['topic_layout'],
+				'id_topic' => $topicOptions['id']
+			)
+		);
+	}
+
 	// Mark the edited post as read.
 	if (!empty($topicOptions['mark_as_read']) && !$user_info['is_guest'])
 	{

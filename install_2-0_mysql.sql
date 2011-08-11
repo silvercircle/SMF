@@ -1391,6 +1391,25 @@ CREATE TABLE {$db_prefix}prefixes (
 	PRIMARY KEY (id_prefix)
 ) ENGINE=MyISAM;
 
+# 
+# Tagging system (note: the table structure is compatible with SMFTags)
+#
+
+CREATE TABLE {db_prefix}tags (
+    id_tag mediumint(8) NOT NULL auto_increment,
+    tag tinytext NOT NULL,
+    approved tinyint(4) NOT NULL default '0',
+    PRIMARY KEY  (id_tag)
+) ENGINE=MyISAM;
+
+CREATE TABLE {db_prefix}tags_log (
+    id int(11) NOT NULL auto_increment,
+    id_tag mediumint(8) unsigned NOT NULL default '0',
+    id_topic mediumint(8) unsigned NOT NULL default '0',
+    id_member mediumint(8) unsigned NOT NULL default '0',
+    PRIMARY KEY  (id)
+) Engine=MyISAM;
+
 #
 # Dumping data for table `messages`
 #

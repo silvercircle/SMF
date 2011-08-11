@@ -47,7 +47,7 @@ function getBoardIndex($boardIndexOptions)
 			CASE WHEN b.redirect != {string:blank_string} THEN 1 ELSE 0 END AS is_redirect,
 			b.num_posts, b.num_topics, b.unapproved_posts, b.unapproved_topics, b.id_parent,
 			IFNULL(m.poster_time, 0) AS poster_time, IFNULL(mem.member_name, m.poster_name) AS poster_name,
-			m.subject, m.id_topic, t.id_first_msg AS id_first_msg, m1.icon AS icon, IFNULL(mem.real_name, m.poster_name) AS real_name,
+			m.subject, m.id_topic, t.id_first_msg AS id_first_msg, m1.icon AS icon, IFNULL(mem.real_name, m.poster_name) AS real_name, p.name as topic_prefix,
 			' . ($user_info['is_guest'] ? ' 1 AS is_read, 0 AS new_from,' : '
 			(IFNULL(lb.id_msg, 0) >= b.id_msg_updated) AS is_read, IFNULL(lb.id_msg, -1) + 1 AS new_from,' . ($boardIndexOptions['include_categories'] ? '
 			c.can_collapse, IFNULL(cc.id_member, 0) AS is_collapsed,' : '')) . '
@@ -57,6 +57,7 @@ function getBoardIndex($boardIndexOptions)
 			LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)' : '') . '
 			LEFT JOIN {db_prefix}messages AS m ON (m.id_msg = b.id_last_msg)
 			LEFT JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic)
+			LEFT JOIN {db_prefix}prefixes AS p ON (p.id_prefix = t.id_prefix)
 			LEFT JOIN {db_prefix}messages AS m1 ON (m1.id_msg = t.id_first_msg)
 			LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = m.id_member)' . ($user_info['is_guest'] ? '' : '
 			LEFT JOIN {db_prefix}log_boards AS lb ON (lb.id_board = b.id_board AND lb.id_member = {int:current_member})' . ($boardIndexOptions['include_categories'] ? '
@@ -244,7 +245,8 @@ function getBoardIndex($boardIndexOptions)
 				'link' => $row_board['poster_name'] != '' ? (!empty($row_board['id_member']) ? '<a href="' . $scripturl . '?action=profile;u=' . $row_board['id_member'] . '">' . $row_board['real_name'] . '</a><span class="mcard" data-id="'.$row_board['id_member'].'">&nbsp;&nbsp;</span>' : $row_board['real_name']) : $txt['not_applicable'],
 			),
 			'start' => 'msg' . $row_board['new_from'],
-			'topic' => $row_board['id_topic']
+			'topic' => $row_board['id_topic'],
+			'prefix' => html_entity_decode($row_board['topic_prefix'])
 		);
 		
 		if (!isset($context['icon_sources'][$row_board['icon']]))

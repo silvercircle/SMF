@@ -759,5 +759,7 @@ $txt['smftags_admin'] = 'Tags Configuration';
 
 $txt['like_label'] = "Like";
 $txt['unlike_label'] = "Unlike";
-
+$txt['content_label'] = 'Content';
+$txt['font_increase'] = 'Increase text size';
+$txt['font_decrease'] = 'Decrease text size';
 ?>

@@ -1128,6 +1128,12 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'content' => '<br />',
 			),
 			array(
+				'tag' => 'justify',
+				'before' => '<div style="text-align:justify;">',
+				'after' => '</div>',
+				'block_level' => true,
+			),
+			array(
 				'tag' => 'center',
 				'before' => '<div style="text-align:center;">',
 				'after' => '</div>',
@@ -2875,23 +2881,6 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 
 	// For session check verfication.... don't switch browsers...
 	$_SESSION['USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
-
-	if (!empty($settings['strict_doctype']))
-	{
-		// The theme author wants to use the STRICT doctype (only God knows why).
-		$temp = ob_get_contents();
-		if (function_exists('ob_clean'))
-			ob_clean();
-		else
-		{
-			ob_end_clean();
-			ob_start('ob_sessrewrite');
-		}
-
-		echo strtr($temp, array(
-			'var smf_iso_case_folding' => 'var target_blank = \'_blank\'; var smf_iso_case_folding',
-			'target="_blank"' => 'onclick="this.target=target_blank"'));
-	}
 
 	// Hand off the output to the portal, etc. we're integrated with.
 	call_integration_hook('integrate_exit', array($do_footer && !WIRELESS));

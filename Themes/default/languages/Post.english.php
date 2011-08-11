@@ -125,6 +125,8 @@ $txt['sticky_after'] = 'Sticky this topic.';
 $txt['move_after2'] = 'Move this topic.';
 $txt['back_to_topic'] = 'Return to this topic.';
 $txt['approve_this_post'] = 'Approve this Post';
+$txt['first_post_sticky'] = 'Make first post appear on every page';
+$txt['first_post_layout'] = 'First post uses alternate postbit layout';
 
 $txt['retrieving_quote'] = 'Retrieving Quote...';
 

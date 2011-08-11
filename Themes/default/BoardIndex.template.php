@@ -100,7 +100,7 @@ function template_main()
 		echo '
 			<tbody class="header" id="category_', $category['id'], '">
 				<tr>
-					<td colspan="4">
+					<td class="borderless" colspan="4">
 						<div class="cat_bar rounded_top">
 							<h3 class="catbg">';
 
@@ -119,6 +119,14 @@ function template_main()
 						</div>
 					</td>
 				</tr>
+			</tbody>
+			<tbody>
+			<tr>
+				<td class="glass"></td>
+				<td class="glass">',$txt['board'],'</td>
+				<td class="glass centertext">',$txt['content_label'],'</td>
+				<td class="glass centertext">',$txt['last_post'],'</td>
+			</tr>
 			</tbody>';
 
 		// Assuming the category hasn't been collapsed...
@@ -210,7 +218,7 @@ function template_main()
 					<td class="lastpost">';
 				if (!empty($board['last_post']['id']))
 					echo '<img src="',$board['first_post']['icon_url'],'" alt="icon" />
-					<strong>',$txt['in'], ': </strong>', $board['last_post']['topiclink'], '<br />
+					<strong>',$txt['in'], ': </strong>', $board['last_post']['prefix'],'&nbsp;',$board['last_post']['topiclink'], '<br />
 						<a class="lp_link" title="',$txt['last_post'],'" href="',$board['last_post']['href'],'">',$board['last_post']['time'], '</a>
 						<strong style="padding-left:17px;">', $txt['by'], ': </strong>', $board['last_post']['member']['link'];
 				else

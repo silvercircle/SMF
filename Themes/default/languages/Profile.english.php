@@ -279,6 +279,7 @@ $txt['show_no_avatars'] = 'Don\'t show users\' avatars.';
 $txt['show_no_signatures'] = 'Don\'t show users\' signatures.';
 $txt['disable_share_bar'] = 'Disable social share buttons';
 $txt['disable_analytics'] = 'Disable Google Analytics tracking';
+$txt['disable_dynatime'] = 'Disable dynamic time stamps';
 $txt['show_no_censored'] = 'Leave words uncensored.';
 $txt['topics_per_page'] = 'Topics to display per page:';
 $txt['messages_per_page'] = 'Messages to display per page:';

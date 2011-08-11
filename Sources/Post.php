@@ -719,7 +719,7 @@ function Post()
 				m.id_member, m.modified_time, m.smileys_enabled, m.body,
 				m.poster_name, m.poster_email, m.subject, m.icon, m.approved,
 				IFNULL(a.size, -1) AS filesize, a.filename, a.id_attach,
-				a.approved AS attachment_approved, t.id_member_started AS id_member_poster, t.id_prefix,
+				a.approved AS attachment_approved, t.id_member_started AS id_member_poster, t.id_prefix, t.id_layout,
 				m.poster_time
 			FROM {db_prefix}messages AS m
 				INNER JOIN {db_prefix}topics AS t ON (t.id_topic = {int:current_topic})
@@ -798,6 +798,8 @@ function Post()
 		$context['destination'] = 'post2;start=' . $_REQUEST['start'] . ';msg=' . $_REQUEST['msg'] . ';' . $context['session_var'] . '=' . $context['session_id'] . (isset($_REQUEST['poll']) ? ';poll' : '');
 		$context['submit_label'] = $txt['save'];
 		$context['id_prefix'] = $row['id_prefix'];
+		$context['first_is_sticky'] = ((int)$row['id_layout'] & 0x80);
+		$context['first_has_layout'] = ((int)$row['id_layout'] & 0x7f);
 	}
 	// Posting...
 	else
@@ -814,7 +816,9 @@ function Post()
 		$context['use_smileys'] = true;
 		$context['icon'] = 'xx';
 		$context['id_prefix'] = 0;
+		$context['first_is_sticky'] = $context['first_has_layout'] = 0;
 
+		
 		if(!$context['make_event']) {
 			$request = $smcFunc['db_query']('', 'SELECT b.allow_topics FROM {db_prefix}boards AS b WHERE b.id_board = {int:board}',
 				array('board' => $board));
@@ -1294,7 +1298,7 @@ function Post2()
 	if (!empty($topic))
 	{
 		$request = $smcFunc['db_query']('', '
-			SELECT locked, is_sticky, id_poll, approved, id_first_msg, id_last_msg, id_member_started, id_board, id_prefix
+			SELECT locked, is_sticky, id_poll, approved, id_first_msg, id_last_msg, id_member_started, id_board, id_prefix, id_layout
 			FROM {db_prefix}topics
 			WHERE id_topic = {int:current_topic}
 			LIMIT 1',
@@ -1903,6 +1907,7 @@ function Post2()
 		'sticky_mode' => isset($_POST['sticky']) && !empty($modSettings['enableStickyTopics']) ? (int) $_POST['sticky'] : null,
 		'mark_as_read' => true,
 		'topic_prefix' => isset($_REQUEST['topic_prefix']) ? intval($_REQUEST['topic_prefix']) : null,
+		'topic_layout' => (isset($_REQUEST['stickfirst']) && $_REQUEST['stickfirst'] ? 0x80 : 0) | (isset($_REQUEST['firstlayout']) && $_REQUEST['firstlayout'] ? 0x01 : 0),
 		'is_approved' => !$modSettings['postmod_active'] || empty($topic) || !empty($board_info['cur_topic_approved']),
 	);
 	$posterOptions = array(

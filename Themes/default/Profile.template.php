@@ -2825,6 +2825,13 @@ function template_profile_timeformat_modify()
 	echo '
 								</select><br />
 								<input type="text" name="time_format" value="', $context['member']['time_format'], '" size="30" class="input_text" />
+							</dd>
+							<dt>
+								<strong>',$txt['disable_dynatime'],'</strong><br />
+							</dt>
+							<dd>
+								<input type="hidden" name="default_options[disable_dynatime]" value="0" />
+								<label for="disable_dynatime"><input type="checkbox" name="default_options[disable_dynatime]" id="disable_dynatime" value="1"', !empty($context['member']['options']['disable_dynatime']) ? ' checked="checked"' : '', ' class="input_check" /></label>
 							</dd>';
 }
 

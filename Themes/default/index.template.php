@@ -49,7 +49,7 @@ function template_init()
 	/* What document type definition is being used? (for font size and other issues.)
 		'xhtml' for an XHTML 1.0 document type definition.
 		'html' for an HTML 4.01 document type definition. */
-	$settings['doctype'] = 'xhtml';
+	$settings['doctype'] = 'html';
 
 	/* The version this template/theme is for.
 		This should probably be the version of SMF it was created for. */
@@ -63,12 +63,6 @@ function template_init()
 
 	/* Show sticky and lock status separate from topic icons? */
 	$settings['separate_sticky_lock'] = true;
-
-	/* Does this theme use the strict doctype? */
-	$settings['strict_doctype'] = false;
-
-	/* Does this theme use post previews on the message index? */
-	$settings['message_index_preview'] = false;
 
 	/* Set the following variable to true if this theme requires the optional theme strings file to be loaded. */
 	$settings['require_theme_strings'] = false;
@@ -101,7 +95,7 @@ function template_html_above()
 	// Here comes the JavaScript bits!
 	echo '
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script-min.js?fin20"></script>
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js?fin20"></script>
 	<script type="text/javascript">
 		// <![CDATA[
 		var smf_theme_url = "', $settings['theme_url'], '";
@@ -120,7 +114,15 @@ function template_html_above()
 		var ajax_notification_cancel_text = "', $txt['modify_cancel'], '";
 		var sSessionId = \'', $context['session_id'], '\';
 		var sSessionVar = \'', $context['session_var'], '\';
+		var disableDynamicTime = ',empty($options['disable_dynatime']) ? 0 : 1,';
+		var textSizeUnit = \'pt\';
+		var textSizeStep = 1;
+		var textSizeMax = 16;
+		var textSizeMin = 8;
+		var textSizeDefault = 10;
 
+		var cookie = readCookie(\'SMF_textsize\');
+		var textsize = cookie ? parseInt(cookie) : textSizeDefault;
 	// ]]></script>';
 
 	echo '
@@ -254,6 +256,10 @@ function template_body_above()
 	template_menu();
 
 	echo '</nav>
+	<script>
+		// <![CDATA[
+    	setTextSize(textsize);
+	// ]]></script>
 	</div></header>';
 
 	// The main content should go here.
@@ -266,7 +272,7 @@ function template_body_above()
 	theme_linktree();
 	// Show the navigation tree.
 	$scope = 0;
-	echo '<form onmouseout="return false;" onsubmit="submitSearchBox();" style="float:right;margin-right:10px;margin-bottom:-20px;" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
+	echo '<form onmouseout="return false;" onsubmit="submitSearchBox();" style="float:right;margin-right:30px;margin-bottom:-20px;" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
 			// Search within current topic?
 			$search_label = 'Search';
 			if (!empty($context['current_topic'])) {
@@ -457,6 +463,11 @@ function template_menu()
 	
 	echo '
 		<div id="main_menu">
+			<div style="float:right;line-height:24px;font-size:10px;">
+				<span id="curfontsize"></span>
+				<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
+				<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
+			</div>
 			<ul class="dropmenu" id="menu_nav">';
 
 	foreach ($context['menu_buttons'] as $act => $button)

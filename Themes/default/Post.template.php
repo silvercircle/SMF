@@ -427,6 +427,7 @@ function template_main()
 						<img src="', $settings['images_url'], '/collapse.gif" alt="-" id="postMoreExpand" style="display: none;" /> <strong><a href="#" id="postMoreExpandLink">', $txt['post_additionalopt'], '</a></strong>
 					</div>';
 
+	$context['can_stick_firstpost'] = $context['is_first_post'] && true;  // todo: make this a permission
 	// Display the check boxes for all the standard options - if they are available to the user!
 	echo '
 					<div id="postMoreOptions" class="smalltext">
@@ -439,6 +440,8 @@ function template_main()
 							', $context['can_move'] ? '<li><input type="hidden" name="move" value="0" /><label for="check_move"><input type="checkbox" name="move" id="check_move" value="1" class="input_check" ' . (!empty($context['move']) ? 'checked="checked" ' : '') . '/> ' . $txt['move_after2'] . '</label></li>' : '', '
 							', $context['can_announce'] && $context['is_first_post'] ? '<li><label for="check_announce"><input type="checkbox" name="announce_topic" id="check_announce" value="1" class="input_check" ' . (!empty($context['announce']) ? 'checked="checked" ' : '') . '/> ' . $txt['announce_topic'] . '</label></li>' : '', '
 							', $context['show_approval'] ? '<li><label for="approve"><input type="checkbox" name="approve" id="approve" value="2" class="input_check" ' . ($context['show_approval'] === 2 ? 'checked="checked"' : '') . ' /> ' . $txt['approve_this_post'] . '</label></li>' : '', '
+							', $context['can_stick_firstpost'] ? '<li><label for="stickfirst"><input type="checkbox" name="stickfirst" id="stickfirst" value="1" class="input_check" '.($context['first_is_sticky'] ? 'checked="checked"' : '') . ' />' . $txt['first_post_sticky'] . '</label></li>' : '', '
+							', $context['can_stick_firstpost'] ? '<li><label for="firstlayout"><input type="checkbox" name="firstlayout" id="firstlayout" value="1" class="input_check" '.($context['first_has_layout'] ? 'checked="checked"' : '') . ' />' . $txt['first_post_layout'] . '</label></li>' : '', '
 						</ul>
 					</div>';
 

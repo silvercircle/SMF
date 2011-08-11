@@ -1123,7 +1123,7 @@ IconList.prototype.initIcons = function ()
 {
 	for (var i = document.images.length - 1, iPrefixLength = this.opt.sIconIdPrefix.length; i >= 0; i--)
 		if (document.images[i].id.substr(0, iPrefixLength) == this.opt.sIconIdPrefix)
-			setOuterHTML(document.images[i], '<div title="' + this.opt.sLabelIconList + '" onclick="' + this.opt.sBackReference + '.openPopup(this, ' + document.images[i].id.substr(iPrefixLength) + ')" onmouseover="' + this.opt.sBackReference + '.onBoxHover(this, true)" onmouseout="' + this.opt.sBackReference + '.onBoxHover(this, false)" style="background: ' + this.opt.sBoxBackground + '; cursor: ' + (is_ie && !is_ie6up ? 'hand' : 'pointer') + '; padding: 3px; text-align: center;"><img src="' + document.images[i].src + '" alt="' + document.images[i].alt + '" id="' + document.images[i].id + '" style="margin: 0px; padding: ' + (is_ie ? '3px' : '3px 0px 3px 0px') + ';" /></div>');
+			setOuterHTML(document.images[i], '<div title="' + this.opt.sLabelIconList + '" onclick="' + this.opt.sBackReference + '.openPopup(this, ' + document.images[i].id.substr(iPrefixLength) + ')" onmouseover="' + this.opt.sBackReference + '.onBoxHover(this, true)" onmouseout="' + this.opt.sBackReference + '.onBoxHover(this, false)" style="background: ' + this.opt.sBoxBackground + '; cursor: ' + (is_ie && !is_ie6up ? 'hand' : 'pointer') + '; padding: 0px; text-align: center;"><img src="' + document.images[i].src + '" alt="' + document.images[i].alt + '" id="' + document.images[i].id + '" style="margin:0; padding: 0;" /></div>');
 };
 
 // Event for the mouse hovering over the original icon.
@@ -1150,7 +1150,7 @@ IconList.prototype.openPopup = function (oDiv, iMessageId)
 		this.oContainerDiv.style.width = oDiv.offsetWidth + 'px';
 		this.oContainerDiv.style.background = this.opt.sContainerBackground;
 		this.oContainerDiv.style.border = this.opt.sContainerBorder;
-		this.oContainerDiv.style.padding = '1px';
+		this.oContainerDiv.style.padding = '0px';
 		this.oContainerDiv.style.textAlign = 'center';
 		document.body.appendChild(this.oContainerDiv);
 
@@ -1508,6 +1508,7 @@ var smf_addListItemHoverEvents = function()
 if (is_ie7down && 'attachEvent' in window)
 	window.attachEvent('onload', smf_addListItemHoverEvents);
 
+	
 /*
  * timeago: a jQuery plugin, version: 0.9.3 (2011-01-21)
  * @requires jQuery v1.2.3 or later
@@ -1662,3 +1663,35 @@ if (is_ie7down && 'attachEvent' in window)
     return s;
   }
 }(jQuery));
+
+function createCookie(name,value,days) {
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime()+(days*24*60*60*1000));
+    var expires = "; expires="+date.toGMTString();
+  }
+  else var expires = "";
+  document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0;i < ca.length;i++) {
+    var c = ca[i];
+    while (c.charAt(0)==' ') c = c.substring(1,c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+  }
+  return null;
+}
+
+function setTextSize(_s)
+{
+    textsize = _s;
+  
+	if(textsize < textSizeMin || textsize > textSizeMax)
+   		textsize = textSizeDefault;
+	$('body').css('font-size', _s + textSizeUnit);
+	createCookie('SMF_textsize', textsize, 500);
+	$('#curfontsize').html(textsize + textSizeUnit);
+}

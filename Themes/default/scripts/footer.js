@@ -244,7 +244,8 @@ jQuery(document).ready(function() {
 		});
 		
 	// convert all time stamps to relative 
-	$('abbr.timeago').timeago();
+	if(!disableDynamicTime)
+		$('abbr.timeago').timeago();
 });
 
 function submitTagForm(ele)
