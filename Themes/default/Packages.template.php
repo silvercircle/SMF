@@ -1449,7 +1449,7 @@ function template_control_chmod()
 		}
 		function testFTP()
 		{
-			ajax_indicator(true);
+			setBusy(true);
 
 			// What we need to post.
 			var oPostData = {
@@ -1469,7 +1469,7 @@ function template_control_chmod()
 		}
 		function testFTPResults(oXMLDoc)
 		{
-			ajax_indicator(false);
+			setBusy(false);
 
 			// This assumes it went wrong!
 			var wasSuccess = false;
@@ -1585,7 +1585,7 @@ function template_file_permissions()
 			// Otherwise we need to get the wicked thing.
 			else if (window.XMLHttpRequest)
 			{
-				ajax_indicator(true);
+				setBusy(true);
 				getXMLDocument(smf_prepareScriptUrl(smf_scripturl) + \'action=admin;area=packages;onlyfind=\' + escape(folderReal) + \';sa=perms;xml;', $context['session_var'], '=', $context['session_id'], '\', onNewFolderReceived);
 			}
 			// Otherwise reload.
@@ -1602,7 +1602,7 @@ function template_file_permissions()
 		}
 		function dynamicAddMore()
 		{
-			ajax_indicator(true);
+			setBusy(true);
 
 			getXMLDocument(smf_prepareScriptUrl(smf_scripturl) + \'action=admin;area=packages;fileoffset=\' + (parseInt(this.offset) + ', $context['file_limit'], ') + \';onlyfind=\' + escape(this.path) + \';sa=perms;xml;', $context['session_var'], '=', $context['session_id'], '\', onNewFolderReceived);
 		}
@@ -1641,7 +1641,7 @@ function template_file_permissions()
 		// Getting something back?
 		function onNewFolderReceived(oXMLDoc)
 		{
-			ajax_indicator(false);
+			setBusy(false);
 
 			var fileItems = oXMLDoc.getElementsByTagName(\'folders\')[0].getElementsByTagName(\'folder\');
 

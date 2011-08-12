@@ -1188,10 +1188,6 @@ ul#navigation li
 /* Styles for the general looks for the Curve theme.
 ------------------------------------------------------- */
 
-/* the framing graphics */
-#header
-{
-}
 /* the content section, wrapper for everything between header and footer */
 #content_section
 {
@@ -3657,9 +3653,14 @@ div.likebar {
 }
 
 div#ajaxbusy {
-	border:2px solid #ccc;
+	border:2px solid white;
+	border-top:0;
+	border-right:0;
+	border-bottom-left-radius:12px;
 	background-color:#ddd;
 	padding:10px 20px;
+	background:#576D82;
+	opacity:0.7;
 }
 /*
  * some generic classes

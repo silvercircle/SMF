@@ -222,7 +222,7 @@ function smfRegister(formID, passwordDifficultyLevel, regTextStrings)
 			return false;
 
 		if (!is_auto)
-			ajax_indicator(true);
+			setBusy(true);
 
 		// Request a search on that username.
 		checkName = curUsername.php_to8bit().php_urlencode();
@@ -245,7 +245,7 @@ function smfRegister(formID, passwordDifficultyLevel, regTextStrings)
 		verificationFields['username'][1].className = verificationFields['username'][5] + ' ' + (isValid == 1 ? 'valid_input' : 'invalid_input');
 		setVerificationImage(verificationFields['username'][2], isValid == 1, alt);
 
-		ajax_indicator(false);
+		setBusy(false);
 	}
 
 	// Set the image to be the correct type.

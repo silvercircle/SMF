@@ -42,8 +42,6 @@ var is_ie8up = is_ie8 && !is_ie7down;
 var is_iphone = ua.indexOf('iphone') != -1 || ua.indexOf('ipod') != -1;
 var is_android = ua.indexOf('android') != -1;
 
-var ajax_indicator_ele = null;
-
 // Define document.getElementById for Internet Explorer 4.
 if (!('getElementById' in document) && 'all' in document)
 	document.getElementById = function (sId) {
@@ -887,62 +885,6 @@ smc_Toggle.prototype.toggle = function()
 	this.changeState(!this.bCollapsed);
 };
 
-
-function ajax_indicator(turn_on)
-{
-	if (ajax_indicator_ele == null)
-	{
-		ajax_indicator_ele = document.getElementById('ajax_in_progress');
-
-		if (ajax_indicator_ele == null && typeof(ajax_notification_text) != null)
-		{
-			create_ajax_indicator_ele();
-		}
-	}
-
-	if (ajax_indicator_ele != null)
-	{
-		if (navigator.appName == 'Microsoft Internet Explorer' && !is_ie7up)
-		{
-			ajax_indicator_ele.style.position = 'absolute';
-			ajax_indicator_ele.style.top = document.documentElement.scrollTop;
-		}
-
-		ajax_indicator_ele.style.display = turn_on ? 'block' : 'none';
-	}
-};
-
-function create_ajax_indicator_ele()
-{
-	// Create the div for the indicator.
-	ajax_indicator_ele = document.createElement('div');
-
-	// Set the id so it'll load the style properly.
-	ajax_indicator_ele.id = 'ajax_in_progress';
-
-	// Add the image in and link to turn it off.
-	var cancel_link = document.createElement('a');
-	cancel_link.href = 'javascript:ajax_indicator(false)';
-	var cancel_img = document.createElement('img');
-	cancel_img.src = smf_images_url + '/icons/quick_remove.gif';
-
-	if (typeof(ajax_notification_cancel_text) != 'undefined')
-	{
-		cancel_img.alt = ajax_notification_cancel_text;
-		cancel_img.title = ajax_notification_cancel_text;
-	}
-
-	// Add the cancel link and image to the indicator.
-	cancel_link.appendChild(cancel_img);
-	ajax_indicator_ele.appendChild(cancel_link);
-
-	// Set the text.  (Note:  You MUST append here and not overwrite.)
-	ajax_indicator_ele.innerHTML += ajax_notification_text;
-
-	// Finally attach the element to the body.
-	document.body.appendChild(ajax_indicator_ele);
-};
-
 function createEventListener(oTarget)
 {
 	if (!('addEventListener' in oTarget))
@@ -974,7 +916,7 @@ function grabJumpToContent()
 	var oXMLDoc = getXMLDocument(smf_prepareScriptUrl(smf_scripturl) + 'action=xmlhttp;sa=jumpto;xml');
 	var aBoardsAndCategories = new Array();
 
-	ajax_indicator(true);
+	setBusy(true);
 
 	if (oXMLDoc.responseXML)
 	{
@@ -991,7 +933,7 @@ function grabJumpToContent()
 		}
 	}
 
-	ajax_indicator(false);
+	setBusy(false);
 
 	for (var i = 0, n = aJumpTo.length; i < n; i++)
 		aJumpTo[i].fillSelect(aBoardsAndCategories);
@@ -1155,7 +1097,7 @@ IconList.prototype.openPopup = function (oDiv, iMessageId)
 		document.body.appendChild(this.oContainerDiv);
 
 		// Start to fetch its contents.
-		ajax_indicator(true);
+		setBusy(true);
 		this.tmpMethod = getXMLDocument;
 		this.tmpMethod(smf_prepareScriptUrl(this.opt.sScriptUrl) + 'action=xmlhttp;sa=messageicons;board=' + this.opt.iBoardId + ';xml', this.onIconsReceived);
 		delete this.tmpMethod;
@@ -1194,7 +1136,7 @@ IconList.prototype.onIconsReceived = function (oXMLDoc)
 	if (is_ie)
 		this.oContainerDiv.style.width = this.oContainerDiv.clientWidth + 'px';
 
-	ajax_indicator(false);
+	setBusy(false);
 };
 
 // Event handler for hovering over the icons.
@@ -1215,11 +1157,11 @@ IconList.prototype.onItemMouseDown = function (oDiv, sNewIcon)
 {
 	if (this.iCurMessageId != 0)
 	{
-		ajax_indicator(true);
+		setBusy(true);
 		this.tmpMethod = getXMLDocument;
 		var oXMLDoc = this.tmpMethod(smf_prepareScriptUrl(this.opt.sScriptUrl) + 'action=jsmodify;topic=' + this.opt.iTopicId + ';msg=' + this.iCurMessageId + ';' + this.opt.sSessionVar + '=' + this.opt.sSessionId + ';icon=' + sNewIcon + ';xml');
 		delete this.tmpMethod;
-		ajax_indicator(false);
+		setBusy(false);
 
 		var oMessage = oXMLDoc.responseXML.getElementsByTagName('smf')[0].getElementsByTagName('message')[0];
 		if (oMessage.getElementsByTagName('error').length == 0)

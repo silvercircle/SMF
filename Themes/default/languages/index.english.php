@@ -762,4 +762,5 @@ $txt['unlike_label'] = "Unlike";
 $txt['content_label'] = 'Content';
 $txt['font_increase'] = 'Increase text size';
 $txt['font_decrease'] = 'Decrease text size';
+$txt['who_posted'] = 'Who posted';
 ?>

@@ -17,10 +17,13 @@ function template_main()
 	echo '
 	<a id="top"></a>';
 
+	if (!empty($options['show_board_desc']) && $context['description'] != '')
+		echo '<div class="orange_container">', $context['description'], '</div>';
+
 	if (!empty($context['boards']) && (!empty($options['show_children']) || $context['start'] == 0))
 	{
 		echo '
-	<div class="tborder childboards" id="board_', $context['current_board'], '_childboards">
+	<div style="margin-top:10px;" class="tborder childboards" id="board_', $context['current_board'], '_childboards">
 		<div class="cat_bar rounded_top">
 			<h3 class="catbg">', $txt['parent_boards'], '</h3>
 		</div>
@@ -119,11 +122,6 @@ function template_main()
 		</div>
 	</div>';
 	}
-
-	if (!empty($options['show_board_desc']) && $context['description'] != '')
-		echo '
-	<p class="orange_container">', $context['description'], '</p>';
-
 	if(!$context['act_as_cat']) {
 	
 	// Create the button set...
@@ -296,9 +294,12 @@ function template_main()
 							</p>
 						</div>
 					</td>
-					<td class="stats ', $color_class, '">
-						', $topic['replies'], ' ', $txt['replies'], '
-						<br />
+					<td class="stats ', $color_class, '">';
+						if($topic['replies'])
+							echo '<a title="',$txt['who_posted'],'" class="whoposted" data-topic="',$topic['id'], '" href="',$scripturl,'?action=xmlhttp;sa=whoposted;t=',$topic['id'],'" >', $topic['replies'], ' ', $txt['replies'], '</a>';
+						else
+							echo $topic['replies'], ' ', $txt['replies'];
+						echo '<br />
 						', $topic['views'], ' ', $txt['views'], '
 					</td>
 					<td class="lastpost ', $color_class, '">',
@@ -491,4 +492,24 @@ function template_main()
 // ]]></script>';
 }
 
+function template_ajaxresponse_whoposted()
+{
+	global $context, $txt, $scripturl;
+
+	echo '<table style="margin:0 20px;position:relative;top:-29px;">
+		<tr>
+			<td colspan="2" class="centertext"><h3>',$txt['who_posted'],'</h3></td>
+		</tr>
+		<tr>
+			<td class="glass lefttext">',$txt['who_member'],'</td>
+			<td class="glass righttext">',$txt['posts'],'</td>
+		</tr>';
+	foreach($context['posters'] as $poster)	{
+		echo '<tr>
+			<td class="lefttext">',$poster['real_name'], '</td>
+			<td class="righttext">',$poster['count'], '</td>
+			</tr>';
+	}
+	echo '</table>';
+}
 ?>

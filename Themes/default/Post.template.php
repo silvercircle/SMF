@@ -427,7 +427,6 @@ function template_main()
 						<img src="', $settings['images_url'], '/collapse.gif" alt="-" id="postMoreExpand" style="display: none;" /> <strong><a href="#" id="postMoreExpandLink">', $txt['post_additionalopt'], '</a></strong>
 					</div>';
 
-	$context['can_stick_firstpost'] = $context['is_first_post'] && true;  // todo: make this a permission
 	// Display the check boxes for all the standard options - if they are available to the user!
 	echo '
 					<div id="postMoreOptions" class="smalltext">

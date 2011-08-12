@@ -34,7 +34,8 @@ function XMLhttpMain()
 		'mcard' => array('function' => 'GetMcard'),
 		'givelike' => array('function' => 'GiveLike'),
 		'mpeek' => array('function' => 'TopicPeek'),
-		'tags' => array('function' => 'TagsActionDispatcher')
+		'tags' => array('function' => 'TagsActionDispatcher'),
+		'whoposted' => array('function' => 'WhoPosted')
 	);
 	if (!isset($_REQUEST['sa'], $sub_actions[$_REQUEST['sa']]))
 		fatal_lang_error('no_access', false);
@@ -310,5 +311,42 @@ function TagsActionDispatcher()
 		TaggingSystem_Submit();
 	if(isset($_REQUEST['deletetag']))
 		TaggingSystem_Delete();
+}
+
+function WhoPosted()
+{
+	global $smcFunc, $context, $txt;
+	
+	$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
+	
+	if(isset($_REQUEST['t']))
+		$tid = intval($_REQUEST['t']);
+	else
+		$tid = 0;
+		
+	if($tid) {
+		$result = $smcFunc['db_query']('', 'SELECT t.id_board FROM {db_prefix}topics AS t
+			INNER JOIN {db_prefix}boards AS b ON b.id_board = t.id_board WHERE t.id_topic = {int:topic} 
+			AND {query_see_board}', array('topic' => $tid));
+		
+		$b = $smcFunc['db_fetch_row']($result);
+		$smcFunc['db_free_result']($result);
+		
+		if($b) {
+			loadTemplate('MessageIndex');
+			$context['sub_template'] = 'ajaxresponse_whoposted';
+			$context['template_layers'] = array();
+			
+			$result = $smcFunc['db_query']('', '
+				SELECT mem.real_name, m.id_member, count(m.id_member) AS count FROM {db_prefix}messages AS m
+					LEFT JOIN {db_prefix}members AS mem ON mem.id_member = m.id_member WHERE m.id_topic = {int:topic} 
+					GROUP BY m.id_member ORDER BY count DESC limit 10', array('topic' => $tid));
+			
+			while($row = $smcFunc['db_fetch_assoc']($result))
+				$context['posters'][] = $row;
+
+			$smcFunc['db_free_result']($result);
+		}
+	}
 }
 ?>

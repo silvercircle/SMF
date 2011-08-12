@@ -1143,7 +1143,7 @@ function Post()
 			'post_button' => $context['submit_label'],
 		),
 		// add height and width for the editor
-		'height' => '175px',
+		'height' => '300px',
 		'width' => '100%',
 		// We do XML preview here.
 		'preview_type' => 2,
@@ -1201,6 +1201,7 @@ function Post()
 	$context['is_new_topic'] = empty($topic);
 	$context['is_new_post'] = !isset($_REQUEST['msg']);
 	$context['is_first_post'] = $context['is_new_topic'] || (isset($_REQUEST['msg']) && $_REQUEST['msg'] == $id_first_msg);
+	$context['can_stick_firstpost'] = $context['is_first_post'] && allowedTo('post_sticky');
 
 	if($context['is_first_post'])
 		getPrefixSelector($board, !empty($context['id_prefix']) ? $context['id_prefix'] : 0);

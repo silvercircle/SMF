@@ -1481,7 +1481,7 @@ function create_control_richedit($editorOptions)
 		'rich_active' => empty($modSettings['disable_wysiwyg']) && (!empty($options['wysiwyg_default']) || !empty($editorOptions['force_rich']) || !empty($_REQUEST[$editorOptions['id'] . '_mode'])),
 		'disable_smiley_box' => !empty($editorOptions['disable_smiley_box']),
 		'columns' => isset($editorOptions['columns']) ? $editorOptions['columns'] : 60,
-		'rows' => isset($editorOptions['rows']) ? $editorOptions['rows'] : 12,
+		'rows' => isset($editorOptions['rows']) ? $editorOptions['rows'] : 20,
 		'width' => isset($editorOptions['width']) ? $editorOptions['width'] : '70%',
 		'height' => isset($editorOptions['height']) ? $editorOptions['height'] : '150px',
 		'form' => isset($editorOptions['form']) ? $editorOptions['form'] : 'postmodify',

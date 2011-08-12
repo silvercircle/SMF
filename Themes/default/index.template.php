@@ -95,7 +95,7 @@ function template_html_above()
 	// Here comes the JavaScript bits!
 	echo '
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js?fin20"></script>
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script-min.js?fin20"></script>
 	<script type="text/javascript">
 		// <![CDATA[
 		var smf_theme_url = "', $settings['theme_url'], '";
@@ -328,6 +328,11 @@ function template_body_below()
 	t2.async = true;
 	t2.src = "',$settings['theme_url'],'/scripts/footer.js?ver=1.1.0";
 	anchor.parentNode.insertBefore(t2, anchor);
+	var t3 = document.createElement(\'SCRIPT\');
+	t3.type = "text/javascript";
+	t3.async = true;
+	t3.src = "',$settings['theme_url'],'/scripts/shlt.js?ver=1.1.0";
+	anchor.parentNode.insertBefore(t3, anchor);
 	';
 
 	if(isset($modSettings['embed_GA']) && $modSettings['embed_GA'] && ($context['user']['is_guest'] || (empty($options['disable_analytics']) ? 1 : !$options['disable_analytics'])))	{

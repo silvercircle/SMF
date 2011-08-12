@@ -171,8 +171,8 @@ function template_folder()
 			echo '
 				<div class="post_wrapper light_shadow ',$window_class,'">
 						<div class="poster">
-						<div class="orange_container poster_details">
 							<h4>', $message['member']['link'], '</h4>
+						<div class="orange_container poster_details" style="margin-top:5px;">
 							<ul class="reset smalltext" id="msg_', $message['id'], '_extra_info">';
 
 		// Show the member's custom title, if they have one.
@@ -276,9 +276,8 @@ function template_folder()
 							</ul>
 						</div></div>
 		<div class="postarea">
-			<div class="flow_hidden">
-				<div class="orange_container">
-					<h5 id="subject_', $message['id'], '">
+				<div class="keyinfo">
+					<h5 style="display:inline;" id="subject_', $message['id'], '">
 						', $message['subject'], '
 					</h5>';
 
@@ -308,39 +307,8 @@ function template_folder()
 
 			echo '
 				</div>
-				<ul class="reset smalltext quickbuttons">';
-
-			// Show reply buttons if you have the permission to send PMs.
-			if ($context['can_send_pm'])
-			{
-				// You can't really reply if the member is gone.
-				if (!$message['member']['is_guest'])
-				{
-					// Is there than more than one recipient you can reply to?
-					if ($message['number_recipients'] > 1 && $context['display_mode'] != 2)
-						echo '
-					<li class="reply_all_button"><a href="', $scripturl, '?action=pm;sa=send;f=', $context['folder'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pmsg=', $message['id'], ';quote;u=all">', $txt['reply_to_all'], '</a></li>';
-
-					echo '
-					<li class="reply_button"><a href="', $scripturl, '?action=pm;sa=send;f=', $context['folder'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pmsg=', $message['id'], ';u=', $message['member']['id'], '">', $txt['reply'], '</a></li>
-					<li class="quote_button"><a href="', $scripturl, '?action=pm;sa=send;f=', $context['folder'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pmsg=', $message['id'], ';quote', $context['folder'] == 'sent' ? '' : ';u=' . $message['member']['id'], '">', $txt['quote'], '</a></li>';
-				}
-				// This is for "forwarding" - even if the member is gone.
-				else
-					echo '
-					<li class="forward_button"><a href="', $scripturl, '?action=pm;sa=send;f=', $context['folder'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pmsg=', $message['id'], ';quote">', $txt['reply_quote'], '</a></li>';
-			}
-			echo '
-					<li class="remove_button"><a href="', $scripturl, '?action=pm;sa=pmactions;pm_actions[', $message['id'], ']=delete;f=', $context['folder'], ';start=', $context['start'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', addslashes($txt['remove_message']), '?\');">', $txt['delete'], '</a></li>';
-
-			if (empty($context['display_mode']))
-				echo '
-					<li class="inline_mod_check"><input type="checkbox" name="pms[]" id="deletedisplay', $message['id'], '" value="', $message['id'], '" onclick="document.getElementById(\'deletelisting', $message['id'], '\').checked = this.checked;" class="input_check" /></li>';
-
-			echo '
-				</ul>
 			</div>
-			<div class="post">
+			<div class="post" style="margin-left:205px;">
 				<div class="inner" id="msg_', $message['id'], '"', '>', $message['body'], '</div>
 				<div class="smalltext reportlinks">
 					', (!empty($modSettings['enableReportPM']) && $context['folder'] != 'sent' ? '<div class="righttext"><a href="' . $scripturl . '?action=pm;sa=report;l=' . $context['current_label_id'] . ';pmsg=' . $message['id'] . '">' . $txt['pm_report_to_admin'] . '</a></div>' : '');
@@ -420,10 +388,40 @@ function template_folder()
 			}
 
 			echo '
-			</div>
 			<br class="clear" />
 		</div>
-		<div class="moderatorbar">
+		<div class="post_bottom">';
+			echo '<ul class="reset smalltext quickbuttons">';
+
+			// Show reply buttons if you have the permission to send PMs.
+			if ($context['can_send_pm'])
+			{
+				// You can't really reply if the member is gone.
+				if (!$message['member']['is_guest'])
+				{
+					// Is there than more than one recipient you can reply to?
+					if ($message['number_recipients'] > 1 && $context['display_mode'] != 2)
+						echo '
+					<li class="reply_all_button"><a href="', $scripturl, '?action=pm;sa=send;f=', $context['folder'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pmsg=', $message['id'], ';quote;u=all">', $txt['reply_to_all'], '</a></li>';
+
+					echo '
+					<li class="reply_button"><a href="', $scripturl, '?action=pm;sa=send;f=', $context['folder'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pmsg=', $message['id'], ';u=', $message['member']['id'], '">', $txt['reply'], '</a></li>
+					<li class="quote_button"><a href="', $scripturl, '?action=pm;sa=send;f=', $context['folder'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pmsg=', $message['id'], ';quote', $context['folder'] == 'sent' ? '' : ';u=' . $message['member']['id'], '">', $txt['quote'], '</a></li>';
+				}
+				// This is for "forwarding" - even if the member is gone.
+				else
+					echo '
+					<li class="forward_button"><a href="', $scripturl, '?action=pm;sa=send;f=', $context['folder'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pmsg=', $message['id'], ';quote">', $txt['reply_quote'], '</a></li>';
+			}
+			echo '
+					<li class="remove_button"><a href="', $scripturl, '?action=pm;sa=pmactions;pm_actions[', $message['id'], ']=delete;f=', $context['folder'], ';start=', $context['start'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', addslashes($txt['remove_message']), '?\');">', $txt['delete'], '</a></li>';
+
+			if (empty($context['display_mode']))
+				echo '
+					<li class="inline_mod_check"><input type="checkbox" name="pms[]" id="deletedisplay', $message['id'], '" value="', $message['id'], '" onclick="document.getElementById(\'deletelisting', $message['id'], '\').checked = this.checked;" class="input_check" /></li>';
+
+			echo '
+				</ul><div class="clear"></div>
 		</div>
 	</div>';
 		}
@@ -474,10 +472,10 @@ function template_subject_list()
 	<table width="100%" id="messageindex" class="topic_table mediumpadding">
 	<thead>
 		<tr>
-			<th align="center" width="4%" class="blue_container first_th">
+			<th width="4%" class="centertext blue_container first_th">
 				<a href="', $scripturl, '?action=pm;view;f=', $context['folder'], ';start=', $context['start'], ';sort=', $context['sort_by'], ($context['sort_direction'] == 'up' ? '' : ';desc'), ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : ''), '"><img src="', $settings['images_url'], '/im_switch.gif" alt="', $txt['pm_change_view'], '" title="', $txt['pm_change_view'], '" width="16" height="16" /></a>
 			</th>
-			<th class="blue_container lefttext" width="22%">
+			<th class="blue_container lefttext" style="width:22%;">
 				<a href="', $scripturl, '?action=pm;f=', $context['folder'], ';start=', $context['start'], ';sort=date', $context['sort_by'] == 'date' && $context['sort_direction'] == 'up' ? ';desc' : '', $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', '">', $txt['date'], $context['sort_by'] == 'date' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 			</th>
 			<th class="blue_container lefttext" width="46%">
@@ -486,7 +484,7 @@ function template_subject_list()
 			<th class="blue_container lefttext">
 				<a href="', $scripturl, '?action=pm;f=', $context['folder'], ';start=', $context['start'], ';sort=name', $context['sort_by'] == 'name' && $context['sort_direction'] == 'up' ? ';desc' : '', $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', '">', ($context['from_or_to'] == 'from' ? $txt['from'] : $txt['to']), $context['sort_by'] == 'name' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 			</th>
-			<th align="center" width="4%" class="blue_container last_th">
+			<th width="4%" class="centertext blue_container last_th">
 				<input type="checkbox" onclick="invertAll(this, this.form);" class="input_check" />
 			</th>
 		</tr>
@@ -503,7 +501,7 @@ function template_subject_list()
 	{
 		echo '
 		<tr class="', $next_alternate ? 'windowbg' : 'windowbg2', '">
-			<td align="center" width="4%">
+			<td class="centertext" style="width:4%;">
 			<script type="text/javascript"><!-- // --><![CDATA[
 				currentLabels[', $message['id'], '] = {';
 
@@ -525,7 +523,7 @@ function template_subject_list()
 			<td>', $message['time'], '</td>
 			<td>', ($context['display_mode'] != 0 && $context['current_pm'] == $message['id'] ? '<img src="' . $settings['images_url'] . '/selected.gif" alt="*" />' : ''), '<a href="', ($context['display_mode'] == 0 || $context['current_pm'] == $message['id'] ? '' : ($scripturl . '?action=pm;pmid=' . $message['id'] . ';kstart;f=' . $context['folder'] . ';start=' . $context['start'] . ';sort=' . $context['sort_by'] . ($context['sort_direction'] == 'up' ? ';' : ';desc') . ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : ''))), '#msg', $message['id'], '">', $message['subject'], '</a>', $message['is_unread'] ? '&nbsp;<img src="' . $settings['lang_images_url'] . '/new.gif" alt="' . $txt['new'] . '" />' : '', '</td>
 			<td>', ($context['from_or_to'] == 'from' ? $message['member']['link'] : (empty($message['recipients']['to']) ? '' : implode(', ', $message['recipients']['to']))), '</td>
-			<td align="center" width="4%"><input type="checkbox" name="pms[]" id="deletelisting', $message['id'], '" value="', $message['id'], '"', $message['is_selected'] ? ' checked="checked"' : '', ' onclick="if (document.getElementById(\'deletedisplay', $message['id'], '\')) document.getElementById(\'deletedisplay', $message['id'], '\').checked = this.checked;" class="input_check" /></td>
+			<td class="centertext"><input type="checkbox" name="pms[]" id="deletelisting', $message['id'], '" value="', $message['id'], '"', $message['is_selected'] ? ' checked="checked"' : '', ' onclick="if (document.getElementById(\'deletedisplay', $message['id'], '\')) document.getElementById(\'deletedisplay', $message['id'], '\').checked = this.checked;" class="input_check" /></td>
 		</tr>';
 			$next_alternate = !$next_alternate;
 	}
@@ -1134,7 +1132,7 @@ function template_labels()
 	if (count($context['labels']) < 2)
 		echo '
 			<tr class="windowbg2">
-				<td colspan="2" align="center">', $txt['pm_labels_no_exist'], '</td>
+				<td colspan="2" class="centertext">', $txt['pm_labels_no_exist'], '</td>
 			</tr>';
 	else
 	{
@@ -1149,7 +1147,7 @@ function template_labels()
 				<td>
 					<input type="text" name="label_name[', $label['id'], ']" value="', $label['name'], '" size="30" maxlength="30" class="input_text" />
 				</td>
-				<td width="4%" align="center"><input type="checkbox" class="input_check" name="delete_label[', $label['id'], ']" /></td>
+				<td class="centertext"><input type="checkbox" class="input_check" name="delete_label[', $label['id'], ']" /></td>
 			</tr>';
 
 			$alternate = !$alternate;
@@ -1303,7 +1301,7 @@ function template_rules()
 	if (empty($context['rules']))
 		echo '
 			<tr class="windowbg2">
-				<td colspan="2" align="center">
+				<td colspan="2" class="centertext">
 					', $txt['pm_rules_none'], '
 				</td>
 			</tr>';
@@ -1316,7 +1314,7 @@ function template_rules()
 				<td>
 					<a href="', $scripturl, '?action=pm;sa=manrules;add;rid=', $rule['id'], '">', $rule['name'], '</a>
 				</td>
-				<td width="4%" align="center">
+				<td class="centertext">
 					<input type="checkbox" name="delrule[', $rule['id'], ']" class="input_check" />
 				</td>
 			</tr>';

@@ -185,8 +185,7 @@ smf_StatsCenter.prototype.onBeforeExpandMonth = function (oToggle)
 		this.oXmlRequestHandle = this.tmpMethod(smf_prepareScriptUrl(smf_scripturl) + 'action=stats;expand=' + oToggle.opt.sMonthId + ';xml', this.onDocReceived);
 		delete this.tmpMethod;
 
-		if ('ajax_indicator' in window)
-			ajax_indicator(true);
+		setBusy(true);
 
 		this.bIsLoading = true;
 	}
@@ -234,6 +233,5 @@ smf_StatsCenter.prototype.onDocReceived = function (oXMLDoc)
 	}
 
 	this.bIsLoading = false;
-	if (typeof(window.ajax_indicator) == 'function')
-		ajax_indicator(false);
+	setBusy(false);
 }

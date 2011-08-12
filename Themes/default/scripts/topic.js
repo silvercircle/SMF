@@ -29,8 +29,7 @@ function modify_topic(topic_id, first_msg_id)
 	mouse_on_div = 1;
 	cur_topic_id = topic_id;
 
-	if (typeof window.ajax_indicator == "function")
-		ajax_indicator(true);
+	setBusy(true);
 	getXMLDocument(smf_prepareScriptUrl(smf_scripturl) + "action=quotefast;quote=" + first_msg_id + ";modify;xml", onDocReceived_modify_topic);
 }
 
@@ -45,8 +44,7 @@ function onDocReceived_modify_topic(XMLDoc)
 	set_hidden_topic_areas('none');
 
 	modify_topic_show_edit(XMLDoc.getElementsByTagName("subject")[0].childNodes[0].nodeValue);
-	if (typeof window.ajax_indicator == "function")
-		ajax_indicator(false);
+	setBusy(false);
 }
 
 function modify_topic_cancel()
@@ -72,8 +70,7 @@ function modify_topic_save(cur_session_id, cur_session_var)
 	x[x.length] = 'topic=' + parseInt(document.forms.quickModForm.elements['topic'].value);
 	x[x.length] = 'msg=' + parseInt(document.forms.quickModForm.elements['msg'].value);
 
-	if (typeof window.ajax_indicator == "function")
-		ajax_indicator(true);
+	setBusy(true);
 	sendXMLDocument(smf_prepareScriptUrl(smf_scripturl) + "action=jsmodify;topic=" + parseInt(document.forms.quickModForm.elements['topic'].value) + ";" + cur_session_var + "=" + cur_session_id + ";xml", x.join("&"), modify_topic_done);
 
 	return false;
@@ -91,8 +88,7 @@ function modify_topic_done(XMLDoc)
 	var subject = message.getElementsByTagName("subject")[0];
 	var error = message.getElementsByTagName("error")[0];
 
-	if (typeof window.ajax_indicator == "function")
-		ajax_indicator(false);
+	setBusy(false);
 
 	if (!subject || error)
 		return false;
@@ -142,7 +138,7 @@ QuickReply.prototype.quote = function (iMessageId, xDeprecated)
 		// Doing it the XMLhttp way?
 		if (window.XMLHttpRequest)
 		{
-			ajax_indicator(true);
+			setBusy(true);
 			getXMLDocument(smf_prepareScriptUrl(this.opt.sScriptUrl) + 'action=quotefast;quote=' + iMessageId + ';xml', this.onQuoteReceived);
 		}
 		// Or with a smart popup!
@@ -169,7 +165,7 @@ QuickReply.prototype.onQuoteReceived = function (oXMLDoc)
 
 	replaceText(sQuoteText, document.forms.postmodify.message);
 
-	ajax_indicator(false);
+	setBusy(false);
 }
 
 // The function handling the swapping of the quick reply.
@@ -237,7 +233,7 @@ QuickModify.prototype.modifyMsg = function (iMessageId)
 	this.bInEditMode = true;
 
 	// Send out the XMLhttp request to get more info
-	ajax_indicator(true);
+	setBusy(1);
 
 	// For IE 5.0 support, 'call' is not yet used.
 	this.tmpMethod = getXMLDocument;
@@ -251,7 +247,7 @@ QuickModify.prototype.onMessageReceived = function (XMLDoc)
 	var sBodyText = '', sSubjectText = '';
 
 	// No longer show the 'loading...' sign.
-	ajax_indicator(false);
+	setBusy(0);
 
 	// Grab the message ID.
 	this.sCurMessageId = XMLDoc.getElementsByTagName('message')[0].getAttribute('id');
@@ -316,7 +312,7 @@ QuickModify.prototype.modifySave = function (sSessionId, sSessionVar)
 	x[x.length] = 'msg=' + parseInt(document.forms.quickModForm.elements['msg'].value);
 
 	// Send in the XMLhttp request and let's hope for the best.
-	ajax_indicator(true);
+	setBusy(1);
 	sendXMLDocument.call(this, smf_prepareScriptUrl(this.opt.sScriptUrl) + "action=jsmodify;topic=" + this.opt.iTopicId + ";" + sSessionVar + "=" + sSessionId + ";xml", x.join("&"), this.onModifyDone);
 
 	return false;
@@ -325,9 +321,7 @@ QuickModify.prototype.modifySave = function (sSessionId, sSessionVar)
 // Callback function of the XMLhttp request sending the modified message.
 QuickModify.prototype.onModifyDone = function (XMLDoc)
 {
-	// We've finished the loading stuff.
-	ajax_indicator(false);
-
+	setBusy(0);
 	// If we didn't get a valid document, just cancel.
 	if (!XMLDoc || !XMLDoc.getElementsByTagName('smf')[0])
 	{
