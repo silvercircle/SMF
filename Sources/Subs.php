@@ -944,7 +944,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 {
 	global $txt, $scripturl, $context, $modSettings, $user_info, $smcFunc;
 	static $bbc_codes = array(), $itemcodes = array(), $no_autolink_tags = array();
-	static $disabled;
+	static $disabled, $feet;
 
 	// Don't waste cycles
 	if ($message === '')
@@ -1242,6 +1242,15 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'after' => '</span>',
 			),
 			array(
+				'tag' => 'merged',
+				'type' => 'unparsed_content',
+				'test' => '([0-9]+)',
+				'content' => '<div class="bbc_merged">Posted: $1</div>',
+				'validate' => create_function('&$tag, &$data, $disabled', 
+					'$data = timeformat($data);'
+				)
+			),
+			array(
 				'tag' => 'email',
 				'type' => 'unparsed_content',
 				'content' => '<a href="mailto:$1" class="bbc_email">$1</a>',
@@ -1277,6 +1286,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'before' => '<span style="font-family: $1;" class="bbc_font">',
 				'after' => '</span>',
 			),
+			/*
 			array(
 				'tag' => 'ftp',
 				'type' => 'unparsed_content',
@@ -1287,6 +1297,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 						$data = \'ftp://\' . $data;
 				'),
 			),
+			*/
 			array(
 				'tag' => 'ftp',
 				'type' => 'unparsed_equals',
@@ -2482,6 +2493,55 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	$message = strtr($message, array('  ' => ' &nbsp;', "\r" => '', "\n" => '<br />', '<br /> ' => '<br />&nbsp;', '&#13;' => "\n"));
 
 	// Cache the output if it took some time...
+	
+	if (stripos($message, '[fn]') !== false && (empty($parse_tags) || in_array('nb', $parse_tags)) && (!isset($_REQUEST['action']) || $_REQUEST['action'] != 'jseditor'))
+	{
+		preg_match_all('~\s*\[fn]((?>[^[]|\[(?!/?nb])|(?R))+?)\[/fn\]~i', $message, $matches, PREG_SET_ORDER);
+
+		if (count($matches) > 0) {
+			$f = 0;
+			global $addnote;
+			if (is_null($addnote))
+				$addnote = array();
+			foreach ($matches as $m)
+			{
+				$my_pos = $end_blockquote = strpos($message, $m[0]);
+				$message = substr_replace($message, '<a class="fnote_ref" id="footlink' . ++$feet . '" href="#footnote' . $feet . '">[' . ++$f . ']</a>', $my_pos, strlen($m[0]));
+				$addnote[$feet] = array($feet, $f, $m[1]);
+
+				while ($end_blockquote !== false)
+				{
+					$end_blockquote = strpos($message, '</blockquote>', $my_pos);
+					if ($end_blockquote === false)
+						continue;
+
+					$start_blockquote = strpos($message, '<blockquote', $my_pos);
+					if ($start_blockquote !== false && $start_blockquote < $end_blockquote)
+						$my_pos = $end_blockquote + 1;
+					else
+					{
+						$message = substr_replace($message, '<foot:' . $feet . '>', $end_blockquote, 0);
+						break;
+					}
+				}
+
+				if ($end_blockquote === false)
+					$message .= '<foot:' . $feet . '>';
+			}
+
+			$message = preg_replace_callback('~(?:<foot:\d+>)+~', create_function('$match', '
+				global $addnote;
+				$msg = \'<table class="fnotes">\';
+				preg_match_all(\'~<foot:(\d+)>~\', $match[0], $mat);
+				foreach ($mat[1] as $note)
+				{
+					$n = &$addnote[$note];
+					$msg .= \'<tr><td class="fnote"><a id="footnote\' . $n[0] . \'" href="#footlink\' . $n[0] . \'">&nbsp;\' . $n[1] . \'.&nbsp;</a></td><td class="fnote_content">\'
+						 . (stripos($n[2], \'[nb]\', 1) === false ? $n[2] : parse_bbc($n[2])) . \'</td></tr>\';
+				}
+				return $msg . \'</table>\';'), $message);
+		}
+	}
 	if (isset($cache_key, $cache_t) && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
 		cache_put_data($cache_key, $message, 240);
 

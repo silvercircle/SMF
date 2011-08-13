@@ -1,12 +1,12 @@
 a:link, a:visited
 {
-	color: #56b;
+	color: #0099cc;
 	text-decoration: none;
 }
 a:hover
 {
-	text-decoration: underline;
-	cursor: pointer;
+	text-decoration: none;
+	color: #99cc00;
 }
 
 /* Links that open in a new window. */
@@ -30,13 +30,17 @@ table
 /* Set a fontsize that will look the same in all browsers. */
 body
 {
-	background: #f0f0f0 url(../images/bodybg-blue2.png) left -45px repeat-x;
+	background:#333355;
 	font-family: "Trebuchet MS", "Verdana", "Arial", "Helvetica", "sans-serif";
 	font-size:10pt;
 	margin: 0 auto;
 	padding: 0;
 }
 
+#wrap {
+	background: #f0f0f0 url(../images/bodybg-blue2.png) left -45px repeat-x;
+	margin:0 auto;
+}
 /* Help popups require a different styling of the body element. */
 body#help_popup
 {
@@ -46,17 +50,10 @@ body#help_popup
 /* use dark grey for the text, leaving #000 for headers etc */
 body, td, th, tr
 {
-	color: #444;
+	color: #555;
 }
 
 /* This division wraps the entire forum when a forum width is set. */
-div#wrapper
-{
-	margin: 0 auto;
-	min-width: 764px;
-	max-width: 2300px;
-}
-
 /* lets give all forms zero padding/margins */
 form
 {
@@ -384,6 +381,14 @@ code.bbc_code
 	cursor: help;
 }
 
+.bbc_merged {
+	text-align:left;
+	padding-left:30px;
+	font-size:11px;
+	font-weight:bold;
+	border-top:2px solid #ccc;
+	margin-top:15px;
+}
 /* /me uses this a lot. (emote, try typing /me in a post.) */
 .meaction
 {
@@ -1204,12 +1209,12 @@ ul#navigation li
 	max-width:1200px;
 	background-color:#fff;
 	min-height: 200px;
-	margin-left:auto;
-	margin-right:auto;
+	margin-left:0 auto;
 	border:1px solid #aaa;
 	padding:10px;
 	border-top-left-radius:10px;
 	border-top-right-radius:10px;
+	box-shadow: 0 0 10px 1px #aaa;
 }
 
 /* the main title, always stay at 45 pixels in height! */
@@ -1992,7 +1997,8 @@ img.smiley
 }
 #forumposts .modified
 {
-	float: left;
+	display:inline;
+	margin-left:20px;
 }
 #forumposts .reportlinks
 {
@@ -3673,6 +3679,7 @@ div#ajaxbusy {
 .borderless {border:0 !important;}
 a.tpeek {margin-left:10px;}
 abbr.timeago {border:0;}
+.inline_highlight {background-color: yellow;}
 
 .fontinc {background:transparent url(../images/theme/sprite.png) 0 -47px no-repeat;padding: 1px 8px;cursor:pointer;}
 .fontdec {background:transparent url(../images/theme/sprite.png) 0 -19px no-repeat;padding: 1px 8px;cursor:pointer;}
@@ -3747,6 +3754,15 @@ div.fb_tweet {
 .bbc_editor_button:hover {
 	background-color:#888;
 } 
+
+table.fnotes {
+	width:100%;
+	font-size:11px;
+	margin:20px auto 0 auto;
+	border-top:1px solid #ccc;
+}
+td.fnote_content {width:100%;}
+a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
 /* syntaxhighlighter and colorbox */
 
 /**

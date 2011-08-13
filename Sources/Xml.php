@@ -79,6 +79,7 @@ function ListMessageIcons()
 
 /*
  * output the member card
+ * todo: better error response
  */
  
 function GetMcard()
@@ -121,6 +122,7 @@ function GetMcard()
  * TODO: error responses
  * TODO: disallow like for posts by banned users
  * TODO: use language packs to make it fully translatable
+ * TODO: allow likes for more than just post content types (i.e. profile messages in a later stage)
  */
  
 function GiveLike()
@@ -313,6 +315,12 @@ function TagsActionDispatcher()
 		TaggingSystem_Delete();
 }
 
+/*
+ * return a list of member ids and the number of posts they made in the
+ * topic specified in ;t=
+ * 
+ * todo: error checking, improve this for non-ajax requests
+ */
 function WhoPosted()
 {
 	global $smcFunc, $context, $txt;
@@ -335,7 +343,7 @@ function WhoPosted()
 		if($b) {
 			loadTemplate('MessageIndex');
 			$context['sub_template'] = 'ajaxresponse_whoposted';
-			$context['template_layers'] = array();
+			$context['template_layers'] = array();		// ouput "plain", no header etc.
 			
 			$result = $smcFunc['db_query']('', '
 				SELECT mem.real_name, m.id_member, count(m.id_member) AS count FROM {db_prefix}messages AS m

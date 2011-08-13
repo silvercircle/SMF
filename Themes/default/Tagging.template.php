@@ -103,24 +103,17 @@ function template_addtag()
 		global $scripturl, $txt, $context;
 
 		echo '<form method="post" action="', $scripturl, '?action=tags;sa=submittag">
-			<table center" width="100%">
-  <tr>
-    <td width="50%" colspan="2"  align="center" class="catbg">
-    <b>', $txt['smftags_addtag2'], '</b></td>
-  </tr>
-  <tr>
-    <td width="28%"  class="windowbg2" align="right"><span class="gen"><b>', $txt['smftags_tagtoadd'], '</b></span></td>
-    <td width="72%" class="windowbg2"><input type="text" name="tag" size="64" maxlength="100" /></td>
-  </tr>
-
-  <tr>
-    <td width="28%" colspan="2" align="center" class="windowbg2">
+    <div class="cat_bar rounded_top centertext"><h3 class="catbg">',$txt['smftags_tagtoadd'], '</h3></div>
+    <div class="generic_container largepadding">
+    <div class="blue_container">
+    	<div class="centertext">
+    		<input type="text" name="tag" size="64" maxlength="100" />
+    		<input type="submit" value="', $txt['smftags_addtag'], '" name="submit" class="button_submit" />
+    	</div>
+    </div>
+    </div>
     <input type="hidden" name="topic" value="', $context['tags_topic'], '" />
-    <input type="submit" value="', $txt['smftags_addtag2'], '" name="submit" /></td>
-
-  </tr>
-</table>
-</form>
+	</form>
 ';
 }
 

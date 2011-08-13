@@ -455,6 +455,18 @@ function template_modify_board()
 						</dl>
 					</div>';
 
+	echo '
+					<div id="automerge_div">
+						<dl class="settings">
+							<dt>
+								<strong>', $txt['mboards_automerge'], ':</strong><br />
+								<span class="smalltext">', $txt['mboards_automerge_desc'], '</span><br />
+							</dt>
+							<dd>
+								<input type="text" name="automerge" value="', $context['board']['automerge'],'" class="input_text" />
+							</dd>
+						</dl>
+					</div>';
 					
 	// Here the user can choose to force this board to use a theme other than the default theme for the forum.
 	echo '

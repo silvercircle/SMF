@@ -390,7 +390,7 @@ InTopicModeration.prototype.init = function()
 		// Create the checkbox.
 		var oCheckbox = document.createElement('input');
 		oCheckbox.type = 'checkbox';
-		oCheckbox.className = 'input_check';
+		oCheckbox.className = 'input_check it_check';
 		oCheckbox.name = 'msgs[]';
 		oCheckbox.value = this.opt.aMessageIds[i];
 		oCheckbox.instanceRef = this;
@@ -533,3 +533,34 @@ function expandThumb(thumbID)
 	img.style.height = '';
 	return false;
 }
+
+$(document).ready(function() {
+	$('input.cb_inline').change(function() {
+		var cbox = this;
+		$(this).parent().parent().children('td').each(function() {
+			if($(cbox).is(':checked'))
+				$(this).addClass('inline_highlight');
+			else
+				$(this).removeClass('inline_highlight');
+		});
+	});
+	
+	$('input.cb_invertall').change(function() {
+		$('input.cb_inline').each(function() {
+			$(this).change();
+		});
+	});
+	
+	$('input.it_check').change(function() {
+		var cbox = this;
+		var id = $(this).val();
+		$('div.post_wrapper').each(function() {
+			if($(this).attr('data-mid') == id) {
+				if($(cbox).is(':checked'))
+					$(this).addClass('inline_highlight');
+				else
+					$(this).removeClass('inline_highlight');
+			}
+		});
+	});
+});

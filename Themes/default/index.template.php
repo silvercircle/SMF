@@ -110,8 +110,6 @@ function template_html_above()
 				window.open(smf_prepareScriptUrl(smf_scripturl) + "action=pm");
 		}
 		addLoadEvent(fPmPopup);' : '', '
-		var ajax_notification_text = "', $txt['ajax_in_progress'], '";
-		var ajax_notification_cancel_text = "', $txt['modify_cancel'], '";
 		var sSessionId = \'', $context['session_id'], '\';
 		var sSessionVar = \'', $context['session_var'], '\';
 		var disableDynamicTime = ',empty($options['disable_dynatime']) ? 0 : 1,';
@@ -175,8 +173,10 @@ function template_body_above()
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
 	echo '<div id="ajaxbusy" style="display:none;"><img src="',$settings['images_url'],'/ajax-loader.gif" alt="loader" /></div><div id="mcard" style="display:none;"><div id="mcard_close">X</div><div id="mcard_inner"></div></div>
-	<div id="wrap"><header><div id="header">
-		<div id="upper_section" class="middletext"><img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" /><div style="float:left;color:#ddd;text-shadow:1px 1px black;font-size:22px;padding:20px 30px;">SMF pLayGround</div>';
+	<div id="wrap" style="max-width:',empty($settings['forum_width']) ? '3000px' : $settings['forum_width'],';">
+	<header>
+	<div id="header">
+	<div id="upper_section" class="middletext"><img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" /><div style="float:left;color:#ddd;text-shadow:1px 1px black;font-size:22px;padding:20px 30px;">SMF pLayGround</div>';
 
 	// If the user is logged in, display stuff like their name, new messages, etc.
 	if ($context['user']['is_logged'])

@@ -132,7 +132,7 @@ function template_main()
 		// Assuming the category hasn't been collapsed...
 		if (!$category['is_collapsed'])
 		{
-		$alternate = 0;
+		$alternate = 1;
 		echo '
 			<tbody class="content" id="category_', $category['id'], '_boards">';
 			/* Each board in each category's boards has:
@@ -215,7 +215,7 @@ function template_main()
 						', $board['is_redirect'] ? '' : comma_format($board['topics']) . ' ' . $txt['board_topics'], '
 						</p>
 					</td>
-					<td class="lastpost">';
+					<td class="lastpost" style="min-width:300px;">';
 				if (!empty($board['last_post']['id']))
 					echo '<img src="',$board['first_post']['icon_url'],'" alt="icon" />
 					<strong>',$txt['in'], ': </strong>', $board['last_post']['prefix'],'&nbsp;',$board['last_post']['topiclink'], '<br />

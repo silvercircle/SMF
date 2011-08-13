@@ -80,7 +80,7 @@ function template_main()
 						', $board['is_redirect'] ? '' : comma_format($board['topics']) . ' ' . $txt['board_topics'], '
 						</p>
 					</td>
-					<td class="lastpost">';
+					<td class="lastpost" style="min-width:300px;">';
 				if (!empty($board['last_post']['id']))
 					echo '<img src="',$board['first_post']['icon_url'],'" alt="icon" />
 					<strong>',$txt['in'], ': </strong>', $board['last_post']['topiclink'], '<br />
@@ -175,7 +175,7 @@ function template_main()
 			// Show a "select all" box for quick moderation?
 			if (!empty($context['can_quick_mod']) && $options['display_quick_mod'] == 1)
 				echo '
-					<th scope="col" class="blue_container last_th" style="width:24px;"><input type="checkbox" onclick="invertAll(this, this.form, \'topics[]\');" class="input_check" /></th>';
+					<th scope="col" class="blue_container last_th" style="width:24px;"><input type="checkbox" onclick="invertAll(this, this.form, \'topics[]\');" class="input_check cb_invertall" /></th>';
 
 			// If it's on in "image" mode, don't show anything but the column.
 			elseif (!empty($context['can_quick_mod']))
@@ -314,7 +314,7 @@ function template_main()
 					<td class="moderation ', $color_class, '" style="text-align:center;">';
 				if ($options['display_quick_mod'] == 1)
 					echo '
-						<input type="checkbox" name="topics[]" value="', $topic['id'], '" class="input_check" />';
+						<input type="checkbox" name="topics[]" value="', $topic['id'], '" class="input_check cb_inline" />';
 				else
 				{
 					// Check permissions on each and show only the ones they are allowed to use.

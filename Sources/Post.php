@@ -820,13 +820,13 @@ function Post()
 
 		
 		if(!$context['make_event']) {
-			$request = $smcFunc['db_query']('', 'SELECT b.allow_topics FROM {db_prefix}boards AS b WHERE b.id_board = {int:board}',
+			$request = $smcFunc['db_query']('', 'SELECT b.allow_topics, b.automerge FROM {db_prefix}boards AS b WHERE b.id_board = {int:board}',
 				array('board' => $board));
 		
-			$row = $smcFunc['db_fetch_row']($request);
+			list($allow, $automerge) = $smcFunc['db_fetch_row']($request);
 			$smcFunc['db_free_result']($request);
 		
-			if($row[0] == 0)
+			if($allow == 0)
 				fatal_lang_error('no_board', false);
 		}
 		
@@ -1299,8 +1299,10 @@ function Post2()
 	if (!empty($topic))
 	{
 		$request = $smcFunc['db_query']('', '
-			SELECT locked, is_sticky, id_poll, approved, id_first_msg, id_last_msg, id_member_started, id_board, id_prefix, id_layout
-			FROM {db_prefix}topics
+			SELECT t.locked, t.is_sticky, t.id_poll, t.approved, t.id_first_msg, t.id_last_msg, t.id_member_started, t.id_member_updated,
+				t.id_board, t.id_prefix, t.id_layout, b.automerge
+			FROM {db_prefix}topics AS t
+			LEFT JOIN {db_prefix}boards AS b on b.id_board = t.id_board 
 			WHERE id_topic = {int:current_topic}
 			LIMIT 1',
 			array(
@@ -1909,6 +1911,9 @@ function Post2()
 		'mark_as_read' => true,
 		'topic_prefix' => isset($_REQUEST['topic_prefix']) ? intval($_REQUEST['topic_prefix']) : null,
 		'topic_layout' => (isset($_REQUEST['stickfirst']) && $_REQUEST['stickfirst'] ? 0x80 : 0) | (isset($_REQUEST['firstlayout']) && $_REQUEST['firstlayout'] ? 0x01 : 0),
+		'automerge' => $topic_info['automerge'],
+		'id_last_msg' => $topic_info['id_last_msg'],
+		'id_member_updated' => $topic_info['id_member_updated'],
 		'is_approved' => !$modSettings['postmod_active'] || empty($topic) || !empty($board_info['cur_topic_approved']),
 	);
 	$posterOptions = array(

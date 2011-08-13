@@ -174,7 +174,6 @@ jQuery(document).ready(function() {
 		function() {
 			$(this).find('a[class=tpeek]:first').remove();			
 		});
-		
 	// convert all time stamps to relative 
 	if(!disableDynamicTime)
 		$('abbr.timeago').timeago();

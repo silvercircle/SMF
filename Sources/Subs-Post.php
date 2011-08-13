@@ -156,6 +156,7 @@ if (!defined('SMF'))
 /*
  * creates the dropdown of available prefixes for $board
  * optionally preselects the given prefix id (if we modify a first post)
+ * $mandatory: a prefix is required dictated by board settings. TODO: NOT IMPLEMENTE YET
  */
 function getPrefixSelector($board, $id = 0, $mandatory = 0)
 {
@@ -1858,39 +1859,83 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 
 	$new_topic = empty($topicOptions['id']);
 
+	// decide whether we should just update the last post or append a new one
+	$automerge_posts = false;
+	
+	if(!$new_topic && $topicOptions['automerge'] > 0 && $topicOptions['id_member_updated'] == $posterOptions['id'] && empty($topicOptions['poll'])) {
+		$result = $smcFunc['db_query']('', '
+			SELECT poster_time, modified_time, body FROM {db_prefix}messages WHERE id_msg = {int:last_id}',
+			array('last_id' => $topicOptions['id_last_msg']));
+		list($ptime, $mtime, $oldbody) = $smcFunc['db_fetch_row']($result);
+		if ($smcFunc['db_affected_rows']() != 0) {
+			if(time() - max($ptime, $mtime) < $topicOptions['automerge'] * 60) {
+				$automerge_posts = true;
+				$msg_to_update = $topicOptions['id_last_msg'];
+			}
+		}
+		$smcFunc['db_free_result']($result);
+	}
 	// Insert the post.
-	$smcFunc['db_insert']('',
-		'{db_prefix}messages',
-		array(
-			'id_board' => 'int', 'id_topic' => 'int', 'id_member' => 'int', 'subject' => 'string-255', 'body' => (!empty($modSettings['max_messageLength']) && $modSettings['max_messageLength'] > 65534 ? 'string-' . $modSettings['max_messageLength'] : 'string-65534'),
-			'poster_name' => 'string-255', 'poster_email' => 'string-255', 'poster_time' => 'int', 'poster_ip' => 'string-255',
-			'smileys_enabled' => 'int', 'modified_name' => 'string', 'icon' => 'string-16', 'approved' => 'int', 'has_img' => 'int',
-		),
-		array(
-			$topicOptions['board'], $topicOptions['id'], $posterOptions['id'], $msgOptions['subject'], $msgOptions['body'],
-			$posterOptions['name'], $posterOptions['email'], time(), $posterOptions['ip'],
-			$msgOptions['smileys_enabled'] ? 1 : 0, '', $msgOptions['icon'], $msgOptions['approved'], $msgOptions['has_img'],
-		),
-		array('id_msg')
-	);
-	$msgOptions['id'] = $smcFunc['db_insert_id']('{db_prefix}messages', 'id_msg');
-
-	// Something went wrong creating the message...
-	if (empty($msgOptions['id']))
-		return false;
-
-	// Fix the attachments.
-	if (!empty($msgOptions['attachments']))
-		$smcFunc['db_query']('', '
-			UPDATE {db_prefix}attachments
-			SET id_msg = {int:id_msg}
-			WHERE id_attach IN ({array_int:attachment_list})',
+	if(false === $automerge_posts) {
+		
+		$smcFunc['db_insert']('',
+			'{db_prefix}messages',
 			array(
-				'attachment_list' => $msgOptions['attachments'],
-				'id_msg' => $msgOptions['id'],
-			)
+				'id_board' => 'int', 'id_topic' => 'int', 'id_member' => 'int', 'subject' => 'string-255', 'body' => (!empty($modSettings['max_messageLength']) && $modSettings['max_messageLength'] > 65534 ? 'string-' . $modSettings['max_messageLength'] : 'string'),
+				'poster_name' => 'string-255', 'poster_email' => 'string-255', 'poster_time' => 'int', 'poster_ip' => 'string-255',
+				'smileys_enabled' => 'int', 'modified_name' => 'string', 'icon' => 'string-16', 'approved' => 'int', 'has_img' => 'int',
+			),
+			array(
+				$topicOptions['board'], $topicOptions['id'], $posterOptions['id'], $msgOptions['subject'], $msgOptions['body'],
+				$posterOptions['name'], $posterOptions['email'], time(), $posterOptions['ip'],
+				$msgOptions['smileys_enabled'] ? 1 : 0, '', $msgOptions['icon'], $msgOptions['approved'], $msgOptions['has_img'],
+			),
+			array('id_msg')
 		);
+		$msgOptions['id'] = $smcFunc['db_insert_id']('{db_prefix}messages', 'id_msg');
 
+		// Something went wrong creating the message...
+		if (empty($msgOptions['id']))
+			return false;
+
+		$msg_to_update = $msgOptions['id'];		// needed for later tasks
+		// Fix the attachments.
+		if (!empty($msgOptions['attachments']))
+			$smcFunc['db_query']('', '
+				UPDATE {db_prefix}attachments
+				SET id_msg = {int:id_msg}
+				WHERE id_attach IN ({array_int:attachment_list})',
+				array(
+					'attachment_list' => $msgOptions['attachments'],
+					'id_msg' => $msgOptions['id'],
+				)
+			);
+	}
+	else {
+		if($msg_to_update) {
+			$newbody = $oldbody . "\n[merged]".time()."[/merged]\n".$msgOptions['body'];
+			$smcFunc['db_query']('', '
+				UPDATE {db_prefix}messages SET body = {string:newbody}, modified_time = {int:now} WHERE id_msg = {int:id_msg}',
+				array('newbody' => $newbody, 'now' => time(), 'id_msg' => $msg_to_update));
+				
+			$smcFunc['db_query']('', 'DELETE FROM {db_prefix}messages_cache WHERE id_msg = {int:id_msg}',
+				array('id_msg' => $msg_to_update));
+		}
+		else
+			return false;		// that should NOT happen...
+			
+		// attachments must be fixed and "redirected" to the post to which we merge...
+		if (!empty($msgOptions['attachments']))
+			$smcFunc['db_query']('', '
+				UPDATE {db_prefix}attachments
+				SET id_msg = {int:id_msg}
+				WHERE id_attach IN ({array_int:attachment_list})',
+				array(
+					'attachment_list' => $msgOptions['attachments'],
+					'id_msg' => $msg_to_update,
+				)
+			);
+	}
 	// Insert a new topic (if the topicID was left empty.)
 	if ($new_topic)
 	{
@@ -1949,7 +1994,10 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	// The topic already exists, it only needs a little updating.
 	else
 	{
-		$countChange = $msgOptions['approved'] ? 'num_replies = num_replies + 1' : 'unapproved_posts = unapproved_posts + 1';
+		if(false === $automerge_posts)
+			$countChange = $msgOptions['approved'] ? 'num_replies = num_replies + 1' : 'unapproved_posts = unapproved_posts + 1';
+		else		// the # of replies and unapproved posts does not increase if we merge
+			$countChange = $msgOptions['approved'] ? 'num_replies = num_replies' : 'unapproved_posts = unapproved_posts';
 
 		// Update the number of replies and the lock/sticky status.
 		$smcFunc['db_query']('', '
@@ -1962,7 +2010,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			WHERE id_topic = {int:id_topic}',
 			array(
 				'poster_id' => $posterOptions['id'],
-				'id_msg' => $msgOptions['id'],
+				'id_msg' => $msg_to_update,
 				'locked' => $topicOptions['lock_mode'],
 				'is_sticky' => $topicOptions['sticky_mode'],
 				'id_topic' => $topicOptions['id'],
@@ -1970,22 +2018,25 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		);
 
 		// One new post has been added today.
-		trackStats(array('posts' => '+'));
+		if(false === $automerge_posts)
+			trackStats(array('posts' => '+'));
 	}
 
 	// Creating is modifying...in a way.
 	//!!! Why not set id_msg_modified on the insert?
-	$smcFunc['db_query']('', '
-		UPDATE {db_prefix}messages
-		SET id_msg_modified = {int:id_msg}
-		WHERE id_msg = {int:id_msg}',
-		array(
-			'id_msg' => $msgOptions['id'],
-		)
-	);
+	if(false === $automerge_posts) {
+		$smcFunc['db_query']('', '
+			UPDATE {db_prefix}messages
+			SET id_msg_modified = {int:id_msg}
+			WHERE id_msg = {int:id_msg}',
+			array(
+				'id_msg' => $msgOptions['id'],
+			)
+		);
+	}
 
 	// Increase the number of posts and topics on the board.
-	if ($msgOptions['approved'])
+	if ($msgOptions['approved'] && false === $automerge_posts)
 		$smcFunc['db_query']('', '
 			UPDATE {db_prefix}boards
 			SET num_posts = num_posts + 1' . ($new_topic ? ', num_topics = num_topics + 1' : '') . '
@@ -1994,7 +2045,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 				'id_board' => $topicOptions['board'],
 			)
 		);
-	else
+	else if(false === $automerge_posts)
 	{
 		$smcFunc['db_query']('', '
 			UPDATE {db_prefix}boards
@@ -2031,7 +2082,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 					AND id_topic = {int:id_topic}',
 				array(
 					'current_member' => $posterOptions['id'],
-					'id_msg' => $msgOptions['id'],
+					'id_msg' => $msg_to_update,
 					'id_topic' => $topicOptions['id'],
 				)
 			);
@@ -2044,7 +2095,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			$smcFunc['db_insert']('ignore',
 				'{db_prefix}log_topics',
 				array('id_topic' => 'int', 'id_member' => 'int', 'id_msg' => 'int'),
-				array($topicOptions['id'], $posterOptions['id'], $msgOptions['id']),
+				array($topicOptions['id'], $posterOptions['id'], $msg_to_update),
 				array('id_topic', 'id_member')
 			);
 		}
@@ -2055,9 +2106,14 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	{
 		$customIndexSettings = unserialize($modSettings['search_custom_index_config']);
 
+		if($automerge_posts)
+			$text = $newbody;
+		else
+			$text = $msgOptions['body'];
+			
 		$inserts = array();
 		foreach (text2words($msgOptions['body'], $customIndexSettings['bytes_per_word'], true) as $word)
-			$inserts[] = array($word, $msgOptions['id']);
+			$inserts[] = array($word, $msg_to_update);
 
 		if (!empty($inserts))
 			$smcFunc['db_insert']('ignore',
@@ -2069,7 +2125,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	}
 
 	// Increase the post counter for the user that created the post.
-	if (!empty($posterOptions['update_post_count']) && !empty($posterOptions['id']) && $msgOptions['approved'])
+	if (!empty($posterOptions['update_post_count']) && !empty($posterOptions['id']) && $msgOptions['approved'] && false === $automerge_posts)
 	{
 		// Are you the one that happened to create this post?
 		if ($user_info['id'] == $posterOptions['id'])
@@ -2081,15 +2137,17 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	$_SESSION['last_read_topic'] = 0;
 
 	// Better safe than sorry.
-	if (isset($_SESSION['topicseen_cache'][$topicOptions['board']]))
-		$_SESSION['topicseen_cache'][$topicOptions['board']]--;
+	if(false === $automerge_posts) {
+		if (isset($_SESSION['topicseen_cache'][$topicOptions['board']]))
+			$_SESSION['topicseen_cache'][$topicOptions['board']]--;
+	}
 
 	// Update all the stats so everyone knows about this new topic and message.
-	updateStats('message', true, $msgOptions['id']);
+	updateStats('message', true, $msg_to_update);
 
 	// Update the last message on the board assuming it's approved AND the topic is.
 	if ($msgOptions['approved'])
-		updateLastMessages($topicOptions['board'], $new_topic || !empty($topicOptions['is_approved']) ? $msgOptions['id'] : 0);
+		updateLastMessages($topicOptions['board'], $new_topic || !empty($topicOptions['is_approved']) ? $msg_to_update : 0);
 
 	// Alright, done now... we can abort now, I guess... at least this much is done.
 	ignore_user_abort($previous_ignore_user_abort);

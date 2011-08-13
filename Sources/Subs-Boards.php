@@ -604,6 +604,10 @@ function modifyBoard($board_id, &$boardOptions)
 		$boardUpdates[] = 'allow_topics = {int:allow_topics}';
 		$boardUpdateParameters['allow_topics'] = $boardOptions['allow_topics'] ? 1 : 0;
 	}
+	if (isset($boardOptions['automerge'])) {
+		$boardUpdates[] = 'automerge = {int:automerge}';
+		$boardUpdateParameters['automerge'] = $boardOptions['automerge'];
+	}
 	// Set the theme for this board.
 	if (isset($boardOptions['board_theme']))
 	{
@@ -767,6 +771,7 @@ function createBoard($boardOptions)
 		'inherit_permissions' => true,
 		'dont_log' => true,
 		'allow_topics' => 1,
+		'automerge' => 0,
 	);
 
 	// Insert a board, the settings are dealt with later.
@@ -1043,7 +1048,7 @@ function getBoardTree()
 		SELECT
 			IFNULL(b.id_board, 0) AS id_board, b.id_parent, b.name AS board_name, b.description, b.child_level,
 			b.board_order, b.count_posts, b.member_groups, b.id_theme, b.override_theme, b.id_profile, b.redirect,
-			b.num_posts, b.allow_topics, b.num_topics, c.id_cat, c.name AS cat_name, c.cat_order, c.can_collapse
+			b.num_posts, b.allow_topics, b.automerge, b.num_topics, c.id_cat, c.name AS cat_name, c.cat_order, c.can_collapse
 		FROM {db_prefix}categories AS c
 			LEFT JOIN {db_prefix}boards AS b ON (b.id_cat = c.id_cat)
 		ORDER BY c.cat_order, b.child_level, b.board_order',
@@ -1094,6 +1099,7 @@ function getBoardTree()
 				'profile' => $row['id_profile'],
 				'redirect' => $row['redirect'],
 				'allow_topics' => $row['allow_topics'],
+				'automerge' => $row['automerge'],
 				'prev_board' => $prevBoard
 			);
 			$prevBoard = $row['id_board'];

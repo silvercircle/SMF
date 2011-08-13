@@ -191,7 +191,7 @@ function template_main()
 	{
 		echo '<a href="' . $scripturl . '?action=tags;tagid=' . $tag['ID_TAG']  . '">' . $tag['tag'] . '</a>';
 		if($context['can_delete_tags'])
-			echo '<a href="' . $scripturl . '?action=tags;sa=deletetag;tagid=' . $tag['ID']  . '"><span class="xtag">&nbsp;&nbsp;</span></a>';
+			echo '<a href="' . $scripturl . '?action=tags;sa=deletetag;tagid=' . $tag['ID']  . '"><span onclick="sendRequest(smf_scripturl, \'action=xmlhttp;sa=tags;deletetag=1;tagid=' . $tag['ID']. '\', $(\'#tags\'));return(false);" class="xtag">&nbsp;&nbsp;</span></a>';
 		else
 			echo '&nbsp;&nbsp;';
 
@@ -249,7 +249,7 @@ function template_main()
 
 		// Show the message anchor and a "new" anchor if this message is new.
 		$cclass = $message['approved'] ? ($message['alternate'] == 0 ? 'windowbg ' : 'windowbg2 ') : 'approvebg ';
-					echo '<div class="',$cclass,'post_wrapper light_shadow">';
+					echo '<div class="',$cclass,'post_wrapper light_shadow" data-mid="',$message['id'], '">';
 
 		if ($message['id'] != $context['first_message']) {
 			echo '
@@ -465,17 +465,8 @@ function template_main()
 
 		echo '
 						</div>
-						<div class="moderatorbar">
-							<div class="smalltext modified" id="modified_', $message['id'], '">';
-
-		// Show "� Last Edit: Time by Person �" if this post was edited.
-		if ($settings['show_modify'] && !empty($message['modified']['name']))
-			echo '
-								&#171; <em>', $txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'], '</em> &#187;';
-
-		echo '
-							</div>';
-
+						<div class="moderatorbar">';
+					
 		// Are there any custom profile fields for above the signature?
 		if (!empty($message['member']['custom_fields']))
 		{
@@ -519,11 +510,15 @@ function template_main()
 							if (!empty($modSettings['onlineEnable']) && !$message['member']['is_guest'])
 								echo '', $context['can_send_pm'] ? '<a href="' . $message['member']['online']['href'] . '">' : '', $message['member']['online']['text'], $context['can_send_pm'] ? '</a>' : '';
 
-							echo '</div>
-							<div class="reportlinks">';
-							
+							echo '<div class="modified" id="modified_', $message['id'], '">';
+							if ($settings['show_modify'] && !empty($message['modified']['name']))
+								echo '<em>', $txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'], '</em>';
 
-								echo '<ul class="floatright reset quickbuttons" style="line-height:100%;">';
+							echo '
+								</div>
+								</div>
+							<div class="reportlinks">
+						<ul class="floatright reset quickbuttons" style="line-height:100%;">';
 
 		// Maybe we can approve it, maybe we should?
 		if ($message['can_approve'])
@@ -761,9 +756,9 @@ function template_main()
 							bShowModify: ', $settings['show_modify'] ? 'true' : 'false', ',
 							iTopicId: ', $context['current_topic'], ',
 							sTemplateBodyEdit: ', JavaScriptEscape('
-								<div id="quick_edit_body_container" style="width: 90%">
+								<div id="quick_edit_body_container" style="width: 85%;">
 									<div id="error_box" style="padding: 4px;" class="error"></div>
-									<textarea class="editor" name="message" rows="12" style="' . ($context['browser']['is_ie8'] ? 'width: 635px; max-width: 100%; min-width: 100%' : 'width: 100%') . '; margin-bottom: 10px;" tabindex="' . $context['tabindex']++ . '">%body%</textarea><br />
+									<textarea class="editor" name="message" rows="20" style="' . ($context['browser']['is_ie8'] ? 'width: 635px; max-width: 100%; min-width: 100%' : 'width: 100%') . '; margin-bottom: 10px;" tabindex="' . $context['tabindex']++ . '">%body%</textarea><br />
 									<input type="hidden" name="' . $context['session_var'] . '" value="' . $context['session_id'] . '" />
 									<input type="hidden" name="topic" value="' . $context['current_topic'] . '" />
 									<input type="hidden" name="msg" value="%msg_id%" />
@@ -771,7 +766,7 @@ function template_main()
 										<input type="submit" name="post" value="' . $txt['save'] . '" tabindex="' . $context['tabindex']++ . '" onclick="return oQuickModify.modifySave(\'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\');" accesskey="s" class="button_submit" />&nbsp;&nbsp;' . ($context['show_spellchecking'] ? '<input type="button" value="' . $txt['spell_check'] . '" tabindex="' . $context['tabindex']++ . '" onclick="spellCheck(\'quickModForm\', \'message\');" class="button_submit" />&nbsp;&nbsp;' : '') . '<input type="submit" name="cancel" value="' . $txt['modify_cancel'] . '" tabindex="' . $context['tabindex']++ . '" onclick="return oQuickModify.modifyCancel();" class="button_submit" />
 									</div>
 								</div>'), ',
-							sTemplateSubjectEdit: ', JavaScriptEscape('<input type="text" style="width: 90%;" name="subject" value="%subject%" size="80" maxlength="80" tabindex="' . $context['tabindex']++ . '" class="input_text" />'), ',
+							sTemplateSubjectEdit: ', JavaScriptEscape('<input type="text" style="width: 50%;" name="subject" value="%subject%" size="50" maxlength="80" tabindex="' . $context['tabindex']++ . '" class="input_text" />'), ',
 							sTemplateBodyNormal: ', JavaScriptEscape('%body%'), ',
 							sTemplateSubjectNormal: ', JavaScriptEscape('<a href="' . $scripturl . '?topic=' . $context['current_topic'] . '.msg%msg_id%#msg%msg_id%" rel="nofollow">%subject%</a>'), ',
 							sTemplateTopSubject: ', JavaScriptEscape($txt['topic'] . ': %subject% &nbsp;(' . $txt['read'] . ' ' . $context['num_views'] . ' ' . $txt['times'] . ')'), ',
@@ -914,14 +909,15 @@ function template_postbit_blog(&$message, $ignoring)
 
 		echo '</div>
 			</div>';
-					echo '<div style="float:left;"><div class="messageicon">
+					echo '<div><div class="messageicon">
 						  <img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' id="msg_icon_' . $message['id'] . '"' : '', ' />
 						  </div>
-						  <h5 id="subject_', $message['id'], '">
+						  <h5 style="display:inline;" id="subject_', $message['id'], '">
 						  <a href="', $message['href'], '" rel="nofollow">', $message['subject'], '</a>
-						  </h5></div>
+						  </h5>	  
+						  <span class="smalltext">&nbsp;',$message['time'], '</span>						  
+						  </div>
 						  <span class="smalltext" style="float:right;">', !empty($message['counter']) ? $txt['reply_noun'] . ' #' . $message['counter'] : '','</span>
-						  <span class="smalltext">&nbsp;',$message['time'], '</span>
 						  <div id="msg_', $message['id'], '_quick_mod"></div>';
 
 		// Done with the information about the poster... on to the post itself.
@@ -1007,17 +1003,7 @@ function template_postbit_blog(&$message, $ignoring)
 		}
 
 		echo '
-						<div class="moderatorbar" style="margin-left:10px;">
-							<div class="smalltext modified" id="modified_', $message['id'], '">';
-
-		// Show "� Last Edit: Time by Person �" if this post was edited.
-		if ($settings['show_modify'] && !empty($message['modified']['name']))
-			echo '
-								&#171; <em>', $txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'], '</em> &#187;';
-
-		echo '
-							</div>';
-
+						<div class="moderatorbar" style="margin-left:10px;">';
 		// Are there any custom profile fields for above the signature?
 		if (!empty($message['member']['custom_fields']))
 		{
@@ -1048,22 +1034,30 @@ function template_postbit_blog(&$message, $ignoring)
 							<div class="signature" id="msg_', $message['id'], '_signature">', $message['member']['signature'], '</div>';
 
 		echo '
-						</div>';
-						if($message['likes_count'] > 0 || !empty($message['likelink'])) 
-							echo '<div class="likebar">
-							<div style="float:right;">',$message['likelink'],'</div>
-							<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
-							<div style="clear:both;"></div></div>';
+			</div>';
+		if($message['likes_count'] > 0 || !empty($message['likelink'])) 
+			echo '<div class="likebar">
+				<div style="float:right;">',$message['likelink'],'</div>
+				<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
+				<div style="clear:both;"></div></div>';
 						
-						echo '<div class="post_bottom">
-							<div style="float:left;font-size:11px;">';
-							// Show online and offline buttons?
-							if (!empty($modSettings['onlineEnable']) && !$message['member']['is_guest'])
-								echo '', $context['can_send_pm'] ? '<a href="' . $message['member']['online']['href'] . '">' : '', $message['member']['online']['text'], $context['can_send_pm'] ? '</a>' : '';
+		echo '<div class="post_bottom">
+				<div style="float:left;font-size:11px;">';
+				// Show online and offline buttons?
+				if (!empty($modSettings['onlineEnable']) && !$message['member']['is_guest'])
+					echo '', $context['can_send_pm'] ? '<a href="' . $message['member']['online']['href'] . '">' : '', $message['member']['online']['text'], $context['can_send_pm'] ? '</a>' : '';
+					
+				echo '<div class="modified" id="modified_', $message['id'], '">';
+				// Show "� Last Edit: Time by Person �" if this post was edited.
+				if ($settings['show_modify'] && !empty($message['modified']['name']))
+					echo '
+						<em>', $txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'], '</em>';
 
-							echo '</div>
-							<div class="reportlinks">
-								<ul class="floatright reset smalltext quickbuttons">';
+					echo '
+					</div>';
+				echo '</div>
+					<div class="reportlinks">
+					<ul class="floatright reset smalltext quickbuttons">';
 
 		// Maybe we can approve it, maybe we should?
 		if ($message['can_approve'])

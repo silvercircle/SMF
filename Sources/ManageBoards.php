@@ -409,6 +409,7 @@ function EditBoard()
 			'category' => (int) $_REQUEST['cat'],
 			'no_children' => true,
 			'allow_topics' => 1,
+			'automerge' => 0,
 		);
 	}
 	else
@@ -595,6 +596,7 @@ function EditBoard2()
 
 		// Checkboxes....
 		$boardOptions['allow_topics'] = !isset($_POST['act_as_cat']);
+		$boardOptions['automerge'] = isset($_POST['automerge']) ? $_POST['automerge'] : 0;
 		$boardOptions['posts_count'] = isset($_POST['count']);
 		$boardOptions['override_theme'] = isset($_POST['override_theme']);
 		$boardOptions['board_theme'] = (int) $_POST['boardtheme'];
@@ -661,6 +663,7 @@ function EditBoard2()
 				$boardOptions['move_to'] = 'bottom';
 			
 			$boardOptions['allow_topics'] = 1;
+			$boardOptions['automerge'] = 0;
 			createBoard($boardOptions);
 		}
 
