@@ -1133,7 +1133,7 @@ class SimpleSEF {
         self::$queryCount++;
     }
 
-	private static function encode_new($text)
+	private static function encode_old($text)
 	{
 		global $modSettings, $txt;
 
@@ -1236,8 +1236,8 @@ class SimpleSEF {
 		}
 		//	Remove unwanted '-'s
 		$prettytext = preg_replace(array('~^-+|-+$~', '~-+~'), array('', '-'), $prettytext);
-        $prettytext = urlencode($prettytext);
-        //$prettytext = str_replace('%2F', '', $prettytext);
+        //$prettytext = urlencode($prettytext);
+        $prettytext = str_replace('%2F', '', $prettytext);
         //$prettytext = str_replace(self::$stripChars, '', $prettytext);
 		return $prettytext;
 	}
@@ -1274,19 +1274,12 @@ class SimpleSEF {
         }
         else {
         	setlocale(LC_CTYPE, 'en_US.utf8');
-    		$string = iconv('UTF-8', "US-ASCII//TRANSLIT", $string); // TRANSLIT does the whole job
+    		$string = iconv('UTF-8', "UTF-8//TRANSLIT", $string); // TRANSLIT does the whole job
         	$string = implode(' ', array_diff(explode(' ', $string), self::$stripWords));
         	$string = str_replace(self::$stripChars, '', $string);
     		$string = preg_replace('~[^\\pL0-9_]+~u', $modSettings['simplesef_space'], $string); // substitutes anything but letters, numbers and '_' with separator 
-        	//$string = trim($string, " $modSettings[simplesef_space]\t\n\r");
-        	//$string = urlencode($string);
-        	
-        	//$string = str_replace($modSettings['simplesef_space'], '+', $string);
-        	//$string = preg_replace('~(\+)+~', $modSettings['simplesef_space'], $string);
-        	
         	if (!empty($modSettings['simplesef_lowercase']))
             	$string = strtolower($string);
-    		//$string = preg_replace('~[^-a-z0-9_]+~', '', $string);
     		return($string);
         }
 

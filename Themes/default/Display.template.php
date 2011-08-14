@@ -505,17 +505,17 @@ function template_main()
 							<div style="clear:both;"></div></div>';
 						
 						echo '<div class="post_bottom">
-							<div style="float:left;">';
+							<div style="display:inline;">';
 							// Show online and offline buttons?
 							if (!empty($modSettings['onlineEnable']) && !$message['member']['is_guest'])
 								echo '', $context['can_send_pm'] ? '<a href="' . $message['member']['online']['href'] . '">' : '', $message['member']['online']['text'], $context['can_send_pm'] ? '</a>' : '';
 
-							echo '<div class="modified" id="modified_', $message['id'], '">';
+							echo '<span class="modified" id="modified_', $message['id'], '">';
 							if ($settings['show_modify'] && !empty($message['modified']['name']))
 								echo '<em>', $txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'], '</em>';
 
 							echo '
-								</div>
+								</span>
 								</div>
 							<div class="reportlinks">
 						<ul class="floatright reset quickbuttons" style="line-height:100%;">';
@@ -1042,19 +1042,19 @@ function template_postbit_blog(&$message, $ignoring)
 				<div style="clear:both;"></div></div>';
 						
 		echo '<div class="post_bottom">
-				<div style="float:left;font-size:11px;">';
+				<div style="display:inline;">';
 				// Show online and offline buttons?
 				if (!empty($modSettings['onlineEnable']) && !$message['member']['is_guest'])
 					echo '', $context['can_send_pm'] ? '<a href="' . $message['member']['online']['href'] . '">' : '', $message['member']['online']['text'], $context['can_send_pm'] ? '</a>' : '';
 					
-				echo '<div class="modified" id="modified_', $message['id'], '">';
+				echo '<span class="modified" id="modified_', $message['id'], '">';
 				// Show "� Last Edit: Time by Person �" if this post was edited.
 				if ($settings['show_modify'] && !empty($message['modified']['name']))
 					echo '
 						<em>', $txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'], '</em>';
 
 					echo '
-					</div>';
+					</span>';
 				echo '</div>
 					<div class="reportlinks">
 					<ul class="floatright reset smalltext quickbuttons">';

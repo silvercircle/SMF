@@ -1,8 +1,14 @@
 <?php
 function template_main()
 {
-		global $context, $user_info, $scripturl, $settings, $txt;
+	global $context, $user_info, $scripturl, $settings, $txt;
 	
+	if(empty($context['member'])) {
+		echo '	<div class="orange_container largepadding">
+					',$txt['no_access'],'
+				</div>';
+	}
+	else {
 		$member = $context['member'];
 	    $loc = array();
 	    
@@ -54,5 +60,6 @@ function template_main()
 		echo '</div></td></tr></table>';
 		echo '<div class="title_bar">
 			<div style="position:absolute;bottom:3px;right:8px;"><a href="',$scripturl,'?action=profile;u=',$member['id'],'">View full profile</a></div><div style="clear:both;"></div></div>';
+	}
 }
 ?>

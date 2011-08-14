@@ -1242,6 +1242,53 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'after' => '</span>',
 			),
 			array(
+				'tag' => 'yt',
+				'type' => 'unparsed_content',
+				'validate' => create_function('&$tag, &$data, $disabled', '
+					// Access globals
+					global $txt, $context;
+					// Determine which variable is the link
+					$link = !is_array($data) ? $data : $data[0] ;
+					// Remove linebreaks & trim
+					$link = trim(strtr($link, array(\'<br />\' => \'\')));
+					// Parse the ID of video or playlist safely
+					if  (preg_match(\'~^(?:http://((?:www|au|br|ca|es|fr|de|hk|ie|in|il|it|jp|kr|mx|nl|nz|pl|ru|tw|uk)\.)?youtube\.com/(?:[^"]*?)(?:(?:video_)?id=|(?:v|p)(?:/|=)))?([0-9a-f]{16}|[0-9a-z-_]{11})~i\'.($context[\'utf8\'] ? \'u\' : \'\'), $link, $matches))
+					{
+						// Localised youtube site?  If not use www.
+						$site = !empty($matches[1]) ? strtolower($matches[1]) : \'www.\' ;
+						// Video or Playlist ID?
+						$type = strlen($matches[2]) == 11 ? 1 : 0 ;
+						// Set sizes Or Normalise sizes (If sizes are <100 or > 780)
+						if(!is_array($data) || ($data[1] > 780 || $data[1] < 100 || $data[2] > 780 || $data[2] < 100))
+							$data = array(0, 425, ($type ? 350 : 355));
+						// Set ID in the array
+						$data[0] = $matches[2];
+						// Tidy up
+						unset($matches, $link);
+
+						// Set the Content (With conditions on disabled types of BBCode)
+						if (isset($disabled[\'url\']) && isset($disabled[\'youtube\']))
+							// Youtube & Url bbc disabled? (eg Printer friendly pages)
+							$tag[\'content\'] = "http://". $site ."youtube.com/". ($type ? "watch?v" : "view_play_list?p") ."=". $data[0];
+						elseif(isset($disabled[\'youtube\']))
+							// Only Youtube is disabled, So make an active link
+							$tag[\'content\'] = "<a href=\"http://". $site ."youtube.com/". ($type ? "watch?v" : "view_play_list?p") ."=". $data[0]."\" target=\"_blank\">http://". $site ."youtube.com/". ($type ? "watch?v" : "view_play_list?p") ."=". $data[0]."</a>";
+						else
+						{
+							// Empty content
+							$tag[\'content\'] = \'\';
+							
+							$tag[\'content\'] = "<div class=\"blue_container mediumpadding\" style=\"text-align:center;\"><iframe class=\"youtube-player\" type=\"text/html\" width=\"640\" height=\"385\" src=\"http://www.youtube.com/embed/".$data[0]."\" frameborder=\"0\"></iframe></div>";
+							//$tag[\'content\'] = "<div class=\"blue_container mediumpadding\" style=\"text-align:center;\"><a class=\"vbox\" href=\"http://www.youtube.com/embed/".$data[0]."\"><img src=\"http://img.youtube.com/vi/".$data[0]."/0.jpg\" alt=\"thumb\" /></a></div>";
+						}
+					}
+					else
+						// Invalid link
+						$tag[\'content\'] = $txt[\'youtube_invalid\'];
+				'),
+				'disabled_content' => '$1',
+            ),
+			array(
 				'tag' => 'merged',
 				'type' => 'unparsed_content',
 				'test' => '([0-9]+)',
@@ -3900,10 +3947,12 @@ function create_button($name, $alt, $label = '', $custom = '', $force_use = fals
 {
 	global $settings, $txt, $context;
 
+	return '<span class="button '.$alt.'">'.$txt[$alt].'</span>';
 	// Does the current loaded theme have this and we are not forcing the usage of this function?
 	if (function_exists('template_create_button') && !$force_use)
 		return template_create_button($name, $alt, $label = '', $custom = '');
 
+	//return '<a class="button '.$alt.'" >'.$txt[$alt].'</a>';
 	if (!$settings['use_image_buttons'])
 		return $txt[$alt];
 	elseif (!empty($settings['use_buttons']))
@@ -4183,6 +4232,7 @@ function setupMenuContext()
 				),
 				'is_last' => !$context['right_to_left'],
 			),
+			/*
 			'logout' => array(
 				'title' => $txt['logout'],
 				'href' => $scripturl . '?action=logout;%1$s=%2$s',
@@ -4191,6 +4241,7 @@ function setupMenuContext()
 				),
 				'is_last' => !$context['right_to_left'],
 			),
+			*/
 		);
 
 		// Allow editing menu buttons easily.

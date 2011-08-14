@@ -763,4 +763,6 @@ $txt['content_label'] = 'Content';
 $txt['font_increase'] = 'Increase text size';
 $txt['font_decrease'] = 'Decrease text size';
 $txt['who_posted'] = 'Who posted';
+$txt['read_topic'] = 'Read the topic from the beginning';
+$txt['visit_new'] = 'Go to first unread post';
 ?>

@@ -30,8 +30,8 @@ function template_show_list($list_id = null)
 	// Show the title of the table (if any).
 	if (!empty($cur_list['title']))
 		echo '
-			<div class="title_bar clear_right">
-				<h3 class="titlebg">
+			<div class="cat_bar">
+				<h3>
 					', $cur_list['title'], '
 				</h3>
 			</div>';
@@ -79,7 +79,7 @@ function template_show_list($list_id = null)
 	}
 
 	echo '
-			<table class="table_grid" cellspacing="0" width="', !empty($cur_list['width']) ? $cur_list['width'] : '100%', '">';
+			<table class="table_grid" style="width:', !empty($cur_list['width']) ? $cur_list['width'] : '100%;', '">';
 
 	// Show the column headers.
 	$header_count = count($cur_list['headers']);
@@ -87,7 +87,7 @@ function template_show_list($list_id = null)
 	{
 		echo '
 			<thead>
-				<tr class="catbg">';
+				<tr>';
 
 		// Loop through each column and add a table header.
 		$i = 0;
@@ -100,7 +100,7 @@ function template_show_list($list_id = null)
 				$col_header['class'] = 'last_th';
 
 			echo '
-					<th scope="col"', empty($col_header['class']) ? '' : ' class="' . $col_header['class'] . '"', empty($col_header['style']) ? '' : ' style="' . $col_header['style'] . '"', empty($col_header['colspan']) ? '' : ' colspan="' . $col_header['colspan'] . '"', '>', empty($col_header['href']) ? '' : '<a href="' . $col_header['href'] . '" rel="nofollow">', empty($col_header['label']) ? '&nbsp;' : $col_header['label'], empty($col_header['href']) ? '' : '</a>', empty($col_header['sort_image']) ? '' : ' <img src="' . $settings['images_url'] . '/sort_' . $col_header['sort_image'] . '.gif" alt="" />', '</th>';
+					<th scope="col"', empty($col_header['class']) ? 'class="red_container"' : ' class="red_container ' . $col_header['class'] . '"', empty($col_header['style']) ? '' : ' style="' . $col_header['style'] . '"', empty($col_header['colspan']) ? '' : ' colspan="' . $col_header['colspan'] . '"', '>', empty($col_header['href']) ? '' : '<a href="' . $col_header['href'] . '" rel="nofollow">', empty($col_header['label']) ? '&nbsp;' : $col_header['label'], empty($col_header['href']) ? '' : '</a>', empty($col_header['sort_image']) ? '' : ' <img src="' . $settings['images_url'] . '/sort_' . $col_header['sort_image'] . '.gif" alt="" />', '</th>';
 		}
 
 		echo '

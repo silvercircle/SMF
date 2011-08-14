@@ -95,7 +95,7 @@ function template_html_above()
 	// Here comes the JavaScript bits!
 	echo '
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script-min.js?fin20"></script>
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js?fin20"></script>
 	<script type="text/javascript">
 		// <![CDATA[
 		var smf_theme_url = "', $settings['theme_url'], '";
@@ -188,7 +188,7 @@ function template_body_above()
 				<div class="avatar">', $context['user']['avatar']['image'], '</div>';
 		echo '
 				<div><ul class="reset">
-					<li class="greeting">', $txt['hello_member_ndt'], ' <span>', $context['user']['name'], '</span></li>
+					<li class="greeting">', $txt['hello_member_ndt'], ' <span>', $context['user']['name'], '</span>&nbsp;&nbsp;<a href="',$scripturl,'?action=logout;',$context['session_var'],'=',$context['session_id'], '" style="font-size:11px;">[',$txt['logout'], ']</a></li>
 					<li><a href="', $scripturl, '?action=unread">', $txt['unread_since_visit'], '</a></li>
 					<li><a href="', $scripturl, '?action=unreadreplies">', $txt['show_unread_replies'], '</a></li>
 					<li>', $context['current_time'], '</li></ul></div>';
@@ -284,8 +284,9 @@ function template_body_above()
 				$search_label = 'Search this board';
 				$scope = 1;
 			}
-			echo '<input style="width:220px;padding-left:26px;margin:0;" onclick="var s_event = arguments[0] || window.event;openAdvSearch(s_event);return(false);" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" name="search" value="',$search_label,'" class="searchfield" />
-				<div id="adv_search" style="width:240px;position:absolute;display:none;padding:5px;" class="orange_container smalltext">
+			echo '<input style="width:215px;padding-left:26px;margin:0;" onclick="var s_event = arguments[0] || window.event;openAdvSearch(s_event);return(false);" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" name="search" value="',$search_label,'" class="searchfield" />
+				<div id="adv_search" style="width:246px;position:absolute;top:0;display:none;padding:0;padding-top:30px;" class="smalltext">
+				<div class="orange_container">
 				&nbsp;&nbsp;&nbsp;Search posts by member<br />
 				<div style="text-align:center;margin-bottom:10px;"><input style="width:90%;" class="input_text" type="text" name="userspec" id="userspec" value="*" /></div>
 				<input type="checkbox" name="show_complete" id="show_complete" value="0" />Show results as messages<br />';
@@ -303,7 +304,7 @@ function template_body_above()
 				}
 				echo '<input style="width:100%;margin:10px 0;" type="submit" name="submit" value="', 'Search now', '" class="button_submit" />
 			 	  <div style="text-align:center;"><a href="',$scripturl,'?action=search" >Go advanced</a></div>';
-				echo '</div>
+				echo '</div></div>
 				<noscript>
 				<input style="margin:0;" type="submit" name="submit" value="', $txt['go'], '" class="button_submit" />
 				</noscript>';
@@ -468,7 +469,7 @@ function template_menu()
 	
 	echo '
 		<div id="main_menu">
-			<div style="float:right;line-height:24px;font-size:10px;">
+			<div style="float:right;line-height:24px;font-size:10px;font-family:Verdana;">
 				<span id="curfontsize"></span>
 				<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
 				<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>

@@ -430,12 +430,15 @@ function showPosts($memID)
 			$request = $smcFunc['db_query']('', '
 				SELECT
 					b.id_board, b.name AS bname, c.id_cat, c.name AS cname, m.id_topic, m.id_msg,
-					t.id_member_started, t.id_first_msg, t.id_last_msg, m.body, m.smileys_enabled,
-					m.subject, m.poster_time, m.approved
+					t.id_member_started, t.id_first_msg, t.id_last_msg, m.body, m.smileys_enabled, m.id_member,
+					m.subject, m.poster_time, m.approved, mc.body AS cached_body, c1.likes_count, c1.like_status, c1.updated AS like_updated, l.id_user AS liked
 				FROM {db_prefix}messages AS m
 					INNER JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic)
 					INNER JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
 					LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)
+					LEFT JOIN {db_prefix}likes AS l ON l.id_msg = m.id_msg AND l.id_user = '.$user_info['id'].'
+					LEFT JOIN {db_prefix}like_cache AS c1 ON c1.id_msg = m.id_msg
+					LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang}
 				WHERE m.id_member = {int:current_member}' . (!empty($board) ? '
 					AND b.id_board = {int:board}' : '') . (empty($range_limit) ? '' : '
 					AND ' . $range_limit) . '
@@ -447,6 +450,8 @@ function showPosts($memID)
 					'current_member' => $memID,
 					'is_approved' => 1,
 					'board' => $board,
+					'style' => $user_info['smiley_set_id'],
+					'lang' => $user_info['language_id'],
 				)
 			);
 		}
@@ -462,15 +467,25 @@ function showPosts($memID)
 	$counter = $reverse ? $context['start'] + $maxIndex + 1 : $context['start'];
 	$context['posts'] = array();
 	$board_ids = array('own' => array(), 'any' => array());
+	
+	$cache_parsed = (isset($modSettings['use_post_cache']) && $modSettings['use_post_cache']);
+	$can_see_like = allowedTo('like_see');
+	$can_give_like = allowedTo('like_give');
+	require_once($sourcedir . '/LikeSystem.php');
+	
 	while ($row = $smcFunc['db_fetch_assoc']($request))
 	{
 		// Censor....
 		censorText($row['body']);
 		censorText($row['subject']);
-
-		// Do the code.
-		$row['body'] = parse_bbc($row['body'], $row['smileys_enabled'], $row['id_msg']);
-
+		
+		if($cache_parsed) {
+			if(!empty($row['cached_body']))
+				$row['body'] = $row['cached_body'];
+			else
+				$row['body'] = parse_bbc($row['body'], $row['smileys_enabled'], $row['id_msg']);
+		}
+		AddLikeBar($row, $can_give_like);
 		// And the array...
 		$context['posts'][$counter += $reverse ? -1 : 1] = array(
 			'body' => $row['body'],
@@ -495,6 +510,8 @@ function showPosts($memID)
 			'can_delete' => false,
 			'delete_possible' => ($row['id_first_msg'] != $row['id_msg'] || $row['id_last_msg'] == $row['id_msg']) && (empty($modSettings['edit_disable_time']) || $row['poster_time'] + $modSettings['edit_disable_time'] * 60 >= time()),
 			'approved' => $row['approved'],
+			'likers' => $row['likers'],
+			'likelink' => $row['likelink'],
 		);
 
 		if ($user_info['id'] == $row['id_member_started'])

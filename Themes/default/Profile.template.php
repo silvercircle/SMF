@@ -52,13 +52,12 @@ function template_summary()
 	echo '
 <div id="profileview" class="flow_auto">
 	<div class="cat_bar">
-		<h3 class="catbg">
-			<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/profile_sm.gif" alt="" class="icon" />', $txt['summary'], '</span>
+		<h3>
+			',$txt['summary'],'
 		</h3>
 	</div>
 	<div id="basicinfo">
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content flow_auto">
 				<div class="username"><h4>', $context['member']['name'], ' <span class="position">', (!empty($context['member']['group']) ? $context['member']['group'] : $context['member']['post_group']), '</span></h4></div>
 				', $context['member']['avatar']['image'], '
@@ -112,12 +111,10 @@ function template_summary()
 
 	echo '
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 	</div>
 	<div id="detailedinfo">
-		<div class="windowbg2">
-			<span class="topslice"><span></span></span>
+		<div class="yellow_container">
 			<div class="content">
 				<dl>';
 
@@ -319,7 +316,6 @@ function template_summary()
 
 	echo '
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 	</div>
 <div class="clear"></div>
@@ -333,7 +329,7 @@ function template_showPosts()
 
 	echo '
 		<div class="cat_bar">
-			<h3 class="catbg">
+			<h3>
 				', (!isset($context['attachments']) && empty($context['is_topics']) ? $txt['showMessages'] : (!empty($context['is_topics']) ? $txt['showTopics'] : $txt['showAttachments'])), ' - ', $context['member']['name'], '
 			</h3>
 		</div>
@@ -355,13 +351,12 @@ function template_showPosts()
 		{
 			echo '
 		<div class="topic">
-			<div class="', $post['alternate'] == 0 ? 'windowbg2' : 'windowbg', ' core_posts">
-				<span class="topslice"><span></span></span>
+			<div class="post_wrapper core_posts">
 				<div class="content">
 					<div class="counter">', $post['counter'], '</div>
 					<div class="topic_details">
 						<h5><strong><a href="', $scripturl, '?board=', $post['board']['id'], '.0">', $post['board']['name'], '</a> / <a href="', $scripturl, '?topic=', $post['topic'], '.', $post['start'], '#msg', $post['id'], '">', $post['subject'], '</a></strong></h5>
-						<span class="smalltext">&#171;&nbsp;<strong>', $txt['on'], ':</strong> ', $post['time'], '&nbsp;&#187;</span>
+						<span class="smalltext">', $post['time'], '</span>
 					</div>
 					<div class="list_posts">';
 
@@ -378,7 +373,7 @@ function template_showPosts()
 
 			if ($post['can_reply'] || $post['can_mark_notify'] || $post['can_delete'])
 				echo '
-				<div class="floatright">
+				<div class="floatright mediumpadding">
 					<ul class="reset smalltext quickbuttons">';
 
 			// If they *can* reply?
@@ -405,33 +400,37 @@ function template_showPosts()
 				echo '
 					</ul>
 				</div>';
-
 			echo '
-				<br class="clear" />
-				<span class="botslice"><span></span></span>
-			</div>
+				<br class="clear" />';
+				
+			if($post['likes_count'] > 0 || !empty($post['likelink'])) 
+				echo '<div class="likebar">
+				<div style="float:right;">',$post['likelink'],'</div>
+				<span id="likers_msg_',$post['id'],'">',$post['likers'],'</span>
+				<div style="clear:both;"></div></div>';
+			echo '</div>
 		</div>';
 		}
 	}
 	else
 	{
 		echo '
-		<table border="0" width="100%" cellspacing="1" cellpadding="2" class="table_grid" align="center">
+		<table class="table_grid" style="width:100%;">
 			<thead>
-				<tr class="titlebg">
-					<th class="first_th lefttext" scope="col" width="25%">
+				<tr>
+					<th class="red_container lefttext" scope="col" width="25%">
 						<a href="', $scripturl, '?action=profile;u=', $context['current_member'], ';area=showposts;sa=attach;sort=filename', ($context['sort_direction'] == 'down' && $context['sort_order'] == 'filename' ? ';asc' : ''), '">
 							', $txt['show_attach_filename'], '
 							', ($context['sort_order'] == 'filename' ? '<img src="' . $settings['images_url'] . '/sort_' . ($context['sort_direction'] == 'down' ? 'down' : 'up') . '.gif" alt="" />' : ''), '
 						</a>
 					</th>
-					<th scope="col" width="12%">
+					<th class="red_container" scope="col" width="12%">
 						<a href="', $scripturl, '?action=profile;u=', $context['current_member'], ';area=showposts;sa=attach;sort=downloads', ($context['sort_direction'] == 'down' && $context['sort_order'] == 'downloads' ? ';asc' : ''), '">
 							', $txt['show_attach_downloads'], '
 							', ($context['sort_order'] == 'downloads' ? '<img src="' . $settings['images_url'] . '/sort_' . ($context['sort_direction'] == 'down' ? 'down' : 'up') . '.gif" alt="" />' : ''), '
 						</a>
 					</th>
-					<th class="lefttext" scope="col" width="30%">
+					<th class="red_container lefttext" scope="col" width="30%">
 						<a href="', $scripturl, '?action=profile;u=', $context['current_member'], ';area=showposts;sa=attach;sort=subject', ($context['sort_direction'] == 'down' && $context['sort_order'] == 'subject' ? ';asc' : ''), '">
 							', $txt['message'], '
 							', ($context['sort_order'] == 'subject' ? '<img src="' . $settings['images_url'] . '/sort_' . ($context['sort_direction'] == 'down' ? 'down' : 'up') . '.gif" alt="" />' : ''), '
@@ -799,20 +798,20 @@ function template_showPermissions()
 
 	echo '
 		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/profile_sm.gif" alt="" class="icon" />', $txt['showPermissions'], '</span>
+			<h3>
+				', $txt['showPermissions'], '
 			</h3>
 		</div>';
 
 	if ($context['member']['has_all_permissions'])
 	{
 		echo '
-		<p class="windowbg description">', $txt['showPermissions_all'], '</p>';
+		<p class="red_container">', $txt['showPermissions_all'], '</p>';
 	}
 	else
 	{
 		echo '
-		<p class="description">',$txt['showPermissions_help'],'</p>
+		<p class="blue_container">',$txt['showPermissions_help'],'</p>
 		<div id="permissions" class="flow_hidden">';
 
 		if (!empty($context['no_access_boards']))
@@ -837,16 +836,16 @@ function template_showPermissions()
 		echo '
 				<div class="tborder">
 					<div class="cat_bar">
-						<h3 class="catbg">', $txt['showPermissions_general'], '</h3>
+						<h3>', $txt['showPermissions_general'], '</h3>
 					</div>';
 		if (!empty($context['member']['permissions']['general']))
 		{
 			echo '
-					<table class="table_grid" width="100%" cellspacing="0">
+					<table class="table_grid" style="width:100%;">
 						<thead>
-							<tr class="titlebg">
-								<th class="lefttext first_th" scope="col" width="50%">', $txt['showPermissions_permission'], '</th>
-								<th class="lefttext last_th" scope="col" width="50%">', $txt['showPermissions_status'], '</th>
+							<tr>
+								<th class="lefttext red_container nowrap" scope="col" width="50%">', $txt['showPermissions_permission'], '</th>
+								<th class="lefttext red_container nowrap" scope="col" width="50%">', $txt['showPermissions_status'], '</th>
 							</tr>
 						</thead>
 						<tbody>';
@@ -855,10 +854,10 @@ function template_showPermissions()
 			{
 				echo '
 							<tr>
-								<td class="windowbg" title="', $permission['id'], '">
+								<td class="windowbg smalltext" title="', $permission['id'], '">
 									', $permission['is_denied'] ? '<del>' . $permission['name'] . '</del>' : $permission['name'], '
 								</td>
-								<td class="windowbg2 smalltext">';
+								<td class="windowbg smalltext">';
 
 				if ($permission['is_denied'])
 					echo '
@@ -885,7 +884,7 @@ function template_showPermissions()
 			<div class="tborder">
 				<form action="' . $scripturl . '?action=profile;u=', $context['id_member'], ';area=permissions#board_permissions" method="post" accept-charset="', $context['character_set'], '">
 					<div class="cat_bar">
-						<h3 class="catbg"><span class="ie6_header floatleft">
+						<h3><span class="ie6_header floatleft">
 							<a id="board_permissions"></a>', $txt['showPermissions_select'], ':
 							<select name="board" onchange="if (this.options[this.selectedIndex].value) this.form.submit();">
 								<option value="0"', $context['board'] == 0 ? ' selected="selected"' : '', '>', $txt['showPermissions_global'], '&nbsp;</option>';
@@ -906,11 +905,11 @@ function template_showPermissions()
 		if (!empty($context['member']['permissions']['board']))
 		{
 			echo '
-				<table class="table_grid" width="100%" cellspacing="0">
+				<table class="table_grid" style="width:100%;">
 					<thead>
-						<tr class="titlebg">
-							<th class="lefttext first_th" scope="col" width="50%">', $txt['showPermissions_permission'], '</th>
-							<th class="lefttext last_th" scope="col" width="50%">', $txt['showPermissions_status'], '</th>
+						<tr>
+							<th class="lefttext red_container nowrap" scope="col" width="50%">', $txt['showPermissions_permission'], '</th>
+							<th class="lefttext red_container nowrap" scope="col" width="50%">', $txt['showPermissions_status'], '</th>
 						</tr>
 					</thead>
 					<tbody>';
@@ -960,15 +959,13 @@ function template_statPanel()
 	<div id="profileview">
 		<div id="generalstats">
 			<div class="cat_bar">
-				<h3 class="catbg">
-					<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/stats_info.gif" alt="" class="icon" />
+				<h3>
 					', $txt['statPanel_generalStats'], ' - ', $context['member']['name'], '
 					</span>
 				</h3>
 			</div>
 			<div class="windowbg2">
-				<span class="topslice"><span></span></span>
-				<div class="content">
+				<div class="content blue_container mediumpadding">
 					<dl>
 						<dt>', $txt['statPanel_total_time_online'], ':</dt>
 						<dd>', $context['time_logged_in'], '</dd>
@@ -982,7 +979,6 @@ function template_statPanel()
 						<dd>', $context['num_votes'], ' ', $txt['statPanel_votes'], '</dd>
 					</dl>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 		</div>';
 
@@ -990,13 +986,12 @@ function template_statPanel()
 	echo '
 		<div id="activitytime" class="flow_hidden">
 			<div class="cat_bar">
-				<h3 class="catbg">
-				<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/stats_history.gif" alt="" class="icon" />', $txt['statPanel_activityTime'], '</span>
+				<h3>
+				', $txt['statPanel_activityTime'], '
 				</h3>
 			</div>
 			<div class="windowbg2">
-				<span class="topslice"><span></span></span>
-				<div class="content">';
+				<div class="content blue_container mediumpadding">';
 
 	// If they haven't post at all, don't draw the graph.
 	if (empty($context['posts_by_time']))
@@ -1030,7 +1025,6 @@ function template_statPanel()
 	echo '
 					<span class="clear" />
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 		</div>';
 
@@ -1039,13 +1033,12 @@ function template_statPanel()
 		<div class="flow_hidden">
 			<div id="popularposts">
 				<div class="cat_bar">
-					<h3 class="catbg">
-						<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/stats_replies.gif" alt="" class="icon" />', $txt['statPanel_topBoards'], '</span>
+					<h3>
+						', $txt['statPanel_topBoards'], '
 					</h3>
 				</div>
 				<div class="windowbg2">
-					<span class="topslice"><span></span></span>
-					<div class="content">';
+					<div class="content blue_container mediumpadding">';
 
 	if (empty($context['popular_boards']))
 		echo '
@@ -1074,19 +1067,17 @@ function template_statPanel()
 	}
 	echo '
 					</div>
-					<span class="botslice"><span></span></span>
 				</div>
 			</div>';
 	echo '
 			<div id="popularactivity">
 				<div class="cat_bar">
-					<h3 class="catbg">
-					<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/stats_replies.gif" alt="" class="icon" />', $txt['statPanel_topBoardsActivity'], '</span>
+					<h3>
+					', $txt['statPanel_topBoardsActivity'], '
 					</h3>
 				</div>
 				<div class="windowbg2">
-					<span class="topslice"><span></span></span>
-					<div class="content">';
+					<div class="content blue_container mediumpadding">';
 
 	if (empty($context['board_activity']))
 		echo '
@@ -1114,7 +1105,6 @@ function template_statPanel()
 	}
 	echo '
 					</div>
-					<span class="botslice"><span></span></span>
 				</div>
 			</div>
 		</div>';
@@ -1133,9 +1123,7 @@ function template_edit_options()
 	echo '
 		<form action="', (!empty($context['profile_custom_submit_url']) ? $context['profile_custom_submit_url'] : $scripturl . '?action=profile;area=' . $context['menu_item_selected'] . ';u=' . $context['id_member'] . ';save'), '" method="post" accept-charset="', $context['character_set'], '" name="creator" id="creator" enctype="multipart/form-data" onsubmit="return checkProfileSubmit();">
 			<div class="cat_bar">
-				<h3 class="catbg">
-					<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/profile_sm.gif" alt="" class="icon" />';
-
+				<h3>';
 		// Don't say "Profile" if this isn't the profile...
 		if (!empty($context['profile_header_text']))
 			echo '
@@ -1472,10 +1460,6 @@ function template_profile_theme_settings()
 							<li>
 								<input type="hidden" name="default_options[show_children]" value="0" />
 								<label for="show_children"><input type="checkbox" name="default_options[show_children]" id="show_children" value="1"', !empty($context['member']['options']['show_children']) ? ' checked="checked"' : '', ' class="input_check" /> ', $txt['show_children'], '</label>
-							</li>
-							<li>
-								<input type="hidden" name="default_options[use_sidebar_menu]" value="0" />
-								<label for="use_sidebar_menu"><input type="checkbox" name="default_options[use_sidebar_menu]" id="use_sidebar_menu" value="1"', !empty($context['member']['options']['use_sidebar_menu']) ? ' checked="checked"' : '', ' class="input_check" /> ', $txt['use_sidebar_menu'], '</label>
 							</li>
 							<li>
 								<input type="hidden" name="default_options[show_no_avatars]" value="0" />

@@ -30,25 +30,14 @@ function template_generic_menu_sidebar_above()
 	{
 		// Show the section header - and pump up the line spacing for readability.
 		echo '
-			<div class="adm_section">
+			<div class="orange_container minpadding" style="margin-bottom:15px;border-right:0;border-radius:3px 0 0 3px;">
 				<div class="cat_bar">
-					<h4 class="catbg">';
+					<h3>';
 
-		if ($firstSection && !empty($menu_context['can_toggle_drop_down']))
-		{
-			echo '
-						<span class="ie6_header floatleft">
-							<a href="', $menu_context['toggle_url'], '">', $section['title'],'<img style="margin: 0 5px; vertical-align: middle;" src="', $context['menu_image_path'], '/change_menu', $context['right_to_left'] ? '' : '2', '.png" alt="!" /></a>
-						</span>';
-		}
-		else
-		{
 			echo '
 						', $section['title'];
-		}
-
 		echo '
-					</h4>
+					</h3>
 				</div>
 				<ul class="smalltext left_admmenu">';
 
@@ -59,24 +48,18 @@ function template_generic_menu_sidebar_above()
 			if (empty($area['label']))
 				continue;
 
-			echo '
-					<li>';
-
 			// Is this the current area, or just some area?
 			if ($i == $menu_context['current_area'])
 			{
 				echo '
-						<strong><a href="', isset($area['url']) ? $area['url'] : $menu_context['base_url'] . ';area=' . $i, $menu_context['extra_parameters'], '">', $area['label'], '</a></strong>';
+						<li class="active"><a href="', isset($area['url']) ? $area['url'] : $menu_context['base_url'] . ';area=' . $i, $menu_context['extra_parameters'], '">', $area['label'], '</a></li>';
 
 				if (empty($context['tabs']))
 					$context['tabs'] = isset($area['subsections']) ? $area['subsections'] : array();
 			}
 			else
 				echo '
-						<a href="', isset($area['url']) ? $area['url'] : $menu_context['base_url'] . ';area=' . $i, $menu_context['extra_parameters'], '">', $area['label'], '</a>';
-
-			echo '
-					</li>';
+						<li><a href="', isset($area['url']) ? $area['url'] : $menu_context['base_url'] . ';area=' . $i, $menu_context['extra_parameters'], '">', $area['label'], '</a></li>';
 		}
 
 		echo '
@@ -225,7 +208,7 @@ function template_generic_menu_tabs(&$menu_context)
 
 	echo '
 	<div class="cat_bar">
-		<h3 class="catbg">';
+		<h3>';
 
 	// Exactly how many tabs do we have?
 	foreach ($context['tabs'] as $id => $tab)
@@ -299,7 +282,7 @@ function template_generic_menu_tabs(&$menu_context)
 	if (!empty($settings['use_tabs']))
 	{
 		echo '
-	<p class="windowbg description">
+	<p class="orange_container">
 		', !empty($selected_tab['description']) ? $selected_tab['description'] : $tab_context['description'], '
 	</p>';
 

@@ -120,4 +120,46 @@ function LikesError($msg, $xmlreq)
 	}
 	fatal_error($msg, '');
 }
+
+/*
+ * $row[] is supposed to hold all the relevant data for a post
+ * ['likelink'] and ['likers'] will be populated and can then
+ * be used in a template. $can_give_like should be the result of a allowedTo('like_give') check.
+ */
+function AddLikeBar(&$row, $can_give_like)
+{
+	global $user_info, $txt;
+	
+	$row['likers'] = '';
+	$have_liked_it = false;
+	if($can_give_like) {
+		if((int)$row['liked'] > 0) {
+			$row['likelink'] = '<a rel="nofollow" class="givelike" data-fn="remove" href="#" data-id="'.$row['id_msg'].'">'.$txt['unlike_label'].'</a>';
+			$have_liked_it = true;
+		}
+		else if(!$user_info['is_guest']) {
+			if($row['id_member'] != $user_info['id'])
+				$row['likelink'] = '<a rel="nofollow" class="givelike" data-fn="give" href="#" data-id="'.$row['id_msg'].'">'.$txt['like_label'].'</a>';
+			else
+				$row['likelink'] = '&nbsp;';
+		}
+	}
+	else {
+		if((int)$row['liked'] > 0)
+			$have_liked_it = true;
+		$row['likelink'] = '';
+	}
+			
+	if($user_info['is_admin'])
+		$row['likelink'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$row['id_msg'].'">Repair Likes</a>';
+		
+	if($row['likes_count'] > 0) {
+		if(time() - $row['like_updated'] > 86400) {
+			$result = LikesUpdate($row['id_msg']);
+			LikesGenerateOutput($result['status'], $row['likers'], $result['count'], $row['id_msg'], $have_liked_it);
+		}
+		else
+			LikesGenerateOutput($row['like_status'], $row['likers'], $row['likes_count'], $row['id_msg'], $have_liked_it);
+	}
+}
 ?>

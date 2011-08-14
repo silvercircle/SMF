@@ -90,27 +90,23 @@ function GetMcard()
 	$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
 	
 	if(!$is_xmlreq)
-		die;
+		redirectexit();
 		
 	if(!isset($_REQUEST['u']))
 		die;
 		
 	$uid = intval($_REQUEST['u']);
 	
+	loadTemplate('MemberCard');
 	if(allowedTo('profile_view_any') && $uid) {
 		loadMemberData($uid, false, 'profile');
 		loadMemberContext($uid);
-		loadTemplate('MemberCard');
 		loadLanguage('Profile');
 		loadLanguage('Like');
 		$context['member'] = $memberContext[$uid];
 	}
-	else {
-		loadTemplate('MemberCard');
-		loadLanguage('Errors');
-		echo "Forbidden";
-		die;
-	}
+	else
+		$context['member'] = null;
 }
 
 /*
@@ -253,11 +249,14 @@ function TopicPeek()
 		$result = $smcFunc['db_query']('', '
 			SELECT b.*, t.id_topic, t.id_board, t.id_first_msg, t.id_last_msg, m.id_member AS member_started, m1.id_member AS member_lastpost, m.subject AS first_subject, m.poster_name AS starter_name, m1.subject AS last_subject,
 			m1.poster_name AS last_name, m.body as first_body, m1.body AS last_body, 
+			' . ($user_info['is_guest'] ? '0' : 'IFNULL(lt.id_msg, IFNULL(lmr.id_msg, -1)) + 1') . ' AS new_from,
 			m.poster_time AS first_time, m1.poster_time AS last_time FROM {db_prefix}topics AS t
+			LEFT JOIN {db_prefix}log_topics AS lt ON (lt.id_topic = t.id_topic AND lt.id_member = {int:current_member})
+			LEFT JOIN {db_prefix}log_mark_read AS lmr ON (lmr.id_board = t.id_board AND lmr.id_member = {int:current_member})
 			LEFT JOIN {db_prefix}boards AS b ON b.id_board = t.id_board
 			LEFT JOIN {db_prefix}messages AS m ON m.id_msg = t.id_first_msg 
 			LEFT JOIN {db_prefix}messages AS m1 ON m1.id_msg = t.id_last_msg WHERE t.id_topic = {int:topic_id} AND {query_see_board}',
-			array('topic_id' => $tid));
+			array('topic_id' => $tid, 'current_member' => $user_info['id'], 'current_board' => $board));
 			
 		$row = $smcFunc['db_fetch_assoc']($result);
 		
@@ -293,7 +292,7 @@ function TopicPeek()
 			if($context['member_lastpost']) {
 				censorText($context['preview']['last_subject']);
 				$context['preview']['last_body'] = parse_bbc($context['preview']['last_body'], false);
-				$context['preview']['last_body'] = $smcFunc['substr']($context['preview']['last_body'], 0, 300) . '...';
+				$context['preview']['last_body'] = substr($context['preview']['last_body'], 0, 600) . '...';
 				$context['preview']['last_time'] = timeformat($row['last_time']);
 			}
 		}
