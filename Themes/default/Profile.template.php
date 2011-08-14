@@ -88,7 +88,7 @@ function template_summary()
 				', !isset($context['disabled_fields']['aim']) && !empty($context['member']['aim']['link']) ? '<li>' . $context['member']['aim']['link'] . '</li>' : '', '
 				', !isset($context['disabled_fields']['yim']) && !empty($context['member']['yim']['link']) ? '<li>' . $context['member']['yim']['link'] . '</li>' : '', '
 			</ul>
-			<span id="userstatus">', $context['can_send_pm'] ? '<a href="' . $context['member']['online']['href'] . '" title="' . $context['member']['online']['label'] . '" rel="nofollow">' : '', $settings['use_image_buttons'] ? '<img src="' . $context['member']['online']['image_href'] . '" alt="' . $context['member']['online']['text'] . '" align="middle" />' : $context['member']['online']['text'], $context['can_send_pm'] ? '</a>' : '', $settings['use_image_buttons'] ? '<span class="smalltext"> ' . $context['member']['online']['text'] . '</span>' : '';
+			<span id="userstatus">', $context['can_send_pm'] ? '<a href="' . $context['member']['online']['href'] . '" title="' . $context['member']['online']['label'] . '" rel="nofollow">' : '', $settings['use_image_buttons'] ? '<img src="' . $context['member']['online']['image_href'] . '" alt="' . $context['member']['online']['text'] . '" />' : $context['member']['online']['text'], $context['can_send_pm'] ? '</a>' : '', $settings['use_image_buttons'] ? '<span class="smalltext"> ' . $context['member']['online']['text'] . '</span>' : '';
 
 	// Can they add this member as a buddy?
 	if (!empty($context['can_have_buddy']) && !$context['user']['is_owner'])
@@ -113,7 +113,7 @@ function template_summary()
 			</div>
 		</div>
 	</div>
-	<div id="detailedinfo">
+	<div id="detailedinfo"><br />
 		<div class="yellow_container">
 			<div class="content">
 				<dl>';
@@ -1023,7 +1023,7 @@ function template_statPanel()
 	}
 
 	echo '
-					<span class="clear" />
+					<span class="clear"></span>
 				</div>
 			</div>
 		</div>';
@@ -1140,11 +1140,10 @@ function template_edit_options()
 	// Have we some description?
 	if ($context['page_desc'])
 		echo '
-			<p class="windowbg description">', $context['page_desc'], '</p>';
+			<p class="red_container mediumpadding">', $context['page_desc'], '</p>';
 
 	echo '
-			<div class="windowbg2">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container">
 				<div class="content">';
 
 	// Any bits at the start?
@@ -1317,7 +1316,6 @@ function template_edit_options()
 						<input type="hidden" name="sa" value="', $context['menu_item_selected'], '" />
 					</div>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 			<br />
 		</form>';
@@ -1581,13 +1579,12 @@ function template_notification()
 	// The main containing header.
 	echo '
 			<div class="cat_bar">
-				<h3 class="catbg">
-					<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/profile_sm.gif" alt="" class="icon" />', $txt['profile'], '</span>
+				<h3>
+					<span class="ie6_header floatleft">', $txt['profile'], '</span>
 				</h3>
 			</div>
-			<p class="windowbg description">', $txt['notification_info'], '</p>
-			<div class="windowbg2">
-				<span class="topslice"><span></span></span>
+			<p class="red_container description">', $txt['notification_info'], '</p>
+			<div class="blue_container">
 				<div class="content">
 					<form action="', $scripturl, '?action=profile;area=notification;save" method="post" accept-charset="', $context['character_set'], '" id="notify_options" class="flow_hidden">';
 
@@ -1633,7 +1630,6 @@ function template_notification()
 						</div><br class="clear" />
 					</form>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 			<br />';
 
@@ -1654,11 +1650,11 @@ function template_groupMembership()
 	echo '
 		<form action="', $scripturl, '?action=profile;area=groupmembership;save" method="post" accept-charset="', $context['character_set'], '" name="creator" id="creator">
 			<div class="cat_bar">
-				<h3 class="catbg">
-					<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/profile_sm.gif" alt="" class="icon" />', $txt['profile'], '</span>
+				<h3>
+					<span class="ie6_header floatleft">', $txt['profile'], '</span>
 				</h3>
 			</div>
-			<p class="description">', $txt['groupMembership_info'], '</p>';
+			<p class="red_container mediumpadding">', $txt['groupMembership_info'], '</p>';
 
 	// Do we have an update message?
 	if (!empty($context['update_message']))
@@ -1675,7 +1671,6 @@ function template_groupMembership()
 				<div class="cat_bar">
 					<h3 class="catbg">', $txt['request_group_membership'], '</h3>
 				</div>
-				<span class="upperframe"><span></span></span>
 				<div class="roundframe"><div class="innerframe">
 					', $txt['request_group_membership_desc'], ':
 					<textarea name="reason" rows="4" style="' . ($context['browser']['is_ie8'] ? 'width: 635px; max-width: 99%; min-width: 99%' : 'width: 99%') . ';"></textarea>
@@ -1684,17 +1679,16 @@ function template_groupMembership()
 						<input type="submit" name="req" value="', $txt['submit_request'], '" class="button_submit" />
 					</div>
 				</div></div>
-				<span class="lowerframe"><span></span></span>
 			</div>';
 	}
 	else
 	{
 		echo '
-			<table border="0" width="100%" cellspacing="0" cellpadding="4" class="table_grid">
+			<table class="table_grid" style="width:100%;">
 				<thead>
-					<tr class="catbg">
-						<th class="first_th" scope="col" ', $context['can_edit_primary'] ? ' colspan="2"' : '', '>', $txt['current_membergroups'], '</th>
-						<th class="last_th" scope="col"></th>
+					<tr>
+						<th class="red_container first_th" scope="col" ', $context['can_edit_primary'] ? ' colspan="2"' : '', '>', $txt['current_membergroups'], '</th>
+						<th class="red_container last_th" scope="col"></th>
 					</tr>
 				</thead>
 				<tbody>';

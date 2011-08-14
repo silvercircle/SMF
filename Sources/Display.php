@@ -72,6 +72,7 @@ function Display()
 	$cache_parsed = (isset($modSettings['use_post_cache']) && $modSettings['use_post_cache']);
 	$time_now = time();
 	
+	require_once($sourcedir . '/LikeSystem.php');
 	// What are you gonna display if these are empty?!
 	if (empty($topic))
 		fatal_lang_error('no_board', false);
@@ -184,19 +185,16 @@ function Display()
 
 	// get the tags for this topic
 	$dbresult= $smcFunc['db_query']('', "
-        SELECT
-                t.tag,l.ID,t.ID_TAG
-        FROM {db_prefix}tags_log as l, {db_prefix}tags as t
-        WHERE t.ID_TAG = l.ID_TAG && l.ID_TOPIC = $topic");
-                $context['topic_tags'] = array();
-                 while($row = $smcFunc['db_fetch_assoc']($dbresult))
-                        {
-                                $context['topic_tags'][] = array(
-                                'ID' => $row['ID'],
-                                'ID_TAG' => $row['ID_TAG'],
-                                'tag' => $row['tag'],
-                                );
-                }
+       SELECT t.tag,l.ID,t.ID_TAG FROM {db_prefix}tags_log as l, {db_prefix}tags as t
+       	WHERE t.ID_TAG = l.ID_TAG && l.ID_TOPIC = $topic");
+    $context['topic_tags'] = array();
+    while($row = $smcFunc['db_fetch_assoc']($dbresult)) {
+    	$context['topic_tags'][] = array(
+        	'ID' => $row['ID'],
+            'ID_TAG' => $row['ID_TAG'],
+            'tag' => $row['tag'],
+        );
+    }
 	$smcFunc['db_free_result']($dbresult);
         	
 	// Get all the important topic info.
@@ -1266,7 +1264,6 @@ function prepareDisplayContext($reset = false)
 	);
 
 	if($can_see_like) {
-		require_once($sourcedir . '/LikeSystem.php');
 		$output['likers'] = '';
 		$have_liked_it = false;
 		if($can_give_like) {

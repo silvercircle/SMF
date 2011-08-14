@@ -1013,6 +1013,22 @@ jQuery(document).ready(function() {
 		}
 		return(false);
 	});
+	$('table.table_grid td .input_check').change(function() {
+		var cbox = this;
+		$(this).parent().parent().children('td').each(function() {
+			if($(cbox).is(':checked'))
+				$(this).addClass('inline_highlight');
+			else
+				$(this).removeClass('inline_highlight');
+		});
+	});
+	
+	$('table.table_grid th .input_check').change(function() {
+		$('table.table_grid td .input_check').each(function() {
+			$(this).change();
+		});
+	});
+	
 	// handle the topic preview functionality in MessageIndex
 	// fade in the preview link when hovering the subject
 	$('span.tpeek').hover(
@@ -1157,7 +1173,6 @@ function response(ele)
 function openAdvSearch(e)
 {
 	$('#adv_search').fadeIn();
-	//stopEventPropagation(e);
 }
 
 function submitSearchBox()

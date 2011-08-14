@@ -1278,7 +1278,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 							// Empty content
 							$tag[\'content\'] = \'\';
 							
-							$tag[\'content\'] = "<div class=\"blue_container mediumpadding\" style=\"text-align:center;\"><iframe class=\"youtube-player\" type=\"text/html\" width=\"640\" height=\"385\" src=\"http://www.youtube.com/embed/".$data[0]."\" frameborder=\"0\"></iframe></div>";
+							$tag[\'content\'] = "<div class=\"blue_container mediumpadding\" style=\"text-align:center;\"><iframe style=\"width:640px;height:385px;border:0;\" class=\"youtube-player\" src=\"http://www.youtube.com/embed/".$data[0]."\"></iframe></div>";
 							//$tag[\'content\'] = "<div class=\"blue_container mediumpadding\" style=\"text-align:center;\"><a class=\"vbox\" href=\"http://www.youtube.com/embed/".$data[0]."\"><img src=\"http://img.youtube.com/vi/".$data[0]."/0.jpg\" alt=\"thumb\" /></a></div>";
 						}
 					}

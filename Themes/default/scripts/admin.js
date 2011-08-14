@@ -328,3 +328,13 @@ smf_ViewVersions.prototype.determineVersions = function ()
 	if (oLowVersion.Languages)
 		document.getElementById('yourLanguages').style.color = 'red';
 }
+
+$(document).ready(function(){
+	$('table.table_grid td .input_check').each(function() {
+		if($(this).is(':checked')) {
+			$(this).parent().parent().children('td').each(function() {
+				$(this).addClass('inline_highlight');
+			});
+		}				
+	});
+});

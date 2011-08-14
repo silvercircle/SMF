@@ -27,28 +27,28 @@ function template_permission_index()
 
 		if (!empty($context['profile']))
 			echo '
-			<div class="title_bar">
-				<h3 class="titlebg">', $txt['permissions_for_profile'], ': &quot;', $context['profile']['name'], '&quot;</h3>
+			<div class="cat_bar">
+				<h3>', $txt['permissions_for_profile'], ': &quot;', $context['profile']['name'], '&quot;</h3>
 			</div>';
 
 		echo '
-			<table width="100%" class="table_grid">
+			<table style="width:100%;" class="table_grid mlist mediumpadding">
 				<thead>
-					<tr class="catbg">
-						<th class="first_th">', $txt['membergroups_name'], '</th>
-						<th width="10%" align="center" valign="middle">', $txt['membergroups_members_top'], '</th>';
+					<tr>
+						<th class="red_container">', $txt['membergroups_name'], '</th>
+						<th class="red_container" width="10%" align="center" valign="middle">', $txt['membergroups_members_top'], '</th>';
 
 			if (empty($modSettings['permission_enable_deny']))
 				echo '
-						<th width="16%" align="center">', $txt['membergroups_permissions'], '</th>';
+						<th class="red_container" width="16%" align="center">', $txt['membergroups_permissions'], '</th>';
 			else
 				echo '
-						<th width="8%" align="center">', $txt['permissions_allowed'], '</th>
-						<th width="8%" align="center">', $txt['permissions_denied'], '</th>';
+						<th class="red_container" width="8%" align="center">', $txt['permissions_allowed'], '</th>
+						<th class="red_container" width="8%" align="center">', $txt['permissions_denied'], '</th>';
 
 			echo '
-						<th width="10%" align="center" valign="middle">', $context['can_modify'] ? $txt['permissions_modify'] : $txt['permissions_view'], '</th>
-						<th class="last_th" width="4%" align="center" valign="middle">
+						<th class="red_container" width="10%" align="center" valign="middle">', $context['can_modify'] ? $txt['permissions_modify'] : $txt['permissions_view'], '</th>
+						<th class="red_container" class="last_th" width="4%" align="center" valign="middle">
 							', $context['can_modify'] ? '<input type="checkbox" class="input_check" onclick="invertAll(this, this.form, \'group\');" />' : '', '
 						</th>
 					</tr>
@@ -96,13 +96,13 @@ function template_permission_index()
 	{
 		echo '
 			<div class="cat_bar">
-				<h3 class="catbg">
+				<h3>
 					<span class="ie6_header floatleft">
 						<img src="', $settings['images_url'], '/', empty($context['show_advanced_options']) ? 'selected' : 'sort_down', '.gif" id="permissions_panel_toggle" alt="*" /> ', $txt['permissions_advanced_options'], '
 					</span>
 				</h3>
 			</div>
-			<div id="permissions_panel_advanced" class="windowbg">
+			<div id="permissions_panel_advanced" class="blue_container">
 				<span class="topslice"><span></span></span>
 				<div class="content">
 					<fieldset>
@@ -264,16 +264,15 @@ function template_by_board()
 	echo '
 	<form id="admincenter" action="', $scripturl, '?action=admin;area=permissions;sa=board" method="post" accept-charset="', $context['character_set'], '">
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['permissions_boards'], '</h3>
+			<h3>', $txt['permissions_boards'], '</h3>
 		</div>
-		<div class="information">
+		<div class="red_container">
 			', $txt['permissions_boards_desc'], '
 		</div>
-		<div class="title_bar">
-			<h3 id="board_permissions" class="titlebg flow_hidden">
-				<span class="perm_name floatleft">', $txt['board_name'], '</span>
-				<span class="perm_profile floatleft">', $txt['permission_profile'], '</span>
-			</h3>
+		<div class="bigheader" id="board_permissions">
+			<span class="perm_name floatleft">', $txt['board_name'], '</span>
+			<span class="perm_profile floatleft">', $txt['permission_profile'], '</span>
+			<div class="clear"></div>
 		</div>';
 
 	if (!$context['edit_all'])
@@ -286,13 +285,12 @@ function template_by_board()
 	{
 		echo '
 		<div class="cat_bar">
-			<h3 class="catbg"><strong>', $category['name'], '</strong></h3>
+			<h3><strong>', $category['name'], '</strong></h3>
 		</div>';
 
 		if (!empty($category['boards']))
 			echo '
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<ul class="perm_boards flow_hidden">';
 
@@ -334,7 +332,6 @@ function template_by_board()
 			echo '
 				</ul>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>';
 	}
 
@@ -363,16 +360,16 @@ function template_edit_profiles()
 	echo '
 	<div id="admincenter">
 		<form action="', $scripturl, '?action=admin;area=permissions;sa=profiles" method="post" accept-charset="', $context['character_set'], '">
-			<div class="title_bar">
-				<h3 class="titlebg">', $txt['permissions_profile_edit'], '</h3>
+			<div class="cat_bar">
+				<h3>', $txt['permissions_profile_edit'], '</h3>
 			</div>
 
-			<table width="100%" class="table_grid">
+			<table class="table_grid mediumpadding mlist" style="margin-top:10px;width:100%;">
 				<thead>
-					<tr class="catbg">
-						<th class="first_th">', $txt['permissions_profile_name'], '</th>
-						<th>', $txt['permissions_profile_used_by'], '</th>
-						<th class="last_th" width="5%">', $txt['delete'], '</th>
+					<tr>
+						<th class="red_container">', $txt['permissions_profile_name'], '</th>
+						<th class="red_container">', $txt['permissions_profile_used_by'], '</th>
+						<th class="red_container" width="5%">', $txt['delete'], '</th>
 					</tr>
 				</thead>
 				<tbody>';
@@ -491,13 +488,13 @@ function template_modify_group()
 
 	if (!empty($modSettings['permission_enable_deny']) && $context['group']['id'] != -1)
 		echo '
-			<div class="information">
+			<div class="red_container">
 				', $txt['permissions_option_desc'], '
 			</div>';
 
 	echo '
 			<div class="cat_bar">
-				<h3 class="catbg">';
+				<h3>';
 	if ($context['permission_type'] == 'board')
 		echo '
 				', $txt['permissions_local_for'], ' &quot;', $context['group']['name'], '&quot; ', $txt['permissions_on'], ' &quot;', $context['profile']['name'], '&quot;';
@@ -507,14 +504,13 @@ function template_modify_group()
 	echo '
 				</h3>
 			</div>
-			<div class="windowbg">
-				<span class="topslice"><span></span></span>
+			<div class="yellow_container">
 				<div class="content">
 					', $txt['permissions_change_view'], ': ', ($context['view_type'] == 'simple' ? '<img src="' . $settings['images_url'] . '/selected.gif" alt="*" />' : ''), '<a href="', $scripturl, '?action=admin;area=permissions;sa=modify;group=', $context['group']['id'], ($context['permission_type'] == 'board' ? ';pid=' . $context['profile']['id'] : ''), ';view=simple">', $txt['permissions_view_simple'], '</a> |
 					', ($context['view_type'] == 'classic' ? '<img src="' . $settings['images_url'] . '/selected.gif" alt="*" />' : ''), '<a href="', $scripturl, '?action=admin;area=permissions;sa=modify;group=', $context['group']['id'], ($context['permission_type'] == 'board' ? ';pid=' . $context['profile']['id'] : ''), ';view=classic">', $txt['permissions_view_classic'], '</a>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
+			<br />
 			<div class="flow_hidden">';
 
 	// Draw out the main bits.
@@ -530,12 +526,12 @@ function template_modify_group()
 			</div>
 			<br />
 			<div class="cat_bar">
-				<h3 class="catbg">', $txt['permissions_board'], '</h3>
+				<h3>', $txt['permissions_board'], '</h3>
 			</div>
-			<div class="information">
+			<div class="red_container">
 				', $txt['permissions_board_desc'], '
 			</div>
-			<div class="flow_hidden">';
+			<div class="flow_hidden"><br />';
 
 		if ($context['view_type'] == 'simple')
 			template_modify_group_simple('board');
@@ -572,18 +568,18 @@ function template_modify_group_simple($type)
 	$disable_field = $context['profile']['can_modify'] ? '' : 'disabled="disabled" ';
 
 	echo '
-			<table width="100%" class="table_grid">
+			<table style="width:100%;" class="mlist mediumpadding table_grid">
 				<thead>
-					<tr class="catbg">
-						<th colspan="2" width="100%" align="left" class="first_th"></th>';
+					<tr>
+						<th colspan="2" width="100%" align="left" class="red_container"></th>';
 				if (empty($modSettings['permission_enable_deny']) || $context['group']['id'] == -1)
 					echo '
-						<th colspan="3" width="9" class="last_th">&nbsp;</th>';
+						<th colspan="3" width="9"  class="red_container">&nbsp;</th>';
 				else
 					echo '
-						<th>', $txt['permissions_option_on'], '</th>
-						<th>', $txt['permissions_option_off'], '</th>
-						<th class="last_th">', $txt['permissions_option_deny'], '</th>';
+						<th class="red_container">', $txt['permissions_option_on'], '</th>
+						<th class="red_container">', $txt['permissions_option_off'], '</th>
+						<th class="red_container">', $txt['permissions_option_deny'], '</th>';
 					echo '
 					</tr>
 				</thead>
@@ -853,8 +849,7 @@ function template_modify_group_classic($type)
 	$disable_field = $context['profile']['can_modify'] ? '' : 'disabled="disabled" ';
 
 	echo '
-				<div class="windowbg2">
-					<span class="topslice"><span></span></span>
+				<div class="blue_container">
 					<div class="content">';
 
 	foreach ($permission_type['columns'] as $column)
@@ -879,11 +874,11 @@ function template_modify_group_classic($type)
 				if ($has_display_content)
 				{
 					echo '
-							<tr class="catbg">
-								<th colspan="2" width="100%" align="left"><strong class="smalltext">', $permissionGroup['name'], '</strong></th>';
+							<tr>
+								<th colspan="2" width="100%" class="red_container lefttext"><strong class="smalltext">', $permissionGroup['name'], '</strong></th>';
 					if (empty($modSettings['permission_enable_deny']) || $context['group']['id'] == -1)
 						echo '
-								<th colspan="3" width="10"></th>';
+								<th class="red_container" colspan="3" width="10">&nbsp;</th>';
 					else
 						echo '
 								<th align="center"><div>', $txt['permissions_option_on'], '</div></th>
@@ -1085,14 +1080,14 @@ function template_postmod_permissions()
 	echo '
 	<div id="admincenter">
 		<form action="', $scripturl, '?action=admin;area=permissions;sa=postmod;', $context['session_var'], '=', $context['session_id'], '" method="post" name="postmodForm" id="postmodForm" accept-charset="', $context['character_set'], '">
-			<div class="title_bar">
-				<h3 class="titlebg">', $txt['permissions_post_moderation'], '</h3>
+			<div class="cat_bar">
+				<h3>', $txt['permissions_post_moderation'], '</h3>
 			</div>';
 
 	// Got advanced permissions - if so warn!
 	if (!empty($modSettings['permission_enable_deny']))
 		echo '
-				<div class="information">', $txt['permissions_post_moderation_deny_note'], '</div>';
+				<div class="red_container">', $txt['permissions_post_moderation_deny_note'], '</div>';
 
 	echo '
 				<div class="righttext padding">
@@ -1108,39 +1103,39 @@ function template_postmod_permissions()
 					</select>
 					<input type="submit" value="', $txt['go'], '" class="button_submit" />
 			</div>
-			<table width="100%" class="table_grid">
+			<table class="table_grid mlist mediumpadding" style="width:100%;">
 				<thead>
-					<tr class="catbg">
-						<th class="first_th"></th>
-						<th align="center" colspan="3">
+					<tr>
+						<th class="red_container"></th>
+						<th colspan="3" class="red_container centertext">
 							', $txt['permissions_post_moderation_new_topics'], '
 						</th>
-						<th align="center" colspan="3">
+						<th colspan="3" class="red_container centertext">
 							', $txt['permissions_post_moderation_replies_own'], '
 						</th>
-						<th align="center" colspan="3">
+						<th colspan="3" class="red_container centertext">
 							', $txt['permissions_post_moderation_replies_any'], '
 						</th>
-						<th class="last_th" align="center" colspan="3">
+						<th colspan="3" class="red_container centertext">
 							', $txt['permissions_post_moderation_attachments'], '
 						</th>
 					</tr>
-					<tr class="titlebg">
-						<th width="30%">
+					<tr>
+						<th class="centertext blue_container" style="width:30%;">
 							', $txt['permissions_post_moderation_group'], '
 						</th>
-						<th align="center"><img src="', $settings['default_images_url'], '/admin/post_moderation_allow.gif" alt="', $txt['permissions_post_moderation_allow'], '" title="', $txt['permissions_post_moderation_allow'], '" /></th>
-						<th align="center"><img src="', $settings['default_images_url'], '/admin/post_moderation_moderate.gif" alt="', $txt['permissions_post_moderation_moderate'], '" title="', $txt['permissions_post_moderation_moderate'], '" /></th>
-						<th align="center"><img src="', $settings['default_images_url'], '/admin/post_moderation_deny.gif" alt="', $txt['permissions_post_moderation_disallow'], '" title="', $txt['permissions_post_moderation_disallow'], '" /></th>
-						<th align="center"><img src="', $settings['default_images_url'], '/admin/post_moderation_allow.gif" alt="', $txt['permissions_post_moderation_allow'], '" title="', $txt['permissions_post_moderation_allow'], '" /></th>
-						<th align="center"><img src="', $settings['default_images_url'], '/admin/post_moderation_moderate.gif" alt="', $txt['permissions_post_moderation_moderate'], '" title="', $txt['permissions_post_moderation_moderate'], '" /></th>
-						<th align="center"><img src="', $settings['default_images_url'], '/admin/post_moderation_deny.gif" alt="', $txt['permissions_post_moderation_disallow'], '" title="', $txt['permissions_post_moderation_disallow'], '" /></th>
-						<th align="center"><img src="', $settings['default_images_url'], '/admin/post_moderation_allow.gif" alt="', $txt['permissions_post_moderation_allow'], '" title="', $txt['permissions_post_moderation_allow'], '" /></th>
-						<th align="center"><img src="', $settings['default_images_url'], '/admin/post_moderation_moderate.gif" alt="', $txt['permissions_post_moderation_moderate'], '" title="', $txt['permissions_post_moderation_moderate'], '" /></th>
-						<th align="center"><img src="', $settings['default_images_url'], '/admin/post_moderation_deny.gif" alt="', $txt['permissions_post_moderation_disallow'], '" title="', $txt['permissions_post_moderation_disallow'], '" /></th>
-						<th align="center"><img src="', $settings['default_images_url'], '/admin/post_moderation_allow.gif" alt="', $txt['permissions_post_moderation_allow'], '" title="', $txt['permissions_post_moderation_allow'], '" /></th>
-						<th align="center"><img src="', $settings['default_images_url'], '/admin/post_moderation_moderate.gif" alt="', $txt['permissions_post_moderation_moderate'], '" title="', $txt['permissions_post_moderation_moderate'], '" /></th>
-						<th align="center"><img src="', $settings['default_images_url'], '/admin/post_moderation_deny.gif" alt="', $txt['permissions_post_moderation_disallow'], '" title="', $txt['permissions_post_moderation_disallow'], '" /></th>
+						<th class="centertext blue_container"><img src="', $settings['default_images_url'], '/admin/post_moderation_allow.gif" alt="', $txt['permissions_post_moderation_allow'], '" title="', $txt['permissions_post_moderation_allow'], '" /></th>
+						<th class="centertext blue_container"><img src="', $settings['default_images_url'], '/admin/post_moderation_moderate.gif" alt="', $txt['permissions_post_moderation_moderate'], '" title="', $txt['permissions_post_moderation_moderate'], '" /></th>
+						<th class="centertext blue_container"><img src="', $settings['default_images_url'], '/admin/post_moderation_deny.gif" alt="', $txt['permissions_post_moderation_disallow'], '" title="', $txt['permissions_post_moderation_disallow'], '" /></th>
+						<th class="centertext blue_container"><img src="', $settings['default_images_url'], '/admin/post_moderation_allow.gif" alt="', $txt['permissions_post_moderation_allow'], '" title="', $txt['permissions_post_moderation_allow'], '" /></th>
+						<th class="centertext blue_container"><img src="', $settings['default_images_url'], '/admin/post_moderation_moderate.gif" alt="', $txt['permissions_post_moderation_moderate'], '" title="', $txt['permissions_post_moderation_moderate'], '" /></th>
+						<th class="centertext blue_container"><img src="', $settings['default_images_url'], '/admin/post_moderation_deny.gif" alt="', $txt['permissions_post_moderation_disallow'], '" title="', $txt['permissions_post_moderation_disallow'], '" /></th>
+						<th class="centertext blue_container"><img src="', $settings['default_images_url'], '/admin/post_moderation_allow.gif" alt="', $txt['permissions_post_moderation_allow'], '" title="', $txt['permissions_post_moderation_allow'], '" /></th>
+						<th class="centertext blue_container"><img src="', $settings['default_images_url'], '/admin/post_moderation_moderate.gif" alt="', $txt['permissions_post_moderation_moderate'], '" title="', $txt['permissions_post_moderation_moderate'], '" /></th>
+						<th class="centertext blue_container"><img src="', $settings['default_images_url'], '/admin/post_moderation_deny.gif" alt="', $txt['permissions_post_moderation_disallow'], '" title="', $txt['permissions_post_moderation_disallow'], '" /></th>
+						<th class="centertext blue_container"><img src="', $settings['default_images_url'], '/admin/post_moderation_allow.gif" alt="', $txt['permissions_post_moderation_allow'], '" title="', $txt['permissions_post_moderation_allow'], '" /></th>
+						<th class="centertext blue_container"><img src="', $settings['default_images_url'], '/admin/post_moderation_moderate.gif" alt="', $txt['permissions_post_moderation_moderate'], '" title="', $txt['permissions_post_moderation_moderate'], '" /></th>
+						<th class="centertext blue_container"><img src="', $settings['default_images_url'], '/admin/post_moderation_deny.gif" alt="', $txt['permissions_post_moderation_disallow'], '" title="', $txt['permissions_post_moderation_disallow'], '" /></th>
 					</tr>
 				</thead>
 				<tbody>';

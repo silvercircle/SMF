@@ -59,12 +59,10 @@ function template_latest_news()
 				<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=live_news" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" alt="', $txt['help'], '" class="icon" /></a> ', $txt['mc_latest_news'], '</span>
 			</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<div id="smfAnnouncements" class="smalltext">', $txt['mc_cannot_connect_sm'], '</div>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>';
 
 	// This requires a lot of javascript...
@@ -509,8 +507,8 @@ function template_viewmodreport()
 					', sprintf($txt['mc_viewmodreport'], $context['report']['message_link'], $context['report']['author']['link']), '
 				</h3>
 			</div>
-			<div class="title_bar">
-				<h3 class="titlebg">
+			<div class="red_container">
+				<h3>
 					<span class="floatleft">
 						', sprintf($txt['mc_modreport_summary'], $context['report']['num_reports'], $context['report']['last_updated']), '
 					</span>
@@ -526,8 +524,9 @@ function template_viewmodreport()
 						<a href="', $scripturl, '?action=moderate;area=reports;close=', (int) !$context['report']['closed'], ';rid=', $context['report']['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $close_button, '</a>
 					</span>
 				</h3>
+				<div class="clear"></div>
 			</div>
-			<div class="windowbg2">
+			<div class="blue_container">
 				<div class="content">
 					', $context['report']['body'], '
 				</div>
@@ -539,7 +538,7 @@ function template_viewmodreport()
 
 	foreach ($context['report']['comments'] as $comment)
 		echo '
-			<div class="windowbg">
+			<div class="post_wrapper">
 				<div class="content">
 					<p class="smalltext">', sprintf($txt['mc_modreport_whoreported_data'], $comment['member']['link'] . (empty($comment['member']['id']) && !empty($comment['member']['ip']) ? ' (' . $comment['member']['ip'] . ')' : ''), $comment['time']), '</p>
 					<p>', $comment['message'], '</p>
@@ -551,7 +550,7 @@ function template_viewmodreport()
 			<div class="cat_bar">
 				<h3>', $txt['mc_modreport_mod_comments'], '</h3>
 			</div>
-			<div class="windowbg2">
+			<div class="blue_container">
 				<div class="content">';
 
 	if (empty($context['report']['mod_comments']))
@@ -565,7 +564,7 @@ function template_viewmodreport()
 	echo '
 					<textarea rows="2" cols="60" style="' . ($context['browser']['is_ie8'] ? 'width: 635px; max-width: 60%; min-width: 60%' : 'width: 60%') . ';" name="mod_comment"></textarea>
 					<div>
-						<input type="submit" name="add_comment" value="', $txt['mc_modreport_add_mod_comment'], '" class="button_submit" />
+						<input style="float:right;" type="submit" name="add_comment" value="', $txt['mc_modreport_add_mod_comment'], '" class="button_submit" />
 					</div>
 				</div>
 			</div>

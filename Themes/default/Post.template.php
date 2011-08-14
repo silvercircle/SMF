@@ -129,9 +129,7 @@ function template_main()
 
 	// Start the main table.
 	echo '
-			<div class="cat_bar rounded_top">
-				<h3 class="catbg">', $context['page_title'], '</h3>
-			</div>
+			<h1 class="bigheader">', $context['page_title'], '</h1>
 			<div class="generic_container"><br />
 				<div class="blue_container" style="margin:0 auto;padding:10px;max-width:900px;">', isset($context['current_topic']) ? '
 					<input type="hidden" name="topic" value="' . $context['current_topic'] . '" />' : '';

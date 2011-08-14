@@ -406,11 +406,15 @@ function showPosts($memID)
 			$request = $smcFunc['db_query']('', '
 				SELECT
 					b.id_board, b.name AS bname, c.id_cat, c.name AS cname, t.id_member_started, t.id_first_msg, t.id_last_msg,
-					t.approved, m.body, m.smileys_enabled, m.subject, m.poster_time, m.id_topic, m.id_msg
+					t.approved, m.body, m.smileys_enabled, m.id_member, m.subject, m.poster_time, m.id_topic, m.id_msg,
+					mc.body AS cached_body, c1.likes_count, c1.like_status, c1.updated AS like_updated, l.id_user AS liked
 				FROM {db_prefix}topics AS t
 					INNER JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
-					LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)
+					LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)					
 					INNER JOIN {db_prefix}messages AS m ON (m.id_msg = t.id_first_msg)
+					LEFT JOIN {db_prefix}likes AS l ON l.id_msg = m.id_msg AND l.id_user = '.$user_info['id'].'
+					LEFT JOIN {db_prefix}like_cache AS c1 ON c1.id_msg = m.id_msg
+					LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang}
 				WHERE t.id_member_started = {int:current_member}' . (!empty($board) ? '
 					AND t.id_board = {int:board}' : '') . (empty($range_limit) ? '' : '
 					AND ' . $range_limit) . '
@@ -422,6 +426,8 @@ function showPosts($memID)
 					'current_member' => $memID,
 					'is_approved' => 1,
 					'board' => $board,
+					'style' => $user_info['smiley_set_id'],
+					'lang' => $user_info['language_id'],
 				)
 			);
 		}
@@ -487,6 +493,7 @@ function showPosts($memID)
 		}
 		AddLikeBar($row, $can_give_like);
 		// And the array...
+		$row['likes_count'] = isset($row['likes_count']) ? $row['likes_count'] : 0;
 		$context['posts'][$counter += $reverse ? -1 : 1] = array(
 			'body' => $row['body'],
 			'counter' => $counter,
@@ -512,6 +519,7 @@ function showPosts($memID)
 			'approved' => $row['approved'],
 			'likers' => $row['likers'],
 			'likelink' => $row['likelink'],
+			'likes_count' => $row['likes_count']
 		);
 
 		if ($user_info['id'] == $row['id_member_started'])

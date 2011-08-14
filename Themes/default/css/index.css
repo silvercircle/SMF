@@ -793,8 +793,8 @@ div.cat_bar
 	padding: 0 9px;
 	height: 26px;
 	overflow: hidden;
-	text-shadow:1px 1px #ccc;
 }
+h3.catbg{text-shadow:1px 1px #ccc;}
 div.title_bar
 {
 	background: #ccc url(../images/theme/sprite.png) 0 -171px repeat-x;
@@ -1129,9 +1129,43 @@ ul#navigation li
 {
 	padding-left: 2em;
 	overflow: hidden;
-	background-color:#98AABA;
+	background-color:white;
+	border-bottom:1px solid #aaa;
 }
 
+#adm_submenus li {
+	margin:0 1px;
+	color:black;
+	padding:0;
+	position:relative;
+	top:2px;
+}
+
+#adm_submenus li a {
+	background:transparent;
+	color:#666;
+	padding:0;
+	margin:0;
+}
+#adm_submenus li a span {
+	padding:0 3px;
+	border:1px solid #ccc;
+	border-bottom:0;
+	margin:0;
+}
+#adm_submenus li a span:hover {
+	background:transparent;
+}
+
+#adm_submenus li:hover {
+	background:#ccc;
+}
+
+#adm_submenus li a.active span {
+	background:#ddd;
+	margin-top:-4px;
+	margin-left:-3px;
+}
 /* Styles for the general looks for the Curve theme.
 ------------------------------------------------------- */
 
@@ -1169,7 +1203,7 @@ h1.forumtitle
 	padding: 0;
 	float: left;
 }
-h1.bigheader {
+h1.bigheader, div.bigheader {
 	display:block;
 	font-size:16px;
 	font-weight:bold;
@@ -1310,10 +1344,6 @@ select.qaction, input.qaction
 {
 	font-size: 0.85em;
 	padding: 0;
-}
-#mlist table tbody td.windowbg2
-{
-	text-align: center;
 }
 
 /* Styles for a typical table.
@@ -1521,7 +1551,7 @@ div.table_frame .table_list
 	/*border-collapse: collapse;*/
 	margin: 0;
 }
-#messageindex
+#messageindex, #mlist, .mlist
 {
 	clear: both;
 	border:1px solid #aac;
@@ -2535,8 +2565,6 @@ tr.titlebg td
 	height:20px;
 }
 #main_admsection .catbg {
-	background:transparent;
-	text-shadow:none;
 	height:18px;
 	margin:0;
 }
@@ -2545,22 +2573,15 @@ tr.titlebg td
 	font-size: 95%;
 	margin-bottom: 5px;
 }
-#main_container
-{
-	position: relative;
-}
 #main_admsection
 {
-	position: relative;
-	left: 0;
-	right: 0;
 	min-height:600px;
 	border:1px solid #F8DA8B;
-	background-color:#FFF6E2;
+	background-color:#FFFbEc;
 	border-radius:8px 8px 8px 0;
 	padding:5px;
 	overflow: hidden;
-	z-index:0;
+	font-size:12px;
 }
 
 tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td
@@ -3502,13 +3523,18 @@ span.hidelink
 	padding:2px 4px;
 	border-radius:3px;
 }
+#left_admsection .orange_container {
+	background:#FFFbEc;
+}
 .yellow_container {
 	background-color:#F9F9e0;
 	border:1px solid #F2F2A5;
 	padding:2px 4px;
 	border-radius:3px;
 }
-
+.red_container a, .blue_container a, .orange_container a, .yellow_container a {
+	color:#558;
+}
 .red_container, .quoteheader, codeheader{
 	background-color:#FFF2F2;
 	border:1px solid #FFCACA;
@@ -3575,19 +3601,21 @@ div#mcard, .tcard {
 	border-right-width:6px;
 	border-radius:4px;
 	box-shadow: 3px 3px 12px 4px #aaa;
-	max-width:600px;
+	max-width:720px;
+	width:auto;
 }
 div#mcard_inner, .tcard_inner {
 	background-color:#fafafa;
 	padding:5px 0px 0px 0px;
 	margin-top:27px;
-	max-width:592px;
+	max-width:712px;
+	width:auto;
 }
 #mcard_inner pre, #mcard_inner code {
-	max-width:552px;
+	max-width:672px;
 	overflow:hidden !important;
 }
-#mcard_inner div {overflow:hidden !important;max-width:592px;}
+#mcard_inner div {overflow:hidden !important;max-width:712px;}
 div#mcard_close, div#tcard_close {
 	float:right;
 	color:black;

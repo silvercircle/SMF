@@ -18,14 +18,13 @@ function template_admin()
 	// Welcome message for the admin.
 	echo '
 	<div id="admincenter">
-		<div class="cat_bar">
-			<h3 class="catbg">';
+		<div class="cat_bar" style="height:22px;">
+			<h3>';
 
 	if ($context['user']['is_admin'])
 		echo '
 			<object id="quick_search">
 				<form action="', $scripturl, '?action=admin;area=search" method="post" accept-charset="', $context['character_set'], '" class="floatright">
-					<img src="', $settings['images_url'] , '/filter.gif" alt="" />
 					<input type="text" name="search_term" value="', $txt['admin_search'], '" onclick="if (this.value == \'', $txt['admin_search'], '\') this.value = \'\';" class="input_text" />
 					<select name="search_type">
 						<option value="internal"', (empty($context['admin_preferences']['sb']) || $context['admin_preferences']['sb'] == 'internal' ? ' selected="selected"' : ''), '>', $txt['admin_search_type_internal'], '</option>
@@ -39,14 +38,12 @@ function template_admin()
 	echo $txt['admin_center'], '
 			</h3>
 		</div>
-		<span class="upperframe"><span></span></span>
-		<div class="roundframe">
+		<div class="red_container mediumtext mediumpadding">
 			<div id="welcome">
 				<strong>', $txt['hello_guest'], ' ', $context['user']['name'], '!</strong>
 				', sprintf($txt['admin_main_welcome'], $txt['admin_center'], $txt['help'], $txt['help']), '
 			</div>
-		</div>
-		<span class="lowerframe"><span></span></span>';
+		</div>';
 
 	// Is there an update available?
 	echo '
@@ -59,16 +56,14 @@ function template_admin()
 	echo '
 			<div id="live_news" class="floatleft">
 				<div class="cat_bar">
-					<h3 class="catbg">
+					<h3>
 						<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=live_news" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" class="icon" alt="', $txt['help'], '" /></a> ', $txt['live'], '</span>
 					</h3>
 				</div>
-				<div class="windowbg nopadding">
-					<span class="topslice"><span></span></span>
+				<div class="blue_container">
 					<div class="content">
 						<div id="smfAnnouncements">', $txt['lfyi'], '</div>
 					</div>
-					<span class="botslice"><span></span></span>
 				</div>
 			</div>';
 
@@ -76,11 +71,11 @@ function template_admin()
 	echo '
 			<div id="supportVersionsTable" class="floatright">
 				<div class="cat_bar">
-					<h3 class="catbg">
+					<h3>
 						<a href="', $scripturl, '?action=admin;area=credits">', $txt['support_title'], '</a>
 					</h3>
 				</div>
-				<div class="windowbg nopadding">
+				<div class="blue_container">
 					<span class="topslice"><span></span></span>
 					<div class="content">
 						<div id="version_details">
@@ -110,8 +105,7 @@ function template_admin()
 		</div>';
 
 	echo '
-		<div class="windowbg2 clear_right">
-			<span class="topslice"><span></span></span>
+		<div class="yellow_container clear_right">
 			<div class="content">
 				<ul id="quick_tasks" class="flow_hidden">';
 
@@ -139,7 +133,6 @@ function template_admin()
 
 	// This sets the announcements and current versions themselves ;).
 	echo '
-		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/admin.js?fin20"></script>
 		<script type="text/javascript"><!-- // --><![CDATA[
 			var oAdminIndex = new smf_AdminIndex({
 				sSelf: \'oAdminCenter\',
@@ -201,12 +194,11 @@ function template_credits()
 
 	<div id="admincenter">
 		<div class="cat_bar">
-			<h3 class="catbg">
+			<h3>
 				', $txt['support_title'], '
 			</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<strong>', $txt['support_versions'], ':</strong><br />
 					', $txt['support_versions_forum'], ':
@@ -222,50 +214,44 @@ function template_credits()
 
 	echo '
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 	';
 
 	// Point the admin to common support resources.
-	echo '
+	echo '<br />
 		<div class="cat_bar">
-			<h3 class="catbg">
+			<h3>
 				', $txt['support_resources'], '
 			</h3>
 		</div>
-		<div class="windowbg2">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<p>', $txt['support_resources_p1'], '</p>
 				<p>', $txt['support_resources_p2'], '</p>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>';
 
 	// Display latest support questions from simplemachines.org.
-	echo '
+	echo '<br />
 		<div class="cat_bar">
-			<h3 class="catbg">
+			<h3>
 				<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=latest_support" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" class="icon" alt="', $txt['help'], '" /></a> ', $txt['support_latest'], '</span>
 			</h3>
 		</div>
-		<div class="windowbg2">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<div id="latestSupport">', $txt['support_latest_fetch'], '</div>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>';
 
 	// The most important part - the credits :P.
-	echo '
+	echo '<br />
 		<div class="cat_bar">
-			<h3 class="catbg">
+			<h3>
 				', $txt['admin_credits'], '
 			</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container smalltext">
 			<div class="content">';
 
 	foreach ($context['credits'] as $section)
@@ -299,7 +285,6 @@ function template_credits()
 
 	echo '
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 	</div>
 	<br class="clear" />';
@@ -778,7 +763,7 @@ function template_show_settings()
 	if (isset($context['settings_title']))
 		echo '
 			<div class="cat_bar">
-				<h3 class="catbg">
+				<h3>
 					', $context['settings_title'], '
 				</h3>
 			</div>';
@@ -786,7 +771,7 @@ function template_show_settings()
 	// Have we got some custom code to insert?
 	if (!empty($context['settings_message']))
 		echo '
-			<div class="information">', $context['settings_message'], '</div>';
+			<div class="red_container">', $context['settings_message'], '</div>';
 
 	// Now actually loop through all the variables.
 	$is_open = false;
@@ -802,7 +787,6 @@ function template_show_settings()
 				echo '
 					</dl>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>';
 			}
 
@@ -821,7 +805,7 @@ function template_show_settings()
 			else
 			{
 				echo '
-					<p class="description">
+					<p class="red_container">
 						', $config_var['label'], '
 					</p>';
 			}
@@ -834,8 +818,7 @@ function template_show_settings()
 		{
 			$is_open = true;
 			echo '
-			<div class="windowbg2">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container">
 				<div class="content">
 					<dl class="settings">';
 		}
@@ -976,7 +959,6 @@ function template_show_settings()
 	if ($is_open)
 		echo '
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>';
 
 	echo '
@@ -1369,11 +1351,11 @@ function template_core_features()
 	{
 		echo '
 			<div class="cat_bar">
-				<h3 class="catbg">
+				<h3>
 					', $txt['core_settings_welcome_msg'], '
 				</h3>
 			</div>
-			<div class="information">
+			<div class="red_container">
 				', $txt['core_settings_welcome_msg_desc'], '
 			</div>';
 	}
@@ -1381,7 +1363,7 @@ function template_core_features()
 	echo '
 		<form action="', $scripturl, '?action=admin;area=corefeatures;" method="post" accept-charset="', $context['character_set'], '">
 			<div class="cat_bar">
-				<h3 class="catbg">
+				<h3>
 					', $txt['core_settings_title'], '
 				</h3>
 			</div>';
@@ -1390,7 +1372,7 @@ function template_core_features()
 	foreach ($context['features'] as $id => $feature)
 	{
 		echo '
-			<div class="windowbg', $alternate ? '2' : '', '">
+			<div class="blue_container" style="margin-bottom:5px;">
 				<span class="topslice"><span></span></span>
 				<div class="content features">
 					<img class="features_image png_fix" src="', $settings['default_images_url'], '/admin/feature_', $id, '.png" alt="', $feature['title'], '" />

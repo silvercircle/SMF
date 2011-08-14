@@ -187,21 +187,18 @@ function template_main()
 	// Tags
 	echo '
 		<div id="tagstrip"><span id="tags">';
-	foreach ($context['topic_tags'] as $i => $tag)
-	{
+	foreach ($context['topic_tags'] as $i => $tag) {
 		echo '<a href="' . $scripturl . '?action=tags;tagid=' . $tag['ID_TAG']  . '">' . $tag['tag'] . '</a>';
 		if($context['can_delete_tags'])
 			echo '<a href="' . $scripturl . '?action=tags;sa=deletetag;tagid=' . $tag['ID']  . '"><span onclick="sendRequest(smf_scripturl, \'action=xmlhttp;sa=tags;deletetag=1;tagid=' . $tag['ID']. '\', $(\'#tags\'));return(false);" class="xtag">&nbsp;&nbsp;</span></a>';
 		else
 			echo '&nbsp;&nbsp;';
-
 	}
 	echo '</span>';
 		
 	if($context['can_add_tags'])
 		echo '
 			&nbsp;<a rel="nofollow" id="addtag" onclick="$(\'#tagform\').remove();sendRequest(smf_scripturl, \'action=xmlhttp;sa=tags;addtag=1;topic=',$topic,'\', $(\'#addtag\'));return(false);" data-id="',$topic,'" href="' . $scripturl . '?action=tags;sa=addtag;topic=',$topic, '">' . $txt['smftags_addtag'] . '</a>';
-
 	else
 		echo '&nbsp;';
 	echo '

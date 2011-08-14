@@ -12,7 +12,7 @@ function template_main()
 		$member = $context['member'];
 	    $loc = array();
 	    
-		echo '<table style="border:0;width:100%;max-width:500px;position:relative;top:-32px;margin-bottom:-32px;"><tr><td style="vertical-align:top;text-align:center;">';
+		echo '<table style="border:0;width:100%;position:relative;top:-32px;margin-bottom:-32px;"><tr><td style="vertical-align:top;text-align:center;">';
 		if(!empty($member['avatar']['image']))
 			echo $member['avatar']['image'];
 		else

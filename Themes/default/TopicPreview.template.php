@@ -15,7 +15,7 @@ function template_main()
 		echo '</div></td></tr></table>';
 		
 		if($context['member_lastpost']) {
-			echo '<table style="border:0;width:100%;max-width:600px;position:relative;"><tr><td style="vertical-align:top;text-align:center;">';
+			echo '<table style="border:0;width:100%;position:relative;"><tr><td style="vertical-align:top;text-align:center;">';
 			echo '</td>';
 
 			echo '<td style="width:100%;padding:2px 5px;vertical-align:top;">';

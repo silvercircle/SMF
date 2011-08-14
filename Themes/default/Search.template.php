@@ -16,10 +16,9 @@ function template_main()
 
 	echo '
 	<form action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '" name="searchform" id="searchform">
-		<div class="cat_bar rounded_top">
-			<h3 class="catbg">
-				<span class="ie6_header floatleft">', $txt['set_parameters'], '</span>
-			</h3>
+		<div class="bigheader">
+			<span class="ie6_header floatleft">', $txt['set_parameters'], '</span>
+			<div class="clear"></div>
 		</div>
 		<div class="generic_container rounded_bottom">';
 
