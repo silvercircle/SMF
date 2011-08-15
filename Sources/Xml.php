@@ -32,7 +32,7 @@ function XMLhttpMain()
 			'function' => 'ListMessageIcons',
 		),
 		'mcard' => array('function' => 'GetMcard'),
-		'givelike' => array('function' => 'GiveLike'),
+		'givelike' => array('function' => 'HandleLikeRequest'),
 		'mpeek' => array('function' => 'TopicPeek'),
 		'tags' => array('function' => 'TagsActionDispatcher'),
 		'whoposted' => array('function' => 'WhoPosted')
@@ -77,6 +77,23 @@ function ListMessageIcons()
 	$context['sub_template'] = 'message_icons';
 }
 
+function AjaxErrorMsg($msg)
+{
+	global $context;
+	
+	$xmlreq = (isset($_REQUEST['action']) && $_REQUEST['action'] == 'xmlhttp') ? true : false;
+
+	if($xmlreq) {
+		$context['ajax_error_message'] = $msg;
+		$context['error_container_id'] = 'ajax_error_container';
+		$context['sub_template'] = 'ajax_error';
+		$context['template_layers'] = array();		// ouput "plain", no header etc.
+		obExit(true, true, false);
+	}
+	else
+		fatal_error($msg, '');
+}
+
 /*
  * output the member card
  * todo: better error response
@@ -109,123 +126,16 @@ function GetMcard()
 		$context['member'] = null;
 }
 
-/*
- * handle a like. _REQUEST['m'] is the message id that is to receive the
- * like
- * 
- * TODO: remove likes from the database when a user is deleted
- * TODO: make it work without AJAX and JavaScript
- * TODO: error responses
- * TODO: disallow like for posts by banned users
- * TODO: use language packs to make it fully translatable
- * TODO: allow likes for more than just post content types (i.e. profile messages in a later stage)
- */
- 
-function GiveLike()
+function HandleLikeRequest()
 {
-	global $context;
-	global $settings, $user_info, $sourcedir, $smcFunc;
-	$total = array();
+	global $sourcedir;
 	
-	if(isset($_REQUEST['m']))
-		$mid = intval($_REQUEST['m']);
-	else
-		$mid = 0;
+	$mid = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
 	
-	if($mid > 0) {
-		$uid = $user_info['id'];
-		$remove_it = isset($_REQUEST['remove']) ? true : false;
-		$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
-		
-		require_once($sourcedir . '/LikeSystem.php');
-
-		if($user_info['is_guest'])
-			LikesError("Permission denied", $is_xmlreq);
-
-		/* check for dupes */
-		$request = $smcFunc['db_query']('', '
-			SELECT COUNT(id_msg) as count, id_user 
-				FROM {db_prefix}likes AS l WHERE l.id_msg = {int:id_message} AND l.id_user = {int:id_user}',
-				array('id_message' => $mid, 'id_user' => $uid));
-				
-		$count = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
-		
-		$c = intval($count[0]);
-		$like_owner = intval($count[1]);
-		/*
-		 * this is a debugging feature and allows the admin to repair
-		 * the likes for a post.
-		 * it may go away at a later time.
-		 */
-		if(isset($_REQUEST['repair'])) {
-			if(!$user_info['is_admin'])
-				die;
-			$total = LikesUpdate($mid);
-			$output = '';
-			LikesGenerateOutput($total['status'], $output, $total['count'], $mid, $c > 0 ? true : false);
-			if($is_xmlreq)
-				echo $output;
-			else
-				LikesError("The like status cache for post ".$mid."was rebuilt successfully");
-			die;
-		}
-		
-		if($c > 0 && !$remove_it)		// duplicate like (but not when removing it)
-			LikesError('Verification failed (duplicate)', $is_xmlreq);
-			
-		/*
-		 * you cannot like your own post - the front end handles this with a seperate check and
-		 * doesn't show the like button for own messages, but this check is still necessary
-		 */		
-		
-		$request = $smcFunc['db_query']('', '
-			SELECT id_member, id_board FROM {db_prefix}messages AS m WHERE m.id_msg = '.$mid);
-
-		$m = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
-		$like_receiver = intval($m[0]);
-		
-		if($like_receiver == $uid)
-			LikesError('Cannot like own posts.', $is_xmlreq);
-		
-		if(!allowedTo('like_give', $m[1]))			// no permission to give likes in this board
-			LikesError('You cannot use this feature.', $is_xmlreq);
-
-		if($remove_it && $c > 0) {   	// TODO: remove a like, $c must indicate a duplicate (existing) like
-										// and you must be the owner of the like or admin
-			LikesError('Removing is ok', $is_xmlreq);
-		}
-		else {
-			/* store the like */
-			global $memberContext;
-			
-			if($like_receiver) {
-				loadMemberData($like_receiver);
-				loadMemberContext($like_receiver);
-				if(!$memberContext[$like_receiver]['is_banned']) {
-					$smcFunc['db_query']('', '
-						INSERT INTO {db_prefix}likes values({int:id_message}, {int:id_user}, {int:id_receiver}, {int:updated})',
-						array('id_message' => $mid, 'id_user' => $uid, 'id_receiver' => $like_receiver, 'updated' => time()));
-					
-					$smcFunc['db_query']('', 'UPDATE {db_prefix}members SET likes_received = likes_received + 1 WHERE id_member = {int:id_member}',
-						array('id_member' => $like_receiver));
-					
-					$smcFunc['db_query']('', 'UPDATE {db_prefix}members SET likes_given = likes_given + 1 WHERE id_member = '.$uid);
-				}
-			}
-			else
-				LikesError('Cannot like this post', $is_xmlreq);
-				
-		}
-		$total = LikesUpdate($mid);
-		$output = '';
-		LikesGenerateOutput($total['status'], $output, $total['count'], $mid, true);
-		echo $output;
-	}
-	die;
+	require_once($sourcedir . '/LikeSystem.php');
+	GiveLike($mid);
 }
-
+	
 // todo: check permissions!!
 function TopicPeek()
 {
@@ -326,10 +236,7 @@ function WhoPosted()
 	
 	$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
 	
-	if(isset($_REQUEST['t']))
-		$tid = intval($_REQUEST['t']);
-	else
-		$tid = 0;
+	$tid = isset($_REQUEST['t']) ? (int)$_REQUEST['t'] : 0;
 		
 	if($tid) {
 		$result = $smcFunc['db_query']('', 'SELECT t.id_board FROM {db_prefix}topics AS t
@@ -347,7 +254,7 @@ function WhoPosted()
 			$result = $smcFunc['db_query']('', '
 				SELECT mem.real_name, m.id_member, count(m.id_member) AS count FROM {db_prefix}messages AS m
 					LEFT JOIN {db_prefix}members AS mem ON mem.id_member = m.id_member WHERE m.id_topic = {int:topic} 
-					GROUP BY m.id_member ORDER BY count DESC limit 10', array('topic' => $tid));
+					GROUP BY m.id_member ORDER BY count DESC limit 20', array('topic' => $tid));
 			
 			while($row = $smcFunc['db_fetch_assoc']($result))
 				$context['posters'][] = $row;

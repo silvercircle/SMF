@@ -1,6 +1,6 @@
 a:link, a:visited
 {
-	color: #0099cc;
+	color: #0066aa;
 	text-decoration: none;
 }
 a:hover
@@ -424,9 +424,9 @@ code.bbc_code
 .catbg, .catbg2, tr.catbg td, tr.catbg2 td, tr.catbg th, tr.catbg2 th
 {
 	color: #222;
-	font-size: 1.1em;
+	font-size: 1.0em;
 	font-weight: bold;
-	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
+	/*background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;*/
 }
 
 /* adjust the table versions of headers */
@@ -455,7 +455,7 @@ tr.titlebg th a:link, tr.titlebg th a:visited, tr.titlebg2 td a:link, tr.titlebg
 	border:0 !important;
 }
 /* Alternating backgrounds for posts, and several other sections of the forum. */
-.windowbg, #preview_body
+.windowbg
 {
 	color: #000;
 	background-color: #f0f0f5;
@@ -756,8 +756,8 @@ dl.settings dt a img
 h3.catbg, h3.catbg2, h3.titlebg, h4.titlebg, h4.catbg
 {
 	overflow: hidden;
-	height: 26px;
-	line-height: 26px;
+	height: 20px;
+	line-height: 20px;
 	font-size: 1.05em;
 	font-weight: bold;
 }
@@ -785,29 +785,21 @@ h4.titlebg, h3.titlebg
 h4.titlebg img.icon
 {
 	float: left;
-	margin: 5px 8px 0 0;
+	margin: 2px 8px 0 0;
 }
-div.cat_bar
-{
-	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
-	padding: 0 9px;
-	height: 26px;
-	overflow: hidden;
-}
-h3.catbg{text-shadow:1px 1px #ccc;}
 div.title_bar
 {
 	background: #ccc url(../images/theme/sprite.png) 0 -171px repeat-x;
-	padding-left: 9px;
-	height: 26px;
+	padding: 2px 9px;
+	height: 20px;
 	overflow: hidden;
 }
 
 div.title_barIC
 {
 	background: #ccc url(../images/theme/sprite.png) 0 -171px repeat-x;
-	padding-left: 9px;
-	height: 26px;
+	padding: 2px 9px;
+	height: 20px;
 	overflow: hidden;
 	margin-bottom: 1px;
 }
@@ -823,7 +815,7 @@ div.title_barIC h4.titlebg
 img#upshrink_ic, img#newsupshrink
 {
 	float: right;
-	margin: 5px 5px 0 0;
+	margin: 0 5px 0 0;
 }
 table.table_list a.unreadlink, table.table_list a.collapse
 {
@@ -840,10 +832,10 @@ table.table_list a.collapse
 	font-size: 0.95em;
 	border-bottom: 1px solid #fff;
 }
-.table_grid tr.catbg th, .table_grid tr.titlebg th
+.table_grid tr.catbg th, .table_grid tr th
 {
-	height: 28px;
-	line-height: 28px;
+	height: 22px;
+	line-height: 22px;
 }
 tr.catbg th.first_th
 {
@@ -882,12 +874,13 @@ table.table_grid td
 {
 	padding: 3px;
 	border-bottom:1px solid #d5ecfa;
+	font-size:0.95em;
 }
 
 /* GenericList */
 .additional_row
 {
-	padding: 0.5em 0 0.5em 0;
+	padding: 0.2em 0 0.2em 0;
 }
 table.table_grid thead tr.catbg th
 {
@@ -1138,7 +1131,8 @@ ul#navigation li
 	color:black;
 	padding:0;
 	position:relative;
-	top:2px;
+	position:relative;
+	top:4px;
 }
 
 #adm_submenus li a {
@@ -1148,10 +1142,11 @@ ul#navigation li
 	margin:0;
 }
 #adm_submenus li a span {
-	padding:0 3px;
+	padding:0 4px;
 	border:1px solid #ccc;
 	border-bottom:0;
 	margin:0;
+	border-radius:3px 3px 0 0;
 }
 #adm_submenus li a span:hover {
 	background:transparent;
@@ -1163,8 +1158,10 @@ ul#navigation li
 
 #adm_submenus li a.active span {
 	background:#ddd;
-	margin-top:-4px;
 	margin-left:-3px;
+	padding:1px 5px;
+	position:relative;
+	top:-4px;
 }
 /* Styles for the general looks for the Curve theme.
 ------------------------------------------------------- */
@@ -1209,6 +1206,7 @@ h1.bigheader, div.bigheader {
 	font-weight:bold;
 	border-bottom:3px solid #ccc;
 	padding:4px 20px;
+	margin-bottom:2px;
 }
 h3, h4
 {
@@ -1555,8 +1553,8 @@ div.table_frame .table_list
 {
 	clear: both;
 	border:1px solid #aac;
-	border-radius:8px;
-	padding-top:3px;
+	border-radius:5px;
+	padding:3px;
 }
 /* the page navigation area */
 .childboards
@@ -1761,8 +1759,6 @@ p#whoisviewing
 .poster_details
 {
 	text-align:center;
-	/*background-color:#f2f5fe;
-	border:1px solid #d5ecfa;*/
 	width:180px;
 	max-width:180px;
 	min-width:180px;
@@ -1892,30 +1888,21 @@ ul.quickbuttons li, .buttonlist ul li
 	padding:0;
 	cursor:pointer;
 }
-ul.quickbuttons li a, .buttonlist ul li a
+ul.quickbuttons li a, .buttonlist ul li a, span.button
 {
+	font-size:10px !important;
+	font-family:Verdana,arial,helvetica;
+	font-weight:bold;
+	text-shadow: white 1px 1px 8px;
 	float: left;
-	font-size:11px;
-	line-height:18px !important;
+	line-height:17px !important;
+	margin-top:1px;
 	text-decoration: none;
 	padding:0 4px;
-	color:black;
+	color:#555;
 	background:#d8dfea;
 	border:1px solid #9bb1db;
 	border-radius:2px;
-}
-span.button
-{
-	/*padding: 0 0 0 20px;*/
-	font-size:11px;
-	line-height:18px !important;
-	text-decoration: none;
-	padding:1px 4px;
-	color:black;
-	background:#d8dfea;
-	border:1px solid #9bb1db;
-	border-radius:2px;
-	cursor:pointer;
 }
 
 ul.quickbuttons li a:hover, span.button:hover, .buttonlist ul li a:hover {
@@ -1932,10 +1919,6 @@ ul.quickbuttons li a:hover, span.button:hover, .buttonlist ul li a:hover {
 {
 	background-color:#a8aFbA !important;
 	color: white;
-	font-weight: bold;
-}
-.buttonlist ul li a.active
-{
 	font-weight: bold;
 }
 ul.quickbuttons li.inline_mod_check
@@ -2555,7 +2538,7 @@ tr.titlebg td
 	min-height:600px;
 	border-right:1px solid #F8DA8B;
 }
-#left_admsection .cat_bar, #main_admsection .cat_bar  {
+.cat_bar, #left_admsection .cat_bar, #main_admsection .cat_bar  {
 	background:#E2E2E2 url(../images/theme/sprite.png) 0 -118px repeat-x;
 	border:1px solid #ddd;
 	border-bottom: 2px solid #ddd;
@@ -2563,6 +2546,18 @@ tr.titlebg td
 	padding:3px 4px 0px 10px;
 	margin-bottom:1px;
 	height:20px;
+}
+#boardindex_table .cat_bar
+{
+	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
+	padding: 3px 9px;
+	height: 20px;
+	overflow: hidden;
+	border:0;
+}
+#boardindex_table div.cat_bar > h3.catbg
+{
+	text-shadow:1px 1px #ccc !important;
 }
 #main_admsection .catbg {
 	height:18px;
@@ -3322,12 +3317,12 @@ dl.addrules dt.floatleft
 }
 #month_grid div.cat_bar
 {
-	height: 25px;
+	height: 21px;
 }
 #month_grid h3.catbg
 {
-	height: 25px;
-	line-height: 27px;
+	height: 21px;
+	line-height: 21px;
 }
 #month_grid table
 {
@@ -3532,23 +3527,26 @@ span.hidelink
 	padding:2px 4px;
 	border-radius:3px;
 }
-.red_container a, .blue_container a, .orange_container a, .yellow_container a {
+.red_container a, .blue_container a {
 	color:#558;
 }
-.red_container, .quoteheader, codeheader{
+.red_container, .quoteheader, .codeheader{
 	background-color:#FFF2F2;
 	border:1px solid #FFCACA;
 	padding:2px 4px;
 	border-radius:3px;
 }
 
-.quoteheader, codeheader {
+.quoteheader, .codeheader {
 	border-bottom-left-radius:0;
 	border-bottom-right-radius:0;
 	border-left:3px solid #a88;
 	font-size:11px;
 	font-weight:bold;
 	margin:10px 10px 0 10px;
+}
+.codeheader {
+	margin:10px 0px 0 0px;
 }
 /* page links (navpages) */
 
@@ -3710,22 +3708,26 @@ div.bmbar > div.title {
 	line-height:20px;
 }
 .share_button {
-	padding:5px 5px 5px 24px;
+	font-size:10px !important;
+	font-family:Verdana,arial,helvetica;
+	font-weight:bold;
+	text-shadow: white 2px 2px 10px;
+	float: left;
+	line-height:16px !important;
+	text-decoration: none;
+	padding:1px 4px 1px 22px;
+	color:#555;
+	background:#d8dfea;
+	border:1px solid #9bb1db;
 	border-radius:2px;
-	cursor:pointer;
-	display:inline-block;
-	font-size:10px;
-	line-height:100%;
-	border: 1px solid #6b81ab;
-	background-color:#D8DFEA;
-	
+	margin-right:4px;
 }
 .share_button:hover {background-color:#ccc !important;border-color:#888;}
 
-.share_fb {background:#D8DFEA url(../images/theme/sprite.png) 0 -327px no-repeat;}
-.share_tw {background:#D8DFEA url(../images/theme/sprite.png) 0 -357px no-repeat;}
-.share_buzz {background:#D8DFEA url(../images/theme/sprite.png) 0 -390px no-repeat;}
-.share_digg {background:#D8DFEA url(../images/theme/sprite.png) 0 -421px no-repeat;}
+.share_fb {background:#D8DFEA url(../images/theme/sprite.png) 0 -328px no-repeat;}
+.share_tw {background:#D8DFEA url(../images/theme/sprite.png) 0 -358px no-repeat;}
+.share_buzz {background:#D8DFEA url(../images/theme/sprite.png) 0 -391px no-repeat;}
+.share_digg {background:#D8DFEA url(../images/theme/sprite.png) 0 -422px no-repeat;}
 
 div.fb_tweet {
     vertical-align:bottom;

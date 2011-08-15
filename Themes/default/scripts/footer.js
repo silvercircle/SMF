@@ -968,6 +968,10 @@ jQuery(document).ready(function() {
 		scalePhotos : false,
 		transition : 'fade'
 	});
+	$('.attach_thumb').click(function() {
+		$.colorbox({transition:'fade', opacity:0.6, maxWidth:'100%', photo:true, href: $(this).attr('href')});
+		return(false);
+	});
 	$('.whoposted').click(function() {
 		var t = $(this).attr('data-topic');
 		if(t) {
@@ -1104,15 +1108,16 @@ function sendRequest(uri, request, anchor_element)
 	}
 };
 
-function openResult(html)
+function openResult(html, width)
 {
 	$('#wrap').css('opacity', '0.6');
+	$('#mcard').css('width', width + 'px');
 	$('#mcard_inner').html(req.responseText);
 	var el = $('#mcard');
    	el.css("position","fixed");
 	el.css("top", (($(window).height() - el.outerHeight()) / 2) -200 + "px");
 	el.css("left", (($(window).width() - el.outerWidth()) / 2) + $(window).scrollLeft() + "px");
-	el.fadeIn();
+	el.show();
 	el.css('z-index', '100');
 }
 /*
@@ -1127,11 +1132,11 @@ function response(ele)
 			if(req.status == 200) {
 				setBusy(0);
 				if(ele.attr('class') == 'whoposted') {
-					openResult(req.responseText);
+					openResult(req.responseText, 150);
 					return;
 				}
 				if(ele.attr('class') == 'tpeek') {
-					openResult(req.responseText);
+					openResult(req.responseText, 710);
     				$('div#mcard_inner abbr.timeago').timeago();
 					return;
 				}
@@ -1156,7 +1161,7 @@ function response(ele)
 					ele.html(req.responseText);
 					return;
 				}
-				openResult(req.responseText);
+				openResult(req.responseText, 500);
     			$('div#mcard_inner abbr.timeago').timeago();
 			} else if(req.status == 500) {
 				setBusy(0);

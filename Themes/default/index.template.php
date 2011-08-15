@@ -174,7 +174,9 @@ function template_body_above()
 {
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
-	echo '<div id="ajaxbusy" style="display:none;"><img src="',$settings['images_url'],'/ajax-loader.gif" alt="loader" /></div><div id="mcard" style="display:none;"><div id="mcard_close">X</div><div id="mcard_inner"></div></div>
+	echo '
+	<div id="ajaxbusy" style="display:none;"><img src="',$settings['images_url'],'/ajax-loader.gif" alt="loader" /></div>
+	<div id="mcard" style="display:none;"><div id="mcard_close">X</div><div id="mcard_inner"></div></div>
 	<div id="wrap" style="max-width:',empty($settings['forum_width']) ? '3000px' : $settings['forum_width'],';">
 	<header>
 	<div id="header">
@@ -352,6 +354,7 @@ function template_body_below()
 		sa.parentNode.insertBefore(ga, sa);
 		';
 	}
+	/*
 	if($fbxml) {
 			echo '
 			window.fbAsyncInit = function() {
@@ -374,6 +377,7 @@ function template_body_below()
 			anchor.parentNode.insertBefore(t1, anchor);
 			';
 	}
+	*/
 	if($plusone) {
 		echo '
 			var t3 = document.createElement(\'SCRIPT\');
@@ -419,44 +423,47 @@ function template_html_below()
 function theme_linktree($force_show = false)
 {
 	global $context, $settings, $options, $shown_linktree;
-
+	static $ltree = '';
+	
 	// If linktree is empty, just return - also allow an override.
 	if (empty($context['linktree']) || (!empty($context['dont_default_linktree']) && !$force_show))
 		return;
 
-	echo '
-	<div class="navigate_section">
-		<ul>';
+	if(!empty($ltree)) {
+		echo $ltree;
+		return;
+	}
+	$ltree = '<div class="navigate_section"><ul class="linktree" id="linktree_'. (empty($shown_linktree) ? 'upper' : 'lower'). '">';
 
 	// Each tree item has a URL and name. Some may have extra_before and extra_after.
 	foreach ($context['linktree'] as $link_num => $tree)
 	{
-		echo '
-			<li', ($link_num == count($context['linktree']) - 1) ? ' class="last"' : '', '>';
+		$ltree .= ('
+		<li'. (($link_num == count($context['linktree']) - 1) ? ' class="last"' : ''). '>');
 
 		// Show something before the link?
 		if (isset($tree['extra_before']))
-			echo $tree['extra_before'];
+			$ltree .= $tree['extra_before'];
 
 		// Show the link, including a URL if it should have one.
-		echo $settings['linktree_link'] && isset($tree['url']) ? '
-				<a href="' . $tree['url'] . '"><span>' . $tree['name'] . '</span></a>' : '<span>' . $tree['name'] . '</span>';
+		$ltree .= ($settings['linktree_link'] && isset($tree['url']) ? ('
+			<a href="' . $tree['url'] . '"><span>' . $tree['name'] . '</span></a>') : ('<span>') . $tree['name'] . '</span>');
 
 		// Show something after the link...?
 		if (isset($tree['extra_after']))
-			echo $tree['extra_after'];
+			$ltree .= $tree['extra_after'];
 
 		// Don't show a separator for the last one.
 		if ($link_num != count($context['linktree']) - 1)
-			echo '<span class="arrow"> &#187;</span>';
+			$ltree .= ' &gt;';
 
-		echo '
-			</li>';
+		$ltree .= '
+		</li>';
 	}
-	echo '
-		</ul>
-	</div>';
-
+	$ltree .= '
+	</ul></div>';
+	
+	echo($ltree);
 	$shown_linktree = true;
 }
 
@@ -654,5 +661,4 @@ function socialbar_passive($l, $t)
        		<div style="clear:both;"></div>';
 	echo '</div><div style="clear:both;"></div>';
 }
-
 ?>

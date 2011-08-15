@@ -408,42 +408,44 @@ function template_html_below()
 function theme_linktree($force_show = false)
 {
 	global $context, $settings, $options, $shown_linktree;
-
+	static $ltree = '';
+	
 	// If linktree is empty, just return - also allow an override.
 	if (empty($context['linktree']) || (!empty($context['dont_default_linktree']) && !$force_show))
 		return;
 
-	echo '
-	<ul class="linktree" id="linktree_', empty($shown_linktree) ? 'upper' : 'lower', '">';
+	$ltree = '
+	<div class="navigate_section"><ul class="linktree" id="linktree_', empty($shown_linktree) ? 'upper' : 'lower', '">';
 
 	// Each tree item has a URL and name. Some may have extra_before and extra_after.
 	foreach ($context['linktree'] as $link_num => $tree)
 	{
-		echo '
-		<li', ($link_num == count($context['linktree']) - 1) ? ' class="last"' : '', '>';
+		$ltree .= ('
+		<li'. ($link_num == count($context['linktree']) - 1) ? ' class="last"' : ''. '>');
 
 		// Show something before the link?
 		if (isset($tree['extra_before']))
-			echo $tree['extra_before'];
+			$ltree .= $tree['extra_before'];
 
 		// Show the link, including a URL if it should have one.
-		echo $settings['linktree_link'] && isset($tree['url']) ? '
-			<a href="' . $tree['url'] . '"><span>' . $tree['name'] . '</span></a>' : '<span>' . $tree['name'] . '</span>';
+		$ltree .= ($settings['linktree_link'] && isset($tree['url']) ? '
+			<a href="' . $tree['url'] . '"><span>' . $tree['name'] . '</span></a>' : '<span>' . $tree['name'] . '</span>');
 
 		// Show something after the link...?
 		if (isset($tree['extra_after']))
-			echo $tree['extra_after'];
+			$ltree .= $tree['extra_after'];
 
 		// Don't show a separator for the last one.
 		if ($link_num != count($context['linktree']) - 1)
-			echo ' &gt;';
+			$ltree .= ' &gt;';
 
-		echo '
+		$ltree .= '
 		</li>';
 	}
-	echo '
-	</ul>';
-
+	$ltree .= '
+	</ul></div>';
+	
+	echo($ltree);
 	$shown_linktree = true;
 }
 

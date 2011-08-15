@@ -258,7 +258,7 @@ function template_show_month_grid($grid_name)
 	{
 		echo '
 			<div class="cat_bar rounded_top">
-				<h3 class="catbg centertext" style="font-size: ', $calendar_data['size'] == 'large' ? 'large' : 'small', ';">';
+				<h3 class="catbg centertext" style="font-size: ', $calendar_data['size'] == 'large' ? 'medium' : 'small', ';">';
 
 		if (empty($calendar_data['previous_calendar']['disabled']) && $calendar_data['show_next_prev'])
 			echo '

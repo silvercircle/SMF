@@ -16,11 +16,9 @@ function template_main()
 
 	echo '
 	<div id="recent" class="main_section">
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/post/xx.gif" alt="" class="icon" />',$txt['recent_posts'],'</span>
-			</h3>
-		</div>
+			<h1 class="bigheader">
+				<img src="', $settings['images_url'], '/post/xx.gif" alt="" class="icon" />',$txt['recent_posts'],'
+			</h1>
 		<div class="pagesection">
 			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
 		</div>';
@@ -28,8 +26,7 @@ function template_main()
 	foreach ($context['posts'] as $post)
 	{
 		echo '
-			<div class="', $post['alternate'] == 0 ? 'windowbg' : 'windowbg2', ' core_posts">
-				<span class="topslice"><span></span></span>
+			<div class="post_wrapper mediumpadding"', ' core_posts">
 				<div class="content">
 					<div class="counter">', $post['counter'], '</div>
 					<div class="topic_details">
@@ -69,8 +66,7 @@ function template_main()
 					</ul>
 				</div>';
 
-		echo '
-				<span class="botslice clear"><span></span></span>
+		echo '<div class="clear"></div>
 			</div>';
 
 	}
@@ -128,29 +124,29 @@ function template_unread()
 
 		echo '
 			<div class="tborder topic_table" id="unread">
-				<table class="table_grid" cellspacing="0">
+				<table class="table_grid mlist">
 					<thead>
-						<tr class="catbg">
-							<th scope="col" class="first_th" width="8%" colspan="2">&nbsp;</th>
-							<th scope="col">
+						<tr>
+							<th scope="col" style="width:2%;" class="blue_container first_th" colspan="2">&nbsp;</th>
+							<th class="blue_container" scope="col">
 								<a href="', $scripturl, '?action=unread', $context['showing_all_topics'] ? ';all' : '', $context['querystring_board_limits'], ';sort=subject', $context['sort_by'] == 'subject' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['subject'], $context['sort_by'] == 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 							</th>
-							<th scope="col" width="14%" align="center">
+							<th scope="col" style="width:14%;" class="blue_container centertext">
 								<a href="', $scripturl, '?action=unread', $context['showing_all_topics'] ? ';all' : '', $context['querystring_board_limits'], ';sort=replies', $context['sort_by'] == 'replies' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['replies'], $context['sort_by'] == 'replies' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 							</th>';
 
 		// Show a "select all" box for quick moderation?
 		if ($showCheckboxes)
 			echo '
-							<th scope="col" width="22%">
+							<th scope="col" style="width:22%;" class="blue_container">
 								<a href="', $scripturl, '?action=unread', $context['showing_all_topics'] ? ';all' : '', $context['querystring_board_limits'], ';sort=last_post', $context['sort_by'] == 'last_post' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['last_post'], $context['sort_by'] == 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 							</th>
-							<th class="last_th">
+							<th class="blue_container last_th">
 								<input type="checkbox" onclick="invertAll(this, this.form, \'topics[]\');" class="input_check" />
 							</th>';
 		else
 			echo '
-							<th scope="col" class="smalltext last_th" width="22%">
+							<th scope="col" class="blue_container smalltext last_th" style="width:22%;">
 								<a href="', $scripturl, '?action=unread', $context['showing_all_topics'] ? ';all' : '', $context['querystring_board_limits'], ';sort=last_post', $context['sort_by'] == 'last_post' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['last_post'], $context['sort_by'] == 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 							</th>';
 		echo '
@@ -193,15 +189,14 @@ function template_unread()
 								<br />
 								', $topic['views'], ' ', $txt['views'], '
 							</td>
-							<td class="', $color_class2, ' lastpost windowbg2">
-								<a href="', $topic['last_post']['href'], '"><img src="', $settings['images_url'], '/icons/last_post.gif" alt="', $txt['last_post'], '" title="', $txt['last_post'], '" style="float: right;" /></a>
-								', $topic['last_post']['time'], '<br />
-								', $txt['by'], ' ', $topic['last_post']['member']['link'], '
+							<td class="', $color_class, ' lastpost windowbg2">',
+								$txt['by'], ': ', $topic['last_post']['member']['link'], '<br />
+								<a class="lp_link" title="', $txt['last_post'], '" href="', $topic['last_post']['href'], '">',$topic['last_post']['time'], '</a>
 							</td>';
 
 			if ($showCheckboxes)
 				echo '
-							<td class="windowbg2" valign="middle" align="center">
+							<td class="windowbg2 centertext">
 								<input type="checkbox" name="topics[]" value="', $topic['id'], '" class="input_check" />
 							</td>';
 			echo '
@@ -238,11 +233,9 @@ function template_unread()
 	}
 	else
 		echo '
-			<div class="cat_bar">
-				<h3 class="catbg centertext">
-					', $context['showing_all_topics'] ? $txt['msg_alert_none'] : $txt['unread_topics_visit_none'], '
-				</h3>
-			</div>';
+			<h1 class="bigheader centertext">
+				', $context['showing_all_topics'] ? $txt['msg_alert_none'] : $txt['unread_topics_visit_none'], '
+			</h1>';
 
 	if ($showCheckboxes)
 		echo '
@@ -312,29 +305,29 @@ function template_replies()
 
 		echo '
 			<div class="tborder topic_table" id="unreadreplies">
-				<table class="table_grid" cellspacing="0">
+				<table class="table_grid mlist">
 					<thead>
-						<tr class="catbg">
-							<th scope="col" class="first_th" width="8%" colspan="2">&nbsp;</th>
-							<th scope="col">
+						<tr>
+							<th scope="col" class="blue_container first_th" style="width:8%;" colspan="2">&nbsp;</th>
+							<th class="blue_container" scope="col">
 								<a href="', $scripturl, '?action=unreadreplies', $context['querystring_board_limits'], ';sort=subject', $context['sort_by'] === 'subject' && $context['sort_direction'] === 'up' ? ';desc' : '', '">', $txt['subject'], $context['sort_by'] === 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 							</th>
-							<th scope="col" width="14%" align="center">
+							<th class="blue_container centertext" scope="col" style="width:14%;">
 								<a href="', $scripturl, '?action=unreadreplies', $context['querystring_board_limits'], ';sort=replies', $context['sort_by'] === 'replies' && $context['sort_direction'] === 'up' ? ';desc' : '', '">', $txt['replies'], $context['sort_by'] === 'replies' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 							</th>';
 
 		// Show a "select all" box for quick moderation?
 		if ($showCheckboxes)
 				echo '
-							<th scope="col" width="22%">
+							<th class="blue_container" scope="col" style="width:22%;">
 								<a href="', $scripturl, '?action=unreadreplies', $context['querystring_board_limits'], ';sort=last_post', $context['sort_by'] === 'last_post' && $context['sort_direction'] === 'up' ? ';desc' : '', '">', $txt['last_post'], $context['sort_by'] === 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 							</th>
-							<th class="last_th">
+							<th class="blue_container last_th">
 								<input type="checkbox" onclick="invertAll(this, this.form, \'topics[]\');" class="input_check" />
 							</th>';
 		else
 			echo '
-							<th scope="col" class="last_th" width="22%">
+							<th scope="col" class="blue_container last_th" style="width:22%;">
 								<a href="', $scripturl, '?action=unreadreplies', $context['querystring_board_limits'], ';sort=last_post', $context['sort_by'] === 'last_post' && $context['sort_direction'] === 'up' ? ';desc' : '', '">', $txt['last_post'], $context['sort_by'] === 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 							</th>';
 		echo '
@@ -377,15 +370,14 @@ function template_replies()
 								<br />
 								', $topic['views'], ' ', $txt['views'], '
 							</td>
-							<td class="', $color_class2, ' lastpost windowbg2">
-								<a href="', $topic['last_post']['href'], '"><img src="', $settings['images_url'], '/icons/last_post.gif" alt="', $txt['last_post'], '" title="', $txt['last_post'], '" style="float: right;" /></a>
-								', $topic['last_post']['time'], '<br />
-								', $txt['by'], ' ', $topic['last_post']['member']['link'], '
+							<td class="', $color_class, ' lastpost windowbg2">',
+								$txt['by'], ': ', $topic['last_post']['member']['link'], '<br />
+								<a class="lp_link" title="', $txt['last_post'], '" href="', $topic['last_post']['href'], '">',$topic['last_post']['time'], '</a>
 							</td>';
 
 			if ($showCheckboxes)
 				echo '
-							<td class="windowbg2" valign="middle" align="center">
+							<td class="windowbg2 centertext">
 								<input type="checkbox" name="topics[]" value="', $topic['id'], '" class="input_check" />
 							</td>';
 			echo '
@@ -429,15 +421,15 @@ function template_replies()
 		<div class="description flow_auto" id="topic_icons">
 			<p class="smalltext floatleft">
 				', !empty($modSettings['enableParticipation']) ? '
-				<img src="' . $settings['images_url'] . '/topic/my_normal_post.gif" alt="" align="middle" /> ' . $txt['participation_caption'] . '<br />' : '', '
-				<img src="', $settings['images_url'], '/topic/normal_post.gif" alt="" align="middle" /> ', $txt['normal_topic'], '<br />
-				<img src="', $settings['images_url'], '/topic/hot_post.gif" alt="" align="middle" /> ', sprintf($txt['hot_topics'], $modSettings['hotTopicPosts']), '<br />
-				<img src="', $settings['images_url'], '/topic/veryhot_post.gif" alt="" align="middle" /> ', sprintf($txt['very_hot_topics'], $modSettings['hotTopicVeryPosts']), '
+				<img src="' . $settings['images_url'] . '/topic/my_normal_post.gif" alt=""  /> ' . $txt['participation_caption'] . '<br />' : '', '
+				<img src="', $settings['images_url'], '/topic/normal_post.gif" alt="" /> ', $txt['normal_topic'], '<br />
+				<img src="', $settings['images_url'], '/topic/hot_post.gif" alt="" /> ', sprintf($txt['hot_topics'], $modSettings['hotTopicPosts']), '<br />
+				<img src="', $settings['images_url'], '/topic/veryhot_post.gif" alt="" /> ', sprintf($txt['very_hot_topics'], $modSettings['hotTopicVeryPosts']), '
 			</p>
 			<p class="smalltext para2">
-				<img src="', $settings['images_url'], '/icons/quick_lock.gif" alt="" align="middle" /> ', $txt['locked_topic'], '<br />', ($modSettings['enableStickyTopics'] == '1' ? '
-				<img src="' . $settings['images_url'] . '/icons/quick_sticky.gif" alt="" align="middle" /> ' . $txt['sticky_topic'] . '<br />' : '') . ($modSettings['pollMode'] == '1' ? '
-				<img src="' . $settings['images_url'] . '/topic/normal_poll.gif" alt="" align="middle" /> ' . $txt['poll'] : '') . '
+				<img src="', $settings['images_url'], '/icons/quick_lock.gif" alt="" /> ', $txt['locked_topic'], '<br />', ($modSettings['enableStickyTopics'] == '1' ? '
+				<img src="' . $settings['images_url'] . '/icons/quick_sticky.gif" alt="" /> ' . $txt['sticky_topic'] . '<br />' : '') . ($modSettings['pollMode'] == '1' ? '
+				<img src="' . $settings['images_url'] . '/topic/normal_poll.gif" alt="" /> ' . $txt['poll'] : '') . '
 			</p>
 		</div>
 	</div>';

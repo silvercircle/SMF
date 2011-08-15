@@ -23,25 +23,25 @@ function template_main()
 
 	echo '
 	<div class="main_section" id="memberlist">
-		<div class="cat_bar">
-			<h4 class="catbg">
+		<div class="bigheader">
+			<h4>
 				<span class="floatleft">', $txt['members_list'], '</span>';
 		if (!isset($context['old_search']))
 				echo '
 				<span class="floatright">', $context['letter_links'], '</span>';
 		echo '
 			</h4>
-		</div>
+		<div class="clear"></div></div>
 		<div class="pagesection">
 			', template_button_strip($memberlist_buttons, 'right'), '
 			<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], '</div>
 		</div>';
 
 	echo '
-		<div id="mlist" class="tborder topic_table">
-			<table class="table_grid" cellspacing="0" width="100%">
+		<div id="mlist" class="tborder topic_table mediumpadding">
+			<table class="table_grid" style="width:100%;">
 			<thead>
-				<tr class="catbg">';
+				<tr>';
 
 	// Display each of the column headers of the table.
 	foreach ($context['columns'] as $column)
@@ -49,17 +49,17 @@ function template_main()
 		// We're not able (through the template) to sort the search results right now...
 		if (isset($context['old_search']))
 			echo '
-					<th scope="col" class="', isset($column['class']) ? ' ' . $column['class'] : '', '"', isset($column['width']) ? ' width="' . $column['width'] . '"' : '', isset($column['colspan']) ? ' colspan="' . $column['colspan'] . '"' : '', '>
+					<th scope="col" class="red_container"', isset($column['width']) ? ' width="' . $column['width'] . '"' : '', isset($column['colspan']) ? ' colspan="' . $column['colspan'] . '"' : '', '>
 						', $column['label'], '</th>';
 		// This is a selected column, so underline it or some such.
 		elseif ($column['selected'])
 			echo '
-					<th scope="col" class="', isset($column['class']) ? ' ' . $column['class'] : '', '" style="width: auto;"' . (isset($column['colspan']) ? ' colspan="' . $column['colspan'] . '"' : '') . ' nowrap="nowrap">
+					<th scope="col" class="red_container" style="width: auto;"' . (isset($column['colspan']) ? ' colspan="' . $column['colspan'] . '"' : '') . ' nowrap="nowrap">
 						<a href="' . $column['href'] . '" rel="nofollow">' . $column['label'] . ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" /></a></th>';
 		// This is just some column... show the link and be done with it.
 		else
 			echo '
-					<th scope="col" class="', isset($column['class']) ? ' ' . $column['class'] : '', '"', isset($column['width']) ? ' width="' . $column['width'] . '"' : '', isset($column['colspan']) ? ' colspan="' . $column['colspan'] . '"' : '', '>
+					<th scope="col" class="red_container"', isset($column['width']) ? ' width="' . $column['width'] . '"' : '', isset($column['colspan']) ? ' colspan="' . $column['colspan'] . '"' : '', '>
 						', $column['link'], '</th>';
 	}
 	echo '
@@ -173,18 +173,15 @@ function template_search()
 	echo '
 	<form action="', $scripturl, '?action=mlist;sa=search" method="post" accept-charset="', $context['character_set'], '">
 		<div id="memberlist">
-			<div class="cat_bar">
-				<h3 class="catbg mlist">
-					<span class="ie6_header floatleft">', !empty($settings['use_buttons']) ? '<img src="' . $settings['images_url'] . '/buttons/search.gif" alt="" class="icon" />' : '', $txt['mlist_search'], '</span>
-				</h3>
-			</div>
+			<h1 class="bigheader">
+					', !empty($settings['use_buttons']) ? '<img src="' . $settings['images_url'] . '/buttons/search.gif" alt="" class="icon" />' : '', $txt['mlist_search'], '
+			</h3>
 			<div class="pagesection">
 				', template_button_strip($memberlist_buttons, 'right'), '
 			</div>';
 	// Display the input boxes for the form.
 	echo '	<div id="memberlist_search" class="clear">
-				<span class="upperframe"><span></span></span>
-				<div class="roundframe">
+				<div class="blue_container">
 					<div id="mlist_search" class="flow_hidden">
 						<div id="search_term_input"><br />
 							<strong>', $txt['search_for'], ':</strong>
@@ -206,8 +203,7 @@ function template_search()
 		echo '
 						</span>
 					</div>
-				</div>
-				<span class="lowerframe"><span></span></span>
+				</div><br /><br />
 			</div>
 		</div>
 	</form>';

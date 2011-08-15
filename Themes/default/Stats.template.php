@@ -16,20 +16,15 @@ function template_main()
 
 	echo '
 	<div id="statistics" class="main_section">
-		<div class="cat_bar">
-			<h3 class="catbg">', $context['page_title'], '</h3>
-		</div>
-		<div class="title_bar">
-			<h4 class="titlebg">
-				<span class="ie6_header floatleft">
-					<img src="', $settings['images_url'], '/stats_info.gif" class="icon" alt="" /> ', $txt['general_stats'], '
-				</span>
-			</h4>
+		<h1 class="bigheader">', $context['page_title'], '</h1>
+		<div class="red_container" style="margin-top:10px;">
+			<h3>
+				<img src="', $settings['images_url'], '/stats_info.gif" class="icon" alt="" /> ', $txt['general_stats'], '
+			</h3>
 		</div>
 		<div class="flow_hidden">
 			<div id="stats_left">
-				<div class="windowbg2">
-					<span class="topslice"><span></span></span>
+				<div class="blue_container">
 					<div class="content top_row">
 						<dl class="stats">
 							<dt>', $txt['total_members'], ':</dt>
@@ -56,12 +51,10 @@ function template_main()
 						</dl>
 						<div class="clear"></div>
 					</div>
-					<span class="botslice"><span></span></span>
 				</div>
 			</div>
 			<div id="stats_right">
-				<div class="windowbg2">
-					<span class="topslice"><span></span></span>
+				<div class="blue_container">
 					<div class="content top_row">
 						<dl class="stats">
 							<dt>', $txt['average_members'], ':</dt>
@@ -88,21 +81,17 @@ function template_main()
 						</dl>
 						<div class="clear"></div>
 					</div>
-					<span class="botslice"><span></span></span>
 				</div>
 			</div>
-		</div>
+		</div><br />
 		<div class="flow_hidden">
 			<div id="top_posters">
-				<div class="title_bar">
-					<h4 class="titlebg">
-						<span class="ie6_header floatleft">
-							<img src="', $settings['images_url'], '/stats_posters.gif" class="icon" alt="" /> ', $txt['top_posters'], '
-						</span>
+				<div class="red_container">
+					<h4>
+						<img src="', $settings['images_url'], '/stats_posters.gif" class="icon" alt="" /> ', $txt['top_posters'], '
 					</h4>
 				</div>
-					<div class="windowbg2">
-						<span class="topslice"><span></span></span>
+					<div class="blue_container">
 						<div class="content">
 							<dl class="stats">';
 
@@ -129,19 +118,15 @@ function template_main()
 							</dl>
 							<div class="clear"></div>
 						</div>
-						<span class="botslice"><span></span></span>
 					</div>
 			</div>
 			<div id="top_boards">
-				<div class="title_bar">
-					<h4 class="titlebg">
-						<span class="ie6_header floatleft">
-							<img src="', $settings['images_url'], '/stats_board.gif" class="icon" alt="" /> ', $txt['top_boards'], '
-						</span>
+				<div class="red_container">
+					<h4>
+						<img src="', $settings['images_url'], '/stats_board.gif" class="icon" alt="" /> ', $txt['top_boards'], '
 					</h4>
 				</div>
-					<div class="windowbg2">
-						<span class="topslice"><span></span></span>
+					<div class="blue_container">
 						<div class="content">
 							<dl class="stats">';
 
@@ -167,21 +152,18 @@ function template_main()
 							</dl>
 							<div class="clear"></div>
 						</div>
-						<span class="botslice"><span></span></span>
 					</div>
 			</div>
 		</div>
+		<br />
 		<div class="flow_hidden">
 			<div id="top_topics_replies">
-				<div class="title_bar">
-					<h4 class="titlebg">
-						<span class="ie6_header floatleft">
-							<img src="', $settings['images_url'], '/stats_replies.gif" class="icon" alt="" /> ', $txt['top_topics_replies'], '
-						</span>
+				<div class="red_container">
+					<h4>
+						<img src="', $settings['images_url'], '/stats_replies.gif" class="icon" alt="" /> ', $txt['top_topics_replies'], '
 					</h4>
 				</div>
-					<div class="windowbg2">
-						<span class="topslice"><span></span></span>
+					<div class="blue_container">
 						<div class="content">
 							<dl class="stats">';
 
@@ -206,20 +188,16 @@ function template_main()
 							</dl>
 							<div class="clear"></div>
 						</div>
-						<span class="botslice"><span></span></span>
 					</div>
 			</div>
 
 			<div id="top_topics_views">
-				<div class="title_bar">
-					<h4 class="titlebg">
-						<span class="ie6_header floatleft">
-							<img src="', $settings['images_url'], '/stats_views.gif" class="icon" alt="" /> ', $txt['top_topics_views'], '
-						</span>
+				<div class="red_container">
+					<h4>
+						<img src="', $settings['images_url'], '/stats_views.gif" class="icon" alt="" /> ', $txt['top_topics_views'], '
 					</h4>
 				</div>
-				<div class="windowbg2">
-					<span class="topslice"><span></span></span>
+				<div class="blue_container">
 					<div class="content">
 						<dl class="stats">';
 
@@ -244,21 +222,18 @@ function template_main()
 						</dl>
 						<div class="clear"></div>
 					</div>
-					<span class="botslice"><span></span></span>
 				</div>
 			</div>
 		</div>
+		<br />
 		<div class="flow_hidden">
 			<div id="top_topics_starter">
-				<div class="title_bar">
-					<h4 class="titlebg">
-						<span class="ie6_header floatleft">
-							<img src="', $settings['images_url'], '/stats_replies.gif" class="icon" alt="" /> ', $txt['top_starters'], '
-						</span>
+				<div class="red_container">
+					<h4>
+						<img src="', $settings['images_url'], '/stats_replies.gif" class="icon" alt="" /> ', $txt['top_starters'], '
 					</h4>
 				</div>
-				<div class="windowbg2">
-					<span class="topslice"><span></span></span>
+				<div class="blue_container">
 					<div class="content">
 						<dl class="stats">';
 
@@ -285,19 +260,15 @@ function template_main()
 						</dl>
 						<div class="clear"></div>
 					</div>
-					<span class="botslice"><span></span></span>
 				</div>
 			</div>
 			<div id="most_online">
-				<div class="title_bar">
-					<h4 class="titlebg">
-						<span class="ie6_header floatleft">
-							<img src="', $settings['images_url'], '/stats_views.gif" class="icon" alt="" /> ', $txt['most_time_online'], '
-						</span>
+				<div class="red_container">
+					<h4>
+						<img src="', $settings['images_url'], '/stats_views.gif" class="icon" alt="" /> ', $txt['most_time_online'], '
 					</h4>
 				</div>
-				<div class="windowbg2">
-					<span class="topslice"><span></span></span>
+				<div class="blue_container">
 					<div class="content">
 						<dl class="stats">';
 
@@ -324,35 +295,30 @@ function template_main()
 						</dl>
 						<div class="clear"></div>
 					</div>
-					<span class="botslice"><span></span></span>
 				</div>
 			</div>
 		</div>
 		<br class="clear" />
 		<div class="flow_hidden">
-			<div class="cat_bar">
-				<h3 class="catbg">
-					<span class="ie6_header floatleft">
-						<img src="', $settings['images_url'], '/stats_history.gif" class="icon" alt="" /> ', $txt['forum_history'], '
-					</span>
-				</h3>
+			<div class="bigheader">
+				<img src="', $settings['images_url'], '/stats_history.gif" class="icon" alt="" /> ', $txt['forum_history'], '
 			</div>';
 
 	if (!empty($context['yearly']))
 	{
 		echo '
-		<table border="0" width="100%" cellspacing="1" cellpadding="4" class="table_grid" id="stats">
+		<table class="table_grid mlist" id="stats">
 			<thead>
-				<tr class="titlebg" valign="middle" align="center">
-					<th class="first_th lefttext" width="25%">', $txt['yearly_summary'], '</th>
-					<th width="15%">', $txt['stats_new_topics'], '</th>
-					<th width="15%">', $txt['stats_new_posts'], '</th>
-					<th width="15%">', $txt['stats_new_members'], '</th>
-					<th', empty($modSettings['hitStats']) ? ' class="last_th"' : '', ' width="15%">', $txt['smf_stats_14'], '</th>';
+				<tr>
+					<th class="red_container lefttext" style="width:50%;">', $txt['yearly_summary'], '</th>
+					<th style="width:15%;" class="red_container nowrap">', $txt['stats_new_topics'], '</th>
+					<th style="width:15%;" class="red_container nowrap">', $txt['stats_new_posts'], '</th>
+					<th style="width:15%;" class="red_container nowrap">', $txt['stats_new_members'], '</th>
+					<th style="width:15%;" class="red_container nowrap">', $txt['smf_stats_14'], '</th>';
 
 		if (!empty($modSettings['hitStats']))
 			echo '
-					<th class="last_th">', $txt['page_views'], '</th>';
+					<th style="width:15%;" class="red_container nowrap last_th">', $txt['page_views'], '</th>';
 
 		echo '
 				</tr>
@@ -362,14 +328,14 @@ function template_main()
 		foreach ($context['yearly'] as $id => $year)
 		{
 			echo '
-				<tr class="windowbg2" valign="middle" align="center" id="year_', $id, '">
-					<th class="lefttext" width="25%">
+				<tr class="windowbg2 centertext" id="year_', $id, '">
+					<th class="lefttext" style="width:50%;">
 						<img id="year_img_', $id, '" src="', $settings['images_url'], '/collapse.gif" alt="*" /> <a href="#year_', $id, '" id="year_link_', $id, '">', $year['year'], '</a>
 					</th>
-					<th width="15%">', $year['new_topics'], '</th>
-					<th width="15%">', $year['new_posts'], '</th>
-					<th width="15%">', $year['new_members'], '</th>
-					<th width="15%">', $year['most_members_online'], '</th>';
+					<th>', $year['new_topics'], '</th>
+					<th>', $year['new_posts'], '</th>
+					<th>', $year['new_members'], '</th>
+					<th>', $year['most_members_online'], '</th>';
 
 			if (!empty($modSettings['hitStats']))
 				echo '
@@ -381,18 +347,18 @@ function template_main()
 			foreach ($year['months'] as $month)
 			{
 				echo '
-				<tr class="windowbg2" valign="middle" align="center" id="tr_month_', $month['id'], '">
+				<tr class="windowbg2" id="tr_month_', $month['id'], '">
 					<th class="stats_month">
 						<img src="', $settings['images_url'], '/', $month['expanded'] ? 'collapse.gif' : 'expand.gif', '" alt="" id="img_', $month['id'], '" /> <a id="m', $month['id'], '" href="', $month['href'], '" onclick="return doingExpandCollapse;">', $month['month'], ' ', $month['year'], '</a>
 					</th>
-					<th width="15%">', $month['new_topics'], '</th>
-					<th width="15%">', $month['new_posts'], '</th>
-					<th width="15%">', $month['new_members'], '</th>
-					<th width="15%">', $month['most_members_online'], '</th>';
+					<th class="centertext">', $month['new_topics'], '</th>
+					<th class="centertext">', $month['new_posts'], '</th>
+					<th class="centertext">', $month['new_members'], '</th>
+					<th class="centertext">', $month['most_members_online'], '</th>';
 
 				if (!empty($modSettings['hitStats']))
 					echo '
-					<th>', $month['hits'], '</th>';
+					<th class="centertext">', $month['hits'], '</th>';
 
 				echo '
 				</tr>';
@@ -402,16 +368,16 @@ function template_main()
 					foreach ($month['days'] as $day)
 					{
 						echo '
-				<tr class="windowbg2" valign="middle" align="center" id="tr_day_', $day['year'], '-', $day['month'], '-', $day['day'], '">
+				<tr class="windowbg2" id="tr_day_', $day['year'], '-', $day['month'], '-', $day['day'], '">
 					<td class="stats_day">', $day['year'], '-', $day['month'], '-', $day['day'], '</td>
-					<td>', $day['new_topics'], '</td>
-					<td>', $day['new_posts'], '</td>
-					<td>', $day['new_members'], '</td>
-					<td>', $day['most_members_online'], '</td>';
+					<td class="centertext">', $day['new_topics'], '</td>
+					<td class="centertext">', $day['new_posts'], '</td>
+					<td class="centertext">', $day['new_members'], '</td>
+					<td class="centertext">', $day['most_members_online'], '</td>';
 
 						if (!empty($modSettings['hitStats']))
 							echo '
-					<td>', $day['hits'], '</td>';
+					<td class="centertext">', $day['hits'], '</td>';
 
 						echo '
 				</tr>';

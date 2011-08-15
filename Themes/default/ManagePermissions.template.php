@@ -416,10 +416,9 @@ function template_edit_profiles()
 		<br />
 		<form action="', $scripturl, '?action=admin;area=permissions;sa=profiles" method="post" accept-charset="', $context['character_set'], '">
 			<div class="cat_bar">
-				<h3 class="catbg">', $txt['permissions_profile_new'], '</h3>
+				<h3>', $txt['permissions_profile_new'], '</h3>
 			</div>
-			<div class="windowbg">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container">
 				<div class="content">
 					<dl class="settings">
 						<dt>
@@ -447,7 +446,6 @@ function template_edit_profiles()
 						<input type="submit" name="create" value="', $txt['permissions_profile_new_create'], '" class="button_submit" />
 					</div>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 		</form>
 	</div>

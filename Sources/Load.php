@@ -1246,7 +1246,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'group_stars' => str_repeat('<img src="' . str_replace('$language', $context['user']['language'], isset($profile['stars'][1]) ? $settings['images_url'] . '/' . $profile['stars'][1] : '') . '" alt="*" />', empty($profile['stars'][0]) || empty($profile['stars'][1]) ? 0 : $profile['stars'][0]),
 		'warning' => $profile['warning'],
 		'warning_status' => !empty($modSettings['warning_mute']) && $modSettings['warning_mute'] <= $profile['warning'] ? 'mute' : (!empty($modSettings['warning_moderate']) && $modSettings['warning_moderate'] <= $profile['warning'] ? 'moderate' : (!empty($modSettings['warning_watch']) && $modSettings['warning_watch'] <= $profile['warning'] ? 'watch' : (''))),
-		'local_time' => timeformat(time() + ($profile['time_offset'] - $user_info['time_offset']) * 3600, false),
+		'local_time' => timeformat_static(time() + ($profile['time_offset'] - $user_info['time_offset']) * 3600, false),
 		'liked' => isset($profile['liked']) ? $profile['liked'] : 0,
 		'likesgiven' => isset($profile['likesgiven']) ? $profile['likesgiven'] : 0,
 	);

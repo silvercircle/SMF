@@ -24,7 +24,7 @@ function template_main()
 	{
 		echo '
 	<div style="margin-top:10px;" class="tborder childboards" id="board_', $context['current_board'], '_childboards">
-		<div class="cat_bar rounded_top">
+		<div class="cat_bar">
 			<h3 class="catbg">', $txt['parent_boards'], '</h3>
 		</div>
 		<div class="table_frame">
@@ -153,7 +153,7 @@ function template_main()
 	<form action="', $scripturl, '?action=quickmod;board=', $context['current_board'], '.', $context['start'], '" method="post" accept-charset="', $context['character_set'], '" class="clear" name="quickModForm" id="quickModForm">';
 
 		echo '
-		<div class="mediumpadding" id="messageindex">
+		<div id="messageindex">
 		<table class="topic_table">';
 
 		// Are there actually any topics to show?

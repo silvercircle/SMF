@@ -21,11 +21,11 @@ function template_login()
 		<form action="', $scripturl, '?action=login2" name="frmLogin" id="frmLogin" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
 		<div class="tborder login">
 			<div class="cat_bar rounded_top">
-				<h3 class="catbg">
-					<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/login_sm.gif" alt="" class="icon" /> ', $txt['login'], '</span>
+				<h3 class="catbg centertext">
+					', $txt['login'], '
 				</h3>
 			</div>
-			<div class="generic_container rounded_bottom"><br class="clear" />';
+			<div class="blue_container"><br class="clear" />';
 
 	// Did they make a mistake last time?
 	if (!empty($context['login_errors']))
@@ -90,26 +90,23 @@ function template_kick_guest()
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/sha1.js"></script>
 	<form action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" name="frmLogin" id="frmLogin"', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
 		<div class="tborder login">
-			<div class="cat_bar">
-				<h3 class="catbg">', $txt['warning'], '</h3>
+			<div class="cat_bar rounded_top">
+				<h3 class="catbg centertext">', $txt['warning'], '</h3>
 			</div>';
 
 	// Show the message or default message.
 	echo '
-			<p class="information centertext">
+			<p class="red_container centertext">
 				', empty($context['kick_message']) ? $txt['only_members_can_access'] : $context['kick_message'], '<br />
 				', $txt['login_below'], ' <a href="', $scripturl, '?action=register">', $txt['register_an_account'], '</a> ', sprintf($txt['login_with_forum'], $context['forum_name_html_safe']), '
 			</p>';
 
 	// And now the login information.
 	echo '
-			<div class="cat_bar">
-				<h3 class="catbg">
-					<img src="', $settings['images_url'], '/icons/login_sm.gif" alt="" class="icon" /> ', $txt['login'], '
-				</h3>
-			</div>
-			<span class="upperframe"><span></span></span>
-			<div class="roundframe">
+			<h1 class="bigheader centertext">
+				', $txt['login'], '
+			</h1>
+			<div class="blue_container">
 				<dl>
 					<dt>', $txt['username'], ':</dt>
 					<dd><input type="text" name="user" size="20" class="input_text" /></dd>
@@ -204,7 +201,7 @@ function template_admin_login()
 				<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/login_sm.gif" alt="" class="icon" /> ', $txt['login'], '</span>
 			</h3>
 		</div>
-		<div class="generic_container rounded_bottom centertext">';
+		<div class="blue_container centertext">';
 
 	if (!empty($context['incorrect_password']))
 		echo '

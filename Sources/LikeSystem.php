@@ -10,6 +10,117 @@
 
 loadLanguage('Like');
 
+
+/*
+ * handle a like. $mid is the message id that is to receive the
+ * like
+ * 
+ * TODO: remove likes from the database when a user is deleted
+ * TODO: make it work without AJAX and JavaScript
+ * TODO: error responses
+ * TODO: disallow like for posts by banned users
+ * TODO: use language packs to make it fully translatable
+ * TODO: allow likes for more than just post content types (i.e. profile messages in a later stage)
+ */
+ 
+function GiveLike($mid)
+{
+	global $context, $settings, $user_info, $sourcedir, $smcFunc, $txt;
+	$total = array();
+	
+	if($mid > 0) {
+		$uid = $user_info['id'];
+		$remove_it = isset($_REQUEST['remove']) ? true : false;
+		$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
+		
+		if($user_info['is_guest'])
+			AjaxErrorMsg($txt['no_like_for_guests']);
+
+		/* check for dupes */
+		$request = $smcFunc['db_query']('', '
+			SELECT COUNT(id_msg) as count, id_user 
+				FROM {db_prefix}likes AS l WHERE l.id_msg = {int:id_message} AND l.id_user = {int:id_user}',
+				array('id_message' => $mid, 'id_user' => $uid));
+				
+		$count = $smcFunc['db_fetch_row']($request);
+		$smcFunc['db_free_result']($request);
+		
+		$c = intval($count[0]);
+		$like_owner = intval($count[1]);
+		/*
+		 * this is a debugging feature and allows the admin to repair
+		 * the likes for a post.
+		 * it may go away at a later time.
+		 */
+		if(isset($_REQUEST['repair'])) {
+			if(!$user_info['is_admin'])
+				die;
+			$total = LikesUpdate($mid);
+			$output = '';
+			LikesGenerateOutput($total['status'], $output, $total['count'], $mid, $c > 0 ? true : false);
+			if($is_xmlreq) {
+				echo $output;
+				die;
+			}
+			else
+				redirectexit();
+		}
+		
+		if($c > 0 && !$remove_it)		// duplicate like (but not when removing it)
+			AjaxErrorMsg($txt['like_verify_error']);
+			
+		/*
+		 * you cannot like your own post - the front end handles this with a seperate check and
+		 * doesn't show the like button for own messages, but this check is still necessary
+		 */		
+		
+		$request = $smcFunc['db_query']('', '
+			SELECT id_member, id_board FROM {db_prefix}messages AS m WHERE m.id_msg = '.$mid);
+
+		$m = $smcFunc['db_fetch_row']($request);
+		$smcFunc['db_free_result']($request);
+		$like_receiver = intval($m[0]);
+		
+		if($like_receiver == $uid)
+			AjaxErrorMsg($txt['cannot_like_own']);
+		
+		if(!allowedTo('like_give', $m[1]))			// no permission to give likes in this board
+			AjaxErrorMsg($txt['like_no_permission']);
+
+		if($remove_it && $c > 0) {   	// TODO: remove a like, $c must indicate a duplicate (existing) like
+										// and you must be the owner of the like or admin
+			AjaxErrorMsg($txt['like_remove_ok']);
+		}
+		else {
+			/* store the like */
+			global $memberContext;
+			
+			if($like_receiver) {
+				loadMemberData($like_receiver);
+				loadMemberContext($like_receiver);
+				if(!$memberContext[$like_receiver]['is_banned']) {
+					$smcFunc['db_query']('', '
+						INSERT INTO {db_prefix}likes values({int:id_message}, {int:id_user}, {int:id_receiver}, {int:updated})',
+						array('id_message' => $mid, 'id_user' => $uid, 'id_receiver' => $like_receiver, 'updated' => time()));
+					
+					$smcFunc['db_query']('', 'UPDATE {db_prefix}members SET likes_received = likes_received + 1 WHERE id_member = {int:id_member}',
+						array('id_member' => $like_receiver));
+					
+					$smcFunc['db_query']('', 'UPDATE {db_prefix}members SET likes_given = likes_given + 1 WHERE id_member = '.$uid);
+				}
+			}
+			else
+				AjaxErrorMsg($txt['like_cannot_like']);
+				
+		}
+		$total = LikesUpdate($mid);
+		$output = '';
+		LikesGenerateOutput($total['status'], $output, $total['count'], $mid, true);
+		echo $output;
+	}
+	die;
+}
+
 function LikesUpdate($mid)
 {
 	global $context;
@@ -110,15 +221,6 @@ function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_l
 	else
 		$output = vsprintf($like_template[$count], $results);
 	return($output);
-}
-
-function LikesError($msg, $xmlreq)
-{
-	if($xmlreq) {
-		echo $msg;
-		die;
-	}
-	fatal_error($msg, '');
 }
 
 /*

@@ -659,14 +659,13 @@ function template_trackActivity()
 
 	// The first table shows IP information about the user.
 	echo '
-			<div class="title_bar">
-				<h3 class="titlebg"><strong>', $txt['view_ips_by'], ' ', $context['member']['name'], '</strong></h3>
+			<div class="cat_bar">
+				<h3><strong>', $txt['view_ips_by'], ' ', $context['member']['name'], '</strong></h3>
 			</div>';
 
 	// The last IP the user used.
 	echo '
-			<div id="tracking" class="windowbg2">
-				<span class="topslice"><span></span></span>
+			<div id="tracking" class="blue_container">
 				<div class="content">
 					<dl class="noborder">
 						<dt>', $txt['most_recent_ip'], ':
@@ -703,7 +702,6 @@ function template_trackActivity()
 						</dd>
 					</dl>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 		<br />';
 
@@ -719,15 +717,11 @@ function template_trackIP()
 	// This function always defaults to the last IP used by a member but can be set to track any IP.
 	// The first table in the template gives an input box to allow the admin to enter another IP to track.
 	echo '
-		<div class="cat_bar">
-			<h3 class="catbg">', $txt['trackIP'], '</h3>
-		</div>
-		<div class="windowbg2">
-			<span class="topslice"><span></span></span>
+		<h1 class="bigheader">', $txt['trackIP'], '</h1>
+		<div class="blue_container">
 			<form action="', $context['base_url'], '" method="post" accept-charset="', $context['character_set'], '">
 				<div class="padding">', $txt['enter_ip'], ':&nbsp;&nbsp;<input type="text" name="searchip" value="', $context['ip'], '" class="input_text" />&nbsp;&nbsp;<input type="submit" value="', $txt['trackIP'], '" class="button_submit" /></div>
 			</form>
-			<span class="botslice"><span></span></span>
 		</div>
 		<br />';
 
@@ -735,30 +729,28 @@ function template_trackIP()
 	if ($context['single_ip'])
 	{
 		echo '
-			<div class="title_bar">
-				<h3 class="titlebg">', $txt['whois_title'], ' ', $context['ip'], '</h3>
+			<div class="cat_bar">
+				<h3>', $txt['whois_title'], ' ', $context['ip'], '</h3>
 			</div>
-			<div class="windowbg2">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container">
 				<div class="padding">';
 			foreach ($context['whois_servers'] as $server)
 				echo '
 					<a href="', $server['url'], '" target="_blank" class="new_win"', isset($context['auto_whois_server']) && $context['auto_whois_server']['name'] == $server['name'] ? ' style="font-weight: bold;"' : '', '>', $server['name'], '</a><br />';
 			echo '
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 		<br />';
 	}
 
 	// The second table lists all the members who have been logged as using this IP address.
 	echo '
-		<div class="title_bar">
-			<h3 class="titlebg">', $txt['members_from_ip'], ' ', $context['ip'], '</h3>
+		<div class="cat_bar">
+			<h3>', $txt['members_from_ip'], ' ', $context['ip'], '</h3>
 		</div>';
 	if (empty($context['ips']))
 		echo '
-		<p class="windowbg2 description"><em>', $txt['no_members_from_ip'], '</em></p>';
+		<p class="blue_container description"><em>', $txt['no_members_from_ip'], '</em></p>';
 	else
 	{
 		echo '
@@ -2304,18 +2296,17 @@ function template_deleteAccount()
 	// The main containing header.
 	echo '
 		<form action="', $scripturl, '?action=profile;area=deleteaccount;save" method="post" accept-charset="', $context['character_set'], '" name="creator" id="creator">
-			<div class="title_bar">
-				<h3 class="titlebg">
-					<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/profile_sm.gif" alt="" class="icon" />', $txt['deleteAccount'], '</span>
+			<div class="cat_bar">
+				<h3>
+					<span class="ie6_header floatleft">', $txt['deleteAccount'], '</span>
 				</h3>
 			</div>';
 	// If deleting another account give them a lovely info box.
 	if (!$context['user']['is_owner'])
 		echo '
-			<p class="windowbg2 description">', $txt['deleteAccount_desc'], '</p>';
+			<p class="red_container">', $txt['deleteAccount_desc'], '</p>';
 	echo '
-			<div class="windowbg2">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container">
 				<div class="content">';
 
 	// If they are deleting their account AND the admin needs to approve it - give them another piece of info ;)
@@ -2368,7 +2359,6 @@ function template_deleteAccount()
 	}
 	echo '
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 			<br />
 		</form>';

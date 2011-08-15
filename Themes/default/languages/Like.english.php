@@ -10,4 +10,10 @@
 	$txt['like_label'] = "Like";
 	$txt['unlike_label'] = "Unlike";
 	$txt['like_profile_report'] = "%s has liked %d posts and received %d likes on %d posts.";
+	$txt['no_like_for_guests'] = 'You must be logged in to use this function';
+	$txt['like_remove_ok'] = 'Removing is ok';
+	$txt['cannot_like_own'] = 'You cannot like your own post';
+	$txt['like_no_permission'] = 'You have no permission to use the like system';
+	$txt['like_cannot_like'] = 'This post cannot be liked';
+	$txt['like_verify_error'] = 'Verification error';
 ?>
