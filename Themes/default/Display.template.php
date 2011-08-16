@@ -557,7 +557,7 @@ function template_main()
 									<li class="restore_button"><a href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['restore_message'], '</a></li>';
 
 		// Show a checkbox for quick moderation?
-		if (!empty($options['display_quick_mod']) && $options['display_quick_mod'] == 1 && $message['can_remove'])
+		if (!empty($options['display_quick_mod']) && $message['can_remove'])
 			echo '
 									<li class="inline_mod_check" style="display: none;" id="in_topic_mod_check_', $message['id'], '"></li>';
 
@@ -812,7 +812,7 @@ function template_main()
 						sJumpAnchor: "quickreply"
 					});';
 
-	if (!empty($options['display_quick_mod']) && $options['display_quick_mod'] == 1 && $context['can_remove_post'])
+	if (!empty($options['display_quick_mod']) && $context['can_remove_post'])
 		echo '
 					var oInTopicModeration = new InTopicModeration({
 						sSelf: \'oInTopicModeration\',
@@ -1185,7 +1185,7 @@ function template_postbit_blog(&$message, $ignoring)
 									<li class="restore_button"><a href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['restore_message'], '</a></li>';
 
 		// Show a checkbox for quick moderation?
-		if (!empty($options['display_quick_mod']) && $options['display_quick_mod'] == 1 && $message['can_remove'])
+		if (!empty($options['display_quick_mod']) && $message['can_remove'])
 			echo '
 									<li class="inline_mod_check" style="display: none;" id="in_topic_mod_check_', $message['id'], '"></li>';
 

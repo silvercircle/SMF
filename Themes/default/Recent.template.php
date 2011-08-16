@@ -16,8 +16,8 @@ function template_main()
 
 	echo '
 	<div id="recent" class="main_section">
-			<h1 class="bigheader">
-				<img src="', $settings['images_url'], '/post/xx.gif" alt="" class="icon" />',$txt['recent_posts'],'
+			<h1 class="bigheader">'
+				,$txt['recent_posts'],'
 			</h1>
 		<div class="pagesection">
 			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
@@ -85,7 +85,7 @@ function template_unread()
 	echo '
 	<div id="recent" class="main_content">';
 
-	$showCheckboxes = !empty($options['display_quick_mod']) && $options['display_quick_mod'] == 1 && $settings['show_mark_read'];
+	$showCheckboxes = !empty($options['display_quick_mod']) && $settings['show_mark_read'];
 
 	if ($showCheckboxes)
 		echo '
@@ -266,7 +266,7 @@ function template_replies()
 	echo '
 	<div id="recent">';
 
-	$showCheckboxes = !empty($options['display_quick_mod']) && $options['display_quick_mod'] == 1 && $settings['show_mark_read'];
+	$showCheckboxes = !empty($options['display_quick_mod']) && $settings['show_mark_read'];
 
 	if ($showCheckboxes)
 		echo '

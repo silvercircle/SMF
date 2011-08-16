@@ -279,12 +279,12 @@ function template_body_above()
 	echo '<form onmouseout="return false;" onsubmit="submitSearchBox();" style="float:right;margin-right:30px;margin-bottom:-20px;" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
 			// Search within current topic?
 			$search_label = 'Search';
-			if (!empty($context['current_topic'])) {
+			if (isset($context['current_topic'])) {
 				$search_label = 'Search this topic';
 				$scope = 2;
 			}
 			// If we're on a certain board, limit it to this board ;).
-			elseif (!empty($context['current_board'])) {
+			elseif (isset($context['current_board'])) {
 				$search_label = 'Search this board';
 				$scope = 1;
 			}

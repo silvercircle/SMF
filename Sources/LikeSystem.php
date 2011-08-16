@@ -32,6 +32,7 @@ function GiveLike($mid)
 		$uid = $user_info['id'];
 		$remove_it = isset($_REQUEST['remove']) ? true : false;
 		$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
+		$update_mode = false;
 		
 		if($user_info['is_guest'])
 			AjaxErrorMsg($txt['no_like_for_guests']);
@@ -90,7 +91,7 @@ function GiveLike($mid)
 										// and you must be the owner of the like or admin
 			//AjaxErrorMsg($txt['like_remove_ok']);
 			
-			if($like_receiver) {
+			if($like_receiver && $like_owner == $uid) {
 				$smcFunc['db_query']('', '
 					DELETE FROM {db_prefix}likes WHERE id_msg = {int:id_msg} AND id_user = {int:id_user}',
 					array('id_msg' => $mid, 'id_user' => $uid));
@@ -120,6 +121,8 @@ function GiveLike($mid)
 						array('id_member' => $like_receiver));
 					
 					$smcFunc['db_query']('', 'UPDATE {db_prefix}members SET likes_given = likes_given + 1 WHERE id_member = '.$uid);
+					
+					$update_mode = true;
 				}
 			}
 			else
@@ -128,7 +131,7 @@ function GiveLike($mid)
 		}
 		$total = LikesUpdate($mid);
 		$output = '';
-		LikesGenerateOutput($total['status'], $output, $total['count'], $mid, true);
+		LikesGenerateOutput($total['status'], $output, $total['count'], $mid, $update_mode);
 		echo $output;
 	}
 	obExit(false, false, false);

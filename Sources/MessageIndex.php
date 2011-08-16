@@ -591,7 +591,7 @@ function MessageIndex()
 		}
 
 		// Find the boards/cateogories they can move their topic to.
-		if ($options['display_quick_mod'] == 1 && $context['can_move'] && !empty($context['topics']))
+		if ($options['display_quick_mod'] && $context['can_move'] && !empty($context['topics']))
 		{
 			require_once($sourcedir . '/Subs-MessageIndex.php');
 			$boardListOptions = array(
@@ -615,11 +615,8 @@ function MessageIndex()
 				$context['can_move'] = false;
 		}
 		// Can we use quick moderation checkboxes?
-		if ($options['display_quick_mod'] == 1)
+		if ($options['display_quick_mod'])
 			$context['can_quick_mod'] = $context['user']['is_logged'] || $context['can_approve'] || $context['can_remove'] || $context['can_lock'] || $context['can_sticky'] || $context['can_move'] || $context['can_merge'] || $context['can_restore'];
-		// Or the icons?
-		else
-			$context['can_quick_mod'] = $context['can_remove'] || $context['can_lock'] || $context['can_sticky'] || $context['can_move'];
 	}
 
 	// If there are children, but no topics and no ability to post topics...

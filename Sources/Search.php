@@ -2047,7 +2047,7 @@ function prepareSearchContext($reset = false)
 		$context['can_merge'] |= in_array($output['board']['id'], $boards_can['merge_any']);
 
 		// If we've found a message we can move, and we don't already have it, load the destinations.
-		if ($options['display_quick_mod'] == 1 && !isset($context['move_to_boards']) && $context['can_move'])
+		if ($options['display_quick_mod'] && !isset($context['move_to_boards']) && $context['can_move'])
 		{
 			require_once($sourcedir . '/Subs-MessageIndex.php');
 			$boardListOptions = array(

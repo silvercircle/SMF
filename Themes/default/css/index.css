@@ -1906,7 +1906,7 @@ ul.quickbuttons li a, .buttonlist ul li a, span.button
 	border:1px solid #9bb1db;
 	border-radius:2px;
 }
-
+span.button {margin: 0 0.5em;}
 ul.quickbuttons li a:hover, span.button:hover, .buttonlist ul li a:hover {
 	background:white;
 }
@@ -2579,7 +2579,6 @@ tr.titlebg td
 	border-radius:8px 8px 8px 0;
 	padding:5px;
 	overflow: hidden;
-	font-size:12px;
 }
 
 tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td

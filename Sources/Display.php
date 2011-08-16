@@ -224,7 +224,7 @@ function Display()
 		fatal_lang_error('not_a_topic', false);
 		
 	// Added by Related Topics
-	if (!empty($modSettings['relatedTopicsEnabled'])) {
+	if (isset($modSettings['have_related_topics']) && $modSettings['have_related_topics'] && !empty($modSettings['relatedTopicsEnabled'])) {
 		require_once($sourcedir . '/Subs-Related.php');
 		loadRelated($topic);
 	}

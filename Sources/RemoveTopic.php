@@ -258,8 +258,10 @@ function removeTopics($topics, $decreasePostCount = true, $ignoreRecycling = fal
 
 	// Recycle topics that aren't in the recycle board...
 	// Added by Related Topics
-	require_once($sourcedir . '/Subs-Related.php');
-	relatedRemoveTopics($topics);
+	if(isset($modSettings['have_related_topics']) && $modSettings['have_related_topics']) {
+		require_once($sourcedir . '/Subs-Related.php');
+		relatedRemoveTopics($topics);
+	}
 	// Related Topics END	
 	if (!empty($modSettings['recycle_enable']) && $modSettings['recycle_board'] > 0 && !$ignoreRecycling)
 	{

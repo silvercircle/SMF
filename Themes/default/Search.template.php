@@ -270,7 +270,7 @@ function template_results()
 	if ($context['compact'])
 	{
 		// Quick moderation set to checkboxes? Oh, how fun :/.
-		if (!empty($options['display_quick_mod']) && $options['display_quick_mod'] == 1)
+		if (!empty($options['display_quick_mod']))
 			echo '
 	<form action="', $scripturl, '?action=quickmod" method="post" accept-charset="', $context['character_set'], '" name="topicForm">';
 
@@ -278,7 +278,7 @@ function template_results()
 		<div class="cat_bar">
 			<h3 class="catbg">
 				<span class="floatright">';
-					if (!empty($options['display_quick_mod']) && $options['display_quick_mod'] == 1)
+					if (!empty($options['display_quick_mod']))
 					echo '
 							<input type="checkbox" onclick="invertAll(this, this.form, \'topics[]\');" class="input_check" />';
 				echo '
@@ -316,37 +316,8 @@ function template_results()
 				if (!empty($options['display_quick_mod']))
 				{
 					echo '
-					<div class="floatright">';
-
-					if ($options['display_quick_mod'] == 1)
-					{
-						echo '
-						<input type="checkbox" name="topics[]" value="', $topic['id'], '" class="input_check" />';
-					}
-					else
-					{
-						if ($topic['quick_mod']['remove'])
-							echo '
-						<a href="', $scripturl, '?action=quickmod;actions[', $topic['id'], ']=remove;', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['quickmod_confirm'], '\');"><img src="', $settings['images_url'], '/icons/quick_remove.gif" width="16" alt="', $txt['remove_topic'], '" title="', $txt['remove_topic'], '" /></a>';
-
-						if ($topic['quick_mod']['lock'])
-							echo '
-						<a href="', $scripturl, '?action=quickmod;actions[', $topic['id'], ']=lock;', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['quickmod_confirm'], '\');"><img src="', $settings['images_url'], '/icons/quick_lock.gif" width="16" alt="', $txt['set_lock'], '" title="', $txt['set_lock'], '" /></a>';
-
-						if ($topic['quick_mod']['lock'] || $topic['quick_mod']['remove'])
-							echo '
-						<br />';
-
-						if ($topic['quick_mod']['sticky'])
-							echo '
-						<a href="', $scripturl, '?action=quickmod;actions[', $topic['id'], ']=sticky;', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['quickmod_confirm'], '\');"><img src="', $settings['images_url'], '/icons/quick_sticky.gif" width="16" alt="', $txt['set_sticky'], '" title="', $txt['set_sticky'], '" /></a>';
-
-						if ($topic['quick_mod']['move'])
-							echo '
-						<a href="', $scripturl, '?action=movetopic;topic=', $topic['id'], '.0"><img src="', $settings['images_url'], '/icons/quick_move.gif" width="16" alt="', $txt['move_topic'], '" title="', $txt['move_topic'], '" /></a>';
-					}
-
-					echo '
+					<div class="floatright">
+					<input type="checkbox" name="topics[]" value="', $topic['id'], '" class="input_check" />
 					</div>';
 				}
 
@@ -369,7 +340,7 @@ function template_results()
 			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
 		</div>';
 
-		if (!empty($options['display_quick_mod']) && $options['display_quick_mod'] == 1 && !empty($context['topics']))
+		if (!empty($options['display_quick_mod']) && !empty($context['topics']))
 		{
 			echo '
 			<div class="middletext titlebg2" style="padding: 4px;">
@@ -412,7 +383,7 @@ function template_results()
 		}
 
 
-		if (!empty($options['display_quick_mod']) && $options['display_quick_mod'] == 1 && !empty($context['topics']))
+		if (!empty($options['display_quick_mod']) && !empty($context['topics']))
 			echo '
 			<input type="hidden" name="' . $context['session_var'] . '" value="' . $context['session_id'] . '" />
 		</form>';

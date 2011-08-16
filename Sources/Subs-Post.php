@@ -1955,11 +1955,6 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			array('id_topic')
 		);
 		
-		// Added by Related Topics
-		require_once($sourcedir . '/Subs-Related.php');
-		relatedUpdateTopics($topicOptions['id']);
-		// Related Topics END		
-		
 		$topicOptions['id'] = $smcFunc['db_insert_id']('{db_prefix}topics', 'id_topic');
 
 		// The topic couldn't be created for some reason.
@@ -1994,6 +1989,13 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		updateStats('topic', true);
 		updateStats('subject', $topicOptions['id'], $msgOptions['subject']);
 
+		// Added by Related Topics
+		if(isset($modSettings['have_related_topics']) && $modSettings['have_related_topics']) {
+			require_once($sourcedir . '/Subs-Related.php');
+			relatedUpdateTopics($topicOptions['id']);
+		}
+		// Related Topics END		
+		
 		// What if we want to export new topics out to a CMS?
 		call_integration_hook('integrate_create_topic', array($msgOptions, $topicOptions, $posterOptions));
 	}
@@ -2505,7 +2507,7 @@ function createAttachment(&$attachmentOptions)
 // !!!
 function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 {
-	global $user_info, $modSettings, $smcFunc, $context;
+	global $user_info, $modSettings, $smcFunc, $context, $sourcedir;
 
 	$topicOptions['poll'] = isset($topicOptions['poll']) ? (int) $topicOptions['poll'] : null;
 	$topicOptions['lock_mode'] = isset($topicOptions['lock_mode']) ? $topicOptions['lock_mode'] : null;
@@ -2718,9 +2720,10 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		if ($smcFunc['db_num_rows']($request) == 1)	{
 			updateStats('subject', $topicOptions['id'], $msgOptions['subject']);
 			// Added by Related Topics
-			global $sourcedir;
-			require_once($sourcedir . '/Subs-Related.php');
-			relatedUpdateTopics($topicOptions['id']);
+			if(isset($modSettings['have_related_topics']) && $modSettings['have_related_topics']) {
+				require_once($sourcedir . '/Subs-Related.php');
+				relatedUpdateTopics($topicOptions['id']);
+			}
 			// Related Topics END
 		}			
 		$smcFunc['db_free_result']($request);

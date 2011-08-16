@@ -140,7 +140,6 @@ function template_options()
 			'options' => array(
 				0 => $txt['display_quick_mod_none'],
 				1 => $txt['display_quick_mod_check'],
-				2 => $txt['display_quick_mod_image'],
 			),
 			'default' => true,
 		),

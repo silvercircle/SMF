@@ -106,13 +106,13 @@ function template_main()
 
 		// Group and date.
 		echo '
-					<td class="windowbg lefttext">', empty($member['group']) ? $member['post_group'] : $member['group'], '</td>
-					<td class="windowbg lefttext">', $member['registered_date'], '</td>';
+					<td class="windowbg centertext">', empty($member['group']) ? $member['post_group'] : $member['group'], '</td>
+					<td class="windowbg centertext">', $member['registered_date'], '</td>';
 
 		if (!isset($context['disabled_fields']['posts']))
 		{
 			echo '
-					<td class="windowbg2" style="white-space: nowrap" width="15">', $member['posts'], '</td>
+					<td class="windowbg centertext" style="white-space: nowrap" width="15">', $member['posts'], '</td>
 					<td class="windowbg statsbar" width="120">';
 
 			if (!empty($member['post_percent']))

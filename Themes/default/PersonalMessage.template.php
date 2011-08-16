@@ -216,7 +216,7 @@ function template_folder()
 								<li class="karma">', $modSettings['karmaLabel'], ' +', $message['member']['karma']['good'], '/-', $message['member']['karma']['bad'], '</li>';
 
 			// Is this user allowed to modify this member's karma?
-			if ($message['member']['karma']['allow'])
+			if ($message['member']['karma']['allow'] && isset($context['current_topic']))
 				echo '
 								<li class="karma_allow">
 									<a href="', $scripturl, '?action=modifykarma;sa=applaud;uid=', $message['member']['id'], ';topic=', $context['current_topic'], '.' . $context['start'], ';m=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $modSettings['karmaApplaudLabel'], '</a>
@@ -276,10 +276,10 @@ function template_folder()
 							</ul>
 						</div></div>
 		<div class="postarea">
-				<div class="keyinfo">
-					<h5 style="display:inline;" id="subject_', $message['id'], '">
-						', $message['subject'], '
-					</h5>';
+			<div class="keyinfo">
+				<h5 style="display:inline;" id="subject_', $message['id'], '">
+					', $message['subject'], '
+				</h5>';
 
 			// Show who the message was sent to.
 			echo '
@@ -301,13 +301,14 @@ function template_folder()
 				echo '
 					<br /><span class="smalltext">&#171; <strong> ', $txt['pm_bcc'], ':</strong> ', implode(', ', $message['recipients']['bcc']), ' &#187;</span>';
 
+			echo '
+				</div>';
+				
 			if (!empty($message['is_replied_to']))
 				echo '
-					<br /><span class="smalltext">&#171; ', $txt['pm_is_replied_to'], ' &#187;</span>';
+					<div style="margin:3px;" class="orange_container smalltext">&#171; ', $txt['pm_is_replied_to'], ' &#187;</div>';
 
-			echo '
-				</div>
-			</div>
+			echo '</div>
 			<div class="post" style="margin-left:205px;">
 				<div class="inner" id="msg_', $message['id'], '"', '>', $message['body'], '</div>
 				<div class="smalltext reportlinks">
