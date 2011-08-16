@@ -1114,10 +1114,16 @@ function openResult(html, width)
 	$('#mcard').css('width', width + 'px');
 	$('#mcard_inner').html(req.responseText);
 	var el = $('#mcard');
-   	el.css("position","fixed");
+   	//el.css("position","relative");		// for cbox
+   	el.css("position",'fixed');
 	el.css("top", (($(window).height() - el.outerHeight()) / 2) -200 + "px");
 	el.css("left", (($(window).width() - el.outerWidth()) / 2) + $(window).scrollLeft() + "px");
 	el.show();
+	/*$.colorbox({inline:true, href:'#mcard', speed:100, transition:'elastic', opacity:0.6,onCleanup:function() {
+		$('#mcard_inner').html('');
+		$('#mcard').hide();
+		$('#wrap').css('opacity', '1.0');
+	}});*/
 	el.css('z-index', '100');
 }
 /*

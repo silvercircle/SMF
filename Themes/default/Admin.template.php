@@ -2098,47 +2098,48 @@ function template_prefix_settings()
 	echo '
 		<form action="', $scripturl, '?action=admin;area=postsettings;sa=prefixes;save" method="post" accept-charset="', $context['character_set'], '">
 		<div class="cat_bar">
-		<h3 class="catbg">',$txt['manageposts_prefix_settings'],'</h3>
+			<h3>',$txt['manageposts_prefix_settings'],'</h3>
 		</div>
-		<div class="generic_container mediumpadding">
+		<div class="blue_container mediumpadding">
 		<table class="table_grid">
-		<thead><tr>
-			<td style="white-space:nowrap;">',$txt['prefix_name'],'</td>';
-			//<td style="white-space:nowrap;">',$txt['prefix_html_before'],'</td>
-			//<td style="white-space:nowrap;">',$txt['prefix_html_after'],'</td>
-		echo '<td style="white-space:nowrap;"></td>
-			<td style="width:100%;text-align:right;">',$txt['prefix_boards'],'</td>
-			<td style="width:100%;text-align:right;white-space:nowrap;">',$txt['prefix_groups'],'</td>
-		</tr></thead>';
+		 <thead>
+		  <tr>
+			<th class="red_container nowrap">',$txt['prefix_name'],'</th>
+			<th class="red_container nowrap"></th>
+			<th class="red_container centertext" style="width:100%;">',$txt['prefix_boards'],'</th>
+			<th class="red_container centertext nowrap" style="width:100%;">',$txt['prefix_groups'],'</th>
+		  </tr>
+		 </thead>
+		 <tbody>';
 	foreach($context['prefixes'] as $prefix) {
-		echo '<tr><td>
+	echo '<tr>
+		   <td>
 			<input type="hidden" name="id_', $prefix['id_prefix'], '" value="1" />
 			<input type="text" size="80" value="',$prefix['name'],'" name="name_',$prefix['id_prefix'],'" />
-			</td>';
-			//<td><input type="text" size="40" value="',$prefix['html_before'],'" name="html_before_',$prefix['id_prefix'],'" /></td>
-			//<td><input type="text" size="40" value="',$prefix['html_after'],'" name="html_after_',$prefix['id_prefix'],'" /></td>
-			echo '<td style="white-space:nowrap;">',$prefix['preview'],'</td>
-				<td style="text-align:right;"><input type="text" size="25" value="',$prefix['boards'],'" name="boards_',$prefix['id_prefix'],'" /></td>
-				<td style="text-align:right;"><input type="text" size="25" value="',$prefix['groups'],'" name="groups_',$prefix['id_prefix'],'" /></td>
-			</tr>';
+		   </td>
+		   <td class="nowrap">',$prefix['preview'],'</td>
+		   <td style="text-align:right;"><input type="text" size="25" value="',$prefix['boards'],'" name="boards_',$prefix['id_prefix'],'" /></td>
+		   <td style="text-align:right;"><input type="text" size="25" value="',$prefix['groups'],'" name="groups_',$prefix['id_prefix'],'" /></td>
+	      </tr>';
 	}
 	for($i = 0; $i < 5; $i++) {
-		echo '<tr><td>
+	echo '<tr>
+	       <td>
 			<input type="hidden" name="id_', $i, '" value="1" />
 			<input type="text" size="80" name="name_new_',$i,'" />
-			</td><td></td>';
-			//<td><input type="text" size="40" name="html_before_new_',$i,'" /></td>
-			//<td><input type="text" size="40" name="html_after_new_',$i,'" /></td>
-			echo '<td style="text-align:right;"><input type="text" size="25" name="boards_new_',$i,'" /></td>
-				<td style="text-align:right;"><input type="text" size="25" name="groups_new_',$i,'" /></td>
-			</tr>';
+		   </td>
+		   <td style="text-align:right;"><input type="text" size="25" name="boards_new_',$i,'" /></td>
+		   <td style="text-align:right;"><input type="text" size="25" name="groups_new_',$i,'" /></td>
+	      </tr>';
 	}
 	
 	echo '
-		</table><br />
+		</tbody>
+		</table>
+		<br />
 		<input style="float:right;" type="submit" value="', $txt['save'], '" class="button_submit" />
 		<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-		<div style="clear:both;">
+		<div style="clear:both;"></div>
 		</div>
 		</form>';
 }
@@ -2149,11 +2150,11 @@ function template_tag_admin_settings()
 
 	echo '
 		<div class="cat_bar">
-			<h3 class="catbg">',$txt['manageposts_tag_settings'],'</h3>
+			<h3>',$txt['manageposts_tag_settings'],'</h3>
 		</div>
-		<div class="generic_container largepadding">
+		<div class="blue_container mediumpadding">
 		<form action="', $scripturl, '?action=admin;area=postsettings;sa=tags;save" method="post" accept-charset="', $context['character_set'], '">
-		<table class="table_grid">
+		<table class="table_grid mlist">
 			<tr>
 				<td style="white-space:nowrap;">',$txt['smftags_set_mintaglength'],'</td>
 				<td><input type="text" name="smftags_set_mintaglength" value="' .  $modSettings['smftags_set_mintaglength'] . '" /></td>
@@ -2167,7 +2168,7 @@ function template_tag_admin_settings()
 				<td><input type="text" name="smftags_set_maxtags" value="' .  $modSettings['smftags_set_maxtags'] . '" /></td>
 			</tr>
 			<tr>
-				<td clospan="2"><b>',$txt['smftags_tagcloud_settings'],'</b></td>
+				<td colspan="2"><b>',$txt['smftags_tagcloud_settings'],'</b></td>
 			</tr>
 			<tr>
 				<td style="white-space:nowrap;">' . $txt['smftags_set_cloud_tags_to_show'] . '</td>

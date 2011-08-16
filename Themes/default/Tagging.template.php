@@ -10,92 +10,71 @@ function template_main()
 	global $txt, $context, $scripturl;
 
 	echo '
-	<table border="0" cellpadding="0" cellspacing="0" align="center" width="95%">
-  <tr>
-  	<td align="center"  class="catbg">',$txt['smftags_popular'], '
+	<div class="orange_container mediumpadding" style="float:right;width:250px;">
+		<div class="cat_bar">
+			<h3>',$txt['smftags_popular'],'</h3>
+		</div>';
+  		if (isset($context['poptags']))
+  			echo $context['poptags'];
+	echo '
+	</div>
+	<div class="blue_container mediumpadding" style="margin-right:280px;">
+  	 <table class="table_grid">
+  	 <thead>
+	  <tr>
+		<th class="red_container">',$txt['smftags_subject'],'</th>
+		<th class="red_container" style="width:11%;">',$txt['smftags_topictag'],'</th>
+		<th class="red_container" style="width:11%;">',$txt['smftags_startedby'],'</th>
+	  	<th class="red_container centertext" style="width:4%;">',$txt['smftags_replies'],'</th>
+	  	<th class="red_container centertext" style="width:4%;">', $txt['smftags_views'], '</th>
+	  </tr>';
+	  foreach ($context['tags_topics'] as $i => $topic)	{
+	  	echo '<tr>';
+	  	 echo '<td class="windowbg2"><a href="' . $scripturl . '?topic=' . $topic['id_topic'] . '.0">' . $topic['subject'] . '</a></td>';
+   		 echo '<td class="windowbg2"><a href="' . $scripturl . '?action=tags;tagid=' . $topic['ID_TAG'] . '">' . $topic['tag'] . '</a></td>';
+		 echo '<td class="windowbg2"><a href="' . $scripturl . '?action=profile;u=' . $topic['id_member'] . '">' . $topic['poster_name'] . '</a></td>';
+		 echo '<td class="windowbg2 centertext">' . $topic['num_replies'] . '</td>';
+		 echo '<td class="windowbg2 centertext">' . $topic['num_views'] . '</td>';
+		echo '</tr>';
 
-  	</td>
-  	</tr>
-  <tr>
-  	<td align="center" class="windowbg2">';
-  	if (isset($context['poptags']))
-  		echo $context['poptags'];
- echo '
-  	</td>
-  	</tr>
-  	</table>
-  	<br />
-  	<table border="0" cellpadding="0" cellspacing="0" align="center" width="95%">
-  <tr>
-  	<td align="center"  class="catbg">',$txt['smftags_latest'], '
-
-  	</td>
-  	</tr>
-  <tr>
-  	<td align="center" class="windowbg2">
-  	<table border="0" width="100%" cellspacing="1" cellpadding="4" class="bordercolor">
-					<tr>
-						<td class="catbg3">',$txt['smftags_subject'],'</td>
-						<td class="catbg3" width="11%">',$txt['smftags_topictag'],'</td>
-						<td class="catbg3" width="11%">',$txt['smftags_startedby'],'</td>
-						<td class="catbg3" width="4%" align="center">',$txt['smftags_replies'],'</td>
-						<td class="catbg3" width="4%" align="center">', $txt['smftags_views'], '</td>
-					</tr>';
-		foreach ($context['tags_topics'] as $i => $topic)
-		{
-				echo '<tr>';
-					echo '<td class="windowbg2"><a href="' . $scripturl . '?topic=' . $topic['id_topic'] . '.0">' . $topic['subject'] . '</a></td>';
-					echo '<td class="windowbg2"><a href="' . $scripturl . '?action=tags;tagid=' . $topic['ID_TAG'] . '">' . $topic['tag'] . '</a></td>';
-					echo '<td class="windowbg"><a href="' . $scripturl . '?action=profile;u=' . $topic['id_member'] . '">' . $topic['poster_name'] . '</a></td>';
-					echo '<td class="windowbg2">' . $topic['num_replies'] . '</td>';
-					echo '<td class="windowbg2">' . $topic['num_views'] . '</td>';
-				echo '</tr>';
-
-		}
-echo '
-
-  	</tr>
-  	</table>
-  	</td></tr></table>
-
-  	<br />
-  	';
+	  }
+	  echo '</table>
+	      </div><br class="clear" /><br /><br />';
 }
 
 function template_tagging_results()
 {
 	global $scripturl, $txt, $context;
 echo '
-	<div style="width:80%;margin-left:auto;margin-right:auto;">
-	<div class="cat_bar rounded_top">
-		<h3 class="catbg">',
+	<div class="orange_container mediumpadding" style="width:80%;margin-left:auto;margin-right:auto;">
+	<div class="cat_bar">
+		<h3>',
 		$txt['smftags_resultsfor'] . $context['tag_search'],'
 		</h3>
 	</div>
-	<div class="generic_container mediumpadding">
-	<table class="table_grid">
+	<table class="table_grid mlist">
 		<thead>
   		<tr>
-			<th class="blue_container" style="width:100%;">',$txt['smftags_subject'],'</th>
-			<th class="blue_container" style="white-space:nowrap;">',$txt['smftags_startedby'],'</th>
-			<th class="blue_container" style="text-align:center;">',$txt['smftags_replies'],'</th>
-			<th class="blue_container" style="text-align:center;">',$txt['smftags_views'], '</th>
+			<th class="red_container" style="width:100%;">',$txt['smftags_subject'],'</th>
+			<th class="red_container centertext nowrap">',$txt['smftags_startedby'],'</th>
+			<th class="red_container centertext">',$txt['smftags_replies'],'</th>
+			<th class="red_container centertext">',$txt['smftags_views'], '</th>
 		</tr>
 		</thead><tbody>';
 		foreach ($context['tags_topics'] as $i => $topic)
 		{
 			echo '<tr>';
 			echo '<td class="windowbg2"><a href="' . $scripturl . '?topic=' . $topic['id_topic'] . '.0">' . $topic['subject'] . '</a></td>';
-			echo '<td class="windowbg"><a href="' . $scripturl . '?action=profile;u=' . $topic['id_member'] . '">' . $topic['poster_name'] . '</a></td>';
-			echo '<td class="windowbg2">', $topic['num_replies'], '</td>';
-			echo '<td class="windowbg2">', $topic['num_views'], '</td>';
+			echo '<td class="windowbg2"><a href="' . $scripturl . '?action=profile;u=' . $topic['id_member'] . '">' . $topic['poster_name'] . '</a></td>';
+			echo '<td class="windowbg2 centertext">', $topic['num_replies'], '</td>';
+			echo '<td class="windowbg2 centertext">', $topic['num_views'], '</td>';
 			echo '</tr>';
 		}
 echo '
 	<tr>
-	<td class="blue_container" colspan="4">' . $txt['smftags_pages'] . $context['page_index'] . '</td>
+	  <td class="blue_container" colspan="4">' . $txt['smftags_pages'] . $context['page_index'] . '</td>
   	</tr>
-  	</tbody></table></div></div>';
+  	</tbody></table></div>';
 }
 
 function template_addtag()

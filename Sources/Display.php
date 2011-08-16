@@ -184,9 +184,11 @@ function Display()
 	}
 
 	// get the tags for this topic
-	$dbresult= $smcFunc['db_query']('', "
+	$dbresult= $smcFunc['db_query']('', '
        SELECT t.tag,l.ID,t.ID_TAG FROM {db_prefix}tags_log as l, {db_prefix}tags as t
-       	WHERE t.ID_TAG = l.ID_TAG && l.ID_TOPIC = $topic");
+       	WHERE t.ID_TAG = l.ID_TAG && l.ID_TOPIC = {int:topic}',
+       	array('topic' => $topic));
+    
     $context['topic_tags'] = array();
     while($row = $smcFunc['db_fetch_assoc']($dbresult)) {
     	$context['topic_tags'][] = array(
@@ -220,6 +222,13 @@ function Display()
 	);
 	if ($smcFunc['db_num_rows']($request) == 0)
 		fatal_lang_error('not_a_topic', false);
+		
+	// Added by Related Topics
+	if (!empty($modSettings['relatedTopicsEnabled'])) {
+		require_once($sourcedir . '/Subs-Related.php');
+		loadRelated($topic);
+	}
+		
 	$topicinfo = $smcFunc['db_fetch_assoc']($request);
 	$smcFunc['db_free_result']($request);
 

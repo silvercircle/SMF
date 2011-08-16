@@ -18,14 +18,13 @@ function template_search_members()
 	<div id="admincenter">
 		<form action="', $scripturl, '?action=admin;area=viewmembers" method="post" accept-charset="', $context['character_set'], '">
 			<div class="cat_bar">
-				<h3 class="catbg">
+				<h3>
 					<span class="floatleft">', $txt['search_for'], '</span>
 					<span class="smalltext floatright">', $txt['wild_cards_allowed'], '</span>
 				</h3>
 			</div>
 			<input type="hidden" name="sa" value="query" />
 			<div class="windowbg">
-				<span class="topslice"><span></span></span>
 				<div class="content">
 					<div class="flow_hidden">
 						<div class="msearch_details floatleft">
@@ -159,16 +158,16 @@ function template_search_members()
 				<span class="botslice clear_right"><span></span></span>
 			</div>
 			<br />
-			<div class="title_bar">
-				<h3 class="titlebg">', $txt['member_part_of_these_membergroups'], '</h3>
+			<div class="cat_bar">
+				<h3>', $txt['member_part_of_these_membergroups'], '</h3>
 			</div>
 			<div class="flow_hidden">
-				<table width="49%" class="table_grid floatleft">
+				<table style="width:49%;" class="table_grid floatleft">
 					<thead>
-						<tr class="catbg">
-							<th scope="col" class="first_th">', $txt['membergroups'], '</th>
-							<th scope="col">', $txt['primary'], '</th>
-							<th scope="col" class="last_th">', $txt['additional'], '</th>
+						<tr>
+							<th scope="col" class="red_container first_th">', $txt['membergroups'], '</th>
+							<th scope="col" class="red_container">', $txt['primary'], '</th>
+							<th scope="col" class="red_container last_th">', $txt['additional'], '</th>
 						</tr>
 					</thead>
 					<tbody>';
@@ -200,13 +199,13 @@ function template_search_members()
 					</tbody>
 				</table>
 
-				<table width="49%" class="table_grid floatright">
+				<table style="width:49%;" class="table_grid floatright">
 					<thead>
-						<tr class="catbg">
-							<th scope="col" class="first_th">
+						<tr>
+							<th scope="col" class="red_container first_th">
 								', $txt['membergroups_postgroups'], '
 							</th>
-							<th class="last_th">&nbsp;</th>
+							<th class="red_container last_th">&nbsp;</th>
 						</tr>
 					</thead>
 					</tbody>';

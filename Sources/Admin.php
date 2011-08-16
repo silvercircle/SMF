@@ -169,6 +169,15 @@ function AdminMain()
 						'loads' => array($txt['load_balancing_settings']),
 					),
 				),
+				'relatedtopics' => array(
+					'label' => $txt['admin_related_topic'],
+					'file' => 'RelatedTopics.php',
+					'function' => 'RelatedTopicsAdmin',
+					'subsections' => array(
+						'settings' => array($txt['admin_related_topics_settings']),
+						'methods' => array($txt['admin_related_topics_methods']),
+					),
+				),
 				'current_theme' => array(
 					'label' => $txt['theme_current_settings'],
 					'file' => 'Themes.php',
@@ -194,6 +203,7 @@ function AdminMain()
 					'file' => 'ManageSettings.php',
 					'function' => 'ModifyModSettings',
 					'icon' => 'modifications.gif',
+					'related' => array($txt['admin_related_topic']),
 					'subsections' => array(
 						'general' => array($txt['mods_cat_modifications_misc']),
 						// Mod Authors for a "ADD AFTER" on this line. Ensure you end your change with a comma. For example:

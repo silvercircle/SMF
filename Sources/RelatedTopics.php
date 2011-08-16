@@ -23,13 +23,12 @@ function RelatedTopicsAdmin()
 	$context['page_title'] = $txt['related_topics_admin_title'];
 
 	$subActions = array(
-		'main' => array('RelatedTopicsAdminMain'),
 		'settings' => array('RelatedTopicsAdminSettings'),
 		'methods' => array('RelatedTopicsAdminMethods'),
 		'buildIndex' => array('RelatedTopicsAdminBuildIndex'),
 	);
 
-	$_REQUEST['sa'] = isset($_REQUEST['sa']) && isset($subActions[$_REQUEST['sa']]) ? $_REQUEST['sa'] : 'main';
+	$_REQUEST['sa'] = isset($_REQUEST['sa']) && isset($subActions[$_REQUEST['sa']]) ? $_REQUEST['sa'] : 'settings';
 
 	if (isset($subActions[$_REQUEST['sa']][1]))
 		isAllowedTo($subActions[$_REQUEST['sa']][1]);

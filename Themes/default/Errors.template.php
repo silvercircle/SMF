@@ -29,9 +29,7 @@ function template_fatal_error()
 			</h3>
 		</div>
 		<div class="windowbg">
-			<span class="topslice"><span></span></span>
-			<div class="padding">', $context['error_message'], '</div>
-			<span class="botslice"><span></span></span>
+			<div class="mediumpadding">', $context['error_message'], '</div>
 		</div>
 	</div>';
 
@@ -49,14 +47,12 @@ function template_error_log()
 			<script type="text/javascript"><!-- // --><![CDATA[
 				var lastClicked = "";
 			// ]]></script>
-			<div class="title_bar clear_right">
-				<h3 class="titlebg">
-					<span class="ie6_header floatleft">
-						<a href="', $scripturl, '?action=helpadmin;help=error_log" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" alt="', $txt['help'], '" align="top" /></a> ', $txt['errlog'], '
-					</span>
+			<div class="cat_bar clear_right">
+				<h3>
+					<a href="', $scripturl, '?action=helpadmin;help=error_log" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" alt="', $txt['help'], '" align="top" /></a> ', $txt['errlog'], '
 				</h3>
 			</div>
-			<table border="0" cellspacing="1" class="table_grid" id="error_log">
+			<table class="table_grid mlist" style="margin-top:1em;" id="error_log">
 				<tr>
 					<td colspan="3" class="windowbg">
 						&nbsp;&nbsp;', $txt['apply_filter_of_type'], ':';

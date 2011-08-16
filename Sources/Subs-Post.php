@@ -1781,7 +1781,7 @@ function sendNotifications($topics, $type, $exclude = array(), $members_only = a
 // - Mandatory parameters are set.
 function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 {
-	global $user_info, $txt, $modSettings, $smcFunc, $context;
+	global $user_info, $txt, $modSettings, $smcFunc, $context, $sourcedir;
 
 	// Set optional parameters to the default value.
 	$msgOptions['icon'] = empty($msgOptions['icon']) ? 'xx' : $msgOptions['icon'];
@@ -1954,6 +1954,12 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			),
 			array('id_topic')
 		);
+		
+		// Added by Related Topics
+		require_once($sourcedir . '/Subs-Related.php');
+		relatedUpdateTopics($topicOptions['id']);
+		// Related Topics END		
+		
 		$topicOptions['id'] = $smcFunc['db_insert_id']('{db_prefix}topics', 'id_topic');
 
 		// The topic couldn't be created for some reason.
@@ -2709,8 +2715,14 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 				'id_first_msg' => $msgOptions['id'],
 			)
 		);
-		if ($smcFunc['db_num_rows']($request) == 1)
+		if ($smcFunc['db_num_rows']($request) == 1)	{
 			updateStats('subject', $topicOptions['id'], $msgOptions['subject']);
+			// Added by Related Topics
+			global $sourcedir;
+			require_once($sourcedir . '/Subs-Related.php');
+			relatedUpdateTopics($topicOptions['id']);
+			// Related Topics END
+		}			
 		$smcFunc['db_free_result']($request);
 	}
 

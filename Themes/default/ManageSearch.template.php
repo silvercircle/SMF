@@ -18,10 +18,9 @@ function template_modify_weights()
 	<div id="admincenter">
 		<form action="', $scripturl, '?action=admin;area=managesearch;sa=weights" method="post" accept-charset="', $context['character_set'], '">
 			<div class="cat_bar">
-				<h3 class="catbg">', $txt['search_weights'], '</h3>
+				<h3>', $txt['search_weights'], '</h3>
 			</div>
-			<div class="windowbg">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container">
 				<div class="content">
 					<dl class="settings">
 						<dt class="large_caption">
@@ -83,7 +82,6 @@ function template_modify_weights()
 					<input type="submit" name="save" value="', $txt['search_weights_save'], '" class="button_submit floatright" />
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" /><br class="clear" />
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 		</form>
 	</div>
@@ -113,13 +111,12 @@ function template_select_search_method()
 	<div id="admincenter">
 		<form action="', $scripturl, '?action=admin;area=managesearch;sa=method" method="post" accept-charset="', $context['character_set'], '">
 			<div class="cat_bar">
-				<h3 class="catbg">', $txt['search_method'], '</h3>
+				<h3>', $txt['search_method'], '</h3>
 			</div>
-			<div class="information">
+			<div class="orange_container">
 				<div class="smalltext" style="font-weight: normal;"><a href="', $scripturl, '?action=helpadmin;help=search_why_use_index" onclick="return reqWin(this.href);">', $txt['search_create_index_why'], '</a></div>
 			</div>
-			<div class="windowbg">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container">
 				<div class="content">
 					<dl class="settings">
 
@@ -196,6 +193,15 @@ function template_select_search_method()
 								</span>
 							</dd>';
 
+	echo '
+							<dt>
+								<input type="radio" name="search_index" value="sphinx"', !empty($modSettings['search_index']) && $modSettings['search_index'] == 'sphinx' ? ' checked="checked"' : '', $context['custom_index'] ? '' : ' onclick="alert(\'' . $txt['search_index_custom_warning'] . '\'); selectRadioByName(this.form.search_method, \'1\');"', ' class="input_radio" />
+								Sphinx
+							</dt>
+							<dd>
+								<span class="smalltext">The admin panel only allows to switch between search indexes. To adjust further Sphinx settings, use the sphinx_config.php tool.</span>
+							</dd>';
+
 	foreach ($context['search_apis'] as $api)
 	{
 		if (empty($api['label']) || $api['has_template'])
@@ -227,7 +233,6 @@ function template_select_search_method()
 						<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 					</div>
 				</div>
-				<span class="botslice clear"><span></span></span>
 			</div>
 		</form>
 	</div>

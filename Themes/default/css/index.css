@@ -938,7 +938,10 @@ table.table_grid thead tr.catbg th
 {
 	padding: 0 0.5em;
 	background-color:#98AABA;
-	font-size:12px;
+	font-size:10px;
+	font-family:Verdana,Arial,Helvetica;
+	text-shadow:black 2px 2px 4px;
+	font-weight:bold;
 }
 
 .dropmenu, .dropmenu ul
@@ -966,7 +969,6 @@ table.table_grid thead tr.catbg th
 {
 	display: block;
 	padding: 0 0 0 5px;
-	font-size: 0.9em;
 }
 /* the background's first level only */
 .dropmenu li a.firstlevel
@@ -981,7 +983,6 @@ table.table_grid thead tr.catbg th
 	line-height: 20px;
 	white-space: pre;
 	padding:2px 5px 2px 5px;
-	font-weight:bold;
 }
 .dropmenu > li
 {
@@ -996,11 +997,13 @@ table.table_grid thead tr.catbg th
 	display: none;
 	position: absolute;
 	width: auto;
-	font-weight: normal;
 	background-color:#98AABA;
 	padding: 0 0 0 0;
 	margin-top:22px;
-	width:15em;
+	width:20em;
+	box-shadow: 1px 1px 4px 1px #888;
+	border:1px solid #888;
+	border-top:0;
 }
 
 .dropmenu li li
@@ -1039,14 +1042,12 @@ table.table_grid thead tr.catbg th
 /* the hover effects */
 .dropmenu li a.firstlevel:hover, .dropmenu li:hover a.firstlevel
 {
-	color: #ccc;
 	cursor: pointer;
 	text-decoration: none;
 }
 .dropmenu li a.firstlevel:hover span.firstlevel, .dropmenu li:hover a.firstlevel span.firstlevel
 {
 	background-color:#ccc;
-	color:black;
 }
 /* the hover effects on level2 and 3 */
 .dropmenu li li a:hover, .dropmenu li li:hover>a
@@ -1054,6 +1055,7 @@ table.table_grid thead tr.catbg th
 	background: #d4dbe4;
 	color: #000;
 	text-decoration: none;
+	text-shadow:white 1px 1px 6px;
 }
 .dropmenu li:hover ul ul, .dropmenu li:hover ul ul ul
 {
@@ -1073,7 +1075,7 @@ table.table_grid thead tr.catbg th
 }
 
 span.m_downarrow {
-    padding:6px 12px 6px 0px;
+    padding:8px 12px 6px 0px;
     margin-left:-4px;
     margin-right:4px;
     float:left;
@@ -2546,6 +2548,7 @@ tr.titlebg td
 	padding:3px 4px 0px 10px;
 	margin-bottom:1px;
 	height:20px;
+	text-shadow:#fff 2px 2px 5px;
 }
 #boardindex_table .cat_bar
 {
@@ -3631,9 +3634,9 @@ div#mcard_close, div#tcard_close {
 	z-index:10;
 }
 span.mcard {
-	width:14px;
-	min-width:16px;
-	max-width:16px;
+	width:11px;
+	min-width:11px;
+	max-width:11px;
 	background: transparent url(../images/theme/sprite.png) 0 -561px no-repeat;
 	cursor:pointer;
 	display:inline-block;

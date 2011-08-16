@@ -418,25 +418,25 @@ function template_showPosts()
 		<table class="table_grid" style="width:100%;">
 			<thead>
 				<tr>
-					<th class="red_container lefttext" scope="col" width="25%">
+					<th class="red_container lefttext" scope="col" style="width:25%;">
 						<a href="', $scripturl, '?action=profile;u=', $context['current_member'], ';area=showposts;sa=attach;sort=filename', ($context['sort_direction'] == 'down' && $context['sort_order'] == 'filename' ? ';asc' : ''), '">
 							', $txt['show_attach_filename'], '
 							', ($context['sort_order'] == 'filename' ? '<img src="' . $settings['images_url'] . '/sort_' . ($context['sort_direction'] == 'down' ? 'down' : 'up') . '.gif" alt="" />' : ''), '
 						</a>
 					</th>
-					<th class="red_container" scope="col" width="12%">
+					<th class="red_container" scope="col" style="width:12%;">
 						<a href="', $scripturl, '?action=profile;u=', $context['current_member'], ';area=showposts;sa=attach;sort=downloads', ($context['sort_direction'] == 'down' && $context['sort_order'] == 'downloads' ? ';asc' : ''), '">
 							', $txt['show_attach_downloads'], '
 							', ($context['sort_order'] == 'downloads' ? '<img src="' . $settings['images_url'] . '/sort_' . ($context['sort_direction'] == 'down' ? 'down' : 'up') . '.gif" alt="" />' : ''), '
 						</a>
 					</th>
-					<th class="red_container lefttext" scope="col" width="30%">
+					<th class="red_container lefttext" scope="col" style="width:30%;">
 						<a href="', $scripturl, '?action=profile;u=', $context['current_member'], ';area=showposts;sa=attach;sort=subject', ($context['sort_direction'] == 'down' && $context['sort_order'] == 'subject' ? ';asc' : ''), '">
 							', $txt['message'], '
 							', ($context['sort_order'] == 'subject' ? '<img src="' . $settings['images_url'] . '/sort_' . ($context['sort_direction'] == 'down' ? 'down' : 'up') . '.gif" alt="" />' : ''), '
 						</a>
 					</th>
-					<th class="last_th lefttext" scope="col">
+					<th class="red_container last_th lefttext" scope="col">
 						<a href="', $scripturl, '?action=profile;u=', $context['current_member'], ';area=showposts;sa=attach;sort=posted', ($context['sort_direction'] == 'down' && $context['sort_order'] == 'posted' ? ';asc' : ''), '">
 						', $txt['show_attach_posted'], '
 						', ($context['sort_order'] == 'posted' ? '<img src="' . $settings['images_url'] . '/sort_' . ($context['sort_direction'] == 'down' ? 'down' : 'up') . '.gif" alt="" />' : ''), '
@@ -754,11 +754,11 @@ function template_trackIP()
 	else
 	{
 		echo '
-		<table class="table_grid" cellspacing="0" width="100%">
+		<table class="table_grid" style="width:100%;">
 			<thead>
-				<tr class="catbg">
-					<th class="first_th" scope="col">', $txt['ip_address'], '</th>
-					<th class="last_th" scope="col">', $txt['display_name'], '</th>
+				<tr>
+					<th class="first_th red_container" scope="col">', $txt['ip_address'], '</th>
+					<th class="last_th red_container" scope="col">', $txt['display_name'], '</th>
 				</tr>
 			</thead>
 			<tbody>';
@@ -785,7 +785,7 @@ function template_trackIP()
 }
 
 function template_showPermissions()
-{
+	{
 	global $context, $settings, $options, $scripturl, $txt;
 
 	echo '
@@ -836,8 +836,8 @@ function template_showPermissions()
 					<table class="table_grid" style="width:100%;">
 						<thead>
 							<tr>
-								<th class="lefttext red_container nowrap" scope="col" width="50%">', $txt['showPermissions_permission'], '</th>
-								<th class="lefttext red_container nowrap" scope="col" width="50%">', $txt['showPermissions_status'], '</th>
+								<th class="lefttext red_container nowrap" scope="col" style="width:50%;">', $txt['showPermissions_permission'], '</th>
+								<th class="lefttext red_container nowrap" scope="col" style="width:50%;">', $txt['showPermissions_status'], '</th>
 							</tr>
 						</thead>
 						<tbody>';
@@ -900,8 +900,8 @@ function template_showPermissions()
 				<table class="table_grid" style="width:100%;">
 					<thead>
 						<tr>
-							<th class="lefttext red_container nowrap" scope="col" width="50%">', $txt['showPermissions_permission'], '</th>
-							<th class="lefttext red_container nowrap" scope="col" width="50%">', $txt['showPermissions_status'], '</th>
+							<th class="lefttext red_container nowrap" scope="col" style="width:50%;">', $txt['showPermissions_permission'], '</th>
+							<th class="lefttext red_container nowrap" scope="col" style="width:50%;">', $txt['showPermissions_status'], '</th>
 						</tr>
 					</thead>
 					<tbody>';
@@ -953,7 +953,6 @@ function template_statPanel()
 			<div class="cat_bar">
 				<h3>
 					', $txt['statPanel_generalStats'], ' - ', $context['member']['name'], '
-					</span>
 				</h3>
 			</div>
 			<div class="windowbg2">
@@ -1125,7 +1124,6 @@ function template_edit_options()
 					', $txt['profile'];
 
 		echo '
-					</span>
 				</h3>
 			</div>';
 
@@ -1160,7 +1158,7 @@ function template_edit_options()
 		{
 			echo '
 					</dl>
-					<hr width="100%" size="1" class="hrcolor clear" />
+					<hr style="width:100%;" class="hrcolor clear" />
 					<dl>';
 		}
 		elseif ($field['type'] == 'callback')
@@ -1248,7 +1246,7 @@ function template_edit_options()
 	{
 		if ($lastItem != 'hr')
 			echo '
-					<hr width="100%" size="1" class="hrcolor clear" />';
+					<hr style="width:100%;" class="hrcolor clear" />';
 
 		echo '
 					<dl>';
@@ -1276,7 +1274,7 @@ function template_edit_options()
 					<div>', $context['profile_posthtml'], '</div>';
 	elseif ($lastItem != 'hr')
 		echo '
-					<hr width="100%" size="1" class="hrcolor clear" />';
+					<hr style="width:100%;" class="hrcolor clear" />';
 
 	// Only show the password box if it's actually needed.
 	if ($context['require_password'])
@@ -1693,7 +1691,7 @@ function template_groupMembership()
 
 				if ($context['can_edit_primary'])
 					echo '
-						<td width="4%">
+						<td style="width:4%;">
 							<input type="radio" name="primary" id="primary_', $group['id'], '" value="', $group['id'], '" ', $group['is_primary'] ? 'checked="checked"' : '', ' onclick="highlightSelected(\'primdiv_' . $group['id'] . '\');" ', $group['can_be_primary'] ? '' : 'disabled="disabled"', ' class="input_radio" />
 						</td>';
 
@@ -1701,7 +1699,7 @@ function template_groupMembership()
 						<td>
 							<label for="primary_', $group['id'], '"><strong>', (empty($group['color']) ? $group['name'] : '<span style="color: ' . $group['color'] . '">' . $group['name'] . '</span>'), '</strong>', (!empty($group['desc']) ? '<br /><span class="smalltext">' . $group['desc'] . '</span>' : ''), '</label>
 						</td>
-						<td width="15%" class="righttext">';
+						<td style="width:15%;" class="righttext">';
 
 				// Can they leave their group?
 				if ($group['can_leave'])
@@ -1728,7 +1726,7 @@ function template_groupMembership()
 		{
 			echo '
 			<br />
-			<table border="0" width="100%" cellspacing="0" cellpadding="4" class="table_grid">
+			<table border="0" style="width:100%;" class="table_grid">
 				<thead>
 					<tr class="catbg">
 						<th class="first_th" scope="col">
@@ -2264,7 +2262,7 @@ function template_issueWarning()
 	if (empty($context['previous_warnings']))
 		echo '
 				<tr class="windowbg2">
-					<td align="center" colspan="4">
+					<td class="centertext" colspan="4">
 						', $txt['profile_warning_previous_none'], '
 					</td>
 				</tr>';
@@ -2586,7 +2584,7 @@ function template_profile_avatar_select()
 		echo '
 								<div id="avatar_server_stored">
 									<div>
-										<select name="cat" id="cat" size="10" onchange="changeSel(\'\');" onfocus="selectRadioByName(document.forms.creator.avatar_choice, \'server_stored\');">';
+										<select name="cat" id="cat" onchange="changeSel(\'\');" onfocus="selectRadioByName(document.forms.creator.avatar_choice, \'server_stored\');">';
 		// This lists all the file catergories.
 		foreach ($context['avatars'] as $avatar)
 			echo '
@@ -2597,7 +2595,7 @@ function template_profile_avatar_select()
 									<div>
 										<select name="file" id="file" size="10" style="display: none;" onchange="showAvatar()" onfocus="selectRadioByName(document.forms.creator.avatar_choice, \'server_stored\');" disabled="disabled"><option></option></select>
 									</div>
-									<div><img name="avatar" id="avatar" src="', !empty($context['member']['avatar']['allow_external']) && $context['member']['avatar']['choice'] == 'external' ? $context['member']['avatar']['external'] : $modSettings['avatar_url'] . '/blank.gif', '" alt="Do Nothing" /></div>
+									<div><img id="avatar" src="', !empty($context['member']['avatar']['allow_external']) && $context['member']['avatar']['choice'] == 'external' ? $context['member']['avatar']['external'] : $modSettings['avatar_url'] . '/blank.gif', '" alt="Do Nothing" /></div>
 									<script type="text/javascript"><!-- // --><![CDATA[
 										var files = ["' . implode('", "', $context['avatar_list']) . '"];
 										var avatar = document.getElementById("avatar");
@@ -2716,7 +2714,7 @@ function template_profile_avatar_select()
 	{
 		echo '
 								<div id="avatar_upload">
-									<input type="file" size="44" name="attachment" value="" onfocus="selectRadioByName(document.forms.creator.avatar_choice, \'upload\');" class="input_file" />
+									<input type="file" name="attachment" onfocus="selectRadioByName(document.forms.creator.avatar_choice, \'upload\');" class="input_file" />
 									', ($context['member']['avatar']['id_attach'] > 0 ? '<br /><br /><img src="' . $context['member']['avatar']['href'] . (strpos($context['member']['avatar']['href'], '?') === false ? '?' : '&amp;') . 'time=' . time() . '" alt="" /><input type="hidden" name="id_attach" value="' . $context['member']['avatar']['id_attach'] . '" />' : ''), '
 								</div>';
 	}
@@ -2847,7 +2845,7 @@ function template_profile_smiley_pick()
 		echo '
 									<option value="', $set['id'], '"', $set['selected'] ? ' selected="selected"' : '', '>', $set['name'], '</option>';
 	echo '
-								</select> <img id="smileypr" src="', $context['member']['smiley_set']['id'] != 'none' ? $modSettings['smileys_url'] . '/' . ($context['member']['smiley_set']['id'] != '' ? $context['member']['smiley_set']['id'] : (!empty($settings['smiley_sets_default']) ? $settings['smiley_sets_default'] : $modSettings['smiley_sets_default'])) . '/smiley.gif' : $settings['images_url'] . '/blank.gif', '" alt=":)" align="top" style="padding-left: 20px;" />
+								</select> <img id="smileypr" src="', $context['member']['smiley_set']['id'] != 'none' ? $modSettings['smileys_url'] . '/' . ($context['member']['smiley_set']['id'] != '' ? $context['member']['smiley_set']['id'] : (!empty($settings['smiley_sets_default']) ? $settings['smiley_sets_default'] : $modSettings['smiley_sets_default'])) . '/smiley.gif' : $settings['images_url'] . '/blank.gif', '" alt=":)" style="padding-left: 20px;" />
 							</dd>';
 }
 

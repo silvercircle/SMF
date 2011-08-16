@@ -9,8 +9,7 @@
 // Main funtions
 function loadRelated($topic)
 {
-	global $modSettings, $context, $smcFunc;
-
+	global $modSettings, $context, $smcFunc, $user_info;
 	$context['can_approve_posts_boards'] = boardsAllowedTo('approve_posts', false);
 
 	// Otherwise use customized fulltext index
@@ -35,12 +34,10 @@ function loadRelated($topic)
 
 		return false;
 	}
-
 	$topics_ids = array();
 	while ($row = $smcFunc['db_fetch_assoc']($request))
 		$topics_ids[] = $row['id_topic'];
 	$smcFunc['db_free_result']($request);
-
 	return prepareTopicArray($topics_ids);
 }
 

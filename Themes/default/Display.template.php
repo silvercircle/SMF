@@ -648,6 +648,7 @@ function template_main()
 			if ($context['show_spellchecking'])
 				echo '
 								<input type="button" value="', $txt['spell_check'], '" onclick="spellCheck(\'postmodify\', \'message\');" tabindex="', $context['tabindex']++, '" class="button_submit" />';
+								
 
 			echo '
 							</div>
@@ -673,7 +674,95 @@ function template_main()
 				<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . ' &nbsp;&nbsp;<a href="#top"><strong>' . $txt['go_up'] . '</strong></a>' : '', '</div>
 				<div class="nextlinks_bottom">', $context['previous_next'], '</div>
 			</div>';
-			
+	// Added by Related Topics
+	if (!empty($context['related_topics'])) // TODO: Have ability to display no related topics?
+	{
+		echo '
+			<h1 class="bigheader">', $txt['related_topics'], '</h1>
+			<div class="tborder topic_table">
+				<table class="table_grid mlist">
+					<thead>
+						<tr>';
+
+		// Are there actually any topics to show?
+		if (!empty($context['related_topics']))
+		{
+			echo '
+							<th scope="col" class="blue_container smalltext first_th" style="width:8%;">&nbsp;</th>
+							<th scope="col" class="blue_container smalltext">', $txt['subject'], ' / ', $txt['started_by'], '</th>
+							<th scope="col" class="blue_container smalltext centertext" style="width:14%;">', $txt['replies'], '</th>
+							<th scope="col" class="blue_container smalltext last_th" style="width:22%;">', $txt['last_post'], '</th>';
+		}
+		// No topics.... just say, "sorry bub".
+		else
+			echo '
+							<th scope="col" class="red_container smalltext first_th">&nbsp;</th>
+							<th class="smalltext red_container" colspan="3"><strong>', $txt['msg_alert_none'], '</strong></th>
+							<th scope="col" class="red_container smalltext last_th" width="8%">&nbsp;</th>';
+
+		echo '
+						</tr>
+					</thead>
+					<tbody>';
+
+		foreach ($context['related_topics'] as $topic)
+		{
+			// Is this topic pending approval, or does it have any posts pending approval?
+			if ($topic['board']['can_approve_posts'] && $topic['unapproved_posts'])
+				$color_class = !$topic['approved'] ? 'approvetbg' : 'approvebg';
+			// We start with locked and sticky topics.
+			elseif ($topic['is_sticky'] && $topic['is_locked'])
+				$color_class = 'stickybg locked_sticky';
+			// Sticky topics should get a different color, too.
+			elseif ($topic['is_sticky'])
+				$color_class = 'stickybg';
+			// Locked topics get special treatment as well.
+			elseif ($topic['is_locked'])
+				$color_class = 'lockedbg';
+			// Last, but not least: regular topics.
+			else
+				$color_class = 'windowbg';
+
+			// Some columns require a different shade of the color class.
+			$alternate_class = $color_class . '2';
+
+			echo '
+						<tr>
+							<td class="icon1 ', $color_class, '">
+								<img src="', $settings['images_url'], '/topic/', $topic['class'], '.gif" alt="" />
+							</td>
+							<td class="subject ', $alternate_class, '">
+								<div ', (!empty($topic['quick_mod']['modify']) ? 'id="topic_' . $topic['first_post']['id'] . '" onmouseout="mouse_on_div = 0;" onmouseover="mouse_on_div = 1;" ondblclick="modify_topic(\'' . $topic['id'] . '\', \'' . $topic['first_post']['id'] . '\', \'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\');"' : ''), '>
+									', $topic['is_sticky'] ? '<strong>' : '', '<span id="msg_' . $topic['first_post']['id'] . '">', $topic['first_post']['link'], (!$topic['board']['can_approve_posts'] && !$topic['approved'] ? '&nbsp;<em>(' . $txt['awaiting_approval'] . ')</em>' : ''), '</span>', $topic['is_sticky'] ? '</strong>' : '' ;
+
+			// Is this topic new? (assuming they are logged in!)
+			if ($topic['new'] && $context['user']['is_logged'])
+					echo '
+									<a href="', $topic['new_href'], '" id="newicon' . $topic['first_post']['id'] . '"><img src="', $settings['lang_images_url'], '/new.gif" alt="', $txt['new'], '" /></a>';
+
+			echo '
+									<p>', $txt['started_by'], ' ', $topic['first_post']['member']['link'], '
+										<small id="pages' . $topic['first_post']['id'] . '">', $topic['pages'], '</small>
+										<small>', $topic['board']['link'], '</small>
+									</p>
+								</div>
+							</td>
+							<td style="padding:2px 5px;" class="nowrap stats ', $color_class, '">
+								', $topic['replies'], ' ', $txt['replies'], '
+								<br />
+								', $topic['views'], ' ', $txt['views'], '
+							</td>
+							<td class="lastpost ', $alternate_class, '">',
+								$txt['by'], ': ', $topic['last_post']['member']['link'], '<br />
+								<a class="lp_link" title="', $txt['last_post'], '" href="', $topic['last_post']['href'], '">',$topic['last_post']['time'], '</a>
+							</td>
+						</tr>';
+		}
+
+		echo '
+				</table>
+			</div><br />';
+	}
 	// Show the lower breadcrumbs.
 	theme_linktree();
 	$mod_buttons = array(

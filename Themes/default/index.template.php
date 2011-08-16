@@ -430,6 +430,7 @@ function theme_linktree($force_show = false)
 		return;
 
 	if(!empty($ltree)) {
+		$ltree = str_ireplace('linktree_upper', 'linktree_lower', $ltree);
 		echo $ltree;
 		return;
 	}
@@ -479,7 +480,7 @@ function template_menu()
 	echo '
 		<div id="main_menu">
 			<div style="float:right;line-height:24px;font-size:10px;font-family:Verdana;">
-				<span id="curfontsize"></span>
+				<span style="color:white;" id="curfontsize"></span>
 				<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
 				<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
 			</div>

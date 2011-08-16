@@ -21,14 +21,13 @@ function template_report_type()
 			<div class="cat_bar">
 				<h3 class="catbg">', $txt['generate_reports'], '</h3>
 			</div>
-			<div class="information">
+			<div class="information orange_container">
 				', $txt['generate_reports_desc'], '
 			</div>
 			<div class="cat_bar">
-				<h3 class="catbg">', $txt['generate_reports_type'], '</h3>
+				<h3>', $txt['generate_reports_type'], '</h3>
 			</div>
-			<div class="windowbg">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container">
 				<div class="content">
 					<dl class="generate_report">';
 
@@ -51,7 +50,6 @@ function template_report_type()
 						<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 					</div>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 		</form>
 	</div>
@@ -71,8 +69,8 @@ function template_main()
 
 	echo '
 	<div id="admincenter">
-		<div class="title_bar">
-			<h3 class="titlebg">', $txt['results'], '</h3>
+		<div class="cat_bar">
+			<h3>', $txt['results'], '</h3>
 		</div>
 		<div id="report_buttons">';
 
@@ -80,19 +78,19 @@ function template_main()
 		template_button_strip($report_buttons, 'right');
 
 	echo '
-		</div>';
+		</div><br class="clear" /><br />';
 
 	// Go through each table!
 	foreach ($context['tables'] as $table)
 	{
 		echo '
-		<table class="table_grid" width="100%">';
+		<table class="table_grid mlist" style="width:100%;margin-bottom:1em;">';
 
 		if (!empty($table['title']))
 			echo '
 			<thead>
-				<tr class="catbg">
-					<th scope="col" colspan="', $table['column_count'], '">', $table['title'], '</th>
+				<tr>
+					<th class="red_container" scope="col" colspan="', $table['column_count'], '">', $table['title'], '</th>
 				</tr>
 			</thead>
 			<tbody>';
@@ -107,7 +105,7 @@ function template_main()
 				<tr class="windowbg table_caption">';
 			else
 				echo '
-				<tr class="', !empty($row[0]['separator']) ? 'catbg' : ($alternate ? 'windowbg' : 'windowbg2'), '" valign="top">';
+				<tr class="', !empty($row[0]['separator']) ? 'catbg' : ($alternate ? 'windowbg' : 'windowbg2'), '">';
 
 			// Now do each column.
 			$column_number = 0;
@@ -178,11 +176,11 @@ function template_print()
 	{
 		echo '
 		<div style="overflow: visible;', $table['max_width'] != 'auto' ? ' width: ' . $table['max_width'] . 'px;' : '', '">
-			<table border="0" cellspacing="1" cellpadding="4" width="100%" class="bordercolor">';
+			<table class="table_grid mlist" style="width:100%;">';
 
 		if (!empty($table['title']))
 			echo '
-				<tr class="catbg">
+				<tr>
 					<td colspan="', $table['column_count'], '">
 						', $table['title'], '
 					</td>
@@ -195,7 +193,7 @@ function template_print()
 		{
 			if ($row_number == 0 && !empty($table['shading']['top']))
 				echo '
-				<tr class="titlebg" valign="top">';
+				<tr class="red_container">';
 			else
 				echo '
 				<tr class="', $alternate ? 'windowbg' : 'windowbg2', '" valign="top">';

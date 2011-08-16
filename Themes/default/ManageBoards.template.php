@@ -121,8 +121,7 @@ function template_modify_category()
 					', isset($context['category']['is_new']) ? $txt['mboards_new_cat_name'] : $txt['catEdit'], '
 					</h3>
 				</div>
-				<div class="windowbg">
-					<span class="topslice"><span></span></span>
+				<div class="blue_container">
 					<div class="content">
 						<dl class="settings">';
 	// If this isn't the only category, let the user choose where this category should be positioned down the board index.
@@ -180,7 +179,6 @@ function template_modify_category()
 	echo '
 					</div>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 		</form>
 	</div>
@@ -257,12 +255,11 @@ function template_modify_board()
 		<form action="', $scripturl, '?action=admin;area=manageboards;sa=board2" method="post" accept-charset="', $context['character_set'], '">
 			<input type="hidden" name="boardid" value="', $context['board']['id'], '" />
 			<div class="cat_bar">
-				<h3 class="catbg">
+				<h3>
 					', isset($context['board']['is_new']) ? $txt['mboards_new_board_name'] : $txt['boardsEdit'], '
 				</h3>
 			</div>
-			<div class="windowbg">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container">
 				<div class="content">
 					<dl class="settings">';
 
