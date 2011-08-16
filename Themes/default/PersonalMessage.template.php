@@ -469,7 +469,7 @@ function template_subject_list()
 	global $context, $options, $settings, $modSettings, $txt, $scripturl;
 
 	echo '
-	<table width="100%" id="messageindex" class="topic_table mediumpadding">
+	<table width="100%" id="messageindex" class="table_grid mediumpadding ">
 	<thead>
 		<tr>
 			<th width="4%" class="centertext blue_container first_th">

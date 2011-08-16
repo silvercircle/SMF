@@ -10,10 +10,10 @@
 
 loadLanguage('Like');
 
-
 /*
  * handle a like. $mid is the message id that is to receive the
  * like
+ * $mid = id_msg to like
  * 
  * TODO: remove likes from the database when a user is deleted
  * TODO: make it work without AJAX and JavaScript
@@ -65,7 +65,6 @@ function GiveLike($mid)
 			else
 				redirectexit();
 		}
-		
 		if($c > 0 && !$remove_it)		// duplicate like (but not when removing it)
 			AjaxErrorMsg($txt['like_verify_error']);
 			
@@ -89,7 +88,21 @@ function GiveLike($mid)
 
 		if($remove_it && $c > 0) {   	// TODO: remove a like, $c must indicate a duplicate (existing) like
 										// and you must be the owner of the like or admin
-			AjaxErrorMsg($txt['like_remove_ok']);
+			//AjaxErrorMsg($txt['like_remove_ok']);
+			
+			if($like_receiver) {
+				$smcFunc['db_query']('', '
+					DELETE FROM {db_prefix}likes WHERE id_msg = {int:id_msg} AND id_user = {int:id_user}',
+					array('id_msg' => $mid, 'id_user' => $uid));
+				
+				$smcFunc['db_query']('', '
+					UPDATE {db_prefix}members SET likes_received = likes_received - 1 WHERE id_member = {int:id_member}',
+					array('id_member' => $like_receiver));
+				
+				$smcFunc['db_query']('', '
+					UPDATE {db_prefix}members SET likes_given = likes_given - 1 WHERE id_member = {int:id_member}',
+					array('id_member' => $uid));
+			}
 		}
 		else {
 			/* store the like */
@@ -118,7 +131,7 @@ function GiveLike($mid)
 		LikesGenerateOutput($total['status'], $output, $total['count'], $mid, true);
 		echo $output;
 	}
-	die;
+	obExit(false, false, false);
 }
 
 function LikesUpdate($mid)
