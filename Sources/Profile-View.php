@@ -474,24 +474,19 @@ function showPosts($memID)
 	$context['posts'] = array();
 	$board_ids = array('own' => array(), 'any' => array());
 	
-	$cache_parsed = (isset($modSettings['use_post_cache']) && $modSettings['use_post_cache']);
 	$can_see_like = allowedTo('like_see');
 	$can_give_like = allowedTo('like_give');
 	require_once($sourcedir . '/LikeSystem.php');
 	
+	$time_now = time();
 	while ($row = $smcFunc['db_fetch_assoc']($request))
 	{
 		// Censor....
 		censorText($row['body']);
 		censorText($row['subject']);
 		
-		if($cache_parsed) {
-			if(!empty($row['cached_body']))
-				$row['body'] = $row['cached_body'];
-			else
-				$row['body'] = parse_bbc($row['body'], $row['smileys_enabled'], $row['id_msg']);
-		}
-		AddLikeBar($row, $can_give_like);
+		getCachedPost($row);
+		AddLikeBar($row, $can_give_like, $time_now);
 		// And the array...
 		$row['likes_count'] = isset($row['likes_count']) ? $row['likes_count'] : 0;
 		$context['posts'][$counter += $reverse ? -1 : 1] = array(

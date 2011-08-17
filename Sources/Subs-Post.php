@@ -1913,7 +1913,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	}
 	else {
 		if($msg_to_update) {
-			$newbody = $oldbody . "\n[merged]".time()."[/merged]\n".$msgOptions['body'];
+			$newbody = $oldbody . "\n[hr][size=11px][color=red][b]      Posted ".timeformat(time())."[/b][/color][/size]\n".$msgOptions['body'];	// todo: make the separator customizable
 			$smcFunc['db_query']('', '
 				UPDATE {db_prefix}messages SET body = {string:newbody}, modified_time = {int:now} WHERE id_msg = {int:id_msg}',
 				array('newbody' => $newbody, 'now' => time(), 'id_msg' => $msg_to_update));

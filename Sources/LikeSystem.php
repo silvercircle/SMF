@@ -8,7 +8,10 @@
  * members:  likes_received INT(4);
  */
 
-loadLanguage('Like');
+if (!defined('SMF'))
+	die('Hacking attempt...');
+
+ loadLanguage('Like');
 
 /*
  * handle a like. $mid is the message id that is to receive the
@@ -87,18 +90,18 @@ function GiveLike($mid)
 		if(!allowedTo('like_give', $m[1]))			// no permission to give likes in this board
 			AjaxErrorMsg($txt['like_no_permission']);
 
-		if($remove_it && $c > 0) {   	// TODO: remove a like, $c must indicate a duplicate (existing) like
-										// and you must be the owner of the like or admin
+		if($remove_it && $c > 0) {
 			//AjaxErrorMsg($txt['like_remove_ok']);
 			
-			if($like_receiver && $like_owner == $uid) {
+			if($like_owner == $uid) {
 				$smcFunc['db_query']('', '
 					DELETE FROM {db_prefix}likes WHERE id_msg = {int:id_msg} AND id_user = {int:id_user}',
 					array('id_msg' => $mid, 'id_user' => $uid));
 				
-				$smcFunc['db_query']('', '
-					UPDATE {db_prefix}members SET likes_received = likes_received - 1 WHERE id_member = {int:id_member}',
-					array('id_member' => $like_receiver));
+				if($like_receiver)
+					$smcFunc['db_query']('', '
+						UPDATE {db_prefix}members SET likes_received = likes_received - 1 WHERE id_member = {int:id_member}',
+						array('id_member' => $like_receiver));
 				
 				$smcFunc['db_query']('', '
 					UPDATE {db_prefix}members SET likes_given = likes_given - 1 WHERE id_member = {int:id_member}',
@@ -109,21 +112,23 @@ function GiveLike($mid)
 			/* store the like */
 			global $memberContext;
 			
-			if($like_receiver) {
-				loadMemberData($like_receiver);
+			if($like_receiver) {					// we do have a member, but still allow to like posts made by guests
+				loadMemberData($like_receiver);		// but banned users shall not receive likes
 				loadMemberContext($like_receiver);
-				if(!$memberContext[$like_receiver]['is_banned']) {
-					$smcFunc['db_query']('', '
-						INSERT INTO {db_prefix}likes values({int:id_message}, {int:id_user}, {int:id_receiver}, {int:updated})',
-						array('id_message' => $mid, 'id_user' => $uid, 'id_receiver' => $like_receiver, 'updated' => time()));
+			}
+			if(($like_receiver && !$memberContext[$like_receiver]['is_banned']) || $like_receiver == 0) {
+				$smcFunc['db_query']('', '
+					INSERT INTO {db_prefix}likes values({int:id_message}, {int:id_user}, {int:id_receiver}, {int:updated})',
+					array('id_message' => $mid, 'id_user' => $uid, 'id_receiver' => $like_receiver, 'updated' => time()));
 					
+				if($like_receiver)
 					$smcFunc['db_query']('', 'UPDATE {db_prefix}members SET likes_received = likes_received + 1 WHERE id_member = {int:id_member}',
 						array('id_member' => $like_receiver));
 					
-					$smcFunc['db_query']('', 'UPDATE {db_prefix}members SET likes_given = likes_given + 1 WHERE id_member = '.$uid);
+				$smcFunc['db_query']('', 'UPDATE {db_prefix}members SET likes_given = likes_given + 1 WHERE id_member = {int:uid}',
+					array('uid' => $uid));
 					
-					$update_mode = true;
-				}
+				$update_mode = true;
 			}
 			else
 				AjaxErrorMsg($txt['like_cannot_like']);
@@ -153,12 +158,12 @@ function LikesUpdate($mid)
 	while ($row = $smcFunc['db_fetch_assoc']($request)) {
 		if(empty($row['member_name']))
 			continue;
-		$likers[$count] = $row['like_user'].'[**]' . $row['member_name'];
+		$likers[$count] = $row['like_user'].'@' . base64_encode($row['member_name']);
 		$count++;
 		if($count > 3)
 			break;
 	}
-	$like_string = implode("(**)", $likers);
+	$like_string = implode("|", $likers);
 	$smcFunc['db_free_result']($request);
 	
 	
@@ -198,18 +203,19 @@ function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_l
 	$like_template[4] = $txt['4likes'];
 	$like_template[5] = $txt['5likes'];
 
-	$likers = explode("(**)", $like_status);
+	$likers = explode("|", $like_status);
 	$n = 1;
 	$results = array();
 	foreach($likers as $liker) {
 		if(!empty($liker)) {
-			$liker_components = explode("[**]", $liker);
+			$liker_components = explode("@", $liker);
 			if(isset($liker_components[0]) && isset($liker_components[1])) {
-				if($liker_components[1] === $user_info['name']) {
+				$liker_components[1] = base64_decode($liker_components[1]);
+				if((int)$liker_components[0] === (int)$user_info['id']) {
 					$results[0] = $txt['you_liker'];
 					continue;
 				}
-				$results[$n++] = '<a rel="nofollow" class="mcard" data-id="'.$liker_components[0].'" href="'.$scripturl.'?action=profile;u='.intval($liker_components[0]).'">'.$liker_components[1].'</a>';
+				$results[$n++] = '<a rel="nofollow" class="mcard" data-id="'.$liker_components[0].'" href="'.$scripturl.'?action=profile;u='.$liker_components[0].'">'.$liker_components[1].'</a>';
 			}
 		}
 	}
@@ -219,12 +225,11 @@ function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_l
 		
 	/*
 	 * we have liked it but our entry is too old to be in the top 4, so move 
-	 * it to the front and remove the oldest
+	 * it to the front and remove the oldest - we always want our own like in the first position
 	 */
 	if($have_liked && !isset($results[0])) {
 		array_pop($results);
 		$results[0] = $txt['you_liker'];
-		//$count = count($results);
 	}
 	
 	ksort($results);
@@ -241,10 +246,10 @@ function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_l
 
 /*
  * $row[] is supposed to hold all the relevant data for a post
- * ['likelink'] and ['likers'] will be populated and can then
+ * populates all like-related fields and generates the like links
  * be used in a template. $can_give_like should be the result of a allowedTo('like_give') check.
  */
-function AddLikeBar(&$row, $can_give_like)
+function AddLikeBar(&$row, $can_give_like, $now)
 {
 	global $user_info, $txt;
 	
@@ -268,11 +273,12 @@ function AddLikeBar(&$row, $can_give_like)
 		$row['likelink'] = '';
 	}
 			
+	// todo: admin gets a "repair likes" link (just a debugging tool, will probably go away...)
 	if($user_info['is_admin'])
 		$row['likelink'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$row['id_msg'].'">Repair Likes</a>';
 		
 	if($row['likes_count'] > 0) {
-		if(time() - $row['like_updated'] > 86400) {
+		if($now - $row['like_updated'] > 86400) {
 			$result = LikesUpdate($row['id_msg']);
 			LikesGenerateOutput($result['status'], $row['likers'], $result['count'], $row['id_msg'], $have_liked_it);
 		}

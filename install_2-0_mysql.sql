@@ -1375,7 +1375,7 @@ CREATE TABLE {$db_prefix}likes (
 CREATE TABLE {$db_prefix}like_cache (
 	id_msg int(10) unsigned NOT NULL default '0',
   	likes_count int(4) NOT NULL default '0',
-  	like_status varchar(150) NOT NULL default '',
+  	like_status varchar(255) NOT NULL default '',
   	updated int(4) NOT NULL default '0',
   	PRIMARY KEY (id_msg)
 ) ENGINE=MyISAM;
@@ -1852,6 +1852,15 @@ VALUES ('smfVersion', '{$smf_version}'),
 	('attachment_thumb_png', '1'),
 	('avatar_reencode', '1'),
 	('avatar_paranoid', '0');
+
+# new settings - these must also be done for updating a default SMF database
+	
+INSERT INTO {$db_prefix}settings
+	(variable, value)
+VALUES ('use_post_cache', '0'),
+	('post_cache_cutoff', '30')'
+	('embed_GA', '0');
+	
 # --------------------------------------------------------
 
 #

@@ -289,7 +289,7 @@ function RecentPosts()
 	// Get all the most recent posts.
 	$request = $smcFunc['db_query']('', '
 		SELECT
-			m.id_msg, m.subject, m.smileys_enabled, m.poster_time, m.body, m.id_topic, t.id_board, b.id_cat,
+			m.id_msg, m.subject, m.smileys_enabled, m.poster_time, m.body, m.id_topic, t.id_board, b.id_cat, mc.body AS cached_body,
 			b.name AS bname, c.name AS cname, t.num_replies, m.id_member, m2.id_member AS id_first_member,
 			IFNULL(mem2.real_name, m2.poster_name) AS first_poster_name, t.id_first_msg,
 			IFNULL(mem.real_name, m.poster_name) AS poster_name, t.id_last_msg
@@ -300,11 +300,14 @@ function RecentPosts()
 			INNER JOIN {db_prefix}messages AS m2 ON (m2.id_msg = t.id_first_msg)
 			LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = m.id_member)
 			LEFT JOIN {db_prefix}members AS mem2 ON (mem2.id_member = m2.id_member)
+			LEFT JOIN {db_prefix}messages_cache AS mc ON (mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang})
 		WHERE m.id_msg IN ({array_int:message_list})
 		ORDER BY m.id_msg DESC
 		LIMIT ' . count($messages),
 		array(
 			'message_list' => $messages,
+			'style' => $user_info['smiley_set_id'],
+			'lang' => $user_info['language_id'],
 		)
 	);
 	$counter = $_REQUEST['start'] + 1;
@@ -316,8 +319,9 @@ function RecentPosts()
 		censorText($row['body']);
 		censorText($row['subject']);
 
+		getCachedPost($row);
 		// BBC-atize the message.
-		$row['body'] = parse_bbc($row['body'], $row['smileys_enabled'], $row['id_msg']);
+		//$row['body'] = parse_bbc($row['body'], $row['smileys_enabled'], $row['id_msg']);
 
 		// And build the array.
 		$context['posts'][$row['id_msg']] = array(

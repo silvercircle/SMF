@@ -1911,9 +1911,9 @@ function Post2()
 		'mark_as_read' => true,
 		'topic_prefix' => isset($_REQUEST['topic_prefix']) ? intval($_REQUEST['topic_prefix']) : null,
 		'topic_layout' => (isset($_REQUEST['stickfirst']) && $_REQUEST['stickfirst'] ? 0x80 : 0) | (isset($_REQUEST['firstlayout']) && $_REQUEST['firstlayout'] ? 0x01 : 0),
-		'automerge' => $topic_info['automerge'],
-		'id_last_msg' => $topic_info['id_last_msg'],
-		'id_member_updated' => $topic_info['id_member_updated'],
+		'automerge' => !empty($topic) ? $topic_info['automerge'] : 0,
+		'id_last_msg' => !empty($topic) ? $topic_info['id_last_msg'] : 0,
+		'id_member_updated' => !empty($topic) ? $topic_info['id_member_updated'] : 0,
 		'is_approved' => !$modSettings['postmod_active'] || empty($topic) || !empty($board_info['cur_topic_approved']),
 	);
 	$posterOptions = array(

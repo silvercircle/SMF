@@ -2128,6 +2128,8 @@ function template_prefix_settings()
 			<input type="hidden" name="id_', $i, '" value="1" />
 			<input type="text" size="80" name="name_new_',$i,'" />
 		   </td>
+		   <td>
+		   </td>
 		   <td style="text-align:right;"><input type="text" size="25" name="boards_new_',$i,'" /></td>
 		   <td style="text-align:right;"><input type="text" size="25" name="groups_new_',$i,'" /></td>
 	      </tr>';

@@ -552,8 +552,6 @@ function AdminHome()
 	$checkFor = array(
 		'gd',
 		'db_server',
-		'mmcache',
-		'eaccelerator',
 		'phpa',
 		'apc',
 		'memcache',

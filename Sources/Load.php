@@ -2626,28 +2626,6 @@ function cache_put_data($key, $value, $ttl = 120)
 
 		memcache_set($memcached, $key, $value, 0, $ttl);
 	}
-	// eAccelerator...
-	elseif (function_exists('eaccelerator_put'))
-	{
-		if (mt_rand(0, 10) == 1)
-			eaccelerator_gc();
-
-		if ($value === null)
-			@eaccelerator_rm($key);
-		else
-			eaccelerator_put($key, $value, $ttl);
-	}
-	// Turck MMCache?
-	elseif (function_exists('mmcache_put'))
-	{
-		if (mt_rand(0, 10) == 1)
-			mmcache_gc();
-
-		if ($value === null)
-			@mmcache_rm($key);
-		else
-			mmcache_put($key, $value, $ttl);
-	}
 	// Alternative PHP Cache, ahoy!
 	elseif (function_exists('apc_store'))
 	{
@@ -2725,12 +2703,6 @@ function cache_get_data($key, $ttl = 120)
 
 		$value = memcache_get($memcached, $key);
 	}
-	// Again, eAccelerator.
-	elseif (function_exists('eaccelerator_get'))
-		$value = eaccelerator_get($key);
-	// The older, but ever-stable, Turck MMCache...
-	elseif (function_exists('mmcache_get'))
-		$value = mmcache_get($key);
 	// This is the free APC from PECL.
 	elseif (function_exists('apc_fetch'))
 		$value = apc_fetch($key . 'smf');

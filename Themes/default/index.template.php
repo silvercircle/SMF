@@ -95,7 +95,7 @@ function template_html_above()
 	// Here comes the JavaScript bits!
 	echo '
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js?fin20"></script>';
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/script.js?fin20"></script>';
 	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin')
 		echo '<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/admin.js?fin20"></script>';
 	echo '<script type="text/javascript">
@@ -180,9 +180,12 @@ function template_body_above()
 	<div id="wrap" style="max-width:',empty($settings['forum_width']) ? '3000px' : $settings['forum_width'],';">
 	<header>
 	<div id="header">
-	<div id="upper_section" class="middletext"><img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" /><div style="float:left;color:#ddd;text-shadow:1px 1px black;font-size:22px;padding:20px 30px;">SMF pLayGround</div>';
+	<div id="upper_section" class="middletext"><div style="float:left;color:#ddd;text-shadow:black 2px 2px 10px;font-size:35px;font-family:Comic Sans MS;padding:20px 30px;"><strong><em>SMF pLayGround</em></strong><br />
+		<div style="font-size:16px;height:26px;padding-top:20px;">...Test</div>
+	</div>';
 
 	// If the user is logged in, display stuff like their name, new messages, etc.
+	// for the logo -> <img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" />
 	if ($context['user']['is_logged'])
 	{
 		echo '<div class="user" style="padding:5px 5px 0 0;">';
@@ -279,7 +282,7 @@ function template_body_above()
 	echo '<form onmouseout="return false;" onsubmit="submitSearchBox();" style="float:right;margin-right:30px;margin-bottom:-20px;" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
 			// Search within current topic?
 			$search_label = 'Search';
-			if (isset($context['current_topic'])) {
+			if (isset($context['current_topic']) && $context['current_topic']) {
 				$search_label = 'Search this topic';
 				$scope = 2;
 			}

@@ -1289,15 +1289,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'disabled_content' => '$1',
             ),
 			array(
-				'tag' => 'merged',
-				'type' => 'unparsed_content',
-				'test' => '([0-9]+)',
-				'content' => '<div class="bbc_merged">Posted: $1</div>',
-				'validate' => create_function('&$tag, &$data, $disabled', 
-					'$data = timeformat($data);'
-				)
-			),
-			array(
 				'tag' => 'email',
 				'type' => 'unparsed_content',
 				'content' => '<a href="mailto:$1" class="bbc_email">$1</a>',
@@ -3947,18 +3938,11 @@ function create_button($name, $alt, $label = '', $custom = '', $force_use = fals
 {
 	global $settings, $txt, $context;
 
-	return '<span class="button '.$alt.'">'.$txt[$alt].'</span>';
 	// Does the current loaded theme have this and we are not forcing the usage of this function?
 	if (function_exists('template_create_button') && !$force_use)
 		return template_create_button($name, $alt, $label = '', $custom = '');
 
-	//return '<a class="button '.$alt.'" >'.$txt[$alt].'</a>';
-	if (!$settings['use_image_buttons'])
-		return $txt[$alt];
-	elseif (!empty($settings['use_buttons']))
-		return '<img src="' . $settings['images_url'] . '/buttons/' . $name . '" alt="' . $txt[$alt] . '" ' . $custom . ' />' . ($label != '' ? '<strong>' . $txt[$label] . '</strong>' : '');
-	else
-		return '<img src="' . $settings['lang_images_url'] . '/' . $name . '" alt="' . $txt[$alt] . '" ' . $custom . ' />';
+	return '<span class="button '.$alt.'">'.$txt[$alt].'</span>';
 }
 
 // Empty out the cache folder.
@@ -4446,4 +4430,13 @@ function remove_integration_function($hook, $function)
 	$modSettings[$hook] = implode(',', $functions);
 }
 
+function getCachedPost(&$message)
+{
+	global $modSettings;
+	
+	if(!empty($modSettings['use_post_cache']) && !empty($message['cached_body']))
+		$message['body'] = $message['cached_body'];
+	else
+		$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
+}
 ?>

@@ -69,7 +69,7 @@ function Display()
 	$can_see_like = allowedTo('like_see');
 	$can_give_like = allowedTo('like_give');
 	$context['use_share'] = allowedTo('use_share');
-	$cache_parsed = (isset($modSettings['use_post_cache']) && $modSettings['use_post_cache']);
+	$cache_parsed = !empty($modSettings['use_post_cache']);
 	$time_now = time();
 	
 	require_once($sourcedir . '/LikeSystem.php');
@@ -206,8 +206,9 @@ function Display()
 			t.id_member_started, t.id_first_msg, t.id_last_msg, t.approved, t.unapproved_posts, t.id_layout,
 			' . ($user_info['is_guest'] ? 't.id_last_msg + 1' : 'IFNULL(lt.id_msg, IFNULL(lmr.id_msg, -1)) + 1') . ' AS new_from
 			' . (!empty($modSettings['recycle_board']) && $modSettings['recycle_board'] == $board ? ', id_previous_board, id_previous_topic' : '') . ',
-			p.name AS prefix_name
+			p.name AS prefix_name, ms1.poster_time AS last_post_time, ms1.modified_time AS last_modified_time
 		FROM {db_prefix}topics AS t
+			INNER JOIN {db_prefix}messages AS ms1 ON (ms1.id_msg = t.id_last_msg)
 			INNER JOIN {db_prefix}messages AS ms ON (ms.id_msg = t.id_first_msg)' . ($user_info['is_guest'] ? '' : '
 			LEFT JOIN {db_prefix}log_topics AS lt ON (lt.id_topic = {int:current_topic} AND lt.id_member = {int:current_member})
 			LEFT JOIN {db_prefix}log_mark_read AS lmr ON (lmr.id_board = {int:current_board} AND lmr.id_member = {int:current_member})') . '
@@ -228,10 +229,11 @@ function Display()
 		require_once($sourcedir . '/Subs-Related.php');
 		loadRelated($topic);
 	}
-		
+	
 	$topicinfo = $smcFunc['db_fetch_assoc']($request);
 	$smcFunc['db_free_result']($request);
-
+	
+	$context['topic_last_modified'] = max($topicinfo['last_post_time'], $topicinfo['last_modified_time']);		// todo: considering - make post cutoff time for the cache depend on the modification time of the topic's last post
 	$context['real_num_replies'] = $context['num_replies'] = $topicinfo['num_replies'];
 	$context['topic_first_message'] = $topicinfo['id_first_msg'];
 	$context['topic_last_message'] = $topicinfo['id_last_msg'];
@@ -1243,6 +1245,7 @@ function prepareDisplayContext($reset = false)
 		'attachment' => loadAttachmentContext($message['id_msg']),
 		'alternate' => $counter % 2,
 		'id' => $message['id_msg'],
+		'id_msg' => $message['id_msg'],
 		'href' => $scripturl . '?topic=' . $topic . '.msg' . $message['id_msg'] . '#msg' . $message['id_msg'],
 		'link' => '<a href="' . $scripturl . '?topic=' . $topic . '.msg' . $message['id_msg'] . '#msg' . $message['id_msg'] . '" rel="nofollow">' . $message['subject'] . '</a>',
 		'member' => &$memberContext[$message['id_member']],
@@ -1270,41 +1273,12 @@ function prepareDisplayContext($reset = false)
 		'likes_count' => $message['likes_count'],
 		'like_status' => $message['like_status'],
 		'liked' => $message['liked'],
+		'like_updated' => $message['like_updated'],
+		'id_member' => $message['id_member']
 	);
 
-	if($can_see_like) {
-		$output['likers'] = '';
-		$have_liked_it = false;
-		if($can_give_like) {
-			if(intval($output['liked']) > 0) {
-				$output['likelink'] = '<a rel="nofollow" class="givelike" data-fn="remove" href="#" data-id="'.$message['id_msg'].'">'.$txt['unlike_label'].'</a>';
-				$have_liked_it = true;
-			}
-			else if(!$user_info['is_guest']) {
-				if($message['id_member'] != $user_info['id'])
-					$output['likelink'] = '<a rel="nofollow" class="givelike" data-fn="give" href="#" data-id="'.$message['id_msg'].'">'.$txt['like_label'].'</a>';
-				else
-					$output['likelink'] = '&nbsp;';
-			}
-		}
-		else {
-			if(intval($output['liked']) > 0)
-				$have_liked_it = true;
-			$output['likelink'] = '';
-		}
-			
-		if($user_info['is_admin'])
-			$output['likelink'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$message['id_msg'].'">Repair Likes</a>';
-		
-		if($output['likes_count'] > 0) {
-			if(time() - $message['like_updated'] > 86400) {
-				$result = LikesUpdate($message['id_msg']);
-				LikesGenerateOutput($result['status'], $output['likers'], $result['count'], $message['id_msg'], $have_liked_it);
-			}
-			else
-				LikesGenerateOutput($message['like_status'], $output['likers'], $output['likes_count'], $message['id_msg'], $have_liked_it);
-		}
-	}
+	if($can_see_like)
+		AddLikeBar($output, $can_give_like, $time_now);
 	else
 		$output['likes_count'] = 0;
 	// Is this user the message author?
