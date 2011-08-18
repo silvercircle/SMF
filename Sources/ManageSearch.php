@@ -205,118 +205,11 @@ function EditSearchMethod()
 	$context[$context['admin_menu_name']]['current_subsection'] = 'method';
 	$context['page_title'] = $txt['search_method_title'];
 	$context['sub_template'] = 'select_search_method';
-	$context['supports_fulltext'] = $smcFunc['db_search_support']('fulltext');
 
 	// Load any apis.
 	$context['search_apis'] = loadSearchAPIs();
 
-	// Detect whether a fulltext index is set.
-	if ($context['supports_fulltext'])
-	{
-		$request = $smcFunc['db_query']('', '
-			SHOW INDEX
-			FROM {db_prefix}messages',
-			array(
-			)
-		);
-		$context['fulltext_index'] = '';
-		if ($request !== false || $smcFunc['db_num_rows']($request) != 0)
-		{
-			while ($row = $smcFunc['db_fetch_assoc']($request))
-				if ($row['Column_name'] == 'body' && (isset($row['Index_type']) && $row['Index_type'] == 'FULLTEXT' || isset($row['Comment']) && $row['Comment'] == 'FULLTEXT'))
-					$context['fulltext_index'][] = $row['Key_name'];
-			$smcFunc['db_free_result']($request);
-
-			if (is_array($context['fulltext_index']))
-				$context['fulltext_index'] = array_unique($context['fulltext_index']);
-		}
-
-		$request = $smcFunc['db_query']('', '
-			SHOW COLUMNS
-			FROM {db_prefix}messages',
-			array(
-			)
-		);
-		if ($request !== false)
-		{
-			while ($row = $smcFunc['db_fetch_assoc']($request))
-				if ($row['Field'] == 'body' && $row['Type'] == 'mediumtext')
-					$context['cannot_create_fulltext'] = true;
-			$smcFunc['db_free_result']($request);
-		}
-
-		if (preg_match('~^`(.+?)`\.(.+?)$~', $db_prefix, $match) !== 0)
-			$request = $smcFunc['db_query']('', '
-				SHOW TABLE STATUS
-				FROM {string:database_name}
-				LIKE {string:table_name}',
-				array(
-					'database_name' => '`' . strtr($match[1], array('`' => '')) . '`',
-					'table_name' => str_replace('_', '\_', $match[2]) . 'messages',
-				)
-			);
-		else
-			$request = $smcFunc['db_query']('', '
-				SHOW TABLE STATUS
-				LIKE {string:table_name}',
-				array(
-					'table_name' => str_replace('_', '\_', $db_prefix) . 'messages',
-				)
-			);
-
-		if ($request !== false)
-		{
-			while ($row = $smcFunc['db_fetch_assoc']($request))
-				if ((isset($row['Type']) && strtolower($row['Type']) != 'myisam') || (isset($row['Engine']) && strtolower($row['Engine']) != 'myisam'))
-					$context['cannot_create_fulltext'] = true;
-			$smcFunc['db_free_result']($request);
-		}
-	}
-
-	if (!empty($_REQUEST['sa']) && $_REQUEST['sa'] == 'createfulltext')
-	{
-		checkSession('get');
-
-		// Make sure it's gone before creating it.
-		$smcFunc['db_query']('', '
-			ALTER TABLE {db_prefix}messages
-			DROP INDEX body',
-			array(
-				'db_error_skip' => true,
-			)
-		);
-
-		$smcFunc['db_query']('', '
-			ALTER TABLE {db_prefix}messages
-			ADD FULLTEXT body (body)',
-			array(
-			)
-		);
-
-		$context['fulltext_index'] = 'body';
-	}
-	elseif (!empty($_REQUEST['sa']) && $_REQUEST['sa'] == 'removefulltext' && !empty($context['fulltext_index']))
-	{
-		checkSession('get');
-
-		$smcFunc['db_query']('', '
-			ALTER TABLE {db_prefix}messages
-			DROP INDEX ' . implode(',
-			DROP INDEX ', $context['fulltext_index']),
-			array(
-				'db_error_skip' => true,
-			)
-		);
-
-		$context['fulltext_index'] = '';
-
-		// Go back to the default search method.
-		if (!empty($modSettings['search_index']) && $modSettings['search_index'] == 'fulltext')
-			updateSettings(array(
-				'search_index' => '',
-			));
-	}
-	elseif (!empty($_REQUEST['sa']) && $_REQUEST['sa'] == 'removecustom')
+	if (!empty($_REQUEST['sa']) && $_REQUEST['sa'] == 'removecustom')
 	{
 		checkSession('get');
 
@@ -346,7 +239,7 @@ function EditSearchMethod()
 	{
 		checkSession();
 		updateSettings(array(
-			'search_index' => empty($_POST['search_index']) || (!in_array($_POST['search_index'], array('fulltext', 'custom', 'sphinx')) && !isset($context['search_apis'][$_POST['search_index']])) ? '' : $_POST['search_index'],
+			'search_index' => empty($_POST['search_index']) || (!in_array($_POST['search_index'], array('custom', 'sphinx')) && !isset($context['search_apis'][$_POST['search_index']])) ? '' : $_POST['search_index'],
 			'search_force_index' => isset($_POST['search_force_index']) ? '1' : '0',
 			'search_match_words' => isset($_POST['search_match_words']) ? '1' : '0',
 		));
@@ -417,54 +310,6 @@ function EditSearchMethod()
 			$context['table_info']['custom_index_length'] = $row['Data_length'] + $row['Index_length'];
 			$smcFunc['db_free_result']($request);
 		}
-	}
-	elseif ($db_type == 'postgresql')
-	{
-		// In order to report the sizes correctly we need to perform vacuum (optimize) on the tables we will be using.
-		db_extend();
-		$temp_tables = $smcFunc['db_list_tables']();
-		foreach ($temp_tables as $table)
-			if ($table == $db_prefix. 'messages' || $table == $db_prefix. 'log_search_words')
-				$smcFunc['db_optimize_table']($table);
-
-		// PostGreSql has some hidden sizes.
-		$request = $smcFunc['db_query']('', '
-			SELECT relname, relpages * 8 *1024 AS "KB" FROM pg_class
-			WHERE relname = {string:messages} OR relname = {string:log_search_words}
-			ORDER BY relpages DESC',
-			array(
-				'messages' => $db_prefix. 'messages',
-				'log_search_words' => $db_prefix. 'log_search_words',
-			)
-		);
-
-		if ($request !== false && $smcFunc['db_num_rows']($request) > 0)
-		{
-			while ($row = $smcFunc['db_fetch_assoc']($request))
-			{
-				if ($row['relname'] == $db_prefix . 'messages')
-				{
-					$context['table_info']['data_length'] = (int) $row['KB'];
-					$context['table_info']['index_length'] = (int) $row['KB'];
-					// Doesn't support fulltext
-					$context['table_info']['fulltext_length'] = $txt['not_applicable'];
-				}
-				elseif ($row['relname'] == $db_prefix. 'log_search_words')
-				{
-					$context['table_info']['index_length'] = (int) $row['KB'];
-					$context['table_info']['custom_index_length'] = (int) $row['KB'];
-				}
-			}
-			$smcFunc['db_free_result']($request);
-		}
-		else
-			// Didn't work for some reason...
-			$context['table_info'] = array(
-				'data_length' => $txt['not_applicable'],
-				'index_length' => $txt['not_applicable'],
-				'fulltext_length' => $txt['not_applicable'],
-				'custom_index_length' => $txt['not_applicable'],
-			);
 	}
 	else
 		$context['table_info'] = array(

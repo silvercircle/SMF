@@ -442,8 +442,8 @@ function showPosts($memID)
 					INNER JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic)
 					INNER JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
 					LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)
-					LEFT JOIN {db_prefix}likes AS l ON l.id_msg = m.id_msg AND l.id_user = '.$user_info['id'].'
-					LEFT JOIN {db_prefix}like_cache AS c1 ON c1.id_msg = m.id_msg
+					LEFT JOIN {db_prefix}likes AS l ON (l.id_msg = m.id_msg AND l.ctype = 1 AND l.id_user = '.$user_info['id'].')
+					LEFT JOIN {db_prefix}like_cache AS c1 ON (c1.id_msg = m.id_msg AND c1.ctype = 1)
 					LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang}
 				WHERE m.id_member = {int:current_member}' . (!empty($board) ? '
 					AND b.id_board = {int:board}' : '') . (empty($range_limit) ? '' : '
