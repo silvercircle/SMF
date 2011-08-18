@@ -1214,12 +1214,12 @@ ul#navigation li
 	max-width:1200px;
 	background-color:#fff;
 	min-height: 200px;
-	margin:0 auto;
+	margin:0 auto 20px auto;
 	border:1px solid #aaa;
 	padding:10px;
 	border-top-left-radius:10px;
 	border-top-right-radius:10px;
-	box-shadow: 0 0 10px 1px #aaa;
+	box-shadow: 0 10px 10px 1px #aaa;
 }
 
 /* the main title, always stay at 45 pixels in height! */
@@ -2582,6 +2582,7 @@ tr.titlebg td
 	height: 20px;
 	overflow: hidden;
 	border:0;
+	border-bottom:1px solid #aaa;
 }
 #boardindex_table div.cat_bar > h3.catbg
 {
@@ -3626,7 +3627,7 @@ div#mcard, .tcard {
 	border-bottom-width:6px;
 	border-right-width:6px;
 	border-radius:4px;
-	box-shadow: 3px 3px 12px 4px #aaa;
+	box-shadow: 0px 5px 12px 4px #888;
 	max-width:720px;
 	width:auto;
 }
@@ -3691,10 +3692,10 @@ div#ajaxbusy {
  * some generic classes
  */
  
-.rounded_top {border-top-left-radius:5px !important;border-top-right-radius:5px !important;}
+/*.rounded_top {border-top-left-radius:5px !important;border-top-right-radius:5px !important;}*/
 .rounded_bottom {border-bottom-left-radius:5px !important;border-bottom-right-radius:5px !important;}
 .rounded_tl {border-top-left-radius:5px !important;}
-.light_shadow {	box-shadow: 2px 2px 12px 0px #bbb;}
+.light_shadow {	box-shadow: 0px 5px 12px 0px #bbb;}
 .borderless {border:0 !important;}
 a.tpeek {margin-left:10px;}
 abbr.timeago {border:0;}

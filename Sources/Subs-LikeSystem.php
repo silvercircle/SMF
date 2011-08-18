@@ -26,6 +26,7 @@ function GiveLike($mid)
 {
 	global $context, $settings, $user_info, $sourcedir, $smcFunc, $txt;
 	$total = array();
+	$content_type = 1;			// > post content type
 	
 	if($mid > 0) {
 		$uid = $user_info['id'];
@@ -39,8 +40,8 @@ function GiveLike($mid)
 		/* check for dupes */
 		$request = $smcFunc['db_query']('', '
 			SELECT COUNT(id_msg) as count, id_user 
-				FROM {db_prefix}likes AS l WHERE l.id_msg = {int:id_message} AND l.id_user = {int:id_user}',
-				array('id_message' => $mid, 'id_user' => $uid));
+				FROM {db_prefix}likes AS l WHERE l.id_msg = {int:id_message} AND l.id_user = {int:id_user} AND l.ctype = {int:ctype}',
+				array('id_message' => $mid, 'id_user' => $uid, 'ctype' => $content_type));
 				
 		$count = $smcFunc['db_fetch_row']($request);
 		$smcFunc['db_free_result']($request);
@@ -91,8 +92,8 @@ function GiveLike($mid)
 			
 			if($like_owner == $uid) {
 				$smcFunc['db_query']('', '
-					DELETE FROM {db_prefix}likes WHERE id_msg = {int:id_msg} AND id_user = {int:id_user}',
-					array('id_msg' => $mid, 'id_user' => $uid));
+					DELETE FROM {db_prefix}likes WHERE id_msg = {int:id_msg} AND id_user = {int:id_user} AND ctype = {int:ctype}',
+					array('id_msg' => $mid, 'id_user' => $uid, 'ctype' => $content_type));
 				
 				if($like_receiver)
 					$smcFunc['db_query']('', '
@@ -114,8 +115,8 @@ function GiveLike($mid)
 			}
 			if(($like_receiver && !$memberContext[$like_receiver]['is_banned']) || $like_receiver == 0) {
 				$smcFunc['db_query']('', '
-					INSERT INTO {db_prefix}likes values({int:id_message}, {int:id_user}, {int:id_receiver}, {int:updated})',
-					array('id_message' => $mid, 'id_user' => $uid, 'id_receiver' => $like_receiver, 'updated' => time()));
+					INSERT INTO {db_prefix}likes(id_msg, id_user, id_receiver, updated, ctype) values({int:id_message}, {int:id_user}, {int:id_receiver}, {int:updated}, {int:ctype})',
+					array('id_message' => $mid, 'id_user' => $uid, 'id_receiver' => $like_receiver, 'updated' => time(), 'ctype' => $content_type));
 					
 				if($like_receiver)
 					$smcFunc['db_query']('', 'UPDATE {db_prefix}members SET likes_received = likes_received + 1 WHERE id_member = {int:id_member}',
@@ -146,10 +147,13 @@ function LikesUpdate($mid)
 	$like_string = '';
 	$count = 0;
 	$likers = array();
+	$content_type = 1; 
 	
 	$request = $smcFunc['db_query']('', '
 		SELECT l.id_msg AS like_message, l.id_user AS like_user, m.real_name AS member_name FROM {db_prefix}likes AS l
-			LEFT JOIN {db_prefix}members AS m on m.id_member = l.id_user WHERE l.id_msg = {int:id_message} AND m.id_member <> 0 ORDER BY l.updated DESC LIMIT 4', array('id_message' => $mid));
+			LEFT JOIN {db_prefix}members AS m on m.id_member = l.id_user WHERE l.id_msg = {int:id_message} 
+				AND l.ctype = {int:ctype} AND m.id_member <> 0 ORDER BY l.updated DESC LIMIT 4', 
+				array('id_message' => $mid, 'ctype' => $content_type));
 
 	while ($row = $smcFunc['db_fetch_assoc']($request)) {
 		if(empty($row['member_name']))
@@ -174,9 +178,9 @@ function LikesUpdate($mid)
 	$time = time();	
 	
 	$smcFunc['db_query']('', '
-		INSERT INTO {db_prefix}like_cache VALUES({int:id_msg}, {int:total}, {string:like_status}, {int:updated}) 
+		INSERT INTO {db_prefix}like_cache(id_msg, likes_count, like_status, updated, ctype) VALUES({int:id_msg}, {int:total}, {string:like_status}, {int:updated}, {int:ctype}) 
 			ON DUPLICATE KEY UPDATE updated = {int:updated}, likes_count = {int:total}, like_status = {string:like_status}',
-			array('id_msg' => $mid, 'total' => $totalcount, 'updated' => $time, 'like_status' => $like_string));
+			array('id_msg' => $mid, 'total' => $totalcount, 'updated' => $time, 'like_status' => $like_string, 'ctype' => $content_type));
 
 	$result['count'] = $totalcount;
 	$result['status'] = $like_string;

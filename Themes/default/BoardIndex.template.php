@@ -107,7 +107,7 @@ function template_main()
 		// If this category even can collapse, show a link to collapse it.
 		if ($category['can_collapse'])
 			echo '
-								<a class="collapse" href="', $category['collapse_href'], '">', $category['collapse_image'], '</a>';
+								<a data-id="',$category['id'], '" class="collapse" href="', $category['collapse_href'], '">', $category['collapse_image'], '</a>';
 
 		if (!$context['user']['is_guest'] && $category['new'])
 			echo '
@@ -119,22 +119,21 @@ function template_main()
 						</div>
 					</td>
 				</tr>
-			</tbody>
-			<tbody>
+			</tbody>';
+
+		// Assuming the category hasn't been collapsed...
+		//if (!$category['is_collapsed'])
+		//{
+		$alternate = 1;
+		echo '
+			<tbody ',$category['is_collapsed'] ? 'style="display:none;" ' : '', 'class="content" id="category_', $category['id'], '_boards">
 			<tr>
 				<td class="glass"></td>
 				<td class="glass">',$txt['board'],'</td>
 				<td class="glass centertext">',$txt['content_label'],'</td>
 				<td class="glass centertext">',$txt['last_post'],'</td>
 			</tr>
-			</tbody>';
-
-		// Assuming the category hasn't been collapsed...
-		if (!$category['is_collapsed'])
-		{
-		$alternate = 1;
-		echo '
-			<tbody class="content" id="category_', $category['id'], '_boards">';
+			';
 			/* Each board in each category's boards has:
 			new (is it new?), id, name, description, moderators (see below), link_moderators (just a list.),
 			children (see below.), link_children (easier to use.), children_new (are they new?),
@@ -229,7 +228,7 @@ function template_main()
 			}
 		echo '
 			</tbody>';
-		}
+		//}
 		echo '
 			<tbody class="divider">
 				<tr>

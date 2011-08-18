@@ -14,7 +14,7 @@
 $GLOBALS['current_smf_version'] = '2.0';
 $GLOBALS['db_script_version'] = '2-0';
 
-$GLOBALS['required_php_version'] = '4.1.0';
+$GLOBALS['required_php_version'] = '5.1.0';
 
 // Don't have PHP support, do you?
 // ><html dir="ltr"><head><title>Error!</title></head><body>Sorry, this installer requires PHP!<div style="display: none;">
@@ -33,62 +33,11 @@ $databases = array(
 		'utf8_support' => true,
 		'utf8_version' => '4.1.0',
 		'utf8_version_check' => 'return mysql_get_server_info();',
-		'utf8_default' => false,
+		'utf8_default' => true,
 		'utf8_required' => false,
 		'alter_support' => true,
 		'validate_prefix' => create_function('&$value', '
 			$value = preg_replace(\'~[^A-Za-z0-9_\$]~\', \'\', $value);
-			return true;
-		'),
-	),
-	'postgresql' => array(
-		'name' => 'PostgreSQL',
-		'version' => '8.0',
-		'function_check' => 'pg_connect',
-		'version_check' => '$request = pg_query(\'SELECT version()\'); list ($version) = pg_fetch_row($request); list($pgl, $version) = explode(" ", $version); return $version;',
-		'supported' => function_exists('pg_connect'),
-		'always_has_db' => true,
-		'utf8_default' => true,
-		'utf8_required' => true,
-		'utf8_support' => true,
-		'utf8_version' => '8.0',
-		'utf8_version_check' => '$request = pg_query(\'SELECT version()\'); list ($version) = pg_fetch_row($request); list($pgl, $version) = explode(" ", $version); return $version;',
-		'validate_prefix' => create_function('&$value', '
-			$value = preg_replace(\'~[^A-Za-z0-9_\$]~\', \'\', $value);
-
-			// Is it reserved?
-			if ($value == \'pg_\')
-				return $txt[\'error_db_prefix_reserved\'];
-
-			// Is the prefix numeric?
-			if (preg_match(\'~^\d~\', $value))
-				return $txt[\'error_db_prefix_numeric\'];
-
-			return true;
-		'),
-	),
-	'sqlite' => array(
-		'name' => 'SQLite',
-		'version' => '1',
-		'function_check' => 'sqlite_open',
-		'version_check' => 'return 1;',
-		'supported' => function_exists('sqlite_open'),
-		'always_has_db' => true,
-		'utf8_default' => true,
-		'utf8_required' => true,
-		'validate_prefix' => create_function('&$value', '
-			global $incontext, $txt;
-
-			$value = preg_replace(\'~[^A-Za-z0-9_\$]~\', \'\', $value);
-
-			// Is it reserved?
-			if ($value == \'sqlite_\')
-				return $txt[\'error_db_prefix_reserved\'];
-
-			// Is the prefix numeric?
-			if (preg_match(\'~^\d~\', $value))
-				return $txt[\'error_db_prefix_numeric\'];
-
 			return true;
 		'),
 	),
@@ -355,8 +304,6 @@ function load_database()
 	if (!$db_connection)
 	{
 		require_once($sourcedir . '/Subs-Db-' . $db_type . '.php');
-		if (@version_compare(PHP_VERSION, '5') == -1)
-			require_once($sourcedir . '/Subs-Compat.php');
 
 		if (!$db_connection)
 			$db_connection = smf_db_initiate($db_server, $db_name, $db_user, $db_passwd, $db_prefix, array('persist' => $db_persist));

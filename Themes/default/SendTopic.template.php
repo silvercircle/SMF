@@ -44,13 +44,10 @@ function template_main()
 	echo '
 	<div id="send_topic">
 		<form action="', $scripturl, '?action=emailuser;sa=sendtopic;topic=', $context['current_topic'], '.', $context['start'], '" method="post" accept-charset="', $context['character_set'], '">
-			<div class="cat_bar">
-				<h3 class="catbg">
-					<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/email_sm.gif" alt="" class="icon" />', $context['page_title'], '</span>
-				</h3>
-			</div>
-			<div class="windowbg2">
-			<span class="topslice"><span></span></span>
+			<h1 class="bigheader">
+				', $context['page_title'], '
+			</h3>
+			<div class="blue_container">
 				<div class="content">
 					<fieldset id="sender" class="send_topic">
 						<dl class="settings send_topic">
@@ -94,7 +91,6 @@ function template_main()
 						<input type="submit" name="send" value="', $txt['sendtopic_send'], '" class="button_submit" />
 					</div>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 			<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 		</form>

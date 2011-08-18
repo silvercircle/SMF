@@ -1071,6 +1071,26 @@ jQuery(document).ready(function() {
 		function() {
 			$(this).find('a[class=tpeek]:first').remove();			
 	});
+	$('a.collapse').click(function() {
+		var img = $(this).children('img:first');
+		var is_collapsed = (img.attr('src')).match(/\/expand\./i) ? 1 : 0;
+		var request = 'action=xmlhttp;sa=collapse;c=' + $(this).attr('data-id') + (is_collapsed ? ';expand=1' : ';collapse=1');
+		sendRequest(smf_scripturl, request, $(this));
+		var id = '#category_' + $(this).attr('data-id') + '_boards';
+		var src = img.attr('src');
+		if(is_collapsed) {
+			$(id).show();
+			var dest = src.replace('expand.gif', 'collapse.gif');
+			img.attr('src', dest);
+		}
+		else {
+			$(id).hide();
+			var dest = src.replace('collapse.gif', 'expand.gif');
+			img.attr('src', dest);
+		}
+			
+		return(false);
+	});
 	// convert all time stamps to relative 
 	if(!disableDynamicTime)
 		$('abbr.timeago').timeago();
@@ -1184,6 +1204,9 @@ function response(ele)
 					ele.html(req.responseText);
 					return;
 				}
+				if(ele.attr('class') == 'collapse')
+					return;
+					
 				openResult(req.responseText, 500);
     			$('div#mcard_inner abbr.timeago').timeago();
 			} else if(req.status == 500) {

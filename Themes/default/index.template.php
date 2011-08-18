@@ -128,7 +128,7 @@ var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
 var t2 = document.createElement(\'SCRIPT\');
 t2.type = "text/javascript";
 t2.async = true;
-t2.src = "',$settings['theme_url'],'/scripts/min/footer.js?ver=1.1.0";
+t2.src = "',$settings['theme_url'],'/scripts/footer.js?ver=1.1.0";
 anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
 	</script>';

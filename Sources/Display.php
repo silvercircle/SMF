@@ -1030,8 +1030,8 @@ function Display()
 				m.smileys_enabled, m.poster_name, m.poster_email, m.approved, c.likes_count, c.like_status, c.updated AS like_updated, l.id_user AS liked,
 				m.id_msg_modified < {int:new_from} AS is_read
 			FROM {db_prefix}messages AS m
-			LEFT JOIN {db_prefix}likes AS l ON l.id_msg = m.id_msg AND l.id_user = '.$user_info['id'].'
-			LEFT JOIN {db_prefix}like_cache AS c ON c.id_msg = m.id_msg
+			LEFT JOIN {db_prefix}likes AS l ON (l.id_msg = m.id_msg AND l.ctype = 1 AND l.id_user = '.$user_info['id'].')
+			LEFT JOIN {db_prefix}like_cache AS c ON (c.id_msg = m.id_msg AND c.ctype = 1)
 			LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang}
 			WHERE m.id_msg IN ({array_int:message_list})
 			ORDER BY m.id_msg' . (empty($options['view_newest_first']) ? '' : ' DESC'),

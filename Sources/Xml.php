@@ -35,7 +35,9 @@ function XMLhttpMain()
 		'givelike' => array('function' => 'HandleLikeRequest'),
 		'mpeek' => array('function' => 'TopicPeek'),
 		'tags' => array('function' => 'TagsActionDispatcher'),
-		'whoposted' => array('function' => 'WhoPosted')
+		'whoposted' => array('function' => 'WhoPosted'),
+		'prefix' => array('function' => 'InlinePrefixActions'),
+		'collapse' => array('function' => 'AjaxCollapseCategory')
 	);
 	if (!isset($_REQUEST['sa'], $sub_actions[$_REQUEST['sa']]))
 		fatal_lang_error('no_access', false);
@@ -262,5 +264,38 @@ function WhoPosted()
 			$smcFunc['db_free_result']($result);
 		}
 	}
+}
+
+/*
+ * handle AJAX requests for chaning topic prefixes in the message and topic view(s)
+ */
+function InlinePrefixActions()
+{
+	// board and topic ids must be submitted with the request
+	$b = isset($_REQUEST['b']) ? (int)$_REQUEST['b'] : 0;
+	$t = isset($_REQUEST['t']) ? (int)$_REQUEST['t'] : 0;
+	
+	if($b && $t) {
+		if(isset($_REQUEST['request'])) {			// request list of prefixes in a small popup element
+		
+		}
+	}
+}
+
+function AjaxCollapseCategory()
+{
+	global $sourcedir;
+	
+	require_once($sourcedir . '/BoardIndex.php');
+	
+	$_REQUEST['action'] = 'collapse';
+	
+	if(isset($_REQUEST['expand']))
+		$_GET['sa'] = $_REQUEST['sa'] = 'expand';
+	else if(isset($_REQUEST['collapse']))
+		$_GET['sa'] = $_REQUEST['sa'] = 'collapse';
+	
+	CollapseCategory(true);
+	obExit(false, false, false);
 }
 ?>

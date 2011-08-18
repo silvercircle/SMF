@@ -1342,6 +1342,9 @@ CREATE TABLE {$db_prefix}messages (
   KEY related_ip (id_member, poster_ip, id_msg)
 ) ENGINE=MyISAM;
 
+#
+# table to cache preparsed posts
+#
 CREATE TABLE {$db_prefix}messages_cache (
   id_msg int(10) unsigned NOT NULL default '0',
   body mediumtext NOT NULL,
@@ -1361,7 +1364,8 @@ CREATE TABLE {$db_prefix}likes (
   	id_user mediumint(8) unsigned NOT NULL default '0',
   	id_receiver mediumint(8) unsigned NOT NULL default '0',
   	updated int(4) unsigned NOT NULL default '0',
-  	UNIQUE liked (id_msg, id_user),
+  	ctype tinyint(2) unsigned NOT NULL default '0',
+  	PRIMARY KEY (id_msg, id_user, ctype),
   	KEY id_msg (id_msg),
   	KEY id_user (id_user),
   	KEY id_receiver (id_receiver),
@@ -1377,7 +1381,8 @@ CREATE TABLE {$db_prefix}like_cache (
   	likes_count int(4) NOT NULL default '0',
   	like_status varchar(255) NOT NULL default '',
   	updated int(4) NOT NULL default '0',
-  	PRIMARY KEY (id_msg)
+  	ctype tinyint(2) NOT NULL default '0',
+  	PRIMARY KEY (id_msg, ctype)
 ) ENGINE=MyISAM;
 
 #

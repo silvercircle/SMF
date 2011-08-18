@@ -116,7 +116,7 @@ function BoardIndex()
 }
 
 // Collapse or expand a category
-function CollapseCategory()
+function CollapseCategory($is_ajax = false)
 {
 	global $user_info, $sourcedir, $context;
 
@@ -137,7 +137,8 @@ function CollapseCategory()
 	}
 
 	// And go back to the board index.
-	BoardIndex();
+	if(!$is_ajax)
+		BoardIndex();
 }
 
 ?>
