@@ -1278,8 +1278,8 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 							// Empty content
 							$tag[\'content\'] = \'\';
 							
-							$tag[\'content\'] = "<div class=\"blue_container mediumpadding\" style=\"text-align:center;\"><iframe style=\"width:640px;height:385px;border:0;\" class=\"youtube-player\" src=\"http://www.youtube.com/embed/".$data[0]."\"></iframe></div>";
-							//$tag[\'content\'] = "<div class=\"blue_container mediumpadding\" style=\"text-align:center;\"><a class=\"vbox\" href=\"http://www.youtube.com/embed/".$data[0]."\"><img src=\"http://img.youtube.com/vi/".$data[0]."/0.jpg\" alt=\"thumb\" /></a></div>";
+							$tag[\'content\'] = "<div class=\"blue_container mediumpadding\" style=\"width:auto;margin:auto;text-align:center;\"><iframe style=\"width:640px;height:385px;border:0;\" class=\"youtube-player\" src=\"http://www.youtube.com/embed/".$data[0]."\"></iframe></div>";
+							//$tag[\'content\'] = "<div class=\"blue_container mediumpadding\" style=\"text-align:center;\"><a rel=\"prettyPhoto\" href=\"http://www.youtube.com/watch?v=".$data[0]."?width=640&height=385\"><img src=\"http://img.youtube.com/vi/".$data[0]."/0.jpg\" alt=\"thumb\" /></a></div>";
 						}
 					}
 					else
@@ -2679,16 +2679,7 @@ function highlight_php_code($code)
 
 	$oldlevel = error_reporting(0);
 
-	// It's easier in 4.2.x+.
-	if (@version_compare(PHP_VERSION, '4.2.0') == -1)
-	{
-		ob_start();
-		@highlight_string($code);
-		$buffer = str_replace(array("\n", "\r"), '', ob_get_contents());
-		ob_end_clean();
-	}
-	else
-		$buffer = str_replace(array("\n", "\r"), '', @highlight_string($code, true));
+	$buffer = str_replace(array("\n", "\r"), '', @highlight_string($code, true));
 
 	error_reporting($oldlevel);
 
@@ -3845,10 +3836,6 @@ function host_from_ip($ip)
 		return $host;
 	$t = microtime();
 
-	// If we can't access nslookup/host, PHP 4.1.x might just crash.
-	if (@version_compare(PHP_VERSION, '4.2.0') == -1)
-		$host = false;
-
 	// Try the Linux host command, perhaps?
 	if (!isset($host) && (strpos(strtolower(PHP_OS), 'win') === false || strpos(strtolower(PHP_OS), 'darwin') !== false) && mt_rand(0, 1) == 1)
 	{
@@ -3978,37 +3965,7 @@ function loadClassFile($filename)
 	if (!file_exists($sourcedir . '/' . $filename))
 		fatal_lang_error('error_bad_file', 'general', array($sourcedir . '/' . $filename));
 
-	// Using a version below PHP 5.0? Do a compatibility conversion.
-	if (@version_compare(PHP_VERSION, '5.0.0') != 1)
-	{
-		// Check if it was included before.
-		if (in_array($filename, $files_included))
-			return;
-
-		// Make sure we don't include it again.
-		$files_included[] = $filename;
-
-		// Do some replacements to make it PHP 4 compatible.
-		eval('?' . '>' . preg_replace(array(
-			'~class\s+([\w-_]+)([^}]+)function\s+__construct\s*\(~',
-			'~([\s\t]+)public\s+\$~',
-			'~([\s\t]+)private\s+\$~',
-			'~([\s\t]+)protected\s+\$~',
-			'~([\s\t]+)public\s+function\s+~',
-			'~([\s\t]+)private\s+function\s+~',
-			'~([\s\t]+)protected\s+function\s+~',
-		), array(
-			'class $1$2function $1(',
-			'$1var $',
-			'$1var $',
-			'$1var $',
-			'$1function ',
-			'$1function ',
-			'$1function ',
-		), rtrim(file_get_contents($sourcedir . '/' . $filename))));
-	}
-	else
-		require_once($sourcedir . '/' . $filename);
+	require_once($sourcedir . '/' . $filename);
 }
 
 function setupMenuContext()
@@ -4313,12 +4270,6 @@ function smf_seed_generator()
 	{
 		$modSettings['rand_seed'] = microtime() * 1000000;
 		updateSettings(array('rand_seed' => $modSettings['rand_seed']));
-	}
-
-	if (@version_compare(PHP_VERSION, '4.2.0') == -1)
-	{
-		$seed = ($modSettings['rand_seed'] + ((double) microtime() * 1000003)) & 0x7fffffff;
-		mt_srand($seed);
 	}
 
 	// Change the seed.

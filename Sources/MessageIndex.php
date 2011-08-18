@@ -491,7 +491,7 @@ function MessageIndex()
 					'href' => $scripturl . '?topic=' . $row['id_topic'] . ($user_info['is_guest'] ? ('.' . (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) . '#msg' . $row['id_last_msg']) : (($row['num_replies'] == 0 ? '.0' : '.msg' . $row['id_last_msg']) . '#new')),
 					'link' => '<a href="' . $scripturl . '?topic=' . $row['id_topic'] . ($user_info['is_guest'] ? ('.' . (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) . '#msg' . $row['id_last_msg']) : (($row['num_replies'] == 0 ? '.0' : '.msg' . $row['id_last_msg']) . '#new')) . '" ' . ($row['num_replies'] == 0 ? '' : 'rel="nofollow"') . '>' . $row['last_subject'] . '</a>'
 				),
-				'prefix' => html_entity_decode($row['prefix_name']),
+				'prefix' => $row['prefix_name'] ? (html_entity_decode($row['prefix_name']) . ($context['can_moderate_forum'] ? '&nbsp;<span class="inlineprefix" style="float:none;" data-id="'.$row['id_topic'].'">&nbsp;</span>' : '')) : '',
 				'is_sticky' => !empty($modSettings['enableStickyTopics']) && !empty($row['is_sticky']),
 				'is_locked' => !empty($row['locked']),
 				'is_poll' => $modSettings['pollMode'] == '1' && $row['id_poll'] > 0,

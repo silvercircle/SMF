@@ -94,7 +94,7 @@ function template_html_above()
 
 	// Here comes the JavaScript bits!
 		echo '
-		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js"></script>
+		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js?fin20"></script>
 		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/script.js?fin20"></script>';
 	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin')
 		echo '
@@ -102,29 +102,36 @@ function template_html_above()
 	echo '
 		<script type="text/javascript">
 		// <![CDATA[
-		var smf_theme_url = "', $settings['theme_url'], '";
-		var smf_default_theme_url = "', $settings['default_theme_url'], '";
-		var smf_images_url = "', $settings['images_url'], '";
-		var smf_scripturl = "', $scripturl, '";
-		var smf_iso_case_folding = ', $context['server']['iso_case_folding'] ? 'true' : 'false', ';
-		var smf_charset = "', $context['character_set'], '";', $context['show_pm_popup'] ? '
-		var fPmPopup = function ()
-		{
-			if (confirm("' . $txt['show_personal_messages'] . '"))
-				window.open(smf_prepareScriptUrl(smf_scripturl) + "action=pm");
-		}
-		addLoadEvent(fPmPopup);' : '', '
-		var sSessionId = \'', $context['session_id'], '\';
-		var sSessionVar = \'', $context['session_var'], '\';
-		var disableDynamicTime = ',empty($options['disable_dynatime']) ? 0 : 1,';
-		var textSizeUnit = \'pt\';
-		var textSizeStep = 1;
-		var textSizeMax = 16;
-		var textSizeMin = 8;
-		var textSizeDefault = 10;
-		var cookie = readCookie(\'SMF_textsize\');
-		var textsize = cookie ? parseInt(cookie) : textSizeDefault;
-	// ]]></script>';
+var smf_theme_url = "', $settings['theme_url'], '";
+var smf_default_theme_url = "', $settings['default_theme_url'], '";
+var smf_images_url = "', $settings['images_url'], '";
+var smf_scripturl = "', $scripturl, '";
+var smf_iso_case_folding = ', $context['server']['iso_case_folding'] ? 'true' : 'false', ';
+var smf_charset = "', $context['character_set'], '";', $context['show_pm_popup'] ? '
+var fPmPopup = function ()
+{
+	if (confirm("' . $txt['show_personal_messages'] . '"))
+		window.open(smf_prepareScriptUrl(smf_scripturl) + "action=pm");
+}
+addLoadEvent(fPmPopup);' : '', '
+var sSessionId = \'', $context['session_id'], '\';
+var sSessionVar = \'', $context['session_var'], '\';
+var disableDynamicTime = ',empty($options['disable_dynatime']) ? 0 : 1,';
+var textSizeUnit = \'pt\';
+var textSizeStep = 1;
+var textSizeMax = 16;
+var textSizeMin = 8;
+var textSizeDefault = 10;
+var cookie = readCookie(\'SMF_textsize\');
+var textsize = cookie ? parseInt(cookie) : textSizeDefault;
+var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
+var t2 = document.createElement(\'SCRIPT\');
+t2.type = "text/javascript";
+t2.async = true;
+t2.src = "',$settings['theme_url'],'/scripts/min/footer.js?ver=1.1.0";
+anchor.parentNode.insertBefore(t2, anchor);
+	// ]]>
+	</script>';
 	echo '
 	<meta http-equiv="Content-Type" content="text/html; charset=', $context['character_set'], '" />
 	<meta name="description" content="', $context['page_title_html_safe'], '" />', !empty($context['meta_keywords']) ? '
@@ -327,22 +334,20 @@ function template_body_below()
 
 	// Show the "Powered by" and "Valid" logos, as well as the copyright. Remember, the copyright must be somewhere!
 	echo '
-  	<div id="fb-root"></div><script type="text/javascript">
+  	<div id="fb-root"></div>
+  	<script type="text/javascript">
 	// <![CDATA[
-
-    var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
-	var t2 = document.createElement(\'SCRIPT\');
-	t2.type = "text/javascript";
-	t2.async = true;
-	t2.src = "',$settings['theme_url'],'/scripts/min/footer.js?ver=1.1.0";
-	anchor.parentNode.insertBefore(t2, anchor);
-	var t3 = document.createElement(\'SCRIPT\');
-	t3.type = "text/javascript";
-	t3.async = true;
-	t3.src = "',$settings['theme_url'],'/scripts/shlt.js?ver=1.1.0";
-	anchor.parentNode.insertBefore(t3, anchor);
 	';
 
+	if(isset($context['need_synhlt']))  // include syntax highlighter js when needed. 
+		echo '
+		var t3 = document.createElement(\'SCRIPT\');
+		t3.type = "text/javascript";
+		t3.async = true;
+		t3.src = "',$settings['theme_url'],'/scripts/shlt.js?ver=1.1.0";
+		anchor.parentNode.insertBefore(t3, anchor);';
+
+	
 	if(isset($modSettings['embed_GA']) && $modSettings['embed_GA'] && ($context['user']['is_guest'] || (empty($options['disable_analytics']) ? 1 : !$options['disable_analytics'])))	{
 		echo '
    		var _gaq = _gaq || [];
@@ -383,13 +388,13 @@ function template_body_below()
 	*/
 	if($plusone) {
 		echo '
-			var t3 = document.createElement(\'SCRIPT\');
+		var t4 = document.createElement(\'SCRIPT\');
 
-			t3.src = \'http://apis.google.com/js/plusone.js\'; 
-			t3.type = "text/javascript"; 
-			t3.async = true;
-			anchor.parentNode.insertBefore(t3, anchor);
-			';
+		t4.src = \'http://apis.google.com/js/plusone.js\'; 
+		t4.type = "text/javascript"; 
+		t4.async = true;
+		anchor.parentNode.insertBefore(t4, anchor);
+		';
 	}
 	echo $txt['jquery_timeago_loc'],'
 	// ]]>

@@ -216,11 +216,12 @@
 			$pp_pic_holder.find('.currentTextHolder').text((set_position+1) + settings.counter_separator_label + $(pp_images).size());
 
 			// Set the description
+			/*
 			if(pp_descriptions[set_position] != ""){
 				$pp_pic_holder.find('.pp_description').show().html(unescape(pp_descriptions[set_position]));
 			}else{
 				$pp_pic_holder.find('.pp_description').hide();
-			}
+			}*/
 			
 			// Get the dimensions
 			movie_width = ( parseFloat(getParam('width',pp_images[set_position])) ) ? getParam('width',pp_images[set_position]) : settings.default_width.toString();
@@ -947,6 +948,8 @@ function setBusy(mode)
 	}
 };
 
+var menu_active = false;
+
 jQuery(document).ready(function() {
 	
 	// this kills the pure CSS hover effect from the dropdown menus so they will
@@ -989,31 +992,7 @@ jQuery(document).ready(function() {
 			jQuery(this).children('ul').hide();
 		}
 	});
-	/*
-	$('a.vbox').colorbox({
-		iframe : true,
-		innerWidth : 855,
-		innerHeight : 510,
-		opacity : 0.5,
-		transition : 'fade'
-	});
-	*/
-	/*
-	$('a.bbc_img, img.bbc_img').colorbox({
-		maxWidth : '100%',
-		maxHeight : '100%',
-		opacity : 0.6,
-		scalePhotos : false,
-		transition : 'fade'
-	});
-	*/
 	$('a.bbc_img').prettyPhoto({social_tools:'', allow_resize:true,animation_speed:'fast', show_title:false});
-	
-	/*$('.attach_thumb').click(function() {
-		//$.colorbox({transition:'fade', opacity:0.6, maxWidth:'100%', photo:true, href: $(this).attr('href')});
-		$.prettyPhoto.open($(this).attr('href'));
-		return(false);
-	});*/
 	$('a.attach_thumb').prettyPhoto({social_tools:'', deeplinking:false, overlay_gallery:false, animation_speed:'normal',opacity:1});
 	$('.whoposted').click(function() {
 		var t = $(this).attr('data-topic');

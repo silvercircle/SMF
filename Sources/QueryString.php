@@ -111,7 +111,7 @@ function cleanRequest()
 	}
 
 	// Are we going to need to parse the ; out?
-	if ((strpos(@ini_get('arg_separator.input'), ';') === false || @version_compare(PHP_VERSION, '4.2.0') == -1) && !empty($_SERVER['QUERY_STRING']))
+	if ((strpos(@ini_get('arg_separator.input'), ';') === false) && !empty($_SERVER['QUERY_STRING']))
 	{
 		// Get rid of the old one! You don't know where it's been!
 		$_GET = array();
@@ -429,7 +429,8 @@ function cleanXml($string)
 	global $context;
 
 	// http://www.w3.org/TR/2000/REC-xml-20001006#NT-Char
-	return preg_replace('~[\x00-\x08\x0B\x0C\x0E-\x19' . ($context['utf8'] ? (@version_compare(PHP_VERSION, '4.3.3') != -1 ? '\x{D800}-\x{DFFF}\x{FFFE}\x{FFFF}' : "\xED\xA0\x80-\xED\xBF\xBF\xEF\xBF\xBE\xEF\xBF\xBF") : '') . ']~' . ($context['utf8'] ? 'u' : ''), '', $string);
+	//return preg_replace('~[\x00-\x08\x0B\x0C\x0E-\x19' . ($context['utf8'] ? (@version_compare(PHP_VERSION, '4.3.3') != -1 ? '\x{D800}-\x{DFFF}\x{FFFE}\x{FFFF}' : "\xED\xA0\x80-\xED\xBF\xBF\xEF\xBF\xBE\xEF\xBF\xBF") : '') . ']~' . ($context['utf8'] ? 'u' : ''), '', $string);
+	return preg_replace('~[\x00-\x08\x0B\x0C\x0E-\x19' . ($context['utf8'] ? ('\x{D800}-\x{DFFF}\x{FFFE}\x{FFFF}') : '') . ']~' . ($context['utf8'] ? 'u' : ''), '', $string);
 }
 
 function JavaScriptEscape($string)
@@ -460,7 +461,7 @@ function ob_sessrewrite($buffer)
 
 	// Do nothing if the session is cookied, or they are a crawler - guests are caught by redirectexit().  This doesn't work below PHP 4.3.0, because it makes the output buffer bigger.
 	// !!! smflib
-	if (empty($_COOKIE) && SID != '' && empty($context['browser']['possibly_robot']) && @version_compare(PHP_VERSION, '4.3.0') != -1)
+	if (empty($_COOKIE) && SID != '' && empty($context['browser']['possibly_robot']))
 		$buffer = preg_replace('/"' . preg_quote($scripturl, '/') . '(?!\?' . preg_quote(SID, '/') . ')\\??/', '"' . $scripturl . '?' . SID . '&amp;', $buffer);
 	// Debugging templates, are we?
 	elseif (isset($_GET['debug']))

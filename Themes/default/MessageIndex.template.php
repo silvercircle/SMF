@@ -56,7 +56,7 @@ function template_main()
 					</td>
 					<td class="info">
 						<a href="',$scripturl,'?action=.xml;type=rss;board=',$board['id'],'"><img style="float:right" src="',$settings['images_url'],'/icons/rss.png" alt="rss" title="feed" /></a>
-						<a class="subject" href="', $board['href'], '" name="b', $board['id'], '">', $board['name'], '</a>';
+						<a class="subject" href="', $board['href'], '" id="b', $board['id'], '">', $board['name'], '</a>';
 
 			// Has it outstanding posts for approval?
 			if ($board['can_approve_posts'] && ($board['unapproved_posts'] || $board['unapproved_topics']))

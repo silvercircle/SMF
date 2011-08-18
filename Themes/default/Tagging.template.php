@@ -100,7 +100,7 @@ function template_ajax_addtag()
 {
 	global $scripturl, $txt, $context;
 
-	echo '<div id="tagform" class="blue_container lightshadow mediumpadding" style="padding-bottom:0px;position:absolute;right:50px;">
+	echo '<div id="tagform" class="blue_container lightshadow mediumpadding blue_topbar" style="padding-bottom:0px;position:absolute;right:50px;">
 		<form method="post" action=""><strong>';
 		if(isset($context['not_allowed'])) {
 			echo $txt['cannot_smftags_add'];

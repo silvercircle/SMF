@@ -172,7 +172,8 @@ function reloadSettings()
 	$ent_check = empty($modSettings['disableEntityCheck']) ? array('preg_replace(\'~(&#(\d{1,7}|x[0-9a-fA-F]{1,6});)~e\', \'$smcFunc[\\\'entity_fix\\\'](\\\'\\2\\\')\', ', ')') : array('', '');
 
 	// Preg_replace can handle complex characters only for higher PHP versions.
-	$space_chars = $utf8 ? (@version_compare(PHP_VERSION, '4.3.3') != -1 ? '\x{A0}\x{AD}\x{2000}-\x{200F}\x{201F}\x{202F}\x{3000}\x{FEFF}' : "\xC2\xA0\xC2\xAD\xE2\x80\x80-\xE2\x80\x8F\xE2\x80\x9F\xE2\x80\xAF\xE2\x80\x9F\xE3\x80\x80\xEF\xBB\xBF") : '\x00-\x08\x0B\x0C\x0E-\x19\xA0';
+	//$space_chars = $utf8 ? (@version_compare(PHP_VERSION, '4.3.3') != -1 ? '\x{A0}\x{AD}\x{2000}-\x{200F}\x{201F}\x{202F}\x{3000}\x{FEFF}' : "\xC2\xA0\xC2\xAD\xE2\x80\x80-\xE2\x80\x8F\xE2\x80\x9F\xE2\x80\xAF\xE2\x80\x9F\xE3\x80\x80\xEF\xBB\xBF") : '\x00-\x08\x0B\x0C\x0E-\x19\xA0';
+	$space_chars = $utf8 ? ('\x{A0}\x{AD}\x{2000}-\x{200F}\x{201F}\x{202F}\x{3000}\x{FEFF}') : '\x00-\x08\x0B\x0C\x0E-\x19\xA0';
 
 	$smcFunc += array(
 		'entity_fix' => create_function('$string', '
@@ -1623,7 +1624,7 @@ function loadTheme($id_theme = 0, $initialize = true)
 		'is_cgi' => isset($_SERVER['SERVER_SOFTWARE']) && strpos(php_sapi_name(), 'cgi') !== false,
 		'is_windows' => strpos(PHP_OS, 'WIN') === 0,
 		'iso_case_folding' => ord(strtolower(chr(138))) === 154,
-		'complex_preg_chars' => @version_compare(PHP_VERSION, '4.3.3') != -1,
+		'complex_preg_chars' => 1
 	);
 	// A bug in some versions of IIS under CGI (older ones) makes cookie setting not work with Location: headers.
 	$context['server']['needs_login_fix'] = $context['server']['is_cgi'] && $context['server']['is_iis'];
@@ -2403,8 +2404,7 @@ function loadSession()
 			$_POST[session_name()] = $session_id;
 		}
 
-		// Use database sessions? (they don't work in 4.1.x!)
-		if (!empty($modSettings['databaseSession_enable']) && @version_compare(PHP_VERSION, '4.2.0') != -1)
+		if (!empty($modSettings['databaseSession_enable']))
 		{
 			session_set_save_handler('sessionOpen', 'sessionClose', 'sessionRead', 'sessionWrite', 'sessionDestroy', 'sessionGC');
 			@ini_set('session.gc_probability', '1');
@@ -2427,10 +2427,6 @@ function loadSession()
 		if (!empty($modSettings['databaseSession_loose']))
 			header('Cache-Control: private');
 	}
-
-	// While PHP 4.1.x should use $_SESSION, it seems to need this to do it right.
-	if (@version_compare(PHP_VERSION, '4.2.0') == -1)
-		$HTTP_SESSION_VARS['php_412_bugfix'] = true;
 
 	// Set the randomly generated code.
 	if (!isset($_SESSION['session_var']))
@@ -2547,8 +2543,7 @@ function loadDatabase()
 	global $db_type, $db_name, $ssi_db_user, $ssi_db_passwd, $sourcedir, $db_prefix;
 
 	// Figure out what type of database we are using.
-	if (empty($db_type) || !file_exists($sourcedir . '/Subs-Db-' . $db_type . '.php'))
-		$db_type = 'mysql';
+	$db_type = 'mysql';
 
 	// Load the file for the database.
 	require_once($sourcedir . '/Subs-Db-' . $db_type . '.php');

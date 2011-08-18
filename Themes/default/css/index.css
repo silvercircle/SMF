@@ -1099,12 +1099,17 @@ table.table_grid thead tr.catbg th
 	background-color: #98AABA;
 }
 
-span.m_downarrow {
+span.m_downarrow, span.inlineprefix {
     padding:8px 12px 6px 0px;
     margin-left:-4px;
     margin-right:4px;
     float:left;
     background:transparent url(../images/theme/sprite.png) 0 7px no-repeat;
+}
+span.inlineprefix {
+	background-position: 0 16px;
+	cursor:pointer;
+	margin-top:6px;
 }
 span.m_downarrow:hover {
 	background-color:#ccc !important;
@@ -2656,8 +2661,6 @@ table.topic_table td {
 }
 
 td.lastpost img {
-	width:15px;
-	height:15px;
 	vertical-align:middle;
 }
 td.lastpost > a.lp_link {
@@ -3533,6 +3536,9 @@ span.hidelink
 	border:1px solid #d5ecfa;
 	padding:2px 4px;
 	border-radius:3px;
+}
+.blue_topbar {
+	border-top:7px solid #d5ecfa;
 }
 .orange_container {
 	background-color: #fff6e2;
