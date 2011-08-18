@@ -1450,6 +1450,38 @@ var smf_addListItemHoverEvents = function()
 if (is_ie7down && 'attachEvent' in window)
 	window.attachEvent('onload', smf_addListItemHoverEvents);
 
+
+function createCookie(name,value,days) {
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime()+(days*24*60*60*1000));
+    var expires = "; expires="+date.toGMTString();
+  }
+  else var expires = "";
+  document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0;i < ca.length;i++) {
+    var c = ca[i];
+    while (c.charAt(0)==' ') c = c.substring(1,c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+  }
+  return null;
+}
+
+function setTextSize(_s)
+{
+    textsize = _s;
+  
+	if(textsize < textSizeMin || textsize > textSizeMax)
+   		textsize = textSizeDefault;
+	$('body').css('font-size', _s + textSizeUnit);
+	createCookie('SMF_textsize', textsize, 500);
+	$('#curfontsize').html(textsize + textSizeUnit);
+}
 	
 /*
  * timeago: a jQuery plugin, version: 0.9.3 (2011-01-21)
@@ -1481,7 +1513,7 @@ if (is_ie7down && 'attachEvent' in window)
   $.extend($.timeago, {
     settings: {
       refreshMillis: 60000,
-      allowFuture: true,
+      allowFuture: true
     },
     inWords: function(distanceMillis) {
       var $l = this.settings.strings;
@@ -1605,35 +1637,3 @@ if (is_ie7down && 'attachEvent' in window)
     return s;
   }
 }(jQuery));
-
-function createCookie(name,value,days) {
-  if (days) {
-    var date = new Date();
-    date.setTime(date.getTime()+(days*24*60*60*1000));
-    var expires = "; expires="+date.toGMTString();
-  }
-  else var expires = "";
-  document.cookie = name+"="+value+expires+"; path=/";
-}
-
-function readCookie(name) {
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(';');
-  for(var i=0;i < ca.length;i++) {
-    var c = ca[i];
-    while (c.charAt(0)==' ') c = c.substring(1,c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-  }
-  return null;
-}
-
-function setTextSize(_s)
-{
-    textsize = _s;
-  
-	if(textsize < textSizeMin || textsize > textSizeMax)
-   		textsize = textSizeDefault;
-	$('body').css('font-size', _s + textSizeUnit);
-	createCookie('SMF_textsize', textsize, 500);
-	$('#curfontsize').html(textsize + textSizeUnit);
-}

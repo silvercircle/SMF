@@ -1007,13 +1007,14 @@ jQuery(document).ready(function() {
 		transition : 'fade'
 	});
 	*/
-	$('a.bbc_img').prettyPhoto({social_tools:'', allow_resize:false,animation_speed:'fast', show_title:false});
+	$('a.bbc_img').prettyPhoto({social_tools:'', allow_resize:true,animation_speed:'fast', show_title:false});
 	
-	$('.attach_thumb').click(function() {
+	/*$('.attach_thumb').click(function() {
 		//$.colorbox({transition:'fade', opacity:0.6, maxWidth:'100%', photo:true, href: $(this).attr('href')});
 		$.prettyPhoto.open($(this).attr('href'));
 		return(false);
-	});
+	});*/
+	$('a.attach_thumb').prettyPhoto({social_tools:'', deeplinking:false, overlay_gallery:false, animation_speed:'normal',opacity:1});
 	$('.whoposted').click(function() {
 		var t = $(this).attr('data-topic');
 		if(t) {

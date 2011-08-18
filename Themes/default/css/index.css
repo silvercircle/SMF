@@ -561,6 +561,32 @@ span.xtag:hover {
 	padding: 0.1em 0;
 }
 
+ol.post_attachments {
+	list-style: none;
+	padding:0;
+	margin:0;
+}
+ol.post_attachments li {
+	float:left;
+	width:200px;
+	height:60px;
+	margin-right:10px;
+	margin-top:5px;
+	background-color:#F9F9e0;
+	border:1px solid #F2F2A5;
+	padding:2px 4px;
+	border-radius:3px;
+}
+ol.post_attachments li img {
+	max-height:56px;
+	max-width:90px;
+	padding:1px;
+	border:1px solid black;
+	height:auto;
+	width:auto;
+	float:left;
+	margin-right:5px;
+}
 /* All the signatures used in the forum.  If your forum users use Mozilla, Opera, or Safari, you might add max-height here ;). */
 .signature, .attachments
 {
@@ -568,7 +594,6 @@ span.xtag:hover {
 	overflow: auto;
 	clear: right;
 	padding: 1em 0 3px 0;
-	border-top: 1px solid #aaa;
 	line-height: 1.4em;
 	font-size: 0.85em;
 }
@@ -1898,8 +1923,7 @@ ul.quickbuttons li a, .buttonlist ul li a, span.button
 	font-weight:bold;
 	text-shadow: white 1px 1px 8px;
 	float: left;
-	line-height:17px !important;
-	margin-top:1px;
+	line-height:18px !important;
 	text-decoration: none;
 	padding:0 4px;
 	color:#555;
@@ -1907,7 +1931,7 @@ ul.quickbuttons li a, .buttonlist ul li a, span.button
 	border:1px solid #9bb1db;
 	border-radius:2px;
 }
-span.button {margin: 0 0.5em;}
+span.button {margin: 0 0.3em;}
 ul.quickbuttons li a:hover, span.button:hover, .buttonlist ul li a:hover {
 	background:white;
 }
@@ -1970,12 +1994,7 @@ img.smiley
 }
 .attachments
 {
-	padding: 1em 0 2em 0;
 	overflow:hidden !important;
-}
-.attachments div
-{
-	padding: 0 0.5em;
 }
 
 /* Styles for the quick reply area.
@@ -3684,6 +3703,7 @@ abbr.timeago {border:0;}
 .minpadding {padding:1px;}
 .mediummargin {margin:5px;}
 .nowrap{white-space: nowrap;}
+.forcedwrap{white-space: pre-line;}
 /*
  * social sharing widgets
  */

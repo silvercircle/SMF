@@ -110,13 +110,10 @@ function template_custom_email()
 	echo '
 	<div id="send_topic">
 		<form action="', $scripturl, '?action=emailuser;sa=email" method="post" accept-charset="', $context['character_set'], '">
-			<div class="cat_bar">
-				<h3 class="catbg">
-					<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/email_sm.gif" alt="" class="icon" />', $context['page_title'], '</span>
-				</h3>
-			</div>
-			<div class="windowbg">
-				<span class="topslice"><span></span></span>
+			<h1 class="bigheader">
+				', $context['page_title'], '
+			</h1>
+			<div class="blue_container">
 				<div class="content">
 					<dl class="settings send_mail">
 						<dt>
@@ -184,7 +181,6 @@ function template_custom_email()
 						<input type="submit" name="send" value="', $txt['sendtopic_send'], '" class="button_submit" />
 					</div>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>';
 
 	foreach ($context['form_hidden_vars'] as $key => $value)

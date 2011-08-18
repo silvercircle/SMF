@@ -93,12 +93,14 @@ function template_html_above()
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/rtl.css" />';
 
 	// Here comes the JavaScript bits!
-	echo '
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/script.js?fin20"></script>';
+		echo '
+		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js"></script>
+		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/script.js?fin20"></script>';
 	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin')
-		echo '<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/admin.js?fin20"></script>';
-	echo '<script type="text/javascript">
+		echo '
+		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/admin.js?fin20"></script>';
+	echo '
+		<script type="text/javascript">
 		// <![CDATA[
 		var smf_theme_url = "', $settings['theme_url'], '";
 		var smf_default_theme_url = "', $settings['default_theme_url'], '";
@@ -120,11 +122,9 @@ function template_html_above()
 		var textSizeMax = 16;
 		var textSizeMin = 8;
 		var textSizeDefault = 10;
-
 		var cookie = readCookie(\'SMF_textsize\');
 		var textsize = cookie ? parseInt(cookie) : textSizeDefault;
 	// ]]></script>';
-
 	echo '
 	<meta http-equiv="Content-Type" content="text/html; charset=', $context['character_set'], '" />
 	<meta name="description" content="', $context['page_title_html_safe'], '" />', !empty($context['meta_keywords']) ? '
@@ -334,7 +334,7 @@ function template_body_below()
 	var t2 = document.createElement(\'SCRIPT\');
 	t2.type = "text/javascript";
 	t2.async = true;
-	t2.src = "',$settings['theme_url'],'/scripts/footer.js?ver=1.1.0";
+	t2.src = "',$settings['theme_url'],'/scripts/min/footer.js?ver=1.1.0";
 	anchor.parentNode.insertBefore(t2, anchor);
 	var t3 = document.createElement(\'SCRIPT\');
 	t3.type = "text/javascript";

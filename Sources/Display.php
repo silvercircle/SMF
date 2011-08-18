@@ -72,7 +72,7 @@ function Display()
 	$cache_parsed = !empty($modSettings['use_post_cache']);
 	$time_now = time();
 	
-	require_once($sourcedir . '/LikeSystem.php');
+	require_once($sourcedir . '/Subs-LikeSystem.php');
 	// What are you gonna display if these are empty?!
 	if (empty($topic))
 		fatal_lang_error('no_board', false);
@@ -1682,6 +1682,8 @@ function loadAttachmentContext($id_msg)
 			if (!$attachmentData[$i]['thumbnail']['has_thumb'])
 				$attachmentData[$i]['downloads']++;
 		}
+		// sort images to the top
+		usort($attachmentData, 'sort_by_type');
 	}
 
 	// Do we need to instigate a sort?
@@ -1689,6 +1691,15 @@ function loadAttachmentContext($id_msg)
 		usort($attachmentData, 'approved_attach_sort');
 
 	return $attachmentData;
+}
+
+// sort images to the top of the list
+function sort_by_type($a, $b)
+{
+	if($a['is_image'] == $b['is_image'])
+		return(0);
+	
+	return($a['is_image'] > $b['is_image']) ? -1 : 1;
 }
 
 // A sort function for putting unapproved attachments first.

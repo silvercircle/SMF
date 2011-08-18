@@ -412,11 +412,12 @@ function template_main()
 		{
 			echo '
 							<div id="msg_', $message['id'], '_footer" class="attachments smalltext">
-								<div style="overflow: visible;">';
+								<ol class="post_attachments">';
 
 			$last_approved_state = 1;
 			foreach ($message['attachment'] as $attachment)
 			{
+				echo '<li>';
 				// Show a special box for unapproved attachments...
 				if ($attachment['is_approved'] != $last_approved_state)
 				{
@@ -435,19 +436,22 @@ function template_main()
 				{
 					if ($attachment['thumbnail']['has_thumb'])
 						//echo '<a href="', $attachment['href'], ';image" id="link_', $attachment['id'], '" onclick="', $attachment['thumbnail']['javascript'], '"><img src="', $attachment['thumbnail']['href'], '" alt="" id="thumb_', $attachment['id'], '" /></a><br />';
-								echo '<a href="', $attachment['href'], ';image" id="link_', $attachment['id'], '" class="attach_thumb"><img src="', $attachment['thumbnail']['href'], '" alt="" id="thumb_', $attachment['id'], '" /></a><br />';
+								echo '<a rel="prettyPhoto[gallery]" href="', $attachment['href'], ';image" id="link_', $attachment['id'], '" class="attach_thumb"><img src="', $attachment['thumbnail']['href'], '" alt="" id="thumb_', $attachment['id'], '" /></a>';
 					else
 						echo '
-										<img src="' . $attachment['href'] . ';image" alt="" width="' . $attachment['width'] . '" height="' . $attachment['height'] . '"/><br />';
+										<img src="' . $attachment['href'] . ';image" alt="" width="' . $attachment['width'] . '" height="' . $attachment['height'] . '"/>';
 				}
 				echo '
-										<a href="' . $attachment['href'] . '"><img src="' . $settings['images_url'] . '/icons/clip.gif" alt="*" />&nbsp;' . $attachment['name'] . '</a> ';
+										<a href="' . $attachment['href'] . '">' . $attachment['name'] . '</a><br />';
 
 				if (!$attachment['is_approved'] && $context['can_approve'])
 					echo '
 										[<a href="', $scripturl, '?action=attachapprove;sa=approve;aid=', $attachment['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['approve'], '</a>]&nbsp;|&nbsp;[<a href="', $scripturl, '?action=attachapprove;sa=reject;aid=', $attachment['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['delete'], '</a>] ';
 				echo '
-										(', $attachment['size'], ($attachment['is_image'] ? ', ' . $attachment['real_width'] . 'x' . $attachment['real_height'] . ' - ' . $txt['attach_viewed'] : ' - ' . $txt['attach_downloaded']) . ' ' . $attachment['downloads'] . ' ' . $txt['attach_times'] . '.)<br />';
+										', $attachment['size'], ($attachment['is_image'] ? ', ' . $attachment['real_width'] . 'x' . $attachment['real_height'] . '<br />' . $txt['attach_viewed'] : '<br />' . $txt['attach_downloaded']) . ' ' . $attachment['downloads'] . ' ' . $txt['attach_times'] . '.<br />
+										
+										</li>
+										';
 			}
 
 			// If we had unapproved attachments clean up.
@@ -456,7 +460,7 @@ function template_main()
 									</fieldset>';
 
 			echo '
-								</div>
+								</ol>
 							</div>';
 		}
 

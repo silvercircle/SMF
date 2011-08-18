@@ -132,7 +132,7 @@ function HandleLikeRequest()
 	
 	$mid = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
 	
-	require_once($sourcedir . '/LikeSystem.php');
+	require_once($sourcedir . '/Subs-LikeSystem.php');
 	GiveLike($mid);
 }
 	

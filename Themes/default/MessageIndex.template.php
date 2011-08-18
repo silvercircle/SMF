@@ -473,13 +473,13 @@ function template_ajaxresponse_whoposted()
 {
 	global $context, $txt, $scripturl;
 
-	echo '<table style="margin:0 20px;position:relative;top:-29px;">
+	echo '<table class="table_grid mlist" style="margin:0 20px;position:relative;top:-29px;">
 		<tr>
 			<td colspan="2" class="centertext"><h3>',$txt['who_posted'],'</h3></td>
 		</tr>
 		<tr>
-			<td class="glass lefttext">',$txt['who_member'],'</td>
-			<td class="glass righttext">',$txt['posts'],'</td>
+			<td class="red_container lefttext">',$txt['who_member'],'</td>
+			<td class="red_container righttext">',$txt['posts'],'</td>
 		</tr>';
 	foreach($context['posters'] as $poster)	{
 		echo '<tr>

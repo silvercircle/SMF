@@ -859,12 +859,10 @@ function template_send()
 		<div class="cat_bar">
 			<h3 class="catbg">', $context['preview_subject'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				', $context['preview_message'], '
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 		<br />';
 
@@ -872,15 +870,14 @@ function template_send()
 	echo '
 		<div class="cat_bar">
 			<h3 class="catbg">
-					<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/im_newmsg.gif" alt="', $txt['new_message'], '" title="', $txt['new_message'], '" />&nbsp;', $txt['new_message'], '</span>
+					<span class="ie6_header floatleft">', $txt['new_message'], '
 			</h3>
 		</div>';
 
 	echo '
 	<form action="', $scripturl, '?action=pm;sa=send2" method="post" accept-charset="', $context['character_set'], '" name="postmodify" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\', [\'subject\', \'message\']);">
 		<div>
-			<span class="upperframe"><span></span></span>
-			<div class="roundframe"><br class="clear" />';
+			<div class="blue_container mediumpadding"><br class="clear" />';
 
 	// If there were errors for sending the PM, show them.
 	if (!empty($context['post_error']['messages']))
@@ -987,7 +984,6 @@ function template_send()
 				<input type="hidden" name="l" value="', isset($context['current_label_id']) ? $context['current_label_id'] : -1, '" />
 				<br class="clear" />
 				</div>
-			<span class="lowerframe"><span></span></span>
 		</div>
 	</form>';
 
@@ -995,12 +991,10 @@ function template_send()
 	if ($context['reply'])
 		echo '
 	<br />
-	<br />
 	<div class="cat_bar">
 		<h3 class="catbg">', $txt['subject'], ': ', $context['quoted_message']['subject'], '</h3>
 	</div>
-	<div class="windowbg2">
-		<span class="topslice"><span></span></span>
+	<div class="blue_container">
 		<div class="content">
 			<div class="clear">
 				<span class="smalltext floatright">', $txt['on'], ': ', $context['quoted_message']['time'], '</span>
@@ -1008,7 +1002,6 @@ function template_send()
 			</div><hr />
 			', $context['quoted_message']['body'], '
 		</div>
-		<span class="botslice"><span></span></span>
 	</div><br class="clear" />';
 
 	echo '

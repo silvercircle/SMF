@@ -476,7 +476,7 @@ function showPosts($memID)
 	
 	$can_see_like = allowedTo('like_see');
 	$can_give_like = allowedTo('like_give');
-	require_once($sourcedir . '/LikeSystem.php');
+	require_once($sourcedir . '/Subs-LikeSystem.php');
 	
 	$time_now = time();
 	while ($row = $smcFunc['db_fetch_assoc']($request))
