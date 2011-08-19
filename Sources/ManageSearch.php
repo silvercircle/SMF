@@ -81,6 +81,8 @@ function ManageSearch()
 		'removecustom' => 'EditSearchMethod',
 		'removefulltext' => 'EditSearchMethod',
 		'createmsgindex' => 'CreateMessageIndex',
+		'managesphinx' => 'ManageSphinx',
+		'sphinxconfig' => 'CreateSphinxConfig',
 	);
 
 	// Default the sub-action to 'edit search settings'.
@@ -102,6 +104,10 @@ function ManageSearch()
 			),
 			'settings' => array(
 				'description' => $txt['search_settings_desc'],
+			),
+			'managesphinx' => array(
+				'description' => $txt['search_config_sphinx_desc'],
+				'label' => $txt['search_managesphinx'],
 			),
 		),
 	);
@@ -617,4 +623,168 @@ function loadSearchAPIs()
 	return $apis;
 }
 
+function ManageSphinx()
+{
+	global $txt, $context, $modSettings, $smcFunc;
+
+	if(isset($_REQUEST['save'])) {
+		checkSession();
+		updateSettings(array(
+			'sphinx_data_path' => rtrim($_REQUEST['sphinx_data_path'], '/'),
+			'sphinx_log_path' => rtrim($_REQUEST['sphinx_log_path'], '/'),
+			'sphinx_stopword_path' => $_REQUEST['sphinx_stopword_path'],
+			'sphinx_indexer_mem' => (int) $_REQUEST['sphinx_indexer_mem'],
+			'sphinx_searchd_server' => $_REQUEST['sphinx_searchd_server'],
+			'sphinx_searchd_port' => (int) $_REQUEST['sphinx_searchd_port'],
+			'sphinx_max_results' => (int) $_REQUEST['sphinx_max_results'],
+		));
+		redirectexit('action=admin;area=managesearch;sa=managesphinx;' . $context['session_var'] . '=' . $context['session_id']);
+	}
+	$context['page_title'] = $txt['search_managesphinx'];
+	$context['sub_template'] = 'manage_sphinx';
+}
+
+function CreateSphinxConfig()
+{
+	global $context, $db_server, $db_name, $db_user, $db_passwd, $db_prefix;
+	global $db_character_set, $modSettings;
+
+	$humungousTopicPosts = 200;
+
+	ob_end_clean();
+	header('Pragma: ');
+	if (!$context['browser']['is_gecko'])
+		header('Content-Transfer-Encoding: binary');
+	header('Connection: close');
+	header('Content-Disposition: attachment; filename="sphinx.conf"');
+	header('Content-Type: application/octet-stream');
+
+	$weight_factors = array(
+		'age',
+		'length',
+		'first_message',
+		'sticky',
+	);
+	$weight = array();
+	$weight_total = 0;
+	foreach ($weight_factors as $weight_factor)
+	{
+		$weight[$weight_factor] = empty($modSettings['search_weight_' . $weight_factor]) ? 0 : (int) $modSettings['search_weight_' . $weight_factor];
+		$weight_total += $weight[$weight_factor];
+	}
+
+	if ($weight_total === 0)
+	{
+		$weight = array(
+			'age' => 25,
+			'length' => 25,
+			'first_message' => 25,
+			'sticky' => 25,
+		);
+		$weight_total = 100;
+	}
+
+
+	echo '#
+# Sphinx configuration file (sphinx.conf), configured for SMF 2
+#
+# By default the location of this file would probably be:
+# /usr/local/etc/sphinx.conf
+
+source smf_source
+{
+	type = mysql
+	sql_host = ', $db_server, '
+	sql_user = ', $db_user, '
+	sql_pass = ', $db_passwd, '
+	sql_db = ', $db_name, '
+	sql_port = 3306', empty($db_character_set) ? '' : '
+	sql_query_pre = SET NAMES ' . $db_character_set, '
+	sql_query_pre =	\
+		REPLACE INTO ', $db_prefix, 'settings (variable, value) \
+		SELECT \'sphinx_indexed_msg_until\', MAX(ID_MSG) \
+		FROM ', $db_prefix, 'messages
+	sql_query_range = \
+		SELECT 1, value \
+		FROM ', $db_prefix, 'settings \
+		WHERE variable = \'sphinx_indexed_msg_until\'
+	sql_range_step = 1000
+	sql_query =	\
+		SELECT \
+			m.ID_MSG, m.ID_TOPIC, m.ID_BOARD, IF(m.ID_MEMBER = 0, 4294967295, m.ID_MEMBER) AS ID_MEMBER, m.poster_time, m.body, m.subject, \
+			t.num_replies + 1 AS num_replies, CEILING(1000000 * ( \
+				IF(m.ID_MSG < 0.7 * s.value, 0, (m.ID_MSG - 0.7 * s.value) / (0.3 * s.value)) * ' . $weight['age'] . ' + \
+				IF(t.num_replies < 200, t.num_replies / 200, 1) * ' . $weight['length'] . ' + \
+				IF(m.ID_MSG = t.ID_FIRST_MSG, 1, 0) * ' . $weight['first_message'] . ' + \
+				IF(t.is_sticky = 0, 0, 1) * ' . $weight['sticky'] . ' \
+			) / ' . $weight_total . ') AS relevance \
+		FROM ', $db_prefix, 'messages AS m, ', $db_prefix, 'topics AS t, ', $db_prefix, 'settings AS s \
+		WHERE t.ID_TOPIC = m.ID_TOPIC \
+			AND s.variable = \'maxMsgID\' \
+			AND m.ID_MSG BETWEEN $start AND $end
+	sql_attr_uint = ID_TOPIC
+	sql_attr_uint = ID_BOARD
+	sql_attr_uint = ID_MEMBER
+	sql_attr_timestamp = poster_time
+	sql_attr_timestamp = relevance
+	sql_attr_timestamp = num_replies
+	sql_query_info = \
+		SELECT * \
+		FROM ', $db_prefix, 'messages \
+		WHERE ID_MSG = $id
+}
+
+source smf_delta_source : smf_source
+{
+	sql_query_pre = ', isset($db_character_set) ? 'SET NAMES ' . $db_character_set : '', '
+	sql_query_range = \
+		SELECT s1.value, s2.value \
+		FROM ', $db_prefix, 'settings AS s1, ', $db_prefix, 'settings AS s2 \
+		WHERE s1.variable = \'sphinx_indexed_msg_until\' \
+			AND s2.variable = \'maxMsgID\'
+}
+
+index smf_base_index
+{
+	source = smf_source
+	path = ', $modSettings['sphinx_data_path'], '/smf_sphinx_base.index', empty($modSettings['sphinx_stopword_path']) ? '' : '
+	stopwords = ' . $modSettings['sphinx_stopword_path'], '
+	html_strip = 1
+	min_word_len = 2
+	charset_type = ', isset($db_character_set) && $db_character_set === 'utf8' ? 'utf-8' : 'sbcs', '
+	charset_table = 0..9, A..Z->a..z, _, a..z
+}
+
+index smf_delta_index : smf_base_index
+{
+	source = smf_delta_source
+	path = ', $modSettings['sphinx_data_path'], '/smf_sphinx_delta.index
+}
+
+index smf_index
+{
+	type = distributed
+	local = smf_base_index
+	local = smf_delta_index
+}
+
+indexer
+{
+	mem_limit = ', (int) $modSettings['sphinx_indexer_mem'], 'M
+}
+
+searchd
+{
+	port = ', (int) $modSettings['sphinx_searchd_port'], '
+	log = ', $modSettings['sphinx_log_path'], '/searchd.log
+	query_log = ', $modSettings['sphinx_log_path'], '/query.log
+	read_timeout = 5
+	max_children = 30
+	pid_file = ', $modSettings['sphinx_data_path'], '/searchd.pid
+	max_matches = 1000
+}
+';
+
+	obExit(false, false, false);
+}
 ?>

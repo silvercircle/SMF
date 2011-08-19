@@ -230,12 +230,11 @@ function template_results()
 		echo '
 	<div id="search_results">
 		<div class="cat_bar">
-			<h3 class="catbg">
+			<h3>
 				', $txt['search_adjust_query'], '
 			</h3>
 		</div>
-		<span class="upperframe"><span></span></span>
-		<div class="roundframe">';
+		<div class="blue_container">';
 
 		// Did they make any typos or mistakes, perhaps?
 		if (isset($context['did_you_mean']))
@@ -263,7 +262,6 @@ function template_results()
 		echo '
 			</form>
 		</div>
-		<span class="lowerframe"><span></span></span>
 	</div><br />';
 	}
 
@@ -275,17 +273,15 @@ function template_results()
 	<form action="', $scripturl, '?action=quickmod" method="post" accept-charset="', $context['character_set'], '" name="topicForm">';
 
 	echo '
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="floatright">';
-					if (!empty($options['display_quick_mod']))
-					echo '
-							<input type="checkbox" onclick="invertAll(this, this.form, \'topics[]\');" class="input_check" />';
+		<h1 class="bigheader">
+			<span class="floatright">';
+				if (!empty($options['display_quick_mod']))
 				echo '
-				</span>
-				<span class="ie6_header floatleft"><img src="' . $settings['images_url'] . '/buttons/search.gif" alt="" />&nbsp;', $txt['mlist_search_results'],':&nbsp;',$context['search_params']['search'],'</span>
-			</h3>
-		</div>
+						<input type="checkbox" onclick="invertAll(this, this.form, \'topics[]\');" class="input_check" />';
+			echo '
+			</span>
+			', $txt['mlist_search_results'],':&nbsp;',$context['search_params']['search'],'
+		</h1>
 		<div class="pagesection">
 			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
 		</div>';
@@ -299,37 +295,38 @@ function template_results()
 				$color_class .= 'lockedbg';
 
 			echo '
-			<div class="search_results_posts">
-			<div class="', $message['alternate'] == 0 ? 'windowbg' : 'windowbg2', ' core_posts">
-				<span class="topslice"><span></span></span>
-				<div class="content flow_auto">';
+			<div class="blue_container smallpadding" style="margin-bottom:10px;">
+			<div class="core_posts">
+				<div class="flow_auto">';
 
 			foreach ($topic['matches'] as $message)
 			{
-				echo '
-					<div class="topic_details floatleft" style="width: 94%">
-						<div class="counter">', $message['counter'], '</div>
-						<h5>', $topic['board']['link'], ' / <a href="', $scripturl, '?topic=', $topic['id'], '.msg', $message['id'], '#msg', $message['id'], '">', $message['subject_highlighted'], '</a></h5>
-						<span class="smalltext">&#171;&nbsp;',$txt['by'],'&nbsp;<strong>', $message['member']['link'], '</strong>&nbsp;',$txt['on'],'&nbsp;<em>', $message['time'], '</em>&nbsp;&#187;</span>
-					</div>';
+				if(!empty($message['member']['avatar']['image']))
+					echo '
+					<div class="user" style="float:left;"><div class="avatar" style="margin-right:10px;">',$message['member']['avatar']['image'],'</div></div>';
+				else
+					echo '
+					<div class="user" style="float:left;"><div class="avatar" style="margin:0 10px 0 0;"><a href="', $scripturl, '?action=profile;u=', $message['member']['id'], '">
+					<img src="',$settings['images_url'],'/unknown.png" alt="avatar" /></a></div></div>';
 
+				echo '<div style="margin-left:90px;">';
 				if (!empty($options['display_quick_mod']))
 				{
 					echo '
-					<div class="floatright">
-					<input type="checkbox" name="topics[]" value="', $topic['id'], '" class="input_check" />
-					</div>';
+						<div class="floatright">
+						<input type="checkbox" name="topics[]" value="', $topic['id'], '" class="input_check" />
+						</div>';
 				}
+				echo '<strong>',$message['counter'], '. ','<a href="', $scripturl, '?topic=', $topic['id'], '.msg', $message['id'], '#msg', $message['id'], '">', $message['subject_highlighted'], '</a> ',$txt['in'], ': ',$topic['board']['link'],'</strong><br />
+				<div class="smalltext">',$txt['topic'], ' ',$txt['by'],'&nbsp;<strong>', $message['member']['link'], '</strong>,&nbsp;<em>', $message['time'], '</em>&nbsp;</div>';
 
 				if ($message['body_highlighted'] != '')
-					echo '
-					<br class="clear" />
-					<div class="list_posts double_height">', $message['body_highlighted'], '</div>';
+					echo '<hr style="margin:2px 0;">
+					<div class="smalltext">', $message['body_highlighted'], '</div>';
 			}
 
-			echo '
+			echo '</div>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 		</div>';
 
@@ -343,7 +340,7 @@ function template_results()
 		if (!empty($options['display_quick_mod']) && !empty($context['topics']))
 		{
 			echo '
-			<div class="middletext titlebg2" style="padding: 4px;">
+			<div class="middletext blue_container" style="padding: 4px;">
 				<div class="floatright">
 					<select name="qaction"', $context['can_move'] ? ' onchange="this.form.moveItTo.disabled = (this.options[this.selectedIndex].value != \'move\');"' : '', '>
 						<option value="">--------</option>', $context['can_remove'] ? '
