@@ -1,4 +1,3 @@
-
 	About this repo:
 	----------------
 	
@@ -14,10 +13,11 @@ Some things that are already implemented or planned are:
 
 * A like system
 * A tagging system
-* Topic rating
 * A completely new theme, HTML 5 compliant and targeted at modern 
   browsers
 * Ajax enhancements for previewing member profiles, topics and more.
 * dynamic auto-refreshing relative time stamps.
+* sphinx search support
+* removed legacy code. This will be PHP5 and MySQL only
 
 You can follow the development here: http://forum.miranda.or.at
