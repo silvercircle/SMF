@@ -57,6 +57,8 @@ $txt['allow_disableAnnounce'] = 'Allow users to disable announcements';
 $txt['disallow_sendBody'] = 'Don\'t allow post text in notifications';
 $txt['queryless_urls'] = 'Search engine friendly URLs<div class="smalltext"><strong>Apache/Lighttpd only!</strong></div>';
 $txt['embed_GA'] = 'Embed Google Analytics code into theme\'s footer<div class="smalltext">Note: you also MUST set the tracker ID and domain name in the next fields.</div>';
+$txt['fb_appid'] = 'Your Facebook APP ID - you need this to enable theFacebook Like button on the forum index.';
+$txt['twitter_id'] = 'Our twitter ID. If you fill this out, a follow button will be placed in the side bar allowing visitors to follow you on Twitter';
 $txt['GA_tracker_id'] = 'Your Google Analytics tracker id';
 $txt['GA_domain_name'] = 'Your Google Analytics domain name<div class="smallfont">Must match the domain you have set in GA. Specify this without the leading http:// and without trailing slashes.';
 $txt['max_image_width'] = 'Max width of posted pictures (0 = disable)';

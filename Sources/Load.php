@@ -509,6 +509,7 @@ function loadUserSettings()
 		'ignoreusers' => !empty($user_settings['pm_ignore_list']) ? explode(',', $user_settings['pm_ignore_list']) : array(),
 		'warning' => isset($user_settings['warning']) ? $user_settings['warning'] : 0,
 		'likesgiven' => isset($user_settings['likes_given']) ? $user_settings['likes_given'] : 0,
+		'likesreceived' => isset($user_settings['likes_received']) ? $user_settings['likes_received'] : 0,
 		'permissions' => array(),
 	);
 	

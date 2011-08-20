@@ -221,7 +221,7 @@ em
 /* Default font sizes: small (8pt), normal (10pt), and large (14pt). */
 .smalltext, tr.smalltext th
 {
-	font-size: 0.95em;
+	font-size: 12px;
 }
 .middletext
 {
@@ -662,65 +662,33 @@ a.moderation_link, a.moderation_link:visited
 	background: white url(../images/openid.gif) no-repeat;
 	padding-left: 18px;
 }
-
-/* a descriptive style */
-.description, .description_board, .plainbox
-{
-	padding: 0.5em 1em;
-	font-size: 0.9em;
-	line-height: 1.4em;
-	border: 1px solid #bbb;
-	background: #f5f5f0;
-	margin: 0.2em 1px 1em 1px;
-}
-.description_board
-{
-	margin: 1em 1px 0 1px;
-}
-
-/* an informative style */
-.information
-{
-	padding: 0.5em 1em;
-	font-size: 0.9em;
-	line-height: 1.2em;
-	background: #f6f6f6;
-	margin: 2px 0 1em 0;
-}
-.information p
-{
-	padding: 1em;
-	margin: 0;
-}
 p.para2
 {
 	padding: 1em 0 3.5em 0;
 	margin: 0;
 }
-/* AJAX notification bar
-------------------------------------------------------- */
-#ajax_in_progress
-{
-	background: url(../images/theme/loadingbar.png) repeat-x;
-	color: #f96f00;
-	text-align: center;
-	font-size: 16pt;
-	padding: 8px;
-	width: 100%;
-	height: 66px;
-	line-height: 25px;
-	position: fixed;
-	top: 0;
-	left: 0;
+/* common list */
+dl.common {
+	clear: right;
+	overflow: auto;
+	margin: 0;
+	padding: 0;
 }
-
-#ajax_in_progress a
+dl.common dt
 {
-	color: orange;
-	text-decoration: underline;
-	font-size: smaller;
+	width: 40%;
+	float: left;
+	margin: 0;
+	padding: 0;
+	clear: both;
+}
+dl.common dd
+{
+	width: 56%;
 	float: right;
-	margin-right: 20px;
+	overflow: auto;
+	margin: 0;
+	padding: 0;
 }
 
 /* Lists with settings use these a lot.
@@ -748,7 +716,7 @@ dl.settings dt.settings_title
 	padding: 5px 0 0 0;
 	font-weight: bold;
 	clear: both;
-}
+}                     2
 dl.settings dt.windowbg
 {
 	width: 98%;
@@ -1226,16 +1194,19 @@ ul#navigation li
 	float:right;
 	margin-left:5px;
 	min-height:500px;
+	padding:1px;
 }
 #sbtoggle {
  float:right;
  position:relative;
  right:-20px;
- top:10px;
+ top:-10px;
  width:12px;height:20px;
  background:white;
  border-radius:0 4px 4px 0;
  cursor:pointer;
+}
+#container {
 }
 /* the main title, always stay at 45 pixels in height! */
 h1.forumtitle
@@ -1270,7 +1241,7 @@ h3, h4
 	overflow:hidden;
 	font-size:12px;
 }
-#upper_section ul li.greeting
+li.greeting
 {
 	font-size: 1.3em;
 	font-weight: bold;
@@ -1304,14 +1275,19 @@ div#upper_section div.user
 	font-size:11px;
 	width:auto;
 }
+#sidebar div.user {
+	display:block;
+	font-size:12px;
+	margin:3px;
+}
 div.user .avatar img {
-	border:1px solid blue;
+	border:2px solid #aaa;
 	padding:1px;
 	background-color:#aaa;
 	border-radius:0;
 	max-height:63px;
 	width:auto;
-	margin-left:10px;
+	margin-right:10px;
 }
 div#upper_section div.user div
 {
@@ -2604,6 +2580,12 @@ tr.titlebg td
 {
 	text-shadow:1px 1px #ccc !important;
 }
+#boardindex_table table tr.brow > td:first-child, #boardindex_table table tr.brow > th:first-child {
+	border-left: 1px solid #d5ecfa !important;
+}
+#boardindex_table table tr.brow > td:last-child, #boardindex_table table tr.brow > th:last-child {
+	border-right: 1px solid #d5ecfa !important;
+}
 #main_admsection .catbg {
 	height:18px;
 	margin:0;
@@ -3778,14 +3760,6 @@ div.bmbar > div.title {
 div.fb_tweet {
     vertical-align:bottom;
     padding:3px;
-}
-
-.twitter-share-button {
-/*    max-height:25px !important;
-    min-height:25px !important;*/
-    border:0 !important;
-    vertical-align:top;
-    float:right;
 }
 
 .bbc_editor_button:hover {

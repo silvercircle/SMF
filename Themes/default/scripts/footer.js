@@ -949,7 +949,6 @@ function setBusy(mode)
 };
 
 var menu_active = false;
-var sidebar_content_loaded = false;
 
 jQuery(document).ready(function() {
 	
@@ -1102,8 +1101,8 @@ jQuery(document).ready(function() {
 			createCookie('smf_sidebar_disabled', 1, 300);
 		}
 		else {
-			if(!sidebar_content_loaded)
-				sendRequest(smf_scripturl, 'action=xmlhttp;sa=loadsb', $('#sidebar'));
+			//if(!sidebar_content_loaded)
+			//	sendRequest(smf_scripturl, 'action=xmlhttp;sa=loadsb', $('#sidebar'));
 			$('#container').animate({marginRight: sideBarWidth + 15 + 'px'}, 50, function() {
 				$('#sidebar').fadeIn();
 			});
@@ -1227,7 +1226,7 @@ function response(ele)
 					return;
 	
 				if(ele.attr('id') == 'sidebar') {
-					$('#sidebar').html(req.responseText);
+					ele.html(req.responseText);
 					sidebar_content_loaded = true;
 					return;
 				}

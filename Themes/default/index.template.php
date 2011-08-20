@@ -87,8 +87,6 @@ function template_html_above()
 	//		echo '
 	//<link rel="stylesheet" type="text/css" href="', $settings['default_theme_url'], '/css/', $cssfix, '.css" />';
 
-	setcookie('smf_jsavail', 0, time() + 86400, '/');
-	
 	// RTL languages require an additional stylesheet.
 	if ($context['right_to_left'])
 		echo '
@@ -125,13 +123,13 @@ var textSizeMax = 16;
 var textSizeMin = 8;
 var textSizeDefault = 10;
 var sideBarWidth = 250;
+var sidebar_content_loaded = 0;
 var cookie = readCookie(\'SMF_textsize\');
 var textsize = cookie ? parseInt(cookie) : textSizeDefault;
 var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
 var t2 = document.createElement(\'SCRIPT\');
 t2.type = "text/javascript";
 t2.async = true;
-createCookie(\'smf_jsavail\', 1, 1);
 t2.src = "',$settings['theme_url'],'/scripts/footer.js?ver=1.1.0";
 anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
@@ -194,68 +192,6 @@ function template_body_above()
 	<div id="upper_section" class="middletext"><div style="float:left;color:#ddd;text-shadow:black 2px 2px 10px;font-size:35px;font-family:Comic Sans MS;padding:20px 30px;"><strong><em>SMF pLayGround</em></strong><br />
 		<div style="font-size:16px;height:26px;padding-top:20px;">...Test</div>
 	</div>';
-
-	// If the user is logged in, display stuff like their name, new messages, etc.
-	// for the logo -> <img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" />
-	if ($context['user']['is_logged'])
-	{
-		echo '<div class="user" style="padding:5px 5px 0 0;">';
-
-		if (!empty($context['user']['avatar']))
-			echo '
-				<div class="avatar">', $context['user']['avatar']['image'], '</div>';
-		echo '
-				<div><ul class="reset">
-					<li class="greeting">', $txt['hello_member_ndt'], ' <span>', $context['user']['name'], '</span>&nbsp;&nbsp;<a href="',$scripturl,'?action=logout;',$context['session_var'],'=',$context['session_id'], '" style="font-size:11px;">[',$txt['logout'], ']</a></li>
-					<li><a href="', $scripturl, '?action=unread">', $txt['unread_since_visit'], '</a></li>
-					<li><a href="', $scripturl, '?action=unreadreplies">', $txt['show_unread_replies'], '</a></li>
-					<li>', $context['current_time'], '</li></ul></div>';
-
-		echo '<div style="margin-top:3px;"><ul class="reset"><li></li>';
-		// Is the forum in maintenance mode?
-		if ($context['in_maintenance'] && $context['user']['is_admin'])
-			echo '
-					<li class="notice">', $txt['maintain_mode_on'], '</li>';
-
-		// Are there any members waiting for approval?
-		if (!empty($context['unapproved_members']))
-			echo '
-					<li>', $context['unapproved_members'] == 1 ? $txt['approve_thereis'] : $txt['approve_thereare'], ' <a href="', $scripturl, '?action=admin;area=viewmembers;sa=browse;type=approve">', $context['unapproved_members'] == 1 ? $txt['approve_member'] : $context['unapproved_members'] . ' ' . $txt['approve_members'], '</a> ', $txt['approve_members_waiting'], '</li>';
-
-		if (!empty($context['open_mod_reports']) && $context['show_open_reports'])
-			echo '
-					<li><a href="', $scripturl, '?action=moderate;area=reports">', sprintf($txt['mod_reports_waiting'], $context['open_mod_reports']), '</a></li>';
-
-		echo '</ul></div></div>';
-	}
-	// Otherwise they're a guest - this time ask them to either register or login - lazy bums...
-	elseif (!empty($context['show_login_bar']))
-	{
-		echo '
-				<div class="user">
-				<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/sha1.js"></script>
-				<div class="loginbar"><form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
-					<div style="float:left;margin:5px;">', sprintf($txt['welcome_guest'], $txt['guest_title']), '</div>
-					<div style="margin:5px;"><input type="text" name="user" size="10" class="input_text" />
-					<input type="password" name="passwrd" size="10" class="input_password" />
-					<select name="cookielength">
-						<option value="60">', $txt['one_hour'], '</option>
-						<option value="1440">', $txt['one_day'], '</option>
-						<option value="10080">', $txt['one_week'], '</option>
-						<option value="43200">', $txt['one_month'], '</option>
-						<option value="-1" selected="selected">', $txt['forever'], '</option>
-					</select>
-					<input type="submit" value="', $txt['login'], '" class="button_submit" /><br />
-					<div class="info">', $txt['quick_login_dec'], '</div></div>';
-
-		if (!empty($modSettings['enableOpenID']))
-			echo '
-					<br /><input type="text" name="openid_identifier" id="openid_url" size="25" class="input_text openid_login" />';
-
-		echo '
-					<input type="hidden" name="hash_passwrd" value="" />
-				</form></div></div>';
-	}
 
 	echo '
 			<div class="news normaltext">';
@@ -334,8 +270,9 @@ function template_body_above()
 				</noscript>';
 	echo '</form><div style="clear:both;"></div>';
 	$sidebar_vis = (isset($_COOKIE['smf_sidebar_disabled']) && $_COOKIE['smf_sidebar_disabled'] == 1) ? false : true;
-	echo '<div id="sidebar" class="blue_container blue_topbar" style="width:250px;display:',$sidebar_allowed ? 'normal' : 'none',';">';
-		if(($sidebar_allowed && $sidebar_vis) || (isset($_COOKIE['smf_jsavail']) && !$_COOKIE['smf_jsavail']))
+	echo '<div id="sidebar" class="blue_container" style="width:250px;display:',$sidebar_allowed ? 'normal' : 'none',';">';
+		//if(($sidebar_allowed && $sidebar_vis) || (isset($_COOKIE['smf_jsavail']) && !$_COOKIE['smf_jsavail']))
+		if($sidebar_allowed)
 			template_sidebar_content();
 	echo '</div>
 	      <div id="container" style="margin-right:',$sidebar_allowed ? '265px' : '0',';">
@@ -384,11 +321,10 @@ function template_body_below()
 		sa.parentNode.insertBefore(ga, sa);
 		';
 	}
-	/*
 	if($fbxml) {
 			echo '
 			window.fbAsyncInit = function() {
-   				FB.init({appId: \'109862169045977\', status: true, cookie: true, xfbml: true});
+   				FB.init({appId: \'',$modSettings['fb_appid'],'\', status: true, cookie: true, xfbml: true});
   			};
   			(function() {
     			var e = document.createElement(\'script\'); e.async = true;
@@ -407,7 +343,6 @@ function template_body_below()
 			anchor.parentNode.insertBefore(t1, anchor);
 			';
 	}
-	*/
 	if($plusone) {
 		echo '
 		var t4 = document.createElement(\'SCRIPT\');
@@ -661,10 +596,9 @@ function socialbar($l, $t)
 {
 	global $social_privacy;
 	
-	if(1|| $social_privacy) {
-		socialbar_passive($l, $t);
-		return;
-	}
+	socialbar_passive($l, $t);
+	return;
+	
 	echo '<div class="bmbar">';
 	async_like_and_tweet($l);
 	echo '<div style="clear:both;"></div></div>';	
@@ -695,8 +629,179 @@ function socialbar_passive($l, $t)
 
 function template_sidebar_content()
 {
-	global $context, $user_info, $txt, $modSettings;
+	global $context, $txt, $modSettings, $scripturl, $settings, $user_info, $fbxml, $twitter_widgets, $plusone, $options;
 	
-	echo "This is the sidebar<br />Please, I need content :)";
+	echo '<script>
+		   // <![CDATA[
+		   sidebar_content_loaded = 1;
+           // ]]>
+		  </script>
+		  <div class="cat_bar">
+		<h3>User panel</h3>
+		</div>';
+		
+	// If the user is logged in, display stuff like their name, new messages, etc.
+	// for the logo -> <img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" />
+	if ($context['user']['is_logged'])
+	{
+		echo '<div class="user" style="padding:5px 5px 0 0;">';
+
+		if (!empty($context['user']['avatar']))
+			echo '
+				<div class="avatar floatleft">', $context['user']['avatar']['image'], '</div>';
+		echo '
+				 <ul class="reset">
+					<li class="greeting">', $context['user']['name'], '</li>
+					<li class="smalltext">',$user_info['posts'],' ',$txt['posts'],'<li>
+					<li class="smalltext">',$user_info['likesreceived'],' ',$txt['likes'],'<li>
+				 </ul>
+				 <ul class="clear reset">
+					<li><a href="', $scripturl, '?action=unread">', $txt['unread_since_visit'], '</a></li>
+					<li><a href="', $scripturl, '?action=unreadreplies">', $txt['show_unread_replies'], '</a></li>
+				 </ul>';
+
+		echo '<div style="margin-top:3px;">
+				<ul class="reset"><li></li>';
+		// Is the forum in maintenance mode?
+		if ($context['in_maintenance'] && $context['user']['is_admin'])
+			echo '
+					<li class="notice">', $txt['maintain_mode_on'], '</li>';
+
+		// Are there any members waiting for approval?
+		if (!empty($context['unapproved_members']))
+			echo '
+					<li>', $context['unapproved_members'] == 1 ? $txt['approve_thereis'] : $txt['approve_thereare'], ' <a href="', $scripturl, '?action=admin;area=viewmembers;sa=browse;type=approve">', $context['unapproved_members'] == 1 ? $txt['approve_member'] : $context['unapproved_members'] . ' ' . $txt['approve_members'], '</a> ', $txt['approve_members_waiting'], '</li>';
+
+		if (!empty($context['open_mod_reports']) && $context['show_open_reports'])
+			echo '
+					<li><a href="', $scripturl, '?action=moderate;area=reports">', sprintf($txt['mod_reports_waiting'], $context['open_mod_reports']), '</a></li>';
+
+		echo '</ul></div></div>';
+	}
+	// Otherwise they're a guest - this time ask them to either register or login - lazy bums...
+	elseif (!empty($context['show_login_bar']))
+	{
+		echo '
+				<div class="user">
+				<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/sha1.js"></script>
+				<div class="loginbar"><form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
+					<div style="float:left;margin:5px;">', sprintf($txt['welcome_guest'], $txt['guest_title']), '</div>
+					<div style="margin:5px;"><input type="text" name="user" size="10" class="input_text" />
+					<input type="password" name="passwrd" size="10" class="input_password" />
+					<select name="cookielength">
+						<option value="60">', $txt['one_hour'], '</option>
+						<option value="1440">', $txt['one_day'], '</option>
+						<option value="10080">', $txt['one_week'], '</option>
+						<option value="43200">', $txt['one_month'], '</option>
+						<option value="-1" selected="selected">', $txt['forever'], '</option>
+					</select>
+					<input type="submit" value="', $txt['login'], '" class="button_submit" /><br />
+					<div class="info">', $txt['quick_login_dec'], '</div></div>';
+
+		if (!empty($modSettings['enableOpenID']))
+			echo '
+					<br /><input type="text" name="openid_identifier" id="openid_url" size="25" class="input_text openid_login" />';
+
+		echo '
+					<input type="hidden" name="hash_passwrd" value="" />
+				</form></div></div>';
+	}
+	// Show statistical style information...
+	if ($settings['show_stats_index'] && isset($context['show_stats']))
+	{
+		echo '
+			<div class="cat_bar">
+				<h3>
+					<a href="', $scripturl, '?action=stats">', $txt['forum_stats'], '</a>
+				</h3>
+			</div>
+			<div class="smallpadding smalltext">
+				<dl class="common">
+				 <dt>', $txt['posts'], ': </dt><dd class="righttext">',$context['common_stats']['total_posts'], '</dd>
+				 <dt>', $txt['topics'], ': </dt><dd class="righttext">', $context['common_stats']['total_topics'], '</dd>
+				 <dt>', $txt['members'], ': </dt><dd class="righttext">', $context['common_stats']['total_members'], '</dd>';
+				 if(!empty($settings['show_latest_member']))
+				 	echo '<dt>', $txt['latest_member'] . ': </dt><dd class="righttext"><strong>', $context['common_stats']['latest_member']['link'] . '</strong></dd>';
+				 echo '</dl>';
+				 if(!empty($context['latest_post']))
+				 	echo '    ', $txt['latest_post'] . ': <br /><a href="',$context['latest_post']['href'],'" title="',$context['latest_post']['subject'], '">',shorten_subject($context['latest_post']['subject'], 20),'</a> ( ' . $context['latest_post']['time'] . ' )';
+				echo '<div class="righttext"><a href="', $scripturl, '?action=recent">', $txt['recent_view'], '</a>', $context['show_stats'] ? '<br />
+				<a href="' . $scripturl . '?action=stats">' . $txt['more_stats'] . '</a>' : '', '</div>
+			</div>';
+	}
+	
+	// "Users online" - in order of activity.
+	if(isset($context['show_who'])) {
+		echo '
+				<div class="cat_bar">
+					<h3>
+						', $context['show_who'] ? '<a href="' . $scripturl . '?action=who' . '">' : '', $txt['online_users'], $context['show_who'] ? '</a>' : '', '
+					</h3>
+				</div>
+				<div class="smallpadding smalltext">
+					', $context['show_who'] ? '<a href="' . $scripturl . '?action=who">' : '', comma_format($context['num_guests']), ' ', $context['num_guests'] == 1 ? $txt['guest'] : $txt['guests'], ', ' . comma_format($context['num_users_online']), ' ', $context['num_users_online'] == 1 ? $txt['user'] : $txt['users'];
+
+		// Handle hidden users and buddies.
+		$bracketList = array();
+		if ($context['show_buddies'])
+			$bracketList[] = comma_format($context['num_buddies']) . ' ' . ($context['num_buddies'] == 1 ? $txt['buddy'] : $txt['buddies']);
+		if (!empty($context['num_spiders']))
+			$bracketList[] = comma_format($context['num_spiders']) . ' ' . ($context['num_spiders'] == 1 ? $txt['spider'] : $txt['spiders']);
+		if (!empty($context['num_users_hidden']))
+			$bracketList[] = comma_format($context['num_users_hidden']) . ' ' . $txt['hidden'];
+
+		if (!empty($bracketList))
+			echo ' (' . implode(', ', $bracketList) . ')';
+
+		echo $context['show_who'] ? '</a>' : '', '
+				<p class="inline smalltext">';
+
+		// Assuming there ARE users online... each user in users_online has an id, username, name, group, href, and link.
+		if (!empty($context['users_online']))
+		{
+			echo '
+					', sprintf($txt['users_active'], $modSettings['lastActive']), ':<br />', implode(', ', $context['list_users_online']);
+
+			// Showing membergroups?
+			if (!empty($settings['show_group_key']) && !empty($context['membergroups']))
+				echo '
+					<br />[' . implode(']&nbsp;&nbsp;[', $context['membergroups']) . ']';
+		}
+
+		echo '
+				</p>
+				<p class="last smalltext">
+					', $txt['most_online_today'], ': <strong>', comma_format($modSettings['mostOnlineToday']), '</strong>.
+					', $txt['most_online_ever'], ': ', comma_format($modSettings['mostOnline']), ' (', timeformat($modSettings['mostDate']), ')
+				</p></div>';
+	}
+	
+	if(($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar']))) {
+		echo '<div class="cat_bar">
+			<h3>
+				Socialize
+			</h3>
+	      </div><div class="mediumpadding lefttext">
+		  	<script type="text/javascript">
+			//<![CDATA[
+			';
+			if(isset($modSettings['fb_appid']) && !empty($modSettings['fb_appid'])) {
+       			$fbxml = 1;
+       			echo '(function() {
+        			document.write(\'<div><fb:like href="',$scripturl,'" layout="button_count" send="true" show_faces="false" action="recommend" font="verdana"></fb:like></div><br />\');
+    			})();';
+			}
+    		echo '//]]>
+       		</script>';
+			$twitter_widgets = 1;
+			$plusone++;
+			echo '
+   	    	<a href="http://twitter.com/share" style="border:none;" class="twitter-share-button" data-count="horizontal" data-url="',$scripturl,'"></a>
+			<div style="float:right;"><div class="g-plusone" data-href="',$scripturl,'" data-size="medium" data-count="true"></div></div>';
+			if(isset($modSettings['twitter_id']) && !empty($modSettings['twitter_id']))
+				echo '<br /><br /><a href="http://twitter.com/',$modSettings['twitter_id'],'" class="twitter-follow-button" data-show-count="false">Follow @',$modSettings['twitter_id'],'</a>';
+       		echo '<noscript>This requires JavaScript</noscript>
+       		<div class="clear"></div></div>';
+	}
 }
 ?>

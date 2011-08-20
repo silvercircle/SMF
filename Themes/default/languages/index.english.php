@@ -44,6 +44,7 @@ $txt['forum_index'] = '%1$s - Index';
 $txt['members'] = 'Members';
 $txt['board_name'] = 'Board name';
 $txt['posts'] = 'Posts';
+$txt['likes'] = 'Likes';
 
 $txt['member_postcount'] = 'Posts';
 $txt['no_subject'] = '(No subject)';
@@ -163,7 +164,7 @@ $txt['location'] = 'Location';
 $txt['gender'] = 'Gender';
 $txt['date_registered'] = 'Date Registered';
 
-$txt['recent_view'] = 'View the most recent posts on the forum.';
+$txt['recent_view'] = 'View recent content.';
 $txt['recent_updated'] = 'is the most recently updated topic';
 
 $txt['male'] = 'Male';

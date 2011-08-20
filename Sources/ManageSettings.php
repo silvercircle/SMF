@@ -468,6 +468,8 @@ function ModifyBasicSettings($return_config = false)
 			array('check', 'embed_GA'),
 			array('text', "GA_tracker_id"),
 			array('text', 'GA_domain_name'),
+			array('text', 'fb_appid'),
+			array('text', 'twitter_id'),
 		'',
 			// Number formatting, timezones.
 			array('text', 'time_format'),

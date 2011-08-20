@@ -127,7 +127,7 @@ function template_main()
 		$alternate = 1;
 		echo '
 			<tbody ',$category['is_collapsed'] ? 'style="display:none;" ' : '', 'class="content" id="category_', $category['id'], '_boards">
-			<tr>
+			<tr class="brow">
 				<td class="glass"></td>
 				<td class="glass">',$txt['board'],'</td>
 				<td class="glass centertext">',$txt['content_label'],'</td>
@@ -143,7 +143,7 @@ function template_main()
 				$_c = $alternate ? 'windowbg' : 'windowbg2';
 				$alternate = !$alternate;
 				echo '
-				<tr id="board_', $board['id'], '" class="',$_c,'">
+				<tr id="board_', $board['id'], '" class="',$_c,' brow">
 					<td class="icon">
 						<a href="', ($board['is_redirect'] || $context['user']['is_guest'] ? $board['href'] : $scripturl . '?action=unread;board=' . $board['id'] . '.0;children'), '">';
 
@@ -380,71 +380,6 @@ function template_info_center()
 		echo '
 			</div>';
 	}
-
-	// Show statistical style information...
-	if ($settings['show_stats_index'])
-	{
-		echo '
-			<div class="title_barIC">
-				<h4 class="titlebg">
-					<span class="ie6_header floatleft">
-						<a href="', $scripturl, '?action=stats">', $txt['forum_stats'], '</a>
-					</span>
-				</h4>
-			</div>
-			<div class="yellow_container mediummargin smalltext">
-				', $context['common_stats']['total_posts'], ' ', $txt['posts_made'], ' ', $txt['in'], ' ', $context['common_stats']['total_topics'], ' ', $txt['topics'], ' ', $txt['by'], ' ', $context['common_stats']['total_members'], ' ', $txt['members'], '. ', !empty($settings['show_latest_member']) ? $txt['latest_member'] . ': <strong> ' . $context['common_stats']['latest_member']['link'] . '</strong>' : '', '<br />
-				', (!empty($context['latest_post']) ? $txt['latest_post'] . ': <strong>&quot;' . $context['latest_post']['link'] . '&quot;</strong>  ( ' . $context['latest_post']['time'] . ' )<br />' : ''), '
-				<a href="', $scripturl, '?action=recent">', $txt['recent_view'], '</a>', $context['show_stats'] ? '<br />
-				<a href="' . $scripturl . '?action=stats">' . $txt['more_stats'] . '</a>' : '', '
-			</div>';
-	}
-
-	// "Users online" - in order of activity.
-	echo '
-			<div class="title_barIC">
-				<h4 class="titlebg">
-					<span class="ie6_header floatleft">
-						', $context['show_who'] ? '<a href="' . $scripturl . '?action=who' . '">' : '', $txt['online_users'], $context['show_who'] ? '</a>' : '', '
-					</span>
-				</h4>
-			</div>
-			<div class="yellow_container mediummargin smalltext">
-				', $context['show_who'] ? '<a href="' . $scripturl . '?action=who">' : '', comma_format($context['num_guests']), ' ', $context['num_guests'] == 1 ? $txt['guest'] : $txt['guests'], ', ' . comma_format($context['num_users_online']), ' ', $context['num_users_online'] == 1 ? $txt['user'] : $txt['users'];
-
-	// Handle hidden users and buddies.
-	$bracketList = array();
-	if ($context['show_buddies'])
-		$bracketList[] = comma_format($context['num_buddies']) . ' ' . ($context['num_buddies'] == 1 ? $txt['buddy'] : $txt['buddies']);
-	if (!empty($context['num_spiders']))
-		$bracketList[] = comma_format($context['num_spiders']) . ' ' . ($context['num_spiders'] == 1 ? $txt['spider'] : $txt['spiders']);
-	if (!empty($context['num_users_hidden']))
-		$bracketList[] = comma_format($context['num_users_hidden']) . ' ' . $txt['hidden'];
-
-	if (!empty($bracketList))
-		echo ' (' . implode(', ', $bracketList) . ')';
-
-	echo $context['show_who'] ? '</a>' : '', '
-			<p class="inline smalltext">';
-
-	// Assuming there ARE users online... each user in users_online has an id, username, name, group, href, and link.
-	if (!empty($context['users_online']))
-	{
-		echo '
-				', sprintf($txt['users_active'], $modSettings['lastActive']), ':<br />', implode(', ', $context['list_users_online']);
-
-		// Showing membergroups?
-		if (!empty($settings['show_group_key']) && !empty($context['membergroups']))
-			echo '
-				<br />[' . implode(']&nbsp;&nbsp;[', $context['membergroups']) . ']';
-	}
-
-	echo '
-			</p>
-			<p class="last smalltext">
-				', $txt['most_online_today'], ': <strong>', comma_format($modSettings['mostOnlineToday']), '</strong>.
-				', $txt['most_online_ever'], ': ', comma_format($modSettings['mostOnline']), ' (', timeformat($modSettings['mostDate']), ')
-			</p></div>';
 
 	// If they are logged in, but statistical information is off... show a personal message bar.
 	if ($context['user']['is_logged'] && !$settings['show_stats_index'])

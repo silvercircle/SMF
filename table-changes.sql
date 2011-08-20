@@ -20,6 +20,12 @@ CREATE TABLE {$db_prefix}messages_cache (
 #
 # Table structure for table `likes`
 #
+# id_msg = post (or in the future), content id
+# ctype = content type, at the moment ctype = 1 (post) is the only supported type.
+#
+# id_user - member who gave the like
+# id_receiver - member who receives it (= owner of the content)
+#
 
 CREATE TABLE {$db_prefix}likes (
 	id_msg int(10) unsigned NOT NULL default '0',
@@ -37,6 +43,9 @@ CREATE TABLE {$db_prefix}likes (
 #
 # Table structure for table `like_cache`
 #
+# caches the 4 most recent user_ids / user names for fast retrieval
+# of the like status message (e.g. You, foo, bar and xx others like this)
+#
 
 CREATE TABLE {$db_prefix}like_cache (
 	id_msg int(10) unsigned NOT NULL default '0',
@@ -49,6 +58,13 @@ CREATE TABLE {$db_prefix}like_cache (
 
 #
 # Table structure for table `prefixes`
+#
+# boards = list of boards for which the prefix is allowed
+# groups = member groups who are able to use this prefix
+# both can be empty in which case a prefix is allowed for all boards / all members
+# admin can always use all prefixes anywhere
+# a board moderator can use all prefixes for "his" board(s), regardless what groups 
+# says.
 #
 
 CREATE TABLE {$db_prefix}prefixes (
@@ -80,15 +96,25 @@ CREATE TABLE {db_prefix}tags_log (
 
 # now the changes to stock smf 2 tables
 
+# this can be used to prevent a post from being cached (unimplemented as of now)
 ALTER TABLE {db_prefix}messages ADD has_img tinyint(2) NOT NULL default '0';
 
+# like stats for members
 ALTER TABLE {db_prefix}members ADD likes_received int(4) unsigned NOT NULL default '0';
 ALTER TABLE {db_prefix}members ADD likes_given int(4) unsigned NOT NULL default '0';
 
+# allow topics = 0 - board acts as a pure sub-category and cannot have own topics
 ALTER TABLE {db_prefix}boards ADD allow_topics tinyint(4) unsigned NOT NULL default '1';
+
+# automerge = 1 - multiple posts by the same user at the end of a thread will be automatically
+# merged (if time cutoff limit allows it)
 ALTER TABLE {db_prefix}boards ADD automerge tinyint(4) unsigned NOT NULL default '0';
 
+# prefix id for this topic
 ALTER TABLE {db_prefix}topics ADD id_prefix smallint(5) unsigned NOT NULL default '0';
+
+# make the first post of a topic "sticky" on every page and (optionally) give it a different
+# postbit layout
 ALTER TABLE {db_prefix}topics ADD id_layout tinyint(2) NOT NULL default '0';
 
 
