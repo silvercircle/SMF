@@ -39,6 +39,7 @@ function BoardIndex()
 	else
 		loadTemplate('BoardIndex');
 
+	$context['is_board_index'] = true;
 	// Set a canonical URL for this page.
 	$context['canonical_url'] = $scripturl;
 

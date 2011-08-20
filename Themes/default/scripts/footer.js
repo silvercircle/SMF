@@ -949,6 +949,7 @@ function setBusy(mode)
 };
 
 var menu_active = false;
+var sidebar_content_loaded = false;
 
 jQuery(document).ready(function() {
 	
@@ -1091,6 +1092,24 @@ jQuery(document).ready(function() {
 			
 		return(false);
 	});
+	// side bar (toggle, animate, load content via ajax request)
+	$('#sbtoggle').click(function() {
+		var is_visible = ($('#sidebar').css('display') == 'none' ? false : true);
+		if(is_visible) {
+			$('#sidebar').fadeOut(200, function() {
+				$('#container').animate({marginRight: '0'}, 50);
+			});
+			createCookie('smf_sidebar_disabled', 1, 300);
+		}
+		else {
+			if(!sidebar_content_loaded)
+				sendRequest(smf_scripturl, 'action=xmlhttp;sa=loadsb', $('#sidebar'));
+			$('#container').animate({marginRight: sideBarWidth + 15 + 'px'}, 50, function() {
+				$('#sidebar').fadeIn();
+			});
+			createCookie('smf_sidebar_disabled', 0, 300);
+		}
+	});
 	// convert all time stamps to relative 
 	if(!disableDynamicTime)
 		$('abbr.timeago').timeago();
@@ -1206,7 +1225,12 @@ function response(ele)
 				}
 				if(ele.attr('class') == 'collapse')
 					return;
-					
+	
+				if(ele.attr('id') == 'sidebar') {
+					$('#sidebar').html(req.responseText);
+					sidebar_content_loaded = true;
+					return;
+				}
 				openResult(req.responseText, 500);
     			$('div#mcard_inner abbr.timeago').timeago();
 			} else if(req.status == 500) {

@@ -87,6 +87,8 @@ function template_html_above()
 	//		echo '
 	//<link rel="stylesheet" type="text/css" href="', $settings['default_theme_url'], '/css/', $cssfix, '.css" />';
 
+	setcookie('smf_jsavail', 0, time() + 86400, '/');
+	
 	// RTL languages require an additional stylesheet.
 	if ($context['right_to_left'])
 		echo '
@@ -122,12 +124,14 @@ var textSizeStep = 1;
 var textSizeMax = 16;
 var textSizeMin = 8;
 var textSizeDefault = 10;
+var sideBarWidth = 250;
 var cookie = readCookie(\'SMF_textsize\');
 var textsize = cookie ? parseInt(cookie) : textSizeDefault;
 var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
 var t2 = document.createElement(\'SCRIPT\');
 t2.type = "text/javascript";
 t2.async = true;
+createCookie(\'smf_jsavail\', 1, 1);
 t2.src = "',$settings['theme_url'],'/scripts/footer.js?ver=1.1.0";
 anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
@@ -279,11 +283,17 @@ function template_body_above()
 	// The main content should go here.
 	echo '
 	<div id="content_section">
+		<span class="smalltext" style="float:left;margin:3px 15px;">';
+		echo '</span>
 		<div id="main_content_section">';
 
 	// Custom banners and shoutboxes should be placed here, before the linktree.
 
 	theme_linktree();
+	$sidebar_allowed = isset($context['is_board_index']);			// todo: make this more flexible and define a set of pages where the sidebar can show up
+	if($sidebar_allowed)
+		echo '
+			<div id="sbtoggle"></div>';
 	// Show the navigation tree.
 	$scope = 0;
 	echo '<form onmouseout="return false;" onsubmit="submitSearchBox();" style="float:right;margin-right:30px;margin-bottom:-20px;" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
@@ -323,6 +333,18 @@ function template_body_above()
 				<input style="margin:0;" type="submit" name="submit" value="', $txt['go'], '" class="button_submit" />
 				</noscript>';
 	echo '</form><div style="clear:both;"></div>';
+	$sidebar_vis = (isset($_COOKIE['smf_sidebar_disabled']) && $_COOKIE['smf_sidebar_disabled'] == 1) ? false : true;
+	echo '<div id="sidebar" class="blue_container blue_topbar" style="width:250px;display:',$sidebar_allowed ? 'normal' : 'none',';">';
+		if(($sidebar_allowed && $sidebar_vis) || (isset($_COOKIE['smf_jsavail']) && !$_COOKIE['smf_jsavail']))
+			template_sidebar_content();
+	echo '</div>
+	      <div id="container" style="margin-right:',$sidebar_allowed ? '265px' : '0',';">
+		  <script>
+  		  // <![CDATA[
+  		  		$("#sidebar").css("display", ',$sidebar_vis && $sidebar_allowed ? '"normal"' : '"none"', ');
+  		  		$("#container").css("margin-right", ',$sidebar_vis && $sidebar_allowed ? 'sideBarWidth + 15 + "px"' : "0", ');
+		  // ]]>
+	      </script>';
 }
 
 function template_body_below()
@@ -330,7 +352,7 @@ function template_body_below()
 	global $context, $settings, $options, $scripturl, $txt, $modSettings, $fbxml, $twitter_widgets, $plusone;
 
 	echo '
-		</div></div>';
+		</div></div></div>';
 
 	// Show the "Powered by" and "Valid" logos, as well as the copyright. Remember, the copyright must be somewhere!
 	echo '
@@ -669,5 +691,12 @@ function socialbar_passive($l, $t)
        		</script>
        		<div style="clear:both;"></div>';
 	echo '</div><div style="clear:both;"></div>';
+}
+
+function template_sidebar_content()
+{
+	global $context, $user_info, $txt, $modSettings;
+	
+	echo "This is the sidebar<br />Please, I need content :)";
 }
 ?>

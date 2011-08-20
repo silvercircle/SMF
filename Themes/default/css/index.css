@@ -1222,6 +1222,21 @@ ul#navigation li
 	box-shadow: 0 10px 10px 1px #aaa;
 }
 
+#sidebar {
+	float:right;
+	margin-left:5px;
+	min-height:500px;
+}
+#sbtoggle {
+ float:right;
+ position:relative;
+ right:-20px;
+ top:10px;
+ width:12px;height:20px;
+ background:white;
+ border-radius:0 4px 4px 0;
+ cursor:pointer;
+}
 /* the main title, always stay at 45 pixels in height! */
 h1.forumtitle
 {
@@ -2000,6 +2015,7 @@ img.smiley
 .attachments
 {
 	overflow:hidden !important;
+	padding-left: 10px;
 }
 
 /* Styles for the quick reply area.

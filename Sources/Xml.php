@@ -37,7 +37,8 @@ function XMLhttpMain()
 		'tags' => array('function' => 'TagsActionDispatcher'),
 		'whoposted' => array('function' => 'WhoPosted'),
 		'prefix' => array('function' => 'InlinePrefixActions'),
-		'collapse' => array('function' => 'AjaxCollapseCategory')
+		'collapse' => array('function' => 'AjaxCollapseCategory'),
+		'loadsb' => array('function' => 'GetSidebarContent')
 	);
 	if (!isset($_REQUEST['sa'], $sub_actions[$_REQUEST['sa']]))
 		fatal_lang_error('no_access', false);
@@ -297,5 +298,13 @@ function AjaxCollapseCategory()
 	
 	CollapseCategory(true);
 	obExit(false, false, false);
+}
+
+function GetSidebarContent()
+{
+	global $context, $user_info, $txt, $modSettings;
+	loadTemplate('index');
+	$context['sub_template'] = 'sidebar_content';
+	$context['template_layers'] = array();
 }
 ?>
