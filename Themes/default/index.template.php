@@ -107,13 +107,7 @@ var smf_default_theme_url = "', $settings['default_theme_url'], '";
 var smf_images_url = "', $settings['images_url'], '";
 var smf_scripturl = "', $scripturl, '";
 var smf_iso_case_folding = ', $context['server']['iso_case_folding'] ? 'true' : 'false', ';
-var smf_charset = "', $context['character_set'], '";', $context['show_pm_popup'] ? '
-var fPmPopup = function ()
-{
-	if (confirm("' . $txt['show_personal_messages'] . '"))
-		window.open(smf_prepareScriptUrl(smf_scripturl) + "action=pm");
-}
-addLoadEvent(fPmPopup);' : '', '
+var smf_charset = "', $context['character_set'], '";
 var sSessionId = \'', $context['session_id'], '\';
 var sSessionVar = \'', $context['session_var'], '\';
 var disableDynamicTime = ',empty($options['disable_dynatime']) ? 0 : 1,';
@@ -189,7 +183,10 @@ function template_body_above()
 	<div id="wrap" style="max-width:',empty($settings['forum_width']) ? '3000px' : $settings['forum_width'],';">
 	<header>
 	<div id="header">
-	<div id="upper_section" class="middletext"><div style="float:left;color:#ddd;text-shadow:black 2px 2px 10px;font-size:35px;font-family:Comic Sans MS;padding:20px 30px;"><strong><em>SMF pLayGround</em></strong><br />
+	<div id="upper_section" class="middletext">
+		<div class="notibar"></div>
+		<div class="notibar_intro"></div>
+		<div style="float:left;color:#ddd;text-shadow:black 2px 2px 10px;font-size:35px;font-family:Comic Sans MS;padding:20px 30px;"><strong><em>SMF pLayGround</em></strong><br />
 		<div style="font-size:16px;height:26px;padding-top:20px;">...Test</div>
 	</div>';
 
@@ -644,21 +641,25 @@ function template_sidebar_content()
 	// for the logo -> <img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" />
 	if ($context['user']['is_logged'])
 	{
-		echo '<div class="user" style="padding:5px 5px 0 0;">';
+		echo '<div class="user">';
 
 		if (!empty($context['user']['avatar']))
 			echo '
 				<div class="avatar floatleft">', $context['user']['avatar']['image'], '</div>';
+		else
+			echo '
+				<div class="avatar floatleft"><img src="',$settings['images_url'],'/unknown.png" alt="avatar" /></div>';
 		echo '
-				 <ul class="reset">
-					<li class="greeting">', $context['user']['name'], '</li>
+				 <ul class="reset" style="line-height:110%;">
+					<li class="greeting"><a href="',$scripturl,'?action=profile;u=',$context['user']['id'],'">', $context['user']['name'], '</a></li>
 					<li class="smalltext">',$user_info['posts'],' ',$txt['posts'],'<li>
 					<li class="smalltext">',$user_info['likesreceived'],' ',$txt['likes'],'<li>
+					<li class="smalltext"><span class="smalltext" style="float:right;"><a href="',$scripturl,'?action=logout;',$context['session_var'],'=',$context['session_id'], '">Sign out</a></span><li>
 				 </ul>
-				 <ul class="clear reset">
-					<li><a href="', $scripturl, '?action=unread">', $txt['unread_since_visit'], '</a></li>
-					<li><a href="', $scripturl, '?action=unreadreplies">', $txt['show_unread_replies'], '</a></li>
-				 </ul>';
+				 <div class="clear orange_container">
+					<a href="', $scripturl, '?action=unread">', $txt['unread_since_visit'], '</a><br>
+					<a href="', $scripturl, '?action=unreadreplies">', $txt['show_unread_replies'], '</a>
+				 </div>';
 
 		echo '<div style="margin-top:3px;">
 				<ul class="reset"><li></li>';
@@ -682,11 +683,12 @@ function template_sidebar_content()
 	elseif (!empty($context['show_login_bar']))
 	{
 		echo '
-				<div class="user">
+				<div class="smallpadding smalltext">
 				<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/sha1.js"></script>
-				<div class="loginbar"><form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
-					<div style="float:left;margin:5px;">', sprintf($txt['welcome_guest'], $txt['guest_title']), '</div>
-					<div style="margin:5px;"><input type="text" name="user" size="10" class="input_text" />
+				<div><form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
+					', sprintf($txt['welcome_guest'], $txt['guest_title']), '<br /><br />
+					', $txt['quick_login_dec'], '<br />
+					<input type="text" name="user" size="10" class="input_text" />
 					<input type="password" name="passwrd" size="10" class="input_password" />
 					<select name="cookielength">
 						<option value="60">', $txt['one_hour'], '</option>
@@ -695,8 +697,7 @@ function template_sidebar_content()
 						<option value="43200">', $txt['one_month'], '</option>
 						<option value="-1" selected="selected">', $txt['forever'], '</option>
 					</select>
-					<input type="submit" value="', $txt['login'], '" class="button_submit" /><br />
-					<div class="info">', $txt['quick_login_dec'], '</div></div>';
+					<input style="width:90%;margin-left:5%;margin-top:10px;" type="submit" value="', $txt['login'], '" class="button_submit" /><br />';
 
 		if (!empty($modSettings['enableOpenID']))
 			echo '
@@ -723,9 +724,9 @@ function template_sidebar_content()
 				 if(!empty($settings['show_latest_member']))
 				 	echo '<dt>', $txt['latest_member'] . ': </dt><dd class="righttext"><strong>', $context['common_stats']['latest_member']['link'] . '</strong></dd>';
 				 echo '</dl>';
-				 if(!empty($context['latest_post']))
-				 	echo '    ', $txt['latest_post'] . ': <br /><a href="',$context['latest_post']['href'],'" title="',$context['latest_post']['subject'], '">',shorten_subject($context['latest_post']['subject'], 20),'</a> ( ' . $context['latest_post']['time'] . ' )';
-				echo '<div class="righttext"><a href="', $scripturl, '?action=recent">', $txt['recent_view'], '</a>', $context['show_stats'] ? '<br />
+				 //if(!empty($context['latest_post']))
+				 ///	echo '    ', $txt['latest_post'] . ': <br /><a href="',$context['latest_post']['href'],'" title="',$context['latest_post']['subject'], '">',shorten_subject($context['latest_post']['subject'], 20),'</a> ( ' . $context['latest_post']['time'] . ' )';
+				echo '<div class="orange_container"><div class="floatright righttext"><a href="', $scripturl, '?action=recent">', $txt['recent_view'], '</a>', $context['show_stats'] ? '</div>
 				<a href="' . $scripturl . '?action=stats">' . $txt['more_stats'] . '</a>' : '', '</div>
 			</div>';
 	}
@@ -776,6 +777,7 @@ function template_sidebar_content()
 				</p></div>';
 	}
 	
+	// social panel in the side bar
 	if(($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar']))) {
 		echo '<div class="cat_bar">
 			<h3>
@@ -796,8 +798,8 @@ function template_sidebar_content()
 			$twitter_widgets = 1;
 			$plusone++;
 			echo '
-   	    	<a href="http://twitter.com/share" style="border:none;" class="twitter-share-button" data-count="horizontal" data-url="',$scripturl,'"></a>
-			<div style="float:right;"><div class="g-plusone" data-href="',$scripturl,'" data-size="medium" data-count="true"></div></div>';
+   	    	<div style="float:left;"><a href="http://twitter.com/share" style="border:none;" class="twitter-share-button" data-count="horizontal" data-url="',$scripturl,'"></a></div>
+			<div style="display:inline;max-width:70px;"><div class="g-plusone" data-href="',$scripturl,'" data-size="medium" data-count="true"></div></div>';
 			if(isset($modSettings['twitter_id']) && !empty($modSettings['twitter_id']))
 				echo '<br /><br /><a href="http://twitter.com/',$modSettings['twitter_id'],'" class="twitter-follow-button" data-show-count="false">Follow @',$modSettings['twitter_id'],'</a>';
        		echo '<noscript>This requires JavaScript</noscript>

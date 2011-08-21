@@ -606,7 +606,12 @@ ol.post_attachments li img {
 	line-height: 1.4em;
 	font-size: 0.85em;
 }
-
+a.brd_rsslink {
+	background:transparent url(../images/theme/sprite.png) 0 -653px no-repeat;
+	width:20px;
+	height:20px;
+	float:right;
+}
 /* Sometimes there will be an error when you post */
 .error
 {
@@ -1240,6 +1245,24 @@ h3, h4
 	min-height:75px;
 	overflow:hidden;
 	font-size:12px;
+}
+.notibar {
+	background: #98AABA;
+	line-height:24px;
+	float:right;
+	height:24px;
+	width:500px;
+	position:relative;
+	top:51px;"
+}
+.notibar_intro {
+	background: transparent url(../images/theme/flow.png) left top no-repeat;
+	line-height:24px;
+	float:right;
+	height:24px;
+	width:100px;
+	position:relative;
+	top:51px;"
 }
 li.greeting
 {
@@ -3554,9 +3577,6 @@ span.hidelink
 	padding:2px 4px;
 	border-radius:3px;
 }
-.red_container a, .blue_container a {
-	color:#558;
-}
 .red_container, .quoteheader, .codeheader{
 	background-color:#FFF2F2;
 	border:1px solid #FFCACA;
@@ -3581,11 +3601,6 @@ a.navPages {
 	padding:0 4px;
 	border:1px solid #ccc;
 	border-radius:3px;
-}
-
-div.loginbar {
-	background-color:#485B7D;
-	border-bottom-left-radius:10px;
 }
 span.small_avatar img {
 	max-height:32px;

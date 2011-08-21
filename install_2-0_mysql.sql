@@ -1401,19 +1401,43 @@ CREATE TABLE {$db_prefix}prefixes (
 # Tagging system (note: the table structure is compatible with SMFTags on purpose)
 #
 
-CREATE TABLE {db_prefix}tags (
+CREATE TABLE {$db_prefix}tags (
     id_tag mediumint(8) NOT NULL auto_increment,
     tag tinytext NOT NULL,
     approved tinyint(4) NOT NULL default '0',
     PRIMARY KEY  (id_tag)
 ) ENGINE=MyISAM;
 
-CREATE TABLE {db_prefix}tags_log (
+CREATE TABLE {$db_prefix}tags_log (
     id int(11) NOT NULL auto_increment,
     id_tag mediumint(8) unsigned NOT NULL default '0',
     id_topic mediumint(8) unsigned NOT NULL default '0',
     id_member mediumint(8) unsigned NOT NULL default '0',
     PRIMARY KEY  (id)
+) Engine=MyISAM;
+
+#
+# activity types
+#
+CREATE TABLE {$db_prefix}activity_types (
+	id_type tinyint(3) NOT NULL auto_increment,
+	id_desc varchar(150) NOT NULL default '',
+	formatter varchar(50) NOT NULL default 'act_format_default',
+	PRIMARY KEY (id_type)
+) Engine=MyISAM;
+#
+# log activities
+#
+CREATE TABLE {$db_prefix}log_activities (
+	id_member int(10) unsigned NOT NULL default '0',
+	updated   int(10) NOT NULL default '0',
+	id_type tinyint(3) NOT NULL default '0',
+	params varchar(255) NOT NULL default '',
+	is_private tinyint(2) NOT NULL default '0',
+	id_board smallint(5) NOT NULL default '0',
+	KEY (id_member),
+	KEY (id_type),
+	KEY (updated)
 ) Engine=MyISAM;
 
 #
@@ -1863,8 +1887,17 @@ VALUES ('smfVersion', '{$smf_version}'),
 INSERT INTO {$db_prefix}settings
 	(variable, value)
 VALUES ('use_post_cache', '0'),
-	('post_cache_cutoff', '30')'
+	('post_cache_cutoff', '30'),
+	('fb_appid', ''),
+	('GA_tracker_id', ''),
+	('GA_domain_name', ''),
 	('embed_GA', '0');
+
+INSERT INTO {$db_prefix}activity_types
+	(id_desc, formatter)
+VALUES 
+	('like_given', 'actfmt_like_out'),
+	('like_received', 'actfmt_like_in');
 	
 # --------------------------------------------------------
 

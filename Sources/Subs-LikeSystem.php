@@ -75,11 +75,14 @@ function GiveLike($mid)
 		 */		
 		
 		$request = $smcFunc['db_query']('', '
-			SELECT id_member, id_board FROM {db_prefix}messages AS m WHERE m.id_msg = '.$mid);
+			SELECT id_member, id_board, id_topic, subject FROM {db_prefix}messages AS m WHERE m.id_msg = '.$mid);
 
 		$m = $smcFunc['db_fetch_row']($request);
 		$smcFunc['db_free_result']($request);
+		$id_board = $m[1];
 		$like_receiver = intval($m[0]);
+		$id_topic = (int)$m[2];
+		$topic_title = $m[3];
 		
 		if($like_receiver == $uid)
 			AjaxErrorMsg($txt['cannot_like_own']);
@@ -109,6 +112,7 @@ function GiveLike($mid)
 			/* store the like */
 			global $memberContext;
 			
+			require_once($sourcedir . '/Subs-Activities.php');
 			if($like_receiver) {					// we do have a member, but still allow to like posts made by guests
 				loadMemberData($like_receiver);		// but banned users shall not receive likes
 				loadMemberContext($like_receiver);
@@ -126,6 +130,9 @@ function GiveLike($mid)
 					array('uid' => $uid));
 					
 				$update_mode = true;
+				
+				stream_add_activity($uid, ACT_LIKE, array('member_name' => $context['user']['name'], 'id_member' => $uid, 
+					'topic_id' => $id_topic, 'id_message' => $mid, 'topic_title' => $topic_title), $id_board);
 			}
 			else
 				AjaxErrorMsg($txt['like_cannot_like']);

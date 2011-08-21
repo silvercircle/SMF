@@ -164,7 +164,7 @@ function template_main()
 						</a>
 					</td>
 					<td class="info">
-						<a href="',$scripturl,'?action=.xml;type=rss;board=',$board['id'],'"><img style="float:right" src="',$settings['images_url'],'/icons/rss.png" alt="rss" title="feed" /></a><a class="subject" href="', $board['href'], '" id="b', $board['id'], '">', $board['name'], '</a>';
+						<a class="brd_rsslink" href="',$scripturl,'?action=.xml;type=rss;board=',$board['id'],'">&nbsp;</a><a class="subject" href="', $board['href'], '" id="b', $board['id'], '">', $board['name'], '</a>';
 
 				// Has it outstanding posts for approval?
 				if ($board['can_approve_posts'] && ($board['unapproved_posts'] || $board['unapproved_topics']))
@@ -252,9 +252,9 @@ function template_main()
 
 		echo '
 		<ul class="reset">
-			<li class="floatleft"><img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'new_some.png" alt="" /> ', $txt['new_posts'], '</li>
-			<li class="floatleft"><img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'new_none.png" alt="" /> ', $txt['old_posts'], '</li>
-			<li class="floatleft"><img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'new_redirect.png" alt="" /> ', $txt['redirect_board'], '</li>
+			<li class="floatleft"><img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'on.png" alt="" /> ', $txt['new_posts'], '</li>
+			<li class="floatleft"><img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'off.png" alt="" /> ', $txt['old_posts'], '</li>
+			<li class="floatleft"><img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'redirect.png" alt="" /> ', $txt['redirect_board'], '</li>
 		</ul>
 	</div>';
 
