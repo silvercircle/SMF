@@ -198,6 +198,63 @@ function ModifyModSettings()
 	$subActions[$_REQUEST['sa']]();
 }
 
+function ModifySocialSettings($return_config)
+{
+	
+	global $context, $txt, $scripturl, $modSettings, $settings;
+
+	$subActions = array(
+		'general' => 'ModifySocialSettings',
+	);
+	
+	loadGeneralSettingParameters($subActions, 'general');
+	$context[$context['admin_menu_name']]['tab_data'] = array(
+		'title' => $txt['admin_social'],
+		'description' => $txt['socialsettings_desc'],
+		'tabs' => array(
+			'general' => array(
+			),
+		),
+	);
+	$config_vars = array(
+			array('check', 'embed_GA'),
+			array('text', "GA_tracker_id"),
+			array('text', 'GA_domain_name'),
+			array('text', 'fb_appid'),
+			array('text', 'twitter_id'),
+	);
+	$context['page_title'] = $txt['admin_social'];
+	
+	if ($return_config)
+		return $config_vars;
+
+	// Saving?
+	if (isset($_GET['save']))
+	{
+		checkSession();
+
+		if(isset($_POST['embed_GA']) && $_POST['embed_GA']) {
+			$_POST['GA_tracker_id'] = trim($_POST['GA_tracker_id']);
+			$_POST['GA_domain_name'] = trim($_POST['GA_domain_name']);
+
+			if(strlen($_POST['GA_tracker_id']) > 5 && strlen($_POST['GA_domain_name']) > 5)
+				$_POST['embed_GA'] = 1;
+			else
+				$_POST['embed_GA'] = 0;
+		}
+		else
+			$_POST['embed_GA'] = 0;
+			
+		saveDBSettings($config_vars);
+		writeLog();
+		redirectexit('action=admin;area=socialsettings;sa=general');
+	}
+
+	$context['post_url'] = $scripturl . '?action=admin;area=socialsettings;save;sa=general';
+	$context['settings_title'] = $txt['admin_social'];
+
+	prepareDBSettingContext($config_vars);
+}
 // This is an overall control panel enabling/disabling lots of SMF's key feature components.
 function ModifyCoreFeatures($return_config = false)
 {
@@ -465,11 +522,6 @@ function ModifyBasicSettings($return_config = false)
 			// SEO stuff
 			array('check', 'queryless_urls'),
 			array('text', 'meta_keywords', 'size' => 50),
-			array('check', 'embed_GA'),
-			array('text', "GA_tracker_id"),
-			array('text', 'GA_domain_name'),
-			array('text', 'fb_appid'),
-			array('text', 'twitter_id'),
 		'',
 			// Number formatting, timezones.
 			array('text', 'time_format'),

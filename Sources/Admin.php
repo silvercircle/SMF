@@ -211,6 +211,14 @@ function AdminMain()
 						// Note the comma!! The setting with automatically appear with the first mod to be added.
 					),
 				),
+				'socialsettings' => array(
+					'label' => $txt['admin_social'],
+					'file' => 'ManageSettings.php',
+					'function' => 'ModifySocialSettings',
+					'subsections' => array(
+						'general' => array($txt['socialsettings_general']),
+					),
+				),
 			),
 		),
 		'layout' => array(

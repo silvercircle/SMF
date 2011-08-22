@@ -110,7 +110,7 @@ CREATE TABLE {$db_prefix}log_activities (
 	id_member int(10) unsigned NOT NULL default '0',
 	updated   int(10) NOT NULL default '0',
 	id_type tinyint(3) NOT NULL default '0',
-	params varchar(255) NOT NULL default '',
+	params varchar(600) NOT NULL default '',
 	is_private tinyint(2) NOT NULL default '0',
 	id_board smallint(5) NOT NULL default '0',
 	KEY (id_member),

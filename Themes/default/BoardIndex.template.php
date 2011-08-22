@@ -14,14 +14,6 @@ function template_main()
 {
 	global $context, $settings, $options, $txt, $scripturl, $modSettings;
 
-	// Show some statistics if stat info is off.
-	if (!$settings['show_stats_index'])
-		echo '
-	<div id="index_common_stats">
-		', $txt['members'], ': ', $context['common_stats']['total_members'], ' &nbsp;&#8226;&nbsp; ', $txt['posts_made'], ': ', $context['common_stats']['total_posts'], ' &nbsp;&#8226;&nbsp; ', $txt['topics'], ': ', $context['common_stats']['total_topics'], '
-		', ($settings['show_latest_member'] ? ' ' . $txt['welcome_member'] . ' <strong>' . $context['common_stats']['latest_member']['link'] . '</strong>' . $txt['newest_member'] : '') , '
-	</div>';
-
 	// Show the news fader?  (assuming there are things to show...)
 	if ($settings['show_newsfader'] && !empty($context['fader_news_lines']))
 	{
@@ -379,26 +371,6 @@ function template_info_center()
 		}
 		echo '
 			</div>';
-	}
-
-	// If they are logged in, but statistical information is off... show a personal message bar.
-	if ($context['user']['is_logged'] && !$settings['show_stats_index'])
-	{
-		echo '
-			<div class="title_barIC">
-				<h4 class="titlebg">
-					<span class="ie6_header floatleft">
-						', $context['allow_pm'] ? '<a href="' . $scripturl . '?action=pm">' : '', '<img class="icon" src="', $settings['images_url'], '/message_sm.gif" alt="', $txt['personal_message'], '" />', $context['allow_pm'] ? '</a>' : '', '
-						<span>', $txt['personal_message'], '</span>
-					</span>
-				</h4>
-			</div>
-			<p class="pminfo">
-				<strong><a href="', $scripturl, '?action=pm">', $txt['personal_message'], '</a></strong>
-				<span class="smalltext">
-					', $txt['you_have'], ' ', comma_format($context['user']['messages']), ' ', $context['user']['messages'] == 1 ? $txt['message_lowercase'] : $txt['msg_alert_messages'], '.... ', $txt['click'], ' <a href="', $scripturl, '?action=pm">', $txt['here'], '</a> ', $txt['to_view'], '
-				</span>
-			</p>';
 	}
 
 	echo '
