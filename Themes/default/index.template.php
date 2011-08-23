@@ -216,8 +216,6 @@ function template_body_above()
 	// The main content should go here.
 	echo '
 	<div id="content_section">
-		<span class="smalltext" style="float:left;margin:3px 15px;">';
-		echo '</span>
 		<div id="main_content_section">';
 
 	// Custom banners and shoutboxes should be placed here, before the linktree.
@@ -267,7 +265,7 @@ function template_body_above()
 				</noscript>';
 	echo '</form><div style="clear:both;"></div>';
 	$sidebar_vis = (isset($_COOKIE['smf_sidebar_disabled']) && $_COOKIE['smf_sidebar_disabled'] == 1) ? false : true;
-	echo '<div id="sidebar" class="blue_container" style="width:250px;display:',$sidebar_allowed ? 'normal' : 'none',';">';
+	echo '<div id="sidebar" style="width:255px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
 		//if(($sidebar_allowed && $sidebar_vis) || (isset($_COOKIE['smf_jsavail']) && !$_COOKIE['smf_jsavail']))
 		if($sidebar_allowed)
 			template_sidebar_content();
@@ -275,7 +273,7 @@ function template_body_above()
 	      <div id="container" style="margin-right:',$sidebar_allowed ? '265px' : '0',';">
 		  <script>
   		  // <![CDATA[
-  		  		$("#sidebar").css("display", ',$sidebar_vis && $sidebar_allowed ? '"normal"' : '"none"', ');
+  		  		$("#sidebar").css("display", ',$sidebar_vis && $sidebar_allowed ? '"inline"' : '"none"', ');
   		  		$("#container").css("margin-right", ',$sidebar_vis && $sidebar_allowed ? 'sideBarWidth + 15 + "px"' : "0", ');
 		  // ]]>
 	      </script>';
@@ -286,7 +284,7 @@ function template_body_below()
 	global $context, $settings, $options, $scripturl, $txt, $modSettings, $fbxml, $twitter_widgets, $plusone;
 
 	echo '
-		</div></div></div>';
+		</div></div></div>';    
 
 	// Show the "Powered by" and "Valid" logos, as well as the copyright. Remember, the copyright must be somewhere!
 	echo '
@@ -633,15 +631,13 @@ function template_sidebar_content()
 		   sidebar_content_loaded = 1;
            // ]]>
 		  </script>
-		  <div class="cat_bar">
-		<h3>User panel</h3>
-		</div>';
+		<h1 class="bigheader greyback" style="margin-top:0;">User panel</h1>';
 		
 	// If the user is logged in, display stuff like their name, new messages, etc.
 	// for the logo -> <img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" />
 	if ($context['user']['is_logged'])
 	{
-		echo '<div class="user">';
+		echo '<div class="user blue_container">';
 
 		if (!empty($context['user']['avatar']))
 			echo '
@@ -711,12 +707,10 @@ function template_sidebar_content()
 	if ($settings['show_stats_index'] && isset($context['show_stats']))
 	{
 		echo '
-			<div class="cat_bar">
-				<h3>
+				<h1 class="bigheader greyback">
 					<a href="', $scripturl, '?action=stats">', $txt['forum_stats'], '</a>
-				</h3>
-			</div>
-			<div class="smallpadding smalltext">
+				</h1>
+			<div class="smallpadding smalltext blue_container">
 				<dl class="common">
 				 <dt>', $txt['posts'], ': </dt><dd class="righttext">',$context['common_stats']['total_posts'], '</dd>
 				 <dt>', $txt['topics'], ': </dt><dd class="righttext">', $context['common_stats']['total_topics'], '</dd>
@@ -731,66 +725,20 @@ function template_sidebar_content()
 			</div>';
 	}
 	
-	// "Users online" - in order of activity.
-	if(isset($context['show_who'])) {
-		echo '
-				<div class="cat_bar">
-					<h3>
-						', $context['show_who'] ? '<a href="' . $scripturl . '?action=who' . '">' : '', $txt['online_users'], $context['show_who'] ? '</a>' : '', '
-					</h3>
-				</div>
-				<div class="smallpadding smalltext">
-					', $context['show_who'] ? '<a href="' . $scripturl . '?action=who">' : '', comma_format($context['num_guests']), ' ', $context['num_guests'] == 1 ? $txt['guest'] : $txt['guests'], ', ' . comma_format($context['num_users_online']), ' ', $context['num_users_online'] == 1 ? $txt['user'] : $txt['users'];
-
-		// Handle hidden users and buddies.
-		$bracketList = array();
-		if ($context['show_buddies'])
-			$bracketList[] = comma_format($context['num_buddies']) . ' ' . ($context['num_buddies'] == 1 ? $txt['buddy'] : $txt['buddies']);
-		if (!empty($context['num_spiders']))
-			$bracketList[] = comma_format($context['num_spiders']) . ' ' . ($context['num_spiders'] == 1 ? $txt['spider'] : $txt['spiders']);
-		if (!empty($context['num_users_hidden']))
-			$bracketList[] = comma_format($context['num_users_hidden']) . ' ' . $txt['hidden'];
-
-		if (!empty($bracketList))
-			echo ' (' . implode(', ', $bracketList) . ')';
-
-		echo $context['show_who'] ? '</a>' : '', '
-				<p class="inline smalltext">';
-
-		// Assuming there ARE users online... each user in users_online has an id, username, name, group, href, and link.
-		if (!empty($context['users_online']))
-		{
-			echo '
-					', sprintf($txt['users_active'], $modSettings['lastActive']), ':<br />', implode(', ', $context['list_users_online']);
-
-			// Showing membergroups?
-			if (!empty($settings['show_group_key']) && !empty($context['membergroups']))
-				echo '
-					<br />[' . implode(']&nbsp;&nbsp;[', $context['membergroups']) . ']';
-		}
-
-		echo '
-				</p>
-				<p class="last smalltext">
-					', $txt['most_online_today'], ': <strong>', comma_format($modSettings['mostOnlineToday']), '</strong>.
-					', $txt['most_online_ever'], ': ', comma_format($modSettings['mostOnline']), ' (', timeformat($modSettings['mostDate']), ')
-				</p></div>';
-	}
-	
 	// social panel in the side bar
 	if(($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar']))) {
-		echo '<div class="cat_bar">
-			<h3>
+		echo '
+			<h1 class="bigheader greyback">
 				Socialize
-			</h3>
-	      </div><div class="mediumpadding lefttext">
+			</h1>
+	      	<div class="mediumpadding lefttext blue_container">
 		  	<script type="text/javascript">
 			//<![CDATA[
 			';
 			if(isset($modSettings['fb_appid']) && !empty($modSettings['fb_appid'])) {
        			$fbxml = 1;
        			echo '(function() {
-        			document.write(\'<div><fb:like href="',$scripturl,'" layout="button_count" send="true" show_faces="false" action="recommend" font="verdana"></fb:like></div><br />\');
+        			document.write(\'<div style="margin-bottom:10px;"><fb:like href="',$scripturl,'" layout="button_count" send="true" show_faces="false" action="recommend" font="verdana"></fb:like></div>\');
     			})();';
 			}
     		echo '//]]>
@@ -801,9 +749,88 @@ function template_sidebar_content()
    	    	<div style="float:left;"><a href="http://twitter.com/share" style="border:none;" class="twitter-share-button" data-count="horizontal" data-url="',$scripturl,'"></a></div>
 			<div style="display:inline;max-width:70px;"><div class="g-plusone" data-href="',$scripturl,'" data-size="medium" data-count="true"></div></div>';
 			if(isset($modSettings['twitter_id']) && !empty($modSettings['twitter_id']))
-				echo '<br /><br /><a href="http://twitter.com/',$modSettings['twitter_id'],'" class="twitter-follow-button" data-show-count="false">Follow @',$modSettings['twitter_id'],'</a>';
+				echo '<div style="margin-top:8px;"><a href="http://twitter.com/',$modSettings['twitter_id'],'" class="twitter-follow-button" data-show-count="false">Follow @',$modSettings['twitter_id'],'</a></div>';
        		echo '<noscript>This requires JavaScript</noscript>
        		<div class="clear"></div></div>';
 	}
+	
+	// This is the "Recent Posts" bar.
+	if (!empty($settings['number_recent_posts']) && (!empty($context['latest_posts']) || !empty($context['latest_post'])))
+	{
+		echo '
+			<h1 class="bigheader greyback">
+				<a href="', $scripturl, '?action=recent">', $txt['recent_posts'], '</a>
+			</h1>
+			<div class="lefftext smalltext smallpadding blue_container" id="recent_posts_content" style="line-height:110%;">
+				<div class="entry-title" style="display: none;">', $context['forum_name_html_safe'], ' - ', $txt['recent_posts'], '</div>
+				<div class="entry-content" style="display: none;">
+					<a rel="alternate" type="application/rss+xml" href="', $scripturl, '?action=.xml;type=webslice">', $txt['subscribe_webslice'], '</a>
+				</div>';
+
+		// Only show one post.
+		if ($settings['number_recent_posts'] == 1)
+		{
+			// latest_post has link, href, time, subject, short_subject (shortened with...), and topic. (its id.)
+			echo '
+				<strong><a href="', $scripturl, '?action=recent">', $txt['recent_posts'], '</a></strong>
+				<p id="infocenter_onepost" class="middletext">
+					', $txt['recent_view'], ' &quot;', $context['latest_post']['link'], '&quot; ', $txt['recent_updated'], ' (', $context['latest_post']['time'], ')<br />
+				</p>';
+		}
+		// Show lots of posts.
+		elseif (!empty($context['latest_posts']))
+		{
+			/* Each post in latest_posts has:
+					board (with an id, name, and link.), topic (the topic's id.), poster (with id, name, and link.),
+					subject, short_subject (shortened with...), time, link, and href. */
+			foreach ($context['latest_posts'] as $post)
+				echo 
+					$post['link'], '<br>', $txt['by'], ' ', $post['poster']['link'], '<br>
+					<span class="nowrap floatright">', $post['time'], '</span><hr class="clear">';
+		}
+		echo '
+			</div>';
+	}
+	
+	// Show information about events, birthdays, and holidays on the calendar.
+	if ($context['show_calendar'])
+	{
+		echo '
+			<h1 class="bigheader greyback">
+				<a href="', $scripturl, '?action=calendar' . '">', $context['calendar_only_today'] ? $txt['calendar_today'] : $txt['calendar_upcoming'], '</a>
+			</h1>
+			<div class="smalltext blue_container">';
+
+		// Holidays like "Christmas", "Chanukah", and "We Love [Unknown] Day" :P.
+		if (!empty($context['calendar_holidays']))
+				echo '
+				<span class="holiday">', $txt['calendar_prompt'], ' ', implode(', ', $context['calendar_holidays']), '</span><br />';
+
+		// People's birthdays. Like mine. And yours, I guess. Kidding.
+		if (!empty($context['calendar_birthdays']))
+		{
+				echo '
+				<span class="birthday">', $context['calendar_only_today'] ? $txt['birthdays'] : $txt['birthdays_upcoming'], '</span> ';
+		/* Each member in calendar_birthdays has:
+				id, name (person), age (if they have one set?), is_last. (last in list?), and is_today (birthday is today?) */
+		foreach ($context['calendar_birthdays'] as $member)
+				echo '
+				<a href="', $scripturl, '?action=profile;u=', $member['id'], '">', $member['is_today'] ? '<strong>' : '', $member['name'], $member['is_today'] ? '</strong>' : '', isset($member['age']) ? ' (' . $member['age'] . ')' : '', '</a>', $member['is_last'] ? '<br />' : ', ';
+		}
+		// Events like community get-togethers.
+		if (!empty($context['calendar_events']))
+		{
+			echo '
+				<span class="event">', $context['calendar_only_today'] ? $txt['events'] : $txt['events_upcoming'], '</span> ';
+			/* Each event in calendar_events should have:
+					title, href, is_last, can_edit (are they allowed?), modify_href, and is_today. */
+			foreach ($context['calendar_events'] as $event)
+				echo '
+					', $event['can_edit'] ? '<a href="' . $event['modify_href'] . '" title="' . $txt['calendar_edit'] . '"><img src="' . $settings['images_url'] . '/icons/modify_small.gif" alt="*" /></a> ' : '', $event['href'] == '' ? '' : '<a href="' . $event['href'] . '">', $event['is_today'] ? '<strong>' . $event['title'] . '</strong>' : $event['title'], $event['href'] == '' ? '' : '</a>', $event['is_last'] ? '<br />' : ', ';
+		}
+		echo '
+			</div>';
+	}
+	
 }
 ?>

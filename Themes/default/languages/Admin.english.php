@@ -629,4 +629,11 @@ $txt['spider_stats'] = 'Stats';
 $txt['paid_subscriptions'] = 'Paid Subscriptions';
 $txt['paid_subs_view'] = 'View Subscriptions';
 
+// Admin options
+$txt['masterSaveDrafts'] = 'Enable saving of post drafts';
+$txt['masterAutoSaveDrafts'] = 'Enable automatic saving of post drafts';
+$txt['draftsave_subnote'] = 'Note that the user must still have permission in the Permissions area.';
+$txt['draftautosave_subnote'] = 'This does not override the above option, merely extending it. Also, user must have permission.';
+$txt['masterAutoSaveDraftsDelay'] = 'How often should posts be autosaved?';
+
 ?>

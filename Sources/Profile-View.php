@@ -270,6 +270,13 @@ function showPosts($memID)
 	);
 
 	// Set the page title
+	// Drafts?
+	if (!empty($context[$context['profile_menu_name']]['sections']['info']['areas']['showposts']['subsections']['drafts']))	{
+		// Ensure the tab is present
+		$context[$context['profile_menu_name']]['tab_data']['tabs']['drafts'] = array();
+		if (isset($_REQUEST['sa']) && $_REQUEST['sa'] == 'drafts')
+			return displayDrafts($memID);
+	}	
 	$context['page_title'] = $txt['showPosts'] . ' - ' . $user_profile[$memID]['real_name'];
 
 	// Is the load average too high to allow searching just now?
@@ -1973,6 +1980,135 @@ function viewWarning($memID)
 	foreach ($context['level_effects'] as $limit => $dummy)
 		if ($context['member']['warning'] >= $limit)
 			$context['current_level'] = $limit;
+}
+function displayDrafts($memID)
+{
+	global $txt, $user_info, $scripturl, $modSettings;
+	global $context, $user_profile, $sourcedir, $smcFunc, $board;
+
+	if (!empty($_GET['delete']) && isset($_GET['topic'])) {
+		$draft_id = (int) $_GET['delete'];
+		$topic_id = (int) $_GET['topic'];
+		$msgid = isset($_GET['msg']) ? (int)$_GET['msg'] : 0;
+		
+		$start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
+		checkSession('get');
+		
+		$smcFunc['db_query']('', '
+			DELETE FROM {db_prefix}drafts WHERE id_topic = {int:topic}
+				AND id_draft = {int:draft}
+				AND id_member = {int:member}
+				AND id_msg = {int:message}
+			LIMIT 1',
+			array(
+				'topic' => $topic_id,
+				'draft' => $draft_id,
+				'member' => $user_info['id'],
+				'message' => $msgid,
+			)
+		);
+
+		redirectexit('action=profile;u=' . $memID . ';area=showposts;sa=drafts;start=' . $start);
+	}
+
+	if (empty($_REQUEST['viewscount']) || !is_numeric($_REQUEST['viewscount']))
+		$_REQUEST['viewscount'] = '10';
+
+	// Get the count of applicable drafts
+	$request = $smcFunc['db_query']('', '
+		SELECT COUNT(id_draft)
+		FROM {db_prefix}drafts AS pd
+			INNER JOIN {db_prefix}boards AS b ON (b.id_board = pd.id_board AND {query_see_board})
+		WHERE id_member = {int:member}',
+		array(
+			'member' => $memID,
+		)
+	);
+	list ($msgCount) = $smcFunc['db_fetch_row']($request);
+	$smcFunc['db_free_result']($request);
+
+	$reverse = false;
+	$maxIndex = (int) $modSettings['defaultMaxMessages'];
+
+	// Make sure the starting place makes sense and construct our friend the page index.
+	$context['page_index'] = constructPageIndex($scripturl . '?action=profile;u=' . $memID . ';area=showposts;sa=drafts', $context['start'], $msgCount, $maxIndex);
+	$context['current_page'] = $context['start'] / $maxIndex;
+
+	// Reverse the query if we're past 50% of the pages for better performance.
+	$start = $context['start'];
+	$reverse = $_REQUEST['start'] > $msgCount / 2;
+	if ($reverse)
+	{
+		$maxIndex = $msgCount < $context['start'] + $modSettings['defaultMaxMessages'] + 1 && $msgCount > $context['start'] ? $msgCount - $context['start'] : (int) $modSettings['defaultMaxMessages'];
+		$start = $msgCount < $context['start'] + $modSettings['defaultMaxMessages'] + 1 || $msgCount < $context['start'] + $modSettings['defaultMaxMessages'] ? 0 : $msgCount - $context['start'] - $modSettings['defaultMaxMessages'];
+	}
+
+	// Find this user's drafts.
+	$request = $smcFunc['db_query']('', '
+		SELECT
+			b.id_board, b.name AS bname, pd.id_member, pd.id_draft,
+			pd.body, pd.smileys, pd.subject, pd.updated, pd.icon, pd.id_topic, pd.id_msg, pd.is_locked, pd.is_sticky
+		FROM {db_prefix}drafts AS pd
+			INNER JOIN {db_prefix}boards AS b ON (b.id_board = pd.id_board AND {query_see_board})
+		WHERE pd.id_member = {int:current_member}
+		ORDER BY pd.id_draft ' . ($reverse ? 'ASC' : 'DESC') . '
+		LIMIT ' . $start . ', ' . $maxIndex,
+		array(
+			'current_member' => $memID,
+		)
+	);
+
+	// Start counting at the number of the first message displayed.
+	$counter = $reverse ? $context['start'] + $maxIndex + 1 : $context['start'];
+	$context['posts'] = array();
+	while ($row = $smcFunc['db_fetch_assoc']($request))
+	{
+		// Censor....
+		if (empty($row['body']))
+			$row['body'] = '';
+
+		$row['subject'] = $smcFunc['htmltrim']($row['subject']);
+		if (empty($row['subject']))
+			$row['subject'] = $txt['no_subject'];
+
+		censorText($row['body']);
+		censorText($row['subject']);
+
+		// Do the code.
+		$row['body'] = parse_bbc($row['body'], $row['smileys'], 'draft' . $row['id_draft']);
+
+		// And the array...
+		$context['posts'][$counter += $reverse ? -1 : 1] = array(
+			'body' => $row['body'],
+			'counter' => $counter,
+			'alternate' => $counter % 2,
+			'board' => array(
+				'name' => $row['bname'],
+				'id' => $row['id_board']
+			),
+			'topic' => array(
+				'id' => $row['id_topic'],
+				'link' => empty($row['id']) ? $row['subject'] : '<a href="' . $scripturl . '?topic=' . $row['id_topic'] . '.0">' . $row['subject'] . '</a>',
+			),
+			'message' => array(
+				'id' => $row['id_msg'],
+			),
+			'subject' => $row['subject'],
+			'time' => timeformat($row['updated']),
+			'timestamp' => forum_time(true, $row['updated']),
+			'icon' => $row['icon'],
+			'id' => $row['id_draft'],
+			'locked' => $row['is_locked'],
+			'sticky' => $row['is_sticky'],
+		);
+	}
+	$smcFunc['db_free_result']($request);
+
+	// All posts were retrieved in reverse order, get them right again.
+	if ($reverse)
+		$context['posts'] = array_reverse($context['posts'], true);
+
+	$context['sub_template'] = 'showDrafts';
 }
 
 ?>

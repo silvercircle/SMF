@@ -35,7 +35,7 @@ function _vsprintf( $format, array $data)
 
 function stream_add_activity($id_member, $atype, $params, $id_board)
 {
-	global $smcFunc, $txt, $scripturl;
+	global $smcFunc;
 	
 	$smcFunc['db_query']('', '
 		INSERT INTO {db_prefix}log_activities (id_member, id_type, updated, params, is_private, id_board) 

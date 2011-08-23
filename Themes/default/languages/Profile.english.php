@@ -273,6 +273,7 @@ $txt['timeformat_easy5'] = 'DD-MM-YYYY, HH:MM:SS';
 $txt['poster'] = 'Poster';
 
 $txt['board_desc_inside'] = 'Show board descriptions inside boards.';
+$txt['use_drafts'] = 'Use the drafts feature to save unfinished posts';
 $txt['show_children'] = 'Show child boards on every page inside boards, not just the first.';
 $txt['use_sidebar_menu'] = 'Use sidebar menus instead of dropdown menus when possible.';
 $txt['show_no_avatars'] = 'Don\'t show users\' avatars.';

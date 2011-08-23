@@ -203,6 +203,10 @@ function ModifyPostSettings($return_config = false)
 			array('int', 'spamWaitTime', 'postinput' => $txt['manageposts_seconds']),
 			array('int', 'edit_wait_time', 'postinput' => $txt['manageposts_seconds']),
 			array('int', 'edit_disable_time', 'subtext' => $txt['edit_disable_time_zero'], 'postinput' => $txt['manageposts_minutes']),
+			
+			array('check', 'masterSaveDrafts', 'subtext' => $txt['draftsave_subnote']),
+			array('check', 'masterAutoSaveDrafts', 'subtext' => $txt['draftautosave_subnote']),
+			array('int', 'masterAutoSaveDraftsDelay', 'postinput' => $txt['manageposts_seconds']),
 	);
 
 	if($modSettings['post_cache_cutoff'] < 10)

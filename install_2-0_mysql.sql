@@ -1441,6 +1441,26 @@ CREATE TABLE {$db_prefix}log_activities (
 ) Engine=MyISAM;
 
 #
+# drafts
+#
+CREATE TABLE {$db_prefix}drafts (
+	id_draft int unsigned NOT NULL auto_increment,
+	id_member int(10) unsigned NOT NULL default '0',
+	id_topic  int(10) unsigned NOT NULL default '0',
+	id_board  smallint(5) unsigned NOT NULL default '0',
+	id_msg	  int(10) unsigned NOT NULL default '0',
+	updated   int(10) NOT NULL default '0',
+	icon	  varchar(20) NOT NULL default '',
+	smileys   tinyint(2) NOT NULL default '1',
+	is_locked tinyint(2) NOT NULL default '0',
+	is_sticky tinyint(2) NOT NULL default '0',
+	subject varchar(255) NOT NULL default '',
+	body mediumtext NOT NULL default '',
+	PRIMARY KEY (id_draft),
+	KEY (id_member)
+) Engine=MyISAM;
+
+#
 # Dumping data for table `messages`
 #
 

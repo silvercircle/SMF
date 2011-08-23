@@ -1442,6 +1442,10 @@ function template_profile_theme_settings()
 						</dl>
 						<ul id="theme_settings">
 							<li>
+								<input type="hidden" name="default_options[use_drafts]" value="0" />
+								<label for="use_drafts"><input type="checkbox" name="default_options[use_drafts]" id="use_drafts" value="1"', !empty($context['member']['options']['use_drafts']) ? ' checked="checked"' : '', ' class="input_check" /> ', $txt['use_drafts'], '</label>
+							</li>
+							<li>
 								<input type="hidden" name="default_options[show_board_desc]" value="0" />
 								<label for="show_board_desc"><input type="checkbox" name="default_options[show_board_desc]" id="show_board_desc" value="1"', !empty($context['member']['options']['show_board_desc']) ? ' checked="checked"' : '', ' class="input_check" /> ', $txt['board_desc_inside'], '</label>
 							</li>
@@ -2973,6 +2977,74 @@ echo '
 	}
 	updateAuthMethod();
 	// ]]></script>';
+}
+
+function template_showDrafts()
+{
+	global $context, $settings, $options, $scripturl, $modSettings, $txt;
+
+	echo '
+		<div class="cat_bar">
+			<h3>
+				', $txt['showDrafts'], ' - ', $context['member']['name'], '
+			</h3>
+		</div>
+		<div class="pagesection">
+			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
+		</div>';
+
+	// Button shortcuts
+	$edit_button = create_button('modify_inline.gif', 'edit_draft', 'edit_draft', 'align="middle"');
+	$remove_button = create_button('delete.gif', 'remove_draft', 'remove_draft', 'align="middle"');
+
+	// For every post to be displayed, give it its own subtable, and show the important details of the post.
+	foreach ($context['posts'] as $post)
+	{
+		echo '
+		<div class="post_wrapper mediumpadding">
+			<div class="core_posts">
+				<div class="content">
+					<div class="counter">', $post['counter'], '</div>
+					<div class="topic_details">
+						<h5><strong><a href="', $scripturl, '?board=', $post['board']['id'], '.0">', $post['board']['name'], '</a> / ', $post['topic']['link'], '</strong> &nbsp; &nbsp;';
+
+		if (!empty($post['sticky']))
+			echo '<img src="', $settings['images_url'], '/icons/quick_sticky.gif" alt="', $txt['sticky_topic'], '" title="', $txt['sticky_topic'], '" />';
+
+		if (!empty($post['locked']))
+			echo '<img src="', $settings['images_url'], '/icons/quick_lock.gif" alt="', $txt['locked_topic'], '" title="', $txt['locked_topic'], '" />';
+
+		echo '
+						</h5>
+						<span class="smalltext">&#171;&nbsp;<strong>', $txt['on'], ':</strong> ', $post['time'], '&nbsp;&#187;</span>
+					</div>
+					<div class="list_posts">
+						', $post['body'], '
+					</div>
+				</div>
+				<div class="floatright">
+					<ul class="reset smalltext quickbuttons">
+						<li class="reply_button"><a href="', $scripturl . '?action=post;', (!empty($post['message']['id']) ? 'msg='.$post['message']['id'].';' : ''), (empty($post['topic']['id']) ? 'board=' . $post['board']['id'] : 'topic=' . $post['topic']['id']), '.0;draft;draft_id=', $post['id'], '"><span>', $txt['edit_draft'], '</span></a></li>
+						<li class="remove_button"><a href="', $scripturl, '?action=profile;u=', $context['member']['id'], ';area=showposts;sa=drafts;delete=', $post['id'], ';topic=', $post['topic']['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');"><span>', $txt['remove_draft'], '</span></a></li>
+					</ul>
+				</div>
+				<br class="clear" />
+			</div>
+		</div>';
+	}
+
+	// No drafts? Just end the table with a informative message.
+	if (empty($context['posts']))
+		echo '
+		<div class="tborder windowbg2 padding centertext">
+			', $txt['show_drafts_none'], '
+		</div>';
+
+	// Show more page numbers.
+	echo '
+		<div class="pagesection" style="margin-bottom: 0;">
+			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
+		</div>';
 }
 
 ?>

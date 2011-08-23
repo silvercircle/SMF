@@ -159,7 +159,7 @@ function template_main()
 
 	// If it's locked, show a message to warn the replyer.
 	echo '
-					<p class="information"', $context['locked'] ? '' : ' style="display: none"', ' id="lock_warning">
+					<p class="information"', $context['draft_locked'] ? '' : ' style="display: none"', ' id="lock_warning">
 						', $txt['topic_locked_no_reply'], '
 					</p>';
 
@@ -1120,6 +1120,27 @@ function template_announcement_send()
 				setTimeout("doAutoSubmit();", 1000);
 			}
 		// ]]></script>';
+}
+
+function template_draft_saved()
+{
+	global $context, $txt, $scripturl;
+
+	$profile_url = $scripturl . '?action=profile;u=' . $context['user']['id'];
+
+	echo '
+	<div id="fatal_error">
+		<div class="cat_bar">
+			<h3 class="catbg">
+				', $txt['draft_saved'], '
+			</h3>
+		</div>
+		<div class="windowbg">
+			<span class="topslice"><span></span></span>
+			<div class="padding">', sprintf($txt['draft_saved_full'], $profile_url . ';area=showposts;sa=drafts', $profile_url), '</div>
+			<span class="botslice"><span></span></span>
+		</div>
+	</div>';
 }
 
 ?>

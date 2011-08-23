@@ -385,6 +385,13 @@ function deleteMembers($users, $check_not_admin = false)
 		)
 	);
 
+	$smcFunc['db_query']('', '
+		DELETE FROM {db_prefix}drafts WHERE id_member IN ({array_int:members})',
+		array(
+			'members' => $users,
+		)
+	);
+	
 	// Delete avatar.
 	require_once($sourcedir . '/ManageAttachments.php');
 	removeAttachments(array('id_member' => $users));

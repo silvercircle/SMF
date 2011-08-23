@@ -33,7 +33,7 @@ body
 	background:#333355;
 	font-family: "Trebuchet MS", "Verdana", "Arial", "Helvetica", "sans-serif";
 	font-size:10pt;
-	margin: 0 auto;
+	margin: 0;
 	padding: 0;
 }
 
@@ -1172,34 +1172,37 @@ ul#navigation li
 ------------------------------------------------------- */
 
 /* the content section, wrapper for everything between header and footer */
+
 #content_section
 {
-    padding-left:35px;
-    padding-right:35px;
+    padding-left:20px;
+    padding-right:20px;
     padding-top:10px;
     padding-bottom:5px;
 }
+
 
 /* inner content section, defines the width for the forum itself (but not the header or footer)*/
 #main_content_section
 {
 	min-width:800px;
-	max-width:1200px;
+	max-width:1700px;
+	width:auto;
 	background-color:#fff;
 	min-height: 200px;
-	margin:0 auto 20px auto;
+	margin:0 0 20px 0;
 	border:1px solid #aaa;
-	padding:10px;
 	border-top-left-radius:10px;
 	border-top-right-radius:10px;
 	box-shadow: 0 10px 10px 1px #aaa;
+	padding:10px;
 }
 
 #sidebar {
 	float:right;
-	margin-left:5px;
 	min-height:500px;
-	padding:1px;
+	padding:0px;
+	overflow:hidden;
 }
 #sbtoggle {
  float:right;
@@ -1230,6 +1233,12 @@ h1.bigheader, div.bigheader {
 	border-bottom:3px solid #ccc;
 	padding:4px 20px;
 	margin-bottom:2px;
+	color:#888;
+}
+.greyback {
+	background:#f0f0f5 url(../images/frow.png) bottom left repeat-x;
+	border-radius: 5px 5px 0 0;
+	margin-top:3px;
 }
 h3, h4
 {
@@ -1292,7 +1301,6 @@ li.greeting
 }
 div#upper_section div.user
 {
-	float: right;
 	color:white;
 	white-space: nowrap;
 	font-size:11px;
@@ -1301,7 +1309,6 @@ div#upper_section div.user
 #sidebar div.user {
 	display:block;
 	font-size:12px;
-	margin:3px;
 }
 div.user .avatar img {
 	border:2px solid #aaa;

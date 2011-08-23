@@ -271,6 +271,31 @@ function template_control_richedit_buttons($editor_id)
 	if ($context['show_spellchecking'])
 		echo '
 		<input type="button" value="', $txt['spell_check'], '" tabindex="', $context['tabindex']++, '" onclick="oEditorHandle_', $editor_id, '.spellCheckStart();" class="button_submit" />';
+		
+	if (!empty($context['save_draft']))
+		echo '
+		<input type="hidden" id="draft_id" name="draft_id" value="', empty($context['draft_id']) ? '0' : $context['draft_id'], '" />
+		<input type="submit" name="draft" value="', $txt['save_draft'], '" tabindex="', $context['tabindex']++, '" onclick="return submitThisOnce(this);" accesskey="d" class="button_submit" />';
+		
+	if (!empty($context['save_draft_auto']))
+		echo '
+		<span id="draft_lastautosave" class="clear righttext" style="display: block;"></span>
+		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/drafts.js?1.0"></script>
+		<script type="text/javascript">
+			<!-- // --><![CDATA[
+			var oAutoSave = new draftAutosave({
+				sSelf: \'oAutoSave\',
+				sScriptUrl: smf_scripturl,
+				sSessionId: \'', $context['session_id'], '\',
+				sSessionVar: \'', $context['session_var'], '\',
+				sLastNote: \'draft_lastautosave\',
+				sType: \'full\',
+				iBoard: ', (empty($context['current_board']) ? 0 : $context['current_board']), ',
+				iFreq: ', (empty($modSettings['masterAutoSaveDraftsDelay']) ? 30000 : $modSettings['masterAutoSaveDraftsDelay'] * 1000), '
+			});
+			// ]]>
+			</script>
+			';
 }
 
 // What's this, verification?!

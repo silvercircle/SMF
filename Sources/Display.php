@@ -1106,6 +1106,10 @@ function Display()
 	$context['can_add_tags'] = (($context['user']['started'] && allowedTo('smftags_add')) || allowedTo('smftags_manage'));
 	$context['can_delete_tags'] = (($context['user']['started'] && allowedTo('smftags_del')) || allowedTo('smftags_manage'));
 	// Cleanup all the permissions with extra stuff...
+	
+	$context['save_draft'] = $context['can_reply'] && !$context['user']['is_guest'] && !empty($modSettings['masterSaveDrafts']) && !empty($options['use_drafts']);
+	$context['save_draft_auto'] = $context['save_draft'] && !empty($modSettings['masterAutoSaveDrafts']);
+	
 	$context['can_mark_notify'] &= !$context['user']['is_guest'];
 	$context['can_sticky'] &= !empty($modSettings['enableStickyTopics']);
 	$context['calendar_post'] &= !empty($modSettings['cal_enabled']);

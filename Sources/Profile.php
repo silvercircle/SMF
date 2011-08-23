@@ -333,6 +333,11 @@ function ModifyProfile($post_errors = array())
 	call_integration_hook('integrate_profile_areas', array(&$profile_areas));
 
 	// Do some cleaning ready for the menu function.
+	// Drafts?
+	if ($context['user']['is_owner'] && allowedTo('profile_view_own')) {
+		if (!empty($modSettings['masterSaveDrafts']) && !empty($options['use_drafts']))
+			$profile_areas['info']['areas']['showposts']['subsections']['drafts'] = array($txt['showDrafts'], 'profile_view_own');
+	}	
 	$context['password_areas'] = array();
 	$current_area = isset($_REQUEST['area']) ? $_REQUEST['area'] : '';
 
