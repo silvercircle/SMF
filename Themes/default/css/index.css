@@ -561,12 +561,13 @@ span.xtag:hover {
 	padding: 0.1em 0;
 }
 
-ol.post_attachments {
+ol.post_attachments, ol.tiles {
 	list-style: none;
 	padding:0;
 	margin:0;
 }
-ol.post_attachments li {
+ol.tiles {padding-left:1%;}
+ol.post_attachments li, ol.tiles li {
 	float:left;
 	width:200px;
 	height:60px;
@@ -577,7 +578,15 @@ ol.post_attachments li {
 	padding:2px 4px;
 	border-radius:3px;
 }
-ol.post_attachments li img {
+ol.tiles li {
+	width:33.33%;
+	height:60px;
+	margin: 2px 0;
+	padding:3px 0;
+	background:transparent;
+	border:0;
+}
+ol.post_attachments li img, ol.tiles li img.avatar {
 	max-height:56px;
 	max-width:90px;
 	padding:1px;
@@ -586,6 +595,11 @@ ol.post_attachments li img {
 	width:auto;
 	float:left;
 	margin-right:5px;
+}
+ol.tiles li img.avatar {
+	max-width:60px;
+	max-height:50px;
+	float:none;
 }
 /* All the signatures used in the forum.  If your forum users use Mozilla, Opera, or Safari, you might add max-height here ;). */
 .signature, .attachments
@@ -1239,6 +1253,7 @@ h1.bigheader, div.bigheader {
 	background:#f0f0f5 url(../images/frow.png) bottom left repeat-x;
 	border-radius: 5px 5px 0 0;
 	margin-top:3px;
+	padding: 0 20px !important;
 }
 h3, h4
 {
@@ -3590,7 +3605,11 @@ span.hidelink
 	padding:2px 4px;
 	border-radius:3px;
 }
-
+.flat_container {
+	border:1px solid #ddd;
+	background-color:#f5f5f5;
+	padding:2px 4px;
+}
 .quoteheader, .codeheader {
 	border-bottom-left-radius:0;
 	border-bottom-right-radius:0;

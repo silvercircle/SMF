@@ -652,7 +652,7 @@ function template_sidebar_content()
 					<li class="smalltext">',$user_info['likesreceived'],' ',$txt['likes'],'<li>
 					<li class="smalltext"><span class="smalltext" style="float:right;"><a href="',$scripturl,'?action=logout;',$context['session_var'],'=',$context['session_id'], '">Sign out</a></span><li>
 				 </ul>
-				 <div class="clear orange_container">
+				 <div class="clear flat_container">
 					<a href="', $scripturl, '?action=unread">', $txt['unread_since_visit'], '</a><br>
 					<a href="', $scripturl, '?action=unreadreplies">', $txt['show_unread_replies'], '</a>
 				 </div>';
@@ -720,7 +720,7 @@ function template_sidebar_content()
 				 echo '</dl>';
 				 //if(!empty($context['latest_post']))
 				 ///	echo '    ', $txt['latest_post'] . ': <br /><a href="',$context['latest_post']['href'],'" title="',$context['latest_post']['subject'], '">',shorten_subject($context['latest_post']['subject'], 20),'</a> ( ' . $context['latest_post']['time'] . ' )';
-				echo '<div class="orange_container"><div class="floatright righttext"><a href="', $scripturl, '?action=recent">', $txt['recent_view'], '</a>', $context['show_stats'] ? '</div>
+				echo '<div class="flat_container"><div class="floatright righttext"><a href="', $scripturl, '?action=recent">', $txt['recent_view'], '</a>', $context['show_stats'] ? '</div>
 				<a href="' . $scripturl . '?action=stats">' . $txt['more_stats'] . '</a>' : '', '</div>
 			</div>';
 	}

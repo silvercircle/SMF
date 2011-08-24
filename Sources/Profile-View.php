@@ -258,7 +258,6 @@ function showPosts($memID)
 	$context[$context['profile_menu_name']]['tab_data'] = array(
 		'title' => $txt['showPosts'],
 		'description' => $txt['showPosts_help'],
-		'icon' => 'profile_sm.gif',
 		'tabs' => array(
 			'messages' => array(
 			),

@@ -335,7 +335,7 @@ function ModifyProfile($post_errors = array())
 	// Do some cleaning ready for the menu function.
 	// Drafts?
 	if ($context['user']['is_owner'] && allowedTo('profile_view_own')) {
-		if (!empty($modSettings['masterSaveDrafts']) && !empty($options['use_drafts']))
+		if (!empty($modSettings['masterSaveDrafts']))
 			$profile_areas['info']['areas']['showposts']['subsections']['drafts'] = array($txt['showDrafts'], 'profile_view_own');
 	}	
 	$context['password_areas'] = array();

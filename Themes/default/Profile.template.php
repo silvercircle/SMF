@@ -2988,8 +2988,14 @@ function template_showDrafts()
 			<h3>
 				', $txt['showDrafts'], ' - ', $context['member']['name'], '
 			</h3>
-		</div>
-		<div class="pagesection">
+		</div>';
+		if(empty($options['use_drafts'])) {
+			echo '<br><div class="red_container">'
+			,$txt['drafts_are_disabled'],'
+			</div>';
+			return;
+		}
+		echo '<div class="pagesection">
 			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
 		</div>';
 
@@ -3025,7 +3031,7 @@ function template_showDrafts()
 				<div class="floatright">
 					<ul class="reset smalltext quickbuttons">
 						<li class="reply_button"><a href="', $scripturl . '?action=post;', (!empty($post['message']['id']) ? 'msg='.$post['message']['id'].';' : ''), (empty($post['topic']['id']) ? 'board=' . $post['board']['id'] : 'topic=' . $post['topic']['id']), '.0;draft;draft_id=', $post['id'], '"><span>', $txt['edit_draft'], '</span></a></li>
-						<li class="remove_button"><a href="', $scripturl, '?action=profile;u=', $context['member']['id'], ';area=showposts;sa=drafts;delete=', $post['id'], ';topic=', $post['topic']['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');"><span>', $txt['remove_draft'], '</span></a></li>
+						<li class="remove_button"><a href="', $scripturl, '?action=profile;u=', $context['member']['id'], ';area=showposts;sa=drafts;delete=', $post['id'], ';topic=', $post['topic']['id'], ';',($post['message']['id'] ? 'msg='.$post['message']['id'] . ';' : ''), $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');"><span>', $txt['remove_draft'], '</span></a></li>
 					</ul>
 				</div>
 				<br class="clear" />
@@ -3036,7 +3042,7 @@ function template_showDrafts()
 	// No drafts? Just end the table with a informative message.
 	if (empty($context['posts']))
 		echo '
-		<div class="tborder windowbg2 padding centertext">
+		<div class="blue_container">
 			', $txt['show_drafts_none'], '
 		</div>';
 

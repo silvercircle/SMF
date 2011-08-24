@@ -1153,14 +1153,13 @@ function Post()
 		(!empty($user_info['id']) && $context['save_draft'] && 0 != $msgid)) {
 		
 		$id_cond = empty($_REQUEST['draft_id']) ? '1=1' : ' id_draft = {int:draft} ';
-		
+		$id_sel = $msgid ? ' AND id_msg = {int:message} ' : ' AND id_board = {int:board} AND id_topic = {int:topic} ';
+
 		$query = $smcFunc['db_query']('', '
 			SELECT id_draft, id_board, id_topic, subject, body, icon, smileys, is_locked, is_sticky
 			FROM {db_prefix}drafts	WHERE ' . $id_cond . ' 
 				AND id_member = {int:member}
-				AND id_board = {int:board}
-				AND id_topic = {int:topic}
-				AND id_msg = {int:message}
+				' . $id_sel .'
 			LIMIT 1',
 			array(
 				'draft' => isset($_REQUEST['draft_id']) ? $_REQUEST['draft_id'] : 0,
@@ -1450,9 +1449,9 @@ function Post2()
 		{
 			if (isset($_REQUEST['xml']))
 				draftXmlReturn($draft);
-			loadTemplate('Post');
-			$context['page_title'] = $txt['draft_saved_short'];
-			$context['sub_template'] = 'draft_saved';
+			//loadTemplate('Post');
+			//$context['page_title'] = $txt['draft_saved_short'];
+			//$context['sub_template'] = 'draft_saved';
 			return;
 		}		
 		$posterIsGuest = $user_info['is_guest'];
@@ -1988,6 +1987,9 @@ function Post2()
 	$newTopic = empty($_REQUEST['msg']) && empty($topic);
 
 	$_POST['icon'] = !empty($attachIDs) && $_POST['icon'] == 'xx' ? 'clip' : $_POST['icon'];
+	
+	if (empty($attachIDs) && $_POST['icon'] == 'clip')
+		$_POST['icon'] = 'xx';
 
 	// Collect all parameters for the creation or modification of a post.
 	$msgOptions = array(
@@ -3166,7 +3168,8 @@ function saveDraft()
 		$_REQUEST['draft_id'] = (int) $_REQUEST['draft_id'];
 
 		$id_cond = $msgid ? ' 1=1 ' : ' id_draft = {int:draft} ';
-		
+		$id_sel = $msgid ? ' AND id_msg = {int:message} ' : ' AND id_board = {int:board} AND id_topic = {int:topic} ';
+
 		// Does this draft exist?
 		$smcFunc['db_query']('', '
 			UPDATE {db_prefix}drafts
@@ -3178,10 +3181,8 @@ function saveDraft()
 				is_locked = {int:locked},
 				is_sticky = {int:sticky}
 			WHERE '.$id_cond.'
-				AND id_board = {int:board}
-				AND id_topic = {int:topic}
 				AND id_member = {int:member}
-				AND id_msg = {int:message}
+				'.$id_sel.'
 			LIMIT 1',
 			array(
 				'draft' => $_REQUEST['draft_id'],

@@ -31,116 +31,85 @@ function template_main()
 				<span class="floatright">', $context['letter_links'], '</span>';
 		echo '
 			</h4>
-		<div class="clear"></div></div>
+		<div class="clear"></div>
+		</div>
 		<div class="pagesection">
 			', template_button_strip($memberlist_buttons, 'right'), '
 			<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], '</div>
 		</div>';
 
-	echo '
-		<div id="mlist" class="tborder topic_table mediumpadding">
-			<table class="table_grid" style="width:100%;">
-			<thead>
-				<tr>';
-
+	echo '<div class="orange_container">Sort by:  ';
 	// Display each of the column headers of the table.
 	foreach ($context['columns'] as $column)
 	{
 		// We're not able (through the template) to sort the search results right now...
+		echo '<span style="margin-left:10px;"><strong>';
 		if (isset($context['old_search']))
-			echo '
-					<th scope="col" class="red_container"', isset($column['width']) ? ' width="' . $column['width'] . '"' : '', isset($column['colspan']) ? ' colspan="' . $column['colspan'] . '"' : '', '>
-						', $column['label'], '</th>';
+			echo $column['label'];
 		// This is a selected column, so underline it or some such.
 		elseif ($column['selected'])
 			echo '
-					<th scope="col" class="red_container" style="width: auto;"' . (isset($column['colspan']) ? ' colspan="' . $column['colspan'] . '"' : '') . ' nowrap="nowrap">
-						<a href="' . $column['href'] . '" rel="nofollow">' . $column['label'] . ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" /></a></th>';
+					<a href="' . $column['href'] . '" rel="nofollow">' . $column['label'] . ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" /></a>';
 		// This is just some column... show the link and be done with it.
 		else
-			echo '
-					<th scope="col" class="red_container"', isset($column['width']) ? ' width="' . $column['width'] . '"' : '', isset($column['colspan']) ? ' colspan="' . $column['colspan'] . '"' : '', '>
-						', $column['link'], '</th>';
+			echo $column['link'];
+		echo '</strong></span>';
 	}
-	echo '
-				</tr>
-			</thead>
-			<tbody>';
-
+	echo '</div>';
 	// Assuming there are members loop through each one displaying their data.
-	if (!empty($context['members']))
-	{
-		foreach ($context['members'] as $member)
-		{
+	if (!empty($context['members'])) {
+		echo '<div><ol class="tiles" id="membertiles">';
+		foreach ($context['members'] as $member) {
+			$loc = array();
 			echo '
-				<tr ', empty($member['sort_letter']) ? '' : ' id="letter' . $member['sort_letter'] . '"', '>
-					<td class="windowbg2">
-						', $context['can_send_pm'] ? '<a href="' . $member['online']['href'] . '" title="' . $member['online']['text'] . '">' : '', $settings['use_image_buttons'] ? '<img src="' . $member['online']['image_href'] . '" alt="' . $member['online']['text'] . '" align="middle" />' : $member['online']['label'], $context['can_send_pm'] ? '</a>' : '', '
-					</td>
-					<td class="windowbg lefttext">', $member['link'], '</td>
-					<td class="windowbg2">', $member['show_email'] == 'no' ? '' : '<a href="' . $scripturl . '?action=emailuser;sa=email;uid=' . $member['id'] . '" rel="nofollow"><img src="' . $settings['images_url'] . '/email_sm.gif" alt="' . $txt['email'] . '" title="' . $txt['email'] . ' ' . $member['name'] . '" /></a>', '</td>';
-
-		if (!isset($context['disabled_fields']['website']))
-			echo '
-					<td class="windowbg">', $member['website']['url'] != '' ? '<a href="' . $member['website']['url'] . '" target="_blank" class="new_win"><img src="' . $settings['images_url'] . '/www.gif" alt="' . $member['website']['title'] . '" title="' . $member['website']['title'] . '" /></a>' : '', '</td>';
-
-		// ICQ?
-		if (!isset($context['disabled_fields']['icq']))
-			echo '
-					<td class="windowbg2">', $member['icq']['link'], '</td>';
-
-		// AIM?
-		if (!isset($context['disabled_fields']['aim']))
-			echo '
-					<td class="windowbg2">', $member['aim']['link'], '</td>';
-
-		// YIM?
-		if (!isset($context['disabled_fields']['yim']))
-			echo '
-					<td class="windowbg2">', $member['yim']['link'], '</td>';
-
-		// MSN?
-		if (!isset($context['disabled_fields']['msn']))
-			echo '
-					<td class="windowbg2">', $member['msn']['link'], '</td>';
-
-		// Group and date.
-		echo '
-					<td class="windowbg centertext">', empty($member['group']) ? $member['post_group'] : $member['group'], '</td>
-					<td class="windowbg centertext">', $member['registered_date'], '</td>';
-
-		if (!isset($context['disabled_fields']['posts']))
-		{
-			echo '
-					<td class="windowbg centertext" style="white-space: nowrap" width="15">', $member['posts'], '</td>
-					<td class="windowbg statsbar" width="120">';
-
-			if (!empty($member['post_percent']))
+				<li>
+				<div class="blue_container" style="margin:2px;overflow:hidden;">
+				<div style="width:67px;float:left;">';
+				if(!empty($member['avatar']['image']))
+					echo $member['avatar']['image'];
+				else
+					echo '<img class="avatar" src="',$settings['images_url'], '/unknown.png" alt="avatar" />';
+				
 				echo '
-						<div class="bar" style="width: ', $member['post_percent'] + 4, 'px;">
-							<div style="width: ', $member['post_percent'], 'px;"></div>
-						</div>';
-
-			echo '
-					</td>';
+					</div>
+					<span style="font-size:15px;"><strong>',$member['link'],'</strong></span><br>
+					<span class="smalltext">';
+				if(!empty($member['gender']['name']))
+					$loc[0] = $member['gender']['image'].$member['gender']['name'];
+			
+				if(isset($member['birth_date']) && !empty($member['birth_date'])) {
+					$l = idate('Y', time()) - intval($member['birth_date']);
+					if($l < 100)
+					$loc[1] = $l;
+				}
+			
+				if(!empty($member['location']))
+					$loc[2] = 'from '.$member['location'];
+			
+				if(!empty($loc)) 
+					echo implode(', ', $loc), '<br />';
+				
+				echo '</span>
+				</div></li>';
 		}
-
-		echo '
-				</tr>';
-		}
+		echo '</ol><br class="clear" /></div>
+			<script>
+				$(document).ready(function() {
+					var _w = $("#membertiles").width();
+					if(_w < 900)
+						$("html > head").append("<style>ol.tiles li { width: 50%; } ol.tiles {padding-left: 0;}</style>");
+				});
+			</script>
+			';
 	}
 	// No members?
 	else
 		echo '
-				<tr>
-					<td colspan="', $context['colspan'], '" class="windowbg">', $txt['search_no_results'], '</td>
-				</tr>';
+			<div class="blue_container">', $txt['search_no_results'], '</div>';
 
 	// Show the page numbers again. (makes 'em easier to find!)
-	echo '
-			</tbody>
-			</table>
-		</div>';
+	//echo '
+		//</div>';
 
 	echo '
 		<div class="pagesection">

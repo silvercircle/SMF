@@ -84,31 +84,6 @@ function Memberlist()
 		'real_name' => array(
 			'label' => $txt['username']
 		),
-		'email_address' => array(
-			'label' => $txt['email'],
-			'width' => '25'
-		),
-		'website_url' => array(
-			'label' => $txt['website'],
-			'width' => '70',
-			'link_with' => 'website',
-		),
-		'icq' => array(
-			'label' => $txt['icq'],
-			'width' => '30'
-		),
-		'aim' => array(
-			'label' => $txt['aim'],
-			'width' => '30'
-		),
-		'yim' => array(
-			'label' => $txt['yim'],
-			'width' => '30'
-		),
-		'msn' => array(
-			'label' => $txt['msn'],
-			'width' => '30'
-		),
 		'id_group' => array(
 			'label' => $txt['position']
 		),
