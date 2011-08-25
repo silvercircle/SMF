@@ -1449,9 +1449,9 @@ function Post2()
 		{
 			if (isset($_REQUEST['xml']))
 				draftXmlReturn($draft);
-			//loadTemplate('Post');
-			//$context['page_title'] = $txt['draft_saved_short'];
-			//$context['sub_template'] = 'draft_saved';
+			loadTemplate('Post');
+			$context['page_title'] = $txt['draft_saved_short'];
+			$context['sub_template'] = 'draft_saved';
 			return;
 		}		
 		$posterIsGuest = $user_info['is_guest'];

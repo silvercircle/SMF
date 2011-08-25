@@ -59,4 +59,5 @@ if (!file_exists($sourcedir) && file_exists($boarddir . '/Sources'))
 if (!file_exists($cachedir) && file_exists($boarddir . '/cache'))
 	$cachedir = $boarddir . '/cache';
 
+$db_no_admin_security = 0;	
 ?>

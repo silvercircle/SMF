@@ -68,7 +68,7 @@ function getLastPost()
 	return array(
 		'topic' => $row['id_topic'],
 		'subject' => $row['subject'],
-		'short_subject' => shorten_subject($row['subject'], 24),
+		'short_subject' => shorten_subject($row['subject'], 35),
 		'preview' => $row['body'],
 		'time' => timeformat($row['poster_time']),
 		'timestamp' => forum_time(true, $row['poster_time']),

@@ -290,8 +290,6 @@ blockquote.bbc_standard_quote, blockquote.bbc_alternate_quote
 	margin: 0 10px 0.8em 10px;
 	overflow: auto;
 	border:1px solid #ddd;
-	border-top:0;
-	border-radius:0px 0px 5px 5px;
 	border-left:3px solid #a88;
 }
 
@@ -1223,7 +1221,7 @@ ul#navigation li
  position:relative;
  right:-20px;
  top:-10px;
- width:12px;height:20px;
+ width:14px;height:20px;
  background:white;
  border-radius:0 4px 4px 0;
  cursor:pointer;
@@ -1390,7 +1388,8 @@ div.navigate_section
 {
 	float: left;
 	padding: 0 0.5em 0 0;
-	font-size: 0.95em;
+	font-size: 11px;
+	text-transform: uppercase;
 }
 .navigate_section ul li a
 {
@@ -1805,7 +1804,6 @@ p#whoisviewing
 	border:1px solid #ccc;
 	padding:0 0 0 0;
 	margin-bottom:10px;
-	border-radius:4px;
 	background-color:#f5f5f5;
 }
 .post_bottom {
@@ -3599,7 +3597,7 @@ span.hidelink
 	padding:2px 4px;
 	border-radius:3px;
 }
-.red_container, .quoteheader, .codeheader{
+.red_container {
 	background-color:#FFF2F2;
 	border:1px solid #FFCACA;
 	padding:2px 4px;
@@ -3610,13 +3608,18 @@ span.hidelink
 	background-color:#f5f5f5;
 	padding:2px 4px;
 }
+
+span.arrow {
+	line-height:16px;
+	background: transparent url(../images/theme/sprite.png) left -457px no-repeat !important;
+	padding-left:18px;
+	text-decoration:none;
+}
+
 .quoteheader, .codeheader {
-	border-bottom-left-radius:0;
-	border-bottom-right-radius:0;
-	border-left:3px solid #a88;
 	font-size:11px;
 	font-weight:bold;
-	margin:10px 10px 0 10px;
+	margin:10px 10px 0 20px;
 }
 .codeheader {
 	margin:10px 0px 0 0px;
@@ -3737,7 +3740,7 @@ div#ajaxbusy {
 .light_shadow {	box-shadow: 0px 5px 12px 0px #bbb;}
 .borderless {border:0 !important;}
 a.tpeek {margin-left:10px;}
-abbr.timeago {border:0;}
+abbr.timeago {border:0;color:#888;}
 .inline_highlight {background-color: yellow;}
 
 .fontinc {background:transparent url(../images/theme/sprite.png) 0 -48px no-repeat;padding: 2px 7px;cursor:pointer;}

@@ -82,8 +82,10 @@ function Display()
 	// Load the proper template and/or sub template.
 	if (WIRELESS)
 		$context['sub_template'] = WIRELESS_PROTOCOL . '_display';
-	else
+	else {
 		loadTemplate('Display');
+		loadTemplate('Postbit');
+	}
 
 	// Not only does a prefetch make things slower for the server, but it makes it impossible to know if they read it.
 	if (isset($_SERVER['HTTP_X_MOZ']) && $_SERVER['HTTP_X_MOZ'] == 'prefetch')

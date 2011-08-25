@@ -970,7 +970,6 @@ function PlushSearch2()
 	{
 		$participants = array();
 		$searchArray = array();
-
 		$num_results = $searchAPI->searchQuery($query_params, $searchWords, $excludedIndexWords, $participants, $searchArray);
 	}
 

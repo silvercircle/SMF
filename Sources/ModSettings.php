@@ -130,7 +130,6 @@ function defineSettings()
 			array('check', 'localCookies'),
 			array('check', 'globalCookies'),
 			array('check', 'redirectMetaRefresh'),
-			array('check', 'securityDisable'),
 		array('rule'),
 			// Email and registration type stuff...
 			array('select', 'registration_method', array(&$txt['registration_standard'], &$txt['registration_activate'], &$txt['registration_approval'], &$txt['registration_disabled'])),

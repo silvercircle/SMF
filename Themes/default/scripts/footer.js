@@ -1099,6 +1099,7 @@ jQuery(document).ready(function() {
 				$('#container').animate({marginRight: '0'}, 50);
 			});
 			createCookie('smf_sidebar_disabled', 1, 300);
+			$('#sbtoggle').html('&nbsp;&lt;');
 		}
 		else {
 			//if(!sidebar_content_loaded)
@@ -1107,6 +1108,7 @@ jQuery(document).ready(function() {
 				$('#sidebar').fadeIn();
 			});
 			createCookie('smf_sidebar_disabled', 0, 300);
+			$('#sbtoggle').html('&nbsp;&gt;');
 		}
 	});
 	// convert all time stamps to relative 

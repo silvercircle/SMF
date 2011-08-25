@@ -40,8 +40,10 @@ class sphinx_search
 
 	public function __construct()
 	{
-		global $modSettings, $db_type;
+		global $modSettings;
+		
 		$this->bannedWords = empty($modSettings['search_stopwords']) ? array() : explode(',', $modSettings['search_stopwords']);
+		$this->min_word_length = $this->indexSettings['bytes_per_word'];
 	}
 
 	// Check whether the search can be performed by this API.
@@ -52,7 +54,8 @@ class sphinx_search
 			case 'isValid':
 			case 'searchSort':
 			case 'prepareIndexes':
-			case 'indexedWordQuery':
+			//case 'indexedWordQuery':
+			case 'searchQuery':
 				return true;
 			break;
 
@@ -68,7 +71,8 @@ class sphinx_search
 	public function isValid()
 	{
 		global $modSettings;
-		return !(empty($modSettings['sphinx_searchd_server']) || empty($modSettings['sphinx_searchd_port']));
+		$result = !(empty($modSettings['sphinx_searchd_server']) || empty($modSettings['sphinx_searchd_port']));
+		return($result);
 	}
 
 	// This function compares the length of two strings plus a little.
@@ -82,16 +86,109 @@ class sphinx_search
 		return $y < $x ? 1 : ($y > $x ? -1 : 0);
 	}
 
-	// Do we have to do some work with the words we are searching for to prepare them?
 	public function prepareIndexes($word, &$wordsSearch, &$wordsExclude, $isExcluded)
 	{
 		global $modSettings, $smcFunc;
 
+		$subwords = text2words($word, $this->min_word_length, false);
+
+		// Excluded phrases don't benefit from being split into subwords.
+		if (count($subwords) > 1 && $isExcluded)
+			continue;
+		else
+		{
+			foreach ($subwords as $subword)
+			{
+				if ($smcFunc['strlen']($subword) >= $this->min_word_length && !in_array($subword, $this->bannedWords))
+				{
+					$wordsSearch['indexed_words'][] = $subword;
+					if ($isExcluded)
+						$wordsExclude[] = $subword;
+				}
+			}
+		}
 	}
 
 	// Search for indexed words.
 	public function indexedWordQuery($words, $search_data)
 	{
+	}
+	
+	public function searchQuery($search_params, $searchWords, $excludedIndexWords, &$participants, &$searchArray)
+	{
+		global $modSettings, $context, $sourcedir, $user_info, $scripturl;
+		if (($cached_results = cache_get_data('search_results_' . md5($user_info['query_see_board'] . '_' . $context['params']))) === null)
+		{
+			require_once($sourcedir . '/sphinxapi.php');
+
+			$mySphinx = new SphinxClient();
+			$mySphinx->SetServer($modSettings['sphinx_searchd_server'], (int) $modSettings['sphinx_searchd_port']);
+			$mySphinx->SetLimits(0, (int) $modSettings['sphinx_max_results']);
+			$mySphinx->SetMatchMode(SPH_MATCH_BOOLEAN);
+			$mySphinx->SetGroupBy('ID_TOPIC', SPH_GROUPBY_ATTR);
+			$mySphinx->SetSortMode($search_params['sort_dir'] === 'asc' ? SPH_SORT_ATTR_ASC : SPH_SORT_ATTR_DESC, $search_params['sort'] === 'ID_MSG' ? 'ID_TOPIC' : $search_params['sort']);
+
+			if (!empty($search_params['topic']))
+				$mySphinx->SetFilter('ID_TOPIC', array((int) $search_params['topic']));
+			if (!empty($search_params['min_msg_id']) || !empty($search_params['max_msg_id']))
+				$mySphinx->SetIDRange(empty($search_params['min_msg_id']) ? 0 : (int) $search_params['min_msg_id'], empty($search_params['max_msg_id']) ? (int) $modSettings['maxMsgID'] : (int) $search_params['max_msg_id']);
+			if (!empty($search_params['brd']))
+				$mySphinx->SetFilter('ID_BOARD', $search_params['brd']);
+			if (!empty($search_params['memberlist']))
+				$mySphinx->SetFilter('ID_MEMBER', $search_params['memberlist']);
+			
+			// Construct the (binary mode) query.
+			$orResults = array();
+			foreach ($searchWords as $orIndex => $words)
+			{
+				$andResult = '';
+				foreach ($words['indexed_words'] as $sphinxWord) {
+					echo $sphinxWord;
+					$andResult .= (in_array($sphinxWord, $excludedIndexWords) ? '-' : '') . $sphinxWord . ' & ';
+				}
+				$orResults[] = substr($andResult, 0, -3);
+			}
+			$query = count($orResults) === 1 ? $orResults[0]  : '(' . implode(') | (', $orResults) . ')';
+
+			// Execute the search query.
+			$request = $mySphinx->Query($query, 'smf_index');
+
+			// Can a connection to the deamon be made?
+			if ($request === false)
+				fatal_error('Unable to access the search deamon.');
+
+			// Get the relevant information from the search results.
+			$cached_results = array(
+				'matches' => array(),
+				'num_results' => $request['total'],
+			);
+			log_error('results = '.$cached_results['num_results']);
+			if (isset($request['matches']))
+				foreach ($request['matches'] as $msgID => $match)
+					$cached_results['matches'][$msgID] = array(
+						'id' => $match['attrs']['id_topic'],
+						'relevance' => round($match['attrs']['relevance'] / 10000, 1) . '%',
+						'num_matches' => $match['attrs']['@count'],
+						'matches' => array(),
+					);
+
+			// Store the search results in the cache.
+			cache_put_data('search_results_' . md5($user_info['query_see_board']) . '_' . $context['params'], $cached_results, 600);
+		}
+		foreach (array_slice(array_keys($cached_results['matches']), $_REQUEST['start'], $modSettings['search_results_per_page']) as $msgID)
+		{
+			$context['topics'][$msgID] = $cached_results['matches'][$msgID];
+			$participants[$cached_results['matches'][$msgID]['id']] = false;
+		}
+
+		// Sentences need to be broken up in words for proper highlighting.
+		foreach ($searchWords as $orIndex => $words)
+			$searchArray = array_merge($searchArray, $searchWords[$orIndex]['subject_words']);
+
+		// Now that we know how many results to expect we can start calculating the page numbers.
+		$context['page_index'] = constructPageIndex($scripturl . '?action=search2;params=' . $context['params'], $_REQUEST['start'], $cached_results['num_results'], $modSettings['search_results_per_page'], false);
+		
+		return($cached_results['num_results']);
 	}
 }
 ?>

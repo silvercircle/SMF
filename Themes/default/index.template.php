@@ -222,9 +222,10 @@ function template_body_above()
 
 	theme_linktree();
 	$sidebar_allowed = isset($context['is_board_index']);			// todo: make this more flexible and define a set of pages where the sidebar can show up
+	$sidebar_vis = (isset($_COOKIE['smf_sidebar_disabled']) && $_COOKIE['smf_sidebar_disabled'] == 1) ? false : true;
 	if($sidebar_allowed)
 		echo '
-			<div id="sbtoggle"></div>';
+			<div id="sbtoggle">',$sidebar_vis ? '&nbsp;&gt;' : '&nbsp;&lt;','</div>';
 	// Show the navigation tree.
 	$scope = 0;
 	echo '<form onmouseout="return false;" onsubmit="submitSearchBox();" style="float:right;margin-right:30px;margin-bottom:-20px;" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
@@ -264,7 +265,6 @@ function template_body_above()
 				<input style="margin:0;" type="submit" name="submit" value="', $txt['go'], '" class="button_submit" />
 				</noscript>';
 	echo '</form><div style="clear:both;"></div>';
-	$sidebar_vis = (isset($_COOKIE['smf_sidebar_disabled']) && $_COOKIE['smf_sidebar_disabled'] == 1) ? false : true;
 	echo '<div id="sidebar" style="width:255px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
 		//if(($sidebar_allowed && $sidebar_vis) || (isset($_COOKIE['smf_jsavail']) && !$_COOKIE['smf_jsavail']))
 		if($sidebar_allowed)
@@ -761,7 +761,7 @@ function template_sidebar_content()
 			<h1 class="bigheader greyback">
 				<a href="', $scripturl, '?action=recent">', $txt['recent_posts'], '</a>
 			</h1>
-			<div class="lefftext smalltext smallpadding blue_container" id="recent_posts_content" style="line-height:110%;">
+			<div class="lefftext smalltext smallpadding blue_container" id="recent_posts_content" style="line-height:120%;">
 				<div class="entry-title" style="display: none;">', $context['forum_name_html_safe'], ' - ', $txt['recent_posts'], '</div>
 				<div class="entry-content" style="display: none;">
 					<a rel="alternate" type="application/rss+xml" href="', $scripturl, '?action=.xml;type=webslice">', $txt['subscribe_webslice'], '</a>
@@ -784,9 +784,8 @@ function template_sidebar_content()
 					board (with an id, name, and link.), topic (the topic's id.), poster (with id, name, and link.),
 					subject, short_subject (shortened with...), time, link, and href. */
 			foreach ($context['latest_posts'] as $post)
-				echo 
-					$post['link'], '<br>', $txt['by'], ' ', $post['poster']['link'], '<br>
-					<span class="nowrap floatright">', $post['time'], '</span><hr class="clear">';
+				echo '<a href="',$post['href'],'" title="',$post['subject'],'">',$post['short_subject'],'</a><br>', $txt['by'], ' ', $post['poster']['link'], '
+					<span class="nowrap floatright">', $post['time'], '</span><hr class="clear" style="margin-top:2px;">';
 		}
 		echo '
 			</div>';
