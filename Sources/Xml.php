@@ -268,8 +268,9 @@ function WhoPosted()
 }
 
 /*
- * handle AJAX requests for chaning topic prefixes in the message and topic view(s)
+ * handle AJAX requests for changing topic prefixes in the message and topic view(s)
  */
+ // todo: complete this (ui not done yet)
 function InlinePrefixActions()
 {
 	// board and topic ids must be submitted with the request
@@ -300,7 +301,7 @@ function AjaxCollapseCategory()
 	obExit(false, false, false);
 }
 
-function GetSidebarContent()
+function GetSidebarContent()		// unused at the moment
 {
 	global $context, $user_info, $txt, $modSettings, $sourcedir, $scripturl, $settings;
 	loadTemplate('index');

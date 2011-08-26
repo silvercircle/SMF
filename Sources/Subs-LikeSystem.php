@@ -16,17 +16,16 @@ if (!defined('SMF'))
  * 
  * TODO: remove likes from the database when a user is deleted
  * TODO: make it work without AJAX and JavaScript
- * TODO: error responses
- * TODO: disallow like for posts by banned users
- * TODO: use language packs to make it fully translatable
  * TODO: allow likes for more than just post content types (i.e. profile messages in a later stage)
+ *       ctype is already available as content type in the database, but right now, 
+ *       there is only one content type: a post (ctype == 1)
  */
  
 function GiveLike($mid)
 {
 	global $context, $settings, $user_info, $sourcedir, $smcFunc, $txt;
 	$total = array();
-	$content_type = 1;			// > post content type
+	$content_type = 1;			// > post content type, we should define them elsewhere later when we have more than just this one
 	
 	if($mid > 0) {
 		$uid = $user_info['id'];
@@ -91,8 +90,6 @@ function GiveLike($mid)
 			AjaxErrorMsg($txt['like_no_permission']);
 
 		if($remove_it && $c > 0) {
-			//AjaxErrorMsg($txt['like_remove_ok']);
-			
 			if($like_owner == $uid) {
 				$smcFunc['db_query']('', '
 					DELETE FROM {db_prefix}likes WHERE id_msg = {int:id_msg} AND id_user = {int:id_user} AND ctype = {int:ctype}',
@@ -117,7 +114,7 @@ function GiveLike($mid)
 				loadMemberData($like_receiver);		// but banned users shall not receive likes
 				loadMemberContext($like_receiver);
 			}
-			if(($like_receiver && !$memberContext[$like_receiver]['is_banned']) || $like_receiver == 0) {
+			if(($like_receiver && !$memberContext[$like_receiver]['is_banned']) || $like_receiver == 0) {  // posts by guests can be liked
 				$smcFunc['db_query']('', '
 					INSERT INTO {db_prefix}likes(id_msg, id_user, id_receiver, updated, ctype) values({int:id_message}, {int:id_user}, {int:id_receiver}, {int:updated}, {int:ctype})',
 					array('id_message' => $mid, 'id_user' => $uid, 'id_receiver' => $like_receiver, 'updated' => time(), 'ctype' => $content_type));
@@ -176,7 +173,8 @@ function LikesUpdate($mid)
 	
 	$request = $smcFunc['db_query']('', '
 		SELECT COUNT(id_msg) as count
-			FROM {db_prefix}likes AS l WHERE l.id_msg = {int:id_msg}', array('id_msg' => $mid));
+			FROM {db_prefix}likes AS l WHERE l.id_msg = {int:id_msg} AND l.ctype = {int:ctype}', 
+			array('id_msg' => $mid, 'ctype' => $content_type));
 	
 	$count = $smcFunc['db_fetch_row']($request);
 	$smcFunc['db_free_result']($request);

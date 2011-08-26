@@ -206,6 +206,7 @@ $txt['icon_cry'] = 'Cry';
 
 $txt['moderator'] = 'Moderator';
 $txt['moderators'] = 'Moderators';
+$txt['moderated_by'] = 'Moderated by';
 
 $txt['mark_board_read'] = 'Mark Topics as Read for this Board';
 $txt['views'] = 'Views';

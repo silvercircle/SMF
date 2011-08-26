@@ -993,7 +993,7 @@ jQuery(document).ready(function() {
 		}
 	});
 	$('a.bbc_img').prettyPhoto({social_tools:'', allow_resize:true,animation_speed:'fast', show_title:false});
-	$('a.attach_thumb').prettyPhoto({social_tools:'', deeplinking:false, overlay_gallery:false, animation_speed:'normal',opacity:1});
+	$('a.attach_thumb').prettyPhoto({social_tools:'', deeplinking:false, overlay_gallery:false, animation_speed:'fast'});
 	$('.whoposted').click(function() {
 		var t = $(this).attr('data-topic');
 		if(t) {
@@ -1110,6 +1110,9 @@ jQuery(document).ready(function() {
 			createCookie('smf_sidebar_disabled', 0, 300);
 			$('#sbtoggle').html('&nbsp;&gt;');
 		}
+	});
+	$('span.brd_moderators').click(function() {
+		$(this).children('.brd_moderators_chld').show();
 	});
 	// convert all time stamps to relative 
 	if(!disableDynamicTime)
@@ -1267,4 +1270,7 @@ function submitSearchBox()
 
 $('#adv_search').live('mouseleave',function(event) {
 	$('#adv_search').hide();
+});
+$('.brd_moderators_chld').live('mouseleave',function(event) {
+	$(this).hide();
 });

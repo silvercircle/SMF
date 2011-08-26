@@ -49,8 +49,10 @@ function MessageIndex()
 
 	if (WIRELESS)
 		$context['sub_template'] = WIRELESS_PROTOCOL . '_messageindex';
-	else
+	else {
 		loadTemplate('MessageIndex');
+		loadTemplate('GenericBits');
+	}
 
 	$context['act_as_cat'] = $board_info['allow_topics'] ? false : true;
 	$context['name'] = $board_info['name'];

@@ -419,14 +419,6 @@ code.bbc_code
 	font-weight: bold;
 	background: #ccc url(../images/theme/sprite.png) 0 -171px repeat-x;
 }
-.catbg, .catbg2, tr.catbg td, tr.catbg2 td, tr.catbg th, tr.catbg2 th
-{
-	color: #222;
-	font-size: 1.0em;
-	font-weight: bold;
-	/*background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;*/
-}
-
 /* adjust the table versions of headers */
 tr.titlebg th, tr.titlebg2 th, td.titlebg, td.titlebg2, tr.catbg th, tr.catbg2 th, td.catbg, td.catbg2
 {
@@ -618,12 +610,24 @@ ol.tiles li img.avatar {
 	line-height: 1.4em;
 	font-size: 0.85em;
 }
-a.brd_rsslink {
+a.brd_rsslink, span.brd_moderators {
 	background:transparent url(../images/theme/sprite.png) 0 -653px no-repeat;
 	width:20px;
 	height:20px;
 	float:right;
 }
+span.brd_moderators {
+	background:transparent url(../images/theme/sprite.png) 0 -540px no-repeat;
+	cursor:pointer;
+}
+span.brd_moderators_chld {
+	padding:4px;
+	border:1px solid #ccc;
+	background-color:white;
+	font-size:12px;
+	position:absolute;
+}
+
 /* Sometimes there will be an error when you post */
 .error
 {
@@ -763,7 +767,7 @@ dl.settings dt a img
 
 /* Styles for rounded headers.
 ------------------------------------------------------- */
-h3.catbg, h3.catbg2, h3.titlebg, h4.titlebg, h4.catbg
+h2.catbg, h3.catbg2, h3.titlebg, h4.titlebg, h4.catbg
 {
 	overflow: hidden;
 	height: 20px;
@@ -1493,6 +1497,7 @@ ol.category > li > div.info {
 }
 ol.category > li > div.info h3 {
 	color:#0066aa;
+	display:inline;
 }
 /* the posting icons */
 #posting_icons
@@ -2629,7 +2634,7 @@ tr.titlebg td
 	border:0;
 	border-bottom:1px solid #aaa;
 }
-#boardindex_table div.cat_bar > h3.catbg
+#boardindex_table div.cat_bar > h2
 {
 	text-shadow:1px 1px #ccc !important;
 }
@@ -3658,6 +3663,7 @@ span.avatar_overlay img {
 
 tbody.divider tr {background:white;}
 .td_children {font-size:12px;padding:1px 0;border-top:1px solid #ddd;margin-top:3px;}
+.td_children h4 {display:inline;color:#0066aa;}
 #quick_search form {padding-top:1px !important;}
 
 /* member card */

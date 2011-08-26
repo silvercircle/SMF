@@ -36,8 +36,10 @@ function BoardIndex()
 	// For wireless, we use the Wireless template...
 	if (WIRELESS)
 		$context['sub_template'] = WIRELESS_PROTOCOL . '_boardindex';
-	else
+	else {
 		loadTemplate('BoardIndex');
+		loadTemplate('GenericBits');
+	}
 	$context['is_board_index'] = true;
 	// Set a canonical URL for this page.
 	$context['canonical_url'] = $scripturl;

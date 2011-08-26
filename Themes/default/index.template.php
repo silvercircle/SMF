@@ -79,7 +79,7 @@ function template_html_above()
 
 	// The ?fin20 part of this link is just here to make sure browsers don't cache it wrongly.
 	echo '
-	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css?fin20" />';
+	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css?fin12" />';
 
 	// Some browsers need an extra stylesheet due to bugs/compatibility issues.
 	//foreach (array('ie7', 'ie6', 'webkit') as $cssfix)
@@ -265,11 +265,13 @@ function template_body_above()
 				<input style="margin:0;" type="submit" name="submit" value="', $txt['go'], '" class="button_submit" />
 				</noscript>';
 	echo '</form><div style="clear:both;"></div>';
-	echo '<div id="sidebar" style="width:255px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
+	echo '<aside>
+		  <div id="sidebar" style="width:255px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
 		//if(($sidebar_allowed && $sidebar_vis) || (isset($_COOKIE['smf_jsavail']) && !$_COOKIE['smf_jsavail']))
 		if($sidebar_allowed)
 			template_sidebar_content();
 	echo '</div>
+		  </aside>
 	      <div id="container" style="margin-right:',$sidebar_allowed ? '265px' : '0',';">
 		  <script>
   		  // <![CDATA[
@@ -351,6 +353,7 @@ function template_body_below()
 	echo $txt['jquery_timeago_loc'],'
 	// ]]>
 	</script>
+	<footer>
 	<div id="footer_section">';
 	// Show the load time?
 	if ($context['show_load_time'])
@@ -368,7 +371,8 @@ function template_body_below()
 			</div>';
 
 	echo '
-	</div>';
+	</div>
+	</footer>';
 }
 
 function template_html_below()
@@ -397,25 +401,26 @@ function theme_linktree($force_show = false)
 	$ltree = '<div class="navigate_section"><ul class="linktree" id="linktree_'. (empty($shown_linktree) ? 'upper' : 'lower'). '">';
 
 	// Each tree item has a URL and name. Some may have extra_before and extra_after.
+	$tree_items = count($context['linktree']);
 	foreach ($context['linktree'] as $link_num => $tree)
 	{
 		$ltree .= ('
-		<li'. (($link_num == count($context['linktree']) - 1) ? ' class="last"' : ''). '>');
+		<li'. (($link_num == $tree_items - 1) ? ' class="last"' : ''). '>');
 
 		// Show something before the link?
 		if (isset($tree['extra_before']))
 			$ltree .= $tree['extra_before'];
 
 		// Show the link, including a URL if it should have one.
-		$ltree .= ($settings['linktree_link'] && isset($tree['url']) ? ('
-			<a href="' . $tree['url'] . '"><span>' . $tree['name'] . '</span></a>') : ('<span>') . $tree['name'] . '</span>');
+		$ltree .= (isset($tree['url']) ? ('
+			<a itemscope="itemscope" itemtype="http://data-vocabulary.org/Breadcrumb" href="' . $tree['url'] . '"><span>' . $tree['name'] . '</span></a>') : ('<span>') . $tree['name'] . '</span>');
 
 		// Show something after the link...?
 		if (isset($tree['extra_after']))
 			$ltree .= $tree['extra_after'];
 
 		// Don't show a separator for the last one.
-		if ($link_num != count($context['linktree']) - 1)
+		if ($link_num != $tree_items - 1)
 			$ltree .= ' &gt;';
 
 		$ltree .= '
