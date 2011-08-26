@@ -16,12 +16,18 @@ function template_main()
 
 	echo '
 	<form action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '" name="searchform" id="searchform">
-		<div class="bigheader">
-			<span class="ie6_header floatleft">', $txt['set_parameters'], '</span>
+		<div class="bigheader">';
+			if(isset($modSettings['search_index']) && $modSettings['search_index'] == 'sphinx')
+				echo '<div class="floatright">
+					Powered by: <a href="http://sphinxsearch.com"><img src="',$settings['images_url'],'/theme/sphinx.jpg" alt="sphinxlogo" style="vertical-align:middle;" /></a>
+					</div>';
+
+			echo '<span class="ie6_header floatleft">', $txt['set_parameters'], '</span>
 			<div class="clear"></div>
 		</div>
-		<div class="generic_container rounded_bottom">';
+		<div>';
 
+		
 	if (!empty($context['search_errors']))
 		echo '
 		<p id="search_error" class="error">', implode('<br />', $context['search_errors']['messages']), '</p>';
@@ -390,8 +396,8 @@ function template_results()
 	{
 		echo '
 		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="ie6_header floatleft"><img src="' . $settings['images_url'] . '/buttons/search.gif" alt="" />&nbsp;', $txt['mlist_search_results'],':&nbsp;',$context['search_params']['search'],'</span>
+			<h3>
+				', $txt['mlist_search_results'],':&nbsp;',$context['search_params']['search'],'
 			</h3>
 		</div>
 		<div class="pagesection">
@@ -400,55 +406,11 @@ function template_results()
 
 		if (empty($context['topics']))
 			echo '
-		<div class="information">(', $txt['search_no_results'], ')</div>';
+		<div class="blue_container">(', $txt['search_no_results'], ')</div>';
 
-		while ($topic = $context['get_topics']())
-		{
+		while ($topic = $context['get_topics']()) {
 			foreach ($topic['matches'] as $message)
-			{
-				echo '
-			<div class="search_results_posts">
-				<div class="', $message['alternate'] == 0 ? 'windowbg' : 'windowbg2', ' core_posts">
-					<span class="topslice"><span></span></span>
-					<div class="content">
-						<div class="counter">', $message['counter'], '</div>
-						<div class="topic_details">
-							<h5>', $topic['board']['link'], ' / <a href="', $scripturl, '?topic=', $topic['id'], '.', $message['start'], ';topicseen#msg', $message['id'], '">', $message['subject_highlighted'], '</a></h5>
-							<span class="smalltext">&#171;&nbsp;', $txt['message'], ' ', $txt['by'], ' <strong>', $message['member']['link'], ' </strong>', $txt['on'], '&nbsp;<em>', $message['time'], '</em>&nbsp;&#187;</span>
-						</div>
-						<div class="list_posts">', $message['body_highlighted'], '</div>';
-
-				if ($topic['can_reply'] || $topic['can_mark_notify'])
-					echo '
-						<div class="quickbuttons_wrap">
-							<ul class="reset smalltext quickbuttons">';
-
-				// If they *can* reply?
-				if ($topic['can_reply'])
-					echo '
-								<li class="reply_button"><a href="', $scripturl . '?action=post;topic=' . $topic['id'] . '.' . $message['start'], '">', $txt['reply'], '</a></li>';
-
-				// If they *can* quote?
-				if ($topic['can_quote'])
-					echo '
-								<li class="quote_button"><a href="', $scripturl . '?action=post;topic=' . $topic['id'] . '.' . $message['start'] . ';quote=' . $message['id'] . '">', $txt['quote'], '</a></li>';
-
-				// Can we request notification of topics?
-				if ($topic['can_mark_notify'])
-					echo '
-								<li class="notify_button"><a href="', $scripturl . '?action=notify;topic=' . $topic['id'] . '.' . $message['start'], '">', $txt['notify'], '</a></li>';
-
-				if ($topic['can_reply'] || $topic['can_mark_notify'])
-					echo '
-							</ul>
-						</div>';
-				echo '
-						<br class="clear" />
-					</div>
-					<span class="botslice"><span></span></span>
-				</div>
-			</div>';
-			}
+				template_postbit_compact($message, 0);
 		}
 
 		echo '

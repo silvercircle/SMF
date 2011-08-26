@@ -302,8 +302,10 @@ function PlushSearch2()
 	$context['search_string_limit'] = 100;
 
 	loadLanguage('Search');
-	if (!isset($_REQUEST['xml']))
+	if (!isset($_REQUEST['xml'])) {
 		loadTemplate('Search');
+		loadTemplate('Postbit');
+	}
 	//If we're doing XML we need to use the results template regardless really.
 	else
 		$context['sub_template'] = 'results';
@@ -971,11 +973,13 @@ function PlushSearch2()
 		$participants = array();
 		$searchArray = array();
 		$num_results = $searchAPI->searchQuery($query_params, $searchWords, $excludedIndexWords, $participants, $searchArray);
+		log_error('sphinx search');
 	}
 
 	// Update the cache if the current search term is not yet cached.
 	else
 	{
+		log_error('update cache');
 		$update_cache = empty($_SESSION['search_cache']) || ($_SESSION['search_cache']['params'] != $context['params']);
 		if ($update_cache)
 		{
@@ -1943,11 +1947,11 @@ function prepareSearchContext($reset = false)
 	if (empty($modSettings['messageIconChecks_disable']))
 	{
 		if (!isset($context['icon_sources'][$message['first_icon']]))
-			$context['icon_sources'][$message['first_icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $message['first_icon'] . '.gif') ? 'images_url' : 'default_images_url';
+			$context['icon_sources'][$message['first_icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $message['first_icon'] . '.png') ? 'images_url' : 'default_images_url';
 		if (!isset($context['icon_sources'][$message['last_icon']]))
-			$context['icon_sources'][$message['last_icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $message['last_icon'] . '.gif') ? 'images_url' : 'default_images_url';
+			$context['icon_sources'][$message['last_icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $message['last_icon'] . '.png') ? 'images_url' : 'default_images_url';
 		if (!isset($context['icon_sources'][$message['icon']]))
-			$context['icon_sources'][$message['icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $message['icon'] . '.gif') ? 'images_url' : 'default_images_url';
+			$context['icon_sources'][$message['icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $message['icon'] . '.png') ? 'images_url' : 'default_images_url';
 	}
 	else
 	{
@@ -1983,7 +1987,7 @@ function prepareSearchContext($reset = false)
 			'href' => $scripturl . '?topic=' . $message['id_topic'] . '.0',
 			'link' => '<a href="' . $scripturl . '?topic=' . $message['id_topic'] . '.0">' . $message['first_subject'] . '</a>',
 			'icon' => $message['first_icon'],
-			'icon_url' => $settings[$context['icon_sources'][$message['first_icon']]] . '/post/' . $message['first_icon'] . '.gif',
+			'icon_url' => $settings[$context['icon_sources'][$message['first_icon']]] . '/post/' . $message['first_icon'] . '.png',
 			'member' => array(
 				'id' => $message['first_member_id'],
 				'name' => $message['first_member_name'],
@@ -1999,7 +2003,7 @@ function prepareSearchContext($reset = false)
 			'href' => $scripturl . '?topic=' . $message['id_topic'] . ($message['num_replies'] == 0 ? '.0' : '.msg' . $message['last_msg']) . '#msg' . $message['last_msg'],
 			'link' => '<a href="' . $scripturl . '?topic=' . $message['id_topic'] . ($message['num_replies'] == 0 ? '.0' : '.msg' . $message['last_msg']) . '#msg' . $message['last_msg'] . '">' . $message['last_subject'] . '</a>',
 			'icon' => $message['last_icon'],
-			'icon_url' => $settings[$context['icon_sources'][$message['last_icon']]] . '/post/' . $message['last_icon'] . '.gif',
+			'icon_url' => $settings[$context['icon_sources'][$message['last_icon']]] . '/post/' . $message['last_icon'] . '.png',
 			'member' => array(
 				'id' => $message['last_member_id'],
 				'name' => $message['last_member_name'],
@@ -2073,7 +2077,7 @@ function prepareSearchContext($reset = false)
 		'alternate' => $counter % 2,
 		'member' => &$memberContext[$message['id_member']],
 		'icon' => $message['icon'],
-		'icon_url' => $settings[$context['icon_sources'][$message['icon']]] . '/post/' . $message['icon'] . '.gif',
+		'icon_url' => $settings[$context['icon_sources'][$message['icon']]] . '/post/' . $message['icon'] . '.png',
 		'subject' => $message['subject'],
 		'subject_highlighted' => $subject_highlighted,
 		'time' => timeformat($message['poster_time']),
@@ -2084,9 +2088,10 @@ function prepareSearchContext($reset = false)
 			'timestamp' => forum_time(true, $message['modified_time']),
 			'name' => $message['modified_name']
 		),
-		'body' => $message['body'],
+		'body' => $body_highlighted,
 		'body_highlighted' => $body_highlighted,
-		'start' => 'msg' . $message['id_msg']
+		'start' => 'msg' . $message['id_msg'],
+		'href' => $scripturl . '?topic=' . $message['id_topic'] . '.msg' . $message['id_msg'] . '#msg' . $message['id_msg'],
 	);
 	$counter++;
 

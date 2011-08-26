@@ -227,13 +227,11 @@ function template_main()
 
 	$ignoredMsgs = array();
 	$removableMessageIDs = array();
-	$alternate = false;
 
 	// Get all the messages...
   	while ($message = $context['get_message']())
 	{
 		$ignoring = false;
-		$alternate = !$alternate;
 		if ($message['can_remove'])
 			$removableMessageIDs[] = $message['id'];
 
@@ -244,21 +242,10 @@ function template_main()
 			$ignoredMsgs[] = $message['id'];
 		}
 
-		// Show the message anchor and a "new" anchor if this message is new.
-		$cclass = $message['approved'] ? ($message['alternate'] == 0 ? 'windowbg ' : 'windowbg2 ') : 'approvebg ';
-					echo '<div class="',$cclass,'post_wrapper light_shadow" data-mid="',$message['id'], '">';
-
-		if ($message['id'] != $context['first_message']) {
-			echo '
-				<a id="msg', $message['id'], '"></a>', $message['first_new'] ? '<a id="new"></a>' : '';
-		}
-		else {
-			if($context['id_layout'] != 0) {
-				template_postbit_blog($message, $ignoring);
-				continue;
-			}
-		}
-		template_postbit_normal($message, $ignoring);
+		if ($message['id'] == $context['first_message'] && $context['id_layout'] != 0)
+			template_postbit_blog($message, $ignoring);
+		else
+			template_postbit_normal($message, $ignoring);
 	}
 	echo '
 				</form>

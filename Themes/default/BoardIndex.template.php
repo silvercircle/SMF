@@ -259,8 +259,8 @@ function template_main()
 		echo '
 	<div id="posting_icons" class="flow_hidden">
 		<ul class="reset">
-			<li class="floatleft"><img src="', $settings['images_url'], '/new_none.png" alt="" /> ', $txt['old_posts'], '</li>
-			<li class="floatleft"><img src="', $settings['images_url'], '/new_redirect.png" alt="" /> ', $txt['redirect_board'], '</li>
+			<li class="floatleft"><img src="', $settings['images_url'], '/off.png" alt="" /> ', $txt['old_posts'], '</li>
+			<li class="floatleft"><img src="', $settings['images_url'], '/redirect.png" alt="" /> ', $txt['redirect_board'], '</li>
 		</ul>
 	</div>';
 	}

@@ -42,8 +42,10 @@ class sphinx_search
 	{
 		global $modSettings;
 		
+		//$this->indexSettings = unserialize($modSettings['search_custom_index_config']);
+		//var_dump($this->indexSettings);
 		$this->bannedWords = empty($modSettings['search_stopwords']) ? array() : explode(',', $modSettings['search_stopwords']);
-		$this->min_word_length = $this->indexSettings['bytes_per_word'];
+		$this->min_word_length = null;//$this->indexSettings['bytes_per_word'];
 	}
 
 	// Check whether the search can be performed by this API.
@@ -125,7 +127,8 @@ class sphinx_search
 			$mySphinx->SetServer($modSettings['sphinx_searchd_server'], (int) $modSettings['sphinx_searchd_port']);
 			$mySphinx->SetLimits(0, (int) $modSettings['sphinx_max_results']);
 			$mySphinx->SetMatchMode(SPH_MATCH_BOOLEAN);
-			$mySphinx->SetGroupBy('ID_TOPIC', SPH_GROUPBY_ATTR);
+			if(!$search_params['show_complete'])
+				$mySphinx->SetGroupBy('ID_TOPIC', SPH_GROUPBY_ATTR);
 			$mySphinx->SetSortMode($search_params['sort_dir'] === 'asc' ? SPH_SORT_ATTR_ASC : SPH_SORT_ATTR_DESC, $search_params['sort'] === 'ID_MSG' ? 'ID_TOPIC' : $search_params['sort']);
 
 			if (!empty($search_params['topic']))
@@ -143,7 +146,6 @@ class sphinx_search
 			{
 				$andResult = '';
 				foreach ($words['indexed_words'] as $sphinxWord) {
-					echo $sphinxWord;
 					$andResult .= (in_array($sphinxWord, $excludedIndexWords) ? '-' : '') . $sphinxWord . ' & ';
 				}
 				$orResults[] = substr($andResult, 0, -3);
@@ -162,15 +164,19 @@ class sphinx_search
 				'matches' => array(),
 				'num_results' => $request['total'],
 			);
-			log_error('results = '.$cached_results['num_results']);
-			if (isset($request['matches']))
-				foreach ($request['matches'] as $msgID => $match)
+			//log_error('results = '.$cached_results['num_results']);
+			if (isset($request['matches'])) {
+				foreach ($request['matches'] as $msgID => $match) {
 					$cached_results['matches'][$msgID] = array(
 						'id' => $match['attrs']['id_topic'],
 						'relevance' => round($match['attrs']['relevance'] / 10000, 1) . '%',
-						'num_matches' => $match['attrs']['@count'],
+						//'num_matches' => $match['attrs']['@count'],
 						'matches' => array(),
 					);
+					if(!$search_params['show_complete'])
+						$cached_results['matches'][$msgID]['num_matches'] = $match['attrs']['@count'];
+				}
+			}
 
 			// Store the search results in the cache.
 			cache_put_data('search_results_' . md5($user_info['query_see_board']) . '_' . $context['params'], $cached_results, 600);

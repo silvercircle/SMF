@@ -115,7 +115,7 @@ function template_select_search_method()
 			</div>
 			<div class="orange_container">
 				<div class="smalltext" style="font-weight: normal;"><a href="', $scripturl, '?action=helpadmin;help=search_why_use_index" onclick="return reqWin(this.href);">', $txt['search_create_index_why'], '</a></div>
-			</div>
+			</div><br>
 			<div class="blue_container">
 				<div class="content">
 					<dl class="settings">
@@ -139,7 +139,7 @@ function template_select_search_method()
 					</dl>
 					', $context['double_index'] ? '<div class="information">
 					' . $txt['search_double_index'] . '</div>' : '', '
-					<fieldset class="search_settings floatleft">
+					<fieldset class="search_settings">
 						<legend>', $txt['search_index'], '</legend>
 						<dl>
 							<dt><input type="radio" name="search_index" value=""', empty($modSettings['search_index']) ? ' checked="checked"' : '', ' class="input_radio" />
@@ -198,7 +198,7 @@ function template_select_search_method()
 	echo '
 						</dl>
 					</fieldset>
-					<fieldset class="search_settings floatright">
+					<fieldset class="search_settings">
 					<legend>', $txt['search_method'], '</legend>
 						<input type="checkbox" name="search_force_index" id="search_force_index_check" value="1"', empty($modSettings['search_force_index']) ? '' : ' checked="checked"', ' class="input_check" /><label for="search_force_index_check">', $txt['search_force_index'], '</label><br />
 						<input type="checkbox" name="search_match_words" id="search_match_words_check" value="1"', empty($modSettings['search_match_words']) ? '' : ' checked="checked"', ' class="input_check" /><label for="search_match_words_check">', $txt['search_match_words'], '</label>
@@ -207,6 +207,7 @@ function template_select_search_method()
 						<input type="submit" name="save" value="', $txt['search_method_save'], '" class="button_submit floatright" />
 						<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 					</div>
+					<br class="clear">
 				</div>
 			</div>
 		</form>
@@ -413,21 +414,26 @@ function template_manage_sphinx()
 		<div id="admincenter">
 		<div class="cat_bar">
 			<h3>',$txt['search_managesphinx'],'</h3>
-		</div>
-		<div class="red_container">
+		</div>';
+		if(isset($context['checkresult'])) {
+			echo '<div class="',$context['checkresult']['result'] ? 'ok ' : 'errorbox ', 'mediumpadding mediummargin centertext">',
+			$context['checkresult']['message'],'</div>';
+		}
+		echo '<div class="red_container">
 		On this page you can configure access to your <strong>Sphinx</strong> search daemon and create a sphinx configuration file suitable for your
 		current forum configuration.
 		<br /><br />
-		It is assumed that you have already installed the Sphinx software on your server. If unsure, ask your hosting provider for assistance
-		or consult the documentation or community support available on the <a href="http://sphinxsearch.com/">Sphinx project site.</a>
+		It is assumed that you have completed the installation of the Sphinx software on your server. If unsure, ask your hosting provider for assistance
+		or consult the support available on the <a href="http://sphinxsearch.com/">Sphinx project site.</a>
 		<br /><br />
-		Once you have filled out the necessary data below and verified that all paths are correct and accessible on your server,
-		you can push the <strong>Create configuration file</strong> button. This will create a valid sphinx configuration which you must then
+		First, you must fill out the required settings below. The defaults are suitable for many different systems, but they assume that Sphinx software was installed to /usr/local, 
+		using /var/sphinx for the search index data storage.
+		Please verify ALL the settings and save them at least once before you click the <strong>Create configuration file</strong> button. This will create a sphinx configuration file which you need to
 		upload to your server and save it the sphinx main configuration directory (typically /usr/local/etc, but that depends on your server
 		configuration).
 		<br /><br />
-		If you want or must use Sphinx for more than just your forum, you must merge the configuration into the existing one. You must also make sure to 
-		set up the required cron jobs on your server to update the indexes on a regular base.
+		If you want or must use Sphinx for more than just your forum or multiple forum installations, you must merge the configuration into a existing sphinx.conf. <br />
+		<span class="error">You must also make sure to set up the required cron jobs on your server to update the indexes on a regular base, otherwise new or deleted content will not be reflected in your search queries.</span>
 		</div>
 		<br />
 		<div class="blue_container">
@@ -485,8 +491,15 @@ function template_manage_sphinx()
 		</div>
 		<br />
 		<div class="orange_container centertext mediumpadding">
+		<span class="error">Before creating the configuration file, you must SAVE the settings at least once.</span>
 		<form action="',$scripturl,'?action=admin;area=managesearch;sa=sphinxconfig" method="post">
 			<input type="submit" class="button_submit" value="Create Sphinx config" />
+		</form>
+		</div>
+		<br>
+		<div class="orange_container centertext mediumpadding">
+		<form action="', $scripturl, '?action=admin;area=managesearch;sa=managesphinx;checkconnect=1" method="post" accept-charset="', $context['character_set'], '">
+			<input type="submit" class="button_submit" value="Test connection to Sphinx search daemon" />
 		</form>
 		</div>
 		</div>';

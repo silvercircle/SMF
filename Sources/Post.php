@@ -1171,7 +1171,7 @@ function Post()
 		);
 		if ($row = $smcFunc['db_fetch_assoc']($query)) {
 			// OK, we have a draft in storage for this post. Let's get down and dirty with it.
-			$context['subject'] = $row['subject'] . ' DRAFT';
+			$context['subject'] = $row['subject'];
 			$context['message'] = un_preparsecode($row['body']);
 			$context['use_smileys'] = !empty($row['smileys']);
 			$context['icon'] = $row['icon'];

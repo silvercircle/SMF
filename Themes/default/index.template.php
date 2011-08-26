@@ -124,7 +124,7 @@ var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
 var t2 = document.createElement(\'SCRIPT\');
 t2.type = "text/javascript";
 t2.async = true;
-t2.src = "',$settings['theme_url'],'/scripts/footer.js?ver=1.1.0";
+t2.src = "',$settings['theme_url'],'/scripts/min/footer.js?ver=1.1.0";
 anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
 	</script>';
@@ -245,7 +245,7 @@ function template_body_above()
 				<div class="orange_container">
 				&nbsp;&nbsp;&nbsp;Search posts by member<br />
 				<div style="text-align:center;margin-bottom:10px;"><input style="width:90%;" class="input_text" type="text" name="userspec" id="userspec" value="*" /></div>
-				<input type="checkbox" name="show_complete" id="show_complete" value="0" />Show results as messages<br />';
+				<input type="checkbox" name="show_complete" id="show_complete" value="1" />Show results as messages<br />';
 				if($scope == 2) {
 					echo '<div style="padding-left:20px;"><input type="radio" name="type" id="i_topic" class="input_radio" checked="checked" />Search this topic<br />
 						<input type="radio" name="type" id="i_board" class="input_radio" />Search this board<br />

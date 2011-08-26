@@ -625,7 +625,7 @@ function loadSearchAPIs()
 
 function ManageSphinx()
 {
-	global $txt, $context, $modSettings, $smcFunc;
+	global $txt, $context, $modSettings, $smcFunc, $sourcedir;
 
 	if(isset($_REQUEST['save'])) {
 		checkSession();
@@ -639,6 +639,29 @@ function ManageSphinx()
 			'sphinx_max_results' => (int) $_REQUEST['sphinx_max_results'],
 		));
 		redirectexit('action=admin;area=managesearch;sa=managesphinx;' . $context['session_var'] . '=' . $context['session_id']);
+	}
+	else if(isset($_REQUEST['checkconnect'])) {
+		//checkSession();
+		$context['checkresult']['message'] = 'All tests successfully passed. It appears your sphinx search daemon is running and can accept connections and search queries.';
+		$context['checkresult']['result'] = true;
+		if(@file_exists($sourcedir . '/sphinxapi.php')) {
+			include_once($sourcedir . '/sphinxapi.php');
+			$mySphinx = new SphinxClient();
+			$mySphinx->SetServer($modSettings['sphinx_searchd_server'], (int) $modSettings['sphinx_searchd_port']);
+			$mySphinx->SetLimits(0, (int) $modSettings['sphinx_max_results']);
+			$mySphinx->SetMatchMode(SPH_MATCH_BOOLEAN);
+			$mySphinx->SetSortMode(SPH_SORT_ATTR_ASC, 'ID_TOPIC');
+			
+			$request = $mySphinx->Query('test', 'smf_index');
+			if ($request === false) {
+				$context['checkresult']['result'] = false;
+				$context['checkresult']['message'] = 'Unable to contact the search daemon. Make sure it is running and configured properly.<br><span class="error">Warning: Search will not work until you fix the problem</span>';
+			}
+		}
+		else {
+			$context['checkresult']['result'] = false;
+			$context['checkresult']['message'] = 'The sphinxapi.php file is missing in your Sources directory. You need to copy this file from the sphinx distribution.';
+		}
 	}
 	$context['page_title'] = $txt['search_managesphinx'];
 	$context['sub_template'] = 'manage_sphinx';
