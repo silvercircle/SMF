@@ -1079,12 +1079,12 @@ jQuery(document).ready(function() {
 		var id = '#category_' + $(this).attr('data-id') + '_boards';
 		var src = img.attr('src');
 		if(is_collapsed) {
-			$(id).show();
+			$(id).fadeIn();
 			var dest = src.replace('expand.gif', 'collapse.gif');
 			img.attr('src', dest);
 		}
 		else {
-			$(id).hide();
+			$(id).fadeOut();
 			var dest = src.replace('collapse.gif', 'expand.gif');
 			img.attr('src', dest);
 		}

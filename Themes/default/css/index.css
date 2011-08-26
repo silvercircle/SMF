@@ -1457,33 +1457,43 @@ table.table_list tbody.content td.icon
 
 /* Styles for the board index.
 ------------------------------------------------- */
-
-/* the board title! */
-.table_list tbody.content td.info {
+ol.category {
+	list-style:none;
 	width:100%;
+	padding:0;
+	margin:0;
+	margin-bottom:10px;
 }
-.table_list tbody.content td.info a.subject
-{
-	font-weight: bold;
-	font-size: 1.1em;
-	color:#777799;
+ol.category li {
+	padding:4px 2px 4px 8px;
+	border-left: 1px solid #d5ecfa !important;
+	border-right: 1px solid #d5ecfa !important;
+	border-bottom: 1px solid #d5ecfa !important;
+	border-top:0;
+	line-height:110%;
 }
-.table_list tbody.content td.children
-{
-	color: #555;
-	font-size: 90%;
+ol.category > li > div.lastpost {
+	float:right;
+	min-width:300px;
+	max-width:400px;
+	white-space:nowrap;
+	font-size:12px;
+	margin-left:5px;
 }
-p.moderators
-{
-	font-size: 0.8em;
-	font-family: verdana, sans-serif;
+ol.category > li > div.stats {
+	float:right;
+	white-space: nowrap;
+	font-size:11px;
+	padding:2px;
+	width:70px;
+	text-align:right;
 }
-/* hide the table header/footer parts - but its here for those needing to style it */
-#boardindex_table .table_list thead, #boardindex_table .table_list tfoot
-{
-	display: none;
+ol.category > li > div.info {
+	line-height:110%;
 }
-
+ol.category > li > div.info h3 {
+	color:#0066aa;
+}
 /* the posting icons */
 #posting_icons
 {
@@ -2623,12 +2633,6 @@ tr.titlebg td
 {
 	text-shadow:1px 1px #ccc !important;
 }
-#boardindex_table table tr.brow > td:first-child, #boardindex_table table tr.brow > th:first-child {
-	border-left: 1px solid #d5ecfa !important;
-}
-#boardindex_table table tr.brow > td:last-child, #boardindex_table table tr.brow > th:last-child {
-	border-right: 1px solid #d5ecfa !important;
-}
 #main_admsection .catbg {
 	height:18px;
 	margin:0;
@@ -2702,10 +2706,10 @@ table.topic_table td {
 	font-size:11px;
 }
 
-td.lastpost img {
+td.lastpost img, div.lastpost img {
 	vertical-align:middle;
 }
-td.lastpost > a.lp_link {
+td.lastpost > a.lp_link, div.lastpost > a.lp_link {
 	line-height:16px;
 	background: transparent url(../images/theme/sprite.png) right -457px no-repeat !important;
 	margin-right:-20px;
@@ -2714,7 +2718,7 @@ td.lastpost > a.lp_link {
 	text-decoration:none;
 	font-size:11px;
 }
-td.lastpost {white-space:nowrap;padding-right:10px !important;}
+td.lastpost, div.lastpost {white-space:nowrap;padding-right:10px !important;}
 .topic_table td.lastpost
 {
 	line-height: 1.1em;
@@ -2741,7 +2745,6 @@ td.lastpost {white-space:nowrap;padding-right:10px !important;}
 	background-position: 98% 4px;
 }
 
-table.table_list td.lastpost {font-size:12px;}
 /* Styles for (fatal) errors.
 ------------------------------------------------- */
 
@@ -3654,7 +3657,7 @@ span.avatar_overlay img {
 }
 
 tbody.divider tr {background:white;}
-.td_children {font-size:90%;padding:1px 10px;border-top:1px solid #ddd;margin-top:3px;}
+.td_children {font-size:12px;padding:1px 0;border-top:1px solid #ddd;margin-top:3px;}
 #quick_search form {padding-top:1px !important;}
 
 /* member card */

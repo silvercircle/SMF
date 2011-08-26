@@ -76,8 +76,7 @@ function template_main()
 	}
 
 	echo '
-	<div id="boardindex_table">
-		<table class="table_list">';
+	<div id="boardindex_table">';
 
 	/* Each category in categories is made up of:
 	id, href, link, name, is_collapsed (is it collapsed?), can_collapse (is it okay if it is?),
@@ -90,41 +89,36 @@ function template_main()
 			continue;
 
 		echo '
-			<tbody class="header" id="category_', $category['id'], '">
-				<tr>
-					<td class="borderless" colspan="4">
-						<div class="cat_bar rounded_top">
-							<h3 class="catbg">';
+			<div class="category" id="category_', $category['id'], '">
+ 			  <div class="cat_bar rounded_top">
+				<h3 class="catbg">';
 
 		// If this category even can collapse, show a link to collapse it.
 		if ($category['can_collapse'])
 			echo '
-								<a data-id="',$category['id'], '" class="collapse" href="', $category['collapse_href'], '">', $category['collapse_image'], '</a>';
+					<a style="float:right;" data-id="',$category['id'], '" class="collapse" href="', $category['collapse_href'], '">', $category['collapse_image'], '</a>';
 
 		if (!$context['user']['is_guest'] && $category['new'])
 			echo '
-								<a class="unreadlink" href="', $scripturl, '?action=unread;c=', $category['id'], '">', $txt['view_unread_category'], '</a>';
+					<a class="unreadlink" href="', $scripturl, '?action=unread;c=', $category['id'], '">', $txt['view_unread_category'], '</a>';
 
 		echo '
 								', $category['link'], '
-							</h3>
-						</div>
-					</td>
-				</tr>
-			</tbody>';
+				</h3>
+		      </div>
+			</div>';
 
 		// Assuming the category hasn't been collapsed...
 		//if (!$category['is_collapsed'])
 		//{
 		$alternate = 1;
 		echo '
-			<tbody ',$category['is_collapsed'] ? 'style="display:none;" ' : '', 'class="content" id="category_', $category['id'], '_boards">
-			<tr class="brow">
-				<td class="glass"></td>
-				<td class="glass">',$txt['board'],'</td>
-				<td class="glass centertext">',$txt['content_label'],'</td>
-				<td class="glass centertext">',$txt['last_post'],'</td>
-			</tr>
+			<ol class="category" ',$category['is_collapsed'] ? 'style="display:none;" ' : '', ' id="category_', $category['id'], '_boards">
+			<li class="brow glass">
+				<div class="floatright centertext lastpost">',$txt['last_post'],'</div>
+				<div class="floatright centertext stats">',$txt['content_label'],'</div>
+				<div class="centertext">',$txt['board'],'</div>
+			</li>
 			';
 			/* Each board in each category's boards has:
 			new (is it new?), id, name, description, moderators (see below), link_moderators (just a list.),
@@ -135,8 +129,24 @@ function template_main()
 				$_c = $alternate ? 'windowbg' : 'windowbg2';
 				$alternate = !$alternate;
 				echo '
-				<tr id="board_', $board['id'], '" class="',$_c,' brow">
-					<td class="icon">
+				<li id="board_', $board['id'], '" class="',$_c,' brow">
+					<div class="lastpost">';
+				if (!empty($board['last_post']['id']))
+					echo '<img src="',$board['first_post']['icon_url'],'" alt="icon" />
+					',$txt['in'], ': ', $board['last_post']['prefix'],'&nbsp;',$board['last_post']['topiclink'], '<br />
+						<a class="lp_link" title="',$txt['last_post'],'" href="',$board['last_post']['href'],'">',$board['last_post']['time'], '</a>
+						<span style="padding-left:20px;">', $txt['by'], ': </span>', $board['last_post']['member']['link'];
+				else
+					echo $txt['not_applicable'];
+				echo '
+					</div>
+					<div class="stats">
+						', comma_format($board['posts']), ' ', $board['is_redirect'] ? $txt['redirects'] : $txt['posts'], ' <br />
+						', $board['is_redirect'] ? '' : comma_format($board['topics']) . ' ' . $txt['board_topics'], '
+					</div>
+					<div class="info">
+					
+					<div class="icon" style="float:left;">
 						<a href="', ($board['is_redirect'] || $context['user']['is_guest'] ? $board['href'] : $scripturl . '?action=unread;board=' . $board['id'] . '.0;children'), '">';
 
 				// If the board or children is new, show an indicator.
@@ -154,9 +164,10 @@ function template_main()
 
 				echo '
 						</a>
-					</td>
-					<td class="info">
-						<a class="brd_rsslink" href="',$scripturl,'?action=.xml;type=rss;board=',$board['id'],'">&nbsp;</a><a class="subject" href="', $board['href'], '" id="b', $board['id'], '">', $board['name'], '</a>';
+					</div>
+					<div style="padding-left:32px;">
+						<a class="brd_rsslink" href="',$scripturl,'?action=.xml;type=rss;board=',$board['id'],'">&nbsp;</a>
+						<a href="', $board['href'], '" id="b', $board['id'], '"><h3>', $board['name'], '</h3></a>';
 
 				// Has it outstanding posts for approval?
 				if ($board['can_approve_posts'] && ($board['unapproved_posts'] || $board['unapproved_topics']))
@@ -165,12 +176,12 @@ function template_main()
 
 				echo '
 
-						<p class="smalltext">', $board['description'] , '</p>';
+						<span class="smalltext">', $board['description'] , '</span>';
 
 				// Show the "Moderators: ". Each has name, href, link, and id. (but we're gonna use link_moderators.)
 				if (!empty($board['moderators']))
 					echo '
-						<p class="moderators">', count($board['moderators']) == 1 ? $txt['moderator'] : $txt['moderators'], ': ', implode(', ', $board['link_moderators']), '</p>';
+						<span class="moderators">', count($board['moderators']) == 1 ? $txt['moderator'] : $txt['moderators'], ': ', implode(', ', $board['link_moderators']), '</span>';
 
 				// Show the "Child Boards: ". (there's a link_children but we're going to bold the new ones...)
 				if (!empty($board['children']))
@@ -200,36 +211,15 @@ function template_main()
 						
 				// Show some basic information about the number of posts, etc.
 					echo '
-					</td>
-					<td class="stats">
-						<p>', comma_format($board['posts']), ' ', $board['is_redirect'] ? $txt['redirects'] : $txt['posts'], ' <br />
-						', $board['is_redirect'] ? '' : comma_format($board['topics']) . ' ' . $txt['board_topics'], '
-						</p>
-					</td>
-					<td class="lastpost" style="min-width:300px;">';
-				if (!empty($board['last_post']['id']))
-					echo '<img src="',$board['first_post']['icon_url'],'" alt="icon" />
-					<strong>',$txt['in'], ': </strong>', $board['last_post']['prefix'],'&nbsp;',$board['last_post']['topiclink'], '<br />
-						<a class="lp_link" title="',$txt['last_post'],'" href="',$board['last_post']['href'],'">',$board['last_post']['time'], '</a>
-						<strong style="padding-left:17px;">', $txt['by'], ': </strong>', $board['last_post']['member']['link'];
-				else
-					echo $txt['not_applicable'];
-				echo '
-					</td>
-				</tr>';
+				</div></div>
+				<div style="clear:left;"></div>
+				</li>';
 			}
 		echo '
-			</tbody>';
+			</ol>';
 		//}
-		echo '
-			<tbody class="divider">
-				<tr>
-					<td colspan="4"></td>
-				</tr>
-			</tbody>';
 	}
 	echo '
-		</table>
 	</div>';
 
 	if ($context['user']['is_logged'])

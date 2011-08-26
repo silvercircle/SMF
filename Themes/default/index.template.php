@@ -124,7 +124,7 @@ var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
 var t2 = document.createElement(\'SCRIPT\');
 t2.type = "text/javascript";
 t2.async = true;
-t2.src = "',$settings['theme_url'],'/scripts/min/footer.js?ver=1.1.0";
+t2.src = "',$settings['theme_url'],'/scripts/footer.js?ver=1.1.0";
 anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
 	</script>';
@@ -613,18 +613,14 @@ function socialbar_passive($l, $t)
 			<a role="button" rel="nofollow" class="share_button share_tw" href="http://twitter.com/share?text=',$t,'&amp;url=',$url,'">Tweet</a>
 			<a role="button" rel="nofollow" class="share_button share_digg" href="http://digg.com/submit?phase=2&amp;title=',$t,'&amp;url=',$url,'">Digg</a>
 			<a role="button" rel="nofollow" class="share_button share_buzz" href="http://www.google.com/buzz/post?url=',$url,'">Buzz</a></div>&nbsp;&nbsp;
-			<script type="text/javascript">
-			//<![CDATA[
-            	document.write(\'<div style="float:right;max-width:65px;overflow:hidden;"><g:plusone href="',$url,'" size="medium"></g:plusone></div>\');
-    		//]]>
-       		</script>
+            <div style="float:right;max-width:65px;overflow:hidden;"><div class="g-plusone" data-href="',$url,'" data-size="medium" data-count="true"></div></div>
        		<div style="clear:both;"></div>';
 	echo '</div><div style="clear:both;"></div>';
 }
 
 function template_sidebar_content()
 {
-	global $context, $txt, $modSettings, $scripturl, $settings, $user_info, $fbxml, $twitter_widgets, $plusone, $options;
+	global $context, $txt, $modSettings, $scripturl, $settings, $user_info, $fbxml, $twitter_widgets, $plusone, $options, $boardurl;
 	
 	echo '<script>
 		   // <![CDATA[
@@ -676,10 +672,9 @@ function template_sidebar_content()
 		echo '</ul></div></div>';
 	}
 	// Otherwise they're a guest - this time ask them to either register or login - lazy bums...
-	elseif (!empty($context['show_login_bar']))
-	{
+	else {
 		echo '
-				<div class="smallpadding smalltext">
+				<div class="smallpadding smalltext blue_container">
 				<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/sha1.js"></script>
 				<div><form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
 					', sprintf($txt['welcome_guest'], $txt['guest_title']), '<br /><br />
@@ -738,7 +733,7 @@ function template_sidebar_content()
 			if(isset($modSettings['fb_appid']) && !empty($modSettings['fb_appid'])) {
        			$fbxml = 1;
        			echo '(function() {
-        			document.write(\'<div style="margin-bottom:10px;"><fb:like href="',$scripturl,'" layout="button_count" send="true" show_faces="false" action="recommend" font="verdana"></fb:like></div>\');
+        			document.write(\'<div style="margin-bottom:10px;"><fb:like href="',$boardurl,'" layout="button_count" send="true" show_faces="false" action="recommend" font="verdana"></fb:like></div>\');
     			})();';
 			}
     		echo '//]]>
@@ -746,8 +741,8 @@ function template_sidebar_content()
 			$twitter_widgets = 1;
 			$plusone++;
 			echo '
-   	    	<div style="float:left;"><a href="http://twitter.com/share" style="border:none;" class="twitter-share-button" data-count="horizontal" data-url="',$scripturl,'"></a></div>
-			<div style="display:inline;max-width:70px;"><div class="g-plusone" data-href="',$scripturl,'" data-size="medium" data-count="true"></div></div>';
+   	    	<div style="float:left;"><a href="http://twitter.com/share" style="border:none;" class="twitter-share-button" data-count="horizontal" data-url="',$boardurl,'"></a></div>
+			<div style="display:inline;max-width:70px;"><div class="g-plusone" data-href="',$boardurl,'" data-size="medium" data-count="true"></div></div>';
 			if(isset($modSettings['twitter_id']) && !empty($modSettings['twitter_id']))
 				echo '<div style="margin-top:8px;"><a href="http://twitter.com/',$modSettings['twitter_id'],'" class="twitter-follow-button" data-show-count="false">Follow @',$modSettings['twitter_id'],'</a></div>';
        		echo '<noscript>This requires JavaScript</noscript>
