@@ -973,7 +973,6 @@ function PlushSearch2()
 		$participants = array();
 		$searchArray = array();
 		$num_results = $searchAPI->searchQuery($query_params, $searchWords, $excludedIndexWords, $participants, $searchArray);
-		log_error('sphinx search');
 	}
 
 	// Update the cache if the current search term is not yet cached.

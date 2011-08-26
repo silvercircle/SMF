@@ -63,7 +63,7 @@ if (!defined('SMF'))
 function Display()
 {
 	global $scripturl, $txt, $modSettings, $context, $settings;
-	global $options, $sourcedir, $user_info, $board_info, $topic, $board, $time_now;
+	global $options, $sourcedir, $user_info, $board_info, $topic, $board, $time_now, $delete_own;
 	global $attachments, $messages_request, $topicinfo, $language, $smcFunc, $can_see_like, $can_give_like, $cache_parsed;
 
 	$context['need_synhlt'] = true;
@@ -1149,6 +1149,16 @@ function Display()
 		$context['name'] = isset($_SESSION['guest_name']) ? $_SESSION['guest_name'] : '';
 		$context['email'] = isset($_SESSION['guest_email']) ? $_SESSION['guest_email'] : '';
 	}
+	
+	// $context['icon_sources'] says where each icon should come from - here we set up the ones which will always exist!
+	if (empty($context['icon_sources']))
+	{
+		$stable_icons = array('xx', 'thumbup', 'thumbdown', 'exclamation', 'question', 'lamp', 'smiley', 'angry', 'cheesy', 'grin', 'sad', 'wink', 'moved', 'recycled', 'wireless', 'clip');
+		$context['icon_sources'] = array();
+		foreach ($stable_icons as $icon)
+			$context['icon_sources'][$icon] = 'images_url';
+	}
+	$delete_own = allowedTo('delete_own');
 }
 
 // Callback for the message display.
@@ -1156,6 +1166,7 @@ function prepareDisplayContext($reset = false)
 {
 	global $settings, $txt, $modSettings, $scripturl, $options, $user_info, $smcFunc, $sourcedir, $board, $time_now;
 	global $memberContext, $context, $messages_request, $topic, $attachments, $topicinfo, $can_see_like, $can_give_like, $cache_parsed;
+	global $delete_own;
 
 	static $counter = null;
 
@@ -1179,21 +1190,12 @@ function prepareDisplayContext($reset = false)
 		return false;
 	}
 
-	// $context['icon_sources'] says where each icon should come from - here we set up the ones which will always exist!
-	if (empty($context['icon_sources']))
-	{
-		$stable_icons = array('xx', 'thumbup', 'thumbdown', 'exclamation', 'question', 'lamp', 'smiley', 'angry', 'cheesy', 'grin', 'sad', 'wink', 'moved', 'recycled', 'wireless', 'clip');
-		$context['icon_sources'] = array();
-		foreach ($stable_icons as $icon)
-			$context['icon_sources'][$icon] = 'images_url';
-	}
-
 	// Message Icon Management... check the images exist.
 	if (empty($modSettings['messageIconChecks_disable']))
 	{
 		// If the current icon isn't known, then we need to do something...
 		if (!isset($context['icon_sources'][$message['icon']]))
-			$context['icon_sources'][$message['icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $message['icon'] . '.gif') ? 'images_url' : 'default_images_url';
+			$context['icon_sources'][$message['icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $message['icon'] . '.png') ? 'images_url' : 'default_images_url';
 	}
 	elseif (!isset($context['icon_sources'][$message['icon']]))
 		$context['icon_sources'][$message['icon']] = 'images_url';
@@ -1202,7 +1204,7 @@ function prepareDisplayContext($reset = false)
 	$message['subject'] = $message['subject'] != '' ? $message['subject'] : $txt['no_subject'];
 
 	// Are you allowed to remove at least a single reply?
-	$context['can_remove_post'] |= allowedTo('delete_own') && (empty($modSettings['edit_disable_time']) || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 >= time()) && $message['id_member'] == $user_info['id'];
+	$context['can_remove_post'] |= $delete_own && (empty($modSettings['edit_disable_time']) || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 >= time()) && $message['id_member'] == $user_info['id'];
 
 	// If it couldn't load, or the user was a guest.... someday may be done with a guest table.
 	if (!loadMemberContext($message['id_member'], true))
@@ -1226,7 +1228,6 @@ function prepareDisplayContext($reset = false)
 	$memberContext[$message['id_member']]['ip'] = $message['poster_ip'];
 
 	// Do the censor thang.
-	censorText($message['body']);
 	censorText($message['subject']);
 
 	// create a cached (= parsed) version of the post on the fly
@@ -1246,7 +1247,7 @@ function prepareDisplayContext($reset = false)
 	else
 		$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
 	
-	// Run BBC interpreter on the message.
+	censorText($message['body']);
 
 	// Compose the memory eat- I mean message array.
 	$output = array(

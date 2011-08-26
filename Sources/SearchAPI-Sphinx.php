@@ -111,11 +111,6 @@ class sphinx_search
 		}
 	}
 
-	// Search for indexed words.
-	public function indexedWordQuery($words, $search_data)
-	{
-	}
-	
 	public function searchQuery($search_params, $searchWords, $excludedIndexWords, &$participants, &$searchArray)
 	{
 		global $modSettings, $context, $sourcedir, $user_info, $scripturl;
