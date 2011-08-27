@@ -752,11 +752,10 @@ function template_show_notice()
 		<div class="cat_bar">
 			<h3 class="catbg">', $txt['show_notice'], '</h3>
 		</div>
-		<div class="title_bar">
-			<h3 class="titlebg">', $txt['show_notice_subject'], ': ', $context['notice_subject'], '</h3>
+		<div class="cat_bar">
+			<h3>', $txt['show_notice_subject'], ': ', $context['notice_subject'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<dl>
 					<dt>
@@ -767,7 +766,6 @@ function template_show_notice()
 					</dd>
 				</dl>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 	</body>
 </html>';

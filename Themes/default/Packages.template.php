@@ -448,13 +448,12 @@ function template_list()
 	echo '
 	<div id="admincenter">
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['list_file'], '</h3>
+			<h3>', $txt['list_file'], '</h3>
 		</div>
-		<div class="title_bar">
-			<h3 class="titlebg">', $txt['files_archive'], ' ', $context['filename'], ':</h3>
+		<div class="flat_container verticalclear">
+			<h3>', $txt['files_archive'], ' ', $context['filename'], ':</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<ol>';
 
@@ -467,7 +466,6 @@ function template_list()
 				<br />
 				<a href="', $scripturl, '?action=admin;area=packages">[ ', $txt['back'], ' ]</a>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 	</div>
 	<br class="clear" />';
@@ -480,18 +478,16 @@ function template_examine()
 	echo '
 	<div id="admincenter">
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['package_examine_file'], '</h3>
+			<h3>', $txt['package_examine_file'], '</h3>
 		</div>
-		<div class="title_bar">
-			<h3 class="titlebg">', $txt['package_file_contents'], ' ', $context['filename'], ':</h3>
+		<div class="flat_container verticalclear">
+			<h3>', $txt['package_file_contents'], ' ', $context['filename'], ':</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<pre class="file_content">', $context['filedata'], '</pre>
 				<a href="', $scripturl, '?action=admin;area=packages;sa=list;package=', $context['package'], '">[ ', $txt['list_files'], ' ]</a>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 	</div>
 	<br class="clear" />';
@@ -503,8 +499,8 @@ function template_view_installed()
 
 	echo '
 	<div id="admincenter">
-		<div class="title_bar">
-			<h3 class="titlebg">' . $txt['view_and_remove'] . '</h3>
+		<div class="cat_bar">
+			<h3>' . $txt['view_and_remove'] . '</h3>
 		</div>';
 
 	if (empty($context['installed_mods']))
@@ -517,13 +513,13 @@ function template_view_installed()
 	else
 	{
 		echo '
-		<table class="table_grid" width="100%">
+		<table class="table_grid" style="width:100%;">
 		<thead>
-			<tr class="catbg">
-				<th scope="col" width="32"></th>
-				<th scope="col" width="25%">', $txt['mod_name'], '</th>
-				<th scope="col" width="25%">', $txt['mod_version'], '</th>
-				<th scope="col" width="49%"></th>
+			<tr>
+				<th scope="col" class="red_container" style="width:32px;"></th>
+				<th scope="col" class="red_container" style="width:25%;">', $txt['mod_name'], '</th>
+				<th scope="col" class="red_container" style="width:25%;">', $txt['mod_version'], '</th>
+				<th scope="col" class="red_container" style="width:49%;"></th>
 			</tr>
 		</thead>
 		<tbody>';
@@ -560,16 +556,14 @@ function template_browse()
 	echo '
 	<div id="admincenter">
 		<div class="cat_bar">
-			<h3 class="catbg">
+			<h3>
 				<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=latest_packages" onclick="return reqWin(this.href);" class="help"><img class="icon" src="', $settings['images_url'], '/helptopics.gif" alt="', $txt['help'], '" align="top" /></a> ', $txt['packages_latest'], '</span>
 			</h3>
 		</div>
-		<div class="windowbg2">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<div id="packagesLatest">', $txt['packages_latest_fetch'], '</div>
 			</div>
-			<span class="botslice clear_right"><span></span></span>
 		</div>
 
 		<script type="text/javascript"><!-- // --><![CDATA[
@@ -609,24 +603,24 @@ function template_browse()
 	echo '
 		<br />
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['browse_packages'], '</h3>
+			<h3>', $txt['browse_packages'], '</h3>
 		</div>';
 
 	if (!empty($context['available_mods']))
 	{
 		echo '
 		<br />
-		<div class="title_bar">
-			<h3 class="titlebg">', $txt['modification_package'], '</h3>
+		<div class="flat_container verticalclear">
+			<h3>', $txt['modification_package'], '</h3>
 		</div>
 
-		<table class="table_grid" width="100%">
+		<table class="table_grid" style="width:100%;">
 		<thead>
-			<tr class="catbg">
-				<th class="first_th" width="32"></th>
-				<th class="lefttext" width="25%">', $txt['mod_name'], '</th>
-				<th class="lefttext" width="25%">', $txt['mod_version'], '</th>
-				<th class="last_th" width="49%"></th>
+			<tr>
+				<th class="red_container first_th" style="width:32px;"></th>
+				<th class="red_container lefttext" style="width:25%;">', $txt['mod_name'], '</th>
+				<th class="red_container lefttext" style="width:25%;">', $txt['mod_version'], '</th>
+				<th class="red_container last_th" style="width:49%;"></th>
 			</tr>
 		</thead>
 		<tbody>';
@@ -676,16 +670,16 @@ function template_browse()
 	{
 		echo '
 		<br />
-		<div class="title_bar">
-			<h3 class="titlebg">', $txt['avatar_package'], '</h3>
+		<div class="flat_container">
+			<h3>', $txt['avatar_package'], '</h3>
 		</div>
-		<table class="table_grid" width="100%">
+		<table class="table_grid" style="width:100%;">
 		<thead>
-			<tr class="catbg">
-				<th width="32"></th>
-				<th width="25%">', $txt['mod_name'], '</th>
-				<th width="25%">', $txt['mod_version'], '</th>
-				<th width="49%"></th>
+			<tr>
+				<th class="first_th red_container" style="width:32px;"></th>
+				<th class="red_container" style="width:25%;">', $txt['mod_name'], '</th>
+				<th class="red_container" style="width:25%;">', $txt['mod_version'], '</th>
+				<th class="red_container last_th" style="width:49%;"></th>
 			</tr>
 		</thead>
 		<tbody>';
@@ -732,8 +726,8 @@ function template_browse()
 	{
 		echo '
 		<br />
-		<div class="title_bar">
-			<h3 class="titlebg">' . $txt['language_package'] . '</h3>
+		<div class="flat_container verticalclear">
+			<h3>' . $txt['language_package'] . '</h3>
 		</div>
 		<table class="table_grid" width="100%">
 		<thead>
@@ -788,8 +782,8 @@ function template_browse()
 	{
 		echo '
 		<br />
-		<div class="title_bar">
-			<h3 class="titlebg">' . $txt['unknown_package'] . '</h3>
+		<div class="flat_container verticalclear">
+			<h3>' . $txt['unknown_package'] . '</h3>
 		</div>
 		<table class="table_grid" width="100%">
 		<thead>
@@ -911,11 +905,10 @@ function template_servers()
 	if ($context['package_download_broken'])
 	{
 		echo '
-		<div class="title_bar">
-			<h3 class="titlebg">', $txt['package_ftp_necessary'], '</h3>
+		<div class="flat_container verticalclear">
+			<h3>', $txt['package_ftp_necessary'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<p>
 					', $txt['package_ftp_why_download'], '
@@ -953,13 +946,11 @@ function template_servers()
 					</div>
 				</form>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>';
 	}
 
 	echo '
-		<div class="windowbg2">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<fieldset>
 					<legend>' . $txt['package_servers'] . '</legend>
@@ -1021,14 +1012,12 @@ function template_servers()
 					</form>
 				</fieldset>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 		<br />
 		<div class="cat_bar">
 			<h3 class="catbg">' . $txt['package_upload_title'] . '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<form action="' . $scripturl . '?action=admin;area=packages;get;sa=upload" method="post" accept-charset="', $context['character_set'], '" enctype="multipart/form-data" style="margin-bottom: 0;">
 					<dl class="settings">
@@ -1045,7 +1034,6 @@ function template_servers()
 					</div>
 				</form>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 	</div>
 	<br class="clear" />';
@@ -1058,15 +1046,13 @@ function template_package_confirm()
 	echo '
 	<div id="admincenter">
 		<div class="cat_bar">
-			<h3 class="catbg">', $context['page_title'], '</h3>
+			<h3>', $context['page_title'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<p>', $context['confirm_message'], '</p>
 				<a href="', $context['proceed_href'], '">[ ', $txt['package_confirm_proceed'], ' ]</a> <a href="JavaScript:history.go(-1);">[ ', $txt['package_confirm_go_back'], ' ]</a>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 	</div>
 	<br class="clear" />';
@@ -1079,10 +1065,9 @@ function template_package_list()
 	echo '
 	<div id="admincenter">
 		<div class="cat_bar">
-			<h3 class="catbg">' . $context['page_title'] . '</h3>
+			<h3>' . $context['page_title'] . '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">';
 
 	// No packages, as yet.
@@ -1189,7 +1174,6 @@ function template_package_list()
 
 	echo '
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 		<div class="padding smalltext floatleft">
 			', $txt['package_installed_key'], '
@@ -1832,21 +1816,21 @@ function template_file_permissions()
 	</div>
 
 	<form action="', $scripturl, '?action=admin;area=packages;sa=perms;', $context['session_var'], '=', $context['session_id'], '" method="post" accept-charset="', $context['character_set'], '">
-		<div class="title_bar">
-			<h3 class="titlebg">
+		<div class="cat_bar">
+			<h3>
 				<span class="floatleft">', $txt['package_file_perms'], '</span><span class="fperm floatright">', $txt['package_file_perms_new_status'], '</span>
 			</h3>
 		</div>
-		<table width="100%" class="table_grid">
+		<table style="width:100%;" class="table_grid">
 			<thead>
-				<tr class="catbg">
-					<th class="first_th lefttext" width="30%">&nbsp;', $txt['package_file_perms_name'], '&nbsp;</th>
-					<th width="30%" class="lefttext">', $txt['package_file_perms_status'], '</th>
-					<th align="center" width="8%"><span class="filepermissions">', $txt['package_file_perms_status_read'], '</span></th>
-					<th align="center" width="8%"><span class="filepermissions">', $txt['package_file_perms_status_write'], '</span></th>
-					<th align="center" width="8%"><span class="filepermissions">', $txt['package_file_perms_status_execute'], '</span></th>
-					<th align="center" width="8%"><span class="filepermissions">', $txt['package_file_perms_status_custom'], '</span></th>
-					<th class="last_th" align="center" width="8%"><span class="filepermissions">', $txt['package_file_perms_status_no_change'], '</span></th>
+				<tr>
+					<th class="red_container first_th lefttext" style="width:30%;">&nbsp;', $txt['package_file_perms_name'], '&nbsp;</th>
+					<th class="red_container lefttext" style="width:30%;">', $txt['package_file_perms_status'], '</th>
+					<th class="red_container centertext" style="width:8%;"><span class="filepermissions">', $txt['package_file_perms_status_read'], '</span></th>
+					<th class="red_container centertext" style="width:8%;"><span class="filepermissions">', $txt['package_file_perms_status_write'], '</span></th>
+					<th class="red_container centertext" style="width:8%;"><span class="filepermissions">', $txt['package_file_perms_status_execute'], '</span></th>
+					<th class="red_container centertext" style="width:8%;"><span class="filepermissions">', $txt['package_file_perms_status_custom'], '</span></th>
+					<th class="red_container last_th centertext" style="width:8%;"><span class="filepermissions">', $txt['package_file_perms_status_no_change'], '</span></th>
 				</tr>
 			</thead>';
 
@@ -1885,10 +1869,9 @@ function template_file_permissions()
 		</table>
 		<br />
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['package_file_perms_change'], '</h3>
+			<h3>', $txt['package_file_perms_change'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<fieldset>
 					<dl>
@@ -1930,7 +1913,6 @@ function template_file_permissions()
 					<input type="submit" value="', $txt['package_file_perms_go'], '" name="go" class="button_submit" />
 				</div>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>';
 
 	// Any looks fors we've already done?

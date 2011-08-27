@@ -21,8 +21,8 @@ function template_pm_above()
 	// Show the capacity bar, if available.
 	if (!empty($context['limit_bar']))
 		echo '
-		<div class="title_bar">
-			<h3 class="titlebg">
+		<div class="cat_bar">
+			<h3>
 				<span class="floatleft">', $txt['pm_capacity'], ':</span>
 				<span class="floatleft capacity_bar">
 					<span class="', $context['limit_bar']['percent'] > 85 ? 'full' : ($context['limit_bar']['percent'] > 40 ? 'filled' : 'empty'), '" style="width: ', $context['limit_bar']['percent'] / 10, 'em;"></span>
@@ -675,12 +675,11 @@ function template_search()
 		{
 			echo '
 		<fieldset class="labels">
-			<span class="upperframe"><span></span></span>
 			<div class="roundframe">
-				<div class="title_bar">
-					<h4 class="titlebg">
+				<div class="cat_bar">
+					<h3>
 						<span class="ie6_header floatleft"><a href="javascript:void(0);" onclick="expandCollapseLabels(); return false;"><img src="', $settings['images_url'], '/expand.gif" id="expandLabelsIcon" alt="" /></a> <a href="javascript:void(0);" onclick="expandCollapseLabels(); return false;"><strong>', $txt['pm_search_choose_label'], '</strong></a></span>
-					</h4>
+					</h3>
 				</div>
 				<ul id="searchLabelsExpand" class="reset" ', $context['check_all'] ? 'style="display: none;"' : '', '>';
 
@@ -698,7 +697,6 @@ function template_search()
 					<input type="submit" name="submit" value="', $txt['pm_search_go'], '" class="button_submit floatright" />
 				</p><br class="clear" />
 			</div>
-			<span class="lowerframe"><span></span></span>
 		</fieldset>';
 		}
 	}
@@ -722,12 +720,12 @@ function template_search_results()
 	// complete results ?
 	if (empty($context['search_params']['show_complete']) && !empty($context['personal_messages']))
 		echo '
-	<table width="100%" class="table_grid">
+	<table class="table_grid" style="width:100%;">
 	<thead>
-		<tr class="catbg">
-			<th class="lefttext first_th" width="30%">', $txt['date'], '</th>
-			<th class="lefttext" width="50%">', $txt['subject'], '</th>
-			<th class="lefttext last_th" width="20%">', $txt['from'], '</th>
+		<tr>
+			<th class="red_container lefttext first_th" style="width:30%;">', $txt['date'], '</th>
+			<th class="red_container lefttext" style="width:50%;">', $txt['subject'], '</th>
+			<th class="red_container lefttext last_th" style="width:20%;">', $txt['from'], '</th>
 		</tr>
 	</thead>
 	<tbody>';
@@ -740,14 +738,14 @@ function template_search_results()
 		if (!empty($context['search_params']['show_complete']))
 		{
 			echo '
-			<div class="title_bar">
-				<h3 class="titlebg">
+			<div class="cat_bar">
+				<h3>
 					<span class="floatright">', $txt['search_on'], ': ', $message['time'], '</span>
 					<span class="floatleft">', $message['counter'], '&nbsp;&nbsp;<a href="', $message['href'], '">', $message['subject'], '</a></span>
 				</h3>
 			</div>
 			<div class="cat_bar">
-				<h3 class="catbg">', $txt['from'], ': ', $message['member']['link'], ', ', $txt['to'], ': ';
+				<h3>', $txt['from'], ': ', $message['member']['link'], ', ', $txt['to'], ': ';
 
 				// Show the recipients.
 				// !!! This doesn't deal with the sent item searching quite right for bcc.
@@ -761,7 +759,6 @@ function template_search_results()
 				</h3>
 			</div>
 			<div class="windowbg', $alternate ? '2': '', '">
-				<span class="topslice"><span></span></span>
 				<div class="content">
 					', $message['body'], '
 					<p class="pm_reply righttext middletext">';
@@ -784,7 +781,6 @@ function template_search_results()
 				echo '
 					</p>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>';
 		}
 		// Otherwise just a simple list!
@@ -792,7 +788,7 @@ function template_search_results()
 		{
 			// !!! No context at all of the search?
 			echo '
-			<tr class="', $alternate ? 'windowbg' : 'windowbg2', '" valign="top">
+			<tr class="', $alternate ? 'windowbg' : 'windowbg2', '">
 				<td>', $message['time'], '</td>
 				<td>', $message['link'], '</td>
 				<td>', $message['member']['link'], '</td>

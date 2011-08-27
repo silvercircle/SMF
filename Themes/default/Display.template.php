@@ -252,16 +252,16 @@ function template_main()
 			<a id="quickreply"></a>
 			<div class="clear"></div>
 			<div class="tborder" id="quickreplybox">
-				<div class="title_bar rounded_top">
-					<h4 class="titlebg">
+				<div class="cat_bar">
+					<h3>
 						<span class="ie6_header floatleft"><a href="javascript:oQuickReply.swap();">
 							<img src="', $settings['images_url'], '/', $options['display_quick_reply'] == 2 ? 'collapse' : 'expand', '.gif" alt="+" id="quickReplyExpand" class="icon" />
 						</a>
 						<a href="javascript:oQuickReply.swap();">', $txt['quick_reply'], '</a>
 						</span>
-					</h4>
+					</h3>
 				</div>
-				<div class="generic_container largepadding" id="quickReplyOptions"', $options['display_quick_reply'] == 2 ? '' : ' style="display: none"', '>
+				<div class="flat_container largepadding" id="quickReplyOptions"', $options['display_quick_reply'] == 2 ? '' : ' style="display: none"', '>
 					<div>
 						<p class="smalltext lefttext">', $txt['quick_reply_desc'], '</p>
 						', $context['is_locked'] ? '<p class="alert smalltext">' . $txt['quick_reply_warning'] . '</p>' : '',

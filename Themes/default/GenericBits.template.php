@@ -10,7 +10,7 @@ function template_boardbit(&$board)
 	$_c = ($alternate = !$alternate) ? 'windowbg' : 'windowbg2';
 	echo '
 	<li id="board_', $board['id'], '" class="',$_c,'">
-	<div class="lastpost">';
+	<div class="lastpost smalltext">';
 	if (!empty($board['last_post']['id']))
 		echo '
 		<img src="',$board['first_post']['icon_url'],'" alt="icon" />
@@ -53,7 +53,7 @@ function template_boardbit(&$board)
 			echo '
 		  <span class="brd_moderators" title="',$txt['moderated_by'],'"><span class="brd_moderators_chld" style="display:none;">', $txt['moderated_by'], ': ',implode(', ', $board['link_moderators']), '</span></span>';
 		echo '
-		  <a href="', $board['href'], '" id="b', $board['id'], '"><h3>', $board['name'], '</h3></a>';
+		  <h3><a href="', $board['href'], '" id="b', $board['id'], '">', $board['name'], '</a></h3>';
 
 	// Has it outstanding posts for approval?
 	if ($board['can_approve_posts'] && ($board['unapproved_posts'] || $board['unapproved_topics']))
@@ -73,7 +73,7 @@ function template_boardbit(&$board)
 		foreach ($board['children'] as $child)
 		{
 			if (!$child['is_redirect'])
-				$child['link'] = '<a href="' . $child['href'] . '" ' . ($child['new'] ? 'class="new_posts" ' : '') . 'title="' . ($child['new'] ? $txt['new_posts'] : $txt['old_posts']) . ' (' . $txt['board_topics'] . ': ' . comma_format($child['topics']) . ', ' . $txt['posts'] . ': ' . comma_format($child['posts']) . ')"><h4>' . $child['name'] . ($child['new'] ? '</h4></a> <a href="' . $scripturl . '?action=unread;board=' . $child['id'] . '" title="' . $txt['new_posts'] . ' (' . $txt['board_topics'] . ': ' . comma_format($child['topics']) . ', ' . $txt['posts'] . ': ' . comma_format($child['posts']) . ')"><img src="' . $settings['lang_images_url'] . '/new.gif" class="new_posts" alt="" />' : '') . '</h4></a>';
+				$child['link'] = '<a href="' . $child['href'] . '" ' . ($child['new'] ? 'class="new_posts" ' : 'class="no_new_posts" ') . 'title="' . ($child['new'] ? $txt['new_posts'] : $txt['old_posts']) . ' (' . $txt['board_topics'] . ': ' . comma_format($child['topics']) . ', ' . $txt['posts'] . ': ' . comma_format($child['posts']) . ')"><h4>' . $child['name'] . '</h4></a>';
 			else
 				$child['link'] = '<a href="' . $child['href'] . '" title="' . comma_format($child['posts']) . ' ' . $txt['redirects'] . '"><h4>' . $child['name'] . '</h4></a>';
 
@@ -81,17 +81,125 @@ function template_boardbit(&$board)
 			if ($child['can_approve_posts'] && ($child['unapproved_posts'] || $child['unapproved_topics']))
 				$child['link'] .= ' <a href="' . $scripturl . '?action=moderate;area=postmod;sa=' . ($child['unapproved_topics'] > 0 ? 'topics' : 'posts') . ';brd=' . $child['id'] . ';' . $context['session_var'] . '=' . $context['session_id'] . '" title="' . sprintf($txt['unapproved_posts'], $child['unapproved_topics'], $child['unapproved_posts']) . '" class="moderation_link">(!)</a>';
 
-			$children[] = $child['new'] ? '<strong>' . $child['link'] . '</strong>' : $child['link'];
+			$children[] = $child['link'];
 		}
 		echo '
-		<div class="td_children" id="board_', $board['id'], '_children">
-			<strong>', $txt['parent_boards'], '</strong>: ', implode(', ', $children), '
-		</div>';
+		<ol class="td_children" id="board_', $board['id'], '_children">
+			<li>', implode('</li><li>', $children), '</li>
+		</ol>';
 	}
 		echo '
 	  </div>
 	 </div>
 	 <div style="clear:left;"></div>
 	</li>';
+}
+
+function template_topicbit(&$topic)
+{
+	global $alternate;
+	global $context, $settings, $options, $txt, $scripturl, $modSettings;
+
+	// Is this topic pending approval, or does it have any posts pending approval?
+	if ($context['can_approve_posts'] && $topic['unapproved_posts'])
+		$color_class = !$topic['approved'] ? 'approvetbg' : 'approvebg';
+	// We start with locked and sticky topics.
+	elseif ($topic['is_sticky'] && $topic['is_locked'])
+		$color_class = 'stickybg locked_sticky';
+	// Sticky topics should get a different color, too.
+	elseif ($topic['is_sticky'])
+		$color_class = 'stickybg';
+	// Locked topics get special treatment as well.
+	elseif ($topic['is_locked'])
+		$color_class = 'lockedbg';
+	// Last, but not least: regular topics.
+	else
+		$color_class = '';
+
+	// Some columns require a different shade of the color class.
+	$alternate_class = $color_class . '2';
+
+	echo '
+	<tr>
+	  <td class="icon1 ', $color_class, '">';
+		if (!empty($settings['show_user_images']) && empty($options['show_no_avatars'])) {
+		echo '
+	  <span class="small_avatar">';
+		if(!empty($topic['first_post']['member']['avatar'])) {
+			echo '
+		<a href="', $scripturl, '?action=profile;u=', $topic['first_post']['member']['id'], '">
+		  ', $topic['first_post']['member']['avatar'], '
+		</a>';
+		}
+		else {
+			echo '
+		<a href="', $scripturl, '?action=profile;u=', $topic['first_post']['member']['id'], '">
+		  <img src="',$settings['images_url'],'/unknown.png" alt="avatar" />
+		</a>';
+		}
+				/*
+				 * own avatar as overlay when 
+				 * a) avatar is set
+				 * b) we have posted in this topic
+				 * c) we have NOT started the topic
+				 */
+		if($topic['is_posted_in'] && ($topic['first_post']['member']['id'] != $context['user']['id']) && isset($context['user']['avatar']['image']))
+			echo '
+		<span class="avatar_overlay">',$context['user']['avatar']['image'],'</span>';
+		echo '</span>';
+		}
+		else 
+			echo '
+		<img src="', $settings['images_url'], '/topic/', $topic['class'], '.gif" alt="" />';
+
+		$is_new = $topic['new'] && $context['user']['is_logged'];
+		echo '
+		</td>
+		<td class="icon2 ', $color_class, '">
+			<img src="', $topic['first_post']['icon_url'], '" alt="" />
+		</td>
+		<td class="subject ',$alternate_class,'">
+			<div ', (!empty($topic['quick_mod']['modify']) ? 'id="topic_' . $topic['first_post']['id'] . '" ondblclick="modify_topic(\'' . $topic['id'] . '\', \'' . $topic['first_post']['id'] . '\');"' : ''), '>
+			<span class="tpeek" data-id="'.$topic['id'].'" id="msg_' . $topic['first_post']['id'] . '">', $topic['prefix'], ($is_new ? '<strong>' : '') , $topic['first_post']['link'], (!$context['can_approve_posts'] && !$topic['approved'] ? '&nbsp;<em>(' . $txt['awaiting_approval'] . ')</em>' : ''), ($is_new ? '</strong>' : ''), '</span>';
+
+	// Is this topic new? (assuming they are logged in!)
+		if ($is_new)
+			echo '
+			<a href="', $topic['new_href'], '" id="newicon' . $topic['first_post']['id'] . '"><img src="', $settings['lang_images_url'], '/new.gif" alt="', $txt['new'], '" /></a>';
+
+		echo '
+			<p>', $topic['first_post']['member']['link'],', ',$topic['first_post']['time'], '
+			  <small id="pages' . $topic['first_post']['id'] . '">', $topic['pages'], '</small>
+			</p>
+			</div>
+		</td>
+		<td class="stats ', $color_class, '">';
+			if($topic['replies'])
+				echo '
+			<a title="',$txt['who_posted'],'" class="whoposted" data-topic="',$topic['id'], '" href="',$scripturl,'?action=xmlhttp;sa=whoposted;t=',$topic['id'],'" >', $topic['replies'], ' ', $txt['replies'], '</a>';
+			else
+				echo $topic['replies'], ' ', $txt['replies'];
+			echo '
+			<br />
+				', $topic['views'], ' ', $txt['views'], '
+		</td>
+		<td class="lastpost ', $color_class, '">',
+			$txt['by'], ': ', $topic['last_post']['member']['link'], '<br />
+			<a class="lp_link" title="', $txt['last_post'], '" href="', $topic['last_post']['href'], '">',$topic['last_post']['time'], '</a>
+		</td>';
+
+	// Show the quick moderation options?
+	if (!empty($context['can_quick_mod']))
+	{
+		echo '
+			<td class="moderation ', $color_class, '" style="text-align:center;">';
+		if ($options['display_quick_mod'])
+			echo '
+				<input type="checkbox" name="topics[]" value="', $topic['id'], '" class="input_check cb_inline" />';
+		echo '
+			</td>';
+	}
+	echo '
+		</tr>';
 }
 ?>

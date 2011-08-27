@@ -42,6 +42,8 @@ foreach (array('db_character_set', 'cachedir') as $variable)
 // Load the settings...
 require_once(dirname(__FILE__) . '/Settings.php');
 
+$__basekey = md5($boardurl . filemtime($sourcedir . '/Load.php')) . '-SMF-';
+
 if(!isset($db_no_admin_security))
 	$db_no_admin_security = 0;
 // Make absolutely sure the cache directory is defined.

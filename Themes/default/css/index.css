@@ -32,7 +32,7 @@ body
 {
 	background:#333355;
 	font-family: "Trebuchet MS", "Verdana", "Arial", "Helvetica", "sans-serif";
-	font-size:10pt;
+	font-size:1.0em;
 	margin: 0;
 	padding: 0;
 }
@@ -63,7 +63,7 @@ form
 
 img.icon {vertical-align:middle;padding:0;margin:0 3px;border:0;height:16px;}
 #search_form {margin-bottom:0px;position:relative;top:-70px;padding:5px 10px 0 10px;background-color:white;border-top-left-radius:6px;border-top-right-radius:6px;}
-.searchfield {background:#fff url(../images/theme/sicon.png) 3px center no-repeat;font-weight:bold;font-size:12px;border:1px solid #A3B2D0;}
+.searchfield {background:#fff url(../images/theme/sicon.png) 3px center no-repeat;font-weight:bold;font-size:12px;border:1px solid #A3B2D0;min-height:18px;}
 
 input, select, textarea
 {
@@ -219,9 +219,9 @@ em
 }
 
 /* Default font sizes: small (8pt), normal (10pt), and large (14pt). */
-.smalltext, tr.smalltext th
+.smalltext
 {
-	font-size: 12px;
+	font-size: 0.9em;
 }
 .middletext
 {
@@ -412,19 +412,14 @@ code.bbc_code
 /* Generic, mostly color-related, classes.
 ------------------------------------------------------- */
 
-.titlebg, .titlebg2, tr.titlebg th, tr.titlebg td, tr.titlebg2 td
+tr.titlebg th, tr.titlebg td
 {
 	color: #222;
 	font-size: 1.1em;
 	font-weight: bold;
 	background: #ccc url(../images/theme/sprite.png) 0 -171px repeat-x;
 }
-/* adjust the table versions of headers */
-tr.titlebg th, tr.titlebg2 th, td.titlebg, td.titlebg2, tr.catbg th, tr.catbg2 th, td.catbg, td.catbg2
-{
-	padding: 0 6px;
-}
-tr.titlebg th a:link, tr.titlebg th a:visited, tr.titlebg2 td a:link, tr.titlebg2 td a:visited
+tr.titlebg th a:link, tr.titlebg th a:visited
 {
 	color: #222;
 }
@@ -737,7 +732,7 @@ dl.settings dt.settings_title
 	padding: 5px 0 0 0;
 	font-weight: bold;
 	clear: both;
-}                     2
+}
 dl.settings dt.windowbg
 {
 	width: 98%;
@@ -767,7 +762,7 @@ dl.settings dt a img
 
 /* Styles for rounded headers.
 ------------------------------------------------------- */
-h2.catbg, h3.catbg2, h3.titlebg, h4.titlebg, h4.catbg
+h2.catbg, h3.catbg2, h4.catbg
 {
 	overflow: hidden;
 	height: 20px;
@@ -779,27 +774,9 @@ h3.catbg2 a, h3.catbg2
 {
 	color: #feb;
 }
-h3.titlebg a, h3.titlebg, h4.titlebg, h4.titlebg a
-{
-	color: #222;
-}
-h3.titlebg a:hover, h4.titlebg a:hover
-{
-	color: #53616f;
-	text-decoration: none;
-}
 h4.catbg, h4.catbg2 , h3.catbg , h3.catbg2 , .table_list tbody.header td.catbg
 {
 	padding-right: 9px;
-}
-h4.titlebg, h3.titlebg
-{
-	margin-right: 9px;
-}
-h4.titlebg img.icon
-{
-	float: left;
-	margin: 2px 8px 0 0;
 }
 #upshrinkHeaderIC p.pminfo
 {
@@ -830,23 +807,6 @@ table.table_list a.collapse
 {
 	height: 22px;
 	line-height: 22px;
-}
-tr.catbg th.first_th
-{
-	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
-	border-top-left-radius:5px;
-}
-tr.catbg th.last_th
-{
-	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
-}
-tr.titlebg th.first_th
-{
-	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
-}
-tr.titlebg th.last_th
-{
-	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
 }
 .table_grid th.last_th input
 {
@@ -1233,15 +1193,14 @@ h1.bigheader, div.bigheader {
 }
 .greyback {
 	background:#f0f0f5 url(../images/frow.png) bottom left repeat-x;
-	border-radius: 5px 5px 0 0;
+	border-radius: 3px 3px 0 0;
 	margin-top:3px;
-	padding: 0 20px !important;
+	padding: 2px 20px !important;
 }
 h3, h4
 {
 	padding-bottom: 3px;
 }
-/* the upper_section, float the two each way */
 #upper_section
 {
 	/*background-color:#576D82;*/
@@ -1259,7 +1218,7 @@ h3, h4
 	height:24px;
 	width:500px;
 	position:relative;
-	top:51px;"
+	top:51px;
 }
 .notibar_intro {
 	background: transparent url(../images/theme/flow.png) left top no-repeat;
@@ -1268,7 +1227,7 @@ h3, h4
 	height:24px;
 	width:100px;
 	position:relative;
-	top:51px;"
+	top:51px;
 }
 li.greeting
 {
@@ -1305,7 +1264,6 @@ div#upper_section div.user
 }
 #sidebar div.user {
 	display:block;
-	font-size:12px;
 }
 div.user .avatar img {
 	border:2px solid #aaa;
@@ -1448,7 +1406,7 @@ ol.category {
 	margin:0;
 	margin-bottom:10px;
 }
-ol.category li {
+ol.category > li {
 	padding:4px 2px 4px 8px;
 	border-left: 1px solid #d5ecfa !important;
 	border-right: 1px solid #d5ecfa !important;
@@ -1458,10 +1416,9 @@ ol.category li {
 }
 ol.category > li > div.lastpost {
 	float:right;
-	min-width:300px;
+	min-width:330px;
 	max-width:400px;
 	white-space:nowrap;
-	font-size:12px;
 	margin-left:5px;
 }
 ol.category > li > div.stats {
@@ -1478,6 +1435,7 @@ ol.category > li > div.info {
 ol.category > li > div.info h3 {
 	color:#0066aa;
 	display:inline;
+	font-size: 120%;
 }
 /* the posting icons */
 #posting_icons
@@ -2522,12 +2480,6 @@ dl.register_form dd
 }
 
 /* common for all admin sections */
-h3.titlebg img
-{
-	vertical-align: middle;
-	margin-right: 0.5em;
-	margin-top: -1px;
-}
 tr.titlebg td
 {
 	padding-left: 0.7em;
@@ -2617,11 +2569,6 @@ tr.titlebg td
 #main_admsection .catbg {
 	height:18px;
 	margin:0;
-}
-.adm_section h4.titlebg
-{
-	font-size: 95%;
-	margin-bottom: 5px;
 }
 #main_admsection
 {
@@ -3608,8 +3555,9 @@ span.arrow {
 
 a.navPages {
 	padding:0 4px;
-	border:1px solid #ccc;
+	border:1px solid #ffcaca;
 	border-radius:3px;
+	background-color:#fff2f2;
 }
 span.small_avatar img {
 	max-height:32px;
@@ -3634,7 +3582,26 @@ span.avatar_overlay img {
 }
 
 tbody.divider tr {background:white;}
-.td_children {font-size:12px;padding:1px 0;border-top:1px solid #ddd;margin-top:3px;}
+ol.td_children {
+	font-size:12px;
+	padding:1px 0;
+	border-top:1px solid #ddd;
+	margin-top:3px;
+	list-style: none;
+}
+ol.td_children li {
+	width:300px;
+	height:18px;
+	line-height:18px;
+	float:left;
+}
+ol.td_children > li > a.no_new_posts {
+	background: transparent url(../images/theme/sprite.png) 0 -734px no-repeat;
+	padding-left:12px;
+}
+ol.td_children > li > a.new_posts {
+	background: transparent url(../images/theme/sprite.png) 0 -706px no-repeat;
+}
 .td_children h4 {display:inline;color:#0066aa;}
 #quick_search form {padding-top:1px !important;}
 
@@ -3732,6 +3699,7 @@ abbr.timeago {border:0;color:#888;}
 .smallpadding {padding:5px;}
 .minpadding {padding:1px;}
 .mediummargin {margin:5px;}
+.verticalclear {margin:3px 0;}
 .nowrap{white-space: nowrap;}
 .forcedwrap{white-space: pre-line;}
 /*

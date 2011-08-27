@@ -292,7 +292,7 @@ function template_create_list_menu($list_menu, $direction = 'top')
 		else
 		{
 			echo '
-			<tr class="titlebg">
+			<tr class="red_container">
 				<td colspan="', $context['colspan'], '">';
 
 			$links = array();

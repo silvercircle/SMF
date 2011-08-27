@@ -529,19 +529,19 @@ function template_user_subscription()
 	echo '
 		</form>
 		<br />
-		<div class="title_bar">
-			<h3 class="titlebg">', $txt['paid_current'], '</h3>
+		<div class="cat_bar">
+			<h3>', $txt['paid_current'], '</h3>
 		</div>
 		<div class="information">
 			', $txt['paid_current_desc'], '
 		</div>
 		<table width="100%" class="table_grid">
 			<thead>
-				<tr class="catbg">
-					<th class="first_th" width="30%">', $txt['paid_name'], '</th>
-					<th align="center">', $txt['paid_status'], '</th>
-					<th align="center">', $txt['start_date'], '</th>
-					<th class="last_th" align="center">', $txt['end_date'], '</th>
+				<tr>
+					<th class="red_container first_th" width="30%">', $txt['paid_name'], '</th>
+					<th class="red_container centertext">', $txt['paid_status'], '</th>
+					<th class="red_container centertext">', $txt['start_date'], '</th>
+					<th class="red_container last_th centertext">', $txt['end_date'], '</th>
 				</tr>
 			</thead>
 			<tbody>';
@@ -657,17 +657,15 @@ function template_paid_done()
 
 	echo '
 	<div id="paid_subscription">
-		<div class="title_bar">
-			<h3 class="titlebg">', $txt['paid_done'], '</h3>
+		<div class="cat_bar">
+			<h3>', $txt['paid_done'], '</h3>
 		</div>
-		<div class="windowbg2">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<p>', $txt['paid_done_desc'], '</p>
 				<br />
 				<a href="', $scripturl, '?action=profile;u=', $context['member']['id'], ';area=subscriptions">', $txt['paid_sub_return'], '</a>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 	</div>
 	<br class="clear" />';

@@ -1582,7 +1582,7 @@ function template_download_language()
 	{
 		$count = 0;
 		echo '
-				<tr class="titlebg">
+				<tr>
 					<td colspan="4">
 						<img src="', $settings['images_url'], '/sort_down.gif" id="toggle_image_', $theme, '" alt="*" />&nbsp;', isset($context['theme_names'][$theme]) ? $context['theme_names'][$theme] : $theme, '
 					</td>

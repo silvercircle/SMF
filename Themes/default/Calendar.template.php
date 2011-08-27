@@ -287,7 +287,7 @@ function template_show_month_grid($grid_name)
 	if (empty($calendar_data['disable_day_titles']))
 	{
 		echo '
-					<tr class="titlebg2">';
+					<tr class="red_container">';
 
 		if (!empty($calendar_data['show_week_links']))
 			echo '

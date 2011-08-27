@@ -380,8 +380,8 @@ function template_merge_extra_options()
 	echo '
 	<div id="merge_topics">
 		<form action="', $scripturl, '?action=mergetopics;sa=execute;" method="post" accept-charset="', $context['character_set'], '">
-			<div class="title_bar">
-				<h3 class="titlebg">', $txt['merge_topic_list'], '</h3>
+			<div class="cat_bar">
+				<h3>', $txt['merge_topic_list'], '</h3>
 			</div>
 			<table width="100%" class="bordercolor table_grid">
 				<thead>
