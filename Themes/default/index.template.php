@@ -124,7 +124,7 @@ var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
 var t2 = document.createElement(\'SCRIPT\');
 t2.type = "text/javascript";
 t2.async = true;
-t2.src = "',$settings['theme_url'],'/scripts/footer.js?ver=1.1.0";
+t2.src = "',$settings['theme_url'],'/scripts/min/footer.js?ver=1.1.0";
 anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
 	</script>';
@@ -658,23 +658,22 @@ function template_sidebar_content()
 					<a href="', $scripturl, '?action=unreadreplies">', $txt['show_unread_replies'], '</a>
 				 </div>';
 
-		echo '<div style="margin-top:3px;">
-				<ul class="reset"><li></li>';
+		echo '<div style="margin-top:3px;">';
 		// Is the forum in maintenance mode?
 		if ($context['in_maintenance'] && $context['user']['is_admin'])
 			echo '
-					<li class="notice">', $txt['maintain_mode_on'], '</li>';
+					<div class="errorbox smallpadding">', $txt['maintain_mode_on'], '</div>';
 
 		// Are there any members waiting for approval?
 		if (!empty($context['unapproved_members']))
 			echo '
-					<li>', $context['unapproved_members'] == 1 ? $txt['approve_thereis'] : $txt['approve_thereare'], ' <a href="', $scripturl, '?action=admin;area=viewmembers;sa=browse;type=approve">', $context['unapproved_members'] == 1 ? $txt['approve_member'] : $context['unapproved_members'] . ' ' . $txt['approve_members'], '</a> ', $txt['approve_members_waiting'], '</li>';
+					<div>', $context['unapproved_members'] == 1 ? $txt['approve_thereis'] : $txt['approve_thereare'], ' <a href="', $scripturl, '?action=admin;area=viewmembers;sa=browse;type=approve">', $context['unapproved_members'] == 1 ? $txt['approve_member'] : $context['unapproved_members'] . ' ' . $txt['approve_members'], '</a> ', $txt['approve_members_waiting'], '</div>';
 
 		if (!empty($context['open_mod_reports']) && $context['show_open_reports'])
 			echo '
-					<li><a href="', $scripturl, '?action=moderate;area=reports">', sprintf($txt['mod_reports_waiting'], $context['open_mod_reports']), '</a></li>';
+					<div><a href="', $scripturl, '?action=moderate;area=reports">', sprintf($txt['mod_reports_waiting'], $context['open_mod_reports']), '</a></div>';
 
-		echo '</ul></div></div>';
+		echo '</div></div>';
 	}
 	// Otherwise they're a guest - this time ask them to either register or login - lazy bums...
 	else {

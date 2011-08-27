@@ -158,15 +158,15 @@ function template_maintenance()
 		<div class="cat_bar">
 			<h3 class="catbg">', $context['title'], '</h3>
 		</div>
-		<p class="description">
+		<div class="blue_container mediumpadding">
 			<img class="floatleft" src="', $settings['images_url'], '/construction.png" width="40" height="40" alt="', $txt['in_maintain_mode'], '" />
 			', $context['description'], '<br class="clear" />
-		</p>
-		<div class="title_bar">
-			<h4 class="titlebg">', $txt['admin_login'], '</h4>
 		</div>
-		<span class="upperframe"><span></span></span>
-		<div class="roundframe">
+		<br>
+		<div class="cat_bar">
+			<h3>', $txt['admin_login'], '</h3>
+		</div>
+		<div class="blue_container mediumpadding">
 			<dl>
 				<dt>', $txt['username'], ':</dt>
 				<dd><input type="text" name="user" size="20" class="input_text" /></dd>
@@ -179,7 +179,6 @@ function template_maintenance()
 			</dl>
 			<p class="centertext"><input type="submit" value="', $txt['login'], '" class="button_submit" /></p>
 		</div>
-		<span class="lowerframe"><span></span></span>
 		<input type="hidden" name="hash_passwrd" value="" />
 	</div>
 </form>';
@@ -235,11 +234,10 @@ function template_retry_activate()
 	// Just ask them for their code so they can try it again...
 	echo '
 		<form action="', $scripturl, '?action=activate;u=', $context['member_id'], '" method="post" accept-charset="', $context['character_set'], '">
-			<div class="title_bar">
-				<h3 class="titlebg">', $context['page_title'], '</h3>
+			<div class="cat_bar">
+				<h3>', $context['page_title'], '</h3>
 			</div>
-			<span class="upperframe"><span></span></span>
-			<div class="roundframe">';
+			<div class="blue_container mediumpadding">';
 
 	// You didn't even have an ID?
 	if (empty($context['member_id']))
@@ -254,7 +252,6 @@ function template_retry_activate()
 				</dl>
 				<p><input type="submit" value="', $txt['invalid_activation_submit'], '" class="button_submit" /></p>
 			</div>
-			<span class="lowerframe"><span></span></span>
 		</form>';
 }
 
@@ -266,11 +263,10 @@ function template_resend()
 	// Just ask them for their code so they can try it again...
 	echo '
 		<form action="', $scripturl, '?action=activate;sa=resend" method="post" accept-charset="', $context['character_set'], '">
-			<div class="title_bar">
-				<h3 class="titlebg">', $context['page_title'], '</h3>
+			<div class="cat_bar">
+				<h3>', $context['page_title'], '</h3>
 			</div>
-			<span class="upperframe"><span></span></span>
-			<div class="roundframe">
+			<div class="blue_container mediumpadding">
 				<dl>
 					<dt>', $txt['invalid_activation_username'], ':</dt>
 					<dd><input type="text" name="user" size="40" value="', $context['default_username'], '" class="input_text" /></dd>
@@ -294,7 +290,6 @@ function template_resend()
 	echo '
 				<p><input type="submit" value="', $txt['invalid_activation_resend'], '" class="button_submit" /></p>
 			</div>
-			<span class="lowerframe"><span></span></span>
 		</form>';
 }
 

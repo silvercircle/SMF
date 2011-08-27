@@ -486,21 +486,21 @@ function template_editBuddies()
 	global $context, $settings, $options, $scripturl, $modSettings, $txt;
 
 	echo '
-		<div class="title_bar">
-			<h3 class="titlebg">
-				<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/online.gif" alt="" class="icon" />', $txt['editBuddies'], '</span>
+		<div class="cat_bar">
+			<h3>
+				', $txt['editBuddies'], '
 			</h3>
 		</div>
-		<table border="0" width="100%" cellspacing="1" cellpadding="4" class="table_grid" align="center">
-			<tr class="catbg">
-				<th class="first_th lefttext" scope="col" width="20%">', $txt['name'], '</th>
-				<th scope="col">', $txt['status'], '</th>
-				<th scope="col">', $txt['email'], '</th>
-				<th scope="col">', $txt['icq'], '</th>
-				<th scope="col">', $txt['aim'], '</th>
-				<th scope="col">', $txt['yim'], '</th>
-				<th scope="col">', $txt['msn'], '</th>
-				<th class="last_th" scope="col"></th>
+		<table style="width:100%;" class="table_grid" align="center">
+			<tr>
+				<th class="red_container first_th lefttext" scope="col" width="20%">', $txt['name'], '</th>
+				<th class="red_container" scope="col">', $txt['status'], '</th>
+				<th class="red_container" scope="col">', $txt['email'], '</th>
+				<th class="red_container" scope="col">', $txt['icq'], '</th>
+				<th class="red_container" scope="col">', $txt['aim'], '</th>
+				<th class="red_container" scope="col">', $txt['yim'], '</th>
+				<th class="red_container" scope="col">', $txt['msn'], '</th>
+				<th class="red_container last_th" scope="col"></th>
 			</tr>';
 
 	// If they don't have any buddies don't list them!
@@ -537,18 +537,16 @@ function template_editBuddies()
 	<br />
 	<form action="', $scripturl, '?action=profile;u=', $context['id_member'], ';area=lists;sa=buddies" method="post" accept-charset="', $context['character_set'], '">
 		<div class="tborder add_buddy">
-			<div class="title_bar">
-				<h3 class="titlebg">', $txt['buddy_add'], '</h3>
+			<div class="cat_bar">
+				<h3>', $txt['buddy_add'], '</h3>
 			</div>
-			<span class="upperframe"><span></span></span>
-			<div class="roundframe">
+			<div class="blue_container">
 					<label for="new_buddy">
 						<strong>', $txt['who_member'], ':</strong>
 					</label>
 					<input type="text" name="new_buddy" id="new_buddy" size="25" class="input_text" />
 					<input type="submit" value="', $txt['buddy_add_button'], '" class="button_submit" />
 			</div>
-			<span class="lowerframe"><span></span></span>
 		</div>
 	</form>
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/suggest.js?fin20"></script>
@@ -572,21 +570,21 @@ function template_editIgnoreList()
 	global $context, $settings, $options, $scripturl, $modSettings, $txt;
 
 	echo '
-		<div class="title_bar">
-			<h3 class="titlebg">
-				<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/profile_sm.gif" alt="" class="icon" />', $txt['editIgnoreList'], '</span>
+		<div class="cat_bar">
+			<h3>
+				', $txt['editIgnoreList'], '
 			</h3>
 		</div>
-		<table border="0" width="100%" cellspacing="1" cellpadding="4" class="table_grid" align="center">
-			<tr class="catbg">
-				<th class="first_th" scope="col" width="20%">', $txt['name'], '</th>
-				<th scope="col">', $txt['status'], '</th>
-				<th scope="col">', $txt['email'], '</th>
-				<th scope="col">', $txt['icq'], '</th>
-				<th scope="col">', $txt['aim'], '</th>
-				<th scope="col">', $txt['yim'], '</th>
-				<th scope="col">', $txt['msn'], '</th>
-				<th class="last_th" scope="col"></th>
+		<table class="table_grid" style="width:100%;">
+			<tr>
+				<th class="red_container first_th" scope="col" width="20%">', $txt['name'], '</th>
+				<th class="red_container" scope="col">', $txt['status'], '</th>
+				<th class="red_container" scope="col">', $txt['email'], '</th>
+				<th class="red_container" scope="col">', $txt['icq'], '</th>
+				<th class="red_container" scope="col">', $txt['aim'], '</th>
+				<th class="red_container" scope="col">', $txt['yim'], '</th>
+				<th class="red_container" scope="col">', $txt['msn'], '</th>
+				<th class="red_container last_th" scope="col"></th>
 			</tr>';
 
 	// If they don't have anyone on their ignore list, don't list it!
@@ -623,18 +621,16 @@ function template_editIgnoreList()
 	<br />
 	<form action="', $scripturl, '?action=profile;u=', $context['id_member'], ';area=lists;sa=ignore" method="post" accept-charset="', $context['character_set'], '">
 		<div class="tborder add_buddy">
-			<div class="title_bar">
-				<h3 class="titlebg">', $txt['ignore_add'], '</h3>
+			<div class="cat_bar">
+				<h3>', $txt['ignore_add'], '</h3>
 			</div>
-			<span class="upperframe"><span></span></span>
-			<div class="roundframe">
+			<div class="blue_container">
 					<label for="new_buddy">
 						<strong>', $txt['who_member'], ':</strong>
 					</label>
 					<input type="text" name="new_ignore" id="new_ignore" size="25" class="input_text" />
 					<input type="submit" value="', $txt['ignore_add_button'], '" class="button_submit" />
 			</div>
-			<span class="lowerframe"><span></span></span>
 		</div>
 	</form>
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/suggest.js?fin20"></script>
@@ -1915,15 +1911,13 @@ function template_viewWarning()
 	template_load_warning_variables();
 
 	echo '
-		<div class="title_bar">
-			<h3 class="titlebg">
-				<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/profile_sm.gif" alt="" class="icon" />
+		<div class="cat_bar">
+			<h3>
 				', sprintf($txt['profile_viewwarning_for_user'], $context['member']['name']), '
 				</span>
 			</h3>
 		</div>
 		<div class="windowbg">
-			<span class="topslice"><span></span></span>
 			<div class="content">
 				<dl class="settings">
 					<dt>
@@ -1959,7 +1953,6 @@ function template_viewWarning()
 		echo '
 				</dl>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>';
 
 	template_show_list('view_warnings');

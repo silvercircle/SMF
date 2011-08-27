@@ -230,8 +230,8 @@ function template_list_themes()
 	foreach ($context['themes'] as $theme)
 	{
 		echo '
-			<div class="title_bar">
-				<h3 class="titlebg">
+			<div class="cat_bar">
+				<h3>
 					<span class="floatleft"><strong><a href="', $scripturl, '?action=admin;area=theme;th=', $theme['id'], ';', $context['session_var'], '=', $context['session_id'], ';sa=settings">', $theme['name'], '</a></strong>', !empty($theme['version']) ? ' <em>(' . $theme['version'] . ')</em>' : '', '</span>';
 
 			// You *cannot* delete the default theme. It's important!
@@ -242,8 +242,7 @@ function template_list_themes()
 			echo '
 				</h3>
 			</div>
-			<div class="windowbg">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container">
 				<div class="content">
 					<dl class="settings themes_list">
 						<dt>', $txt['themeadmin_list_theme_dir'], ':</dt>
@@ -254,7 +253,6 @@ function template_list_themes()
 						<dd>', $theme['images_url'], '</dd>
 					</dl>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>';
 	}
 
@@ -313,11 +311,10 @@ function template_reset_list()
 		$alternate = !$alternate;
 
 		echo '
-		<div class="title_bar">
-			<h3 class="titlebg">', $theme['name'], '</h3>
+		<div class="cat_bar">
+			<h3>', $theme['name'], '</h3>
 		</div>
-		<div class="windowbg', $alternate ? '' : '2','">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<ul class="reset">
 					<li>
@@ -331,7 +328,6 @@ function template_reset_list()
 					</li>
 				</ul>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>';
 	}
 

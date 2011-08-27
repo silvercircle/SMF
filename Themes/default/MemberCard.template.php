@@ -58,7 +58,7 @@ function template_main()
 			echo 'Last activity: ',$member['last_login'];
 			
 		echo '</div></td></tr></table>';
-		echo '<div class="title_bar">
+		echo '<div class="cat_bar">
 			<div style="position:absolute;bottom:3px;right:8px;"><a href="',$scripturl,'?action=profile;u=',$member['id'],'">View full profile</a></div><div style="clear:both;"></div></div>';
 	}
 }

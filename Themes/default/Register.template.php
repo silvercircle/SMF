@@ -20,11 +20,9 @@ function template_registration_agreement()
 			<div class="cat_bar">
 				<h3 class="catbg">', $txt['registration_agreement'], '</h3>
 			</div>
-			<span class="upperframe"><span></span></span>
-			<div class="roundframe">
+			<div class="blue_container">
 				<p>', $context['agreement'], '</p>
 			</div>
-			<span class="lowerframe"><span></span></span>
 			<div id="confirm_buttons">';
 
 	// Age restriction in effect?
@@ -124,14 +122,13 @@ function template_registration_form()
 
 	echo '
 		<form action="', $scripturl, '?action=register2" method="post" accept-charset="', $context['character_set'], '" name="registration" id="registration" onsubmit="return verifyAgree();">
+			<h1 class="bigheader">
+				', $txt['registration_form'], '
+			</h1>
 			<div class="cat_bar">
-				<h3 class="catbg">', $txt['registration_form'], '</h3>
+				<h3>', $txt['required_info'], '</h3>
 			</div>
-			<div class="title_bar">
-				<h4 class="titlebg">', $txt['required_info'], '</h4>
-			</div>
-			<div class="windowbg2">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container">
 				<fieldset class="content">
 					<dl class="register_form">
 						<dt><strong><label for="smf_autov_username">', $txt['username'], ':</label></strong></dt>
@@ -218,11 +215,10 @@ function template_registration_form()
 	if (!empty($context['profile_fields']) || !empty($context['custom_fields']))
 	{
 		echo '
-			<div class="title_bar">
-				<h4 class="titlebg">', $txt['additional_information'], '</h4>
+			<div class="cat_bar">
+				<h3>', $txt['additional_information'], '</h3>
 			</div>
-			<div class="windowbg2">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container">
 				<fieldset class="content">
 					<dl class="register_form" id="custom_group">';
 	}
@@ -326,20 +322,17 @@ function template_registration_form()
 		echo '
 					</dl>
 				</fieldset>
-				<span class="botslice"><span></span></span>
 			</div>';
 	}	if ($context['visual_verification'])
 	{
-		echo '
-			<h4 class="titlebg"><span class="left"></span>
-				', $txt['verification'], '
-			</h4>
-			<div class="windowbg2">
-				<span class="topslice"><span></span></span>
+		echo '<br>
+			<div class="cat_bar">
+			<h3>', $txt['verification'], '</h3>
+			</div>
+			<div class="blue_container">
 				<fieldset class="content centertext">
 					', template_control_verification($context['visual_verification_id'], 'all'), '
 				</fieldset>
-				<span class="botslice"><span></span></span>
 			</div>';
 	}echo '
 			<div id="confirm_buttons">
@@ -390,11 +383,10 @@ function template_coppa()
 
 	// Formulate a nice complicated message!
 	echo '
-			<div class="title_bar">
-				<h3 class="titlebg">', $context['page_title'], '</h3>
+			<div class="cat_bar">
+				<h3>', $context['page_title'], '</h3>
 			</div>
-			<div class="windowbg2">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container">
 				<div class="content">
 					<p>', $context['coppa']['body'], '</p>
 					<p>
@@ -430,7 +422,6 @@ function template_coppa()
 	}
 	echo '
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>';
 }
 

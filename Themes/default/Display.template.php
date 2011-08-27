@@ -131,24 +131,18 @@ function template_main()
 	if (!empty($context['linked_calendar_events']))
 	{
 		echo '
-			<div class="linked_events">
-				<div class="title_bar rounded_top">
-					<h4 class="titlebg">', $txt['calendar_linked_events'], '</h4>
-				</div>
-				<div class="generic_container">
-					<div class="content">
-						<ul class="reset">';
+			<div class="orange_container">
+				<h3>', $txt['calendar_linked_events'], '</h3>
+					<ul class="reset">';
 
 		foreach ($context['linked_calendar_events'] as $event)
 			echo '
-							<li>
-								', ($event['can_edit'] ? '<a href="' . $event['modify_href'] . '"> <img src="' . $settings['images_url'] . '/icons/modify_small.gif" alt="" title="' . $txt['modify'] . '" class="edit_event" /></a> ' : ''), '<strong>', $event['title'], '</strong>: ', $event['start_date'], ($event['start_date'] != $event['end_date'] ? ' - ' . $event['end_date'] : ''), '
-							</li>';
+					<li>
+					', ($event['can_edit'] ? '<a href="' . $event['modify_href'] . '"> <img src="' . $settings['images_url'] . '/icons/modify_small.gif" alt="" title="' . $txt['modify'] . '" class="edit_event" /></a> ' : ''), '<strong>', $event['title'], '</strong>: ', $event['start_date'], ($event['start_date'] != $event['end_date'] ? ' - ' . $event['end_date'] : ''), '
+					</li>';
 
 		echo '
-						</ul>
-					</div>
-				</div>
+					</ul>
 			</div>';
 	}
 	// Build the normal button array.

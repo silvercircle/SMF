@@ -23,7 +23,7 @@ function template_main()
 			echo '<div class="blue_container mediumpadding" style="margin-bottom:5px;">', $context['preview']['last_body'];
 			echo '</div></td></tr></table>';
 		}
-		echo '<div class="title_bar">
+		echo '<div class="cat_bar">
 			<div style="position:absolute;bottom:3px;right:8px;">
 			<a href="',$scripturl,'?topic=',$context['preview']['id_topic'],'">',$txt['read_topic'],'</a>
 			&nbsp;|&nbsp;<a href="',$scripturl,'?topic=',$context['preview']['id_topic'],'.msg',$context['preview']['new_from'],'#new">',$txt['visit_new'],'</a>

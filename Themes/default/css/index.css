@@ -801,26 +801,6 @@ h4.titlebg img.icon
 	float: left;
 	margin: 2px 8px 0 0;
 }
-div.title_bar
-{
-	background: #ccc url(../images/theme/sprite.png) 0 -171px repeat-x;
-	padding: 2px 9px;
-	height: 20px;
-	overflow: hidden;
-}
-
-div.title_barIC
-{
-	background: #ccc url(../images/theme/sprite.png) 0 -171px repeat-x;
-	padding: 2px 9px;
-	height: 20px;
-	overflow: hidden;
-	margin-bottom: 1px;
-}
-div.title_barIC h4.titlebg
-{
-	background: #ccc url(../images/theme/sprite.png) 0 -171px repeat-x;
-}
 #upshrinkHeaderIC p.pminfo
 {
 	margin: 0;
@@ -1692,10 +1672,6 @@ div.table_frame .table_list
 	overflow: hidden;
 }
 /* Events */
-.linked_events
-{
-	padding: 1em 0;
-}
 .edit_event
 {
 	margin: 0 1em;
@@ -3220,10 +3196,6 @@ div#profile_success
 #statistics
 {
 	padding: 0.5em 0;
-}
-#statistics div.title_bar
-{
-	margin: 4px 0 -2px 0;
 }
 #statistics h3.catbg
 {
