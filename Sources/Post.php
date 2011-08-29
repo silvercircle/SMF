@@ -1356,7 +1356,7 @@ function Post2()
 	{
 		$request = $smcFunc['db_query']('', '
 			SELECT t.locked, t.is_sticky, t.id_poll, t.approved, t.id_first_msg, t.id_last_msg, t.id_member_started, t.id_member_updated,
-				t.id_board, t.id_prefix, t.id_layout, b.automerge
+				t.id_board, t.id_prefix, t.id_layout, t.num_replies, b.automerge
 			FROM {db_prefix}topics AS t
 			LEFT JOIN {db_prefix}boards AS b on b.id_board = t.id_board 
 			WHERE id_topic = {int:current_topic}
@@ -2014,7 +2014,10 @@ function Post2()
 		'id_last_msg' => !empty($topic) ? $topic_info['id_last_msg'] : 0,
 		'id_member_updated' => !empty($topic) ? $topic_info['id_member_updated'] : 0,
 		'is_approved' => !$modSettings['postmod_active'] || empty($topic) || !empty($board_info['cur_topic_approved']),
+		'num_replies' => $topic_info['num_replies'],
 	);
+	if(!isset($_REQUEST['stickfirst']) && !isset($_REQUEST['firstlayout']))
+		$topicOptions['topic_layout'] = null;
 	$posterOptions = array(
 		'id' => $user_info['id'],
 		'name' => $_POST['guestname'],

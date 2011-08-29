@@ -279,9 +279,7 @@ function template_generic_menu_tabs(&$menu_context)
 	</div>';
 
 	// Shall we use the tabs?
-	if (!empty($settings['use_tabs']))
-	{
-		echo '
+	echo '
 	<p class="orange_container">
 		', !empty($selected_tab['description']) ? $selected_tab['description'] : $tab_context['description'], '
 	</p>';
@@ -315,36 +313,6 @@ function template_generic_menu_tabs(&$menu_context)
 		echo '
 		</ul>
 	</div><br class="clear" />';
-	}
-	// ...if not use the old style
-	else
-	{
-		echo '
-	<p class="tabs">';
-
-		// Print out all the items in this tab.
-		foreach ($tab_context['tabs'] as $sa => $tab)
-		{
-			if (!empty($tab['disabled']))
-				continue;
-
-			if (!empty($tab['is_selected']))
-			{
-				echo '
-		<img src="', $settings['images_url'], '/selected.gif" alt="*" /> <strong><a href="', isset($tab['url']) ? $tab['url'] : $menu_context['base_url'] . ';area=' . $menu_context['current_area'] . ';sa=' . $sa, $menu_context['extra_parameters'], '">', $tab['label'], '</a></strong>';
-			}
-			else
-				echo '
-		<a href="', isset($tab['url']) ? $tab['url'] : $menu_context['base_url'] . ';area=' . $menu_context['current_area'] . ';sa=' . $sa, $menu_context['extra_parameters'], '">', $tab['label'], '</a>';
-
-			if (empty($tab['is_last']))
-				echo ' | ';
-		}
-
-		echo '
-	</p>
-	<p class="windowbg description">', isset($selected_tab['description']) ? $selected_tab['description'] : $tab_context['description'], '</p>';
-	}
 }
 
 ?>

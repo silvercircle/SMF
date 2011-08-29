@@ -22,7 +22,67 @@ function template_main()
 		);
 
 	echo '
-	<div class="main_section" id="memberlist">
+	<div id="sidebar" style="width:300px;padding-top:20px;">';
+	
+	// Display each of the column headers of the table.
+	$sortlist = '';
+	foreach ($context['columns'] as $column)
+	{
+		// We're not able (through the template) to sort the search results right now...
+		//if (isset($context['old_search']))
+		//	echo $column['label'];
+		// This is a selected column, so underline it or some such.
+		if(isset($column['selected']) || isset($column['link'])) {
+			if ($column['selected'])
+			 	$sortlist .= '<li><span class="button" style="width:80%;"><a href="' . $column['href'] . '" rel="nofollow">' . $column['label'] . ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" /></a></span><br><br></li>';
+		// This is just some column... show the link and be done with it.
+			else
+			 	$sortlist .= '<li><span class="button" style="width:80%;">'.$column['link'].'</span><br><br></li>';
+		}
+	}
+	if(strlen($sortlist)) {
+		echo '
+	 	<div class="cat_bar"><h3>Sort</h3></div>
+	 	<div class="blue_container">
+		<ol class="centertext" style="list-style:none;">',
+		$sortlist,
+		'</ol>
+		</div>
+		<br>';
+	}
+	echo '
+		<form action="', $scripturl, '?action=mlist;sa=search" method="post" accept-charset="', $context['character_set'], '">
+		<div id="memberlist">
+			<div class="cat_bar">
+			<h3>
+					', $txt['mlist_search'], '
+			</h3>
+		</div>';
+	echo '
+		<div id="memberlist_search" class="clear">
+			<div class="blue_container mediumpadding">
+				<div id="mlist_search" class="flow_hidden">
+					<div id="search_term_input">
+						<input type="text" name="search" value="', $context['old_search'], '" size="35" class="input_text" /> <input type="submit" name="submit" value="' . $txt['search'] . '" class="button_submit" />
+					</div>
+				<span class="floatleft">';
+
+	$count = 0;
+	if(isset($context['search_fields'])) {
+	foreach ($context['search_fields'] as $id => $title) 
+		echo '
+			<label for="fields-', $id, '"><input type="checkbox" name="fields[]" id="fields-', $id, '" value="', $id, '" ', in_array($id, $context['search_defaults']) ? 'checked="checked"' : '', ' class="input_check" />', $title, '</label><br />';
+	}
+		echo '
+						</span>
+					</div>
+				</div><br /><br />
+			</div>
+		</div>
+	</form>
+	
+	</div>
+	<div class="main_section" id="memberlist" style="margin-right:310px;">
 		<div class="bigheader">
 			<h4>
 				<span class="floatleft">', $txt['members_list'], '</span>';
@@ -31,31 +91,14 @@ function template_main()
 				<span class="floatright">', $context['letter_links'], '</span>';
 		echo '
 			</h4>
-		<div class="clear"></div>
-		</div>
-		<div class="pagesection">
-			', template_button_strip($memberlist_buttons, 'right'), '
-			<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], '</div>
+		<div style="clear:left;"></div>
 		</div>';
-
-	echo '<div class="orange_container">Sort by:  ';
-	// Display each of the column headers of the table.
-	foreach ($context['columns'] as $column)
-	{
-		// We're not able (through the template) to sort the search results right now...
-		echo '<span style="margin-left:10px;"><strong>';
-		if (isset($context['old_search']))
-			echo $column['label'];
-		// This is a selected column, so underline it or some such.
-		elseif ($column['selected'])
+		if(isset($context['page_index']))
 			echo '
-					<a href="' . $column['href'] . '" rel="nofollow">' . $column['label'] . ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" /></a>';
-		// This is just some column... show the link and be done with it.
-		else
-			echo $column['link'];
-		echo '</strong></span>';
-	}
-	echo '</div>';
+			<div class="pagesection">
+			 <div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], '</div>
+			</div>';
+
 	// Assuming there are members loop through each one displaying their data.
 	if (!empty($context['members'])) {
 		echo '<div><ol class="tiles" id="membertiles">';
@@ -93,13 +136,6 @@ function template_main()
 				</div></li>';
 		}
 		echo '</ol><br class="clear" /></div>
-			<script>
-				$(document).ready(function() {
-					var _w = $("#membertiles").width();
-					if(_w < 900)
-						$("html > head").append("<style>ol.tiles li { width: 50%; } ol.tiles {padding-left: 0;}</style>");
-				});
-			</script>
 			';
 	}
 	// No members?
@@ -112,18 +148,19 @@ function template_main()
 		//</div>';
 
 	echo '
-		<div class="pagesection">
-			<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], '</div>';
+		<div class="pagesection">';
+			if(isset($context['page_index']))
+				echo '<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], '</div>';
 
 	// If it is displaying the result of a search show a "search again" link to edit their criteria.
-	if (isset($context['old_search']))
+	if (isset($context['old_search']) && isset($context['old_search_value']))
 		echo '
 			<div class="floatright">
 				<a href="', $scripturl, '?action=mlist;sa=search;search=', $context['old_search_value'], '">', $txt['mlist_search_again'], '</a>
 			</div>';
 	echo '
 		</div>
-	</div>';
+	<div class="clear"></div></div>';
 
 }
 
@@ -143,7 +180,7 @@ function template_search()
 	<form action="', $scripturl, '?action=mlist;sa=search" method="post" accept-charset="', $context['character_set'], '">
 		<div id="memberlist">
 			<h1 class="bigheader">
-					', !empty($settings['use_buttons']) ? '<img src="' . $settings['images_url'] . '/buttons/search.gif" alt="" class="icon" />' : '', $txt['mlist_search'], '
+					<img src="' . $settings['images_url'] . '/buttons/search.gif" alt="" class="icon" />', $txt['mlist_search'], '
 			</h3>
 			<div class="pagesection">
 				', template_button_strip($memberlist_buttons, 'right'), '

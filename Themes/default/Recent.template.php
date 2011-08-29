@@ -115,7 +115,7 @@ function template_unread()
 		echo '
 			<div class="pagesection">';
 
-		if (!empty($mark_read) && !empty($settings['use_tabs']))
+		if (!empty($mark_read))
 			template_button_strip($mark_read, 'right');
 
 		echo '
@@ -206,14 +206,6 @@ function template_unread()
 		if (!empty($context['topics']) && !$context['showing_all_topics'])
 			$mark_read['readall'] = array('text' => 'unread_topics_all', 'image' => 'markreadall.gif', 'lang' => true, 'url' => $scripturl . '?action=unread;all' . $context['querystring_board_limits'], 'active' => true);
 
-		if (empty($settings['use_tabs']) && !empty($mark_read))
-			echo '
-						<tr class="catbg">
-							<td colspan="', $showCheckboxes ? '6' : '5', '" align="right">
-								', template_button_strip($mark_read, 'top'), '
-							</td>
-						</tr>';
-
 		if (empty($context['topics']))
 			echo '
 					<tr style="display: none;"><td></td></tr>';
@@ -224,7 +216,7 @@ function template_unread()
 			</div>
 			<div class="pagesection" id="readbuttons">';
 
-		if (!empty($settings['use_tabs']) && !empty($mark_read))
+		if (!empty($mark_read))
 			template_button_strip($mark_read, 'right');
 
 		echo '
@@ -296,7 +288,7 @@ function template_replies()
 		echo '
 			<div class="pagesection">';
 
-		if (!empty($mark_read) && !empty($settings['use_tabs']))
+		if (!empty($mark_read))
 			template_button_strip($mark_read, 'right');
 
 		echo '
@@ -384,21 +376,13 @@ function template_replies()
 						</tr>';
 		}
 
-		if (empty($settings['use_tabs']) && !empty($mark_read))
-			echo '
-						<tr class="catbg">
-							<td colspan="', $showCheckboxes ? '6' : '5', '" align="right">
-								', template_button_strip($mark_read, 'top'), '
-							</td>
-						</tr>';
-
 		echo '
 					</tbody>
 				</table>
 			</div>
 			<div class="pagesection">';
 
-		if (!empty($settings['use_tabs']) && !empty($mark_read))
+		if (!empty($mark_read))
 			template_button_strip($mark_read, 'right');
 
 		echo '

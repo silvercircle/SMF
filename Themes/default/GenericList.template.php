@@ -19,7 +19,7 @@ function template_show_list($list_id = null)
 	$cur_list = &$context[$list_id];
 
 	// These are the main tabs that is used all around the template.
-	if (!empty($settings['use_tabs']) && isset($cur_list['list_menu'], $cur_list['list_menu']['show_on']) && ($cur_list['list_menu']['show_on'] == 'both' || $cur_list['list_menu']['show_on'] == 'top'))
+	if (isset($cur_list['list_menu'], $cur_list['list_menu']['show_on']) && ($cur_list['list_menu']['show_on'] == 'both' || $cur_list['list_menu']['show_on'] == 'top'))
 		template_create_list_menu($cur_list['list_menu'], 'top');
 
 	if (isset($cur_list['form']))
@@ -35,9 +35,6 @@ function template_show_list($list_id = null)
 					', $cur_list['title'], '
 				</h3>
 			</div>';
-	// This is for the old style menu with the arrows "> Test | Test 1"
-	if (empty($settings['use_tabs']) && isset($cur_list['list_menu'], $cur_list['list_menu']['show_on']) && ($cur_list['list_menu']['show_on'] == 'both' || $cur_list['list_menu']['show_on'] == 'top'))
-		template_create_list_menu($cur_list['list_menu'], 'top');
 
 	if (isset($cur_list['additional_rows']['top_of_list']))
 		template_additional_rows('top_of_list', $cur_list);
@@ -190,7 +187,7 @@ function template_show_list($list_id = null)
 	}
 
 	// Tabs at the bottom.  Usually bottom alligned.
-	if (!empty($settings['use_tabs']) && isset($cur_list['list_menu'], $cur_list['list_menu']['show_on']) && ($cur_list['list_menu']['show_on'] == 'both' || $cur_list['list_menu']['show_on'] == 'bottom'))
+	if (isset($cur_list['list_menu'], $cur_list['list_menu']['show_on']) && ($cur_list['list_menu']['show_on'] == 'both' || $cur_list['list_menu']['show_on'] == 'bottom'))
 		template_create_list_menu($cur_list['list_menu'], 'bottom');
 
 	if (isset($cur_list['javascript']))
@@ -247,15 +244,9 @@ function template_create_list_menu($list_menu, $direction = 'top')
 	$first = $context['right_to_left'] ? 'last' : 'first';
 	$last = $context['right_to_left'] ? 'first' : 'last';
 
-	// Tabs take preference over buttons in certain cases.
-	if (empty($settings['use_tabs']) && $list_menu['style'] == 'button')
-		$list_menu['style'] = 'tabs';
-
 	if (!isset($list_menu['style']) || isset($list_menu['style']) && $list_menu['style'] == 'tabs')
 	{
-		if (!empty($settings['use_tabs']))
-		{
-			echo '
+		echo '
 		<table cellpadding="0" cellspacing="0" style="margin-', $list_menu['position'], ': 10px; width: 100%;">
 			<tr>', $list_menu['position'] == 'right' ? '
 				<td>&nbsp;</td>' : '', '
@@ -288,22 +279,6 @@ function template_create_list_menu($list_menu, $direction = 'top')
 				<td>&nbsp;</td>' : '', '
 			</tr>
 		</table>';
-		}
-		else
-		{
-			echo '
-			<tr class="red_container">
-				<td colspan="', $context['colspan'], '">';
-
-			$links = array();
-			foreach ($list_menu['links'] as $link)
-				$links[] = ($link['is_selected'] ? '<img src="' . $settings['images_url'] . '/selected.gif" alt="&gt;" /> ' : '') . '<a href="' . $link['href'] . '">' . $link['label'] . '</a>';
-
-			echo '
-				', implode(' | ', $links), '
-				</td>
-			</tr>';
-		}
 	}
 	elseif (isset($list_menu['style']) && $list_menu['style'] == 'buttons')
 	{

@@ -441,7 +441,7 @@ function un_preparsecode($message)
 			// $parts[$i] = preg_replace('~\[html\](.+?)\[/html\]~ie', '\'[html]\' . strtr(htmlspecialchars(\'$1\', ENT_QUOTES), array(\'\\&quot;\' => \'&quot;\', \'&amp;#13;\' => \'<br />\', \'&amp;#32;\' => \' \', \'&amp;#38;\' => \'&#38;\', \'&amp;#91;\' => \'[\', \'&amp;#93;\' => \']\')) . \'[/html]\'', $parts[$i]);
 
 			// Attempt to un-parse the time to something less awful.
-			$parts[$i] = preg_replace('~\[time\](\d{0,10})\[/time\]~ie', '\'[time]\' . timeformat(\'$1\', false) . \'[/time]\'', $parts[$i]);
+			$parts[$i] = preg_replace('~\[time\](\d{0,10})\[/time\]~ie', '\'[time]\' . timeformat_static(\'$1\', false) . \'[/time]\'', $parts[$i]);
 		}
 	}
 
@@ -1862,7 +1862,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	// decide whether we should just update the last post or append a new one
 	$automerge_posts = false;
 	
-	if(!$new_topic && $topicOptions['automerge'] > 0 && $topicOptions['id_member_updated'] == $posterOptions['id'] && empty($topicOptions['poll'])) {
+	if(!$new_topic && $topicOptions['automerge'] > 0 && $topicOptions['num_replies'] > 0 && $topicOptions['id_member_updated'] == $posterOptions['id'] && empty($topicOptions['poll'])) {
 		$result = $smcFunc['db_query']('', '
 			SELECT poster_time, modified_time, body FROM {db_prefix}messages WHERE id_msg = {int:last_id}',
 			array('last_id' => $topicOptions['id_last_msg']));
@@ -1871,6 +1871,12 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			if(time() - max($ptime, $mtime) < $topicOptions['automerge'] * 60) {
 				$automerge_posts = true;
 				$msg_to_update = $topicOptions['id_last_msg'];
+				$ar_result = $smcFunc['db_query']('', '
+					SHOW TABLE STATUS LIKE "{db_prefix}messages"');
+				$row = $smcFunc['db_fetch_assoc']($ar_result);
+				$new_msg_id = $row['Auto_increment'];
+				$smcFunc['db_free_result']($ar_result);
+				log_error('New msg id = '.$new_msg_id);
 			}
 		}
 		$smcFunc['db_free_result']($result);
@@ -1912,29 +1918,38 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			);
 	}
 	else {
-		if($msg_to_update) {
-			$newbody = $oldbody . "\n[hr][size=11px][color=red][b]      Posted ".timeformat(time())."[/b][/color][/size]\n".$msgOptions['body'];	// todo: make the separator customizable
+		if($msg_to_update && $new_msg_id) {
+			$newbody = $oldbody . "\n[hr][size=11px][color=red][b]      Posted: [time]".time()."[/time][/b][/color][/size]\n".$msgOptions['body'];	// todo: make the separator customizable
+			//todo: don't forget has_img here for marking message as uncacheable
 			$smcFunc['db_query']('', '
-				UPDATE {db_prefix}messages SET body = {string:newbody}, modified_time = {int:now} WHERE id_msg = {int:id_msg}',
-				array('newbody' => $newbody, 'now' => time(), 'id_msg' => $msg_to_update));
+				UPDATE {db_prefix}messages SET id_msg = {int:new_id}, body = {string:newbody}, modified_time = {int:now},
+					approved = {int:approved}, subject = {string:subject} WHERE id_msg = {int:id_msg}',
+				array('newbody' => $newbody, 'now' => time(), 'id_msg' => $msg_to_update, 'new_id' => $new_msg_id,
+					'approved' => $msgOptions['approved'], 'subject' => $msgOptions['subject']));
 				
 			$smcFunc['db_query']('', 'DELETE FROM {db_prefix}messages_cache WHERE id_msg = {int:id_msg}',
 				array('id_msg' => $msg_to_update));
+			
+			if(empty($msgOptions['attachments']))
+				$attachments[0] = -1;
+			else
+				$attachments = $msgOptions['attachments'];
+				
+			// attachments must be fixed and "redirected" to the post to which we merge...
+			$smcFunc['db_query']('', '
+				UPDATE {db_prefix}attachments
+				SET id_msg = {int:id_msg}
+				WHERE id_attach IN ({array_int:attachment_list}) OR id_msg = {int:id_old_msg}',
+				array(
+					'attachment_list' => $attachments,
+					'id_msg' => $new_msg_id, 'id_old_msg' => $msg_to_update
+				)
+			);
+			$msg_to_update = $new_msg_id;
 		}
 		else
 			return false;		// that should NOT happen...
 			
-		// attachments must be fixed and "redirected" to the post to which we merge...
-		if (!empty($msgOptions['attachments']))
-			$smcFunc['db_query']('', '
-				UPDATE {db_prefix}attachments
-				SET id_msg = {int:id_msg}
-				WHERE id_attach IN ({array_int:attachment_list})',
-				array(
-					'attachment_list' => $msgOptions['attachments'],
-					'id_msg' => $msg_to_update,
-				)
-			);
 	}
 	// Insert a new topic (if the topicID was left empty.)
 	if ($new_topic)
@@ -2032,16 +2047,14 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 
 	// Creating is modifying...in a way.
 	//!!! Why not set id_msg_modified on the insert?
-	if(false === $automerge_posts) {
-		$smcFunc['db_query']('', '
-			UPDATE {db_prefix}messages
-			SET id_msg_modified = {int:id_msg}
-			WHERE id_msg = {int:id_msg}',
-			array(
-				'id_msg' => $msgOptions['id'],
-			)
-		);
-	}
+	$smcFunc['db_query']('', '
+		UPDATE {db_prefix}messages
+		SET id_msg_modified = {int:id_msg}
+		WHERE id_msg = {int:id_msg}',
+		array(
+			'id_msg' => $msg_to_update,
+		)
+	);
 
 	// Increase the number of posts and topics on the board.
 	if ($msgOptions['approved'] && false === $automerge_posts)
@@ -2145,10 +2158,8 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	$_SESSION['last_read_topic'] = 0;
 
 	// Better safe than sorry.
-	if(false === $automerge_posts) {
-		if (isset($_SESSION['topicseen_cache'][$topicOptions['board']]))
-			$_SESSION['topicseen_cache'][$topicOptions['board']]--;
-	}
+	if (isset($_SESSION['topicseen_cache'][$topicOptions['board']]))
+		$_SESSION['topicseen_cache'][$topicOptions['board']]--;
 
 	// Update all the stats so everyone knows about this new topic and message.
 	updateStats('message', true, $msg_to_update);

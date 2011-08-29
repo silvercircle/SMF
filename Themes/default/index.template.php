@@ -46,26 +46,9 @@ function template_init()
 		if this is 'never' or isn't set at all, images from the default theme will not be used. */
 	$settings['use_default_images'] = 'never';
 
-	/* What document type definition is being used? (for font size and other issues.)
-		'xhtml' for an XHTML 1.0 document type definition.
-		'html' for an HTML 4.01 document type definition. */
-	$settings['doctype'] = 'html';
-
 	/* The version this template/theme is for.
 		This should probably be the version of SMF it was created for. */
 	$settings['theme_version'] = '2.0';
-
-	/* Set a setting that tells the theme that it can render the tabs. */
-	$settings['use_tabs'] = true;
-
-	/* Use plain buttons - as opposed to text buttons? */
-	$settings['use_buttons'] = true;
-
-	/* Show sticky and lock status separate from topic icons? */
-	$settings['separate_sticky_lock'] = true;
-
-	/* Set the following variable to true if this theme requires the optional theme strings file to be loaded. */
-	$settings['require_theme_strings'] = false;
 }
 
 // The main sub template above the content.
@@ -124,7 +107,7 @@ var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
 var t2 = document.createElement(\'SCRIPT\');
 t2.type = "text/javascript";
 t2.async = true;
-t2.src = "',$settings['theme_url'],'/scripts/min/footer.js?ver=1.1.0";
+t2.src = "',$settings['theme_url'],'/scripts/footer.js?ver=1.1.0";
 anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
 	</script>';
@@ -675,7 +658,7 @@ function template_sidebar_content()
 	// for the logo -> <img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" />
 	if ($context['user']['is_logged'])
 	{
-		echo '<div class="user blue_container">';
+		echo '<div class="user blue_container smalltext">';
 
 		if (!empty($context['user']['avatar']))
 			echo '

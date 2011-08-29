@@ -56,6 +56,7 @@ function Memberlist()
 
 	$context['listing_by'] = !empty($_GET['sa']) ? $_GET['sa'] : 'all';
 
+	MLSearch();
 	// $subActions array format:
 	// 'subaction' => array('label', 'function', 'is_selected')
 	$subActions = array(
@@ -516,7 +517,7 @@ function MLSearch()
 		// What do we search for by default?
 		$context['search_defaults'] = array('name', 'email');
 
-		$context['sub_template'] = 'search';
+		//$context['sub_template'] = 'search';
 		$context['old_search'] = isset($_GET['search']) ? $_GET['search'] : (isset($_POST['search']) ? htmlspecialchars($_POST['search']) : '');
 	}
 

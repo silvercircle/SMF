@@ -564,7 +564,7 @@ ol.post_attachments li, ol.tiles li {
 	border-radius:3px;
 }
 ol.tiles li {
-	width:33.33%;
+	width:50%;
 	height:60px;
 	margin: 2px 0;
 	padding:3px 0;
@@ -3582,24 +3582,29 @@ span.avatar_overlay img {
 }
 
 tbody.divider tr {background:white;}
-ol.td_children {
+div.td_children {
 	font-size:12px;
 	padding:1px 0;
 	border-top:1px solid #ddd;
 	margin-top:3px;
 	list-style: none;
+	background: transparent url(../images/theme/sprite.png) -16px -521px no-repeat;
+	padding-left:20px;
+	margin-left:-10px;
 }
-ol.td_children li {
-	width:300px;
-	height:18px;
-	line-height:18px;
-	float:left;
+div.td_children table {
+	width:100%;
+	border:0;
 }
-ol.td_children > li > a.no_new_posts {
+div.td_children td {
+	padding-right:20px;
+	vertical-align:top;
+}
+div.td_children a.no_new_posts {
 	background: transparent url(../images/theme/sprite.png) 0 -734px no-repeat;
 	padding-left:12px;
 }
-ol.td_children > li > a.new_posts {
+div.td_children a.new_posts {
 	background: transparent url(../images/theme/sprite.png) 0 -706px no-repeat;
 }
 .td_children h4 {display:inline;color:#0066aa;}

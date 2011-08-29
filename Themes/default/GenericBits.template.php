@@ -73,9 +73,9 @@ function template_boardbit(&$board)
 		foreach ($board['children'] as $child)
 		{
 			if (!$child['is_redirect'])
-				$child['link'] = '<a href="' . $child['href'] . '" ' . ($child['new'] ? 'class="new_posts" ' : 'class="no_new_posts" ') . 'title="' . ($child['new'] ? $txt['new_posts'] : $txt['old_posts']) . ' (' . $txt['board_topics'] . ': ' . comma_format($child['topics']) . ', ' . $txt['posts'] . ': ' . comma_format($child['posts']) . ')"><h4>' . $child['name'] . '</h4></a>';
+				$child['link'] = '<h4><a href="' . $child['href'] . '" ' . ($child['new'] ? 'class="new_posts" ' : 'class="no_new_posts" ') . 'title="' . ($child['new'] ? $txt['new_posts'] : $txt['old_posts']) . ' (' . $txt['board_topics'] . ': ' . comma_format($child['topics']) . ', ' . $txt['posts'] . ': ' . comma_format($child['posts']) . ')">' . $child['name'] . '</a></h4>'.'&nbsp;('.$child['description'].')';
 			else
-				$child['link'] = '<a href="' . $child['href'] . '" title="' . comma_format($child['posts']) . ' ' . $txt['redirects'] . '"><h4>' . $child['name'] . '</h4></a>';
+				$child['link'] = '<a href="' . $child['href'] . '" title="' . comma_format($child['posts']) . ' ' . $txt['redirects'] . '"><h4>' . $child['name'] . '</h4></a>'.'&nbsp;('.$child['description'].')';
 
 			// Has it posts awaiting approval?
 			if ($child['can_approve_posts'] && ($child['unapproved_posts'] || $child['unapproved_topics']))
@@ -84,9 +84,21 @@ function template_boardbit(&$board)
 			$children[] = $child['link'];
 		}
 		echo '
-		<ol class="td_children" id="board_', $board['id'], '_children">
-			<li>', implode('</li><li>', $children), '</li>
-		</ol>';
+		<div class="td_children" id="board_', $board['id'], '_children">
+			<table>
+			  <tr>';
+			  $n = 0;
+			  foreach($children as $child) {
+				  echo '<td>',$children[$n++],'</td>';
+				  if($n > 2) {
+					  $n = 0;
+					  echo '</tr><tr>';
+				  }
+			  }
+			  echo '
+			  </tr>
+			</table>
+		</div>';
 	}
 		echo '
 	  </div>

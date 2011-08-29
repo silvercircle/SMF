@@ -874,7 +874,7 @@ function timeformat_static($log_time, $show_today = true, $offset_type = false)
 	if ($context['server']['is_windows'] && strpos($str, '%e') !== false)
 		$str = str_replace('%e', ltrim(strftime('%d', $time), '0'), $str);
 
-	return '<abbr>'.strftime($str, $time).'</abbr>';
+	return strftime($str, $time);
 }
 
 // Removes special entities from strings.  Compatibility...

@@ -992,8 +992,8 @@ jQuery(document).ready(function() {
 			jQuery(this).children('ul').hide();
 		}
 	});
-	$('a.bbc_img').prettyPhoto({social_tools:'', allow_resize:true,animation_speed:'fast', show_title:false});
-	$('a.attach_thumb').prettyPhoto({social_tools:'', deeplinking:false, overlay_gallery:false, animation_speed:'fast'});
+	$('a.bbc_img').prettyPhoto({social_tools:'', allow_resize:true,animation_speed:'normal', show_title:false});
+	$('a.attach_thumb').prettyPhoto({social_tools:'', deeplinking:false, overlay_gallery:false, animation_speed:'normal'});
 	$('.whoposted').click(function() {
 		var t = $(this).attr('data-topic');
 		if(t) {
