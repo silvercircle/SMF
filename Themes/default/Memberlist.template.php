@@ -22,8 +22,7 @@ function template_main()
 		);
 
 	echo '
-	<div id="sidebar" style="width:300px;padding-top:20px;">';
-	
+	<div id="sbar" style="width:300px;padding-top:20px;">';
 	// Display each of the column headers of the table.
 	$sortlist = '';
 	foreach ($context['columns'] as $column)
@@ -41,47 +40,39 @@ function template_main()
 		}
 	}
 	if(strlen($sortlist)) {
-		echo '
-	 	<div class="cat_bar"><h3>Sort</h3></div>
-	 	<div class="blue_container">
-		<ol class="centertext" style="list-style:none;">',
-		$sortlist,
-		'</ol>
-		</div>
-		<br>';
+		$sortcontent = array('id' => 'mlist_sortform', 'title' => 'Sort', 'content' => '
+			<ol class="centertext" style="list-style:none;">'.
+			$sortlist.
+			'</ol>'
+		);
+		template_create_collapsible_container($sortcontent);
 	}
+	$formcontent = array('id' => 'mlist_sform', 'title' => $txt['mlist_search'],
+		'bodyclass' => 'cContainer_body mediumpadding');
+
+	template_create_collapsible_container($formcontent);
+		
 	echo '
-		<form action="', $scripturl, '?action=mlist;sa=search" method="post" accept-charset="', $context['character_set'], '">
-		<div id="memberlist">
-			<div class="cat_bar">
-			<h3>
-					', $txt['mlist_search'], '
-			</h3>
-		</div>';
-	echo '
-		<div id="memberlist_search" class="clear">
-			<div class="blue_container mediumpadding">
+		<form action="'. $scripturl. '?action=mlist;sa=search" method="post" accept-charset="'. $context['character_set']. '">
 				<div id="mlist_search" class="flow_hidden">
 					<div id="search_term_input">
-						<input type="text" name="search" value="', $context['old_search'], '" size="35" class="input_text" /> <input type="submit" name="submit" value="' . $txt['search'] . '" class="button_submit" />
+						<input type="text" name="search" value="'. $context['old_search']. '" size="35" class="input_text" /> <input type="submit" name="submit" value="'.$txt['search'] . '" class="button_submit" />
 					</div>
 				<span class="floatleft">';
-
 	$count = 0;
 	if(isset($context['search_fields'])) {
-	foreach ($context['search_fields'] as $id => $title) 
-		echo '
-			<label for="fields-', $id, '"><input type="checkbox" name="fields[]" id="fields-', $id, '" value="', $id, '" ', in_array($id, $context['search_defaults']) ? 'checked="checked"' : '', ' class="input_check" />', $title, '</label><br />';
+		foreach ($context['search_fields'] as $id => $title) 
+			echo '
+			<label for="fields-',$id,'"><input type="checkbox" name="fields[]" id="fields-', $id, '" value="'. $id. '" ',(in_array($id,$context['search_defaults']) ? 'checked="checked"' : ''), ' class="input_check" />',$title,'</label><br />';
 	}
-		echo '
-						</span>
-					</div>
-				</div><br /><br />
-			</div>
-		</div>
-	</form>
-	
+	echo '
+		</span>
 	</div>
+	</form>
+	<div class="cContainer_end"></div>
+	</div>';
+	
+	echo '</div>
 	<div class="main_section" id="memberlist" style="margin-right:310px;">
 		<div class="bigheader">
 			<h4>

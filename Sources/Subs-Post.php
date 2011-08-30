@@ -1921,6 +1921,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		if($msg_to_update && $new_msg_id) {
 			$newbody = $oldbody . "\n[hr][size=11px][color=red][b]      Posted: [time]".time()."[/time][/b][/color][/size]\n".$msgOptions['body'];	// todo: make the separator customizable
 			//todo: don't forget has_img here for marking message as uncacheable
+			//todo: it should be possible to customize the separator
 			$smcFunc['db_query']('', '
 				UPDATE {db_prefix}messages SET id_msg = {int:new_id}, body = {string:newbody}, modified_time = {int:now},
 					approved = {int:approved}, subject = {string:subject} WHERE id_msg = {int:id_msg}',
@@ -1935,7 +1936,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			else
 				$attachments = $msgOptions['attachments'];
 				
-			// attachments must be fixed and "redirected" to the post to which we merge...
+			// attachments must be fixed and "redirected" for the new post id...
 			$smcFunc['db_query']('', '
 				UPDATE {db_prefix}attachments
 				SET id_msg = {int:id_msg}

@@ -32,7 +32,7 @@ body
 {
 	background:#333355;
 	font-family: "Trebuchet MS", "Verdana", "Arial", "Helvetica", "sans-serif";
-	font-size:1.0em;
+	font-size:10pt;
 	margin: 0;
 	padding: 0;
 }
@@ -1154,7 +1154,7 @@ ul#navigation li
 	padding:10px;
 }
 
-#sidebar {
+#sidebar, #sbar {
 	float:right;
 	min-height:500px;
 	padding:0px;
@@ -2543,7 +2543,7 @@ tr.titlebg td
 	min-height:600px;
 	border-right:1px solid #F8DA8B;
 }
-.cat_bar, #left_admsection .cat_bar, #main_admsection .cat_bar  {
+.cat_bar, #left_admsection .cat_bar, #main_admsection .cat_bar, .cContainer_header {
 	background:#E2E2E2 url(../images/theme/sprite.png) 0 -118px repeat-x;
 	border:1px solid #ddd;
 	border-bottom: 2px solid #ddd;
@@ -2552,6 +2552,11 @@ tr.titlebg td
 	margin-bottom:1px;
 	height:20px;
 	text-shadow:#fff 2px 2px 5px;
+}
+.cContainer_header {
+	margin-bottom:0;
+	background:#E2E2E2 url(../images/theme/sprite.png) 0 -171px repeat-x;
+	border:1px solid #bbb6ad;
 }
 #boardindex_table .cat_bar
 {
@@ -3500,11 +3505,22 @@ span.hidelink
 	line-height: 1.5em;
 }
 
-.blue_container {
+.blue_container, .cContainer_body {
 	background-color:#f2f5fe;
 	border:1px solid #d5ecfa;
 	padding:2px 4px;
 	border-radius:3px;
+}
+.cContainer_body {
+	border-top:0;
+	border-radius: 0 0 3px 3px;
+}
+img.cContainer_c {
+	float:right;
+	cursor:pointer;
+}
+div.cContainer_end {
+	height:10px;
 }
 .blue_topbar {
 	border-top:7px solid #d5ecfa;

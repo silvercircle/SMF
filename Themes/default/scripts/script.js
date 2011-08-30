@@ -6,15 +6,7 @@ var smf_editorArray = new Array();
 var ua = navigator.userAgent.toLowerCase();
 
 var is_opera = ua.indexOf('opera') != -1;
-var is_opera5 = ua.indexOf('opera/5') != -1 || ua.indexOf('opera 5') != -1;
-var is_opera6 = ua.indexOf('opera/6') != -1 || ua.indexOf('opera 6') != -1;
-var is_opera7 = ua.indexOf('opera/7') != -1 || ua.indexOf('opera 7') != -1;
-var is_opera8 = ua.indexOf('opera/8') != -1 || ua.indexOf('opera 8') != -1;
-var is_opera9 = ua.indexOf('opera/9') != -1 || ua.indexOf('opera 9') != -1;
-var is_opera95 = ua.indexOf('opera/9.5') != -1 || ua.indexOf('opera 9.5') != -1;
-var is_opera96 = ua.indexOf('opera/9.6') != -1 || ua.indexOf('opera 9.6') != -1;
-var is_opera10 = (ua.indexOf('opera/9.8') != -1 || ua.indexOf('opera 9.8') != -1 || ua.indexOf('opera/10.') != -1 || ua.indexOf('opera 10.') != -1) || ua.indexOf('version/10.') != -1;
-var is_opera95up = is_opera95 || is_opera96 || is_opera10;
+var is_opera95up = is_opera;
 
 var is_ff = (ua.indexOf('firefox') != -1 || ua.indexOf('iceweasel') != -1 || ua.indexOf('icecat') != -1 || ua.indexOf('shiretoko') != -1 || ua.indexOf('minefield') != -1) && !is_opera;
 var is_gecko = ua.indexOf('gecko') != -1 && !is_opera;
@@ -24,17 +16,9 @@ var is_safari = ua.indexOf('applewebkit') != -1 && !is_chrome;
 var is_webkit = ua.indexOf('applewebkit') != -1;
 
 var is_ie = ua.indexOf('msie') != -1 && !is_opera;
-var is_ie4 = is_ie && ua.indexOf('msie 4') != -1;
-var is_ie5 = is_ie && ua.indexOf('msie 5') != -1;
-var is_ie50 = is_ie && ua.indexOf('msie 5.0') != -1;
-var is_ie55 = is_ie && ua.indexOf('msie 5.5') != -1;
-var is_ie5up = is_ie && !is_ie4;
 var is_ie6 = is_ie && ua.indexOf('msie 6') != -1;
-var is_ie6up = is_ie5up && !is_ie55 && !is_ie5;
-var is_ie6down = is_ie6 || is_ie5 || is_ie4;
 var is_ie7 = is_ie && ua.indexOf('msie 7') != -1;
-var is_ie7up = is_ie6up && !is_ie6;
-var is_ie7down = is_ie7 || is_ie6 || is_ie5 || is_ie4;
+var is_ie7down = is_ie7;
 
 var is_ie8 = is_ie && ua.indexOf('msie 8') != -1;
 var is_ie8up = is_ie8 && !is_ie7down;
@@ -51,7 +35,7 @@ if (!('getElementById' in document) && 'all' in document)
 // Define XMLHttpRequest for IE 5 and above. (don't bother for IE 4 :/.... works in Opera 7.6 and Safari 1.2!)
 else if (!('XMLHttpRequest' in window) && 'ActiveXObject' in window)
 	window.XMLHttpRequest = function () {
-		return new ActiveXObject(is_ie5 ? 'Microsoft.XMLHTTP' : 'MSXML2.XMLHTTP');
+		return new ActiveXObject('MSXML2.XMLHTTP');
 	};
 
 // Ensure the getElementsByTagName exists.
@@ -676,7 +660,7 @@ function expandPages(spanNode, baseURL, firstPage, lastPage, perPage)
 		replacement += '<a class="navPages" href="' + baseURL.replace(/%1\$d/, i).replace(/%%/g, '%') + '">' + (1 + i / perPage) + '</a> ';
 
 	if (oldLastPage > 0)
-		replacement += '<span style="font-weight: bold; cursor: ' + (is_ie && !is_ie6up ? 'hand' : 'pointer') + ';" onclick="expandPages(this, \'' + baseURL + '\', ' + lastPage + ', ' + oldLastPage + ', ' + perPage + ');"> ... </span> ';
+		replacement += '<span style="font-weight: bold; cursor: ' + (is_ie ? 'hand' : 'pointer') + ';" onclick="expandPages(this, \'' + baseURL + '\', ' + lastPage + ', ' + oldLastPage + ', ' + perPage + ');"> ... </span> ';
 
 	// Replace the dots by the new page links.
 	setInnerHTML(spanNode, replacement);
@@ -1065,7 +1049,7 @@ IconList.prototype.initIcons = function ()
 {
 	for (var i = document.images.length - 1, iPrefixLength = this.opt.sIconIdPrefix.length; i >= 0; i--)
 		if (document.images[i].id.substr(0, iPrefixLength) == this.opt.sIconIdPrefix)
-			setOuterHTML(document.images[i], '<div title="' + this.opt.sLabelIconList + '" onclick="' + this.opt.sBackReference + '.openPopup(this, ' + document.images[i].id.substr(iPrefixLength) + ')" onmouseover="' + this.opt.sBackReference + '.onBoxHover(this, true)" onmouseout="' + this.opt.sBackReference + '.onBoxHover(this, false)" style="background: ' + this.opt.sBoxBackground + '; cursor: ' + (is_ie && !is_ie6up ? 'hand' : 'pointer') + '; padding: 0px; text-align: center;"><img src="' + document.images[i].src + '" alt="' + document.images[i].alt + '" id="' + document.images[i].id + '" style="margin:0; padding: 0;" /></div>');
+			setOuterHTML(document.images[i], '<div title="' + this.opt.sLabelIconList + '" onclick="' + this.opt.sBackReference + '.openPopup(this, ' + document.images[i].id.substr(iPrefixLength) + ')" onmouseover="' + this.opt.sBackReference + '.onBoxHover(this, true)" onmouseout="' + this.opt.sBackReference + '.onBoxHover(this, false)" style="background: ' + this.opt.sBoxBackground + '; cursor: ' + (is_ie ? 'hand' : 'pointer') + '; padding: 0px; text-align: center;"><img src="' + document.images[i].src + '" alt="' + document.images[i].alt + '" id="' + document.images[i].id + '" style="margin:0; padding: 0;" /></div>');
 };
 
 // Event for the mouse hovering over the original icon.
@@ -1087,7 +1071,7 @@ IconList.prototype.openPopup = function (oDiv, iMessageId)
 		this.oContainerDiv = document.createElement('div');
 		this.oContainerDiv.id = 'iconList';
 		this.oContainerDiv.style.display = 'none';
-		this.oContainerDiv.style.cursor = is_ie && !is_ie6up ? 'hand' : 'pointer';
+		this.oContainerDiv.style.cursor = is_ie ? 'hand' : 'pointer';
 		this.oContainerDiv.style.position = 'absolute';
 		this.oContainerDiv.style.width = oDiv.offsetWidth + 'px';
 		this.oContainerDiv.style.background = this.opt.sContainerBackground;
@@ -1107,9 +1091,6 @@ IconList.prototype.openPopup = function (oDiv, iMessageId)
 
 	// Set the position of the container.
 	var aPos = smf_itemPos(oDiv);
-	if (is_ie50)
-		aPos[1] += 4;
-
 	this.oContainerDiv.style.top = (aPos[1] + oDiv.offsetHeight) + 'px';
 	this.oContainerDiv.style.left = (aPos[0] - 1) + 'px';
 	this.oClickedIcon = oDiv;
@@ -1371,7 +1352,7 @@ function smf_codeBoxFix()
 };
 
 // Add a fix for code stuff?
-if ((is_ie && !is_ie4) || is_webkit || is_ff)
+if (is_ie || is_webkit || is_ff)
 	addLoadEvent(smf_codeBoxFix);
 
 // Toggles the element height and width styles of an image.
@@ -1445,11 +1426,6 @@ var smf_addListItemHoverEvents = function()
 		};
 	}
 };
-
-// Add hover events to list items if the browser requires it.
-if (is_ie7down && 'attachEvent' in window)
-	window.attachEvent('onload', smf_addListItemHoverEvents);
-
 
 function readCookie(name) {
   var nameEQ = name + "=";
@@ -1618,10 +1594,10 @@ function setTextSize(_s)
 		if(hours > 0 && hours < 24)
     		return($t.settings.strings.yesterday + ', ' + pad(date.getUTCHours()) + ':'+ pad(date.getUTCMinutes()));
 	}
-	if(dist < 0 && Math.abs(dist) < 3600 * 1000)
-		$t.settings.allowFuture = false;
-	else
-		$t.settings.allowFuture = true;
+	// correct possible mismatch between server time and local time (after time zone correction)
+	// future timestamps within the next hour will be wrong. 
+	// todo: needs fixing / better solution
+	$t.settings.allowFuture = (dist < 0 && Math.abs(dist) < onehour ? false : true);
     return($t.inWords(dist));
   };
 

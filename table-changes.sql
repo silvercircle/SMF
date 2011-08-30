@@ -1,7 +1,7 @@
 #
-# this is for REFERENCE only
+# !!! this is for REFERENCE only !!!
 # it tracks all the db changes made (new tables and alterations)
-# do not run or otherwise use it. ignore it.
+# DO NOT run or otherwise use it. ignore it.
 #
 
 #
@@ -160,6 +160,7 @@ ALTER TABLE {$db_prefix}topics ADD id_prefix smallint(5) unsigned NOT NULL defau
 
 # make the first post of a topic "sticky" on every page and (optionally) give it a different
 # postbit layout
+# highest bit (0x80) indicates a sticky post, bits 0-7 (id_layout & 0x7f) are the layout it
 ALTER TABLE {$db_prefix}topics ADD id_layout tinyint(2) NOT NULL default '0';
 
 

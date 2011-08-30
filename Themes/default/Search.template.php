@@ -138,15 +138,12 @@ function template_main()
 
 		if (empty($context['search_params']['topic']))
 		{
+			$collapser = array('id' => 'search_boards', 'title' => $txt['choose_board']);
+			template_create_collapsible_container($collapser);
 			echo '
 		<fieldset class="flow_hidden">
 			<div>
-				<div class="cat_bar">
-					<h3>
-						<a href="javascript:void(0);" onclick="expandCollapseBoards(); return false;"><img src="', $settings['images_url'], '/expand.gif" id="expandBoardsIcon" alt="" /></a> <a href="javascript:void(0);" onclick="expandCollapseBoards(); return false;"><strong>', $txt['choose_board'], '</strong></a>
-					</h3>
-				</div>
-				<div class="flow_auto" id="searchBoardsExpand"', $context['boards_check_all'] ? ' style="display: none;"' : '', '>
+				<div class="flow_auto" id="searchBoardsExpand">
 					<ul class="ignoreboards floatleft">';
 
 	$i = 0;
@@ -154,50 +151,47 @@ function template_main()
 	foreach ($context['categories'] as $category)
 	{
 		echo '
-						<li class="category">
-							<a href="javascript:void(0);" onclick="selectBoards([', implode(', ', $category['child_ids']), ']); return false;">', $category['name'], '</a>
-							<ul>';
+			<li class="category">
+			<a href="javascript:void(0);" onclick="selectBoards([', implode(', ', $category['child_ids']), ']); return false;">', $category['name'], '</a>
+			<ul>';
 
 		foreach ($category['boards'] as $board)
 		{
 			if ($i == $limit)
 				echo '
-							</ul>
-						</li>
-					</ul>
-					<ul class="ignoreboards floatright">
-						<li class="category">
-							<ul>';
-
+				</ul>
+			 	 </li>
+				</ul>
+				<ul class="ignoreboards floatright">
+				 <li class="category">
+				<ul>';
 			echo '
-								<li class="board" style="margin-', $context['right_to_left'] ? 'right' : 'left', ': ', $board['child_level'], 'em;">
-									<label for="brd', $board['id'], '"><input type="checkbox" id="brd', $board['id'], '" name="brd[', $board['id'], ']" value="', $board['id'], '"', $board['selected'] ? ' checked="checked"' : '', ' class="input_check" /> ', $board['name'], '</label>
-								</li>';
-
+				 <li class="board" style="margin-', $context['right_to_left'] ? 'right' : 'left', ': ', $board['child_level'], 'em;">
+				  <label for="brd', $board['id'], '"><input type="checkbox" id="brd', $board['id'], '" name="brd[', $board['id'], ']" value="', $board['id'], '"', $board['selected'] ? ' checked="checked"' : '', ' class="input_check" /> ', $board['name'], '</label>
+				 </li>';
 			$i ++;
 		}
-
 		echo '
-							</ul>
-						</li>';
+				</ul>
+				</li>';
 	}
+	echo '
+		</ul>
+		</div>
+		<br class="clear" />';
 
 	echo '
-					</ul>
-				</div>
-				<br class="clear" />';
-
-			echo '
-				<div class="padding">
-					<input type="checkbox" name="all" id="check_all" value=""', $context['boards_check_all'] ? ' checked="checked"' : '', ' onclick="invertAll(this, this.form, \'brd\');" class="input_check floatleft" />
-					<label for="check_all" class="floatleft">', $txt['check_all'], '</label>
-					<input type="submit" name="submit" value="', $txt['search'], '" class="button_submit floatright" />
-				</div>
-				<br class="clear" />
-			</div>
+		<div class="padding">
+			<input type="checkbox" name="all" id="check_all" value=""', $context['boards_check_all'] ? ' checked="checked"' : '', ' onclick="invertAll(this, this.form, \'brd\');" class="input_check floatleft" />
+			<label for="check_all" class="floatleft">', $txt['check_all'], '</label>
+			<input type="submit" name="submit" value="', $txt['search'], '" class="button_submit floatright" />
+		</div>
+		<br class="clear" />
+		</div>
 		</fieldset>';
+	echo '
+		</div>';
 		}
-
 	}
 
 	echo '

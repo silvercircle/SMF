@@ -920,6 +920,12 @@ var _timer = null;
 var req = null;
 var _is_locked = false;
 
+Array.prototype.remove = function(from, to) {
+   var rest = this.slice((to || from) + 1 || this.length);
+   this.length = from < 0 ? this.length + from : from;
+   return this.push.apply(this, rest);
+};
+
 function stopEventPropagation(_e)
 {
    if (_e.stopPropagation) {
@@ -1113,6 +1119,38 @@ jQuery(document).ready(function() {
 	});
 	$('span.brd_moderators').click(function() {
 		$(this).children('.brd_moderators_chld').show();
+	});
+	$('.cContainer_c').click(function() {
+		var raw_id = $(this).attr('id');
+		var id = '#' + raw_id + '_body';
+		var is_visible = ($(id).css('display') == 'none' ? false : true);
+		var src = $(this).attr('src');
+		if(is_visible) {
+			$(id).attr('data-height', $(id).css('height'));
+			$(id).fadeOut(500);
+			var dest = src.replace('collapse.gif', 'expand.gif');
+		}
+		else {
+			var height = $(id).attr('data-height');
+			$(id).fadeIn(500);
+			var dest = src.replace('expand.gif', 'collapse.gif');
+		}
+		$(this).attr('src', dest);
+		var cookie = readCookie('SF_collapsed') || '';
+		if(cookie.length > 1)
+			var _s = cookie.split(',');
+		if(is_visible)
+			cookie += (',' + raw_id);
+		else {
+			var n;
+			for(n = 0; n < _s.length; n++) {
+				if(_s[n] == raw_id)
+					_s.remove(n, n);
+			}
+			cookie = _s.join(',');
+		}
+		createCookie('SF_collapsed', cookie, 360);
+		return(false);
 	});
 	// convert all time stamps to relative 
 	if(!disableDynamicTime)

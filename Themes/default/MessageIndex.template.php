@@ -23,19 +23,20 @@ function template_main()
 
 	if (!empty($context['boards']) && (!empty($options['show_children']) || $context['start'] == 0))
 	{
-		echo '
-	<div style="margin-top:10px;" class="tborder childboards" id="board_', $context['current_board'], '_childboards">
-		<div class="cat_bar">
-			<h3 class="catbg">', $txt['parent_boards'], '</h3>
-		</div>
-		<ol id="board_', $context['current_board'], '_children" class="category">';
+		$collapser = array('id' => $context['current_board'] . '_childboards',
+			'title' => $txt['parent_boards'], 'bodyclass' => 'generic_container');
+		
+		echo '<br>';
+		template_create_collapsible_container($collapser);
+		echo '<ol id="board_', $context['current_board'], '_children" class="category">';
 
 		$alternate = 1;
 		foreach ($context['boards'] as $board)
 			template_boardbit($board);
 		echo '
 			</ol>
-	</div>';
+			</div>
+			';
 	}
 	if(!$context['act_as_cat']) {
 	

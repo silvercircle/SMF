@@ -418,13 +418,10 @@ function template_main()
 						', $context['last_modified'], '
 					</div>';
 
-	// If the admin has enabled the hiding of the additional options - show a link and image for it.
-	if (!empty($settings['additional_options_collapsable']))
-		echo '
-					<div id="postAdditionalOptionsHeader">
-						<img src="', $settings['images_url'], '/collapse.gif" alt="-" id="postMoreExpand" style="display: none;" /> <strong><a href="#" id="postMoreExpandLink">', $txt['post_additionalopt'], '</a></strong>
-					</div>';
 
+	$collapser = array('id' => 'editor_options', 'title' => $txt['post_additionalopt']);
+	echo '<br>';
+	template_create_collapsible_container($collapser);
 	// Display the check boxes for all the standard options - if they are available to the user!
 	echo '
 					<div id="postMoreOptions" class="smalltext">
@@ -528,7 +525,8 @@ function template_main()
 						', template_control_verification($context['visual_verification_id'], 'all'), '
 					</div>';
 	}
-
+	echo '<div class="clear"></div>
+		</div>';
 	// Finally, the submit buttons.
 	echo '
 					<p class="smalltext" id="shortcuts">
@@ -757,10 +755,6 @@ function template_main()
 					document.getElementById(\'additional_options\').value = \'1\';
 				},
 				aSwappableContainers: [
-					\'postMoreOptions\',
-					\'postAttachment\',
-					\'postAttachment2\',
-					\'postAttachment3\'
 				],
 				aSwapImages: [
 					{

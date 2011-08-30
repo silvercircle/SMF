@@ -107,7 +107,7 @@ var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
 var t2 = document.createElement(\'SCRIPT\');
 t2.type = "text/javascript";
 t2.async = true;
-t2.src = "',$settings['theme_url'],'/scripts/footer.js?ver=1.1.0";
+t2.src = "',$settings['theme_url'],'/scripts/min/footer.js?ver=1.1.0";
 anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
 	</script>';
@@ -369,7 +369,7 @@ function template_body_below()
  			} catch( err ) {}
  		</script>
  		<noscript>
- 		  <p><img src="http://piwik.miranda.or.at/piwik.php?idsite=1" style="border:0" alt="" /></p>
+ 		  <div style="width:0px;height:0px;"><img src="http://piwik.miranda.or.at/piwik.php?idsite=1" style="border:0" alt="" /></div>
  		</noscript>';
 	}
 	/*
@@ -647,18 +647,21 @@ function template_sidebar_content()
 {
 	global $context, $txt, $modSettings, $scripturl, $settings, $user_info, $fbxml, $twitter_widgets, $plusone, $options, $boardurl;
 	
+	$collapser = array('id' => 'user_panel', 'title' => 'User panel');
 	echo '<script>
 		   // <![CDATA[
 		   sidebar_content_loaded = 1;
            // ]]>
-		  </script>
-		<h1 class="bigheader greyback" style="margin-top:0;">User panel</h1>';
+		  </script>';
+
+	template_create_collapsible_container($collapser);
+		//<h1 class="bigheader greyback" style="margin-top:0;">User panel</h1>';
 		
 	// If the user is logged in, display stuff like their name, new messages, etc.
 	// for the logo -> <img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" />
 	if ($context['user']['is_logged'])
 	{
-		echo '<div class="user blue_container smalltext">';
+		echo '<div class="smalltext user">';
 
 		if (!empty($context['user']['avatar']))
 			echo '
@@ -722,14 +725,15 @@ function template_sidebar_content()
 					<input type="hidden" name="hash_passwrd" value="" />
 				</form></div></div>';
 	}
+	echo '</div>
+		<div class="cContainer_end"></div>';
+		
 	// Show statistical style information...
 	if ($settings['show_stats_index'] && isset($context['show_stats']))
 	{
-		echo '
-				<h1 class="bigheader greyback">
-					<a href="', $scripturl, '?action=stats">', $txt['forum_stats'], '</a>
-				</h1>
-			<div class="smallpadding smalltext blue_container">
+		$collapser = array('id'=> 'stats_panel','title' => '<a href="'. $scripturl. '?action=stats">'. $txt['forum_stats']. '</a>');
+		template_create_collapsible_container($collapser);
+		echo '<div class="smallpadding smalltext">
 				<dl class="common">
 				 <dt>', $txt['posts'], ': </dt><dd class="righttext">',$context['common_stats']['total_posts'], '</dd>
 				 <dt>', $txt['topics'], ': </dt><dd class="righttext">', $context['common_stats']['total_topics'], '</dd>
@@ -741,16 +745,16 @@ function template_sidebar_content()
 				 ///	echo '    ', $txt['latest_post'] . ': <br /><a href="',$context['latest_post']['href'],'" title="',$context['latest_post']['subject'], '">',shorten_subject($context['latest_post']['subject'], 20),'</a> ( ' . $context['latest_post']['time'] . ' )';
 				echo '<div class="flat_container"><div class="floatright righttext"><a href="', $scripturl, '?action=recent">', $txt['recent_view'], '</a>', $context['show_stats'] ? '</div>
 				<a href="' . $scripturl . '?action=stats">' . $txt['more_stats'] . '</a>' : '', '</div>
-			</div>';
+			</div>
+			</div>
+			<div class="cContainer_end"></div>';
 	}
 	
 	// social panel in the side bar
 	if(($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar']))) {
-		echo '
-			<h1 class="bigheader greyback">
-				Socialize
-			</h1>
-	      	<div class="mediumpadding lefttext blue_container">
+		$collapser = array('id' => 'social_panel', 'title' => 'Socialize');
+		template_create_collapsible_container($collapser);
+	    echo '<div class="mediumpadding lefttext">
 		  	<script type="text/javascript">
 			//<![CDATA[
 			';
@@ -770,17 +774,19 @@ function template_sidebar_content()
 			if(isset($modSettings['twitter_id']) && !empty($modSettings['twitter_id']))
 				echo '<div style="margin-top:8px;"><a href="http://twitter.com/',$modSettings['twitter_id'],'" class="twitter-follow-button" data-show-count="false">Follow @',$modSettings['twitter_id'],'</a></div>';
        		echo '<noscript>This requires JavaScript</noscript>
-       		<div class="clear"></div></div>';
+       		<div class="clear"></div></div>
+			</div>
+			<div class="cContainer_end"></div>
+		';
 	}
 	
 	// This is the "Recent Posts" bar.
 	if (!empty($settings['number_recent_posts']) && (!empty($context['latest_posts']) || !empty($context['latest_post'])))
 	{
+		$collapser = array('id' => 'recent_panel', 'title' => '<a href="'. $scripturl. '?action=recent">'. $txt['recent_posts']. '</a>');
+		template_create_collapsible_container($collapser);
 		echo '
-			<h1 class="bigheader greyback">
-				<a href="', $scripturl, '?action=recent">', $txt['recent_posts'], '</a>
-			</h1>
-			<div class="lefftext smalltext smallpadding blue_container" id="recent_posts_content" style="line-height:120%;">
+			<div class="lefftext smalltext smallpadding" id="recent_posts_content" style="line-height:120%;">
 				<div class="entry-title" style="display: none;">', $context['forum_name_html_safe'], ' - ', $txt['recent_posts'], '</div>
 				<div class="entry-content" style="display: none;">
 					<a rel="alternate" type="application/rss+xml" href="', $scripturl, '?action=.xml;type=webslice">', $txt['subscribe_webslice'], '</a>
@@ -807,17 +813,19 @@ function template_sidebar_content()
 					<span class="nowrap floatright">', $post['time'], '</span><hr class="clear" style="margin-top:2px;">';
 		}
 		echo '
-			</div>';
+			</div>
+			</div>
+			<div class="cContainer_end"></div>
+			';
 	}
 	
 	// Show information about events, birthdays, and holidays on the calendar.
 	if ($context['show_calendar'])
 	{
+		$collapser = array('id' => 'cal_panel', 'title' => '<a href="'. $scripturl. '?action=calendar' . '">'. $context['calendar_only_today'] ? $txt['calendar_today'] : $txt['calendar_upcoming']. '</a>');
+		template_create_collapsible_container($collapser);
 		echo '
-			<h1 class="bigheader greyback">
-				<a href="', $scripturl, '?action=calendar' . '">', $context['calendar_only_today'] ? $txt['calendar_today'] : $txt['calendar_upcoming'], '</a>
-			</h1>
-			<div class="smalltext blue_container">';
+			<div class="smalltext">';
 
 		// Holidays like "Christmas", "Chanukah", and "We Love [Unknown] Day" :P.
 		if (!empty($context['calendar_holidays']))
@@ -847,8 +855,72 @@ function template_sidebar_content()
 					', $event['can_edit'] ? '<a href="' . $event['modify_href'] . '" title="' . $txt['calendar_edit'] . '"><img src="' . $settings['images_url'] . '/icons/modify_small.gif" alt="*" /></a> ' : '', $event['href'] == '' ? '' : '<a href="' . $event['href'] . '">', $event['is_today'] ? '<strong>' . $event['title'] . '</strong>' : $event['title'], $event['href'] == '' ? '' : '</a>', $event['is_last'] ? '<br />' : ', ';
 		}
 		echo '
-			</div>';
+			</div>
+			</div>
+			<div class="cContainer_end"></div>
+			';
 	}
 	
+}
+
+/*
+ * create a collapsible container with an id, a title and html content
+ * caller is responsible to provide the final </div> unless you pass a box
+ * content.
+ * you can optionally pass css classes for the the header bar and the body
+ * object. By default, the cContainer_* classes define the style.
+ * gracefully degrades for people without JavaScript - always expanded.
+ */
+function template_create_collapsible_container(array &$_c)
+{
+	global $context, $txt, $settings;
+	
+	if(!isset($_c['title'])) {
+		log_error('Collapsible container, missing mandatory title string');
+		return;
+	}
+	if(!isset($_c['id'])) {
+		log_error('Collapsible container, missing mandatory ID');
+		return;
+	}
+	$id = $_c['id']; 		// just bein' lazy :)
+	if(isset($_COOKIE['SF_collapsed'])) {
+		$states = explode(',', $_COOKIE['SF_collapsed']);
+		$state = array_search($id, $states);
+	}
+	else
+		$state = false;
+		
+	if(!isset($_c['headerclass']))
+		$_c['headerclass'] = 'cContainer_header';
+	if(!isset($_c['headerstyle']))
+		$_c['headerstyle'] = '';
+	else
+		$_c['headerstyle'] = 'style="'.$_c['headerstyle'].'"';
+	echo '
+		<div class="',$_c['headerclass'],'"',$_c['headerstyle'],'>
+		<img class="cContainer_c" id="',$id,'" src="',$settings['images_url'].($state ? '/expand.gif' : '/collapse.gif'),'" alt="*" />';
+	echo '<h3>',$_c['title'],'</h3>
+		</div>';
+		
+	if(!isset($_c['bodyclass']))
+		$_c['bodyclass'] = 'cContainer_body';
+	if(!isset($_c['bodystyle']))
+		$_c['bodystyle'] = '';
+	else
+		$_c['bodystyle'] = 'style="'.$_c['bodystyle'].'"';
+		
+	echo '
+		<div id="',$id,'_body" class="',$_c['bodyclass'],'"',$_c['bodystyle'],'>
+		<script>
+		// <![CDATA[
+			$("#',$id,'_body").css("display", "',$state ? 'none' : 'normal','");
+		// ]]>	
+		</script>';
+	if(isset($_c['content']))
+		echo $_c['content'],'
+		</div>
+		<div class="cContainer_end"></div>
+		';
 }
 ?>

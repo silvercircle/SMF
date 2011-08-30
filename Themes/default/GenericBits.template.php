@@ -1,7 +1,6 @@
 <?php
 // output a board row (used in BoardIndex, MessageIndex for child boards)
 // todo: use this for subscribed boards as well
-// todo: add threadbit
 function template_boardbit(&$board)
 {
 	global $alternate;
