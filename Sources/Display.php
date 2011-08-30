@@ -1264,6 +1264,7 @@ function prepareDisplayContext($reset = false)
 		'time' => timeformat($message['poster_time']),
 		'timestamp' => forum_time(true, $message['poster_time']),
 		'counter' => $counter,
+		'permalink' => $counter ? ($txt['reply_noun'].' #'.$counter) : $txt['permalink'],
 		'modified' => array(
 			'time' => timeformat($message['modified_time']),
 			'timestamp' => forum_time(true, $message['modified_time']),

@@ -184,28 +184,27 @@ function TopicPeek()
 
 			loadMemberData($m);
 			loadMemberContext($m[0]);
-			$context['member_started'] = $memberContext[$row['member_started']];
+			$context['member_started'] = &$memberContext[$row['member_started']];
 		
 			if(isset($m[1])) {
 				loadMemberContext($m[1]);
-				$context['member_lastpost'] = $memberContext[$row['member_lastpost']];
+				$context['member_lastpost'] = &$memberContext[$row['member_lastpost']];
 			}
-			else {
+			else
 				$context['member_lastpost'] = null;
-			}
 		
-			$context['preview'] = $row;
+			$context['preview'] = &$row;
 		
-			censorText($context['preview']['first_subject']);
-
-			$context['preview']['first_body'] = parse_bbc($context['preview']['first_body'], false);
-			$context['preview']['first_body'] = $smcFunc['substr']($context['preview']['first_body'], 0, 300) . '...';
+			// truncate, censor and parse bbc
+			$_b = $smcFunc['substr']($context['preview']['first_body'], 0, 300) . '...';
+			censorText($_b);
+			$context['preview']['first_body'] = parse_bbc($_b, false);
 			$context['preview']['first_time'] = timeformat($row['first_time']);
 		
 			if($context['member_lastpost']) {
-				censorText($context['preview']['last_subject']);
-				$context['preview']['last_body'] = parse_bbc($context['preview']['last_body'], false);
-				$context['preview']['last_body'] = substr($context['preview']['last_body'], 0, 600) . '...';
+				$_b = $smcFunc['substr']($context['preview']['last_body'], 0, 600) . '...';
+				censorText($_b);
+				$context['preview']['last_body'] = parse_bbc($_b, false);
 				$context['preview']['last_time'] = timeformat($row['last_time']);
 			}
 		}

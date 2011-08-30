@@ -25,10 +25,10 @@ function template_popup()
 		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js"></script>
 	</head>
 	<body id="help_popup">
-		<div class="windowbg description">
+		<div class="blue_container">
 			', $context['help_text'], '<br />
 			<br />
-			<a href="javascript:self.close();">', $txt['close_window'], '</a>
+			<!--<a href="javascript:self.close();">', $txt['close_window'], '</a>-->
 		</div>
 	</body>
 </html>';

@@ -780,4 +780,5 @@ $txt['edit_draft'] = 'Edit draft';
 $txt['remove_draft'] = 'Remove draft';
 $txt['last_saved_on'] = 'Last saved on';
 
+$txt['permalink'] = 'Permalink';
 ?>

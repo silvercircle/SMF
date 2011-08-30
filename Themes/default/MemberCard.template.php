@@ -12,17 +12,26 @@ function template_main()
 		$member = $context['member'];
 	    $loc = array();
 	    
-		echo '<table style="border:0;width:100%;position:relative;top:-32px;margin-bottom:-32px;"><tr><td style="vertical-align:top;text-align:center;">';
+		echo '<div class="title_bar" style="padding-left:100px;">
+			</div>
+			';
+		echo '<table style="border:0;width:100%;">
+				<tr>
+					<td style="vertical-align:top;text-align:center;">
+					<div style="position:relative;top:-26px;">';
 		if(!empty($member['avatar']['image']))
 			echo $member['avatar']['image'];
 		else
 			echo '<img class="avatar" src="',$settings['images_url'], '/unknown.png" alt="avatar" />';
 
-		echo '<br /><br />Karma: ', $member['karma']['good'];
+		echo '</div><br /><br />Karma: ', $member['karma']['good'];
 		echo '<br />Posts: ', $member['posts'];
 		echo '</td>';
-		echo '<td style="width:100%;padding:2px 5px;vertical-align:top;">';
-		echo '<div style="margin-right:10px;margin-bottom:8px;font-size:20px;line-height:20px;"><h4 style="color:#fff;">',$member['name'],'</h4></div>';
+		echo '<td style="width:100%;padding:2px 5px;vertical-align:top;">
+			<h1 style="position:relative;top:-28px;margin-bottom:-16px;">'
+			,$member['name'],'
+			</h1>
+		';
 		if(!empty($member['blurb']))
 			echo '<div class="orange_container" style="padding:3px;margin-bottom:3px;"><strong>',$member['blurb'],'</strong></div>';
 		echo '<div class="blue_container" style="padding:3px;margin-bottom:5px;">';

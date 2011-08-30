@@ -543,9 +543,8 @@ span.xtag:hover {
 .post, .personalmessage
 {
 	line-height: 1.4em;
-	padding: 0.1em 0;
+	padding: 0.1em 1.0em;
 }
-
 ol.post_attachments, ol.tiles {
 	list-style: none;
 	padding:0;
@@ -692,21 +691,22 @@ dl.common {
 }
 dl.common dt
 {
-	width: 40%;
+	width: 49%;
 	float: left;
 	margin: 0;
 	padding: 0;
 	clear: both;
+	white-space: nowrap;
 }
 dl.common dd
 {
-	width: 56%;
+	width: 49%;
 	float: right;
 	overflow: auto;
 	margin: 0;
 	padding: 0;
+	white-space: nowrap;
 }
-
 /* Lists with settings use these a lot.
 ------------------------------------------------------- */
 dl.settings
@@ -1158,7 +1158,6 @@ ul#navigation li
 	float:right;
 	min-height:500px;
 	padding:0px;
-	overflow:hidden;
 }
 #sbtoggle {
  float:right;
@@ -1405,6 +1404,7 @@ ol.category {
 	padding:0;
 	margin:0;
 	margin-bottom:10px;
+	box-shadow:1px 1px 5px 0px #ddd;
 }
 ol.category > li {
 	padding:4px 2px 4px 8px;
@@ -2558,7 +2558,7 @@ tr.titlebg td
 	background:#E2E2E2 url(../images/theme/sprite.png) 0 -171px repeat-x;
 	border:1px solid #bbb6ad;
 }
-#boardindex_table .cat_bar
+#boardindex_table .cat_bar, #mcard .title_bar
 {
 	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
 	padding: 3px 9px;
@@ -2566,6 +2566,13 @@ tr.titlebg td
 	overflow: hidden;
 	border:0;
 	border-bottom:1px solid #aaa;
+}
+#mcard h1 {
+	height: 20px;
+	line-height:20px;
+	font-size:1.3em;
+	color:white;
+	text-shadow:black 2px 2px 5px;
 }
 #boardindex_table div.cat_bar > h2
 {
@@ -3514,6 +3521,7 @@ span.hidelink
 .cContainer_body {
 	border-top:0;
 	border-radius: 0 0 3px 3px;
+	box-shadow:1px 1px 5px 0px #ddd;
 }
 img.cContainer_c {
 	float:right;
@@ -3616,19 +3624,23 @@ div.td_children td {
 	padding-right:20px;
 	vertical-align:top;
 }
-div.td_children a.no_new_posts {
+div.td_children a.no_new_posts, .permalink_old {
 	background: transparent url(../images/theme/sprite.png) 0 -734px no-repeat;
 	padding-left:12px;
 }
-div.td_children a.new_posts {
+div.td_children a.new_posts, .permalink_new {
 	background: transparent url(../images/theme/sprite.png) 0 -706px no-repeat;
+	padding-left:12px;
+}
+.permalink_old, .permalink_new {
+	float:right;
+	font-size:0.9em;
 }
 .td_children h4 {display:inline;color:#0066aa;}
 #quick_search form {padding-top:1px !important;}
 
 /* member card */
 div#mcard, .tcard {
-	background: #97A9BA url(../images/theme/sprite.png) 0 -491px repeat-x;
 	padding:0;
 	position:absolute;
 	font-size:12px;
@@ -3644,8 +3656,7 @@ div#mcard, .tcard {
 }
 div#mcard_inner, .tcard_inner {
 	background-color:#fafafa;
-	padding:5px 0px 0px 0px;
-	margin-top:27px;
+	padding:0;
 	max-width:712px;
 	width:auto;
 }
@@ -3715,10 +3726,10 @@ abbr.timeago {border:0;color:#888;}
 .fontinc {background:transparent url(../images/theme/sprite.png) 0 -48px no-repeat;padding: 2px 7px;cursor:pointer;}
 .fontdec {background:transparent url(../images/theme/sprite.png) 0 -20px no-repeat;padding: 2px 7px;cursor:pointer;}
 
-.mediumpadding {padding:10px;}
+.mediumpadding {padding:10px !important;}
 .largepadding {padding:20px;}
-.smallpadding {padding:5px;}
-.minpadding {padding:1px;}
+.smallpadding {padding:5px!important;}
+.minpadding {padding:1px !important;}
 .mediummargin {margin:5px;}
 .verticalclear {margin:3px 0;}
 .nowrap{white-space: nowrap;}

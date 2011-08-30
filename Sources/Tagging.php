@@ -1,10 +1,14 @@
 <?php
-/*
-Tagging System
-Version 2.4.1
-by:vbgamer45
-http://www.smfhacks.com
-*/
+/**
+ * Simple Machines Forum (SMF)
+ *
+ * @package SMF
+ * @author Simple Machines http://www.simplemachines.org
+ * @copyright 2011 Simple Machines
+ * @license http://www.simplemachines.org/about/smf/license.php BSD
+ *
+ * @version 2.0
+ */
 
 if (!defined('SMF'))
 	die('Hacking attempt...');
@@ -131,36 +135,25 @@ function ViewTags()
 			foreach ($tags as $key => $value)
 			{
 				$row_count++;
-			    // calculate CSS font-size
-			    // find the $value in excess of $min_qty
-			    // multiply by the font-size increment ($size)
-			    // and add the $min_size set above
 			    $size = $min_size + (($value - $min_qty) * $step);
-			    // uncomment if you want sizes in whole %:
-			    // $size = ceil($size);
-
-			    // you'll need to put the link destination in place of the #
-			    // (assuming your tag links to some sort of details page)
-			    $context['poptags'] .= '<a href="' . $scripturl . '?action=tags;tagid=' . $tags2[$key] . '" style="font-size: '.$size.'%"';
-			    // perhaps adjust this title attribute for the things that are tagged
-			   $context['poptags'] .= ' title="'.$value.' things tagged with '.$key.'"';
-			   $context['poptags'] .= '>'.$key.'</a> ';
-			   if ($row_count > ($modSettings['smftags_set_cloud_tags_per_row']-1))
-			   {
-			   	$context['poptags'] .= '<br />';
-			   	$row_count =0;
-			   }
+		    	$context['poptags'] .= '<a href="' . $scripturl . '?action=tags;tagid=' . $tags2[$key] . '" style="font-size: '.$size.'%"';
+			    $context['poptags'] .= ' title="'.$value.' things tagged with '.$key.'"';
+			    $context['poptags'] .= '>'.$key.'</a> ';
+			    if ($row_count > ($modSettings['smftags_set_cloud_tags_per_row']-1)) {
+			   		$context['poptags'] .= '<br />';
+			   		$row_count =0;
+			    }
 			    // notice the space at the end of the link
 			}
 		}
-		// Find Results
+		
 		$dbresult = $smcFunc['db_query']('', "
-		SELECT DISTINCT l.ID_TOPIC, t.num_replies,t.num_views,m.id_member,
-		m.poster_name,m.subject,m.id_topic,m.poster_time, 
-		t.id_board, g.tag, g.ID_TAG 
-		 FROM ({db_prefix}tags_log as l, {db_prefix}boards AS b, {db_prefix}topics as t, {db_prefix}messages as m) 
-		  LEFT JOIN {db_prefix}tags AS g ON (l.ID_TAG = g.ID_TAG)
-		 WHERE b.ID_BOARD = t.id_board AND l.ID_TOPIC = t.id_topic AND t.approved = 1 AND t.id_first_msg = m.id_msg AND " . $user_info['query_see_board'] . " ORDER BY l.ID DESC LIMIT 20");
+			SELECT DISTINCT l.ID_TOPIC, t.num_replies,t.num_views,m.id_member,
+				m.poster_name,m.subject,m.id_topic,m.poster_time, 
+				t.id_board, g.tag, g.ID_TAG 
+		 		FROM ({db_prefix}tags_log as l, {db_prefix}boards AS b, {db_prefix}topics as t, {db_prefix}messages as m) 
+		  		LEFT JOIN {db_prefix}tags AS g ON (l.ID_TAG = g.ID_TAG)
+		 		WHERE b.ID_BOARD = t.id_board AND l.ID_TOPIC = t.id_topic AND t.approved = 1 AND t.id_first_msg = m.id_msg AND {query_see_board} ORDER BY l.ID DESC LIMIT 20");
 
 		$context['tags_topics'] = array();
 		while ($row = $smcFunc['db_fetch_assoc']($dbresult))

@@ -299,24 +299,11 @@ String.prototype.easyReplace = function (oReplacements)
 	return sResult;
 };
 
-
-// Open a new window.
 function reqWin(desktopURL, alternateWidth, alternateHeight, noScrollbars)
 {
-	if ((alternateWidth && self.screen.availWidth * 0.8 < alternateWidth) || (alternateHeight && self.screen.availHeight * 0.8 < alternateHeight))
-	{
-		noScrollbars = false;
-		alternateWidth = Math.min(alternateWidth, self.screen.availWidth * 0.8);
-		alternateHeight = Math.min(alternateHeight, self.screen.availHeight * 0.8);
-	}
-	else
-		noScrollbars = typeof(noScrollbars) == 'boolean' && noScrollbars == true;
-
-	window.open(desktopURL, 'requested_popup', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=' + (noScrollbars ? 'no' : 'yes') + ',width=' + (alternateWidth ? alternateWidth : 480) + ',height=' + (alternateHeight ? alternateHeight : 220) + ',resizable=no');
-
-	// Return false so the click won't follow the link ;).
-	return false;
-};
+	$.prettyPhoto.open(desktopURL + '?iframe=true&height=250');
+	return(false);
+}
 
 // Remember the current position.
 function storeCaret(oTextHandle)

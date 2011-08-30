@@ -116,7 +116,7 @@ class sphinx_search
 		global $modSettings, $context, $sourcedir, $user_info, $scripturl;
 		if (($cached_results = cache_get_data('search_results_' . md5($user_info['query_see_board'] . '_' . $context['params']))) === null)
 		{
-			require_once($sourcedir . '/sphinxapi.php');
+			require_once($sourcedir . '/contrib/sphinxapi.php');
 
 			$mySphinx = new SphinxClient();
 			$mySphinx->SetServer($modSettings['sphinx_searchd_server'], (int) $modSettings['sphinx_searchd_port']);

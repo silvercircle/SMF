@@ -2620,32 +2620,33 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		);
 	}
 	
-	if(isset($topicOptions['topic_prefix']) /*&& $topicOptions['topic_prefix'] != null*/) {
-		$smcFunc['db_query']('', '
-			UPDATE {db_prefix}topics
-			SET
-				id_prefix = {int:id_prefix}
-			WHERE id_topic = {int:id_topic}',
-			array(
-				'id_prefix' => $topicOptions['topic_prefix'],
-				'id_topic' => $topicOptions['id']
-			)
-		);
-	}
+	if($msgOptions['id'] == $topicOptions['id_first_msg']) {
+		if(isset($topicOptions['topic_prefix']) /*&& $topicOptions['topic_prefix'] != null*/) {
+			$smcFunc['db_query']('', '
+				UPDATE {db_prefix}topics
+				SET
+					id_prefix = {int:id_prefix}
+				WHERE id_topic = {int:id_topic}',
+				array(
+					'id_prefix' => $topicOptions['topic_prefix'],
+					'id_topic' => $topicOptions['id']
+				)
+			);
+		}
 
-	if(isset($topicOptions['topic_layout'])) {
-		$smcFunc['db_query']('', '
-			UPDATE {db_prefix}topics
-			SET
-				id_layout = {int:id_layout}
-			WHERE id_topic = {int:id_topic}',
-			array(
-				'id_layout' => $topicOptions['topic_layout'],
-				'id_topic' => $topicOptions['id']
-			)
-		);
+		if(isset($topicOptions['topic_layout'])) {
+			$smcFunc['db_query']('', '
+				UPDATE {db_prefix}topics
+				SET
+					id_layout = {int:id_layout}
+				WHERE id_topic = {int:id_topic}',
+				array(
+					'id_layout' => $topicOptions['topic_layout'],
+					'id_topic' => $topicOptions['id']
+				)
+			);
+		}
 	}
-
 	// Mark the edited post as read.
 	if (!empty($topicOptions['mark_as_read']) && !$user_info['is_guest'])
 	{

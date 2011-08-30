@@ -15,7 +15,7 @@ function template_postbit_normal(&$message, $ignoring)
 		echo '
 						<div class="poster">
 							<h4>', $message['member']['link'], '</h4>
-						<div class="poster_details orange_container" style="margin-top:4px;">
+						<div itemscope="itemscope" itemtype="http://data-vocabulary.org/Person" class="poster_details orange_container" style="margin-top:4px;">
 							<ul class="reset smalltext" id="msg_', $message['id'], '_extra_info">';
 
 		// Show the member's primary group (like 'Administrator') if they have one.
@@ -126,9 +126,9 @@ function template_postbit_normal(&$message, $ignoring)
 										<img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' id="msg_icon_' . $message['id'] . '"' : '', ' />
 									</div>
 									<h5 style="display:inline;" id="subject_', $message['id'], '">
-										<a href="', $message['href'], '" rel="nofollow">', $message['subject'], '</a>
+										', $message['subject'], '
 									</h5>
-									<span class="smalltext" style="float:right;">', !empty($message['counter']) ? $txt['reply_noun'] . ' #' . $message['counter'] : '','</span>
+									<span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a href="', $message['href'], '" rel="nofollow">',$message['permalink'],'</a></span>
 									<span class="smalltext">&nbsp;',$message['time'], '</span>
 									<div id="msg_', $message['id'], '_quick_mod"></div>';
 
@@ -144,7 +144,7 @@ function template_postbit_normal(&$message, $ignoring)
 
 		// Show the post itself, finally!
 		echo '
-							<div class="post">';
+							<div class="post" id="msg_', $message['id'], '">';
 
 		if (!$message['approved'] && $message['member']['id'] != 0 && $message['member']['id'] == $context['user']['id'])
 			echo '
@@ -152,7 +152,9 @@ function template_postbit_normal(&$message, $ignoring)
 									', $txt['post_awaiting_approval'], '
 								</div>';
 		echo '
-								<div class="inner" id="msg_', $message['id'], '"', '>', $message['body'], '</div>
+								<article>
+								', $message['body'],'
+								</article>
 							</div>';
 							
 		// Can the user modify the contents of this post?  Show the modify inline image.
@@ -426,7 +428,7 @@ function template_postbit_blog(&$message, $ignoring)
 
 		// Show the post itself, finally!
 		echo '
-							<div class="post" style="clear:left;padding:10px 20px;">';
+							<div class="post" style="clear:left;padding:10px 20px;" id="msg_', $message['id'], '">';
 
 		if (!$message['approved'] && $message['member']['id'] != 0 && $message['member']['id'] == $context['user']['id'])
 			echo '
@@ -434,7 +436,9 @@ function template_postbit_blog(&$message, $ignoring)
 									', $txt['post_awaiting_approval'], '
 								</div>';
 		echo '
-								<div class="inner" id="msg_', $message['id'], '"', '>', $message['body'], '</div>
+								<article>
+								', $message['body'], '
+								</article>
 							</div>';
 
 		// Can the user modify the contents of this post?  Show the modify inline image.
@@ -643,7 +647,7 @@ function template_postbit_compact(&$message, $ignoring)
 				<a id="msg', $message['id'], '"></a>', $message['first_new'] ? '<a id="new"></a>' : '';
 		
 		// Show information about the poster of this message.
-		echo '<div class="keyinfo" style="margin-left:0px;padding:3px 0 3px 10px;">
+		echo '<div itemscope="itemscope" itemtype="http://data-vocabulary.org/Person" class="keyinfo" style="margin-left:0px;padding:3px 0 3px 10px;">
 			<div class="floatright horizontal_userblock" style="text-align:center;">
 				<h4>', $message['member']['link'], '</h4>
 				<div class="smalltext" id="msg_', $message['id'], '_extra_info">';
@@ -712,7 +716,7 @@ function template_postbit_compact(&$message, $ignoring)
 
 		// Show the post itself, finally!
 		echo '
-							<div class="post" style="clear:left;padding:10px 20px;">';
+							<div class="post" style="clear:left;padding:10px 20px;" id="msg_', $message['id'], '">';
 
 		if(isset($message['approved'])) {
 			if (!$message['approved'] && $message['member']['id'] != 0 && $message['member']['id'] == $context['user']['id'])
@@ -722,7 +726,9 @@ function template_postbit_compact(&$message, $ignoring)
 								</div>';
 		}
 		echo '
-								<div class="inner" id="msg_', $message['id'], '"', '>', $message['body'], '</div>
+								<article>
+								', $message['body'], '
+								</article>
 							</div>';
 
 		echo '

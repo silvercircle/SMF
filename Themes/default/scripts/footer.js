@@ -1214,8 +1214,11 @@ function sendRequest(uri, request, anchor_element)
 function openResult(html, width)
 {
 	$('#wrap').css('opacity', '0.6');
-	$('#mcard').css('width', width + 'px');
 	$('#mcard_inner').html(req.responseText);
+	if(width > 0)
+		$('#mcard').css('width', width + 'px');
+	else
+		$('#mcard').css('width', 'auto');
 	var el = $('#mcard');
    	//el.css("position","absolute");		// for cbox
    	el.css("position",'fixed');
@@ -1236,7 +1239,7 @@ function response(ele)
 			if(req.status == 200) {
 				setBusy(0);
 				if(ele.attr('class') == 'whoposted') {
-					openResult(req.responseText, 150);
+					openResult(req.responseText, 0);
 					return;
 				}
 				if(ele.attr('class') == 'tpeek') {

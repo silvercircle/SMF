@@ -62,7 +62,7 @@ function template_html_above()
 
 	// The ?fin20 part of this link is just here to make sure browsers don't cache it wrongly.
 	echo '
-	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css?fin12" />';
+	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css?fin11" />';
 
 	// Some browsers need an extra stylesheet due to bugs/compatibility issues.
 	//foreach (array('ie7', 'ie6', 'webkit') as $cssfix)
@@ -78,7 +78,7 @@ function template_html_above()
 	// Here comes the JavaScript bits!
 		echo '
 		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js?fin20"></script>
-		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/script.js?fin20"></script>';
+		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js?fin20"></script>';
 	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin')
 		echo '
 		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/admin.js?fin20"></script>';
@@ -107,7 +107,7 @@ var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
 var t2 = document.createElement(\'SCRIPT\');
 t2.type = "text/javascript";
 t2.async = true;
-t2.src = "',$settings['theme_url'],'/scripts/min/footer.js?ver=1.1.0";
+t2.src = "',$settings['theme_url'],'/scripts/footer.js?ver=1.1.0";
 anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
 	</script>';
@@ -769,12 +769,15 @@ function template_sidebar_content()
 			$twitter_widgets = 1;
 			$plusone++;
 			echo '
+			<div style="overflow:hidden;">
    	    	<div style="float:left;"><a href="http://twitter.com/share" style="border:none;" class="twitter-share-button" data-count="horizontal" data-url="',$boardurl,'"></a></div>
 			<div style="display:inline;max-width:70px;"><div class="g-plusone" data-href="',$boardurl,'" data-size="medium" data-count="true"></div></div>';
 			if(isset($modSettings['twitter_id']) && !empty($modSettings['twitter_id']))
 				echo '<div style="margin-top:8px;"><a href="http://twitter.com/',$modSettings['twitter_id'],'" class="twitter-follow-button" data-show-count="false">Follow @',$modSettings['twitter_id'],'</a></div>';
        		echo '<noscript>This requires JavaScript</noscript>
-       		<div class="clear"></div></div>
+       		</div>
+       		<div class="clear"></div>
+       		</div>
 			</div>
 			<div class="cContainer_end"></div>
 		';
