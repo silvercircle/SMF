@@ -133,9 +133,8 @@ function template_topicbit(&$topic)
 	echo '
 	<tr>
 	  <td class="icon1 ', $color_class, '">';
-		if (!empty($settings['show_user_images']) && empty($options['show_no_avatars'])) {
 		echo '
-	  <span class="small_avatar">';
+	  <span class="small_avatar ',$topic['class'],'">';
 		if(!empty($topic['first_post']['member']['avatar'])) {
 			echo '
 		<a href="', $scripturl, '?action=profile;u=', $topic['first_post']['member']['id'], '">
@@ -158,10 +157,6 @@ function template_topicbit(&$topic)
 			echo '
 		<span class="avatar_overlay">',$context['user']['avatar']['image'],'</span>';
 		echo '</span>';
-		}
-		else 
-			echo '
-		<img src="', $settings['images_url'], '/topic/', $topic['class'], '.gif" alt="" />';
 
 		$is_new = $topic['new'] && $context['user']['is_logged'];
 		echo '

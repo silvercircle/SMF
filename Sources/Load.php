@@ -2414,6 +2414,8 @@ function loadSession()
 			@ini_set('session.gc_maxlifetime', max($modSettings['databaseSession_lifetime'], 60));
 
 		// Use cache setting sessions?
+		
+		/* > obsolete, we don't support mmcache or eAccel any longer anyway
 		if (empty($modSettings['databaseSession_enable']) && !empty($modSettings['cache_enable']) && php_sapi_name() != 'cli')
 		{
 			if (function_exists('mmcache_set_session_handlers'))
@@ -2421,6 +2423,7 @@ function loadSession()
 			elseif (function_exists('eaccelerator_set_session_handlers'))
 				eaccelerator_set_session_handlers();
 		}
+		*/
 
 		session_start();
 

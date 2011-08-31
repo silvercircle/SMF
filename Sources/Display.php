@@ -63,14 +63,11 @@ if (!defined('SMF'))
 function Display()
 {
 	global $scripturl, $txt, $modSettings, $context, $settings;
-	global $options, $sourcedir, $user_info, $board_info, $topic, $board, $time_now, $delete_own;
-	global $attachments, $messages_request, $topicinfo, $language, $smcFunc, $can_see_like, $can_give_like, $cache_parsed;
+	global $options, $sourcedir, $user_info, $board_info, $topic, $board, $time_now;
+	global $attachments, $messages_request, $topicinfo, $language, $smcFunc, $cache_parsed;
 
 	$context['need_synhlt'] = true;
 	
-	$can_see_like = allowedTo('like_see');
-	$can_give_like = allowedTo('like_give');
-	$context['use_share'] = allowedTo('use_share');
 	$cache_parsed = !empty($modSettings['use_post_cache']);
 	$time_now = time();
 	
@@ -1107,6 +1104,22 @@ function Display()
 
 	$context['can_add_tags'] = (($context['user']['started'] && allowedTo('smftags_add')) || allowedTo('smftags_manage'));
 	$context['can_delete_tags'] = (($context['user']['started'] && allowedTo('smftags_del')) || allowedTo('smftags_manage'));
+	$context['can_manage_own'] = ($context['user']['started'] && allowedTo('manage_own_topics'));
+	$context['can_moderate_board'] = allowedTo('moderate_board');
+	$context['can_modify_any'] = allowedTo('modify_any');
+	$context['can_modify_replies'] = allowedTo('modify_replies');
+	$context['can_modify_own'] = allowedTo('modify_own');
+	$context['can_delete_any'] = allowedTo('delete_any');
+	$context['can_delete_replies'] = allowedTo('delete_replies');
+	$context['can_delete_own'] = allowedTo('delete_own');
+	
+	$context['can_see_like'] = allowedTo('like_see');
+	$context['can_give_like'] = allowedTo('like_give');
+	$context['use_share'] = allowedTo('use_share');
+	
+	$context['can_lock'] |= $context['can_manage_own'];
+	$context['can_sticky'] |= $context['can_manage_own'];
+	
 	// Cleanup all the permissions with extra stuff...
 	
 	$context['save_draft'] = $context['can_reply'] && !$context['user']['is_guest'] && !empty($modSettings['masterSaveDrafts']) && !empty($options['use_drafts']);
@@ -1158,15 +1171,13 @@ function Display()
 		foreach ($stable_icons as $icon)
 			$context['icon_sources'][$icon] = 'images_url';
 	}
-	$delete_own = allowedTo('delete_own');
 }
 
 // Callback for the message display.
 function prepareDisplayContext($reset = false)
 {
 	global $settings, $txt, $modSettings, $scripturl, $options, $user_info, $smcFunc, $sourcedir, $board, $time_now;
-	global $memberContext, $context, $messages_request, $topic, $attachments, $topicinfo, $can_see_like, $can_give_like, $cache_parsed;
-	global $delete_own;
+	global $memberContext, $context, $messages_request, $topic, $attachments, $topicinfo, $cache_parsed;
 
 	static $counter = null;
 
@@ -1204,7 +1215,7 @@ function prepareDisplayContext($reset = false)
 	$message['subject'] = $message['subject'] != '' ? $message['subject'] : $txt['no_subject'];
 
 	// Are you allowed to remove at least a single reply?
-	$context['can_remove_post'] |= $delete_own && (empty($modSettings['edit_disable_time']) || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 >= time()) && $message['id_member'] == $user_info['id'];
+	$context['can_remove_post'] |= $context['can_delete_own'] && (empty($modSettings['edit_disable_time']) || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 >= time()) && ($message['id_member'] == $user_info['id'] || $context['can_manage_own']);
 
 	// If it couldn't load, or the user was a guest.... someday may be done with a guest table.
 	if (!loadMemberContext($message['id_member'], true))
@@ -1277,8 +1288,8 @@ function prepareDisplayContext($reset = false)
 		'is_ignored' => !empty($modSettings['enable_buddylist']) && !empty($options['posts_apply_ignore_list']) && in_array($message['id_member'], $context['user']['ignoreusers']),
 		'can_approve' => !$message['approved'] && $context['can_approve'],
 		'can_unapprove' => $message['approved'] && $context['can_approve'],
-		'can_modify' => (!$context['is_locked'] || allowedTo('moderate_board')) && (allowedTo('modify_any') || (allowedTo('modify_replies') && $context['user']['started']) || (allowedTo('modify_own') && $message['id_member'] == $user_info['id'] && (empty($modSettings['edit_disable_time']) || !$message['approved'] || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 > time()))),
-		'can_remove' => allowedTo('delete_any') || (allowedTo('delete_replies') && $context['user']['started']) || (allowedTo('delete_own') && $message['id_member'] == $user_info['id'] && (empty($modSettings['edit_disable_time']) || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 > time())),
+		'can_modify' => (!$context['is_locked'] || $context['can_moderate_board']) && ($context['can_modify_any'] || ($context['can_modify_replies'] && $context['user']['started']) || ($context['can_modify_own'] && $message['id_member'] == $user_info['id'] && (empty($modSettings['edit_disable_time']) || !$message['approved'] || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 > time()))),
+		'can_remove' => $context['can_delete_any'] || ($context['can_delete_replies'] && $context['user']['started']) || ($context['can_delete_own'] && $message['id_member'] == $user_info['id'] && (empty($modSettings['edit_disable_time']) || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 > time())),
 		'can_see_ip' => allowedTo('moderate_forum') || ($message['id_member'] == $user_info['id'] && !empty($user_info['id'])),
 		'likes_count' => $message['likes_count'],
 		'like_status' => $message['like_status'],
@@ -1287,8 +1298,8 @@ function prepareDisplayContext($reset = false)
 		'id_member' => $message['id_member']
 	);
 
-	if($can_see_like)
-		AddLikeBar($output, $can_give_like, $time_now);
+	if($context['can_see_like'])
+		AddLikeBar($output, $context['can_give_like'], $time_now);
 	else
 		$output['likes_count'] = 0;
 	// Is this user the message author?

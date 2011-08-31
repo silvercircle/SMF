@@ -480,9 +480,8 @@ function showPosts($memID)
 	$context['posts'] = array();
 	$board_ids = array('own' => array(), 'any' => array());
 	
-	$can_see_like = allowedTo('like_see');
-	$can_give_like = allowedTo('like_give');
 	require_once($sourcedir . '/Subs-LikeSystem.php');
+	$can_give_like = allowedTo('like_give', $row['id_board']);
 	
 	$time_now = time();
 	while ($row = $smcFunc['db_fetch_assoc']($request))
@@ -490,6 +489,8 @@ function showPosts($memID)
 		// Censor....
 		censorText($row['body']);
 		censorText($row['subject']);
+
+		$can_see_like = allowedTo('like_see', $row['id_board']);
 		
 		getCachedPost($row);
 		AddLikeBar($row, $can_give_like, $time_now);

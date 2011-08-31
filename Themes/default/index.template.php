@@ -863,20 +863,21 @@ function template_sidebar_content()
 			<div class="cContainer_end"></div>
 			';
 	}
-	
 }
 
 /*
  * create a collapsible container with an id, a title and html content
  * caller is responsible to provide the final </div> unless you pass a box
- * content.
+ * content in $_c['content'].
+ * 
  * you can optionally pass css classes for the the header bar and the body
  * object. By default, the cContainer_* classes define the style.
  * gracefully degrades for people without JavaScript - always expanded.
+ * id MUST be globally unique 
  */
 function template_create_collapsible_container(array &$_c)
 {
-	global $context, $txt, $settings;
+	global $settings;
 	
 	if(!isset($_c['title'])) {
 		log_error('Collapsible container, missing mandatory title string');
@@ -887,12 +888,9 @@ function template_create_collapsible_container(array &$_c)
 		return;
 	}
 	$id = $_c['id']; 		// just bein' lazy :)
-	if(isset($_COOKIE['SF_collapsed'])) {
-		$states = explode(',', $_COOKIE['SF_collapsed']);
-		$state = array_search($id, $states);
-	}
-	else
-		$state = false;
+	// one cookie to rule them all (it stores all collapsed ids, separated by ',')
+	// duplicate ids will break this, so be careful
+	$state = isset($_COOKIE['SF_collapsed']) ? array_search($id, explode(',', $_COOKIE['SF_collapsed'])) : false;
 		
 	if(!isset($_c['headerclass']))
 		$_c['headerclass'] = 'cContainer_header';

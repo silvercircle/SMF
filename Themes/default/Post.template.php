@@ -17,7 +17,10 @@ function template_main()
 
 	// Start the javascript... and boy is there a lot.
 	echo '
-		<script type="text/javascript"><!-- // --><![CDATA[';
+		<script type="text/javascript"><!-- // --><![CDATA[
+			var txtlabel_zoom = "',$txt['zoom_editor'],'";
+			var txtlabel_restore = "',$txt['restore_editor'],'";
+		';
 
 	// When using Go Back due to fatal_error, allow the form to be re-submitted with changes.
 	if ($context['browser']['is_firefox'])
@@ -397,6 +400,8 @@ function template_main()
 	}
 
 	// Show the actual posting area...
+	echo '<div id="editor_main_content">
+		<div style="float:right;"><span id="editor_main_content_zoom" class="button">',$txt['zoom_editor'],'</span></div>';
 	if ($context['show_bbc'])
 	{
 		echo '
@@ -410,6 +415,7 @@ function template_main()
 	echo '
 					', template_control_richedit($context['post_box_name'], 'smileyBox_message', 'bbcBox_message');
 
+	echo '</div>';
 	// If this message has been edited in the past - display when it was.
 	if (isset($context['last_modified']))
 		echo '

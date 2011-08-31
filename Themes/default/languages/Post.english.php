@@ -195,4 +195,6 @@ $txt['digest_mod_act_move'] = '"%1$s" was moved';
 $txt['digest_mod_act_merge'] = '"%1$s" was merged';
 $txt['digest_mod_act_split'] = '"%1$s" was split';
 
+$txt['zoom_editor'] = 'Zoom editor';
+$txt['restore_editor'] = 'Restore editor';
 ?>

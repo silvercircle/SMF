@@ -1742,3 +1742,52 @@ smc_BBCButtonBox.prototype.setSelect = function (sSelectName, sValue)
 		}
 	}
 }
+
+$(document).ready(function() {
+	var is_zoomed = false;
+	var old_width, old_height, old_editor_width, old_editor_height, old_rich_editor_height, old_rich_editor_width;
+	
+	$('#editor_main_content_zoom').click(function() {
+		var el = $('#editor_main_content');
+
+		if(!is_zoomed) {
+			// save all relevant old metrics
+			old_width = el.css('width');
+			old_height = el.css('height');
+			old_editor_height = $('.editor').css('height');
+			old_editor_width = $('.editor').css('width');
+			old_rich_editor_height = $('.rich_editor_frame').css('height');
+			// just hide scroll bars on main page content
+			$('body').css('overflow', 'hidden');
+			// set new position and styles for the editor section and its relevant children
+			// add some padding to make it look nice.
+   			el.css({"position": 'fixed', 'padding': '10px', 'width': $(window).width() -20 + 'px',
+   				'height': $(window).height() -20 + 'px', 'top':0, 'left': 0});
+			$('.editor').css('height', $(window).height() - 130 + 'px');
+			$('.rich_editor_frame').css('height', $(window).height() - 130 + 'px');
+			is_zoomed = true;
+			$(this).html(txtlabel_restore);
+			$('#message_resizer').hide();
+		}
+		else {
+			// revert the process from above
+			$('body').css('overflow', 'auto');
+   			el.css({"position": 'static', 'padding':0, 'width': old_width, 'height': old_height});
+			$('.editor').css({'height': old_editor_height, 'width': old_editor_width});
+			$('.rich_editor_frame').css('height', old_rich_editor_height);
+			is_zoomed = false;
+			$(this).html(txtlabel_zoom);
+			$('#message_resizer').show();
+		}
+		return(false);
+	});
+	$(window).resize(function() {
+		if(is_zoomed) {
+			var el = $('#editor_main_content');
+   			el.css({"position": 'fixed', 'padding': '10px', 'width': $(window).width() -20 + 'px',
+   				'height': $(window).height() -20 + 'px', 'top':0, 'left': 0});
+			$('.editor').css('height', $(window).height() - 130 + 'px');
+			$('.rich_editor_frame').css('height', $(window).height() - 130 + 'px');
+		}
+	});
+});

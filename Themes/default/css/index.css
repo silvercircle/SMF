@@ -1265,10 +1265,10 @@ div#upper_section div.user
 	display:block;
 }
 div.user .avatar img {
-	border:2px solid #aaa;
-	padding:1px;
-	background-color:#aaa;
-	border-radius:0;
+	border:1px solid #cc6000;
+	padding:2px;
+	background-color:#f0f0f0;
+	border-radius:2px;
 	max-height:63px;
 	width:auto;
 	margin-right:10px;
@@ -1829,8 +1829,10 @@ p#whoisviewing
 .poster li.avatar img, #mcard_inner img.avatar, .horizontal_userblock img.avatar, #basicinfo img.avatar {
 	width:auto;
 	height:auto;
-	border:2px solid #ccc;
-	background-color:#aaa;
+	border:1px solid #cc6000;
+	border-radius:2px;
+	background-color:#f0f0f0;
+	padding:2px;
 	max-width:100px;
 }
 
@@ -1918,6 +1920,7 @@ ul.quickbuttons li a, .buttonlist ul li a, span.button
 	background:#d8dfea;
 	border:1px solid #9bb1db;
 	border-radius:2px;
+	cursor:pointer;
 }
 span.button {margin: 0 0.3em;}
 ul.quickbuttons li a:hover, span.button:hover, .buttonlist ul li a:hover {
@@ -2127,6 +2130,9 @@ ul.post_options li
 #smileyBox_message
 {
 	margin: 0.5em;
+}
+#smileyBox_message div {
+	display:inline;
 }
 
 /* Styles for edit event section
@@ -3527,6 +3533,9 @@ img.cContainer_c {
 	float:right;
 	cursor:pointer;
 }
+#editor_main_content {
+	background-color:#f2f5fe;
+}
 div.cContainer_end {
 	height:10px;
 }
@@ -3588,20 +3597,26 @@ span.small_avatar img {
 	max-width:32px;
 	width:auto;
 	height:auto;
-	padding:1px;
-	border:1px solid orange;
-	background-color:#ccc;
+	border:1px solid #d5ecfa;
+	border-radius:2px;
+	background-color:#f0f0f0;
+	padding:2px;
+}
+span.veryhot_post img, span.my_veryhot_post img {
+	border-color: red !important;
+}
+span.hot_post img, span.my_hot_post img {
+	border-color: orange !important;
 }
 span.small_avatar {display:block;position:relative;}
-span.avatar_overlay {max-height:20px;background-color:transparent;display:block;position:absolute;bottom:-2px;right:-1px;}
+span.avatar_overlay {max-height:20px;background-color:transparent;display:block;position:absolute;bottom:2px;right:-2px;}
 span.avatar_overlay img {
-	max-height:20px;
-	max-width:20px;
-	width:auto;
-	height:auto;
-	background-color:#ccc;
-	padding:0;
-	border:1px solid white;
+	max-height:18px;
+	max-width:18px;
+	width:18px;
+	height:18px;
+	border:1px solid #fff;
+	box-shadow:2px 2px 5px 0px #aaa;
 	padding:0;
 }
 
