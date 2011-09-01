@@ -2139,9 +2139,9 @@ function template_prefix_settings()
 		</tbody>
 		</table>
 		<br />
-		<input style="float:right;" type="submit" value="', $txt['save'], '" class="button_submit" />
+		<input type="submit" value="', $txt['save'], '" class="button_submit floatright" />
 		<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-		<div style="clear:both;"></div>
+		<div class="clear"></div>
 		</div>
 		</form>';
 }
@@ -2189,7 +2189,7 @@ function template_tag_admin_settings()
 				<td><input type="text" name="smftags_set_cloud_min_font_size_precent" value="' .  $modSettings['smftags_set_cloud_min_font_size_precent'] . '" /></td>
 			</tr>
 		</table>
-		<input type="submit" class="button_submit" style="float:right;" name="savesettings" value="', $txt['smftags_savesettings'],  '" />
+		<input type="submit" class="button_submit floatright" name="savesettings" value="', $txt['smftags_savesettings'],  '" />
 		<div class="clear"></div>
 		</form></div>';
 }

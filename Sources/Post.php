@@ -417,6 +417,8 @@ function Post()
 		cache_put_data('response_prefix', $context['response_prefix'], 600);
 	}
 
+	$context['can_merge_with_last'] = false;
+	
 	// Previewing, modifying, or posting?
 	if (isset($_REQUEST['message']) || !empty($context['post_error']))
 	{
@@ -830,6 +832,7 @@ function Post()
 				fatal_lang_error('no_board', false);
 		}
 		
+		$context['can_merge_with_last'] = $automerge > 0;
 		if ($user_info['is_guest'])
 		{
 			$context['name'] = isset($_SESSION['guest_name']) ? $_SESSION['guest_name'] : '';

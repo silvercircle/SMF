@@ -301,10 +301,10 @@ function template_results()
 			{
 				if(!empty($message['member']['avatar']['image']))
 					echo '
-					<div class="user" style="float:left;"><div class="avatar" style="margin-right:10px;">',$message['member']['avatar']['image'],'</div></div>';
+					<div class="user floatleft"><div class="avatar" style="margin-right:10px;">',$message['member']['avatar']['image'],'</div></div>';
 				else
 					echo '
-					<div class="user" style="float:left;"><div class="avatar" style="margin:0 10px 0 0;"><a href="', $scripturl, '?action=profile;u=', $message['member']['id'], '">
+					<div class="user floatleft"><div class="avatar" style="margin:0 10px 0 0;"><a href="', $scripturl, '?action=profile;u=', $message['member']['id'], '">
 					<img src="',$settings['images_url'],'/unknown.png" alt="avatar" /></a></div></div>';
 
 				echo '<div style="margin-left:90px;">';

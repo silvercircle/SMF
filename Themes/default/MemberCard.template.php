@@ -68,7 +68,7 @@ function template_main()
 			
 		echo '</div></td></tr></table>';
 		echo '<div class="cat_bar">
-			<div style="position:absolute;bottom:3px;right:8px;"><a href="',$scripturl,'?action=profile;u=',$member['id'],'">View full profile</a></div><div style="clear:both;"></div></div>';
+			<div style="position:absolute;bottom:3px;right:8px;"><a href="',$scripturl,'?action=profile;u=',$member['id'],'">View full profile</a></div><div class="clear"></div></div>';
 	}
 }
 ?>

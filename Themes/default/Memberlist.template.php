@@ -82,7 +82,7 @@ function template_main()
 				<span class="floatright">', $context['letter_links'], '</span>';
 		echo '
 			</h4>
-		<div style="clear:left;"></div>
+		<div class="clear_left"></div>
 		</div>';
 		if(isset($context['page_index']))
 			echo '
@@ -98,7 +98,7 @@ function template_main()
 			echo '
 				<li>
 				<div class="blue_container" style="margin:2px;overflow:hidden;">
-				<div style="width:67px;float:left;">';
+				<div class="floatleft" style="width:67px;">';
 				if(!empty($member['avatar']['image']))
 					echo $member['avatar']['image'];
 				else

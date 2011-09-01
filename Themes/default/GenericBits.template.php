@@ -25,7 +25,7 @@ function template_boardbit(&$board)
 		 ', $board['is_redirect'] ? '' : comma_format($board['topics']) . ' ' . $txt['board_topics'], '
 		</div>
 		<div class="info">
-		 <div class="icon" style="float:left;">
+		 <div class="icon floatleft">
 		  <a href="', ($board['is_redirect'] || $context['user']['is_guest'] ? $board['href'] : $scripturl . '?action=unread;board=' . $board['id'] . '.0;children'), '">';
 
 		// If the board or children is new, show an indicator.
@@ -102,7 +102,7 @@ function template_boardbit(&$board)
 		echo '
 	  </div>
 	 </div>
-	 <div style="clear:left;"></div>
+	 <div class="clear_left"></div>
 	</li>';
 }
 
@@ -182,7 +182,7 @@ function template_topicbit(&$topic)
 		<td class="stats ', $color_class, '">';
 			if($topic['replies'])
 				echo '
-			<a title="',$txt['who_posted'],'" class="whoposted" data-topic="',$topic['id'], '" href="',$scripturl,'?action=xmlhttp;sa=whoposted;t=',$topic['id'],'" >', $topic['replies'], ' ', $txt['replies'], '</a>';
+			<a title="',$txt['who_posted'],'" onclick="whoPosted($(this));return(false);" class="whoposted" data-topic="',$topic['id'], '" href="',$scripturl,'?action=xmlhttp;sa=whoposted;t=',$topic['id'],'" >', $topic['replies'], ' ', $txt['replies'], '</a>';
 			else
 				echo $topic['replies'], ' ', $txt['replies'];
 			echo '

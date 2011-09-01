@@ -405,9 +405,9 @@ function template_showPosts()
 				
 			if($post['likes_count'] > 0 || !empty($post['likelink'])) 
 				echo '<div class="likebar">
-				<div style="float:right;">',$post['likelink'],'</div>
+				<div class="floatright">',$post['likelink'],'</div>
 				<span id="likers_msg_',$post['id'],'">',$post['likers'],'</span>
-				<div style="clear:both;"></div></div>';
+				<div class="clear"></div></div>';
 			echo '</div>
 		</div>';
 		}

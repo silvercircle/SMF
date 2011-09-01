@@ -1861,14 +1861,15 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 
 	// decide whether we should just update the last post or append a new one
 	$automerge_posts = false;
+	$want_automerge = isset($_REQUEST['want_automerge']) && $_REQUEST['want_automerge'] > 0 ? true : false;
 	
-	if(!$new_topic && $topicOptions['automerge'] > 0 && $topicOptions['num_replies'] > 0 && $topicOptions['id_member_updated'] == $posterOptions['id'] && empty($topicOptions['poll'])) {
+	if(!$new_topic && ($topicOptions['automerge'] > 0 || $want_automerge) && $topicOptions['num_replies'] > 0 && $topicOptions['id_member_updated'] == $posterOptions['id'] && empty($topicOptions['poll'])) {
 		$result = $smcFunc['db_query']('', '
 			SELECT poster_time, modified_time, body FROM {db_prefix}messages WHERE id_msg = {int:last_id}',
 			array('last_id' => $topicOptions['id_last_msg']));
 		list($ptime, $mtime, $oldbody) = $smcFunc['db_fetch_row']($result);
 		if ($smcFunc['db_affected_rows']() != 0) {
-			if(time() - max($ptime, $mtime) < $topicOptions['automerge'] * 60) {
+			if($want_automerge || (time() - max($ptime, $mtime) < $topicOptions['automerge'] * 60)) {
 				$automerge_posts = true;
 				$msg_to_update = $topicOptions['id_last_msg'];
 				$ar_result = $smcFunc['db_query']('', '

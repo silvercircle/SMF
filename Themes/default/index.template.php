@@ -57,12 +57,14 @@ function template_html_above()
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
 	// Show right to left and the character set for ease of translating.
-	echo '<!DOCTYPE html ', $context['right_to_left'] ? ' dir="rtl"' : '', '>
+	echo '
+<!DOCTYPE html ', $context['right_to_left'] ? ' dir="rtl"' : '', '>
+<html id="_S_" lang="en-US">
 <head>';
 
 	// The ?fin20 part of this link is just here to make sure browsers don't cache it wrongly.
 	echo '
-	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css?fin11" />';
+	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css" />';
 
 	// Some browsers need an extra stylesheet due to bugs/compatibility issues.
 	//foreach (array('ie7', 'ie6', 'webkit') as $cssfix)
@@ -77,38 +79,38 @@ function template_html_above()
 
 	// Here comes the JavaScript bits!
 		echo '
-		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js?fin20"></script>
-		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js?fin20"></script>';
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js?v=12"></script>
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js?v=12"></script>';
 	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin')
 		echo '
-		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/admin.js?fin20"></script>';
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/admin.js?v=12"></script>';
 	echo '
-		<script type="text/javascript">
-		// <![CDATA[
-var smf_theme_url = "', $settings['theme_url'], '";
-var smf_default_theme_url = "', $settings['default_theme_url'], '";
-var smf_images_url = "', $settings['images_url'], '";
-var smf_scripturl = "', $scripturl, '";
-var smf_iso_case_folding = ', $context['server']['iso_case_folding'] ? 'true' : 'false', ';
-var smf_charset = "', $context['character_set'], '";
-var sSessionId = \'', $context['session_id'], '\';
-var sSessionVar = \'', $context['session_var'], '\';
-var disableDynamicTime = ',empty($options['disable_dynatime']) ? 0 : 1,';
-var textSizeUnit = \'pt\';
-var textSizeStep = 1;
-var textSizeMax = 16;
-var textSizeMin = 8;
-var textSizeDefault = 10;
-var sideBarWidth = 250;
-var sidebar_content_loaded = 0;
-var cookie = readCookie(\'SMF_textsize\');
-var textsize = cookie ? parseInt(cookie) : textSizeDefault;
-var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
-var t2 = document.createElement(\'SCRIPT\');
-t2.type = "text/javascript";
-t2.async = true;
-t2.src = "',$settings['theme_url'],'/scripts/footer.js?ver=1.1.0";
-anchor.parentNode.insertBefore(t2, anchor);
+	<script type="text/javascript">
+	// <![CDATA[
+	var smf_theme_url = "', $settings['theme_url'], '";
+	var smf_default_theme_url = "', $settings['default_theme_url'], '";
+	var smf_images_url = "', $settings['images_url'], '";
+	var smf_scripturl = "', $scripturl, '";
+	var smf_iso_case_folding = ', $context['server']['iso_case_folding'] ? 'true' : 'false', ';
+	var smf_charset = "', $context['character_set'], '";
+	var sSessionId = \'', $context['session_id'], '\';
+	var sSessionVar = \'', $context['session_var'], '\';
+	var disableDynamicTime = ',empty($options['disable_dynatime']) ? 0 : 1,';
+	var textSizeUnit = \'pt\';
+	var textSizeStep = 1;
+	var textSizeMax = 16;
+	var textSizeMin = 8;
+	var textSizeDefault = 10;
+	var sideBarWidth = 250;
+	var sidebar_content_loaded = 0;
+	var cookie = readCookie(\'SMF_textsize\');
+	var textsize = cookie ? parseInt(cookie) : textSizeDefault;
+	var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
+	var t2 = document.createElement(\'SCRIPT\');
+	t2.type = "text/javascript";
+	t2.async = true;
+	t2.src = "',$settings['theme_url'],'/scripts/footer.js?v=12";
+	anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
 	</script>';
 	echo '
@@ -168,7 +170,7 @@ function template_body_above()
 	<div id="upper_section" class="middletext">
 		<div class="notibar"></div>
 		<div class="notibar_intro"></div>
-		<div style="float:left;color:#ddd;text-shadow:black 2px 2px 10px;font-size:35px;font-family:Comic Sans MS;padding:20px 30px;"><strong><em>SMF pLayGround</em></strong><br />
+		<div class="floatleft" style="color:#ddd;text-shadow:black 2px 2px 10px;font-size:35px;font-family:Comic Sans MS;padding:20px 30px;"><strong><em>SMF pLayGround</em></strong><br />
 		<div style="font-size:16px;height:26px;padding-top:20px;">...Test</div>
 	</div>';
 
@@ -207,10 +209,10 @@ function template_body_above()
 	$sidebar_vis = (isset($_COOKIE['smf_sidebar_disabled']) && $_COOKIE['smf_sidebar_disabled'] == 1) ? false : true;
 	if($sidebar_allowed)
 		echo '
-			<div id="sbtoggle">',$sidebar_vis ? '&nbsp;&gt;' : '&nbsp;&lt;','</div>';
+			<div onclick="sbToggle($(this));" id="sbtoggle">',$sidebar_vis ? '&nbsp;&gt;' : '&nbsp;&lt;','</div>';
 	// Show the navigation tree.
 	$scope = 0;
-	echo '<form onmouseout="return false;" onsubmit="submitSearchBox();" style="float:right;margin-right:30px;margin-bottom:-20px;" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
+	echo '<form onmouseout="return false;" onsubmit="submitSearchBox();" class="floatright" style="margin-right:30px;margin-bottom:-20px;" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
 			// Search within current topic?
 			$search_label = 'Search';
 			if (isset($context['current_topic']) && $context['current_topic']) {
@@ -246,7 +248,9 @@ function template_body_above()
 				<noscript>
 				<input style="margin:0;" type="submit" name="submit" value="', $txt['go'], '" class="button_submit" />
 				</noscript>';
-	echo '</form><div style="clear:both;"></div>';
+	echo '
+	</form>
+	<div class="clear"></div>';
 	echo '<aside>
 		  <div id="sidebar" style="width:255px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
 		//if(($sidebar_allowed && $sidebar_vis) || (isset($_COOKIE['smf_jsavail']) && !$_COOKIE['smf_jsavail']))
@@ -343,14 +347,15 @@ function template_body_below()
 		
 	$time_now = forum_time(false);
 	$tz = date_default_timezone_get();
-	echo '<div style="float:right;text-align:right;" class="smalltext">',$loadtime,'<br />Forum time: ',strftime($modSettings['time_format'], $time_now) . ' '. $tz,'</div>';
+	echo '<div class="smalltext righttext floatright">',$loadtime,'<br />Forum time: ',strftime($modSettings['time_format'], $time_now) . ' '. $tz,'</div>';
 	
 	
-	echo '	<div class="copyright">', my_theme_copyright(), '</div>
-			<div><a id="button_xhtml" href="http://validator.w3.org/check?uri=referer" target="_blank" class="new_win" title="Valid HTML"><span>HTML</span></a> | 
-			', !empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']) ? '<a id="button_rss" href="' . $scripturl . '?action=.xml;type=rss" class="new_win"><span>' . $txt['rss'] . '</span></a> | ' : '', '
-			<a id="button_wap2" href="', $scripturl , '?wap2" class="new_win"><span>', $txt['wap2'], '</span></a>
-			</div>';
+	echo '
+		<div class="copyright">', my_theme_copyright(), '</div>
+		<div><a id="button_xhtml" href="http://validator.w3.org/check?uri=referer" target="_blank" class="new_win" title="Valid HTML"><span>HTML</span></a> | 
+		', !empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']) ? '<a id="button_rss" href="' . $scripturl . '?action=.xml;type=rss" class="new_win"><span>' . $txt['rss'] . '</span></a> | ' : '', '
+		<a id="button_wap2" href="', $scripturl , '?wap2" class="new_win"><span>', $txt['wap2'], '</span></a>
+		</div>';
 
 	echo '
 	</div>
@@ -372,27 +377,6 @@ function template_body_below()
  		  <div style="width:0px;height:0px;"><img src="http://piwik.miranda.or.at/piwik.php?idsite=1" style="border:0" alt="" /></div>
  		</noscript>';
 	}
-	/*
-	if(1) { // owa js method
-	echo '
-	<script type="text/javascript">
-	//<![CDATA[
-		var owa_baseUrl = \'http://stats.miranda.or.at/\';
-		var owa_cmds = owa_cmds || [];
-		owa_cmds.push([\'setSiteId\', \'20ae78d2fb2e0139e1a1e892181c619d\']);
-		owa_cmds.push([\'trackPageView\']);
-		//owa_cmds.push([\'trackClicks\']);
-		//owa_cmds.push([\'trackDomStream\']);
-
-		(function() {
-			var _owa = document.createElement(\'script\'); _owa.type = "text/javascript"; _owa.async = true;
-			owa_baseUrl = ("https:" == document.location.protocol ? window.owa_baseSecUrl || owa_baseUrl.replace(/http:/, "https:") : owa_baseUrl );
-			_owa.src = owa_baseUrl + "modules/base/js/owa.tracker-combined-min.js";
-			var _owa_s = document.getElementsByTagName("script")[0]; _owa_s.parentNode.insertBefore(_owa, _owa_s);
-		}());
-	//]]>
-	</script>';
-	}*/
 }
 
 function template_html_below()
@@ -464,7 +448,7 @@ function template_menu()
 	
 	echo '
 		<div id="main_menu">
-			<div style="float:right;line-height:24px;font-size:10px;font-family:Verdana;">
+			<div class="floatright" style="line-height:24px;font-size:10px;font-family:Verdana;">
 				<span style="color:white;" id="curfontsize"></span>
 				<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
 				<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
@@ -473,14 +457,18 @@ function template_menu()
 
 	foreach ($context['menu_buttons'] as $act => $button)
 	{
+		$has_subitems = !empty($button['sub_buttons']);
 		if(!isset($button['active_button']))
 			$button['active_button'] = false;
 		echo '
 				<li id="button_', $act, '">
 					<a class="', $button['active_button'] ? 'active ' : '', 'firstlevel" href="', $button['href'], '"', isset($button['target']) ? ' target="' . $button['target'] . '"' : '', '>
-						<span class="', isset($button['is_last']) ? 'last ' : '', 'firstlevel">', $button['title'], '</span>
-					</a>';
-		if (!empty($button['sub_buttons']))
+						<span class="', isset($button['is_last']) ? 'last ' : '', 'firstlevel">', $button['title'];
+						if($has_subitems)
+							echo '<span style="float:right;" id="_',$act,'" class="m_downarrow">&nbsp;</span>';
+					echo '</span>';
+					echo '</a>';
+		if ($has_subitems)
 		{
 			echo '
 					<ul>';
@@ -521,7 +509,7 @@ function template_menu()
 	}
 
 	echo '
-			</ul><div style="clear:both;"></div>
+			</ul><div class="clear"></div>
 		</div>';
 }
 
@@ -604,7 +592,7 @@ function async_like_and_tweet($l, $fb = true, $tw = true, $layout="standard")
 	$twitter_widgets = 1;
 	$plusone++;
 	echo '
-		document.write(\'<div style="float:right;max-width:65px;overflow:hidden;"><div style="max-width:65px;" class="g-plusone" data-href="',$l,'" data-size="medium" data-count="true"></div></div>\');
+		document.write(\'<div class="floatright" style="max-width:65px;overflow:hidden;"><div style="max-width:65px;" class="g-plusone" data-href="',$l,'" data-size="medium" data-count="true"></div></div>\');
    	    document.write(\'<a href="http://twitter.com/share" style="border:none;" class="twitter-share-button" data-count="horizontal" data-url="',$l,'"></a>\');
 	';
     }	
@@ -621,7 +609,7 @@ function socialbar($l, $t)
 	
 	echo '<div class="bmbar">';
 	async_like_and_tweet($l);
-	echo '<div style="clear:both;"></div></div>';	
+	echo '<div class="clear"></div></div>';	
 }
 
 function socialbar_passive($l, $t)
@@ -634,13 +622,13 @@ function socialbar_passive($l, $t)
 		
 		//$fb = "<span class=\"share_button share_fb\" onclick=\"share_popup(\'http://www.facebook.com/sharer.php?u=".$url."\', 500,400);\">Share</span>";
 		//$tw = "<span class=\"share_button share_tw\" onclick=\"share_popup(\'http://twitter.com/share?url=".$url."&amp;text=".$title."\', 550,300);\">Tweet</span>";
-		echo '<div style="float:left;"><a role="button" rel="nofollow" class="share_button share_fb" href="http://www.facebook.com/sharer.php?u=',$url,'">Share</a>
+		echo '<div class="floatleft"><a role="button" rel="nofollow" class="share_button share_fb" href="http://www.facebook.com/sharer.php?u=',$url,'">Share</a>
 			<a role="button" rel="nofollow" class="share_button share_tw" href="http://twitter.com/share?text=',$t,'&amp;url=',$url,'">Tweet</a>
 			<a role="button" rel="nofollow" class="share_button share_digg" href="http://digg.com/submit?phase=2&amp;title=',$t,'&amp;url=',$url,'">Digg</a>
 			<a role="button" rel="nofollow" class="share_button share_buzz" href="http://www.google.com/buzz/post?url=',$url,'">Buzz</a></div>&nbsp;&nbsp;
-            <div style="float:right;max-width:65px;overflow:hidden;"><div class="g-plusone" data-href="',$url,'" data-size="medium" data-count="true"></div></div>
-       		<div style="clear:both;"></div>';
-	echo '</div><div style="clear:both;"></div>';
+            <div class="floatright" style="max-width:65px;overflow:hidden;"><div class="g-plusone" data-href="',$url,'" data-size="medium" data-count="true"></div></div>
+       		<div class="clear"></div>';
+	echo '</div><div class="clear"></div>';
 }
 
 function template_sidebar_content()
@@ -674,7 +662,7 @@ function template_sidebar_content()
 					<li class="greeting"><a href="',$scripturl,'?action=profile;u=',$context['user']['id'],'">', $context['user']['name'], '</a></li>
 					<li class="smalltext">',$user_info['posts'],' ',$txt['posts'],'<li>
 					<li class="smalltext">',$user_info['likesreceived'],' ',$txt['likes'],'<li>
-					<li class="smalltext"><span class="smalltext" style="float:right;"><a href="',$scripturl,'?action=logout;',$context['session_var'],'=',$context['session_id'], '">Sign out</a></span><li>
+					<li class="smalltext"><span class="smalltext floatright"><a href="',$scripturl,'?action=logout;',$context['session_var'],'=',$context['session_id'], '">Sign out</a></span><li>
 				 </ul>
 				 <div class="clear flat_container">
 					<a href="', $scripturl, '?action=unread">', $txt['unread_since_visit'], '</a><br>
@@ -701,7 +689,7 @@ function template_sidebar_content()
 	// Otherwise they're a guest - this time ask them to either register or login - lazy bums...
 	else {
 		echo '
-				<div class="smallpadding smalltext blue_container">
+				<div class="smalltext">
 				<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/sha1.js"></script>
 				<div><form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
 					', sprintf($txt['welcome_guest'], $txt['guest_title']), '<br /><br />
@@ -770,7 +758,7 @@ function template_sidebar_content()
 			$plusone++;
 			echo '
 			<div style="overflow:hidden;">
-   	    	<div style="float:left;"><a href="http://twitter.com/share" style="border:none;" class="twitter-share-button" data-count="horizontal" data-url="',$boardurl,'"></a></div>
+   	    	<div class="floatleft"><a href="http://twitter.com/share" style="border:none;" class="twitter-share-button" data-count="horizontal" data-url="',$boardurl,'"></a></div>
 			<div style="display:inline;max-width:70px;"><div class="g-plusone" data-href="',$boardurl,'" data-size="medium" data-count="true"></div></div>';
 			if(isset($modSettings['twitter_id']) && !empty($modSettings['twitter_id']))
 				echo '<div style="margin-top:8px;"><a href="http://twitter.com/',$modSettings['twitter_id'],'" class="twitter-follow-button" data-show-count="false">Follow @',$modSettings['twitter_id'],'</a></div>';
@@ -900,7 +888,7 @@ function template_create_collapsible_container(array &$_c)
 		$_c['headerstyle'] = 'style="'.$_c['headerstyle'].'"';
 	echo '
 		<div class="',$_c['headerclass'],'"',$_c['headerstyle'],'>
-		<img class="cContainer_c" id="',$id,'" src="',$settings['images_url'].($state ? '/expand.gif' : '/collapse.gif'),'" alt="*" />';
+		<img onclick="cContainer($(this));" class="cContainer_c" id="',$id,'" src="',$settings['images_url'].($state ? '/expand.gif' : '/collapse.gif'),'" alt="*" />';
 	echo '<h3>',$_c['title'],'</h3>
 		</div>';
 		

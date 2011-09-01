@@ -113,7 +113,7 @@ function template_main()
 	echo '
 			<div id="preview_section"', isset($context['preview_message']) ? '' : ' style="display: none;"', '>
 				<div class="cat_bar rounded_top">
-					<h3 class="catbg">
+					<h3>
 						<span id="preview_subject">', empty($context['preview_subject']) ? '' : $context['preview_subject'], '</span>
 					</h3>
 				</div>
@@ -401,7 +401,7 @@ function template_main()
 
 	// Show the actual posting area...
 	echo '<div id="editor_main_content">
-		<div style="float:right;"><span id="editor_main_content_zoom" class="button">',$txt['zoom_editor'],'</span></div>';
+		<div class="floatright"><span id="editor_main_content_zoom" class="button">',$txt['zoom_editor'],'</span></div>';
 	if ($context['show_bbc'])
 	{
 		echo '
@@ -442,6 +442,7 @@ function template_main()
 							', $context['show_approval'] ? '<li><label for="approve"><input type="checkbox" name="approve" id="approve" value="2" class="input_check" ' . ($context['show_approval'] === 2 ? 'checked="checked"' : '') . ' /> ' . $txt['approve_this_post'] . '</label></li>' : '', '
 							', $context['can_stick_firstpost'] ? '<li><label for="stickfirst"><input type="checkbox" name="stickfirst" id="stickfirst" value="1" class="input_check" '.($context['first_is_sticky'] ? 'checked="checked"' : '') . ' />' . $txt['first_post_sticky'] . '</label></li>' : '', '
 							', $context['can_stick_firstpost'] ? '<li><label for="firstlayout"><input type="checkbox" name="firstlayout" id="firstlayout" value="1" class="input_check" '.($context['first_has_layout'] ? 'checked="checked"' : '') . ' />' . $txt['first_post_layout'] . '</label></li>' : '', '
+							', $context['can_merge_with_last'] ? '<li><label for="want_automerge"><input type="checkbox" name="want_automerge" id="want_automerge" value="1" class="input_check" />' . $txt['want_automerge'] . '</label></li>' : '', '
 						</ul>
 					</div>';
 

@@ -211,11 +211,11 @@ em
 }
 .clear_left
 {
-	clear: left;
+	clear: left !important;
 }
 .clear_right
 {
-	clear: right;
+	clear: right !important;
 }
 
 /* Default font sizes: small (8pt), normal (10pt), and large (14pt). */
@@ -1029,9 +1029,10 @@ table.table_grid thead tr.catbg th
 }
 
 span.m_downarrow, span.inlineprefix {
-    padding:8px 12px 6px 0px;
-    margin-left:-4px;
-    margin-right:4px;
+    padding:8px 0px 6px 5px;
+    margin-left:4px;
+    margin-right:-4px;
+    width:10px;
     float:left;
     background:transparent url(../images/theme/sprite.png) 0 7px no-repeat;
 }
@@ -1041,7 +1042,7 @@ span.inlineprefix {
 	margin-top:6px;
 }
 span.m_downarrow:hover {
-	background-color:#ccc !important;
+	background-color:black !important;
 }
 
 /* The dropdown menu toggle image */
@@ -4482,7 +4483,7 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
 			margin: 0 0 5px 15px;
 			z-index: 9999;
 		}
-		
+
 /* Styles for print media.
 ------------------------------------------------------- */
 @media print

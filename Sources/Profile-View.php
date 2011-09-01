@@ -481,7 +481,7 @@ function showPosts($memID)
 	$board_ids = array('own' => array(), 'any' => array());
 	
 	require_once($sourcedir . '/Subs-LikeSystem.php');
-	$can_give_like = allowedTo('like_give', $row['id_board']);
+	$can_give_like = false;
 	
 	$time_now = time();
 	while ($row = $smcFunc['db_fetch_assoc']($request))

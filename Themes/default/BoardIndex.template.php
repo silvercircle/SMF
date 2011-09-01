@@ -96,7 +96,7 @@ function template_main()
 		// If this category even can collapse, show a link to collapse it.
 		if ($category['can_collapse'])
 			echo '
-					<a style="float:right;" data-id="',$category['id'], '" class="collapse" href="', $category['collapse_href'], '">', $category['collapse_image'], '</a>';
+					<a onclick="catCollapse($(this));return(false);" data-id="',$category['id'], '" class="collapse floatright" href="', $category['collapse_href'], '">', $category['collapse_image'], '</a>';
 
 		if (!$context['user']['is_guest'] && $category['new'])
 			echo '

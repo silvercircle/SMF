@@ -10,7 +10,7 @@ function template_main()
 	global $txt, $context, $scripturl;
 
 	echo '
-	<div class="orange_container mediumpadding" style="float:right;width:250px;">
+	<div class="orange_container mediumpadding floatright" style="width:250px;">
 		<div class="cat_bar">
 			<h3>',$txt['smftags_popular'],'</h3>
 		</div>';
