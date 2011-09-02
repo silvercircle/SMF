@@ -1383,10 +1383,11 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'type' => 'unparsed_content',
 				'parameters' => array(
 					'alt' => array('optional' => true),
-					'width' => array('optional' => true, 'value' => ' width="$1"', 'match' => '(\d+)'),
-					'height' => array('optional' => true, 'value' => ' height="$1"', 'match' => '(\d+)'),
+					'width' => array('optional' => true, 'value' => 'width:$1px;', 'match' => '(\d+)'),
+					'height' => array('optional' => true, 'value' => 'height:$1px;', 'match' => '(\d+)'),
+					'resized' => array('optional' => true, 'value' => '_$1', 'match' => '(\d+)'),
 				),
-				'content' => '<a href="$1" class="bbc_img"><img src="$1" alt="{alt}"{width}{height} class="bbc_img resized" /></a>',
+				'content' => '<div class="bbc_img_cnt"><div class="bbc_resize{resized}">Resized image, click to zoom</div><br><img style="{width}{height}" src="$1" alt="{alt}" class="bbc_img resized" /></div><div class="clear"></div>',
 				'validate' => create_function('&$tag, &$data, $disabled', '
 					$data = strtr($data, array(\'<br />\' => \'\'));
 					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
@@ -1397,7 +1398,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			array(
 				'tag' => 'img',
 				'type' => 'unparsed_content',
-				'content' => '<a href="$1" class="bbc_img"><img src="$1" alt="" class="bbc_img" /></a>',
+				'content' => '<img src="$1" alt="" class="bbc_img" />',
 				'validate' => create_function('&$tag, &$data, $disabled', '
 					$data = strtr($data, array(\'<br />\' => \'\'));
 					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
@@ -1897,7 +1898,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 							}
 
 							// Set the new image tag.
-							$replaces[$matches[0][$match]] = '[img width=' . $width . ' height=' . $height . $alt . ']' . $imgtag . '[/img]';
+							$replaces[$matches[0][$match]] = '[img resized=1 width=' . $width . ' height=' . $height . $alt . ']' . $imgtag . '[/img]';
 						}
 						else
 							$replaces[$matches[0][$match]] = '[img' . $alt . ']' . $imgtag . '[/img]';

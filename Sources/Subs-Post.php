@@ -534,6 +534,7 @@ function fixTags(&$message)
 		$replaces = array();
 		foreach ($matches[0] as $match => $dummy)
 		{
+			$resized = '';
 			// If the width was after the height, handle it.
 			$matches[1][$match] = !empty($matches[3][$match]) ? $matches[3][$match] : $matches[1][$match];
 
@@ -569,6 +570,7 @@ function fixTags(&$message)
 			{
 				$desired_height = (int) (($modSettings['max_image_width'] * $desired_height) / $desired_width);
 				$desired_width = $modSettings['max_image_width'];
+				$resized = ' resized=1';
 			}
 
 			// Now check the height, as well.  Might have to scale twice, even...
@@ -576,9 +578,9 @@ function fixTags(&$message)
 			{
 				$desired_width = (int) (($modSettings['max_image_height'] * $desired_width) / $desired_height);
 				$desired_height = $modSettings['max_image_height'];
+				$resized = ' resized=1';
 			}
-
-			$replaces[$matches[0][$match]] = '[img' . (!empty($desired_width) ? ' width=' . $desired_width : '') . (!empty($desired_height) ? ' height=' . $desired_height : '') . ']' . $matches[4][$match] . '[/img]';
+			$replaces[$matches[0][$match]] = '[img'.$resized. (!empty($desired_width) ? ' width=' . $desired_width : '') . (!empty($desired_height) ? ' height=' . $desired_height : '') . ']' . $matches[4][$match] . '[/img]';
 		}
 
 		// If any img tags were actually changed...
@@ -1877,7 +1879,6 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 				$row = $smcFunc['db_fetch_assoc']($ar_result);
 				$new_msg_id = $row['Auto_increment'];
 				$smcFunc['db_free_result']($ar_result);
-				log_error('New msg id = '.$new_msg_id);
 			}
 		}
 		$smcFunc['db_free_result']($result);
@@ -2621,7 +2622,7 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		);
 	}
 	
-	if($msgOptions['id'] == $topicOptions['id_first_msg']) {
+	if(isset($topicOptions['id_first_msg']) && $msgOptions['id'] == $topicOptions['id_first_msg']) {
 		if(isset($topicOptions['topic_prefix']) /*&& $topicOptions['topic_prefix'] != null*/) {
 			$smcFunc['db_query']('', '
 				UPDATE {db_prefix}topics

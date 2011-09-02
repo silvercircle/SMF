@@ -56,6 +56,7 @@ function template_html_above()
 {
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
+	$_ver = '?v=1240';
 	// Show right to left and the character set for ease of translating.
 	echo '
 <!DOCTYPE html ', $context['right_to_left'] ? ' dir="rtl"' : '', '>
@@ -64,7 +65,7 @@ function template_html_above()
 
 	// The ?fin20 part of this link is just here to make sure browsers don't cache it wrongly.
 	echo '
-	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css" />';
+	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css',$_ver,'" />';
 
 	// Some browsers need an extra stylesheet due to bugs/compatibility issues.
 	//foreach (array('ie7', 'ie6', 'webkit') as $cssfix)
@@ -79,11 +80,11 @@ function template_html_above()
 
 	// Here comes the JavaScript bits!
 		echo '
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js?v=12"></script>
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js?v=12"></script>';
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js?v=162"></script>
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js',$_ver,'"></script>';
 	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin')
 		echo '
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/admin.js?v=12"></script>';
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/admin.js',$_ver,'"></script>';
 	echo '
 	<script type="text/javascript">
 	// <![CDATA[
@@ -109,7 +110,7 @@ function template_html_above()
 	var t2 = document.createElement(\'SCRIPT\');
 	t2.type = "text/javascript";
 	t2.async = true;
-	t2.src = "',$settings['theme_url'],'/scripts/footer.js?v=12";
+	t2.src = "',$settings['theme_url'],'/scripts/footer.js',$_ver,'";
 	anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
 	</script>';
@@ -461,13 +462,13 @@ function template_menu()
 		if(!isset($button['active_button']))
 			$button['active_button'] = false;
 		echo '
-				<li id="button_', $act, '">
-					<a class="', $button['active_button'] ? 'active ' : '', 'firstlevel" href="', $button['href'], '"', isset($button['target']) ? ' target="' . $button['target'] . '"' : '', '>
+				<li class="', $button['active_button'] ? 'active' : '', '" id="button_', $act, '">
+					<a class="firstlevel" href="', $button['href'], '"', isset($button['target']) ? ' target="' . $button['target'] . '"' : '', '>
 						<span class="', isset($button['is_last']) ? 'last ' : '', 'firstlevel">', $button['title'];
-						if($has_subitems)
-							echo '<span style="float:right;" id="_',$act,'" class="m_downarrow">&nbsp;</span>';
 					echo '</span>';
 					echo '</a>';
+					if($has_subitems)
+						echo '<span style="display:inline-block;" id="_',$act,'" class="m_downarrow">&nbsp;</span>';
 		if ($has_subitems)
 		{
 			echo '

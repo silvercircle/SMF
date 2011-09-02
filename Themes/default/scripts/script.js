@@ -1360,7 +1360,7 @@ function smc_toggleImageDimensions()
 };
 
 // Add a load event for the function above.
-addLoadEvent(smc_toggleImageDimensions);
+//addLoadEvent(smc_toggleImageDimensions);
 
 // Adds a button to a certain button strip.
 function smf_addButton(sButtonStripId, bUseImage, oOptions)

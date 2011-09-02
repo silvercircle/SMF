@@ -186,11 +186,11 @@ em
 
 .floatright
 {
-	float: right;
+	float: right !important;
 }
 .floatleft
 {
-	float: left;
+	float: left !important;
 }
 
 .flow_auto
@@ -326,10 +326,6 @@ code.bbc_code
 }
 
 /* Styling for BBC tags */
-.bbc_link:link, .bbc_link:visited
-{
-	border-bottom: 1px solid #A8B6CF;
-}
 .bbc_link:hover
 {
 	text-decoration: none;
@@ -349,6 +345,24 @@ code.bbc_code
 	width:auto;
 	height:auto;
 	border: 0;
+}
+.bbc_img_cnt {
+	max-width:100%;
+}
+.bbc_resize {
+	display:none;
+}
+.bbc_resize_1
+{
+	height:20px;
+	cursor:pointer;
+	text-align:center;
+	color:white;
+	font-weight:bold;
+	padding:2px 10px;
+	background-color:#888;
+	display:inline;
+	border-radius:5px 5px 0 0;
 }
 .bbc_table
 {
@@ -931,12 +945,10 @@ table.table_grid thead tr.catbg th
 }
 .dropmenu li a.firstlevel span.firstlevel
 {
-	display: block;
-	position: relative;
 	height: 20px;
 	line-height: 20px;
 	white-space: pre;
-	padding:2px 5px 2px 5px;
+	padding:2px 10px 2px 5px;
 }
 .dropmenu > li
 {
@@ -951,9 +963,9 @@ table.table_grid thead tr.catbg th
 	display: none;
 	position: absolute;
 	width: auto;
+	top:24px;
 	background-color:#98AABA;
 	padding: 0 0 0 0;
-	margin-top:22px;
 	width:20em;
 	box-shadow: 1px 1px 4px 1px #888;
 	border:1px solid #888;
@@ -981,7 +993,7 @@ table.table_grid thead tr.catbg th
 }
 
 /* the active button */
-.dropmenu li a.active
+.dropmenu li.active a.firstlevel, .dropmenu li.active span.m_downarrow
 {
 	color: white;
 	font-weight: bold;
@@ -993,15 +1005,11 @@ table.table_grid thead tr.catbg th
 {
 	background-color:#333355;
 }
-/* the hover effects */
-.dropmenu li a.firstlevel:hover, .dropmenu li:hover a.firstlevel
-{
-	cursor: pointer;
-	text-decoration: none;
-}
-.dropmenu li a.firstlevel:hover span.firstlevel, .dropmenu li:hover a.firstlevel span.firstlevel
+.dropmenu li:hover
 {
 	background-color:#ccc;
+	cursor: pointer;
+	text-decoration: none;
 }
 /* the hover effects on level2 and 3 */
 .dropmenu li li a:hover, .dropmenu li li:hover>a
@@ -1029,11 +1037,10 @@ table.table_grid thead tr.catbg th
 }
 
 span.m_downarrow, span.inlineprefix {
-    padding:8px 0px 6px 5px;
-    margin-left:4px;
-    margin-right:-4px;
-    width:10px;
-    float:left;
+    padding:2px 4px 2px 0;
+    width:14px;
+    margin-left:-12px;
+    height:20px;
     background:transparent url(../images/theme/sprite.png) 0 7px no-repeat;
 }
 span.inlineprefix {
@@ -1093,8 +1100,8 @@ ul#navigation li
 	color:black;
 	padding:0;
 	position:relative;
-	position:relative;
 	top:4px;
+	padding-bottom:4px;
 }
 
 #adm_submenus li a {
@@ -1123,7 +1130,8 @@ ul#navigation li
 	margin-left:-3px;
 	padding:1px 5px;
 	position:relative;
-	top:-4px;
+	top:-2px;
+	margin-bottom:-2px;
 }
 /* Styles for the general looks for the Curve theme.
 ------------------------------------------------------- */
@@ -3594,10 +3602,8 @@ a.navPages {
 	background-color:#fff2f2;
 }
 span.small_avatar img {
-	max-height:32px;
-	max-width:32px;
-	width:auto;
-	height:auto;
+	height:32px;
+	width:32px;
 	border:1px solid #d5ecfa;
 	border-radius:2px;
 	background-color:#f0f0f0;

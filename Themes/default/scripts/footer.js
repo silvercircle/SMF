@@ -963,7 +963,7 @@ jQuery(document).ready(function() {
 	// only react on DOM events.
 	$('html > head').append('<style>#menu_nav li:hover ul { display: none; }</style>');
 
-	// arrow clicked -> open the menu
+	// pull down menu handlers
 	jQuery('.m_downarrow').click(function() {
 		var id = 'button' + jQuery(this).attr('id');
 		jQuery('#' + id).children('ul:first').show();
@@ -988,8 +988,14 @@ jQuery(document).ready(function() {
 			jQuery(this).children('ul').hide();
 		}
 	});
-	$('a.bbc_img').prettyPhoto({social_tools:'', allow_resize:true,animation_speed:0, show_title:false});
+	$('.bbc_resize_1').click(function() {
+		var url = $(this).parent().children('img.bbc_img:first').attr('src');
+		$.prettyPhoto.open(url);
+		return(false);
+	});
+	// bbcode img tag and attachment handlers
 	$('a.attach_thumb').prettyPhoto({social_tools:'', deeplinking:false, overlay_gallery:false, animation_speed:0});
+	// passive share button (for sharing a topic)
 	$('.share_button').click(function() {
 		share_popup($(this).attr('href'), 700, 400);
 		return(false);
@@ -997,12 +1003,11 @@ jQuery(document).ready(function() {
 	// initiate a ajax request to open a member card
 	$('.mcard').click(function() {
 		var uid = $(this).attr('data-id');
-		if(uid > 0) {
+		if(uid > 0)
 			sendRequest(smf_scripturl, 'action=xmlhttp;sa=mcard;u=' + parseInt(uid), $(this));
-		}
 		return(false);
 	});
-	// close the member card
+	// close the overlay (member card, topic preview etc. wipe its content)
 	$('#mcard_close').click(function() {
 		$('#mcard').hide();
 		$('#mcard_inner').html('');
@@ -1036,12 +1041,14 @@ jQuery(document).ready(function() {
 			else
 				$(this).removeClass('inline_highlight');
 		});
+		return(false);
 	});
 	
 	$('table.table_grid th .input_check').change(function() {
 		$('table.table_grid td .input_check').each(function() {
 			$(this).change();
 		});
+		return(false);
 	});
 	
 	// handle the topic preview functionality in MessageIndex
@@ -1081,6 +1088,7 @@ function whoPosted(el)
 	return(false);
 }
 
+// collapse / expand a board index category
 function catCollapse(el)
 {
 	var img = el.children('img:first');
@@ -1102,6 +1110,7 @@ function catCollapse(el)
 	return(false);
 }
 
+// toggle the side bar
 function sbToggle(el)
 {
 	// side bar (toggle, animate, load content via ajax request)

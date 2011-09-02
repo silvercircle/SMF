@@ -264,6 +264,7 @@ QuickModify.prototype.onMessageReceived = function (XMLDoc)
 
 	// We have to force the body to lose its dollar signs thanks to IE.
 	sBodyText = sBodyText.replace(/\$/g, '{&dollarfix;$}');
+	sSubjectText = XMLDoc.getElementsByTagName('subject')[0].childNodes[0].nodeValue.replace(/\$/g, '{&dollarfix;$}');
 
 	// Actually create the content, with a bodge for disappearing dollar signs.
 	setInnerHTML(this.oCurMessageDiv, this.opt.sTemplateBodyEdit.replace(/%msg_id%/g, this.sCurMessageId.substr(4)).replace(/%body%/, sBodyText).replace(/\{&dollarfix;\$\}/g, '$'));
@@ -272,7 +273,6 @@ QuickModify.prototype.onMessageReceived = function (XMLDoc)
 	this.oCurSubjectDiv = document.getElementById('subject_' + this.sCurMessageId.substr(4));
 	this.sSubjectBuffer = getInnerHTML(this.oCurSubjectDiv);
 
-	sSubjectText = XMLDoc.getElementsByTagName('subject')[0].childNodes[0].nodeValue.replace(/\$/g, '{&dollarfix;$}');
 	setInnerHTML(this.oCurSubjectDiv, this.opt.sTemplateSubjectEdit.replace(/%subject%/, sSubjectText).replace(/\{&dollarfix;\$\}/g, '$'));
 
 	return true;
@@ -306,7 +306,7 @@ QuickModify.prototype.modifySave = function (sSessionId, sSessionVar)
 		sSessionVar = 'sesc';
 
 	var i, x = new Array();
-	x[x.length] = 'subject=' + escape(document.forms.quickModForm['subject'].value.replace(/&#/g, "&#38;#").php_to8bit()).replace(/\+/g, "%2B");
+	x[x.length] = 'subject=' + escape(document.forms.quickModForm['subject_edit'].value.replace(/&#/g, "&#38;#").php_to8bit()).replace(/\+/g, "%2B");
 	x[x.length] = 'message=' + escape(document.forms.quickModForm['message'].value.replace(/&#/g, "&#38;#").php_to8bit()).replace(/\+/g, "%2B");
 	x[x.length] = 'topic=' + parseInt(document.forms.quickModForm.elements['topic'].value);
 	x[x.length] = 'msg=' + parseInt(document.forms.quickModForm.elements['msg'].value);
@@ -318,7 +318,19 @@ QuickModify.prototype.modifySave = function (sSessionId, sSessionVar)
 	return false;
 }
 
-// Callback function of the XMLhttp request sending the modified message.
+// go advanced
+// data-alt attribute of the form has the correct url for entering edit post mode
+// so modify the form action and submit it (just need to fill out our msg id)
+QuickModify.prototype.goAdvanced = function (sSessionId, sSessionVar)
+{
+	var form = document.forms.quickModForm;
+	var act_new = form.getAttribute('data-alt').replace(/%id_msg%/g, form.elements['msg'].value);
+	form.elements['subject'].value = form.elements['subject_edit'].value;
+	form.action = act_new;
+	form.submit();
+	return(false);
+}
+
 QuickModify.prototype.onModifyDone = function (XMLDoc)
 {
 	setBusy(0);

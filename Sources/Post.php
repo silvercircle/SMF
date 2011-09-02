@@ -618,7 +618,7 @@ function Post()
 					m.id_member, m.modified_time, m.smileys_enabled, m.body,
 					m.poster_name, m.poster_email, m.subject, m.icon, m.approved,
 					IFNULL(a.size, -1) AS filesize, a.filename, a.id_attach,
-					a.approved AS attachment_approved, t.id_member_started AS id_member_poster,
+					a.approved AS attachment_approved, t.id_member_started AS id_member_poster, t.id_layout, t.id_prefix,
 					m.poster_time
 			FROM {db_prefix}messages AS m
 					INNER JOIN {db_prefix}topics AS t ON (t.id_topic = {int:current_topic})
@@ -637,6 +637,10 @@ function Post()
 				fatal_lang_error('no_board', false);
 			$row = $smcFunc['db_fetch_assoc']($request);
 
+			$context['id_prefix'] = $row['id_prefix'];
+			$context['first_is_sticky'] = ((int)$row['id_layout'] & 0x80);
+			$context['first_has_layout'] = ((int)$row['id_layout'] & 0x7f);
+			
 			$attachment_stuff = array($row);
 			while ($row2 = $smcFunc['db_fetch_assoc']($request))
 				$attachment_stuff[] = $row2;
@@ -681,7 +685,6 @@ function Post()
 				}
 				$smcFunc['db_free_result']($request);
 			}
-
 			// Allow moderators to change names....
 			if (allowedTo('moderate_forum') && !empty($topic))
 			{
@@ -1153,7 +1156,7 @@ function Post()
 	
 	// Loading a draft here? (Draft id in URL, not guest, has permission and there's not a message already in the editor)
 	if ((!empty($_REQUEST['draft_id']) && !empty($user_info['id']) && $context['save_draft'] && empty($_POST['subject']) && empty($_POST['message'])) || 
-		(!empty($user_info['id']) && $context['save_draft'] && 0 != $msgid)) {
+		(!empty($user_info['id']) && $context['save_draft'] && 0 != $msgid && empty($_POST['message']))) {
 		
 		$id_cond = empty($_REQUEST['draft_id']) ? '1=1' : ' id_draft = {int:draft} ';
 		$id_sel = $msgid ? ' AND id_msg = {int:message} ' : ' AND id_board = {int:board} AND id_topic = {int:topic} ';
@@ -2780,7 +2783,7 @@ function getTopic()
 
 function QuoteFast()
 {
-	global $modSettings, $user_info, $txt, $settings, $context;
+	global $modSettings, $user_info, $txt, $settings, $context, $options;
 	global $sourcedir, $smcFunc;
 
 	loadLanguage('Post');
@@ -2811,10 +2814,23 @@ function QuoteFast()
 			'not_locked' => 0,
 		)
 	);
+	
+	// quick modify, attempt to find existing drafts and load them
+	if(isset($_REQUEST['modify']) && !$user_info['is_guest'] && !empty($modSettings['masterSaveDrafts']) && !empty($options['use_drafts'])) {
+		$draftrequest = $smcFunc['db_query']('', '
+			SELECT body FROM {db_prefix}drafts WHERE id_msg = {int:id_msg} AND id_member = {int:user}',
+				array('id_msg' => (int)$_REQUEST['quote'], 'user' => $user_info['id']));
+		$draftrow = $smcFunc['db_fetch_assoc']($draftrequest);
+		$smcFunc['db_free_result']($draftrequest);
+	}
+	
 	$context['close_window'] = $smcFunc['db_num_rows']($request) == 0;
 	$row = $smcFunc['db_fetch_assoc']($request);
 	$smcFunc['db_free_result']($request);
 
+	if(isset($_REQUEST['modify']) && isset($draftrow) && !empty($draftrow['body']) && !empty($row))
+		$row['body'] = $draftrow['body'];
+		
 	$context['sub_template'] = 'quotefast';
 	if (!empty($row))
 		$can_view_post = $row['approved'] || ($row['id_member'] != 0 && $row['id_member'] == $user_info['id']) || allowedTo('approve_posts', $row['id_board']);

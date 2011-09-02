@@ -160,11 +160,6 @@ function template_postbit_normal(&$message, $ignoring)
 		</article>
 		</div>';
 						
-	// Can the user modify the contents of this post?  Show the modify inline image.
-	if ($message['can_modify'])
-		echo '
-		<span style="cursor:pointer;" class="modifybutton" id="modify_button_', $message['id'], '" onclick="oQuickModify.modifyMsg(\'', $message['id'], '\')">',$txt['modify'],'</span>';
-
 	// Assuming there are attachments...
 	if (!empty($message['attachment']))
 	{
@@ -309,7 +304,7 @@ function template_postbit_normal(&$message, $ignoring)
 	// Can the user modify the contents of this post?
 	if ($message['can_modify'])
 		echo '
-			<li class="modify_button"><a href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
+			<li class="modify_button"><a onclick="oQuickModify.modifyMsg(\'', $message['id'], '\');return(false);" href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
 
 	// How about... even... remove it entirely?!
 	if ($message['can_remove'])
@@ -456,12 +451,6 @@ function template_postbit_blog(&$message, $ignoring)
 							</article>
 						</div>';
 
-	// Can the user modify the contents of this post?  Show the modify inline image.
-	if ($message['can_modify'])
-		echo '
-						<span style="cursor:pointer;" class="modifybutton" id="modify_button_', $message['id'], '" onclick="oQuickModify.modifyMsg(\'', $message['id'], '\')">',$txt['modify'],'</span>';
-
-	// Assuming there are attachments...
 	// Assuming there are attachments...
 	if (!empty($message['attachment']))
 	{
@@ -598,7 +587,7 @@ function template_postbit_blog(&$message, $ignoring)
 	// Can the user modify the contents of this post?
 	if ($message['can_modify'])
 		echo '
-								<li class="modify_button"><a href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
+			<li class="modify_button"><a onclick="oQuickModify.modifyMsg(\'', $message['id'], '\');return(false);" href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
 
 	// How about... even... remove it entirely?!
 	if ($message['can_remove'])
