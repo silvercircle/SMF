@@ -182,8 +182,8 @@ function template_info_center()
 						', $context['show_who'] ? '<a href="' . $scripturl . '?action=who' . '">' : '', $txt['online_users'], $context['show_who'] ? '</a>' : '', '
 					</h3>
 				</div>
-				<div class="blue_container smallpadding smalltext">
-					', $context['show_who'] ? '<a href="' . $scripturl . '?action=who">' : '', comma_format($context['num_guests']), ' ', $context['num_guests'] == 1 ? $txt['guest'] : $txt['guests'], ', ' . comma_format($context['num_users_online']), ' ', $context['num_users_online'] == 1 ? $txt['user'] : $txt['users'];
+				<div class="blue_container smallpadding smalltext">',
+					sprintf($txt['who_summary'], $context['num_guests'], $context['num_users_online'], $modSettings['lastActive']);
 
 		// Handle hidden users and buddies.
 		$bracketList = array();
@@ -197,8 +197,9 @@ function template_info_center()
 		if (!empty($bracketList))
 			echo ' (' . implode(', ', $bracketList) . ')';
 
-		echo $context['show_who'] ? '</a>' : '', '
-				<p class="inline smalltext">';
+		echo ($context['show_who'] ? '<br>'.$txt['who_showby'].'<a href="'.$scripturl.'?action=who;show=all;sort=user">'.$txt['username'].'</a> | <a href="'.$scripturl.'?action=who;show=all;sort=time">'.$txt['who_lastact'].'</a>' : '');
+		echo '
+			<p class="inline smalltext">';
 
 		// Assuming there ARE users online... each user in users_online has an id, username, name, group, href, and link.
 		if (!empty($context['users_online']))

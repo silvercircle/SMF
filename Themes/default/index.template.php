@@ -49,6 +49,7 @@ function template_init()
 	/* The version this template/theme is for.
 		This should probably be the version of SMF it was created for. */
 	$settings['theme_version'] = '2.0';
+	$context['jsver'] = '?v=1433';
 }
 
 // The main sub template above the content.
@@ -56,7 +57,6 @@ function template_html_above()
 {
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
-	$_ver = '?v=1240';
 	// Show right to left and the character set for ease of translating.
 	echo '
 <!DOCTYPE html ', $context['right_to_left'] ? ' dir="rtl"' : '', '>
@@ -65,7 +65,7 @@ function template_html_above()
 
 	// The ?fin20 part of this link is just here to make sure browsers don't cache it wrongly.
 	echo '
-	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css',$_ver,'" />';
+	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css',$context['jsver'],'" />';
 
 	// Some browsers need an extra stylesheet due to bugs/compatibility issues.
 	//foreach (array('ie7', 'ie6', 'webkit') as $cssfix)
@@ -81,10 +81,10 @@ function template_html_above()
 	// Here comes the JavaScript bits!
 		echo '
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js?v=162"></script>
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js',$_ver,'"></script>';
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js',$context['jsver'],'"></script>';
 	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin')
 		echo '
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/admin.js',$_ver,'"></script>';
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/admin.js',$context['jsver'],'"></script>';
 	echo '
 	<script type="text/javascript">
 	// <![CDATA[
@@ -110,7 +110,7 @@ function template_html_above()
 	var t2 = document.createElement(\'SCRIPT\');
 	t2.type = "text/javascript";
 	t2.async = true;
-	t2.src = "',$settings['theme_url'],'/scripts/footer.js',$_ver,'";
+	t2.src = "',$settings['theme_url'],'/scripts/footer.js',$context['jsver'],'";
 	anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
 	</script>';
@@ -164,7 +164,7 @@ function template_body_above()
 
 	echo '
 	<div id="ajaxbusy" style="display:none;"><img src="',$settings['images_url'],'/ajax-loader.gif" alt="loader" /></div>
-	<div id="mcard" style="display:none;"><div id="mcard_close">X</div><div id="mcard_inner"></div></div>
+	<div id="mcard" style="display:none;"><div onclick="mcardClose();" id="mcard_close">X</div><div id="mcard_inner"></div></div>
 	<div id="wrap" style="max-width:',empty($settings['forum_width']) ? '3000px' : $settings['forum_width'],';">
 	<header>
 	<div id="header">
@@ -213,7 +213,7 @@ function template_body_above()
 			<div onclick="sbToggle($(this));" id="sbtoggle">',$sidebar_vis ? '&nbsp;&gt;' : '&nbsp;&lt;','</div>';
 	// Show the navigation tree.
 	$scope = 0;
-	echo '<form onmouseout="return false;" onsubmit="submitSearchBox();" class="floatright" style="margin-right:30px;margin-bottom:-20px;" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
+	echo '<form onmouseout="return false;" onsubmit="submitSearchBox();" class="floatright" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
 			// Search within current topic?
 			$search_label = 'Search';
 			if (isset($context['current_topic']) && $context['current_topic']) {
@@ -225,9 +225,9 @@ function template_body_above()
 				$search_label = 'Search this board';
 				$scope = 1;
 			}
-			echo '<input style="width:215px;padding-left:26px;margin:0;" onclick="var s_event = arguments[0] || window.event;openAdvSearch(s_event);return(false);" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" name="search" value="',$search_label,'" class="searchfield" />
-				<div id="adv_search" style="width:246px;position:absolute;top:0;display:none;padding:0;padding-top:30px;" class="smalltext">
-				<div class="orange_container">
+			echo '
+				<div id="adv_search" style="width:246px;padding:0;" class="smalltext">
+				<input style="width:215px;padding-left:26px;margin:0;" onclick="var s_event = arguments[0] || window.event;openAdvSearch(s_event);return(false);" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" name="search" value="',$search_label,'" class="searchfield" />
 				&nbsp;&nbsp;&nbsp;Search posts by member<br />
 				<div style="text-align:center;margin-bottom:10px;"><input style="width:90%;" class="input_text" type="text" name="userspec" id="userspec" value="*" /></div>
 				<input type="checkbox" name="show_complete" id="show_complete" value="1" />Show results as messages<br />';
@@ -245,7 +245,7 @@ function template_body_above()
 				}
 				echo '<input style="width:100%;margin:10px 0;" type="submit" name="submit" value="', 'Search now', '" class="button_submit" />
 			 	  <div style="text-align:center;"><a href="',$scripturl,'?action=search" >Go advanced</a></div>';
-				echo '</div></div>
+				echo '</div>
 				<noscript>
 				<input style="margin:0;" type="submit" name="submit" value="', $txt['go'], '" class="button_submit" />
 				</noscript>';
@@ -468,7 +468,7 @@ function template_menu()
 					echo '</span>';
 					echo '</a>';
 					if($has_subitems)
-						echo '<span style="display:inline-block;" id="_',$act,'" class="m_downarrow">&nbsp;</span>';
+						echo '<span onclick="onMenuArrowClick($(this));" style="display:inline-block;" id="_',$act,'" class="m_downarrow">&nbsp;</span>';
 		if ($has_subitems)
 		{
 			echo '
@@ -814,7 +814,8 @@ function template_sidebar_content()
 	// Show information about events, birthdays, and holidays on the calendar.
 	if ($context['show_calendar'])
 	{
-		$collapser = array('id' => 'cal_panel', 'title' => '<a href="'. $scripturl. '?action=calendar' . '">'. $context['calendar_only_today'] ? $txt['calendar_today'] : $txt['calendar_upcoming']. '</a>');
+		$title = $context['calendar_only_today'] ? $txt['calendar_today'] : ($txt['calendar']. ' (Next '.$modSettings['cal_days_for_index'].' days)');
+		$collapser = array('id' => 'cal_panel', 'title' => '<a href="'. $scripturl. '?action=calendar' . '">'. $title . '</a>');
 		template_create_collapsible_container($collapser);
 		echo '
 			<div class="smalltext">';
@@ -822,13 +823,12 @@ function template_sidebar_content()
 		// Holidays like "Christmas", "Chanukah", and "We Love [Unknown] Day" :P.
 		if (!empty($context['calendar_holidays']))
 				echo '
-				<span class="holiday">', $txt['calendar_prompt'], ' ', implode(', ', $context['calendar_holidays']), '</span><br />';
+				<div class="holiday">', $txt['calendar_prompt'], '</div>', implode(', ', $context['calendar_holidays']), '<br><div class="cContainer_end"></div>';
 
 		// People's birthdays. Like mine. And yours, I guess. Kidding.
-		if (!empty($context['calendar_birthdays']))
-		{
+		if (!empty($context['calendar_birthdays']))	{
 				echo '
-				<span class="birthday">', $context['calendar_only_today'] ? $txt['birthdays'] : $txt['birthdays_upcoming'], '</span> ';
+				<div class="birthday">', $context['calendar_only_today'] ? $txt['birthdays'] : $txt['birthdays_upcoming'], '</div> ';
 		/* Each member in calendar_birthdays has:
 				id, name (person), age (if they have one set?), is_last. (last in list?), and is_today (birthday is today?) */
 		foreach ($context['calendar_birthdays'] as $member)
@@ -862,7 +862,8 @@ function template_sidebar_content()
  * you can optionally pass css classes for the the header bar and the body
  * object. By default, the cContainer_* classes define the style.
  * gracefully degrades for people without JavaScript - always expanded.
- * id MUST be globally unique 
+ * id MUST be globally unique for the page
+ * relies on jQuery
  */
 function template_create_collapsible_container(array &$_c)
 {

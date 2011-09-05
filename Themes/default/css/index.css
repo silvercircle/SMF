@@ -62,7 +62,19 @@ form
 }
 
 img.icon {vertical-align:middle;padding:0;margin:0 3px;border:0;height:16px;}
-#search_form {margin-bottom:0px;position:relative;top:-70px;padding:5px 10px 0 10px;background-color:white;border-top-left-radius:6px;border-top-right-radius:6px;}
+#search_form {
+	margin-bottom:0px;
+	position:absolute;top:80px;right:50px;padding:5px 10px 0 10px;
+	background-color:white;border-top-left-radius:6px;border-top-right-radius:6px;
+	border:1px solid white;
+	height:26px;
+	overflow:hidden;
+}
+.search_form_active
+{
+	background-color: #fff6e2 !important;
+	border:1px solid #f8da8b !important;
+}
 .searchfield {background:#fff url(../images/theme/sicon.png) 3px center no-repeat;font-weight:bold;font-size:12px;border:1px solid #A3B2D0;min-height:18px;}
 
 input, select, textarea
@@ -149,15 +161,15 @@ h1, h2, h3, h4, h5, h6
 /* Fieldsets are used to group elements. */
 fieldset
 {
-	background-color:#f2f5fe;
-	border:1px solid #d5ecfa;
 	padding: 1em;
 	margin: 10px;
+	border:1px solid #ddd;
 }
 fieldset legend
 {
 	font-weight: bold;
 	color: #444;
+	padding:0 5px;
 }
 /* No image should have a border when linked. */
 a img
@@ -1845,7 +1857,7 @@ p#whoisviewing
 	max-width:100px;
 }
 
-#mcard_inner img {max-width:100px;}
+#mcard_inner div.bbc_img_cnt {display:none;}
 
 .poster li.warning
 {
@@ -2553,7 +2565,7 @@ tr.titlebg td
 	background:white;
 	right:-1px;
 	float:left;
-	margin-top:15px;
+	margin-top:25px;
 	z-index:10;
 	min-height:600px;
 	border-right:1px solid #F8DA8B;
@@ -2605,6 +2617,7 @@ tr.titlebg td
 	border-radius:8px 8px 8px 0;
 	padding:5px;
 	overflow: hidden;
+	margin-top:10px;
 }
 
 tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td

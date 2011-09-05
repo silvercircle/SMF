@@ -2097,14 +2097,15 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 		$tag = null;
 		foreach ($bbc_codes[$tags] as $possible)
 		{
+			$_len = strlen($possible['tag']);
 			// Not a match?
-			if (strtolower(substr($message, $pos + 1, strlen($possible['tag']))) != $possible['tag'])
+			if (strtolower(substr($message, $pos + 1, $_len)) != $possible['tag'])
 				continue;
 
-			$next_c = substr($message, $pos + 1 + strlen($possible['tag']), 1);
+			$next_c = substr($message, $pos + 1 + $_len, 1);
 
 			// A test validation?
-			if (isset($possible['test']) && preg_match('~^' . $possible['test'] . '~', substr($message, $pos + 1 + strlen($possible['tag']) + 1)) == 0)
+			if (isset($possible['test']) && preg_match('~^' . $possible['test'] . '~', substr($message, $pos + 1 + $_len + 1)) == 0)
 				continue;
 			// Do we want parameters?
 			elseif (!empty($possible['parameters']))
@@ -2118,7 +2119,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				if (in_array($possible['type'], array('unparsed_equals', 'unparsed_commas', 'unparsed_commas_content', 'unparsed_equals_content', 'parsed_equals')) && $next_c != '=')
 					continue;
 				// Maybe we just want a /...
-				if ($possible['type'] == 'closed' && $next_c != ']' && substr($message, $pos + 1 + strlen($possible['tag']), 2) != '/]' && substr($message, $pos + 1 + strlen($possible['tag']), 3) != ' /]')
+				if ($possible['type'] == 'closed' && $next_c != ']' && substr($message, $pos + 1 + $_len, 2) != '/]' && substr($message, $pos + 1 + $_len, 3) != ' /]')
 					continue;
 				// An immediate ]?
 				if ($possible['type'] == 'unparsed_content' && $next_c != ']')
@@ -2137,7 +2138,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			elseif (isset($inside['disallow_children']) && in_array($possible['tag'], $inside['disallow_children']))
 				continue;
 
-			$pos1 = $pos + 1 + strlen($possible['tag']) + 1;
+			$pos1 = $pos + 1 + $_len + 1;
 
 			// Quotes can have alternate styling, we do this php-side due to all the permutations of quotes.
 			if ($possible['tag'] == 'quote')
@@ -2533,8 +2534,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 
 	// Cache the output if it took some time...
 	
-	if (stripos($message, '[fn]') !== false && (empty($parse_tags) || in_array('nb', $parse_tags)) && (!isset($_REQUEST['action']) || $_REQUEST['action'] != 'jseditor'))
-	{
+	if (stripos($message, '[fn]') !== false && (empty($parse_tags) || in_array('nb', $parse_tags)) && (!isset($_REQUEST['action']) || $_REQUEST['action'] != 'jseditor')) {
 		preg_match_all('~\s*\[fn]((?>[^[]|\[(?!/?nb])|(?R))+?)\[/fn\]~i', $message, $matches, PREG_SET_ORDER);
 
 		if (count($matches) > 0) {
@@ -2542,14 +2542,12 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			global $addnote;
 			if (is_null($addnote))
 				$addnote = array();
-			foreach ($matches as $m)
-			{
+			foreach ($matches as $m) {
 				$my_pos = $end_blockquote = strpos($message, $m[0]);
 				$message = substr_replace($message, '<a class="fnote_ref" id="footlink' . ++$feet . '" href="#footnote' . $feet . '">[' . ++$f . ']</a>', $my_pos, strlen($m[0]));
 				$addnote[$feet] = array($feet, $f, $m[1]);
 
-				while ($end_blockquote !== false)
-				{
+				while ($end_blockquote !== false) {
 					$end_blockquote = strpos($message, '</blockquote>', $my_pos);
 					if ($end_blockquote === false)
 						continue;
@@ -2557,8 +2555,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 					$start_blockquote = strpos($message, '<blockquote', $my_pos);
 					if ($start_blockquote !== false && $start_blockquote < $end_blockquote)
 						$my_pos = $end_blockquote + 1;
-					else
-					{
+					else {
 						$message = substr_replace($message, '<foot:' . $feet . '>', $end_blockquote, 0);
 						break;
 					}

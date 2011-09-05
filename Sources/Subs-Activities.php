@@ -10,6 +10,9 @@
  * @version 2.0
  */
 
+if (!defined('SMF'))
+	die('Hacking attempt...');
+
 define('ACT_LIKE', 1);			// user liked a post (for activities)
 define('ACT_LIKED', 1);			// a user's post was liked by another member (for notification / alerts)
 
@@ -40,8 +43,8 @@ function stream_add_activity($id_member, $atype, $params, $id_board)
 	$smcFunc['db_query']('', '
 		INSERT INTO {db_prefix}log_activities (id_member, id_type, updated, params, is_private, id_board) 
 			VALUES({int:id_member}, {int:id_type}, {int:updated}, {string:params}, {int:private}, {int:board})',
-			array('id_member' => $id_member, 'id_type' => $atype, 'updated' => time(),
-			'params' => serialize($params), 'private' => 0, 'board' => $id_board));
+			array('id_member' => (int)$id_member, 'id_type' => (int)$atype, 'updated' => time(),
+			'params' => serialize($params), 'private' => 0, 'board' => (int)$id_board));
 			
 	//$out = _vsprintf($txt['actfmt_like_given'], $params);
 	//echo preg_replace('/@SCRIPTURL@/', $scripturl, $out);

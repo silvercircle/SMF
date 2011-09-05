@@ -25,7 +25,7 @@ function template_main()
 			echo '<span class="ie6_header floatleft">', $txt['set_parameters'], '</span>
 			<div class="clear"></div>
 		</div>
-		<div>';
+		<div class="blue_container">';
 
 		
 	if (!empty($context['search_errors']))
@@ -138,7 +138,7 @@ function template_main()
 
 		if (empty($context['search_params']['topic']))
 		{
-			$collapser = array('id' => 'search_boards', 'title' => $txt['choose_board']);
+			$collapser = array('id' => 'search_boards', 'title' => $txt['choose_board'], 'bodyclass' => 'flat_container');
 			template_create_collapsible_container($collapser);
 			echo '
 		<fieldset class="flow_hidden">

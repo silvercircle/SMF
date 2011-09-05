@@ -160,12 +160,15 @@ function reloadSettings()
 		if (empty($modSettings['defaultMaxMembers']) || $modSettings['defaultMaxMembers'] <= 0 || $modSettings['defaultMaxMembers'] > 999)
 			$modSettings['defaultMaxMembers'] = 30;
 
+		if (empty($modSettings['max_messageLength']))
+			$modSettings['max_messageLength'] = 1024 * 1024;	// hard post length limit, 1M *should* be more than ever needed
+			
 		if (!empty($modSettings['cache_enable']))
 			cache_put_data('modSettings', $modSettings, 90);
 	}
 
 	// UTF-8 in regular expressions is unsupported on PHP(win) versions < 4.2.3.
-	$utf8 = (empty($modSettings['global_character_set']) ? $txt['lang_character_set'] : $modSettings['global_character_set']) === 'UTF-8' && (strpos(strtolower(PHP_OS), 'win') === false || @version_compare(PHP_VERSION, '4.2.3') != -1);
+	$utf8 = (empty($modSettings['global_character_set']) ? $txt['lang_character_set'] : $modSettings['global_character_set']) === 'UTF-8';
 
 	// Set a list of common functions.
 	$ent_list = empty($modSettings['disableEntityCheck']) ? '&(#\d{1,7}|quot|amp|lt|gt|nbsp);' : '&(#021|quot|amp|lt|gt|nbsp);';

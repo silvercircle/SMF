@@ -32,13 +32,14 @@ function template_main()
 	if ($context['is_poll'])
 	{
 		echo '
+			<br>
 			<div id="poll">
-				<div class="cat_bar rounded_top">
-					<h3 class="catbg">
+				<div class="cat_bar">
+					<h3>
 						<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/topic/', $context['poll']['is_locked'] ? 'normal_poll_locked' : 'normal_poll', '.gif" alt="" class="icon" /> ', $txt['poll'], '</span>
 					</h3>
 				</div>
-				<div class="windowbg rounded_bottom">
+				<div class="blue_container">
 					<div class="content" id="poll_options">
 						<h4 id="pollquestion">
 							', $context['poll']['question'], '
@@ -242,6 +243,7 @@ function template_main()
 			template_postbit_normal($message, $ignoring);
 	}
 	echo '
+				<input type="hidden" name="goadvanced" value="1" />
 				</form>
 			</div>
 			<a id="lastPost"></a>';
@@ -472,7 +474,7 @@ function template_main()
 				<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/spellcheck.js"></script>';
 
 	echo '
-				<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/topic.js?v=100"></script>
+				<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/topic.js',$context['jsver'],'"></script>
 				<script type="text/javascript"><!-- // --><![CDATA[';
 
 	if (!empty($options['display_quick_reply']))

@@ -574,7 +574,8 @@ function Post()
 		}
 
 		// Only show the preview stuff if they hit Preview.
-		if ($really_previewing == true || isset($_REQUEST['xml']))
+		// but don't show the preview when we come from hitting the "go advanced" button in inline-modify
+		if (($really_previewing == true && !isset($_REQUEST['goadvanced'])) || isset($_REQUEST['xml']))
 		{
 			// Set up the preview message and subject and censor them...
 			$context['preview_message'] = $form_message;
@@ -891,8 +892,17 @@ function Post()
 			$form_message = preg_replace('~<br ?/?' . '>~i', "\n", $form_message);
 
 			// Remove any nested quotes, if necessary.
-			if (!empty($modSettings['removeNestedQuotes']))
+			if (!empty($modSettings['removeNestedQuotes'])) {
 				$form_message = preg_replace(array('~\n?\[quote.*?\].+?\[/quote\]\n?~is', '~^\n~', '~\[/quote\]~'), '', $form_message);
+				//$form_message = preg_replace(array('~\n?\[quote.*?\].*\[/quote\]\n?~is', '~^\n~', '~\[/quote\]~'), '', $form_message); 
+				//$form_message = preg_replace(array('~\n?\[quote.*?\].+\[/quote\]\n?~is', '~^\n~', '~\[/quote\]~'), '', $form_message); 
+				/*$pattern = "/\[quote(.*?)\](((?R)|.)*?)\[\/quote\]/is";
+				preg_match_all($pattern, $form_message, $matches, PREG_SET_ORDER);
+				foreach ($matches as $match) {
+					$block = preg_replace(array('~\[quote(.*?)\](((?R)|.)*?)\[\/quote\]~is', '~^\n~', '~\[/quote\]~'), '', $match[2], -1, $count);
+					$form_message = str_replace($match[2], $block, $form_message);
+				}*/
+			}
 
 			// Add a quote string on the front and end.
 			$form_message = '[quote author=' . $mname . ' link=topic=' . $topic . '.msg' . (int) $_REQUEST['quote'] . '#msg' . (int) $_REQUEST['quote'] . ' date=' . $mdate . ']' . "\n" . rtrim($form_message) . "\n" . '[/quote]';

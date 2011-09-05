@@ -964,12 +964,6 @@ jQuery(document).ready(function() {
 	$('html > head').append('<style>#menu_nav li:hover ul { display: none; }</style>');
 
 	// pull down menu handlers
-	jQuery('.m_downarrow').click(function() {
-		var id = 'button' + jQuery(this).attr('id');
-		jQuery('#' + id).children('ul:first').show();
-		menu_active = true;
-		return(false);
-	});
 	jQuery('#menu_nav ul').hover(function() {
 	}, function() {
 		jQuery(this).hide();
@@ -1005,13 +999,6 @@ jQuery(document).ready(function() {
 		var uid = $(this).attr('data-id');
 		if(uid > 0)
 			sendRequest(smf_scripturl, 'action=xmlhttp;sa=mcard;u=' + parseInt(uid), $(this));
-		return(false);
-	});
-	// close the overlay (member card, topic preview etc. wipe its content)
-	$('#mcard_close').click(function() {
-		$('#mcard').hide();
-		$('#mcard_inner').html('');
-		$('#wrap').css('opacity', '1.0');
 		return(false);
 	});
 	$('.givelike').click(function() {
@@ -1079,7 +1066,23 @@ jQuery(document).ready(function() {
 /*
  * all "onclick" handlers
  */
- 
+
+function mcardClose()
+{
+	$('#mcard').hide();
+	$('#mcard_inner').html('');
+	$('#wrap').css('opacity', '1.0');
+	return(false);
+}
+
+function onMenuArrowClick(el) 
+{
+	var id = 'button' + el.attr('id');
+	$('#' + id).children('ul:first').show();
+	menu_active = true;
+	return(false);
+}
+
 function whoPosted(el)
 {
 	var t = el.attr('data-topic');
@@ -1302,7 +1305,11 @@ function response(ele)
 
 function openAdvSearch(e)
 {
-	$('#adv_search').fadeIn();
+	//$('#adv_search').animate({height: 'auto'}, 50);
+	
+	$('#search_form').css('overflow', 'auto');
+	$('#search_form').css('height', 'auto');
+	$('#search_form').addClass('search_form_active');
 };
 
 function submitSearchBox()
@@ -1320,7 +1327,9 @@ function submitSearchBox()
 };
 
 $('#adv_search').live('mouseleave',function(event) {
-	$('#adv_search').hide();
+	$('#search_form').css('height', '26px');
+	$('#search_form').css('overflow', 'hidden');
+	$('#search_form').removeClass('search_form_active');
 });
 $('.brd_moderators_chld').live('mouseleave',function(event) {
 	$(this).hide();

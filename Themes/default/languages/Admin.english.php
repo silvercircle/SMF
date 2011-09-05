@@ -497,7 +497,7 @@ $txt['disable_wysiwyg'] = 'Disable WYSIWYG editor';
 $txt['use_post_cache'] = 'Cache parsed posts. This can improve topic view performance at the cost of extra database space requirements.';
 $txt['post_cache_cutoff'] = 'Do not cache parsed posts older than this number of days';
 $txt['max_messageLength'] = 'Maximum allowed post size';
-$txt['max_messageLength_zero'] = '0 for no max.';
+$txt['max_messageLength_zero'] = '0 = no maximum, but hard coded limit of 1 MBytes will take effect.';
 $txt['fixLongWords'] = 'Break up words with more letters than';
 $txt['fixLongWords_zero'] = '0 to disable.';
 $txt['fixLongWords_warning'] = 'this does not work on all servers!';
