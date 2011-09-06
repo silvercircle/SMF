@@ -410,6 +410,7 @@ function EditBoard()
 			'no_children' => true,
 			'allow_topics' => 1,
 			'automerge' => 0,
+			'is_pageboard' => 0,
 		);
 	}
 	else
@@ -596,6 +597,7 @@ function EditBoard2()
 
 		// Checkboxes....
 		$boardOptions['allow_topics'] = !isset($_POST['act_as_cat']);
+		$boardOptions['is_pageboard'] = isset($_POST['is_pageboard']) ? 1 : 0;
 		$boardOptions['automerge'] = isset($_POST['automerge']) ? $_POST['automerge'] : 0;
 		$boardOptions['posts_count'] = isset($_POST['count']);
 		$boardOptions['override_theme'] = isset($_POST['override_theme']);
@@ -664,6 +666,7 @@ function EditBoard2()
 			
 			$boardOptions['allow_topics'] = 1;
 			$boardOptions['automerge'] = 0;
+			$boardOptions['is_pageboard'] = 0;
 			createBoard($boardOptions);
 		}
 
@@ -764,6 +767,9 @@ function EditBoardSettings($return_config = false)
 			array('check', 'recycle_enable', 'onclick' => 'document.getElementById(\'recycle_board\').disabled = !this.checked;'),
 			array('select', 'recycle_board', $recycle_boards),
 			array('check', 'allow_ignore_boards'),
+		'',
+			array('int', 'tidy_child_display_columns'),
+			array('int', 'child_board_desc_shortened'),
 	);
 
 	if ($return_config)

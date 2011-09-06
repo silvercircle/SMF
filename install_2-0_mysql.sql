@@ -488,6 +488,7 @@ CREATE TABLE {$db_prefix}boards (
   unapproved_topics smallint(5) NOT NULL default '0',
   redirect varchar(255) NOT NULL default '',
   allow_topics tinyint(4) NOT NULL default '1',
+  is_pageboard tinyint(4) NOT NULL default '0',
   automerge mediumint(4) unsigned NOT NULL default '0',
   PRIMARY KEY (id_board),
   UNIQUE categories (id_cat, id_board),
@@ -1911,6 +1912,8 @@ VALUES ('use_post_cache', '0'),
 	('fb_appid', ''),
 	('GA_tracker_id', ''),
 	('GA_domain_name', ''),
+	('tidy_child_display_columns', '4'),
+	('child_board_desc_shortened', '0'),
 	('embed_GA', '0');
 
 INSERT INTO {$db_prefix}activity_types

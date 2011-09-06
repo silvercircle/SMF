@@ -43,7 +43,7 @@ function getBoardIndex($boardIndexOptions)
 	$result_boards = $smcFunc['db_query']('boardindex_fetch_boards', '
 		SELECT' . ($boardIndexOptions['include_categories'] ? '
 			c.id_cat, c.name AS cat_name,' : '') . '
-			b.id_board, b.name AS board_name, b.description,
+			b.id_board, b.name AS board_name, b.description, b.redirect,
 			CASE WHEN b.redirect != {string:blank_string} THEN 1 ELSE 0 END AS is_redirect,
 			b.num_posts, b.num_topics, b.unapproved_posts, b.unapproved_topics, b.id_parent,
 			IFNULL(m.poster_time, 0) AS poster_time, IFNULL(mem.member_name, m.poster_name) AS poster_name,
@@ -66,7 +66,7 @@ function getBoardIndex($boardIndexOptions)
 			LEFT JOIN {db_prefix}members AS mods_mem ON (mods_mem.id_member = mods.id_member)
 		WHERE {query_see_board}' . (empty($boardIndexOptions['countChildPosts']) ? (empty($boardIndexOptions['base_level']) ? '' : '
 			AND b.child_level >= {int:child_level}') : '
-			AND b.child_level BETWEEN ' . $boardIndexOptions['base_level'] . ' AND ' . ($boardIndexOptions['base_level'] + 1)),
+			AND b.child_level BETWEEN ' . $boardIndexOptions['base_level'] . ' AND ' . ($boardIndexOptions['base_level'] + 1) . (!$user_info['is_admin'] ? ' AND b.is_pageboard = 0 ' : '')),
 		array(
 			'current_member' => $user_info['id'],
 			'child_level' => $boardIndexOptions['base_level'],
@@ -143,6 +143,8 @@ function getBoardIndex($boardIndexOptions)
 					'topics' => $row_board['num_topics'],
 					'posts' => $row_board['num_posts'],
 					'is_redirect' => $row_board['is_redirect'],
+					'is_page' => !empty($row_board['redirect']) && $row_board['redirect'][0] === '%' && intval(substr($row_board['redirect'], 1)) > 0,
+					'redirect' => $row_board['redirect'],
 					'unapproved_topics' => $row_board['unapproved_topics'],
 					'unapproved_posts' => $row_board['unapproved_posts'] - $row_board['unapproved_topics'],
 					'can_approve_posts' => !empty($user_info['mod_cache']['ap']) && ($user_info['mod_cache']['ap'] == array(0) || in_array($row_board['id_board'], $user_info['mod_cache']['ap'])),
@@ -171,10 +173,13 @@ function getBoardIndex($boardIndexOptions)
 				'id' => $row_board['id_board'],
 				'name' => $row_board['board_name'],
 				'description' => $row_board['description'],
+				'short_description' => $modSettings['child_board_desc_shortened'] ? $smcFunc['substr']($row_board['description'], 0, $modSettings['child_board_desc_shortened']) . '...' : $row_board['description'],
 				'new' => empty($row_board['is_read']) && $row_board['poster_name'] != '',
 				'topics' => $row_board['num_topics'],
 				'posts' => $row_board['num_posts'],
 				'is_redirect' => $row_board['is_redirect'],
+				'is_page' => !empty($row_board['redirect']) && $row_board['redirect'][0] === '%' && intval(substr($row_board['redirect'], 1)) > 0,
+				'redirect' => $row_board['redirect'],
 				'unapproved_topics' => $row_board['unapproved_topics'],
 				'unapproved_posts' => $row_board['unapproved_posts'] - $row_board['unapproved_topics'],
 				'can_approve_posts' => !empty($user_info['mod_cache']['ap']) && ($user_info['mod_cache']['ap'] == array(0) || in_array($row_board['id_board'], $user_info['mod_cache']['ap'])),

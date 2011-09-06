@@ -98,4 +98,9 @@ $txt['mboards_move'] = 'move';
 $txt['mboards_no_cats'] = 'There are currently no categories or boards configured.';
 $txt['board_act_as_cat'] = 'Act as a category';
 $txt['board_act_as_cat_desc'] = 'If this is checked, the board will act as a sub-category. Such a board can not have its own topics, but can hold any number of child boards.';
+$txt['board_is_pageboard'] = 'Board is used for serving pages';
+$txt['board_is_pageboard_desc'] = 'Board is used for serving pages';
+
+$txt['tidy_child_display_columns'] = 'Number of columns to use for displaying child boards.';
+$txt['child_board_desc_shortened'] = 'Shorten description of child boards to that many characters (set to 0 to display descriptions at full length)';
 ?>

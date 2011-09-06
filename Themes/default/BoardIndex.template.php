@@ -148,6 +148,7 @@ function template_main()
 			<li class="floatleft"><img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'on.png" alt="" /> ', $txt['new_posts'], '</li>
 			<li class="floatleft"><img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'off.png" alt="" /> ', $txt['old_posts'], '</li>
 			<li class="floatleft"><img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'redirect.png" alt="" /> ', $txt['redirect_board'], '</li>
+			<li class="floatleft"><img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'page.png" alt="" /> ', $txt['a_page'], '</li>
 		</ul>
 	</div>';
 

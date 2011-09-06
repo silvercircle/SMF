@@ -94,16 +94,9 @@ function template_permission_index()
 	// Advanced stuff...
 	if ($context['can_modify'])
 	{
+		$collapser = array('id' => 'permission_panel_advanced_div', 'title' => $txt['permissions_advanced_options']);
+		template_create_collapsible_container($collapser);
 		echo '
-			<div class="cat_bar">
-				<h3>
-					<span class="ie6_header floatleft">
-						<img src="', $settings['images_url'], '/', empty($context['show_advanced_options']) ? 'selected' : 'sort_down', '.gif" id="permissions_panel_toggle" alt="*" /> ', $txt['permissions_advanced_options'], '
-					</span>
-				</h3>
-			</div>
-			<div id="permissions_panel_advanced" class="blue_container">
-				<span class="topslice"><span></span></span>
 				<div class="content">
 					<fieldset>
 						<legend>', $txt['permissions_with_selection'], '</legend>
@@ -188,7 +181,6 @@ function template_permission_index()
 						<input type="submit" value="', $txt['permissions_set_permissions'], '" onclick="return checkSubmit();" class="button_submit" />
 					</div>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>';
 
 		// Javascript for the advanced stuff.

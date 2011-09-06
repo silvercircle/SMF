@@ -557,7 +557,7 @@ $txt['unread_replies'] = 'Updated Topics';
 
 $txt['who_title'] = 'Who\'s Online';
 $txt['who_and'] = ' and ';
-$txt['who_viewing_topic'] = ' are viewing this topic.';
+$txt['who_viewing_topic'] = ' are viewing this.';
 $txt['who_viewing_board'] = ' are viewing this board.';
 $txt['who_member'] = 'Member';
 
@@ -784,4 +784,5 @@ $txt['permalink'] = 'Permalink';
 $txt['who_summary'] = 'A total of %d guest(s) and %d registered user(s) were online in the last %d minutes.';
 $txt['who_showby'] = 'Show online users sorted by: ';
 $txt['who_lastact'] = 'Last activity';
+$txt['a_page'] = 'A page';
 ?>

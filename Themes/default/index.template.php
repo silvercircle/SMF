@@ -49,7 +49,7 @@ function template_init()
 	/* The version this template/theme is for.
 		This should probably be the version of SMF it was created for. */
 	$settings['theme_version'] = '2.0';
-	$context['jsver'] = '?v=1433';
+	$context['jsver'] = '?v=1440';
 }
 
 // The main sub template above the content.
@@ -169,7 +169,13 @@ function template_body_above()
 	<header>
 	<div id="header">
 	<div id="upper_section" class="middletext">
-		<div class="notibar"></div>
+		<div class="notibar">
+			<div class="floatright" style="line-height:24px;font-size:10px;font-family:Verdana;">
+				<span style="color:white;" id="curfontsize"></span>
+				<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
+				<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
+			</div>
+		</div>
 		<div class="notibar_intro"></div>
 		<div class="floatleft" style="color:#ddd;text-shadow:black 2px 2px 10px;font-size:35px;font-family:Comic Sans MS;padding:20px 30px;"><strong><em>SMF pLayGround</em></strong><br />
 		<div style="font-size:16px;height:26px;padding-top:20px;">...Test</div>
@@ -251,7 +257,7 @@ function template_body_above()
 				</noscript>';
 	echo '
 	</form>
-	<div class="clear"></div>';
+	<div class="clear cContainer_end"></div>';
 	echo '<aside>
 		  <div id="sidebar" style="width:255px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
 		//if(($sidebar_allowed && $sidebar_vis) || (isset($_COOKIE['smf_jsavail']) && !$_COOKIE['smf_jsavail']))
@@ -305,6 +311,7 @@ function template_body_below()
 		sa.parentNode.insertBefore(ga, sa);
 		';
 	}
+	/*
 	if($fbxml) {
 			echo '
 			window.fbAsyncInit = function() {
@@ -337,9 +344,26 @@ function template_body_below()
 		anchor.parentNode.insertBefore(t4, anchor);
 		';
 	}
+	*/
 	echo $txt['jquery_timeago_loc'],'
 	// ]]>
-	</script>
+	</script>';
+	if($plusone) {
+		echo '
+	<script src="',$settings['theme_url'],'/scripts/jquery.socialshareprivacy.js?ver=1.1.0"></script>
+  	<script type="text/javascript">
+	// <![CDATA[
+		var fb_appid = "',$modSettings['fb_appid'],'";
+		var ssp_imgpath = "',$settings['images_url'],'/share";
+    	jQuery(document).ready(function($){
+      		if($(\'#socialshareprivacy\')){
+        		$(\'#socialshareprivacy\').socialSharePrivacy(); 
+      		}
+    	});	
+	// ]]>
+	</script>';
+	}
+	echo '
 	<footer>
 	<div id="footer_section">';
 	// Show the load time?
@@ -449,11 +473,6 @@ function template_menu()
 	
 	echo '
 		<div id="main_menu">
-			<div class="floatright" style="line-height:24px;font-size:10px;font-family:Verdana;">
-				<span style="color:white;" id="curfontsize"></span>
-				<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
-				<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
-			</div>
 			<ul class="dropmenu" id="menu_nav">';
 
 	foreach ($context['menu_buttons'] as $act => $button)
@@ -566,51 +585,10 @@ function my_theme_copyright($get_it = false)
 			</span>';
 }
 
-/**
- * create JavaScript to inject asynchronous and XHTML compliant
- * facebook "like" and Twitter "tweet" buttons
- * @params:
- * 	$l:	article permalink to share
- *	$fb:	if true, generate facebook button
- *	$tw:	if true, generate tweet button
- */
-function async_like_and_tweet($l, $fb = true, $tw = true, $layout="standard")
-{
-    global $fbxml, $twitter_widgets, $social_privacy, $plusone;
-    
-    echo '
-	<script type="text/javascript">
-	//<![CDATA[
-	';
-    if($fb) {
-       $fbxml = 1;
-       echo '(function() {
- 
-        document.write(\'<fb:like style="min-width:500px;min-height:21px;" width="500" href="',$l,'" layout="',$layout,'" send="true" show_faces="false" action="recommend" font="verdana"></fb:like>\');
-    	})();';
-    }
-    if($tw) {
-	$twitter_widgets = 1;
-	$plusone++;
-	echo '
-		document.write(\'<div class="floatright" style="max-width:65px;overflow:hidden;"><div style="max-width:65px;" class="g-plusone" data-href="',$l,'" data-size="medium" data-count="true"></div></div>\');
-   	    document.write(\'<a href="http://twitter.com/share" style="border:none;" class="twitter-share-button" data-count="horizontal" data-url="',$l,'"></a>\');
-	';
-    }	
-    echo '//]]>
-       </script>';
-}
-
 function socialbar($l, $t)
 {
-	global $social_privacy;
-	
 	socialbar_passive($l, $t);
 	return;
-	
-	echo '<div class="bmbar">';
-	async_like_and_tweet($l);
-	echo '<div class="clear"></div></div>';	
 }
 
 function socialbar_passive($l, $t)
@@ -621,14 +599,13 @@ function socialbar_passive($l, $t)
 		$url = $l;
 		$plusone++;
 		
-		//$fb = "<span class=\"share_button share_fb\" onclick=\"share_popup(\'http://www.facebook.com/sharer.php?u=".$url."\', 500,400);\">Share</span>";
-		//$tw = "<span class=\"share_button share_tw\" onclick=\"share_popup(\'http://twitter.com/share?url=".$url."&amp;text=".$title."\', 550,300);\">Tweet</span>";
-		echo '<div class="floatleft"><a role="button" rel="nofollow" class="share_button share_fb" href="http://www.facebook.com/sharer.php?u=',$url,'">Share</a>
-			<a role="button" rel="nofollow" class="share_button share_tw" href="http://twitter.com/share?text=',$t,'&amp;url=',$url,'">Tweet</a>
-			<a role="button" rel="nofollow" class="share_button share_digg" href="http://digg.com/submit?phase=2&amp;title=',$t,'&amp;url=',$url,'">Digg</a>
-			<a role="button" rel="nofollow" class="share_button share_buzz" href="http://www.google.com/buzz/post?url=',$url,'">Buzz</a></div>&nbsp;&nbsp;
-            <div class="floatright" style="max-width:65px;overflow:hidden;"><div class="g-plusone" data-href="',$url,'" data-size="medium" data-count="true"></div></div>
-       		<div class="clear"></div>';
+		//echo '<div class="floatleft"><a role="button" rel="nofollow" class="share_button share_fb" href="http://www.facebook.com/sharer.php?u=',$url,'">Share</a>
+			//<a role="button" rel="nofollow" class="share_button share_tw" href="http://twitter.com/share?text=',$t,'&amp;url=',$url,'">Tweet</a>
+			//<a role="button" rel="nofollow" class="share_button share_digg" href="http://digg.com/submit?phase=2&amp;title=',$t,'&amp;url=',$url,'">Digg</a>
+			//<a role="button" rel="nofollow" class="share_button share_buzz" href="http://www.google.com/buzz/post?url=',$url,'">Buzz</a></div>&nbsp;&nbsp;
+            //<div class="floatright" style="max-width:65px;overflow:hidden;"><div class="g-plusone" data-href="',$url,'" data-size="medium" data-count="true"></div></div>
+       		//<div class="clear"></div>';
+       	echo '<div id="socialshareprivacy"></div><div class="clear"></div>';
 	echo '</div><div class="clear"></div>';
 }
 
@@ -743,7 +720,7 @@ function template_sidebar_content()
 	if(($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar']))) {
 		$collapser = array('id' => 'social_panel', 'title' => 'Socialize');
 		template_create_collapsible_container($collapser);
-	    echo '<div class="mediumpadding lefttext">
+	    /*echo '<div class="mediumpadding lefttext">
 		  	<script type="text/javascript">
 			//<![CDATA[
 			';
@@ -769,7 +746,11 @@ function template_sidebar_content()
        		</div>
 			</div>
 			<div class="cContainer_end"></div>
-		';
+		';*/
+		$plusone++;
+		echo '
+		<div id="socialshareprivacy"></div><div class="clear"></div>
+		</div>';
 	}
 	
 	// This is the "Recent Posts" bar.

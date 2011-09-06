@@ -8,8 +8,10 @@ function template_boardbit(&$board)
 	
 	$_c = ($alternate = !$alternate) ? 'windowbg' : 'windowbg2';
 	echo '
-	<li id="board_', $board['id'], '" class="',$_c,'">
-	<div class="lastpost smalltext">';
+	<li id="board_', $board['id'], '" class="',$_c,'">';
+	if(!$board['is_page']) {
+	echo '
+		<div class="lastpost smalltext">';
 	if (!empty($board['last_post']['id']))
 		echo '
 		<img src="',$board['first_post']['icon_url'],'" alt="icon" />
@@ -61,7 +63,17 @@ function template_boardbit(&$board)
 
 	echo '
 		  <div class="smalltext">', $board['description'] , '</div>';
-
+	}
+	else {
+		echo '
+		<div class="info">
+	 	<div class="icon floatleft">
+	  	<img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'page.png" alt="*" title="*" />
+	 	</div>
+		<div style="padding-left:32px;">
+		<h3><a href="',$scripturl,'?topic=',intval(substr($board['redirect'], 1)),'">',$board['name'],'</a></h3>
+	    <div class="smalltext">', $board['description'] , '</div>';
+	}
 	// Show the "Child Boards: ". (there's a link_children but we're going to bold the new ones...)
 	if (!empty($board['children']))
 	{
@@ -72,7 +84,7 @@ function template_boardbit(&$board)
 		foreach ($board['children'] as $child)
 		{
 			if (!$child['is_redirect'])
-				$child['link'] = '<h4><a href="' . $child['href'] . '" ' . ($child['new'] ? 'class="new_posts" ' : 'class="no_new_posts" ') . 'title="' . ($child['new'] ? $txt['new_posts'] : $txt['old_posts']) . ' (' . $txt['board_topics'] . ': ' . comma_format($child['topics']) . ', ' . $txt['posts'] . ': ' . comma_format($child['posts']) . ')">' . $child['name'] . '</a></h4>'.'&nbsp;('.$child['description'].')';
+				$child['link'] = '<h4><a href="' . $child['href'] . '" ' . ($child['new'] ? 'class="new_posts" ' : 'class="no_new_posts" ') . 'title="' . ($child['new'] ? $txt['new_posts'] : $txt['old_posts']) . ' (' . $txt['board_topics'] . ': ' . comma_format($child['topics']) . ', ' . $txt['posts'] . ': ' . comma_format($child['posts']) . ')">' . $child['name'] . '</a></h4>'.'&nbsp;<span title="'.$child['description'].'">('.$child['short_description'].')</span>';
 			else
 				$child['link'] = '<a href="' . $child['href'] . '" title="' . comma_format($child['posts']) . ' ' . $txt['redirects'] . '"><h4>' . $child['name'] . '</h4></a>'.'&nbsp;('.$child['description'].')';
 
@@ -87,9 +99,10 @@ function template_boardbit(&$board)
 			<table>
 			  <tr>';
 			  $n = 0;
+			  $columns = $modSettings['tidy_child_display_columns'];
 			  foreach($children as $child) {
 				  echo '<td>',$children[$n++],'</td>';
-				  if($n > 2) {
+				  if($n >= $columns) {
 					  $n = 0;
 					  echo '</tr><tr>';
 				  }

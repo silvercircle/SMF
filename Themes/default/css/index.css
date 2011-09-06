@@ -479,7 +479,7 @@ tr.titlebg th a:link, tr.titlebg th a:visited
 .windowbg3
 {
 	color: #000;
-	background-color: #cacdd3;
+	background-color: #e0e4e3;
 }
 
 /* the page navigation area */
@@ -1189,6 +1189,7 @@ ul#navigation li
  background:white;
  border-radius:0 4px 4px 0;
  cursor:pointer;
+ margin-bottom:-20px;
 }
 #container {
 }
@@ -1919,13 +1920,20 @@ ul.quickbuttons
 	text-align: right;
 	margin-left:20px;
 }
-ul.quickbuttons li, .buttonlist ul li
+ul.quickbuttons li, .buttonlist ul li, ul.quickbuttons_linkstyle li
 {
 	float: left;
 	display: inline;
 	margin: 0 0 0 7px;
 	padding:0;
 	cursor:pointer;
+}
+ul.quickbuttons_linkstyle li a {
+	font-size:10px !important;
+	font-family:Verdana,arial,helvetica;
+	line-height:18px !important;
+	float:left;
+	padding:0 4px;
 }
 ul.quickbuttons li a, .buttonlist ul li a, span.button
 {
@@ -2565,7 +2573,7 @@ tr.titlebg td
 	background:white;
 	right:-1px;
 	float:left;
-	margin-top:25px;
+	margin-top:15px;
 	z-index:10;
 	min-height:600px;
 	border-right:1px solid #F8DA8B;
@@ -2617,7 +2625,6 @@ tr.titlebg td
 	border-radius:8px 8px 8px 0;
 	padding:5px;
 	overflow: hidden;
-	margin-top:10px;
 }
 
 tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td
@@ -3614,13 +3621,18 @@ a.navPages {
 	border-radius:3px;
 	background-color:#fff2f2;
 }
-span.small_avatar img {
+span.small_avatar img, li.medium_avatar img {
 	height:32px;
 	width:32px;
 	border:1px solid #d5ecfa;
 	border-radius:2px;
 	background-color:#f0f0f0;
 	padding:2px;
+}
+li.medium_avatar img {
+	height:48px;
+	width:48px;
+	margin:2px 5px;
 }
 span.veryhot_post img, span.my_veryhot_post img {
 	border-color: red !important;
@@ -4503,6 +4515,215 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
 			z-index: 9999;
 		}
 
+.social_share_privacy_area {
+	list-style-type: none; 
+	padding: 0 !important; 
+	height: 25px;
+	display:inline;
+}
+.social_share_privacy_area li {
+	margin: 0 !important; 
+	padding: 0 !important; 
+	height: 20px; 
+	float: left;
+}
+#sidebar .social_share_privacy_area li {
+	margin-bottom:5px !important;
+	margin-top:5px !important;
+}
+.social_share_privacy_area li .dummy_btn {
+    float: left; 
+    margin-left: 10px; 
+    cursor: pointer; 
+}
+/* Facebook begin */
+.social_share_privacy_area .facebook {
+    width: 180px; 
+    display: inline-block; 
+}
+.social_share_privacy_area .facebook .fb_like iframe {
+    width: 145px;
+    height: 21px;
+}
+/* Facebook end */
+/* Twitter begin */
+.social_share_privacy_area .twitter {
+	width: 148px;
+}
+.social_share_privacy_area li div.tweet {
+	width: 115px; 
+}
+/* Twitter end */
+/* Google+ begin */
+.social_share_privacy_area .gplus {
+	width: 123px; 
+}
+.social_share_privacy_area li div.gplusone {
+	width: 90px; 
+}
+/* Google+ end */
+/* Switch begin */
+.social_share_privacy_area li .switch {
+    display: inline-block; 
+    text-indent: -9999em; 
+    background: transparent url(../images/share/socialshareprivacy_on_off.png) no-repeat 0 0 scroll; 
+    width: 23px; 
+    height: 12px; 
+    overflow: hidden; 
+    float: left; 
+    margin: 4px 0 0; 
+    cursor: pointer; 
+}
+.social_share_privacy_area li .switch.on {
+    background-position: 0 -12px; 
+}
+/* Switch end */
+/* Tooltips begin */
+.social_share_privacy_area li.help_info {
+    position: relative; 
+}
+.social_share_privacy_area li.help_info .info, 
+.social_share_privacy_area li .help_info.icon .info {
+    display: none; 
+    position: absolute; 
+    bottom: 40px; 
+    left: 0; 
+    width: 290px; 
+    padding: 10px 15px; 
+    font-size: 11px; 
+    line-height: 16px; 
+    border: 1px solid #ccc; 
+    -moz-border-radius: 4px; 
+    -webkit-border-radius: 4px; 
+    border-radius: 4px; 
+    -moz-box-shadow: 0 3px 4px #999; 
+    -webkit-box-shadow: 0 3px 4px #999; 
+    box-shadow: 0 3px 4px #999; 
+    background-color: #fdfbec; 
+    color: #000; 
+    z-index: 500; 
+}
+.social_share_privacy_area li.gplus.help_info .info {
+    left: -60px;
+}
+.social_share_privacy_area li .help_info.icon .info {
+    left: -243px;
+    width: 350px; 
+}
+.social_share_privacy_area li.help_info.display .info, 
+.social_share_privacy_area li .help_info.icon.display .info {
+    display: block; 
+}
+.social_share_privacy_area li.help_info.info_off.display .info {
+    display: none; 
+}
+.social_share_privacy_area li .help_info.icon {
+    background: #fff url(../images/share/socialshareprivacy_info.png) no-repeat center center scroll; 
+    width: 25px; 
+    height: 20px; 
+    position: relative; 
+    display: inline-block; 
+	vertical-align: top; 
+	border: 2px solid #e7e3e3; 
+	border-right-width: 0; 
+	-moz-border-radius: 5px 0 0 5px; 
+	-webkit-border-radius: 5px 0 0 5px; 
+	border-radius: 5px 0 0 5px; 
+}
+.social_share_privacy_area li.settings_info .settings_info_menu.on .help_info.icon {
+	border-top-width: 0; 
+	border-left-width: 0; 
+}
+.social_share_privacy_area li.settings_info .settings_info_menu.perma_option_off .help_info.icon {
+	border-right-width: 2px; 
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px; 
+	border-radius: 5px; 
+}
+/* Tooltips end */
+/* Settings/Info begin */
+.social_share_privacy_area li.settings_info {
+	position: relative; 
+	top: -2px; 
+}
+.social_share_privacy_area li.settings_info a {
+	text-decoration: none; 
+	margin: 0 !important; 
+}
+.social_share_privacy_area li.settings_info .settings_info_menu {
+    background-color: #f3f4f5; 
+    border: 2px solid #e7e3e3; 
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px; 
+    border-radius: 5px; 
+	-moz-box-shadow: 2px 2px 3px #c1c1c1; 
+	-webkit-box-shadow: 2px 2px 3px #c1c1c1; 
+    box-shadow: 3px 3px 3px #c1c1c1; 
+    left: 0; 
+    position: absolute; 
+    top: 0; 
+    width: 135px; 
+    z-index: 1000; 
+}
+.social_share_privacy_area li.settings_info .settings_info_menu.off {
+	border-width: 0; 
+	-moz-box-shadow: none; 
+	-webkit-box-shadow: none; 
+	box-shadow: none; 
+	background-color: transparent; 
+}
+.social_share_privacy_area li.settings_info .settings_info_menu.off form {
+	display: none; 
+}
+.social_share_privacy_area li.settings_info .settings_info_menu .settings {
+	text-indent: -9999em; 
+	display: inline-block; 
+	background: #fff url(../images/share/settings.png) no-repeat center center scroll; 
+	width: 25px; 
+	height: 20px; 
+	border: 2px solid #e7e3e3; 
+	-moz-border-radius: 0 5px 5px 0; 
+	-webkit-border-radius: 0 5px 5px 0; 
+	border-radius: 0 5px 5px 0; 
+	border-left: 1px solid #ddd; 
+}
+.social_share_privacy_area li.settings_info .settings_info_menu.on .settings {
+	border-top-width: 0; 
+}
+.social_share_privacy_area li.settings_info .settings_info_menu form fieldset {
+    border-width: 0; 
+    margin: 0; 
+    padding: 0 10px 10px; 
+}
+.social_share_privacy_area li.settings_info .settings_info_menu form fieldset legend {
+    font-size: 10px; 
+    line-height: 14px; 
+    margin: 0; 
+    padding: 10px 0; 
+	width: 115px; 
+}
+.social_share_privacy_area li.settings_info .settings_info_menu form fieldset input {
+	clear: both; 
+    float: left; 
+    margin: 4px 10px 4px 0; 
+}
+.social_share_privacy_area li.settings_info .settings_info_menu form fieldset label {
+    display: inline-block; 
+    float: left; 
+    font-size: 10px; 
+    line-height: 24px; 
+	-moz-transition: color .5s ease-in; 
+	-webkit-transition: color .5s ease-in; 
+	transition: color .5s ease-in; 
+}
+.social_share_privacy_area li.settings_info .settings_info_menu form fieldset label.checked {
+	color: #090; 
+}
+/* Settings/Info end */
+#mitte #mitte_links {
+	overflow: visible !important;
+}
+		
 /* Styles for print media.
 ------------------------------------------------------- */
 @media print
