@@ -64,9 +64,10 @@ form
 img.icon {vertical-align:middle;padding:0;margin:0 3px;border:0;height:16px;}
 #search_form {
 	margin-bottom:0px;
-	position:absolute;top:80px;right:50px;padding:5px 10px 0 10px;
+	position:absolute;top:-70px;right:30px;padding:5px 10px 0 10px;
 	background-color:white;border-top-left-radius:6px;border-top-right-radius:6px;
 	border:1px solid white;
+	margin-bottom:-70px;
 	height:26px;
 	overflow:hidden;
 }
@@ -75,7 +76,7 @@ img.icon {vertical-align:middle;padding:0;margin:0 3px;border:0;height:16px;}
 	background-color: #fff6e2 !important;
 	border:1px solid #f8da8b !important;
 }
-.searchfield {background:#fff url(../images/theme/sicon.png) 3px center no-repeat;font-weight:bold;font-size:12px;border:1px solid #A3B2D0;min-height:18px;}
+.searchfield {background:#fff url(../images/theme/sicon.png) 3px center no-repeat;font-weight:bold;font-size:12px;border:1px solid #A3B2D0;min-height:16px;}
 
 input, select, textarea
 {
@@ -1167,7 +1168,7 @@ ul#navigation li
 	width:auto;
 	background-color:#fff;
 	min-height: 200px;
-	margin:0 0 20px 0;
+	margin:0 auto 20px auto;
 	border:1px solid #aaa;
 	border-top-left-radius:10px;
 	border-top-right-radius:10px;
@@ -3559,7 +3560,6 @@ span.hidelink
 	box-shadow:1px 1px 5px 0px #ddd;
 }
 img.cContainer_c {
-	float:right;
 	cursor:pointer;
 }
 #editor_main_content {
@@ -4519,6 +4519,7 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
 	list-style-type: none; 
 	padding: 0 !important; 
 	height: 25px;
+	margin:0;
 	display:inline;
 }
 .social_share_privacy_area li {
@@ -4531,6 +4532,11 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
 	margin-bottom:5px !important;
 	margin-top:5px !important;
 }
+#sidebar .social_share_privacy_area {
+	display:block;
+	float:none;
+	margin-right:0;
+}
 .social_share_privacy_area li .dummy_btn {
     float: left; 
     margin-left: 10px; 
@@ -4538,11 +4544,11 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
 }
 /* Facebook begin */
 .social_share_privacy_area .facebook {
-    width: 180px; 
+    width: 220px; 
     display: inline-block; 
 }
 .social_share_privacy_area .facebook .fb_like iframe {
-    width: 145px;
+    width: 170px;
     height: 21px;
 }
 /* Facebook end */
@@ -4566,16 +4572,19 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
 .social_share_privacy_area li .switch {
     display: inline-block; 
     text-indent: -9999em; 
-    background: transparent url(../images/share/socialshareprivacy_on_off.png) no-repeat 0 0 scroll; 
+    background: transparent url(../images/theme/sprite.png) no-repeat 0 0 scroll; 
     width: 23px; 
     height: 12px; 
     overflow: hidden; 
-    float: left; 
     margin: 4px 0 0; 
     cursor: pointer; 
+    float:left;
 }
 .social_share_privacy_area li .switch.on {
-    background-position: 0 -12px; 
+    background-position: 0 -772px; 
+}
+.social_share_privacy_area li .switch.off {
+    background-position: 0 -760px; 
 }
 /* Switch end */
 /* Tooltips begin */
@@ -4588,7 +4597,7 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
     position: absolute; 
     bottom: 40px; 
     left: 0; 
-    width: 290px; 
+    width: 200px; 
     padding: 10px 15px; 
     font-size: 11px; 
     line-height: 16px; 
@@ -4618,7 +4627,7 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
     display: none; 
 }
 .social_share_privacy_area li .help_info.icon {
-    background: #fff url(../images/share/socialshareprivacy_info.png) no-repeat center center scroll; 
+    background: #fff url(../images/theme/sprite.png) no-repeat 0 -788px scroll; 
     width: 25px; 
     height: 20px; 
     position: relative; 
@@ -4662,7 +4671,7 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
     left: 0; 
     position: absolute; 
     top: 0; 
-    width: 135px; 
+    width: 150px; 
     z-index: 1000; 
 }
 .social_share_privacy_area li.settings_info .settings_info_menu.off {
@@ -4678,7 +4687,7 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
 .social_share_privacy_area li.settings_info .settings_info_menu .settings {
 	text-indent: -9999em; 
 	display: inline-block; 
-	background: #fff url(../images/share/settings.png) no-repeat center center scroll; 
+	background: #fff url(../images/theme/sprite.png) no-repeat 0 -809px scroll; 
 	width: 25px; 
 	height: 20px; 
 	border: 2px solid #e7e3e3; 
@@ -4696,11 +4705,11 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
     padding: 0 10px 10px; 
 }
 .social_share_privacy_area li.settings_info .settings_info_menu form fieldset legend {
-    font-size: 10px; 
+    font-size: 11px; 
     line-height: 14px; 
     margin: 0; 
     padding: 10px 0; 
-	width: 115px; 
+	width: 135px; 
 }
 .social_share_privacy_area li.settings_info .settings_info_menu form fieldset input {
 	clear: both; 
@@ -4710,7 +4719,7 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
 .social_share_privacy_area li.settings_info .settings_info_menu form fieldset label {
     display: inline-block; 
     float: left; 
-    font-size: 10px; 
+    font-size: 11px; 
     line-height: 24px; 
 	-moz-transition: color .5s ease-in; 
 	-webkit-transition: color .5s ease-in; 
@@ -4723,7 +4732,46 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
 #mitte #mitte_links {
 	overflow: visible !important;
 }
-		
+
+/* image clipping sources */
+
+.clipsrc { 
+	position: absolute; 
+	top: 0; 
+	left: 0; 
+}
+/* clip:rect(top, right, bottom, left) (yes, weird, but that's how it is...) */
+.csrcwrapper24px { 
+	position: relative; 
+	height: 24px; width: 24px; 
+}
+.csrcwrapper16px {
+	position: relative; 
+	height: 16px; width: 16px; 
+}
+._on {
+	clip:rect(1px 25px 25px 1px);
+}
+._off {
+	clip:rect(1px 54px 25px 30px);
+	left:-30px;
+}
+._redirect {
+	clip:rect(1px 83px 25px 59px);
+	left:-59px;
+}
+._page {
+	clip:rect(1px 112px 25px 88px);
+	left:-88px;
+}
+._expand {
+	clip:rect(1px 129px 14px 117px);
+	left:-117px;
+}
+._collapse {
+	clip:rect(1px 145px 14px 133px);
+	left:-133px;
+}
 /* Styles for print media.
 ------------------------------------------------------- */
 @media print

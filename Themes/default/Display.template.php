@@ -14,6 +14,16 @@ function template_main()
 {
 	global $context, $settings, $options, $txt, $scripturl, $modSettings, $topic;
 
+	echo '
+		<div id="share_bar" style="display:none;position:absolute;right:0;white-space:nowrap;width:auto;">
+		<div class="bmbar">
+		 <a role="button" rel="nofollow" class="share_button share_fb" data-href="http://www.facebook.com/sharer.php?u=%%uri%%">Share</a>
+		 <a role="button" rel="nofollow" class="share_button share_tw" data-href="http://twitter.com/share?text=%%txt%%&amp;url=%%uri%%">Tweet</a>
+		 <a role="button" rel="nofollow" class="share_button share_digg" data-href="http://digg.com/submit?phase=2&amp;title=%%txt%%&amp;url=%%uri%%">Digg</a>
+		 <div class="clear"></div>
+       	</div>
+       	</div>';
+       	
 	// Let them know, if their report was a success!
 	if ($context['report_sent'])
 	{
@@ -176,7 +186,7 @@ function template_main()
 				</div>';
 
 	// social share bar
-	if($context['use_share'] && ($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar'])))
+	if($context['use_share'])
 		socialbar($scripturl . '?topic=' . $topic, urlencode($context['subject']));
 				
 	// Tags

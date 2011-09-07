@@ -28,22 +28,23 @@ function template_boardbit(&$board)
 		</div>
 		<div class="info">
 		 <div class="icon floatleft">
-		  <a href="', ($board['is_redirect'] || $context['user']['is_guest'] ? $board['href'] : $scripturl . '?action=unread;board=' . $board['id'] . '.0;children'), '">';
+		  <a href="', ($board['is_redirect'] || $context['user']['is_guest'] ? $board['href'] : $scripturl . '?action=unread;board=' . $board['id'] . '.0;children'), '">
+		  <div class="csrcwrapper24px">';
 
 		// If the board or children is new, show an indicator.
 		if ($board['new'] || $board['children_new'])
 			echo '
- 		  <img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'on', $board['new'] ? '' : '2', '.png" alt="', $txt['new_posts'], '" title="', $txt['new_posts'], '" />';
+ 		  <img class="clipsrc _on" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="', $txt['new_posts'], '" title="', $txt['new_posts'], '" />';
 		// Is it a redirection board?
 		elseif ($board['is_redirect'])
 			echo '
-		  <img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'redirect.png" alt="*" title="*" />';
+		  <img class="clipsrc _redirect" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="*" title="*" />';
 		// No new posts at all! The agony!!
 		else
 			echo '
-		  <img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'off.png" alt="', $txt['old_posts'], '" title="', $txt['old_posts'], '" />';
+		  <img class="clipsrc _off" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="', $txt['old_posts'], '" title="', $txt['old_posts'], '" />';
 
-	echo '
+	echo '</div>
 		  </a>
 		</div>
 		<div style="padding-left:32px;">
@@ -68,7 +69,7 @@ function template_boardbit(&$board)
 		echo '
 		<div class="info">
 	 	<div class="icon floatleft">
-	  	<img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'page.png" alt="*" title="*" />
+	  	<div class="csrcwrapper24px"><img class="clipsrc _page" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="*" title="*" /></div>
 	 	</div>
 		<div style="padding-left:32px;">
 		<h3><a href="',$scripturl,'?topic=',intval(substr($board['redirect'], 1)),'">',$board['name'],'</a></h3>

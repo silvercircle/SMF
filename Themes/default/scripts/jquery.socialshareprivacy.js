@@ -52,7 +52,7 @@
             },
             'info_link'         : 'http://www.heise.de/ct/artikel/2-Klicks-fuer-mehr-Datenschutz-1333879.html',
             'txt_help'          : 'Whenever you activate one of the social media buttons, information will be submitted to Facebook, Twitter or Google.',
-            'settings_perma'    : 'Permanently activate social media connections. This will be saved to a cookie and you can revert it any time.',
+            'settings_perma'    : 'Permanently activate social media connections for this site (opt-in). Your choice will be saved to a cookie and you can revert it at any time.',
             'cookie_path'       : '/',
             'cookie_domain'     : document.location.host,
             'cookie_expires'    : '365',
@@ -69,7 +69,7 @@
             // als URL wird erstmal die derzeitige Dokument-URL angenommen
             var uri = document.location.href;
             // ist eine kanonische URL hinterlegt wird diese verwendet
-            var canonical = $("link[rel=canonical]").attr("href");
+            var canonical = $("link[rel=canonical]").attr("data-href");
             if(canonical){
             	/*
                 if(canonical.indexOf("http") <= 0){
@@ -77,7 +77,7 @@
                     alert(canonical);
                 }
                 */
-                uri = canonical;
+                uri = canonical.replace(/PHPSESSID=.*&/g, '');
             }
         }
 
@@ -122,7 +122,7 @@
                 // Kontrolle ob Facebook App-ID hinterlegt ist, da diese noetig fuer den Empfehlen-Button ist
                 if(options.services.facebook.app_id != '__FB_APP-ID__'){
                     var fb_enc_uri = encodeURIComponent(uri+options.services.facebook.referrer_track);
-                    var fb_code = '<iframe src="http://www.facebook.com/plugins/like.php?locale='+options.services.facebook.language+'&amp;app_id='+options.services.facebook.app_id+'&amp;href='+fb_enc_uri+'&amp;send=false&amp;layout=button_count&amp;width=120&amp;show_faces=false&amp;action=recommend&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden;" allowTransparency="true"></iframe>';
+                    var fb_code = '<iframe src="http://www.facebook.com/plugins/like.php?locale='+options.services.facebook.language+'&amp;app_id='+options.services.facebook.app_id+'&amp;href='+fb_enc_uri+'&amp;send=false&amp;layout=button_count&amp;width=240&amp;show_faces=false&amp;action=recommend&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden;" allowTransparency="true"></iframe>';
                     var fb_dummy_btn = '<img src="'+options.services.facebook.dummy_img+'" alt="Facebook &quot;Like&quot;-Dummy" class="fb_like_privacy_dummy" />';
 
                     context.append('<li class="facebook help_info"><span class="info">'+options.services.facebook.txt_info+'</span><span class="switch off">'+options.services.facebook.txt_fb_off+'</span><div class="fb_like dummy_btn">'+fb_dummy_btn+'</div></li>');

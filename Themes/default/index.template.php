@@ -49,7 +49,7 @@ function template_init()
 	/* The version this template/theme is for.
 		This should probably be the version of SMF it was created for. */
 	$settings['theme_version'] = '2.0';
-	$context['jsver'] = '?v=1440';
+	$context['jsver'] = '?v=1445';
 }
 
 // The main sub template above the content.
@@ -81,7 +81,7 @@ function template_html_above()
 	// Here comes the JavaScript bits!
 		echo '
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js?v=162"></script>
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js',$context['jsver'],'"></script>';
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/script.js',$context['jsver'],'"></script>';
 	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin')
 		echo '
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/admin.js',$context['jsver'],'"></script>';
@@ -105,6 +105,8 @@ function template_html_above()
 	var sideBarWidth = 250;
 	var sidebar_content_loaded = 0;
 	var cookie = readCookie(\'SMF_textsize\');
+	var fb_appid = "',$modSettings['fb_appid'],'";
+	var ssp_imgpath = "',$settings['images_url'],'/share";
 	var textsize = cookie ? parseInt(cookie) : textSizeDefault;
 	var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
 	var t2 = document.createElement(\'SCRIPT\');
@@ -128,7 +130,7 @@ function template_html_above()
 	// Present a canonical url for search engines to prevent duplicate content in their indices.
 	if (!empty($context['canonical_url']))
 		echo '
-	<link rel="canonical" href="', $context['canonical_url'], '" />';
+	<link rel="canonical" href="', $context['canonical_url'], '" data-href="',(isset($context['share_url']) ? $context['share_url'] : ''), '" />';
 
 	// Show all the relative links, such as help, search, contents, and the like.
 	echo '
@@ -219,7 +221,8 @@ function template_body_above()
 			<div onclick="sbToggle($(this));" id="sbtoggle">',$sidebar_vis ? '&nbsp;&gt;' : '&nbsp;&lt;','</div>';
 	// Show the navigation tree.
 	$scope = 0;
-	echo '<form onmouseout="return false;" onsubmit="submitSearchBox();" class="floatright" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
+	echo '<div style="position:relative;">
+		  <form onmouseout="return false;" onsubmit="submitSearchBox();" class="floatright" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
 			// Search within current topic?
 			$search_label = 'Search';
 			if (isset($context['current_topic']) && $context['current_topic']) {
@@ -257,6 +260,7 @@ function template_body_above()
 				</noscript>';
 	echo '
 	</form>
+	</div>
 	<div class="clear cContainer_end"></div>';
 	echo '<aside>
 		  <div id="sidebar" style="width:255px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
@@ -348,21 +352,6 @@ function template_body_below()
 	echo $txt['jquery_timeago_loc'],'
 	// ]]>
 	</script>';
-	if($plusone) {
-		echo '
-	<script src="',$settings['theme_url'],'/scripts/jquery.socialshareprivacy.js?ver=1.1.0"></script>
-  	<script type="text/javascript">
-	// <![CDATA[
-		var fb_appid = "',$modSettings['fb_appid'],'";
-		var ssp_imgpath = "',$settings['images_url'],'/share";
-    	jQuery(document).ready(function($){
-      		if($(\'#socialshareprivacy\')){
-        		$(\'#socialshareprivacy\').socialSharePrivacy(); 
-      		}
-    	});	
-	// ]]>
-	</script>';
-	}
 	echo '
 	<footer>
 	<div id="footer_section">';
@@ -389,7 +378,7 @@ function template_body_below()
 		echo '
 		<script type="text/javascript">
  		var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.miranda.or.at/" : "http://piwik.miranda.or.at/");
- 		document.write(unescape("%3Cscript src=\'" + pkBaseURL + "piwik.js\' type=\'text/javascript\'%3E%3C/script%3E"));
+ 		document.write(unescape("%3Cscript src=\'" + pkBaseURL + "piwik.js?v=10\' type=\'text/javascript\'%3E%3C/script%3E"));
  		</script>
  		<script type="text/javascript">
  			try {
@@ -668,7 +657,7 @@ function template_sidebar_content()
 	else {
 		echo '
 				<div class="smalltext">
-				<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/sha1.js"></script>
+				<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/sha1.js',$context['jsver'],'"></script>
 				<div><form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
 					', sprintf($txt['welcome_guest'], $txt['guest_title']), '<br /><br />
 					', $txt['quick_login_dec'], '<br />
@@ -749,8 +738,10 @@ function template_sidebar_content()
 		';*/
 		$plusone++;
 		echo '
-		<div id="socialshareprivacy"></div><div class="clear"></div>
-		</div>';
+		<div id="socialshareprivacy"></div>
+		<div class="clear"></div>
+		</div>
+		<div class="cContainer_end"></div>';
 	}
 	
 	// This is the "Recent Posts" bar.
@@ -871,7 +862,7 @@ function template_create_collapsible_container(array &$_c)
 		$_c['headerstyle'] = 'style="'.$_c['headerstyle'].'"';
 	echo '
 		<div class="',$_c['headerclass'],'"',$_c['headerstyle'],'>
-		<img onclick="cContainer($(this));" class="cContainer_c" id="',$id,'" src="',$settings['images_url'].($state ? '/expand.gif' : '/collapse.gif'),'" alt="*" />';
+		<div class="csrcwrapper16px floatright"><img onclick="cContainer($(this));" class="cContainer_c clipsrc ',($state ? '_expand' : '_collapse'),'" id="',$id,'" src="',$settings['images_url'].'/clipsrc.png" alt="*" /></div>';
 	echo '<h3>',$_c['title'],'</h3>
 		</div>';
 		

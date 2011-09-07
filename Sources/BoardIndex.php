@@ -31,7 +31,7 @@ if (!defined('SMF'))
 // Show the board index!
 function BoardIndex()
 {
-	global $txt, $user_info, $sourcedir, $modSettings, $context, $settings, $scripturl;
+	global $txt, $user_info, $sourcedir, $modSettings, $context, $settings, $scripturl, $boardurl;
 
 	// For wireless, we use the Wireless template...
 	if (WIRELESS)
@@ -43,7 +43,7 @@ function BoardIndex()
 	$context['is_board_index'] = true;
 	// Set a canonical URL for this page.
 	$context['canonical_url'] = $scripturl;
-
+	$context['share_url'] = $boardurl;
 	// Do not let search engines index anything if there is a random thing in $_GET.
 	if (!empty($_GET))
 		$context['robot_no_index'] = true;

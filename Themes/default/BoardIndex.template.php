@@ -90,21 +90,21 @@ function template_main()
 
 		echo '
 			<div class="category" id="category_', $category['id'], '">
- 			  <div class="cat_bar rounded_top">
-				<h2 class="catbg">';
+ 			  <div class="cat_bar rounded_top">';
 
 		// If this category even can collapse, show a link to collapse it.
 		if ($category['can_collapse'])
 			echo '
-					<a onclick="catCollapse($(this));return(false);" data-id="',$category['id'], '" class="collapse floatright" href="', $category['collapse_href'], '">', $category['collapse_image'], '</a>';
+					<div class="csrcwrapper16px floatright"><a onclick="catCollapse($(this));return(false);" data-id="',$category['id'], '" class="collapse floatright" href="', $category['collapse_href'], '">', $category['collapse_image'], '</a></div>';
 
 		if (!$context['user']['is_guest'] && $category['new'])
 			echo '
 					<a class="unreadlink" href="', $scripturl, '?action=unread;c=', $category['id'], '">', $txt['view_unread_category'], '</a>';
 
 		echo '
-								', $category['link'], '
-				</h2>
+				<h2 class="catbg">
+				', $category['link'], '
+			  	</h2>
 		      </div>
 			</div>';
 
@@ -144,12 +144,14 @@ function template_main()
 		);
 
 		echo '
-		<ul class="reset">
-			<li class="floatleft"><img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'on.png" alt="" /> ', $txt['new_posts'], '</li>
-			<li class="floatleft"><img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'off.png" alt="" /> ', $txt['old_posts'], '</li>
-			<li class="floatleft"><img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'redirect.png" alt="" /> ', $txt['redirect_board'], '</li>
-			<li class="floatleft"><img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'page.png" alt="" /> ', $txt['a_page'], '</li>
-		</ul>
+		<table>
+		<tr>
+			<td><div class="csrcwrapper24px"><img class="clipsrc _on" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['new_posts'], '</td>
+			<td><div class="csrcwrapper24px"><img class="clipsrc _off" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['old_posts'], '</td>
+			<td><div class="csrcwrapper24px"><img class="clipsrc _redirect" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['redirect_board'], '</td>
+			<td><div class="csrcwrapper24px"><img class="clipsrc _page" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['a_page'], '</td>
+		</tr>
+		</table>
 	</div>';
 
 		// Show the mark all as read button?
@@ -160,10 +162,13 @@ function template_main()
 	{
 		echo '
 	<div id="posting_icons" class="flow_hidden">
-		<ul class="reset">
-			<li class="floatleft"><img src="', $settings['images_url'], '/off.png" alt="" /> ', $txt['old_posts'], '</li>
-			<li class="floatleft"><img src="', $settings['images_url'], '/redirect.png" alt="" /> ', $txt['redirect_board'], '</li>
-		</ul>
+		<table>
+		<tr>
+			<td><div class="csrcwrapper24px"><img class="clipsrc _off" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['old_posts'], '</td>
+			<td><div class="csrcwrapper24px"><img class="clipsrc _redirect" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['redirect_board'], '</td>
+			<td><div class="csrcwrapper24px"><img class="clipsrc _page" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['a_page'], '</td>
+		</tr>
+		</table>
 	</div>';
 	}
 

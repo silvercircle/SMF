@@ -62,7 +62,7 @@ if (!defined('SMF'))
 // The central part of the board - topic display.
 function Display()
 {
-	global $scripturl, $txt, $modSettings, $context, $settings;
+	global $scripturl, $txt, $modSettings, $context, $settings, $boardurl;
 	global $options, $sourcedir, $user_info, $board_info, $topic, $board, $time_now;
 	global $attachments, $messages_request, $topicinfo, $language, $smcFunc, $cache_parsed;
 
@@ -569,7 +569,7 @@ function Display()
 
 	// Set a canonical URL for this page.
 	$context['canonical_url'] = $scripturl . '?topic=' . $topic . '.' . $context['start'];
-
+	$context['share_url'] = $scripturl . '?topic=' . $topic;
 	// For quick reply we need a response prefix in the default forum language.
 	if (!isset($context['response_prefix']) && !($context['response_prefix'] = cache_get_data('response_prefix', 600)))
 	{
@@ -1115,7 +1115,7 @@ function Display()
 	
 	$context['can_see_like'] = allowedTo('like_see');
 	$context['can_give_like'] = allowedTo('like_give');
-	$context['use_share'] = allowedTo('use_share');
+	$context['use_share'] = allowedTo('use_share') && ($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar']));
 	
 	$context['can_lock'] |= $context['can_manage_own'];
 	$context['can_sticky'] |= $context['can_manage_own'];
@@ -1278,7 +1278,7 @@ function prepareDisplayContext($reset = false)
 		'time' => timeformat($message['poster_time']),
 		'timestamp' => forum_time(true, $message['poster_time']),
 		'counter' => $counter,
-		'permalink' => $counter ? ($txt['reply_noun'].' #'.$counter) : $txt['permalink'],
+		'permalink' => ($counter ? ($txt['reply_noun'].' #'.$counter) : $txt['permalink']),
 		'modified' => array(
 			'time' => timeformat($message['modified_time']),
 			'timestamp' => forum_time(true, $message['modified_time']),
