@@ -53,7 +53,7 @@ function template_boardbit(&$board)
 		// Show the "Moderators: ". Each has name, href, link, and id. (but we're gonna use link_moderators.)
 		if (!empty($board['moderators']))
 			echo '
-		  <span class="brd_moderators" title="',$txt['moderated_by'],'"><span class="brd_moderators_chld" style="display:none;">', $txt['moderated_by'], ': ',implode(', ', $board['link_moderators']), '</span></span>';
+		  <span onclick="brdModeratorsPopup($(this));" class="brd_moderators" title="',$txt['moderated_by'],'"><span class="brd_moderators_chld" style="display:none;">', $txt['moderated_by'], ': ',implode(', ', $board['link_moderators']), '</span></span>';
 		echo '
 		  <h3><a href="', $board['href'], '" id="b', $board['id'], '">', $board['name'], '</a></h3>';
 

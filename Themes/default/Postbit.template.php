@@ -19,21 +19,11 @@ function template_postbit_normal(&$message, $ignoring)
 	<div itemscope="itemscope" itemtype="http://data-vocabulary.org/Person" class="poster_details orange_container" style="margin-top:4px;">
 	<ul class="reset smalltext" id="msg_', $message['id'], '_extra_info">';
 
-	// Show the member's primary group (like 'Administrator') if they have one.
-	if (!empty($message['member']['group']))
-		echo '
-	<li class="membergroup">', $message['member']['group'], '</li>';
-	else
-		echo '
-	<li><br /></li>';
-	// Show the member's custom title, if they have one.
-	if (!empty($message['member']['title']))
-		echo '
-	<li class="title">', $message['member']['title'], '</li>';
-
 	// Don't show these things for guests.
 	if (!$message['member']['is_guest'])
 	{
+		echo '
+		<li class="membergroup">', $message['member']['group_stars'], '</li>';
 		// Show avatars, images, etc.?
 		if (!empty($settings['show_user_images']) && empty($options['show_no_avatars'])) {
 			if(!empty($message['member']['avatar']['image']))
@@ -51,6 +41,13 @@ function template_postbit_normal(&$message, $ignoring)
 			</a>
 		</li>';
 		}
+		//if (!empty($message['member']['post_group']))
+		//	echo '
+		//<li class="membergroup"><span style="color:',$message['member']['post_group_color'], ';">',$message['member']['post_group'], '</span></li>';
+		// Show the member's custom title, if they have one.
+		if (!empty($message['member']['title']))
+			echo '
+		<li class="title">', $message['member']['title'], '</li>';
 		// Show how many posts they have made.
 
 		// Is karma display enabled?  Total or +/-?
@@ -260,23 +257,22 @@ function template_postbit_normal(&$message, $ignoring)
 		<div class="likebar">
 		<div class="floatright">',$message['likelink'],'</div>
 		<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
-		<div class="clear"></div></div>';
-					
-					echo '
+		<div class="clear"></div>
+		</div>';
+	echo '
 		<div class="post_bottom">
 		<div style="display:inline;">';
-						// Show online and offline buttons?
-						if (!empty($modSettings['onlineEnable']) && !$message['member']['is_guest'])
-							echo '
+	// Show online and offline buttons?
+	if (!empty($modSettings['onlineEnable']) && !$message['member']['is_guest'])
+		echo '
 		', $context['can_send_pm'] ? '<a href="' . $message['member']['online']['href'] . '">' : '', $message['member']['online']['text'], $context['can_send_pm'] ? '</a>' : '';
 
-						echo '
+	echo '
 		<span class="modified" id="modified_', $message['id'], '">';
-						if ($settings['show_modify'] && !empty($message['modified']['name']))
-							echo '
+	if ($settings['show_modify'] && !empty($message['modified']['name']))
+		echo '
 		<em>', $txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'], '</em>';
-
-						echo '
+	echo '
 		</span>
 		</div>
 		<div class="reportlinks">
@@ -328,7 +324,6 @@ function template_postbit_normal(&$message, $ignoring)
 
 	echo '
 		</ul>';
-						
 
 	// Maybe they want to report this post to the moderator(s)?
 	if ($context['can_report_moderator'])

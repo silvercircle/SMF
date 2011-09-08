@@ -1762,7 +1762,7 @@ $(document).ready(function() {
 			// set new position and styles for the editor section and its relevant children
 			// add some padding to make it look nice.
    			el.css({"position": 'fixed', 'padding': '10px', 'width': $(window).width() -20 + 'px',
-   				'height': $(window).height() -20 + 'px', 'top':0, 'left': 0});
+   				'height': $(window).height() -20 + 'px', 'top':0, 'left': 0, 'z-index':9999});
 			$('.editor').css('height', $(window).height() - 130 + 'px');
 			$('.rich_editor_frame').css('height', $(window).height() - 130 + 'px');
 			is_zoomed = true;

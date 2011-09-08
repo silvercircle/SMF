@@ -1274,7 +1274,7 @@ class SimpleSEF {
         }
         else {
         	setlocale(LC_CTYPE, 'en_US.utf8');
-    		$string = iconv('UTF-8', "UTF-8//TRANSLIT", $string); // TRANSLIT does the whole job
+    		$string = iconv('UTF-8', "US-ASCII//TRANSLIT", $string); // TRANSLIT does the whole job
         	$string = implode(' ', array_diff(explode(' ', $string), self::$stripWords));
         	$string = str_replace(self::$stripChars, '', $string);
     		$string = preg_replace('~[^\\pL0-9_]+~u', $modSettings['simplesef_space'], $string); // substitutes anything but letters, numbers and '_' with separator 

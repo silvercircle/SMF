@@ -166,4 +166,7 @@ ALTER TABLE {$db_prefix}topics ADD id_prefix smallint(5) unsigned NOT NULL defau
 # highest bit (0x80) indicates a sticky post, bits 0-7 (id_layout & 0x7f) are the layout it
 ALTER TABLE {$db_prefix}topics ADD id_layout tinyint(2) NOT NULL default '0';
 
-
+ALTER TABLE {$db_prefix}members DROP aim;
+ALTER TABLE {$db_prefix}members DROP yim;
+ALTER TABLE {$db_prefix}members DROP msn;
+ALTER TABLE {$db_prefix}members DROP icq;

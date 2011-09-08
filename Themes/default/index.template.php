@@ -49,7 +49,7 @@ function template_init()
 	/* The version this template/theme is for.
 		This should probably be the version of SMF it was created for. */
 	$settings['theme_version'] = '2.0';
-	$context['jsver'] = '?v=1445';
+	$context['jsver'] = '?v=144';
 }
 
 // The main sub template above the content.
@@ -378,7 +378,7 @@ function template_body_below()
 		echo '
 		<script type="text/javascript">
  		var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.miranda.or.at/" : "http://piwik.miranda.or.at/");
- 		document.write(unescape("%3Cscript src=\'" + pkBaseURL + "piwik.js?v=10\' type=\'text/javascript\'%3E%3C/script%3E"));
+ 		document.write(unescape("%3Cscript src=\'" + pkBaseURL + "piwik.js\' type=\'text/javascript\'%3E%3C/script%3E"));
  		</script>
  		<script type="text/javascript">
  			try {
@@ -657,7 +657,7 @@ function template_sidebar_content()
 	else {
 		echo '
 				<div class="smalltext">
-				<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/sha1.js',$context['jsver'],'"></script>
+				<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/sha1.js',$context['jsver'],'"></script>
 				<div><form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
 					', sprintf($txt['welcome_guest'], $txt['guest_title']), '<br /><br />
 					', $txt['quick_login_dec'], '<br />

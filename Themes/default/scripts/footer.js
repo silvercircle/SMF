@@ -1393,10 +1393,6 @@ jQuery(document).ready(function() {
 		function() {
 			$(this).find('a[class=tpeek]:first').remove();			
 	});
-	$('span.brd_moderators').click(function() {
-		$(this).children('.brd_moderators_chld').show();
-		return(false);
-	});
 	// convert all time stamps to relative 
 	if(!disableDynamicTime)
 		$('abbr.timeago').timeago();
@@ -1408,6 +1404,12 @@ jQuery(document).ready(function() {
 /*
  * all "onclick" handlers
  */
+
+function brdModeratorsPopup(el)
+{
+	el.children('.brd_moderators_chld').show();
+	return(false);
+}
 
 function sharePost(el)
 {

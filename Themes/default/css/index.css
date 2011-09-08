@@ -70,6 +70,7 @@ img.icon {vertical-align:middle;padding:0;margin:0 3px;border:0;height:16px;}
 	margin-bottom:-70px;
 	height:26px;
 	overflow:hidden;
+	z-index:1000;
 }
 .search_form_active
 {
