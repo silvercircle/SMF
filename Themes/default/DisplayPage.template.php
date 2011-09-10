@@ -243,7 +243,7 @@ function template_main()
 
 	if ($context['can_reply'] && !empty($options['display_quick_reply']))
 	{
-		$collapser = array('id' => 'quickReplyOptions', 'title' => $txt['quick_reply'], 'bodyclass' => 'flat_container largepadding');
+		$collapser = array('id' => 'quickReplyOptions', 'title' => $txt['quick_reply'], 'bodyclass' => 'flat_container mediumpadding');
 		echo '
 			<a id="quickreply"></a>
 			<div class="clear"></div>
@@ -251,7 +251,7 @@ function template_main()
 				template_create_collapsible_container($collapser);
 				echo '
 					<div>
-						<p class="smalltext lefttext">', $txt['quick_reply_desc'], '</p>
+						', $txt['quick_reply_desc'], '<br><br>
 						', $context['is_locked'] ? '<p class="alert smalltext">' . $txt['quick_reply_warning'] . '</p>' : '',
 						$context['oldTopicError'] ? '<p class="alert smalltext">' . sprintf($txt['error_old_topic'], $modSettings['oldTopicDays']) . '</p>' : '', '
 						', $context['can_reply_approved'] ? '' : '<em>' . $txt['wait_for_approval'] . '</em>', '
@@ -279,9 +279,9 @@ function template_main()
 				echo '
 							<strong>', $txt['verification'], ':</strong>', template_control_verification($context['visual_verification_id'], 'quick_reply'), '<br />';
 
-			if($context['user']['avatar']['image'])
+			if(isset($context['user']['avatar']['image']) && !empty($context['user']['avatar']['image']))
 				echo '
-					<div class="floatleft blue_container mediumpadding">',
+					<div class="floatleft blue_container smallpadding avatar">',
 					$context['user']['avatar']['image'],'
 					</div>';
 			echo '

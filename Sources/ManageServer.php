@@ -756,7 +756,7 @@ function DownloadLanguage()
 			$value_data['params']['value_' . $k] = '%' . $index;
 		}
 
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_theme, value
 			FROM {db_prefix}themes
 			WHERE id_member = {int:no_member}
@@ -769,19 +769,19 @@ function DownloadLanguage()
 			))
 		);
 		$themes = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 		{
 			// Find the right one.
 			foreach ($indexes as $index)
 				if (strpos($row['value'], $index) !== false)
 					$themes[$row['id_theme']] = $index;
 		}
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
 		if (!empty($themes))
 		{
 			// Now we have the id_theme we can get the pretty description.
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT id_theme, value
 				FROM {db_prefix}themes
 				WHERE id_member = {int:no_member}
@@ -793,12 +793,12 @@ function DownloadLanguage()
 					'name' => 'name',
 				)
 			);
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = mysql_fetch_assoc($request))
 			{
 				// Now we have it...
 				$context['theme_names'][$themes[$row['id_theme']]] = $row['value'];
 			}
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 		}
 	}
 
@@ -1090,14 +1090,14 @@ function list_getLanguages()
 	}
 
 	// Work out how many people are using each language.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT lngfile, COUNT(*) AS num_users
 		FROM {db_prefix}members
 		GROUP BY lngfile',
 		array(
 		)
 	);
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 	{
 		// Default?
 		if (empty($row['lngfile']) || !isset($languages[$row['lngfile']]))
@@ -1108,7 +1108,7 @@ function list_getLanguages()
 		elseif (isset($languages[$row['lngfile']]))
 			$languages[$row['lngfile']]['count'] += $row['num_users'];
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// Restore the current users language.
 	$txt = $old_txt;
@@ -1186,7 +1186,7 @@ function ModifyLanguage()
 	$context['lang_id'] = $matches[1];
 
 	// Get all the theme data.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT id_theme, variable, value
 		FROM {db_prefix}themes
 		WHERE id_theme != {int:default_theme}
@@ -1205,9 +1205,9 @@ function ModifyLanguage()
 			'theme_dir' => $settings['default_theme_dir'],
 		),
 	);
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 		$themes[$row['id_theme']][$row['variable']] = $row['value'];
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// This will be where we look
 	$lang_dirs = array();
@@ -1295,7 +1295,7 @@ function ModifyLanguage()
 				deltree($curPath);
 
 		// Members can no longer use this language.
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			UPDATE {db_prefix}members
 			SET lngfile = {string:empty_string}
 			WHERE lngfile = {string:current_language}',

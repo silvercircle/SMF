@@ -139,7 +139,7 @@ function PlushSearch1()
 	}
 
 	// Find all the boards this user is allowed to see.
-	$request = $smcFunc['db_query']('order_by_board_order', '
+	$request = smf_db_query('
 		SELECT b.id_cat, c.name AS cat_name, b.id_board, b.name, b.child_level
 		FROM {db_prefix}boards AS b
 			LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)
@@ -149,10 +149,10 @@ function PlushSearch1()
 			'empty_string' => '',
 		)
 	);
-	$context['num_boards'] = $smcFunc['db_num_rows']($request);
+	$context['num_boards'] = mysql_num_rows($request);
 	$context['boards_check_all'] = true;
 	$context['categories'] = array();
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 	{
 		// This category hasn't been set up yet..
 		if (!isset($context['categories'][$row['id_cat']]))
@@ -174,7 +174,7 @@ function PlushSearch1()
 		if (!$context['categories'][$row['id_cat']]['boards'][$row['id_board']]['selected'] && (empty($modSettings['recycle_enable']) || $row['id_board'] != $modSettings['recycle_board']))
 			$context['boards_check_all'] = false;
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// Now, let's sort the list of categories into the boards for templates that like that.
 	$temp_boards = array();
@@ -219,7 +219,7 @@ function PlushSearch1()
 			'href' => $scripturl . '?topic=' . $context['search_params']['topic'] . '.0',
 		);
 
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT ms.subject
 			FROM {db_prefix}topics AS t
 				INNER JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
@@ -234,11 +234,11 @@ function PlushSearch1()
 			)
 		);
 
-		if ($smcFunc['db_num_rows']($request) == 0)
+		if (mysql_num_rows($request) == 0)
 			fatal_lang_error('topic_gone', false);
 
-		list ($context['search_topic']['subject']) = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
+		list ($context['search_topic']['subject']) = mysql_fetch_row($request);
+		mysql_free_result($request);
 
 		$context['search_topic']['link'] = '<a href="' . $context['search_topic']['href'] . '">' . $context['search_topic']['subject'] . '</a>';
 	}
@@ -386,7 +386,7 @@ function PlushSearch2()
 
 	if (!empty($search_params['minage']) || !empty($search_params['maxage']))
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT ' . (empty($search_params['maxage']) ? '0, ' : 'IFNULL(MIN(id_msg), -1), ') . (empty($search_params['minage']) ? '0' : 'IFNULL(MAX(id_msg), -1)') . '
 			FROM {db_prefix}messages
 			WHERE 1=1' . ($modSettings['postmod_active'] ? '
@@ -399,10 +399,10 @@ function PlushSearch2()
 				'is_approved_true' => 1,
 			)
 		);
-		list ($minMsgID, $maxMsgID) = $smcFunc['db_fetch_row']($request);
+		list ($minMsgID, $maxMsgID) = mysql_fetch_row($request);
 		if ($minMsgID < 0 || $maxMsgID < 0)
 			$context['search_errors']['no_messages_in_time_frame'] = true;
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 	}
 
 	// Default the user name to a wildcard matching every user (*).
@@ -431,7 +431,7 @@ function PlushSearch2()
 		// Create a list of database-escaped search names.
 		$realNameMatches = array();
 		foreach ($possible_users as $possible_user)
-			$realNameMatches[] = $smcFunc['db_quote'](
+			$realNameMatches[] = smf_db_quote(
 				'{string:possible_user}',
 				array(
 					'possible_user' => $possible_user
@@ -439,7 +439,7 @@ function PlushSearch2()
 			);
 
 		// Retrieve a list of possible members.
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_member
 			FROM {db_prefix}members
 			WHERE {raw:match_possible_users}',
@@ -448,11 +448,11 @@ function PlushSearch2()
 			)
 		);
 		// Simply do nothing if there're too many members matching the criteria.
-		if ($smcFunc['db_num_rows']($request) > $maxMembersToSearch)
+		if (mysql_num_rows($request) > $maxMembersToSearch)
 			$userQuery = '';
-		elseif ($smcFunc['db_num_rows']($request) == 0)
+		elseif (mysql_num_rows($request) == 0)
 		{
-			$userQuery = $smcFunc['db_quote'](
+			$userQuery = smf_db_quote(
 				'm.id_member = {int:id_member_guest} AND ({raw:match_possible_guest_names})',
 				array(
 					'id_member_guest' => 0,
@@ -463,9 +463,9 @@ function PlushSearch2()
 		else
 		{
 			$memberlist = array();
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = mysql_fetch_assoc($request))
 				$memberlist[] = $row['id_member'];
-			$userQuery = $smcFunc['db_quote'](
+			$userQuery = smf_db_quote(
 				'(m.id_member IN ({array_int:matched_members}) OR (m.id_member = {int:id_member_guest} AND ({raw:match_possible_guest_names})))',
 				array(
 					'matched_members' => $memberlist,
@@ -474,7 +474,7 @@ function PlushSearch2()
 				)
 			);
 		}
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 	}
 
 	// If the boards were passed by URL (params=), temporarily put them back in $_REQUEST.
@@ -493,7 +493,7 @@ function PlushSearch2()
 	// Special case for boards: searching just one topic?
 	if (!empty($search_params['topic']))
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT b.id_board
 			FROM {db_prefix}topics AS t
 				INNER JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
@@ -507,12 +507,12 @@ function PlushSearch2()
 			)
 		);
 
-		if ($smcFunc['db_num_rows']($request) == 0)
+		if (mysql_num_rows($request) == 0)
 			fatal_lang_error('topic_gone', false);
 
 		$search_params['brd'] = array();
-		list ($search_params['brd'][0]) = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
+		list ($search_params['brd'][0]) = mysql_fetch_row($request);
+		mysql_free_result($request);
 	}
 	// Select all boards you've selected AND are allowed to see.
 	elseif ($user_info['is_admin'] && (!empty($search_params['advanced']) || !empty($_REQUEST['brd'])))
@@ -520,7 +520,7 @@ function PlushSearch2()
 	else
 	{
 		$see_board = empty($search_params['advanced']) ? 'query_wanna_see_board' : 'query_see_board';
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT b.id_board
 			FROM {db_prefix}boards AS b
 			WHERE {raw:boards_allowed_to_see}
@@ -535,9 +535,9 @@ function PlushSearch2()
 			)
 		);
 		$search_params['brd'] = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 			$search_params['brd'][] = $row['id_board'];
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
 		// This error should pro'bly only happen for hackers.
 		if (empty($search_params['brd']))
@@ -550,7 +550,7 @@ function PlushSearch2()
 			$search_params['brd'][$k] = (int) $v;
 
 		// If we've selected all boards, this parameter can be left empty.
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT COUNT(*)
 			FROM {db_prefix}boards
 			WHERE redirect = {string:empty_string}',
@@ -558,8 +558,8 @@ function PlushSearch2()
 				'empty_string' => '',
 			)
 		);
-		list ($num_boards) = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
+		list ($num_boards) = mysql_fetch_row($request);
+		mysql_free_result($request);
 
 		if (count($search_params['brd']) == $num_boards)
 			$boardQuery = '';
@@ -1005,7 +1005,7 @@ function PlushSearch2()
 					// If the database doesn't support IGNORE to make this fast we need to do some tracking.
 					if (!$smcFunc['db_support_ignore'])
 					{
-						while ($row = $smcFunc['db_fetch_row']($ignoreRequest))
+						while ($row = mysql_fetch_row($ignoreRequest))
 						{
 							// No duplicates!
 							if (isset($inserts[$row[1]]))
@@ -1014,11 +1014,11 @@ function PlushSearch2()
 							foreach ($row as $key => $value)
 								$inserts[$row[1]][] = (int) $row[$key];
 						}
-						$smcFunc['db_free_result']($ignoreRequest);
+						mysql_free_result($ignoreRequest);
 						$numSubjectResults = count($inserts);
 					}
 					else
-						$numSubjectResults += $smcFunc['db_affected_rows']();
+						$numSubjectResults += smf_db_affected_rows();
 
 					if (!empty($modSettings['search_max_results']) && $numSubjectResults >= $modSettings['search_max_results'])
 						break;
@@ -1027,7 +1027,7 @@ function PlushSearch2()
 				// If there's data to be inserted for non-IGNORE databases do it here!
 				if (!empty($inserts))
 				{
-					$smcFunc['db_insert']('',
+					smf_db_insert('',
 						'{db_prefix}log_search_results',
 						array('id_search' => 'int', 'id_topic' => 'int', 'relevance' => 'int', 'id_msg' => 'int', 'num_matches' => 'int'),
 						$inserts,
@@ -1234,7 +1234,7 @@ function PlushSearch2()
 						// Don't do INSERT IGNORE? Manually fix this up!
 						if (!$smcFunc['db_support_ignore'])
 						{
-							while ($row = $smcFunc['db_fetch_row']($ignoreRequest))
+							while ($row = mysql_fetch_row($ignoreRequest))
 							{
 								$ind = $createTemporary ? 0 : 1;
 								// No duplicates!
@@ -1243,11 +1243,11 @@ function PlushSearch2()
 
 								$inserts[$row[$ind]] = $row;
 							}
-							$smcFunc['db_free_result']($ignoreRequest);
+							mysql_free_result($ignoreRequest);
 							$numSubjectResults = count($inserts);
 						}
 						else
-							$numSubjectResults += $smcFunc['db_affected_rows']();
+							$numSubjectResults += smf_db_affected_rows();
 
 						if (!empty($modSettings['search_max_results']) && $numSubjectResults >= $modSettings['search_max_results'])
 							break;
@@ -1256,7 +1256,7 @@ function PlushSearch2()
 					// Got some non-MySQL data to plonk in?
 					if (!empty($inserts))
 					{
-						$smcFunc['db_insert']('',
+						smf_db_insert('',
 							('{db_prefix}' . ($createTemporary ? 'tmp_' : '') . 'log_search_topics'),
 							$createTemporary ? array('id_topic' => 'int') : array('id_search' => 'int', 'id_topic' => 'int'),
 							$inserts,
@@ -1335,7 +1335,7 @@ function PlushSearch2()
 
 							if (!$smcFunc['db_support_ignore'])
 							{
-								while ($row = $smcFunc['db_fetch_row']($ignoreRequest))
+								while ($row = mysql_fetch_row($ignoreRequest))
 								{
 									// No duplicates!
 									if (isset($inserts[$row[0]]))
@@ -1343,11 +1343,11 @@ function PlushSearch2()
 
 									$inserts[$row[0]] = $row;
 								}
-								$smcFunc['db_free_result']($ignoreRequest);
+								mysql_free_result($ignoreRequest);
 								$indexedResults = count($inserts);
 							}
 							else
-								$indexedResults += $smcFunc['db_affected_rows']();
+								$indexedResults += smf_db_affected_rows();
 
 							if (!empty($maxMessageResults) && $indexedResults >= $maxMessageResults)
 								break;
@@ -1357,7 +1357,7 @@ function PlushSearch2()
 					// More non-MySQL stuff needed?
 					if (!empty($inserts))
 					{
-						$smcFunc['db_insert']('',
+						smf_db_insert('',
 							'{db_prefix}' . ($createTemporary ? 'tmp_' : '') . 'log_search_messages',
 							$createTemporary ? array('id_msg' => 'int') : array('id_msg' => 'int', 'id_search' => 'int'),
 							$inserts,
@@ -1464,7 +1464,7 @@ function PlushSearch2()
 					if (!$smcFunc['db_support_ignore'])
 					{
 						$inserts = array();
-						while ($row = $smcFunc['db_fetch_row']($ignoreRequest))
+						while ($row = mysql_fetch_row($ignoreRequest))
 						{
 							// No duplicates!
 							if (isset($inserts[$row[2]]))
@@ -1473,7 +1473,7 @@ function PlushSearch2()
 							foreach ($row as $key => $value)
 								$inserts[$row[2]][] = (int) $row[$key];
 						}
-						$smcFunc['db_free_result']($ignoreRequest);
+						mysql_free_result($ignoreRequest);
 
 						// Now put them in!
 						if (!empty($inserts))
@@ -1482,7 +1482,7 @@ function PlushSearch2()
 							foreach ($main_query['select'] as $k => $v)
 								$query_columns[$k] = 'int';
 
-							$smcFunc['db_insert']('',
+							smf_db_insert('',
 								'{db_prefix}log_search_results',
 								$query_columns,
 								$inserts,
@@ -1492,7 +1492,7 @@ function PlushSearch2()
 						$_SESSION['search_cache']['num_results'] += count($inserts);
 					}
 					else
-						$_SESSION['search_cache']['num_results'] = $smcFunc['db_affected_rows']();
+						$_SESSION['search_cache']['num_results'] = smf_db_affected_rows();
 				}
 
 				// Insert subject-only matches.
@@ -1536,7 +1536,7 @@ function PlushSearch2()
 					if (!$smcFunc['db_support_ignore'])
 					{
 						$inserts = array();
-						while ($row = $smcFunc['db_fetch_row']($ignoreRequest))
+						while ($row = mysql_fetch_row($ignoreRequest))
 						{
 							// No duplicates!
 							if (isset($usedIDs[$row[1]]))
@@ -1545,12 +1545,12 @@ function PlushSearch2()
 							$usedIDs[$row[1]] = true;
 							$inserts[] = $row;
 						}
-						$smcFunc['db_free_result']($ignoreRequest);
+						mysql_free_result($ignoreRequest);
 
 						// Now put them in!
 						if (!empty($inserts))
 						{
-							$smcFunc['db_insert']('',
+							smf_db_insert('',
 								'{db_prefix}log_search_results',
 								array('id_search' => 'int', 'id_topic' => 'int', 'relevance' => 'float', 'id_msg' => 'int', 'num_matches' => 'int'),
 								$inserts,
@@ -1560,7 +1560,7 @@ function PlushSearch2()
 						$_SESSION['search_cache']['num_results'] += count($inserts);
 					}
 					else
-						$_SESSION['search_cache']['num_results'] += $smcFunc['db_affected_rows']();
+						$_SESSION['search_cache']['num_results'] += smf_db_affected_rows();
 				}
 				else
 					$_SESSION['search_cache']['num_results'] = 0;
@@ -1580,7 +1580,7 @@ function PlushSearch2()
 				'id_search' => $_SESSION['search_cache']['id_search'],
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 		{
 			$context['topics'][$row['id_msg']] = array(
 				'relevance' => round($row['relevance'] / 10, 1) . '%',
@@ -1590,7 +1590,7 @@ function PlushSearch2()
 			// By default they didn't participate in the topic!
 			$participants[$row['id_topic']] = false;
 		}
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
 		$num_results = $_SESSION['search_cache']['num_results'];
 	}
@@ -1627,7 +1627,7 @@ function PlushSearch2()
 		$msg_list = array_keys($context['topics']);
 
 		// Load the posters...
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_member
 			FROM {db_prefix}messages
 			WHERE id_member != {int:no_member}
@@ -1639,15 +1639,15 @@ function PlushSearch2()
 			)
 		);
 		$posters = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 			$posters[] = $row['id_member'];
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
 		if (!empty($posters))
 			loadMemberData(array_unique($posters));
 
 		// Get the messages out for the callback - select enough that it can be made to look just like Display.
-		$messages_request = $smcFunc['db_query']('', '
+		$messages_request = smf_db_query( '
 			SELECT
 				m.id_msg, m.subject, m.poster_name, m.poster_email, m.poster_time, m.id_member,
 				m.icon, m.poster_ip, m.body, m.smileys_enabled, m.modified_time, m.modified_name,
@@ -1678,13 +1678,13 @@ function PlushSearch2()
 		);
 
 		// If there are no results that means the things in the cache got deleted, so pretend we have no topics anymore.
-		if ($smcFunc['db_num_rows']($messages_request) == 0)
+		if (mysql_num_rows($messages_request) == 0)
 			$context['topics'] = array();
 
 		// If we want to know who participated in what then load this now.
 		if (!empty($modSettings['enableParticipation']) && !$user_info['is_guest'])
 		{
-			$result = $smcFunc['db_query']('', '
+			$result = smf_db_query( '
 				SELECT id_topic
 				FROM {db_prefix}messages
 				WHERE id_topic IN ({array_int:topic_list})
@@ -1696,9 +1696,9 @@ function PlushSearch2()
 					'topic_list' => array_keys($participants),
 				)
 			);
-			while ($row = $smcFunc['db_fetch_assoc']($result))
+			while ($row = mysql_fetch_assoc($result))
 				$participants[$row['id_topic']] = true;
-			$smcFunc['db_free_result']($result);
+			mysql_free_result($result);
 		}
 	}
 
@@ -1747,10 +1747,10 @@ function prepareSearchContext($reset = false)
 
 	// Start from the beginning...
 	if ($reset)
-		return @$smcFunc['db_data_seek']($messages_request, 0);
+		return @mysql_data_seek($messages_request, 0);
 
 	// Attempt to get the next message.
-	$message = $smcFunc['db_fetch_assoc']($messages_request);
+	$message = mysql_fetch_assoc($messages_request);
 	if (!$message)
 		return false;
 

@@ -98,7 +98,7 @@ function smf_openID_getAssociation($server, $handle = null, $no_delete = false)
 	if (!$no_delete)
 	{
 		// Delete the already expired associations.
-		$smcFunc['db_query']('openid_delete_assoc_old', '
+		smf_db_query('
 			DELETE FROM {db_prefix}openid_assoc
 			WHERE expires <= {int:current_time}',
 			array(
@@ -108,7 +108,7 @@ function smf_openID_getAssociation($server, $handle = null, $no_delete = false)
 	}
 
 	// Get the association that has the longest lifetime from now.
-	$request = $smcFunc['db_query']('openid_select_assoc', '
+	$request = smf_db_query('
 		SELECT server_url, handle, secret, issued, expires, assoc_type
 		FROM {db_prefix}openid_assoc
 		WHERE server_url = {string:server_url}' . ($handle === null ? '' : '
@@ -120,11 +120,11 @@ function smf_openID_getAssociation($server, $handle = null, $no_delete = false)
 		)
 	);
 
-	if ($smcFunc['db_num_rows']($request) == 0)
+	if (mysql_num_rows($request) == 0)
 		return null;
 
-	$return = $smcFunc['db_fetch_assoc']($request);
-	$smcFunc['db_free_result']($request);
+	$return = mysql_fetch_assoc($request);
+	mysql_free_result($request);
 
 	return $return;
 }
@@ -185,7 +185,7 @@ function smf_openID_makeAssociation($server)
 		$secret = $assoc_data['mac_key'];
 
 	// Store the data
-	$smcFunc['db_insert']('replace',
+	smf_db_insert('replace',
 		'{db_prefix}openid_assoc',
 		array('server_url' => 'string', 'handle' => 'string', 'secret' => 'string', 'issued' => 'int', 'expires' => 'int', 'assoc_type' => 'string'),
 		array($server, $handle, $secret, $issued, $expires, $assoc_type),
@@ -206,7 +206,7 @@ function smf_openID_removeAssociation($handle)
 {
 	global $smcFunc;
 
-	$smcFunc['db_query']('openid_remove_association', '
+	smf_db_query('
 		DELETE FROM {db_prefix}openid_assoc
 		WHERE handle = {string:handle}',
 		array(
@@ -275,7 +275,7 @@ function smf_openID_return()
 	$context['openid_save_fields'] = isset($_GET['sf']) ? unserialize(base64_decode($_GET['sf'])) : array();
 
 	// Is there a user with this OpenID_uri?
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SELECT passwd, id_member, id_group, lngfile, is_activated, email_address, additional_groups, member_name, password_salt,
 			openid_uri
 		FROM {db_prefix}members
@@ -285,7 +285,7 @@ function smf_openID_return()
 		)
 	);
 
-	$member_found = $smcFunc['db_num_rows']($result);
+	$member_found = mysql_num_rows($result);
 
 	if (!$member_found && isset($_GET['sa']) && $_GET['sa'] == 'change_uri' && !empty($_SESSION['new_openid_uri']) && $_SESSION['new_openid_uri'] == $openid_uri)
 	{
@@ -339,8 +339,8 @@ function smf_openID_return()
 	}
 	else
 	{
-		$user_settings = $smcFunc['db_fetch_assoc']($result);
-		$smcFunc['db_free_result']($result);
+		$user_settings = mysql_fetch_assoc($result);
+		mysql_free_result($result);
 
 		$user_settings['passwd'] = sha1(strtolower($user_settings['member_name']) . $secret);
 		$user_settings['password_salt'] = substr(md5(mt_rand()), 0, 4);
@@ -379,7 +379,7 @@ function smf_openid_member_exists($url)
 {
 	global $smcFunc;
 
-	$request = $smcFunc['db_query']('openid_member_exists', '
+	$request = smf_db_query('
 		SELECT mem.id_member, mem.member_name
 		FROM {db_prefix}members AS mem
 		WHERE mem.openid_uri = {string:openid_uri}',
@@ -387,8 +387,8 @@ function smf_openid_member_exists($url)
 			'openid_uri' => $url,
 		)
 	);
-	$member = $smcFunc['db_fetch_assoc']($request);
-	$smcFunc['db_free_result']($request);
+	$member = mysql_fetch_assoc($request);
+	mysql_free_result($request);
 
 	return $member;
 }

@@ -159,7 +159,7 @@ function TopicPeek()
 		global $memberContext;
 		loadTemplate('TopicPreview');
 		loadLanguage('index');
-		$result = $smcFunc['db_query']('', '
+		$result = smf_db_query( '
 			SELECT b.*, t.id_topic, t.id_board, t.id_first_msg, t.id_last_msg, m.id_member AS member_started, m1.id_member AS member_lastpost, m.subject AS first_subject, m.poster_name AS starter_name, m1.subject AS last_subject,
 			m1.poster_name AS last_name, m.body as first_body, m1.body AS last_body, 
 			' . ($user_info['is_guest'] ? '0' : 'IFNULL(lt.id_msg, IFNULL(lmr.id_msg, -1)) + 1') . ' AS new_from,
@@ -171,7 +171,7 @@ function TopicPeek()
 			LEFT JOIN {db_prefix}messages AS m1 ON m1.id_msg = t.id_last_msg WHERE t.id_topic = {int:topic_id} AND {query_see_board}',
 			array('topic_id' => $tid, 'current_member' => $user_info['id'], 'current_board' => $board));
 			
-		$row = $smcFunc['db_fetch_assoc']($result);
+		$row = mysql_fetch_assoc($result);
 		
 		if(!$row)
 			$context['preview'] = null;			// no access or other error
@@ -208,7 +208,7 @@ function TopicPeek()
 				$context['preview']['last_time'] = timeformat($row['last_time']);
 			}
 		}
-		$smcFunc['db_free_result']($result);
+		mysql_free_result($result);
 	}
 }
 
@@ -241,27 +241,27 @@ function WhoPosted()
 	$tid = isset($_REQUEST['t']) ? (int)$_REQUEST['t'] : 0;
 		
 	if($tid) {
-		$result = $smcFunc['db_query']('', 'SELECT t.id_board FROM {db_prefix}topics AS t
+		$result = smf_db_query( 'SELECT t.id_board FROM {db_prefix}topics AS t
 			INNER JOIN {db_prefix}boards AS b ON b.id_board = t.id_board WHERE t.id_topic = {int:topic} 
 			AND {query_see_board}', array('topic' => $tid));
 		
-		$b = $smcFunc['db_fetch_row']($result);
-		$smcFunc['db_free_result']($result);
+		$b = mysql_fetch_row($result);
+		mysql_free_result($result);
 		
 		if($b) {
 			loadTemplate('MessageIndex');
 			$context['sub_template'] = 'ajaxresponse_whoposted';
 			$context['template_layers'] = array();		// ouput "plain", no header etc.
 			
-			$result = $smcFunc['db_query']('', '
+			$result = smf_db_query( '
 				SELECT mem.real_name, m.id_member, count(m.id_member) AS count FROM {db_prefix}messages AS m
 					LEFT JOIN {db_prefix}members AS mem ON mem.id_member = m.id_member WHERE m.id_topic = {int:topic} 
 					GROUP BY m.id_member ORDER BY count DESC limit 20', array('topic' => $tid));
 			
-			while($row = $smcFunc['db_fetch_assoc']($result))
+			while($row = mysql_fetch_assoc($result))
 				$context['posters'][] = $row;
 
-			$smcFunc['db_free_result']($result);
+			mysql_free_result($result);
 		}
 	}
 }

@@ -35,7 +35,7 @@ function MessageIndex()
 	// If this is a redirection board head off.
 	if ($board_info['redirect'])
 	{
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			UPDATE {db_prefix}boards
 			SET num_posts = num_posts + 1
 			WHERE id_board = {int:current_board}',
@@ -138,7 +138,7 @@ function MessageIndex()
 			die;
 		}
 
-		$smcFunc['db_insert']('replace',
+		smf_db_insert('replace',
 			'{db_prefix}log_boards',
 			array('id_msg' => 'int', 'id_member' => 'int', 'id_board' => 'int'),
 			array($modSettings['maxMsgID'], $user_info['id'], $board),
@@ -147,7 +147,7 @@ function MessageIndex()
 
 		if (!empty($board_info['parent_boards']))
 		{
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				UPDATE {db_prefix}log_boards
 				SET id_msg = {int:id_msg}
 				WHERE id_member = {int:current_member}
@@ -168,7 +168,7 @@ function MessageIndex()
 		if (isset($_SESSION['topicseen_cache'][$board]))
 			unset($_SESSION['topicseen_cache'][$board]);
 
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT sent
 			FROM {db_prefix}log_notify
 			WHERE id_board = {int:current_board}
@@ -179,13 +179,13 @@ function MessageIndex()
 				'current_member' => $user_info['id'],
 			)
 		);
-		$context['is_marked_notify'] = $smcFunc['db_num_rows']($request) != 0;
+		$context['is_marked_notify'] = mysql_num_rows($request) != 0;
 		if ($context['is_marked_notify'])
 		{
-			list ($sent) = $smcFunc['db_fetch_row']($request);
+			list ($sent) = mysql_fetch_row($request);
 			if (!empty($sent))
 			{
-				$smcFunc['db_query']('', '
+				smf_db_query( '
 					UPDATE {db_prefix}log_notify
 					SET sent = {int:is_sent}
 					WHERE id_board = {int:current_board}
@@ -198,7 +198,7 @@ function MessageIndex()
 				);
 			}
 		}
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 	}
 	else
 		$context['is_marked_notify'] = false;
@@ -230,7 +230,7 @@ function MessageIndex()
 		$context['view_members_list'] = array();
 		$context['view_num_hidden'] = 0;
 
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT
 				lo.id_member, lo.log_time, mem.real_name, mem.member_name, mem.show_online,
 				mg.online_color, mg.id_group, mg.group_name
@@ -244,7 +244,7 @@ function MessageIndex()
 				'session' => $user_info['is_guest'] ? 'ip' . $user_info['ip'] : session_id(),
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 		{
 			if (empty($row['id_member']))
 				continue;
@@ -274,8 +274,8 @@ function MessageIndex()
 			if (empty($row['show_online']))
 				$context['view_num_hidden']++;
 		}
-		$context['view_num_guests'] = $smcFunc['db_num_rows']($request) - count($context['view_members']);
-		$smcFunc['db_free_result']($request);
+		$context['view_num_guests'] = mysql_num_rows($request) - count($context['view_members']);
+		mysql_free_result($request);
 
 		// Put them in "last clicked" order.
 		krsort($context['view_members_list']);
@@ -335,7 +335,7 @@ function MessageIndex()
 	$pre_query = $start > 0;
 	if ($pre_query && $maxindex > 0)
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT t.id_topic
 			FROM {db_prefix}topics AS t' . ($context['sort_by'] === 'last_poster' ? '
 				INNER JOIN {db_prefix}messages AS ml ON (ml.id_msg = t.id_last_msg)' : (in_array($context['sort_by'], array('starter', 'subject')) ? '
@@ -356,7 +356,7 @@ function MessageIndex()
 			)
 		);
 		$topic_ids = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 			$topic_ids[] = $row['id_topic'];
 	}
 
@@ -366,7 +366,7 @@ function MessageIndex()
 		// For search engine effectiveness we'll link guests differently.
 		$context['pageindex_multiplier'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) && !WIRELESS ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
 
-		$result = $smcFunc['db_query']('substring', '
+		$result = smf_db_query('
 			SELECT 
 				t.id_topic, t.num_replies, t.locked, t.num_views, t.is_sticky, t.id_poll, t.id_previous_board,
 				' . ($user_info['is_guest'] ? '0' : 'IFNULL(lt.id_msg, IFNULL(lmr.id_msg, -1)) + 1') . ' AS new_from,
@@ -404,7 +404,7 @@ function MessageIndex()
 
 		// Begin 'printing' the message index for current board.
 		$first_posters = array();
-		while ($row = $smcFunc['db_fetch_assoc']($result))
+		while ($row = mysql_fetch_assoc($result))
 		{
 			if ($row['id_poll'] > 0 && $modSettings['pollMode'] == '0')
 				continue;
@@ -527,7 +527,7 @@ function MessageIndex()
 					$_topic['first_post']['member']['avatar'] = $memberContext[$first_posters[$_topic['id']]]['avatar']['image'];
 			}
 		}
-		$smcFunc['db_free_result']($result);
+		mysql_free_result($result);
 
 		// Fix the sequence of topics if they were retrieved in the wrong order. (for speed reasons...)
 		if ($fake_ascending)
@@ -535,7 +535,7 @@ function MessageIndex()
 
 		if (!empty($modSettings['enableParticipation']) && !$user_info['is_guest'] && !empty($topic_ids))
 		{
-			$result = $smcFunc['db_query']('', '
+			$result = smf_db_query( '
 				SELECT id_topic
 				FROM {db_prefix}messages
 				WHERE id_topic IN ({array_int:topic_list})
@@ -547,12 +547,12 @@ function MessageIndex()
 					'topic_list' => $topic_ids,
 				)
 			);
-			while ($row = $smcFunc['db_fetch_assoc']($result))
+			while ($row = mysql_fetch_assoc($result))
 			{
 				$context['topics'][$row['id_topic']]['is_posted_in'] = true;
 				$context['topics'][$row['id_topic']]['class'] = 'my_' . $context['topics'][$row['id_topic']]['class'];
 			}
-			$smcFunc['db_free_result']($result);
+			mysql_free_result($result);
 		}
 	}
 
@@ -740,7 +740,7 @@ function QuickModeration()
 	if (!empty($_REQUEST['actions']))
 	{
 		// Find all topics...
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_topic, id_member_started, id_board, locked, approved, unapproved_posts
 			FROM {db_prefix}topics
 			WHERE id_topic IN ({array_int:action_topic_ids})
@@ -749,7 +749,7 @@ function QuickModeration()
 				'action_topic_ids' => array_keys($_REQUEST['actions']),
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 		{
 			if (!empty($board))
 			{
@@ -775,7 +775,7 @@ function QuickModeration()
 					unset($_REQUEST['actions'][$row['id_topic']]);
 			}
 		}
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 	}
 
 	$stickyCache = array();
@@ -820,7 +820,7 @@ function QuickModeration()
 	// Do all the stickies...
 	if (!empty($stickyCache))
 	{
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			UPDATE {db_prefix}topics
 			SET is_sticky = CASE WHEN is_sticky = {int:is_sticky} THEN 0 ELSE 1 END
 			WHERE id_topic IN ({array_int:sticky_topic_ids})',
@@ -831,7 +831,7 @@ function QuickModeration()
 		);
 
 		// Get the board IDs and Sticky status
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_topic, id_board, is_sticky
 			FROM {db_prefix}topics
 			WHERE id_topic IN ({array_int:sticky_topic_ids})
@@ -842,19 +842,19 @@ function QuickModeration()
 		);
 		$stickyCacheBoards = array();
 		$stickyCacheStatus = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 		{
 			$stickyCacheBoards[$row['id_topic']] = $row['id_board'];
 			$stickyCacheStatus[$row['id_topic']] = empty($row['is_sticky']);
 		}
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 	}
 
 	// Move sucka! (this is, by the by, probably the most complicated part....)
 	if (!empty($moveCache[0]))
 	{
 		// I know - I just KNOW you're trying to beat the system.  Too bad for you... we CHECK :P.
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT t.id_topic, t.id_board, b.count_posts
 			FROM {db_prefix}topics AS t
 				LEFT JOIN {db_prefix}boards AS b ON (t.id_board = b.id_board)
@@ -869,7 +869,7 @@ function QuickModeration()
 		$moveTos = array();
 		$moveCache2 = array();
 		$countPosts = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 		{
 			$to = $moveCache[1][$row['id_topic']];
 
@@ -887,7 +887,7 @@ function QuickModeration()
 			// For reporting...
 			$moveCache2[] = array($row['id_topic'], $row['id_board'], $to);
 		}
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
 		$moveCache = $moveCache2;
 
@@ -901,7 +901,7 @@ function QuickModeration()
 		if (!empty($moveTos))
 		{
 			$topicRecounts = array();
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT id_board, count_posts
 				FROM {db_prefix}boards
 				WHERE id_board IN ({array_int:move_boards})',
@@ -910,7 +910,7 @@ function QuickModeration()
 				)
 			);
 
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = mysql_fetch_assoc($request))
 			{
 				$cp = empty($row['count_posts']);
 
@@ -926,14 +926,14 @@ function QuickModeration()
 				}
 			}
 
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			if (!empty($topicRecounts))
 			{
 				$members = array();
 
 				// Get all the members who have posted in the moved topics.
-				$request = $smcFunc['db_query']('', '
+				$request = smf_db_query( '
 					SELECT id_member, id_topic
 					FROM {db_prefix}messages
 					WHERE id_topic IN ({array_int:moved_topic_ids})',
@@ -942,7 +942,7 @@ function QuickModeration()
 					)
 				);
 
-				while ($row = $smcFunc['db_fetch_assoc']($request))
+				while ($row = mysql_fetch_assoc($request))
 				{
 					if (!isset($members[$row['id_member']]))
 						$members[$row['id_member']] = 0;
@@ -953,7 +953,7 @@ function QuickModeration()
 						$members[$row['id_member']] -= 1;
 				}
 
-				$smcFunc['db_free_result']($request);
+				mysql_free_result($request);
 
 				// And now update them member's post counts
 				foreach ($members as $id_member => $post_adj)
@@ -967,7 +967,7 @@ function QuickModeration()
 	if (!empty($removeCache))
 	{
 		// They can only delete their own topics. (we wouldn't be here if they couldn't do that..)
-		$result = $smcFunc['db_query']('', '
+		$result = smf_db_query( '
 			SELECT id_topic, id_board
 			FROM {db_prefix}topics
 			WHERE id_topic IN ({array_int:removed_topic_ids})' . (!empty($board) && !allowedTo('remove_any') ? '
@@ -981,12 +981,12 @@ function QuickModeration()
 
 		$removeCache = array();
 		$removeCacheBoards = array();
-		while ($row = $smcFunc['db_fetch_assoc']($result))
+		while ($row = mysql_fetch_assoc($result))
 		{
 			$removeCache[] = $row['id_topic'];
 			$removeCacheBoards[$row['id_topic']] = $row['id_board'];
 		}
-		$smcFunc['db_free_result']($result);
+		mysql_free_result($result);
 
 		// Maybe *none* were their own topics.
 		if (!empty($removeCache))
@@ -1008,7 +1008,7 @@ function QuickModeration()
 	if (!empty($approveCache))
 	{
 		// We need unapproved topic ids and their authors!
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_topic, id_member_started
 			FROM {db_prefix}topics
 			WHERE id_topic IN ({array_int:approve_topic_ids})
@@ -1021,12 +1021,12 @@ function QuickModeration()
 		);
 		$approveCache = array();
 		$approveCacheMembers = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 		{
 			$approveCache[] = $row['id_topic'];
 			$approveCacheMembers[$row['id_topic']] = $row['id_member_started'];
 		}
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
 		// Any topics to approve?
 		if (!empty($approveCache))
@@ -1049,7 +1049,7 @@ function QuickModeration()
 		if (!empty($board) && !allowedTo('lock_any'))
 		{
 			// Make sure they started the topic AND it isn't already locked by someone with higher priv's.
-			$result = $smcFunc['db_query']('', '
+			$result = smf_db_query( '
 				SELECT id_topic, locked, id_board
 				FROM {db_prefix}topics
 				WHERE id_topic IN ({array_int:locked_topic_ids})
@@ -1063,17 +1063,17 @@ function QuickModeration()
 			);
 			$lockCache = array();
 			$lockCacheBoards = array();
-			while ($row = $smcFunc['db_fetch_assoc']($result))
+			while ($row = mysql_fetch_assoc($result))
 			{
 				$lockCache[] = $row['id_topic'];
 				$lockCacheBoards[$row['id_topic']] = $row['id_board'];
 				$lockStatus[$row['id_topic']] = empty($row['locked']);
 			}
-			$smcFunc['db_free_result']($result);
+			mysql_free_result($result);
 		}
 		else
 		{
-			$result = $smcFunc['db_query']('', '
+			$result = smf_db_query( '
 				SELECT id_topic, locked, id_board
 				FROM {db_prefix}topics
 				WHERE id_topic IN ({array_int:locked_topic_ids})
@@ -1083,19 +1083,19 @@ function QuickModeration()
 				)
 			);
 			$lockCacheBoards = array();
-			while ($row = $smcFunc['db_fetch_assoc']($result))
+			while ($row = mysql_fetch_assoc($result))
 			{
 				$lockStatus[$row['id_topic']] = empty($row['locked']);
 				$lockCacheBoards[$row['id_topic']] = $row['id_board'];
 			}
-			$smcFunc['db_free_result']($result);
+			mysql_free_result($result);
 		}
 
 		// It could just be that *none* were their own topics...
 		if (!empty($lockCache))
 		{
 			// Alternate the locked value.
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				UPDATE {db_prefix}topics
 				SET locked = CASE WHEN locked = {int:is_locked} THEN ' . (allowedTo('lock_any') ? '1' : '2') . ' ELSE 0 END
 				WHERE id_topic IN ({array_int:locked_topic_ids})',
@@ -1113,7 +1113,7 @@ function QuickModeration()
 		foreach ($markCache as $topic)
 			$markArray[] = array($modSettings['maxMsgID'], $user_info['id'], $topic);
 
-		$smcFunc['db_insert']('replace',
+		smf_db_insert('replace',
 			'{db_prefix}log_topics',
 			array('id_msg' => 'int', 'id_member' => 'int', 'id_topic' => 'int'),
 			$markArray,

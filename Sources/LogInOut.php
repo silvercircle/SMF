@@ -215,7 +215,7 @@ function Login2()
 	}
 
 	// Load the data up!
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT passwd, id_member, id_group, lngfile, is_activated, email_address, additional_groups, member_name, password_salt,
 			openid_uri, passwd_flood
 		FROM {db_prefix}members
@@ -226,11 +226,11 @@ function Login2()
 		)
 	);
 	// Probably mistyped or their email, try it as an email address. (member_name first, though!)
-	if ($smcFunc['db_num_rows']($request) == 0)
+	if (mysql_num_rows($request) == 0)
 	{
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT passwd, id_member, id_group, lngfile, is_activated, email_address, additional_groups, member_name, password_salt, openid_uri,
 			passwd_flood
 			FROM {db_prefix}members
@@ -241,15 +241,15 @@ function Login2()
 			)
 		);
 		// Let them try again, it didn't match anything...
-		if ($smcFunc['db_num_rows']($request) == 0)
+		if (mysql_num_rows($request) == 0)
 		{
 			$context['login_errors'] = array($txt['username_no_exist']);
 			return;
 		}
 	}
 
-	$user_settings = $smcFunc['db_fetch_assoc']($request);
-	$smcFunc['db_free_result']($request);
+	$user_settings = mysql_fetch_assoc($request);
+	mysql_free_result($request);
 
 	// Figure out the password using SMF's encryption - if what they typed is right.
 	if (isset($_POST['hash_passwrd']) && strlen($_POST['hash_passwrd']) == 40)
@@ -502,7 +502,7 @@ function DoLogin()
 	unset($_SESSION['language'], $_SESSION['id_theme']);
 
 	// First login?
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT last_login
 		FROM {db_prefix}members
 		WHERE id_member = {int:id_member}
@@ -511,17 +511,17 @@ function DoLogin()
 			'id_member' => $user_info['id'],
 		)
 	);
-	if ($smcFunc['db_num_rows']($request) == 1)
+	if (mysql_num_rows($request) == 1)
 		$_SESSION['first_login'] = true;
 	else
 		unset($_SESSION['first_login']);
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// You've logged in, haven't you?
 	updateMemberData($user_info['id'], array('last_login' => time(), 'member_ip' => $user_info['ip'], 'member_ip2' => $_SERVER['BAN_CHECK_IP']));
 
 	// Get rid of the online entry for that old guest....
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		DELETE FROM {db_prefix}log_online
 		WHERE session = {string:session}',
 		array(
@@ -565,7 +565,7 @@ function Logout($internal = false, $redirect = true)
 		call_integration_hook('integrate_logout', array($user_settings['member_name']));
 
 		// If you log out, you aren't online anymore :P.
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			DELETE FROM {db_prefix}log_online
 			WHERE id_member = {int:current_member}',
 			array(

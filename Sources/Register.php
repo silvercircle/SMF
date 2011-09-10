@@ -381,7 +381,7 @@ function Register2($verifiedOpenID = false)
 		$regOptions['theme_vars']['display_quick_reply'] = 1;
 
 	// Check whether we have fields that simply MUST be displayed?
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT col_name, field_name, field_type, field_length, mask, show_reg
 		FROM {db_prefix}custom_fields
 		WHERE active = {int:is_active}',
@@ -390,7 +390,7 @@ function Register2($verifiedOpenID = false)
 		)
 	);
 	$custom_field_errors = array();
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 	{
 		// Don't allow overriding of the theme variables.
 		if (isset($regOptions['theme_vars'][$row['col_name']]))
@@ -427,7 +427,7 @@ function Register2($verifiedOpenID = false)
 		if (trim($value) == '' && $row['show_reg'] > 1)
 			$custom_field_errors[] = array('custom_field_empty', array($row['field_name']));
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// Process any errors.
 	if (!empty($custom_field_errors))
@@ -532,7 +532,7 @@ function Activate()
 	}
 
 	// Get the code from the database...
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT id_member, validation_code, member_name, real_name, email_address, is_activated, passwd, lngfile
 		FROM {db_prefix}members' . (empty($_REQUEST['u']) ? '
 		WHERE member_name = {string:email_address} OR email_address = {string:email_address}' : '
@@ -545,7 +545,7 @@ function Activate()
 	);
 
 	// Does this user exist at all?
-	if ($smcFunc['db_num_rows']($request) == 0)
+	if (mysql_num_rows($request) == 0)
 	{
 		$context['sub_template'] = 'retry_activate';
 		$context['page_title'] = $txt['invalid_userid'];
@@ -554,8 +554,8 @@ function Activate()
 		return;
 	}
 
-	$row = $smcFunc['db_fetch_assoc']($request);
-	$smcFunc['db_free_result']($request);
+	$row = mysql_fetch_assoc($request);
+	mysql_free_result($request);
 
 	// Change their email address? (they probably tried a fake one first :P.)
 	if (isset($_POST['new_email'], $_REQUEST['passwd']) && sha1(strtolower($row['member_name']) . $_REQUEST['passwd']) == $row['passwd'])
@@ -571,7 +571,7 @@ function Activate()
 		isBannedEmail($_POST['new_email'], 'cannot_register', $txt['ban_register_prohibited']);
 
 		// Ummm... don't even dare try to take someone else's email!!
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_member
 			FROM {db_prefix}members
 			WHERE email_address = {string:email_address}
@@ -581,9 +581,9 @@ function Activate()
 			)
 		);
 		// !!! Separate the sprintf?
-		if ($smcFunc['db_num_rows']($request) != 0)
+		if (mysql_num_rows($request) != 0)
 			fatal_lang_error('email_in_use', false, array(htmlspecialchars($_POST['new_email'])));
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
 		updateMemberData($row['id_member'], array('email_address' => $_POST['new_email']));
 		$row['email_address'] = $_POST['new_email'];
@@ -674,7 +674,7 @@ function CoppaForm()
 		fatal_lang_error('no_access', false);
 
 	// Get the user details...
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT member_name
 		FROM {db_prefix}members
 		WHERE id_member = {int:id_member}
@@ -684,10 +684,10 @@ function CoppaForm()
 			'is_coppa' => 5,
 		)
 	);
-	if ($smcFunc['db_num_rows']($request) == 0)
+	if (mysql_num_rows($request) == 0)
 		fatal_lang_error('no_access', false);
-	list ($username) = $smcFunc['db_fetch_row']($request);
-	$smcFunc['db_free_result']($request);
+	list ($username) = mysql_fetch_row($request);
+	mysql_free_result($request);
 
 	if (isset($_GET['form']))
 	{

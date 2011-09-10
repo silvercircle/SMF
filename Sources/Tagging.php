@@ -42,27 +42,27 @@ function ViewTags()
 		$id = (int) $_REQUEST['tagid'];
 
 		// Find Tag Name
-		$dbresult = $smcFunc['db_query']('', '
+		$dbresult = smf_db_query( '
 			SELECT tag FROM {db_prefix}tags	WHERE ID_TAG = {int:id} LIMIT 1', array('id' => $id));
-		$row = $smcFunc['db_fetch_assoc']($dbresult);
-		$smcFunc['db_free_result']($dbresult);
+		$row = mysql_fetch_assoc($dbresult);
+		mysql_free_result($dbresult);
 
 		$context['tag_search'] = $row['tag'];
 		$context['page_title'] = $mbname . ' - ' . $txt['smftags_resultsfor'] . $context['tag_search'];
 		$context['start'] = (int) $_REQUEST['start'];
 		
-		$dbresult = $smcFunc['db_query']('', "
+		$dbresult = smf_db_query( "
 		SELECT count(*) as total 
 		FROM ({db_prefix}tags_log as l, {db_prefix}boards AS b, {db_prefix}topics as t, {db_prefix}messages as m)
 		
 		WHERE l.ID_TAG = $id AND b.ID_BOARD = t.ID_BOARD AND l.ID_TOPIC = t.id_topic  AND t.approved = 1 
 		AND t.ID_FIRST_MSG = m.ID_MSG AND " . $user_info['query_see_board'] . " 
 		");
-		$totalRow = $smcFunc['db_fetch_assoc']($dbresult);
+		$totalRow = mysql_fetch_assoc($dbresult);
 		$numofrows = $totalRow['total'];
 		
 		// Find Results
-		$dbresult = $smcFunc['db_query']('', "
+		$dbresult = smf_db_query( "
 		SELECT t.num_replies,t.num_views,m.id_member,m.poster_name,m.subject,m.id_topic,m.poster_time, t.ID_BOARD
 		FROM ({db_prefix}tags_log as l, {db_prefix}boards AS b, {db_prefix}topics as t, {db_prefix}messages as m)
 		
@@ -71,7 +71,7 @@ function ViewTags()
 		ORDER BY m.ID_MSG DESC LIMIT $context[start],25 ");
 
 		$context['tags_topics'] = array();
-		while ($row = $smcFunc['db_fetch_assoc']($dbresult))
+		while ($row = mysql_fetch_assoc($dbresult))
 		{
 				$context['tags_topics'][] = array(
 				'id_member' => $row['id_member'],
@@ -84,7 +84,7 @@ function ViewTags()
 
 				);
 		}
-		$smcFunc['db_free_result']($dbresult);
+		mysql_free_result($dbresult);
 		$context['sub_template']  = 'tagging_results';
 		$context['page_index'] = constructPageIndex($scripturl . '?action=tags;tagid=' . $id, $_REQUEST['start'], $numofrows, 25);
 	}
@@ -93,7 +93,7 @@ function ViewTags()
 		$context['page_title'] = $mbname . ' - ' . $txt['smftags_popular'];
 
 		// Tag cloud from http://www.prism-perfect.net/archive/php-tag-cloud-tutorial/
-		$result = $smcFunc['db_query']('', "
+		$result = smf_db_query( "
 		SELECT 
 			t.tag AS tag, l.ID_TAG, COUNT(l.ID_TAG) AS quantity
 		 FROM {db_prefix}tags as t, {db_prefix}tags_log as l WHERE t.ID_TAG = l.ID_TAG
@@ -103,7 +103,7 @@ function ViewTags()
 		$tags = array();
 		$tags2 = array();
 
-		while ($row = $smcFunc['db_fetch_assoc']($result)) {
+		while ($row = mysql_fetch_assoc($result)) {
 		    $tags[$row['tag']] = $row['quantity'];
 		    $tags2[$row['tag']] = $row['ID_TAG'];
 		}
@@ -147,7 +147,7 @@ function ViewTags()
 			}
 		}
 		
-		$dbresult = $smcFunc['db_query']('', "
+		$dbresult = smf_db_query( "
 			SELECT DISTINCT l.ID_TOPIC, t.num_replies,t.num_views,m.id_member,
 				m.poster_name,m.subject,m.id_topic,m.poster_time, 
 				t.id_board, g.tag, g.ID_TAG 
@@ -156,7 +156,7 @@ function ViewTags()
 		 		WHERE b.ID_BOARD = t.id_board AND l.ID_TOPIC = t.id_topic AND t.approved = 1 AND t.id_first_msg = m.id_msg AND {query_see_board} ORDER BY l.ID DESC LIMIT 20");
 
 		$context['tags_topics'] = array();
-		while ($row = $smcFunc['db_fetch_assoc']($dbresult))
+		while ($row = mysql_fetch_assoc($dbresult))
 		{
 				$context['tags_topics'][] = array(
 				'id_member' => $row['id_member'],
@@ -171,7 +171,7 @@ function ViewTags()
 
 				);
 		}
-		$smcFunc['db_free_result']($dbresult);
+		mysql_free_result($dbresult);
 	}
 	$context['linktree'][] = array(
 					'url' => $scripturl . '?action=tags',
@@ -202,13 +202,13 @@ function TaggingSystem_Add()
 	if (empty($topic))
 		fatal_error($txt['smftags_err_notopic'],false);
 
-	$dbresult = $smcFunc['db_query']('', '
+	$dbresult = smf_db_query( '
 	SELECT m.id_member FROM {db_prefix}topics as t, {db_prefix}messages as m 
 		WHERE t.id_first_msg = m.id_msg AND t.id_topic = {int:topic} LIMIT 1', 
 		array('topic' => $topic));
 
-	$row = $smcFunc['db_fetch_assoc']($dbresult);
-	$smcFunc['db_free_result']($dbresult);
+	$row = mysql_fetch_assoc($dbresult);
+	mysql_free_result($dbresult);
 
 	if ($user_info['id'] != $row['id_member'] && !allowedTo('smftags_manage')) {
 		if($ajaxrequest)
@@ -236,7 +236,7 @@ function RegenerateTagList($topic)
 	
 	// construct the new tag list and return it for DOM insertion
 	
-	$result= $smcFunc['db_query']('', 'SELECT t.tag, l.id, t.id_tag
+	$result= smf_db_query( 'SELECT t.tag, l.id, t.id_tag
        	FROM {db_prefix}tags_log as l, {db_prefix}tags as t
        	WHERE t.id_tag = l.id_tag && l.id_topic = {int:topic}',
        	array('topic' => $topic));
@@ -244,11 +244,11 @@ function RegenerateTagList($topic)
 	$tags = array();
     $output = '';
         
-    while($row = $smcFunc['db_fetch_assoc']($result)) {
+    while($row = mysql_fetch_assoc($result)) {
     	$output .= ' <a href="'.$scripturl.'?action=tags;tagid='.$row['id_tag'].'">'.$row['tag'].'</a>';
         $output .= '<a href="'.$scripturl.'?action=tags;sa=deletetag;tagid='.$row['id'].'"><span onclick="sendRequest(smf_scripturl, \'action=xmlhttp;sa=tags;deletetag=1;tagid=' . $row['id']. '\', $(\'#tags\'));return(false);" class="xtag">&nbsp;&nbsp;</span></a>';
 	}
-	$smcFunc['db_free_result']($result);
+	mysql_free_result($result);
 	return($output);
 }
 
@@ -276,24 +276,24 @@ function TaggingSystem_Submit()
 
 	$edit = allowedTo('smftags_manage');
 
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SELECT t.id_member_started FROM {db_prefix}topics AS t
 		WHERE t.id_topic = {int:topic}',
 		array('topic' => $topic));
 
-	$row = $smcFunc['db_fetch_assoc']($result);
-	$smcFunc['db_free_result']($result);
+	$row = mysql_fetch_assoc($result);
+	mysql_free_result($result);
 
 	if ($user_info['id'] != $row['id_member_started'] && $edit == false)
 		TagErrorMsg($txt['smftags_err_permaddtags']);
 
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SELECT COUNT(*) as total FROM {db_prefix}tags_log WHERE ID_TOPIC = {int:topic}',
 		array('topic' => $topic));
 
-	$row = $smcFunc['db_fetch_assoc']($result);
+	$row = mysql_fetch_assoc($result);
 	$totaltags = $row['total'];
-	$smcFunc['db_free_result']($result);
+	mysql_free_result($result);
 
 	if ($totaltags >= $modSettings['smftags_set_maxtags'])
 		TagErrorMsg($txt['smftags_err_toomaxtag']);
@@ -315,39 +315,39 @@ function TaggingSystem_Submit()
 		if (strlen($tag) > $modSettings['smftags_set_maxtaglength'])
 			continue;
 
-		$dbresult = $smcFunc['db_query']('', 'SELECT id_tag FROM {db_prefix}tags 
+		$dbresult = smf_db_query( 'SELECT id_tag FROM {db_prefix}tags 
 			WHERE tag = {string:tag} LIMIT 1',
 			array('tag' => $tag));
 	
-		if ($smcFunc['db_affected_rows']() == 0) {
-			$smcFunc['db_query']('', 'INSERT INTO {db_prefix}tags
+		if (smf_db_affected_rows() == 0) {
+			smf_db_query( 'INSERT INTO {db_prefix}tags
 				(tag, approved)	VALUES ({string:tag},1)',
 				array('tag' => $tag));
 			
-			$ID_TAG = $smcFunc['db_insert_id']("{db_prefix}tags",'id_tag');
+			$ID_TAG = smf_db_insert_id("{db_prefix}tags",'id_tag');
 	
-			$smcFunc['db_query']('', 'INSERT INTO {db_prefix}tags_log (id_tag, id_topic, id_member)
+			smf_db_query( 'INSERT INTO {db_prefix}tags_log (id_tag, id_topic, id_member)
 			VALUES ({int:id_tag}, {int:topic}, {int:id_user})',
 			array('id_tag' => $ID_TAG, 'topic' => $topic, 'id_user' => $user_info['id']));
 		}
 		else
 		{
-			$row = $smcFunc['db_fetch_assoc']($dbresult);
+			$row = mysql_fetch_assoc($dbresult);
 			$ID_TAG = $row['id_tag'];
-			$dbresult2= $smcFunc['db_query']('', 'SELECT id	FROM {db_prefix}tags_log WHERE id_tag = {int:id_tag}
+			$dbresult2= smf_db_query( 'SELECT id	FROM {db_prefix}tags_log WHERE id_tag = {int:id_tag}
 			 	AND id_topic = {int:topic}',
 			 	array('id_tag' => $ID_TAG, 'topic' => $topic));
 	
-			if ($smcFunc['db_affected_rows']() != 0)
+			if (smf_db_affected_rows() != 0)
 				continue;
 				
-			$smcFunc['db_free_result']($dbresult2);
+			mysql_free_result($dbresult2);
 			
-			$smcFunc['db_query']('', 'INSERT INTO {db_prefix}tags_log (id_tag, id_topic, id_member)
+			smf_db_query( 'INSERT INTO {db_prefix}tags_log (id_tag, id_topic, id_member)
 			VALUES ({int:id_tag}, {int:id_topic}, {int:id_user})',
 				array('id_tag' => $ID_TAG, 'id_topic' => $topic, 'id_user' => $user_info['id']));
 		}
-		$smcFunc['db_free_result']($dbresult);
+		mysql_free_result($dbresult);
 	}
 	if($isajax) {
 		$output = RegenerateTagList($topic);
@@ -372,19 +372,19 @@ function TaggingSystem_Delete()
 	
 	$id = (int) $_REQUEST['tagid'];
 
-	$dbresult = $smcFunc['db_query']('', '
+	$dbresult = smf_db_query( '
 	SELECT id_member, id_topic, id_tag
 		FROM {db_prefix}tags_log WHERE id = {int:id} LIMIT 1', array('id' => $id));
 
-	$row = $smcFunc['db_fetch_assoc']($dbresult);
-	$smcFunc['db_free_result']($dbresult);
+	$row = mysql_fetch_assoc($dbresult);
+	mysql_free_result($dbresult);
 
 	$topic = $row['id_topic'];
 	
 	if ($row['id_member'] != $user_info['id'] && !allowedTo('smftags_manage'))
 		TagErrorMsg($txt['smftags_err_deletetag'], $isajax);
 
-	$smcFunc['db_query']('', 'DELETE FROM {db_prefix}tags_log WHERE id = {int:id} LIMIT 1',
+	smf_db_query( 'DELETE FROM {db_prefix}tags_log WHERE id = {int:id} LIMIT 1',
 		array('id' => $id));
 
 	TagCleanUp($row['id_tag']);
@@ -405,13 +405,13 @@ function TagCleanUp($id_tag)
 {
 	global $smcFunc;
 
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SELECT id FROM {db_prefix}tags_log WHERE id_tag = {int:id}',
 			array('id' => $id_tag));
 
-	if ($smcFunc['db_affected_rows']() == 0)
-		$smcFunc['db_query']('', 'DELETE FROM {db_prefix}tags WHERE id_tag = {int:id}', array('id' => $id_tag));
+	if (smf_db_affected_rows() == 0)
+		smf_db_query( 'DELETE FROM {db_prefix}tags WHERE id_tag = {int:id}', array('id' => $id_tag));
 			
-	$smcFunc['db_free_result']($result);
+	mysql_free_result($result);
 }
 ?>

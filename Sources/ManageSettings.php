@@ -812,7 +812,7 @@ function ModifySpamSettings($return_config = false)
 
 	// Load any question and answers!
 	$context['question_answers'] = array();
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT id_comment, body AS question, recipient_name AS answer
 		FROM {db_prefix}log_comments
 		WHERE comment_type = {string:ver_test}',
@@ -820,7 +820,7 @@ function ModifySpamSettings($return_config = false)
 			'ver_test' => 'ver_test',
 		)
 	);
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 	{
 		$context['question_answers'][$row['id_comment']] = array(
 			'id' => $row['id_comment'],
@@ -828,7 +828,7 @@ function ModifySpamSettings($return_config = false)
 			'answer' => $row['answer'],
 		);
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// Saving?
 	if (isset($_GET['save']))
@@ -864,7 +864,7 @@ function ModifySpamSettings($return_config = false)
 				{
 					if ($question == '' || $answer == '')
 					{
-						$smcFunc['db_query']('', '
+						smf_db_query( '
 							DELETE FROM {db_prefix}log_comments
 							WHERE comment_type = {string:ver_test}
 								AND id_comment = {int:id}',
@@ -876,7 +876,7 @@ function ModifySpamSettings($return_config = false)
 						$count_questions--;
 					}
 					else
-						$request = $smcFunc['db_query']('', '
+						$request = smf_db_query( '
 							UPDATE {db_prefix}log_comments
 							SET body = {string:question}, recipient_name = {string:answer}
 							WHERE comment_type = {string:ver_test}
@@ -904,7 +904,7 @@ function ModifySpamSettings($return_config = false)
 		// Any questions to insert?
 		if (!empty($questionInserts))
 		{
-			$smcFunc['db_insert']('',
+			smf_db_insert('',
 				'{db_prefix}log_comments',
 				array('comment_type' => 'string', 'body' => 'string-65535', 'recipient_name' => 'string-80'),
 				$questionInserts,
@@ -1013,20 +1013,20 @@ function ModifySignatureSettings($return_config = false)
 		$_GET['step'] = isset($_GET['step']) ? (int) $_GET['step'] : 0;
 		$done = false;
 
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT MAX(id_member)
 			FROM {db_prefix}members',
 			array(
 			)
 		);
-		list ($context['max_member']) = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
+		list ($context['max_member']) = mysql_fetch_row($request);
+		mysql_free_result($request);
 
 		while (!$done)
 		{
 			$changes = array();
 
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT id_member, signature
 				FROM {db_prefix}members
 				WHERE id_member BETWEEN ' . $_GET['step'] . ' AND ' . $_GET['step'] . ' + 49
@@ -1036,7 +1036,7 @@ function ModifySignatureSettings($return_config = false)
 					'admin_group' => 1,
 				)
 			);
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = mysql_fetch_assoc($request))
 			{
 				// Apply all the rules we can realistically do.
 				$sig = strtr($row['signature'], array('<br />' => "\n"));
@@ -1207,15 +1207,15 @@ function ModifySignatureSettings($return_config = false)
 				if ($sig != $row['signature'])
 					$changes[$row['id_member']] = $sig;
 			}
-			if ($smcFunc['db_num_rows']($request) == 0)
+			if (mysql_num_rows($request) == 0)
 				$done = true;
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			// Do we need to delete what we have?
 			if (!empty($changes))
 			{
 				foreach ($changes as $id => $sig)
-					$smcFunc['db_query']('', '
+					smf_db_query( '
 						UPDATE {db_prefix}members
 						SET signature = {string:signature}
 						WHERE id_member = {int:id_member}',
@@ -1579,7 +1579,7 @@ function list_getProfileFields($start, $items_per_page, $sort, $standardFields)
 	else
 	{
 		// Load all the fields.
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_field, col_name, field_name, field_desc, field_type, active, placement
 			FROM {db_prefix}custom_fields
 			ORDER BY {raw:sort}
@@ -1590,9 +1590,9 @@ function list_getProfileFields($start, $items_per_page, $sort, $standardFields)
 				'items_per_page' => $items_per_page,
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 			$list[] = $row;
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 	}
 
 	return $list;
@@ -1602,15 +1602,15 @@ function list_getProfileFieldSize()
 {
 	global $smcFunc;
 
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT COUNT(*)
 		FROM {db_prefix}custom_fields',
 		array(
 		)
 	);
 
-	list ($numProfileFields) = $smcFunc['db_fetch_row']($request);
-	$smcFunc['db_free_result']($request);
+	list ($numProfileFields) = mysql_fetch_row($request);
+	mysql_free_result($request);
 
 	return $numProfileFields;
 }
@@ -1631,7 +1631,7 @@ function EditCustomProfiles()
 
 	if ($context['fid'])
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT
 				id_field, col_name, field_name, field_desc, field_type, field_length, field_options,
 				show_reg, show_display, show_profile, private, active, default_value, can_search,
@@ -1643,7 +1643,7 @@ function EditCustomProfiles()
 			)
 		);
 		$context['field'] = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 		{
 			if ($row['field_type'] == 'textarea')
 				@list ($rows, $cols) = @explode(',', $row['default_value']);
@@ -1677,7 +1677,7 @@ function EditCustomProfiles()
 				'placement' => $row['placement'],
 			);
 		}
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 	}
 
 	// Setup the default values as needed.
@@ -1784,7 +1784,7 @@ function EditCustomProfiles()
 			$unique = false;
 			for ($i = 0; !$unique && $i < 9; $i ++)
 			{
-				$request = $smcFunc['db_query']('', '
+				$request = smf_db_query( '
 					SELECT id_field
 					FROM {db_prefix}custom_fields
 					WHERE col_name = {string:current_column}',
@@ -1792,11 +1792,11 @@ function EditCustomProfiles()
 						'current_column' => $colname,
 					)
 				);
-				if ($smcFunc['db_num_rows']($request) == 0)
+				if (mysql_num_rows($request) == 0)
 					$unique = true;
 				else
 					$colname = $initial_colname . $i;
-				$smcFunc['db_free_result']($request);
+				mysql_free_result($request);
 			}
 
 			// Still not a unique colum name? Leave it up to the user, then.
@@ -1811,7 +1811,7 @@ function EditCustomProfiles()
 				|| (($_POST['field_type'] == 'select' || $_POST['field_type'] == 'radio') && $context['field']['type'] != 'select' && $context['field']['type'] != 'radio')
 				|| ($context['field']['type'] == 'check' && $_POST['field_type'] != 'check'))
 			{
-				$smcFunc['db_query']('', '
+				smf_db_query( '
 					DELETE FROM {db_prefix}themes
 					WHERE variable = {string:current_column}
 						AND id_member > {int:no_member}',
@@ -1845,7 +1845,7 @@ function EditCustomProfiles()
 				{
 					// Just been renamed?
 					if (!in_array($k, $takenKeys) && !empty($newOptions[$k]))
-						$smcFunc['db_query']('', '
+						smf_db_query( '
 							UPDATE {db_prefix}themes
 							SET value = {string:new_value}
 							WHERE variable = {string:current_column}
@@ -1866,7 +1866,7 @@ function EditCustomProfiles()
 		// Do the insertion/updates.
 		if ($context['fid'])
 		{
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				UPDATE {db_prefix}custom_fields
 				SET
 					field_name = {string:field_name}, field_desc = {string:field_desc},
@@ -1900,7 +1900,7 @@ function EditCustomProfiles()
 
 			// Just clean up any old selects - these are a pain!
 			if (($_POST['field_type'] == 'select' || $_POST['field_type'] == 'radio') && !empty($newOptions))
-				$smcFunc['db_query']('', '
+				smf_db_query( '
 					DELETE FROM {db_prefix}themes
 					WHERE variable = {string:current_column}
 						AND value NOT IN ({array_string:new_option_values})
@@ -1914,7 +1914,7 @@ function EditCustomProfiles()
 		}
 		else
 		{
-			$smcFunc['db_insert']('',
+			smf_db_insert('',
 				'{db_prefix}custom_fields',
 				array(
 					'col_name' => 'string', 'field_name' => 'string', 'field_desc' => 'string',
@@ -1935,7 +1935,7 @@ function EditCustomProfiles()
 		}
 
 		// As there's currently no option to priorize certain fields over others, let's order them alphabetically.
-		$smcFunc['db_query']('alter_table_boards', '
+		smf_db_query('
 			ALTER TABLE {db_prefix}custom_fields
 			ORDER BY field_name',
 			array(
@@ -1949,7 +1949,7 @@ function EditCustomProfiles()
 		checkSession();
 
 		// Delete the user data first.
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			DELETE FROM {db_prefix}themes
 			WHERE variable = {string:current_column}
 				AND id_member > {int:no_member}',
@@ -1959,7 +1959,7 @@ function EditCustomProfiles()
 			)
 		);
 		// Finally - the field itself is gone!
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			DELETE FROM {db_prefix}custom_fields
 			WHERE id_field = {int:current_field}',
 			array(
@@ -1973,7 +1973,7 @@ function EditCustomProfiles()
 	{
 		checkSession();
 
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT col_name, field_name, field_type, bbc, enclose, placement
 			FROM {db_prefix}custom_fields
 			WHERE show_display = {int:is_displayed}
@@ -1989,7 +1989,7 @@ function EditCustomProfiles()
 		);
 
 		$fields = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 		{
 			$fields[] = array(
 				'colname' => strtr($row['col_name'], array('|' => '', ';' => '')),
@@ -2000,7 +2000,7 @@ function EditCustomProfiles()
 				'enclose' => !empty($row['enclose']) ? $row['enclose'] : '',
 			);
 		}
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
 		updateSettings(array('displayFields' => serialize($fields)));
 		redirectexit('action=admin;area=featuresettings;sa=profile');

@@ -57,7 +57,7 @@ function ModifyKarma()
 	$dir = $_REQUEST['sa'] != 'applaud' ? -1 : 1;
 
 	// Delete any older items from the log. (karmaWaitTime is by hour.)
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		DELETE FROM {db_prefix}log_karma
 		WHERE {int:current_time} - log_time > {int:wait_time}',
 		array(
@@ -73,7 +73,7 @@ function ModifyKarma()
 	if (!empty($modSettings['karmaTimeRestrictAdmins']) || !allowedTo('moderate_forum'))
 	{
 		// Find out if this user has done this recently...
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT action
 			FROM {db_prefix}log_karma
 			WHERE id_target = {int:id_target}
@@ -84,16 +84,16 @@ function ModifyKarma()
 				'id_target' => $_REQUEST['uid'],
 			)
 		);
-		if ($smcFunc['db_num_rows']($request) > 0)
-			list ($action) = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
+		if (mysql_num_rows($request) > 0)
+			list ($action) = mysql_fetch_row($request);
+		mysql_free_result($request);
 	}
 
 	// They haven't, not before now, anyhow.
 	if (empty($action) || empty($modSettings['karmaWaitTime']))
 	{
 		// Put it in the log.
-		$smcFunc['db_insert']('replace',
+		smf_db_insert('replace',
 				'{db_prefix}log_karma',
 				array('action' => 'int', 'id_target' => 'int', 'id_executor' => 'int', 'log_time' => 'int'),
 				array($dir, $_REQUEST['uid'], $user_info['id'], time()),
@@ -110,7 +110,7 @@ function ModifyKarma()
 			fatal_lang_error('karma_wait_time', false, array($modSettings['karmaWaitTime'], $txt['hours']));
 
 		// You decided to go back on your previous choice?
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			UPDATE {db_prefix}log_karma
 			SET action = {int:action}, log_time = {int:current_time}
 			WHERE id_target = {int:id_target}

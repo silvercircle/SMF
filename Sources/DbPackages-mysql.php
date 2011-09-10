@@ -123,7 +123,7 @@ function smf_db_create_table($table_name, $columns, $indexes = array(), $paramet
 			$default = 'auto_increment';
 		}
 		elseif (isset($column['default']) && $column['default'] !== null)
-			$default = 'default \'' . $smcFunc['db_escape_string']($column['default']) . '\'';
+			$default = 'default \'' . addslashes($column['default']) . '\'';
 		else
 			$default = '';
 
@@ -166,7 +166,7 @@ function smf_db_create_table($table_name, $columns, $indexes = array(), $paramet
 		$table_query .= ' DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci';
 
 	// Create the table!
-	$smcFunc['db_query']('', $table_query,
+	smf_db_query( $table_query,
 		array(
 			'security_override' => true,
 		)
@@ -193,7 +193,7 @@ function smf_db_drop_table($table_name, $parameters = array(), $error = 'fatal')
 	if (in_array($full_table_name, $smcFunc['db_list_tables']()))
 	{
 		$query = 'DROP TABLE ' . $table_name;
-		$smcFunc['db_query']('',
+		smf_db_query(
 			$query,
 			array(
 				'security_override' => true,
@@ -243,9 +243,9 @@ function smf_db_add_column($table_name, $column_info, $parameters = array(), $if
 	$query = '
 		ALTER TABLE ' . $table_name . '
 		ADD `' . $column_info['name'] . '` ' . $type . ' ' . (!empty($unsigned) ? $unsigned : '') . (empty($column_info['null']) ? 'NOT NULL' : '') . ' ' .
-			(!isset($column_info['default']) ? '' : 'default \'' . $smcFunc['db_escape_string']($column_info['default']) . '\'') . ' ' .
+			(!isset($column_info['default']) ? '' : 'default \'' . addslashes($column_info['default']) . '\'') . ' ' .
 			(empty($column_info['auto']) ? '' : 'auto_increment primary key') . ' ';
-	$smcFunc['db_query']('', $query,
+	smf_db_query( $query,
 		array(
 			'security_override' => true,
 		)
@@ -266,7 +266,7 @@ function smf_db_remove_column($table_name, $column_name, $parameters = array(), 
 	foreach ($columns as $column)
 		if ($column['name'] == $column_name)
 		{
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				ALTER TABLE ' . $table_name . '
 				DROP COLUMN ' . $column_name,
 				array(
@@ -323,10 +323,10 @@ function smf_db_change_column($table_name, $old_column, $column_info, $parameter
 	if ($size !== null)
 		$type = $type . '(' . $size . ')';
 
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		ALTER TABLE ' . $table_name . '
 		CHANGE COLUMN `' . $old_column . '` `' . $column_info['name'] . '` ' . $type . ' ' . (!empty($unsigned) ? $unsigned : '') . (empty($column_info['null']) ? 'NOT NULL' : '') . ' ' .
-			(!isset($column_info['default']) ? '' : 'default \'' . $smcFunc['db_escape_string']($column_info['default']) . '\'') . ' ' .
+			(!isset($column_info['default']) ? '' : 'default \'' . addslashes($column_info['default']) . '\'') . ' ' .
 			(empty($column_info['auto']) ? '' : 'auto_increment') . ' ',
 		array(
 			'security_override' => true,
@@ -379,7 +379,7 @@ function smf_db_add_index($table_name, $index_info, $parameters = array(), $if_e
 	// If we're here we know we don't have the index - so just add it.
 	if (!empty($index_info['type']) && $index_info['type'] == 'primary')
 	{
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			ALTER TABLE ' . $table_name . '
 			ADD PRIMARY KEY (' . $columns . ')',
 			array(
@@ -389,7 +389,7 @@ function smf_db_add_index($table_name, $index_info, $parameters = array(), $if_e
 	}
 	else
 	{
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			ALTER TABLE ' . $table_name . '
 			ADD ' . (isset($index_info['type']) && $index_info['type'] == 'unique' ? 'UNIQUE' : 'INDEX') . ' ' . $index_info['name'] . ' (' . $columns . ')',
 			array(
@@ -415,7 +415,7 @@ function smf_db_remove_index($table_name, $index_name, $parameters = array(), $e
 		if ($index['type'] == 'primary' && $index_name == 'primary')
 		{
 			// Dropping primary key?
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				ALTER TABLE ' . $table_name . '
 				DROP PRIMARY KEY',
 				array(
@@ -428,7 +428,7 @@ function smf_db_remove_index($table_name, $index_name, $parameters = array(), $e
 		if ($index['name'] == $index_name)
 		{
 			// Drop the bugger...
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				ALTER TABLE ' . $table_name . '
 				DROP INDEX ' . $index_name,
 				array(
@@ -472,7 +472,7 @@ function smf_db_list_columns($table_name, $detail = false, $parameters = array()
 
 	$table_name = str_replace('{db_prefix}', $db_prefix, $table_name);
 
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SHOW FIELDS
 		FROM {raw:table_name}',
 		array(
@@ -480,7 +480,7 @@ function smf_db_list_columns($table_name, $detail = false, $parameters = array()
 		)
 	);
 	$columns = array();
-	while ($row = $smcFunc['db_fetch_assoc']($result))
+	while ($row = mysql_fetch_assoc($result))
 	{
 		if (!$detail)
 		{
@@ -521,7 +521,7 @@ function smf_db_list_columns($table_name, $detail = false, $parameters = array()
 			}
 		}
 	}
-	$smcFunc['db_free_result']($result);
+	mysql_free_result($result);
 
 	return $columns;
 }
@@ -533,7 +533,7 @@ function smf_db_list_indexes($table_name, $detail = false, $parameters = array()
 
 	$table_name = str_replace('{db_prefix}', $db_prefix, $table_name);
 
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SHOW KEYS
 		FROM {raw:table_name}',
 		array(
@@ -541,7 +541,7 @@ function smf_db_list_indexes($table_name, $detail = false, $parameters = array()
 		)
 	);
 	$indexes = array();
-	while ($row = $smcFunc['db_fetch_assoc']($result))
+	while ($row = mysql_fetch_assoc($result))
 	{
 		if (!$detail)
 			$indexes[] = $row['Key_name'];
@@ -574,7 +574,7 @@ function smf_db_list_indexes($table_name, $detail = false, $parameters = array()
 				$indexes[$row['Key_name']]['columns'][] = $row['Column_name'];
 		}
 	}
-	$smcFunc['db_free_result']($result);
+	mysql_free_result($result);
 
 	return $indexes;
 }

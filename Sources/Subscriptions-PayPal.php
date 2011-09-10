@@ -253,7 +253,7 @@ class paypal_payment
 		if ($_POST['txn_type'] == 'subscr_payment' && !empty($_POST['subscr_id']))
 		{
 			$_POST['subscr_id'] = $_POST['subscr_id'];
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				UPDATE {db_prefix}log_subscribed
 				SET vendor_ref = {string:vendor_ref}
 				WHERE id_sublog = {int:current_subscription}',
@@ -277,7 +277,7 @@ class paypal_payment
 			return false;
 
 		// Do we have this in the database?
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_member, id_subscribe
 			FROM {db_prefix}log_subscribed
 			WHERE vendor_ref = {string:vendor_ref}
@@ -287,13 +287,13 @@ class paypal_payment
 			)
 		);
 		// No joy?
-		if ($smcFunc['db_num_rows']($request) == 0)
+		if (mysql_num_rows($request) == 0)
 		{
 			// Can we identify them by email?
 			if (!empty($_POST['payer_email']))
 			{
-				$smcFunc['db_free_result']($request);
-				$request = $smcFunc['db_query']('', '
+				mysql_free_result($request);
+				$request = smf_db_query( '
 					SELECT ls.id_member, ls.id_subscribe
 					FROM {db_prefix}log_subscribed AS ls
 						INNER JOIN {db_prefix}members AS mem ON (mem.id_member = ls.id_member)
@@ -303,15 +303,15 @@ class paypal_payment
 						'payer_email' => $_POST['payer_email'],
 					)
 				);
-				if ($smcFunc['db_num_rows']($request) == 0)
+				if (mysql_num_rows($request) == 0)
 					return false;
 			}
 			else
 				return false;
 		}
-		list ($member_id, $subscription_id) = $smcFunc['db_fetch_row']($request);
+		list ($member_id, $subscription_id) = mysql_fetch_row($request);
 		$_POST['item_number'] = $member_id . '+' . $subscription_id;
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 	}
 }
 

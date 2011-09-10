@@ -316,7 +316,7 @@ function cleanRequest()
 		$_SERVER['REQUEST_URL'] = $_SERVER['REQUEST_URI'];
 
 	// And make sure HTTP_USER_AGENT is set.
-	$_SERVER['HTTP_USER_AGENT'] = isset($_SERVER['HTTP_USER_AGENT']) ? htmlspecialchars($smcFunc['db_unescape_string']($_SERVER['HTTP_USER_AGENT']), ENT_QUOTES) : '';
+	$_SERVER['HTTP_USER_AGENT'] = isset($_SERVER['HTTP_USER_AGENT']) ? htmlspecialchars(stripslashes($_SERVER['HTTP_USER_AGENT']), ENT_QUOTES) : '';
 
 	// Some final checking.
 	if (preg_match('~^((([1]?\d)?\d|2[0-4]\d|25[0-5])\.){3}(([1]?\d)?\d|2[0-4]\d|25[0-5])$~', $_SERVER['BAN_CHECK_IP']) === 0)
@@ -331,14 +331,14 @@ function escapestring__recursive($var)
 	global $smcFunc;
 
 	if (!is_array($var))
-		return $smcFunc['db_escape_string']($var);
+		return addslashes($var);
 
 	// Reindex the array with slashes.
 	$new_var = array();
 
 	// Add slashes to every element, even the indexes!
 	foreach ($var as $k => $v)
-		$new_var[$smcFunc['db_escape_string']($k)] = escapestring__recursive($v);
+		$new_var[addslashes($k)] = escapestring__recursive($v);
 
 	return $new_var;
 }
@@ -379,14 +379,14 @@ function unescapestring__recursive($var)
 	global $smcFunc;
 
 	if (!is_array($var))
-		return $smcFunc['db_unescape_string']($var);
+		return stripslashes($var);
 
 	// Reindex the array without slashes, this time.
 	$new_var = array();
 
 	// Strip the slashes from every element.
 	foreach ($var as $k => $v)
-		$new_var[$smcFunc['db_unescape_string']($k)] = unescapestring__recursive($v);
+		$new_var[stripslashes($k)] = unescapestring__recursive($v);
 
 	return $new_var;
 }

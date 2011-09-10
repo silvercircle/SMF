@@ -116,24 +116,24 @@ function Post()
 	// No message is complete without a topic.
 	if (empty($topic) && !empty($_REQUEST['msg']))
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_topic
 			FROM {db_prefix}messages
 			WHERE id_msg = {int:msg}',
 			array(
 				'msg' => (int) $_REQUEST['msg'],
 		));
-		if ($smcFunc['db_num_rows']($request) != 1)
+		if (mysql_num_rows($request) != 1)
 			unset($_REQUEST['msg'], $_POST['msg'], $_GET['msg']);
 		else
-			list ($topic) = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
+			list ($topic) = mysql_fetch_row($request);
+		mysql_free_result($request);
 	}
 
 	// Check if it's locked.  It isn't locked if no topic is specified.
 	if (!empty($topic))
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT
 				t.locked, IFNULL(ln.id_topic, 0) AS notify, t.is_sticky, t.id_poll, t.id_last_msg, mf.id_member,
 				t.id_first_msg, mf.subject,
@@ -149,8 +149,8 @@ function Post()
 				'current_topic' => $topic,
 			)
 		);
-		list ($locked, $context['notify'], $sticky, $pollID, $context['topic_last_message'], $id_member_poster, $id_first_msg, $first_subject, $lastPostTime) = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
+		list ($locked, $context['notify'], $sticky, $pollID, $context['topic_last_message'], $id_member_poster, $id_first_msg, $first_subject, $lastPostTime) = mysql_fetch_row($request);
+		mysql_free_result($request);
 
 		// If this topic already has a poll, they sure can't add another.
 		if (isset($_REQUEST['poll']) && $pollID > 0)
@@ -289,7 +289,7 @@ function Post()
 			}
 
 			// Get the current event information.
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT
 					id_member, title, MONTH(start_date) AS month, DAYOFMONTH(start_date) AS day,
 					YEAR(start_date) AS year, (TO_DAYS(end_date) - TO_DAYS(start_date)) AS span
@@ -300,8 +300,8 @@ function Post()
 					'id_event' => $context['event']['id'],
 				)
 			);
-			$row = $smcFunc['db_fetch_assoc']($request);
-			$smcFunc['db_free_result']($request);
+			$row = mysql_fetch_assoc($request);
+			mysql_free_result($request);
 
 			// Make sure the user is allowed to edit this event.
 			if ($row['id_member'] != $user_info['id'])
@@ -366,7 +366,7 @@ function Post()
 	{
 		if (empty($options['no_new_reply_warning']) && isset($_REQUEST['last_msg']) && $context['topic_last_message'] > $_REQUEST['last_msg'])
 		{
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT COUNT(*)
 				FROM {db_prefix}messages
 				WHERE id_topic = {int:current_topic}
@@ -379,8 +379,8 @@ function Post()
 					'approved' => 1,
 				)
 			);
-			list ($context['new_replies']) = $smcFunc['db_fetch_row']($request);
-			$smcFunc['db_free_result']($request);
+			list ($context['new_replies']) = mysql_fetch_row($request);
+			mysql_free_result($request);
 
 			if (!empty($context['new_replies']))
 			{
@@ -614,7 +614,7 @@ function Post()
 		if (isset($_REQUEST['msg']) && !empty($topic))
 		{
 			// Get the existing message.
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT
 					m.id_member, m.modified_time, m.smileys_enabled, m.body,
 					m.poster_name, m.poster_email, m.subject, m.icon, m.approved,
@@ -634,18 +634,18 @@ function Post()
 			);
 			// The message they were trying to edit was most likely deleted.
 			// !!! Change this error message?
-			if ($smcFunc['db_num_rows']($request) == 0)
+			if (mysql_num_rows($request) == 0)
 				fatal_lang_error('no_board', false);
-			$row = $smcFunc['db_fetch_assoc']($request);
+			$row = mysql_fetch_assoc($request);
 
 			$context['id_prefix'] = $row['id_prefix'];
 			$context['first_is_sticky'] = ((int)$row['id_layout'] & 0x80);
 			$context['first_has_layout'] = ((int)$row['id_layout'] & 0x7f);
 			
 			$attachment_stuff = array($row);
-			while ($row2 = $smcFunc['db_fetch_assoc']($request))
+			while ($row2 = mysql_fetch_assoc($request))
 				$attachment_stuff[] = $row2;
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			if ($row['id_member'] == $user_info['id'] && !allowedTo('modify_any'))
 			{
@@ -664,7 +664,7 @@ function Post()
 
 			if (!empty($modSettings['attachmentEnable']))
 			{
-				$request = $smcFunc['db_query']('', '
+				$request = smf_db_query( '
 					SELECT IFNULL(size, -1) AS filesize, filename, id_attach, approved
 					FROM {db_prefix}attachments
 					WHERE id_msg = {int:id_msg}
@@ -674,7 +674,7 @@ function Post()
 						'attachment_type' => 0,
 					)
 				);
-				while ($row = $smcFunc['db_fetch_assoc']($request))
+				while ($row = mysql_fetch_assoc($request))
 				{
 					if ($row['filesize'] <= 0)
 						continue;
@@ -684,12 +684,12 @@ function Post()
 						'approved' => $row['approved'],
 					);
 				}
-				$smcFunc['db_free_result']($request);
+				mysql_free_result($request);
 			}
 			// Allow moderators to change names....
 			if (allowedTo('moderate_forum') && !empty($topic))
 			{
-				$request = $smcFunc['db_query']('', '
+				$request = smf_db_query( '
 					SELECT id_member, poster_name, poster_email
 					FROM {db_prefix}messages
 					WHERE id_msg = {int:id_msg}
@@ -700,8 +700,8 @@ function Post()
 						'id_msg' => (int) $_REQUEST['msg'],
 					)
 				);
-				$row = $smcFunc['db_fetch_assoc']($request);
-				$smcFunc['db_free_result']($request);
+				$row = mysql_fetch_assoc($request);
+				mysql_free_result($request);
 
 				if (empty($row['id_member']))
 				{
@@ -720,7 +720,7 @@ function Post()
 		$_REQUEST['msg'] = (int) $_REQUEST['msg'];
 
 		// Get the existing message.
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT
 				m.id_member, m.modified_time, m.smileys_enabled, m.body,
 				m.poster_name, m.poster_email, m.subject, m.icon, m.approved,
@@ -740,14 +740,14 @@ function Post()
 		);
 		// The message they were trying to edit was most likely deleted.
 		// !!! Change this error message?
-		if ($smcFunc['db_num_rows']($request) == 0)
+		if (mysql_num_rows($request) == 0)
 			fatal_lang_error('no_board', false);
-		$row = $smcFunc['db_fetch_assoc']($request);
+		$row = mysql_fetch_assoc($request);
 
 		$attachment_stuff = array($row);
-		while ($row2 = $smcFunc['db_fetch_assoc']($request))
+		while ($row2 = mysql_fetch_assoc($request))
 			$attachment_stuff[] = $row2;
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
 		if ($row['id_member'] == $user_info['id'] && !allowedTo('modify_any'))
 		{
@@ -826,11 +826,11 @@ function Post()
 
 		
 		if(!$context['make_event']) {
-			$request = $smcFunc['db_query']('', 'SELECT b.allow_topics, b.automerge FROM {db_prefix}boards AS b WHERE b.id_board = {int:board}',
+			$request = smf_db_query( 'SELECT b.allow_topics, b.automerge FROM {db_prefix}boards AS b WHERE b.id_board = {int:board}',
 				array('board' => $board));
 		
-			list($allow, $automerge) = $smcFunc['db_fetch_row']($request);
-			$smcFunc['db_free_result']($request);
+			list($allow, $automerge) = mysql_fetch_row($request);
+			mysql_free_result($request);
 		
 			if($allow == 0)
 				fatal_lang_error('no_board', false);
@@ -850,7 +850,7 @@ function Post()
 		if (!empty($topic) && !empty($_REQUEST['quote']))
 		{
 			// Make sure they _can_ quote this post, and if so get it.
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT m.subject, IFNULL(mem.real_name, m.poster_name) AS poster_name, m.poster_time, m.body
 				FROM {db_prefix}messages AS m
 					INNER JOIN {db_prefix}boards AS b ON (b.id_board = m.id_board AND {query_see_board})
@@ -863,10 +863,10 @@ function Post()
 					'is_approved' => 1,
 				)
 			);
-			if ($smcFunc['db_num_rows']($request) == 0)
+			if (mysql_num_rows($request) == 0)
 				fatal_lang_error('quoted_post_deleted', false);
-			list ($form_subject, $mname, $mdate, $form_message) = $smcFunc['db_fetch_row']($request);
-			$smcFunc['db_free_result']($request);
+			list ($form_subject, $mname, $mdate, $form_message) = mysql_fetch_row($request);
+			mysql_free_result($request);
 
 			// Add 'Re: ' to the front of the quoted subject.
 			if (trim($context['response_prefix']) != '' && $smcFunc['strpos']($form_subject, trim($context['response_prefix'])) !== 0)
@@ -950,7 +950,7 @@ function Post()
 		// If this isn't a new post, check the current attachments.
 		if (isset($_REQUEST['msg']))
 		{
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT COUNT(*), SUM(size)
 				FROM {db_prefix}attachments
 				WHERE id_msg = {int:id_msg}
@@ -960,8 +960,8 @@ function Post()
 					'attachment_type' => 0,
 				)
 			);
-			list ($quantity, $total_size) = $smcFunc['db_fetch_row']($request);
-			$smcFunc['db_free_result']($request);
+			list ($quantity, $total_size) = mysql_fetch_row($request);
+			mysql_free_result($request);
 		}
 		else
 		{
@@ -1171,7 +1171,7 @@ function Post()
 		$id_cond = empty($_REQUEST['draft_id']) ? '1=1' : ' id_draft = {int:draft} ';
 		$id_sel = $msgid ? ' AND id_msg = {int:message} ' : ' AND id_board = {int:board} AND id_topic = {int:topic} ';
 
-		$query = $smcFunc['db_query']('', '
+		$query = smf_db_query( '
 			SELECT id_draft, id_board, id_topic, subject, body, icon, smileys, is_locked, is_sticky
 			FROM {db_prefix}drafts	WHERE ' . $id_cond . ' 
 				AND id_member = {int:member}
@@ -1185,7 +1185,7 @@ function Post()
 				'message' => $msgid,
 			)
 		);
-		if ($row = $smcFunc['db_fetch_assoc']($query)) {
+		if ($row = mysql_fetch_assoc($query)) {
 			// OK, we have a draft in storage for this post. Let's get down and dirty with it.
 			$context['subject'] = $row['subject'];
 			$context['message'] = un_preparsecode($row['body']);
@@ -1203,7 +1203,7 @@ function Post()
 		else
 			$context['draft_locked'] = $context['locked'];
 		
-		$smcFunc['db_free_result']($query);
+		mysql_free_result($query);
 	}
 	else 
 		$context['draft_locked'] = $context['locked'];
@@ -1370,7 +1370,7 @@ function Post2()
 	// If this isn't a new topic load the topic info that we need.
 	if (!empty($topic))
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT t.locked, t.is_sticky, t.id_poll, t.approved, t.id_first_msg, t.id_last_msg, t.id_member_started, t.id_member_updated,
 				t.id_board, t.id_prefix, t.id_layout, t.num_replies, b.automerge
 			FROM {db_prefix}topics AS t
@@ -1381,8 +1381,8 @@ function Post2()
 				'current_topic' => $topic,
 			)
 		);
-		$topic_info = $smcFunc['db_fetch_assoc']($request);
-		$smcFunc['db_free_result']($request);
+		$topic_info = mysql_fetch_assoc($request);
+		mysql_free_result($request);
 
 		// Though the topic should be there, it might have vanished.
 		if (!is_array($topic_info))
@@ -1522,7 +1522,7 @@ function Post2()
 	{
 		$_REQUEST['msg'] = (int) $_REQUEST['msg'];
 
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_member, poster_name, poster_email, poster_time, approved
 			FROM {db_prefix}messages
 			WHERE id_msg = {int:id_msg}
@@ -1531,10 +1531,10 @@ function Post2()
 				'id_msg' => $_REQUEST['msg'],
 			)
 		);
-		if ($smcFunc['db_num_rows']($request) == 0)
+		if (mysql_num_rows($request) == 0)
 			fatal_lang_error('cant_find_messages', false);
-		$row = $smcFunc['db_fetch_assoc']($request);
-		$smcFunc['db_free_result']($request);
+		$row = mysql_fetch_assoc($request);
+		mysql_free_result($request);
 
 		if (!empty($topic_info['locked']) && !allowedTo('moderate_board'))
 			fatal_lang_error('topic_locked', false);
@@ -1841,7 +1841,7 @@ function Post2()
 		// If this isn't a new post, check the current attachments.
 		if (isset($_REQUEST['msg']))
 		{
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT COUNT(*), SUM(size)
 				FROM {db_prefix}attachments
 				WHERE id_msg = {int:id_msg}
@@ -1851,8 +1851,8 @@ function Post2()
 					'attachment_type' => 0,
 				)
 			);
-			list ($quantity, $total_size) = $smcFunc['db_fetch_row']($request);
-			$smcFunc['db_free_result']($request);
+			list ($quantity, $total_size) = mysql_fetch_row($request);
+			mysql_free_result($request);
 		}
 		else
 		{
@@ -1966,7 +1966,7 @@ function Post2()
 	if (isset($_REQUEST['poll']))
 	{
 		// Create the poll.
-		$smcFunc['db_insert']('',
+		smf_db_insert('',
 			'{db_prefix}polls',
 			array(
 				'question' => 'string-255', 'hide_results' => 'int', 'max_votes' => 'int', 'expire_time' => 'int', 'id_member' => 'int',
@@ -1978,7 +1978,7 @@ function Post2()
 			),
 			array('id_poll')
 		);
-		$id_poll = $smcFunc['db_insert_id']('{db_prefix}polls', 'id_poll');
+		$id_poll = smf_db_insert_id('{db_prefix}polls', 'id_poll');
 
 		// Create each answer choice.
 		$i = 0;
@@ -1989,7 +1989,7 @@ function Post2()
 			$i++;
 		}
 
-		$smcFunc['db_insert']('insert',
+		smf_db_insert('insert',
 			'{db_prefix}poll_choices',
 			array('id_poll' => 'int', 'id_choice' => 'int', 'label' => 'string-255'),
 			$pollOptions,
@@ -2072,14 +2072,14 @@ function Post2()
 	{
 		global $user_info;
 		//Get how many tags there have been for the topic
-		$dbresult = $smcFunc['db_query']('', "
+		$dbresult = smf_db_query( "
 		SELECT 
 			COUNT(*) as total 
 		FROM {db_prefix}tags_log 
 		WHERE ID_TOPIC = " . $topic);
-		$row = $smcFunc['db_fetch_assoc']($dbresult);
+		$row = mysql_fetch_assoc($dbresult);
 		$totaltags = $row['total'];
-		$smcFunc['db_free_result']($dbresult);
+		mysql_free_result($dbresult);
 
 		// Check Tag restrictions
 		$tags = explode(',',htmlspecialchars($_REQUEST['tags'],ENT_QUOTES));
@@ -2107,21 +2107,21 @@ function Post2()
 					continue;
 
 				//Insert The tag
-				$dbresult = $smcFunc['db_query']('', "
+				$dbresult = smf_db_query( "
 				SELECT 
 					ID_TAG 
 				FROM {db_prefix}tags 
 				WHERE tag = '$tag'");
 				
-				if ($smcFunc['db_affected_rows']() == 0)
+				if (smf_db_affected_rows() == 0)
 				{
 					//Insert into Tags table
-					$smcFunc['db_query']('', "INSERT INTO {db_prefix}tags
+					smf_db_query( "INSERT INTO {db_prefix}tags
 						(tag, approved)
 					VALUES ('$tag',1)");	
-					$ID_TAG = $smcFunc['db_insert_id']("{db_prefix}tags",'ID_TAG');
+					$ID_TAG = smf_db_insert_id("{db_prefix}tags",'ID_TAG');
 					//Insert into Tags log
-					$smcFunc['db_query']('', "INSERT INTO {db_prefix}tags_log
+					smf_db_query( "INSERT INTO {db_prefix}tags_log
 						(ID_TAG,ID_TOPIC, ID_MEMBER)
 					VALUES ($ID_TAG,$topic,$user_info[id])");
 
@@ -2129,27 +2129,27 @@ function Post2()
 				}
 				else 
 				{
-					$row = $smcFunc['db_fetch_assoc']($dbresult);
+					$row = mysql_fetch_assoc($dbresult);
 					$ID_TAG = $row['ID_TAG'];
-					$dbresult2= $smcFunc['db_query']('', "
+					$dbresult2= smf_db_query( "
 					SELECT 
 						ID FROM {db_prefix}tags_log 
 					WHERE ID_TAG  =  $ID_TAG  AND ID_TOPIC = $topic");
-					if ($smcFunc['db_affected_rows']() != 0)
+					if (smf_db_affected_rows() != 0)
 					{
 						continue;
 
 					}
-					$smcFunc['db_free_result']($dbresult2);
+					mysql_free_result($dbresult2);
 					//Insert into Tags log
 
-					$smcFunc['db_query']('', "INSERT INTO {db_prefix}tags_log
+					smf_db_query( "INSERT INTO {db_prefix}tags_log
 						(ID_TAG,ID_TOPIC, ID_MEMBER)
 					VALUES ($ID_TAG,$topic,$user_info[id])");
 					$tagcount++;
 
 				}
-				$smcFunc['db_free_result']($dbresult);
+				mysql_free_result($dbresult);
 			}
 		}
 	}
@@ -2191,7 +2191,7 @@ function Post2()
 		if (!allowedTo('calendar_edit_any'))
 		{
 			// Get the event's poster.
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT id_member
 				FROM {db_prefix}calendar
 				WHERE id_event = {int:id_event}',
@@ -2199,8 +2199,8 @@ function Post2()
 					'id_event' => $_REQUEST['eventid'],
 				)
 			);
-			$row2 = $smcFunc['db_fetch_assoc']($request);
-			$smcFunc['db_free_result']($request);
+			$row2 = mysql_fetch_assoc($request);
+			mysql_free_result($request);
 
 			// Silly hacker, Trix are for kids. ...probably trademarked somewhere, this is FAIR USE! (parody...)
 			isAllowedTo('calendar_edit_' . ($row2['id_member'] == $user_info['id'] ? 'own' : 'any'));
@@ -2208,7 +2208,7 @@ function Post2()
 
 		// Delete it?
 		if (isset($_REQUEST['deleteevent']))
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				DELETE FROM {db_prefix}calendar
 				WHERE id_event = {int:id_event}',
 				array(
@@ -2221,7 +2221,7 @@ function Post2()
 			$span = !empty($modSettings['cal_allowspan']) && !empty($_REQUEST['span']) ? min((int) $modSettings['cal_maxspan'], (int) $_REQUEST['span'] - 1) : 0;
 			$start_time = mktime(0, 0, 0, (int) $_REQUEST['month'], (int) $_REQUEST['day'], (int) $_REQUEST['year']);
 
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				UPDATE {db_prefix}calendar
 				SET end_date = {date:end_date},
 					start_date = {date:start_date},
@@ -2244,7 +2244,7 @@ function Post2()
 	// Mark all the parents read.  (since you just posted and they will be unread.)
 	if (!$user_info['is_guest'] && !empty($board_info['parent_boards']))
 	{
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			UPDATE {db_prefix}log_boards
 			SET id_msg = {int:id_msg}
 			WHERE id_member = {int:current_member}
@@ -2260,7 +2260,7 @@ function Post2()
 	// Turn notification on or off.  (note this just blows smoke if it's already on or off.)
 	if (!empty($_POST['notify']) && allowedTo('mark_any_notify'))
 	{
-		$smcFunc['db_insert']('ignore',
+		smf_db_insert('ignore',
 			'{db_prefix}log_notify',
 			array('id_member' => 'int', 'id_topic' => 'int', 'id_board' => 'int'),
 			array($user_info['id'], $topic, 0),
@@ -2268,7 +2268,7 @@ function Post2()
 		);
 	}
 	elseif (!$newTopic)
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			DELETE FROM {db_prefix}log_notify
 			WHERE id_member = {int:current_member}
 				AND id_topic = {int:current_topic}',
@@ -2318,7 +2318,7 @@ function Post2()
 	// Um, did this come from a draft?
 	if (!empty($_POST['draft_id']) && !empty($user_info['id'])) {
 		$_POST['draft_id'] = (int) $_POST['draft_id'];
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			DELETE FROM {db_prefix}drafts
 			WHERE id_draft = {int:draft}
 				AND id_member = {int:member}
@@ -2332,7 +2332,7 @@ function Post2()
 	if (!empty($_REQUEST['goback']))
 	{
 		// Mark the board as read.... because it might get confusing otherwise.
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			UPDATE {db_prefix}log_boards
 			SET id_msg = {int:maxMsgID}
 			WHERE id_member = {int:current_member}
@@ -2410,7 +2410,7 @@ function AnnouncementSelectMembergroup()
 	}
 
 	// Get all membergroups that have access to the board the announcement was made on.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT mg.id_group, COUNT(mem.id_member) AS num_members
 		FROM {db_prefix}membergroups AS mg
 			LEFT JOIN {db_prefix}members AS mem ON (mem.id_group = mg.id_group OR FIND_IN_SET(mg.id_group, mem.additional_groups) != 0 OR mg.id_group = mem.id_post_group)
@@ -2421,7 +2421,7 @@ function AnnouncementSelectMembergroup()
 			'newbie_id_group' => 4,
 		)
 	);
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 	{
 		$context['groups'][$row['id_group']] = array(
 			'id' => $row['id_group'],
@@ -2429,10 +2429,10 @@ function AnnouncementSelectMembergroup()
 			'member_count' => $row['num_members'],
 		);
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// Now get the membergroup names.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT id_group, group_name
 		FROM {db_prefix}membergroups
 		WHERE id_group IN ({array_int:group_list})',
@@ -2440,12 +2440,12 @@ function AnnouncementSelectMembergroup()
 			'group_list' => $groups,
 		)
 	);
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 		$context['groups'][$row['id_group']]['name'] = $row['group_name'];
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// Get the subject of the topic we're about to announce.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT m.subject
 		FROM {db_prefix}topics AS t
 			INNER JOIN {db_prefix}messages AS m ON (m.id_msg = t.id_first_msg)
@@ -2454,8 +2454,8 @@ function AnnouncementSelectMembergroup()
 			'current_topic' => $topic,
 		)
 	);
-	list ($context['topic_subject']) = $smcFunc['db_fetch_row']($request);
-	$smcFunc['db_free_result']($request);
+	list ($context['topic_subject']) = mysql_fetch_row($request);
+	mysql_free_result($request);
 
 	censorText($context['announce_topic']['subject']);
 
@@ -2491,7 +2491,7 @@ function AnnouncementSend()
 		$_POST['who'][$id] = in_array((int) $mg, $groups) ? (int) $mg : 0;
 
 	// Get the topic subject and censor it.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT m.id_msg, m.subject, m.body
 		FROM {db_prefix}topics AS t
 			INNER JOIN {db_prefix}messages AS m ON (m.id_msg = t.id_first_msg)
@@ -2500,8 +2500,8 @@ function AnnouncementSend()
 			'current_topic' => $topic,
 		)
 	);
-	list ($id_msg, $context['topic_subject'], $message) = $smcFunc['db_fetch_row']($request);
-	$smcFunc['db_free_result']($request);
+	list ($id_msg, $context['topic_subject'], $message) = mysql_fetch_row($request);
+	mysql_free_result($request);
 
 	censorText($context['topic_subject']);
 	censorText($message);
@@ -2512,7 +2512,7 @@ function AnnouncementSend()
 	require_once($sourcedir . '/Subs-Post.php');
 
 	// Select the email addresses for this batch.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT mem.id_member, mem.email_address, mem.lngfile
 		FROM {db_prefix}members AS mem
 		WHERE mem.id_member != {int:current_member}' . (!empty($modSettings['allow_disableAnnounce']) ? '
@@ -2533,7 +2533,7 @@ function AnnouncementSend()
 	);
 
 	// All members have received a mail. Go to the next screen.
-	if ($smcFunc['db_num_rows']($request) == 0)
+	if (mysql_num_rows($request) == 0)
 	{
 		if (!empty($_REQUEST['move']) && allowedTo('move_any'))
 			redirectexit('action=movetopic;topic=' . $topic . '.0' . (empty($_REQUEST['goback']) ? '' : ';goback'));
@@ -2544,7 +2544,7 @@ function AnnouncementSend()
 	}
 
 	// Loop through all members that'll receive an announcement in this batch.
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 	{
 		$cur_language = empty($row['lngfile']) || empty($modSettings['userLanguage']) ? $language : $row['lngfile'];
 
@@ -2569,7 +2569,7 @@ function AnnouncementSend()
 		$announcements[$cur_language]['recipients'][$row['id_member']] = $row['email_address'];
 		$context['start'] = $row['id_member'];
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// For each language send a different mail - low priority...
 	foreach ($announcements as $lang => $mail)
@@ -2629,7 +2629,7 @@ function notifyMembersBoard(&$topicData)
 	$digest_insert = array();
 	foreach ($topicData as $id => $data)
 		$digest_insert[] = array($data['topic'], $data['msg'], 'topic', $user_info['id']);
-	$smcFunc['db_insert']('',
+	smf_db_insert('',
 		'{db_prefix}log_digest',
 		array(
 			'id_topic' => 'int', 'id_msg' => 'int', 'note_type' => 'string', 'exclude' => 'int',
@@ -2639,7 +2639,7 @@ function notifyMembersBoard(&$topicData)
 	);
 
 	// Find the members with notification on for these boards.
-	$members = $smcFunc['db_query']('', '
+	$members = smf_db_query( '
 		SELECT
 			mem.id_member, mem.email_address, mem.notify_regularity, mem.notify_send_body, mem.lngfile,
 			ln.sent, ln.id_board, mem.id_group, mem.additional_groups, b.member_groups,
@@ -2661,7 +2661,7 @@ function notifyMembersBoard(&$topicData)
 			'notify_regularity' => 2,
 		)
 	);
-	while ($rowmember = $smcFunc['db_fetch_assoc']($members))
+	while ($rowmember = mysql_fetch_assoc($members))
 	{
 		if ($rowmember['id_group'] != 1)
 		{
@@ -2720,10 +2720,10 @@ function notifyMembersBoard(&$topicData)
 			$sentOnceAlready = 1;
 		}
 	}
-	$smcFunc['db_free_result']($members);
+	mysql_free_result($members);
 
 	// Sent!
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		UPDATE {db_prefix}log_notify
 		SET sent = {int:is_sent}
 		WHERE id_board IN ({array_int:board_list})
@@ -2749,7 +2749,7 @@ function getTopic()
 		LIMIT ' . (int) $modSettings['topicSummaryPosts'];
 
 	// If you're modifying, get only those posts before the current one. (otherwise get all.)
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT
 			IFNULL(mem.real_name, m.poster_name) AS poster_name, m.poster_time,
 			m.body, m.smileys_enabled, m.id_msg, m.id_member
@@ -2766,7 +2766,7 @@ function getTopic()
 		)
 	);
 	$context['previous_posts'] = array();
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 	{
 		// Censor, BBC, ...
 		censorText($row['body']);
@@ -2788,7 +2788,7 @@ function getTopic()
 		if (!empty($context['new_replies']))
 			$context['new_replies']--;
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 }
 
 function QuoteFast()
@@ -2807,7 +2807,7 @@ function QuoteFast()
 	// Where we going if we need to?
 	$context['post_box_name'] = isset($_GET['pb']) ? $_GET['pb'] : '';
 
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT IFNULL(mem.real_name, m.poster_name) AS poster_name, m.poster_time, m.body, m.id_topic, m.subject,
 			m.id_board, m.id_member, m.approved
 		FROM {db_prefix}messages AS m
@@ -2827,16 +2827,16 @@ function QuoteFast()
 	
 	// quick modify, attempt to find existing drafts and load them
 	if(isset($_REQUEST['modify']) && !$user_info['is_guest'] && !empty($modSettings['masterSaveDrafts']) && !empty($options['use_drafts'])) {
-		$draftrequest = $smcFunc['db_query']('', '
+		$draftrequest = smf_db_query( '
 			SELECT body FROM {db_prefix}drafts WHERE id_msg = {int:id_msg} AND id_member = {int:user}',
 				array('id_msg' => (int)$_REQUEST['quote'], 'user' => $user_info['id']));
-		$draftrow = $smcFunc['db_fetch_assoc']($draftrequest);
-		$smcFunc['db_free_result']($draftrequest);
+		$draftrow = mysql_fetch_assoc($draftrequest);
+		mysql_free_result($draftrequest);
 	}
 	
-	$context['close_window'] = $smcFunc['db_num_rows']($request) == 0;
-	$row = $smcFunc['db_fetch_assoc']($request);
-	$smcFunc['db_free_result']($request);
+	$context['close_window'] = mysql_num_rows($request) == 0;
+	$row = mysql_fetch_assoc($request);
+	mysql_free_result($request);
 
 	if(isset($_REQUEST['modify']) && isset($draftrow) && !empty($draftrow['body']) && !empty($row))
 		$row['body'] = $draftrow['body'];
@@ -2925,7 +2925,7 @@ function JavaScriptModify()
 	require_once($sourcedir . '/Subs-Post.php');
 
 	// Assume the first message if no message ID was given.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 			SELECT
 				t.locked, t.num_replies, t.id_member_started, t.id_first_msg,
 				m.id_msg, m.id_member, m.poster_time, m.subject, m.smileys_enabled, m.body, m.icon,
@@ -2944,10 +2944,10 @@ function JavaScriptModify()
 				'guest_id' => 0,
 			)
 		);
-	if ($smcFunc['db_num_rows']($request) == 0)
+	if (mysql_num_rows($request) == 0)
 		fatal_lang_error('no_board', false);
-	$row = $smcFunc['db_fetch_assoc']($request);
-	$smcFunc['db_free_result']($request);
+	$row = mysql_fetch_assoc($request);
+	mysql_free_result($request);
 
 	// Change either body or subject requires permissions to modify messages.
 	if (isset($_POST['message']) || isset($_POST['subject']) || isset($_REQUEST['icon']))
@@ -3092,7 +3092,7 @@ function JavaScriptModify()
 				cache_put_data('response_prefix', $context['response_prefix'], 600);
 			}
 
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				UPDATE {db_prefix}messages
 				SET subject = {string:subject}
 				WHERE id_topic = {int:current_topic}
@@ -3202,7 +3202,7 @@ function saveDraft()
 		$id_sel = $msgid ? ' AND id_msg = {int:message} ' : ' AND id_board = {int:board} AND id_topic = {int:topic} ';
 
 		// Does this draft exist?
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			UPDATE {db_prefix}drafts
 			SET subject = {string:subject},
 				body = {string:body},
@@ -3231,12 +3231,12 @@ function saveDraft()
 			)
 		);
 
-		if ($smcFunc['db_affected_rows']() != 0)
+		if (smf_db_affected_rows() != 0)
 			return $_REQUEST['draft_id'];
 	}
 
 	// Guess it is a new draft after all
-	$smcFunc['db_insert']('insert',
+	smf_db_insert('insert',
 		'{db_prefix}drafts',
 		array(
 			'id_board' => 'int',
@@ -3267,7 +3267,7 @@ function saveDraft()
 		array('id_draft')
 	);
 
-	return $smcFunc['db_insert_id']('{db_prefix}drafts');
+	return smf_db_insert_id('{db_prefix}drafts');
 }
 
 // Output a block of XML that contains the details of our draft

@@ -40,7 +40,7 @@ function stream_add_activity($id_member, $atype, $params, $id_board)
 {
 	global $smcFunc;
 	
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		INSERT INTO {db_prefix}log_activities (id_member, id_type, updated, params, is_private, id_board) 
 			VALUES({int:id_member}, {int:id_type}, {int:updated}, {string:params}, {int:private}, {int:board})',
 			array('id_member' => (int)$id_member, 'id_type' => (int)$atype, 'updated' => time(),
@@ -84,15 +84,15 @@ function stream_format_test()
 	
 	global $smcFunc, $txt, $scripturl;
 
-	$result = $smcFunc['db_query']('','
+	$result = smf_db_query('
 		SELECT a.*, t.formatter FROM {db_prefix}log_activities AS a 
 		LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)');
 		
-	while($row = $smcFunc['db_fetch_assoc']($result)) {
+	while($row = mysql_fetch_assoc($result)) {
 		stream_format_activity($row);
 		echo $row['formatted_result'];
 	}
 		
-	$smcFunc['db_free_result']($result);
+	mysql_free_result($result);
 }
 ?>

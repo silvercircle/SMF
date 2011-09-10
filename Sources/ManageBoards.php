@@ -447,7 +447,7 @@ function EditBoard()
 	);
 
 	// Load membergroups.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT group_name, id_group, min_posts
 		FROM {db_prefix}membergroups
 		WHERE id_group > {int:moderator_group} OR id_group = {int:global_moderator}
@@ -457,7 +457,7 @@ function EditBoard()
 			'global_moderator' => 2,
 		)
 	);
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 	{
 		if ($_REQUEST['sa'] == 'newboard' && $row['min_posts'] == -1)
 			$curBoard['member_groups'][] = $row['id_group'];
@@ -469,7 +469,7 @@ function EditBoard()
 			'is_post_group' => $row['min_posts'] != -1,
 		);
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// Category doesn't exist, man... sorry.
 	if (!isset($boardList[$curBoard['category']]))
@@ -518,7 +518,7 @@ function EditBoard()
 			'selected' => $catID == $curBoard['category']
 		);
 
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT mem.id_member, mem.real_name
 		FROM {db_prefix}moderators AS mods
 			INNER JOIN {db_prefix}members AS mem ON (mem.id_member = mods.id_member)
@@ -528,9 +528,9 @@ function EditBoard()
 		)
 	);
 	$context['board']['moderators'] = array();
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 		$context['board']['moderators'][$row['id_member']] = $row['real_name'];
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	$context['board']['moderator_list'] = empty($context['board']['moderators']) ? '' : '&quot;' . implode('&quot;, &quot;', $context['board']['moderators']) . '&quot;';
 
@@ -538,7 +538,7 @@ function EditBoard()
 		list ($context['board']['last_moderator_id']) = array_slice(array_keys($context['board']['moderators']), -1);
 
 	// Get all the themes...
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT id_theme AS id, value AS name
 		FROM {db_prefix}themes
 		WHERE variable = {string:name}',
@@ -547,9 +547,9 @@ function EditBoard()
 		)
 	);
 	$context['themes'] = array();
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 		$context['themes'][] = $row;
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	if (!isset($_REQUEST['delete']))
 	{
@@ -632,7 +632,7 @@ function EditBoard2()
 		// We need to know what used to be case in terms of redirection.
 		if (!empty($_POST['boardid']))
 		{
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT redirect, num_posts
 				FROM {db_prefix}boards
 				WHERE id_board = {int:current_board}',
@@ -640,8 +640,8 @@ function EditBoard2()
 					'current_board' => $_POST['boardid'],
 				)
 			);
-			list ($oldRedirect, $numPosts) = $smcFunc['db_fetch_row']($request);
-			$smcFunc['db_free_result']($request);
+			list ($oldRedirect, $numPosts) = mysql_fetch_row($request);
+			mysql_free_result($request);
 
 			// If we're turning redirection on check the board doesn't have posts in it - if it does don't make it a redirection board.
 			if ($boardOptions['redirect'] && empty($oldRedirect) && $numPosts)
@@ -715,7 +715,7 @@ function ModifyCat()
 	$_POST['id'] = substr($_POST['id'][1], 0, 3);
 
 	// Select the stuff we need from the DB.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT CONCAT({string:post_id}, {string:feline_clause}, {string:subact})
 		FROM {db_prefix}categories
 		LIMIT 1',
@@ -725,10 +725,10 @@ function ModifyCat()
 			'subact' => $allowed_sa[2] . 'e, ',
 		)
 	);
-	list ($cat) = $smcFunc['db_fetch_row']($request);
+	list ($cat) = mysql_fetch_row($request);
 
 	// Free resources.
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// This would probably never happen, but just to be sure.
 	if ($cat .= $allowed_sa[1])
@@ -743,7 +743,7 @@ function EditBoardSettings($return_config = false)
 
 	// Load the boards list - for the recycle bin!
 	$recycle_boards = array('');
-	$request = $smcFunc['db_query']('order_by_board_order', '
+	$request = smf_db_query('
 		SELECT b.id_board, b.name AS board_name, c.name AS cat_name
 		FROM {db_prefix}boards AS b
 			LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)
@@ -752,9 +752,9 @@ function EditBoardSettings($return_config = false)
 			'empty_string' => '',
 		)
 	);
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 		$recycle_boards[$row['id_board']] = $row['cat_name'] . ' - ' . $row['board_name'];
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// Here and the board settings...
 	$config_vars = array(

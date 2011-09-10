@@ -210,7 +210,7 @@ function html_to_bbc($text)
 
 			if (!empty($names))
 			{
-				$request = $smcFunc['db_query']('', '
+				$request = smf_db_query( '
 					SELECT code, filename
 					FROM {db_prefix}smileys
 					WHERE filename IN ({array_string:smiley_filenames})',
@@ -219,9 +219,9 @@ function html_to_bbc($text)
 					)
 				);
 				$mappings = array();
-				while ($row = $smcFunc['db_fetch_assoc']($request))
+				while ($row = mysql_fetch_assoc($request))
 					$mappings[$row['filename']] = htmlspecialchars($row['code']);
-				$smcFunc['db_free_result']($request);
+				mysql_free_result($request);
 
 				foreach ($matches[1] as $k => $file)
 					if (isset($mappings[$file]))
@@ -977,7 +977,7 @@ function getMessageIcons($board_id)
 	{
 		if (($temp = cache_get_data('posting_icons-' . $board_id, 480)) == null)
 		{
-			$request = $smcFunc['db_query']('select_message_icons', '
+			$request = smf_db_query('
 				SELECT title, filename
 				FROM {db_prefix}message_icons
 				WHERE id_board IN (0, {int:board_id})',
@@ -986,9 +986,9 @@ function getMessageIcons($board_id)
 				)
 			);
 			$icon_data = array();
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = mysql_fetch_assoc($request))
 				$icon_data[] = $row;
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			cache_put_data('posting_icons-' . $board_id, $icon_data, 480);
 		}
@@ -1763,7 +1763,7 @@ function create_control_richedit($editorOptions)
 		{
 			if (($temp = cache_get_data('posting_smileys', 480)) == null)
 			{
-				$request = $smcFunc['db_query']('', '
+				$request = smf_db_query( '
 					SELECT code, filename, description, smiley_row, hidden
 					FROM {db_prefix}smileys
 					WHERE hidden IN (0, 2)
@@ -1771,14 +1771,14 @@ function create_control_richedit($editorOptions)
 					array(
 					)
 				);
-				while ($row = $smcFunc['db_fetch_assoc']($request))
+				while ($row = mysql_fetch_assoc($request))
 				{
 					$row['filename'] = htmlspecialchars($row['filename']);
 					$row['description'] = htmlspecialchars($row['description']);
 
 					$context['smileys'][empty($row['hidden']) ? 'postform' : 'popup'][$row['smiley_row']]['smileys'][] = $row;
 				}
-				$smcFunc['db_free_result']($request);
+				mysql_free_result($request);
 
 				foreach ($context['smileys'] as $section => $smileyRows)
 				{
@@ -1881,7 +1881,7 @@ function create_control_verification(&$verificationOptions, $do_test = false)
 	{
 		if (($modSettings['question_id_cache'] = cache_get_data('verificationQuestionIds', 300)) == null)
 		{
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT id_comment
 				FROM {db_prefix}log_comments
 				WHERE comment_type = {string:ver_test}',
@@ -1890,9 +1890,9 @@ function create_control_verification(&$verificationOptions, $do_test = false)
 				)
 			);
 			$modSettings['question_id_cache'] = array();
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = mysql_fetch_assoc($request))
 				$modSettings['question_id_cache'][] = $row['id_comment'];
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			if (!empty($modSettings['cache_enable']))
 				cache_put_data('verificationQuestionIds', $modSettings['question_id_cache'], 300);
@@ -1929,7 +1929,7 @@ function create_control_verification(&$verificationOptions, $do_test = false)
 		if ($thisVerification['number_questions'])
 		{
 			// Get the answers and see if they are all right!
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT id_comment, recipient_name AS answer
 				FROM {db_prefix}log_comments
 				WHERE comment_type = {string:ver_test}
@@ -1940,12 +1940,12 @@ function create_control_verification(&$verificationOptions, $do_test = false)
 				)
 			);
 			$incorrectQuestions = array();
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = mysql_fetch_assoc($request))
 			{
 				if (empty($_REQUEST[$verificationOptions['id'] . '_vv']['q'][$row['id_comment']]) || trim($smcFunc['htmlspecialchars'](strtolower($_REQUEST[$verificationOptions['id'] . '_vv']['q'][$row['id_comment']]))) != strtolower($row['answer']))
 					$incorrectQuestions[] = $row['id_comment'];
 			}
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			if (!empty($incorrectQuestions))
 				$verification_errors[] = 'wrong_verification_answer';
@@ -2007,7 +2007,7 @@ function create_control_verification(&$verificationOptions, $do_test = false)
 	// Have we got some questions to load?
 	if (!empty($questionIDs))
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_comment, body AS question
 			FROM {db_prefix}log_comments
 			WHERE comment_type = {string:ver_test}
@@ -2018,7 +2018,7 @@ function create_control_verification(&$verificationOptions, $do_test = false)
 			)
 		);
 		$_SESSION[$verificationOptions['id'] . '_vv']['q'] = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 		{
 			$thisVerification['questions'][] = array(
 				'id' => $row['id_comment'],
@@ -2029,7 +2029,7 @@ function create_control_verification(&$verificationOptions, $do_test = false)
 			);
 			$_SESSION[$verificationOptions['id'] . '_vv']['q'][] = $row['id_comment'];
 		}
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 	}
 
 	$_SESSION[$verificationOptions['id'] . '_vv']['count'] = empty($_SESSION[$verificationOptions['id'] . '_vv']['count']) ? 1 : $_SESSION[$verificationOptions['id'] . '_vv']['count'] + 1;
@@ -2085,7 +2085,7 @@ function AutoSuggest_Search_Member()
 	$_REQUEST['search'] = strtr($_REQUEST['search'], array('%' => '\%', '_' => '\_', '*' => '%', '?' => '_', '&#038;' => '&amp;'));
 
 	// Find the member.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT id_member, real_name
 		FROM {db_prefix}members
 		WHERE real_name LIKE {string:search}' . (!empty($context['search_param']['buddies']) ? '
@@ -2103,7 +2103,7 @@ function AutoSuggest_Search_Member()
 			'children' => array(),
 		),
 	);
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 	{
 		$row['real_name'] = strtr($row['real_name'], array('&amp;' => '&#038;', '&lt;' => '&#060;', '&gt;' => '&#062;', '&quot;' => '&#034;'));
 
@@ -2114,7 +2114,7 @@ function AutoSuggest_Search_Member()
 			'value' => $row['real_name'],
 		);
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	return $xml_data;
 }
@@ -2127,7 +2127,7 @@ function AutoSuggest_Search_Tags()
 	$_REQUEST['search'] = strtr($_REQUEST['search'], array('%' => '\%', '_' => '\_', '*' => '%', '?' => '_', '&#038;' => '&amp;'));
 
 	// Find tags
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT id_member, real_name
 		FROM {db_prefix}tags
 		WHERE tag LIKE {string:search} 
@@ -2142,7 +2142,7 @@ function AutoSuggest_Search_Tags()
 			'children' => array(),
 		),
 	);
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 	{
 		$xml_data['tags']['children'][] = array(
 			'attributes' => array(
@@ -2151,7 +2151,7 @@ function AutoSuggest_Search_Tags()
 			'value' => $row['tag'],
 		);
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	return $xml_data;
 }

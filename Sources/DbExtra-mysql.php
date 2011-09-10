@@ -72,7 +72,7 @@ function smf_db_backup_table($table, $backup_table)
 	$table = str_replace('{db_prefix}', $db_prefix, $table);
 
 	// First, get rid of the old table.
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		DROP TABLE IF EXISTS {raw:backup_table}',
 		array(
 			'backup_table' => $backup_table,
@@ -80,7 +80,7 @@ function smf_db_backup_table($table, $backup_table)
 	);
 
 	// Can we do this the quick way?
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		CREATE TABLE {raw:backup_table} LIKE {raw:table}',
 		array(
 			'backup_table' => $backup_table,
@@ -89,7 +89,7 @@ function smf_db_backup_table($table, $backup_table)
 	// If this failed, we go old school.
 	if ($result)
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			INSERT INTO {raw:backup_table}
 			SELECT *
 			FROM {raw:table}',
@@ -104,14 +104,14 @@ function smf_db_backup_table($table, $backup_table)
 	}
 
 	// At this point, the quick method failed.
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SHOW CREATE TABLE {raw:table}',
 		array(
 			'table' => $table,
 		)
 	);
-	list (, $create) = $smcFunc['db_fetch_row']($result);
-	$smcFunc['db_free_result']($result);
+	list (, $create) = mysql_fetch_row($result);
+	mysql_free_result($result);
 
 	$create = preg_split('/[\n\r]/', $create);
 
@@ -158,7 +158,7 @@ function smf_db_backup_table($table, $backup_table)
 	else
 		$create = '';
 
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		CREATE TABLE {raw:backup_table} {raw:create}
 		ENGINE={raw:engine}' . (empty($charset) ? '' : ' CHARACTER SET {raw:charset}' . (empty($collate) ? '' : ' COLLATE {raw:collate}')) . '
 		SELECT *
@@ -178,7 +178,7 @@ function smf_db_backup_table($table, $backup_table)
 		if (preg_match('~\`(.+?)\`\s~', $auto_inc, $match) != 0 && substr($auto_inc, -1, 1) == ',')
 			$auto_inc = substr($auto_inc, 0, -1);
 
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			ALTER TABLE {raw:backup_table}
 			CHANGE COLUMN {raw:column_detail} {raw:auto_inc}',
 			array(
@@ -200,17 +200,17 @@ function smf_db_optimize_table($table)
 	$table = str_replace('{db_prefix}', $db_prefix, $table);
 
 	// Get how much overhead there is.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 			SHOW TABLE STATUS LIKE {string:table_name}',
 			array(
 				'table_name' => str_replace('_', '\_', $table),
 			)
 		);
-	$row = $smcFunc['db_fetch_assoc']($request);
-	$smcFunc['db_free_result']($request);
+	$row = mysql_fetch_assoc($request);
+	mysql_free_result($request);
 
 	$data_before = isset($row['Data_free']) ? $row['Data_free'] : 0;
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 			OPTIMIZE TABLE `{raw:table}`',
 			array(
 				'table' => $table,
@@ -220,14 +220,14 @@ function smf_db_optimize_table($table)
 		return -1;
 
 	// How much left?
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 			SHOW TABLE STATUS LIKE {string:table}',
 			array(
 				'table' => str_replace('_', '\_', $table),
 			)
 		);
-	$row = $smcFunc['db_fetch_assoc']($request);
-	$smcFunc['db_free_result']($request);
+	$row = mysql_fetch_assoc($request);
+	mysql_free_result($request);
 
 	$total_change = isset($row['Data_free']) && $data_before > $row['Data_free'] ? $data_before / 1024 : 0;
 
@@ -243,7 +243,7 @@ function smf_db_list_tables($db = false, $filter = false)
 	$db = trim($db);
 	$filter = $filter == false ? '' : ' LIKE \'' . $filter . '\'';
 
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SHOW TABLES
 		FROM `{raw:db}`
 		{raw:filter}',
@@ -253,9 +253,9 @@ function smf_db_list_tables($db = false, $filter = false)
 		)
 	);
 	$tables = array();
-	while ($row = $smcFunc['db_fetch_row']($request))
+	while ($row = mysql_fetch_row($request))
 		$tables[] = $row[0];
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	return $tables;
 }
@@ -271,7 +271,7 @@ function smf_db_insert_sql($tableName)
 	$crlf = "\r\n";
 
 	// Get everything from the table.
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SELECT /*!40001 SQL_NO_CACHE */ *
 		FROM `{raw:table}`',
 		array(
@@ -280,20 +280,20 @@ function smf_db_insert_sql($tableName)
 	);
 
 	// The number of rows, just for record keeping and breaking INSERTs up.
-	$num_rows = $smcFunc['db_num_rows']($result);
+	$num_rows = mysql_num_rows($result);
 	$current_row = 0;
 
 	if ($num_rows == 0)
 		return '';
 
-	$fields = array_keys($smcFunc['db_fetch_assoc']($result));
-	$smcFunc['db_data_seek']($result, 0);
+	$fields = array_keys(mysql_fetch_assoc($result));
+	mysql_data_seek($result, 0);
 
 	// Start it off with the basic INSERT INTO.
 	$data = 'INSERT INTO `' . $tableName . '`' . $crlf . "\t" . '(`' . implode('`, `', $fields) . '`)' . $crlf . 'VALUES ';
 
 	// Loop through each row.
-	while ($row = $smcFunc['db_fetch_row']($result))
+	while ($row = mysql_fetch_row($result))
 	{
 		$current_row++;
 
@@ -307,7 +307,7 @@ function smf_db_insert_sql($tableName)
 			elseif (is_numeric($row[$j]) && (int) $row[$j] == $row[$j])
 				$field_list[] = $row[$j];
 			else
-				$field_list[] = '\'' . $smcFunc['db_escape_string']($row[$j]) . '\'';
+				$field_list[] = '\'' . addslashes($row[$j]) . '\'';
 		}
 
 		// 'Insert' the data.
@@ -323,7 +323,7 @@ function smf_db_insert_sql($tableName)
 		else
 			$data .= ',' . $crlf . "\t";
 	}
-	$smcFunc['db_free_result']($result);
+	mysql_free_result($result);
 
 	// Return an empty string if there were no rows.
 	return $num_rows == 0 ? '' : $data;
@@ -346,14 +346,14 @@ function smf_db_table_sql($tableName)
 	$schema_create .= 'CREATE TABLE `' . $tableName . '` (' . $crlf;
 
 	// Find all the fields.
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SHOW FIELDS
 		FROM `{raw:table}`',
 		array(
 			'table' => $tableName,
 		)
 	);
-	while ($row = $smcFunc['db_fetch_assoc']($result))
+	while ($row = mysql_fetch_assoc($result))
 	{
 		// Make the CREATE for this column.
 		$schema_create .= ' `' . $row['Field'] . '` ' . $row['Type'] . ($row['Null'] != 'YES' ? ' NOT NULL' : '');
@@ -371,20 +371,20 @@ function smf_db_table_sql($tableName)
 				$type = strtolower($row['Type']);
 				$isNumericColumn = strpos($type, 'int') !== false || strpos($type, 'bool') !== false || strpos($type, 'bit') !== false || strpos($type, 'float') !== false || strpos($type, 'double') !== false || strpos($type, 'decimal') !== false;
 
-				$schema_create .= ' default ' . ($isNumericColumn ? $row['Default'] : '\'' . $smcFunc['db_escape_string']($row['Default']) . '\'');
+				$schema_create .= ' default ' . ($isNumericColumn ? $row['Default'] : '\'' . addslashes($row['Default']) . '\'');
 			}
 		}
 
 		// And now any extra information. (such as auto_increment.)
 		$schema_create .= ($row['Extra'] != '' ? ' ' . $row['Extra'] : '') . ',' . $crlf;
 	}
-	$smcFunc['db_free_result']($result);
+	mysql_free_result($result);
 
 	// Take off the last comma.
 	$schema_create = substr($schema_create, 0, -strlen($crlf) - 1);
 
 	// Find the keys.
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SHOW KEYS
 		FROM `{raw:table}`',
 		array(
@@ -392,7 +392,7 @@ function smf_db_table_sql($tableName)
 		)
 	);
 	$indexes = array();
-	while ($row = $smcFunc['db_fetch_assoc']($result))
+	while ($row = mysql_fetch_assoc($result))
 	{
 		// IS this a primary key, unique index, or regular index?
 		$row['Key_name'] = $row['Key_name'] == 'PRIMARY' ? 'PRIMARY KEY' : (empty($row['Non_unique']) ? 'UNIQUE ' : ($row['Comment'] == 'FULLTEXT' || (isset($row['Index_type']) && $row['Index_type'] == 'FULLTEXT') ? 'FULLTEXT ' : 'KEY ')) . '`' . $row['Key_name'] . '`';
@@ -407,7 +407,7 @@ function smf_db_table_sql($tableName)
 		else
 			$indexes[$row['Key_name']][$row['Seq_in_index']] = '`' . $row['Column_name'] . '`';
 	}
-	$smcFunc['db_free_result']($result);
+	mysql_free_result($result);
 
 	// Build the CREATEs for the keys.
 	foreach ($indexes as $keyname => $columns)
@@ -419,15 +419,15 @@ function smf_db_table_sql($tableName)
 	}
 
 	// Now just get the comment and type... (MyISAM, etc.)
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SHOW TABLE STATUS
 		LIKE {string:table}',
 		array(
 			'table' => strtr($tableName, array('_' => '\\_', '%' => '\\%')),
 		)
 	);
-	$row = $smcFunc['db_fetch_assoc']($result);
-	$smcFunc['db_free_result']($result);
+	$row = mysql_fetch_assoc($result);
+	mysql_free_result($result);
 
 	// Probably MyISAM.... and it might have a comment.
 	$schema_create .= $crlf . ') ENGINE=' . (isset($row['Type']) ? $row['Type'] : $row['Engine']) . ($row['Comment'] != '' ? ' COMMENT="' . $row['Comment'] . '"' : '');
@@ -440,13 +440,13 @@ function smf_db_get_version()
 {
 	global $smcFunc;
 
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT VERSION()',
 		array(
 		)
 	);
-	list ($ver) = $smcFunc['db_fetch_row']($request);
-	$smcFunc['db_free_result']($request);
+	list ($ver) = mysql_fetch_row($request);
+	mysql_free_result($request);
 
 	return $ver;
 }

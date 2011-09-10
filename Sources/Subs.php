@@ -246,7 +246,7 @@ function updateStats($type, $parameter1 = null, $parameter2 = null)
 		else
 		{
 			// Update the latest activated member (highest id_member) and count.
-			$result = $smcFunc['db_query']('', '
+			$result = smf_db_query('
 				SELECT COUNT(*), MAX(id_member)
 				FROM {db_prefix}members
 				WHERE is_activated = {int:is_activated}',
@@ -254,11 +254,11 @@ function updateStats($type, $parameter1 = null, $parameter2 = null)
 					'is_activated' => 1,
 				)
 			);
-			list ($changes['totalMembers'], $changes['latestMember']) = $smcFunc['db_fetch_row']($result);
-			$smcFunc['db_free_result']($result);
+			list ($changes['totalMembers'], $changes['latestMember']) = mysql_fetch_row($result);
+			mysql_free_result($result);
 
 			// Get the latest activated member's display name.
-			$result = $smcFunc['db_query']('', '
+			$result = smf_db_query('
 				SELECT real_name
 				FROM {db_prefix}members
 				WHERE id_member = {int:id_member}
@@ -267,14 +267,14 @@ function updateStats($type, $parameter1 = null, $parameter2 = null)
 					'id_member' => (int) $changes['latestMember'],
 				)
 			);
-			list ($changes['latestRealName']) = $smcFunc['db_fetch_row']($result);
-			$smcFunc['db_free_result']($result);
+			list ($changes['latestRealName']) = mysql_fetch_row($result);
+			mysql_free_result($result);
 
 			// Are we using registration approval?
 			if ((!empty($modSettings['registration_method']) && $modSettings['registration_method'] == 2) || !empty($modSettings['approveAccountDeletion']))
 			{
 				// Update the amount of members awaiting approval - ignoring COPPA accounts, as you can't approve them until you get permission.
-				$result = $smcFunc['db_query']('', '
+				$result = smf_db_query( '
 					SELECT COUNT(*)
 					FROM {db_prefix}members
 					WHERE is_activated IN ({array_int:activation_status})',
@@ -282,8 +282,8 @@ function updateStats($type, $parameter1 = null, $parameter2 = null)
 						'activation_status' => array(3, 4),
 					)
 				);
-				list ($changes['unapprovedMembers']) = $smcFunc['db_fetch_row']($result);
-				$smcFunc['db_free_result']($result);
+				list ($changes['unapprovedMembers']) = mysql_fetch_row($result);
+				mysql_free_result($result);
 			}
 		}
 
@@ -296,7 +296,7 @@ function updateStats($type, $parameter1 = null, $parameter2 = null)
 		else
 		{
 			// SUM and MAX on a smaller table is better for InnoDB tables.
-			$result = $smcFunc['db_query']('', '
+			$result = smf_db_query( '
 				SELECT SUM(num_posts + unapproved_posts) AS total_messages, MAX(id_last_msg) AS max_msg_id
 				FROM {db_prefix}boards
 				WHERE redirect = {string:blank_redirect}' . (!empty($modSettings['recycle_enable']) && $modSettings['recycle_board'] > 0 ? '
@@ -306,8 +306,8 @@ function updateStats($type, $parameter1 = null, $parameter2 = null)
 					'blank_redirect' => '',
 				)
 			);
-			$row = $smcFunc['db_fetch_assoc']($result);
-			$smcFunc['db_free_result']($result);
+			$row = mysql_fetch_assoc($result);
+			mysql_free_result($result);
 
 			updateSettings(array(
 				'totalMessages' => $row['total_messages'] === null ? 0 : $row['total_messages'],
@@ -318,7 +318,7 @@ function updateStats($type, $parameter1 = null, $parameter2 = null)
 
 	case 'subject':
 		// Remove the previous subject (if any).
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			DELETE FROM {db_prefix}log_search_subjects
 			WHERE id_topic = {int:id_topic}',
 			array(
@@ -337,7 +337,7 @@ function updateStats($type, $parameter1 = null, $parameter2 = null)
 				$inserts[] = array($word, $parameter1);
 
 			if (!empty($inserts))
-				$smcFunc['db_insert']('ignore',
+				smf_db_insert('ignore',
 					'{db_prefix}log_search_subjects',
 					array('word' => 'string', 'id_topic' => 'int'),
 					$inserts,
@@ -353,7 +353,7 @@ function updateStats($type, $parameter1 = null, $parameter2 = null)
 		{
 			// Get the number of topics - a SUM is better for InnoDB tables.
 			// We also ignore the recycle bin here because there will probably be a bunch of one-post topics there.
-			$result = $smcFunc['db_query']('', '
+			$result = smf_db_query( '
 				SELECT SUM(num_topics + unapproved_topics) AS total_topics
 				FROM {db_prefix}boards' . (!empty($modSettings['recycle_enable']) && $modSettings['recycle_board'] > 0 ? '
 				WHERE id_board != {int:recycle_board}' : ''),
@@ -361,8 +361,8 @@ function updateStats($type, $parameter1 = null, $parameter2 = null)
 					'recycle_board' => !empty($modSettings['recycle_board']) ? $modSettings['recycle_board'] : 0,
 				)
 			);
-			$row = $smcFunc['db_fetch_assoc']($result);
-			$smcFunc['db_free_result']($result);
+			$row = mysql_fetch_assoc($result);
+			mysql_free_result($result);
 
 			updateSettings(array('totalTopics' => $row['total_topics'] === null ? 0 : $row['total_topics']));
 		}
@@ -376,7 +376,7 @@ function updateStats($type, $parameter1 = null, $parameter2 = null)
 		if (($postgroups = cache_get_data('updateStats:postgroups', 360)) == null)
 		{
 			// Fetch the postgroups!
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT id_group, min_posts
 				FROM {db_prefix}membergroups
 				WHERE min_posts != {int:min_posts}',
@@ -385,9 +385,9 @@ function updateStats($type, $parameter1 = null, $parameter2 = null)
 				)
 			);
 			$postgroups = array();
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = mysql_fetch_assoc($request))
 				$postgroups[$row['id_group']] = $row['min_posts'];
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			// Sort them this way because if it's done with MySQL it causes a filesort :(.
 			arsort($postgroups);
@@ -409,7 +409,7 @@ function updateStats($type, $parameter1 = null, $parameter2 = null)
 		}
 
 		// A big fat CASE WHEN... END is faster than a zillion UPDATE's ;).
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			UPDATE {db_prefix}members
 			SET id_post_group = CASE ' . $conditions . '
 					ELSE 0
@@ -475,15 +475,15 @@ function updateMemberData($members, $data)
 			else
 			{
 				$member_names = array();
-				$request = $smcFunc['db_query']('', '
+				$request = smf_db_query( '
 					SELECT member_name
 					FROM {db_prefix}members
 					WHERE ' . $condition,
 					$parameters
 				);
-				while ($row = $smcFunc['db_fetch_assoc']($request))
+				while ($row = mysql_fetch_assoc($request))
 					$member_names[] = $row['member_name'];
-				$smcFunc['db_free_result']($request);
+				mysql_free_result($request);
 			}
 
 			if (!empty($member_names))
@@ -536,7 +536,7 @@ function updateMemberData($members, $data)
 		$parameters['p_' . $var] = $val;
 	}
 
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		UPDATE {db_prefix}members
 		SET' . substr($setString, 0, -1) . '
 		WHERE ' . $condition,
@@ -577,7 +577,7 @@ function updateSettings($changeArray, $update = false, $debug = false)
 	{
 		foreach ($changeArray as $variable => $value)
 		{
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				UPDATE {db_prefix}settings
 				SET value = {' . ($value === false || $value === true ? 'raw' : 'string') . ':value}
 				WHERE variable = {string:variable}',
@@ -613,7 +613,7 @@ function updateSettings($changeArray, $update = false, $debug = false)
 	if (empty($replaceArray))
 		return;
 
-	$smcFunc['db_insert']('replace',
+	smf_db_insert('replace',
 		'{db_prefix}settings',
 		array('variable' => 'string-255', 'value' => 'string-65534'),
 		$replaceArray,
@@ -2621,7 +2621,7 @@ function parsesmileys(&$message)
 			// Load the smileys in reverse order by length so they don't get parsed wrong.
 			if (($temp = cache_get_data('parsing_smileys', 480)) == null)
 			{
-				$result = $smcFunc['db_query']('', '
+				$result = smf_db_query( '
 					SELECT code, filename, description
 					FROM {db_prefix}smileys',
 					array(
@@ -2630,13 +2630,13 @@ function parsesmileys(&$message)
 				$smileysfrom = array();
 				$smileysto = array();
 				$smileysdescs = array();
-				while ($row = $smcFunc['db_fetch_assoc']($result))
+				while ($row = mysql_fetch_assoc($result))
 				{
 					$smileysfrom[] = $row['code'];
 					$smileysto[] = $row['filename'];
 					$smileysdescs[] = $row['description'];
 				}
-				$smcFunc['db_free_result']($result);
+				mysql_free_result($result);
 
 				cache_put_data('parsing_smileys', array($smileysfrom, $smileysto, $smileysdescs), 480);
 			}
@@ -2742,7 +2742,7 @@ function writeLog($force = false)
 	{
 		if ($do_delete)
 		{
-			$smcFunc['db_query']('delete_log_online_interval', '
+			smf_db_query('
 				DELETE FROM {db_prefix}log_online
 				WHERE log_time < {int:log_time}
 					AND session != {string:session}',
@@ -2756,7 +2756,7 @@ function writeLog($force = false)
 			cache_put_data('log_online-update', time(), 30);
 		}
 
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			UPDATE {db_prefix}log_online
 			SET log_time = {int:log_time}, ip = IFNULL(INET_ATON({string:ip}), 0), url = {string:url}
 			WHERE session = {string:session}',
@@ -2769,7 +2769,7 @@ function writeLog($force = false)
 		);
 
 		// Guess it got deleted.
-		if ($smcFunc['db_affected_rows']() == 0)
+		if (smf_db_affected_rows() == 0)
 			$_SESSION['log_time'] = 0;
 	}
 	else
@@ -2779,7 +2779,7 @@ function writeLog($force = false)
 	if (empty($_SESSION['log_time']))
 	{
 		if ($do_delete || !empty($user_info['id']))
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				DELETE FROM {db_prefix}log_online
 				WHERE ' . ($do_delete ? 'log_time < {int:log_time}' : '') . ($do_delete && !empty($user_info['id']) ? ' OR ' : '') . (empty($user_info['id']) ? '' : 'id_member = {int:current_member}'),
 				array(
@@ -2788,7 +2788,7 @@ function writeLog($force = false)
 				)
 			);
 
-		$smcFunc['db_insert']($do_delete ? 'ignore' : 'replace',
+		smf_db_insert($do_delete ? 'ignore' : 'replace',
 			'{db_prefix}log_online',
 			array('session' => 'string', 'id_member' => 'int', 'id_spider' => 'int', 'log_time' => 'int', 'ip' => 'raw', 'url' => 'string'),
 			array($session_id, $user_info['id'], empty($_SESSION['id_robot']) ? 0 : $_SESSION['id_robot'], time(), 'IFNULL(INET_ATON(\'' . $user_info['ip'] . '\'), 0)', $serialized),
@@ -3015,7 +3015,7 @@ function logAction($action, $extra = array(), $log_type = 'moderate')
 	// Is there an associated report on this?
 	if (in_array($action, array('move', 'remove', 'split', 'merge')))
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_report
 			FROM {db_prefix}log_reported
 			WHERE {raw:column_name} = {int:reported}
@@ -3026,13 +3026,13 @@ function logAction($action, $extra = array(), $log_type = 'moderate')
 		));
 
 		// Alright, if we get any result back, update open reports.
-		if ($smcFunc['db_num_rows']($request) > 0)
+		if (mysql_num_rows($request) > 0)
 		{
 			require_once($sourcedir . '/ModerationCenter.php');
 			updateSettings(array('last_mod_report_action' => time()));
 			recountOpenReports();
 		}
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 	}
 
 	// No point in doing anything else, if the log isn't even enabled.
@@ -3063,7 +3063,7 @@ function logAction($action, $extra = array(), $log_type = 'moderate')
 		}
 	}
 
-	$smcFunc['db_insert']('',
+	smf_db_insert('',
 		'{db_prefix}log_actions',
 		array(
 			'log_time' => 'int', 'id_log' => 'int', 'id_member' => 'int', 'ip' => 'string-16', 'action' => 'string',
@@ -3076,7 +3076,7 @@ function logAction($action, $extra = array(), $log_type = 'moderate')
 		array('id_action')
 	);
 
-	return $smcFunc['db_insert_id']('{db_prefix}log_actions', 'id_action');
+	return smf_db_insert_id('{db_prefix}log_actions', 'id_action');
 }
 
 // Track Statistics.
@@ -3110,15 +3110,15 @@ function trackStats($stats = array())
 		$insert_keys[$field] = 'int';
 	}
 
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		UPDATE {db_prefix}log_activity
 		SET' . substr($setStringUpdate, 0, -1) . '
 		WHERE date = {date:current_date}',
 		$update_parameters
 	);
-	if ($smcFunc['db_affected_rows']() == 0)
+	if (smf_db_affected_rows() == 0)
 	{
-		$smcFunc['db_insert']('ignore',
+		smf_db_insert('ignore',
 			'{db_prefix}log_activity',
 			array_merge($insert_keys, array('date' => 'date')),
 			array_merge($cache_stats, array($date)),
@@ -3154,7 +3154,7 @@ function spamProtection($error_type)
 		$timeLimit = 2;
 
 	// Delete old entries...
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		DELETE FROM {db_prefix}log_floodcontrol
 		WHERE log_time < {int:log_time}
 			AND log_type = {string:log_type}',
@@ -3165,7 +3165,7 @@ function spamProtection($error_type)
 	);
 
 	// Add a new entry, deleting the old if necessary.
-	$smcFunc['db_insert']('replace',
+	smf_db_insert('replace',
 		'{db_prefix}log_floodcontrol',
 		array('ip' => 'string-16', 'log_time' => 'int', 'log_type' => 'string'),
 		array($user_info['ip'], time(), $error_type),
@@ -3173,7 +3173,7 @@ function spamProtection($error_type)
 	);
 
 	// If affected is 0 or 2, it was there already.
-	if ($smcFunc['db_affected_rows']() != 1)
+	if (smf_db_affected_rows() != 1)
 	{
 		// Spammer!  You only have to wait a *few* seconds!
 		fatal_lang_error($error_type . 'WaitTime_broken', false, array($timeLimit));
@@ -3721,7 +3721,7 @@ function getAttachmentFilename($filename, $attachment_id, $dir = null, $new = fa
 	// Grab the file hash if it wasn't added.
 	if ($file_hash === '')
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT file_hash
 			FROM {db_prefix}attachments
 			WHERE id_attach = {int:id_attach}',
@@ -3729,11 +3729,11 @@ function getAttachmentFilename($filename, $attachment_id, $dir = null, $new = fa
 				'id_attach' => $attachment_id,
 		));
 
-		if ($smcFunc['db_num_rows']($request) === 0)
+		if (mysql_num_rows($request) === 0)
 			return false;
 
-		list ($file_hash) = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
+		list ($file_hash) = mysql_fetch_row($request);
+		mysql_free_result($request);
 	}
 
 	// In case of files from the old system, do a legacy call.
@@ -4307,7 +4307,7 @@ function add_integration_function($hook, $function, $permanent = true)
 	// Is it going to be permanent?
 	if ($permanent)
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT value
 			FROM {db_prefix}settings
 			WHERE variable = {string:variable}',
@@ -4315,8 +4315,8 @@ function add_integration_function($hook, $function, $permanent = true)
 				'variable' => $hook,
 			)
 		);
-		list($current_functions) = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
+		list($current_functions) = mysql_fetch_row($request);
+		mysql_free_result($request);
 
 		if (!empty($current_functions))
 		{
@@ -4349,7 +4349,7 @@ function remove_integration_function($hook, $function)
 	global $smcFunc, $modSettings;
 
 	// Get the permanent functions.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT value
 		FROM {db_prefix}settings
 		WHERE variable = {string:variable}',
@@ -4357,8 +4357,8 @@ function remove_integration_function($hook, $function)
 			'variable' => $hook,
 		)
 	);
-	list($current_functions) = $smcFunc['db_fetch_row']($request);
-	$smcFunc['db_free_result']($request);
+	list($current_functions) = mysql_fetch_row($request);
+	mysql_free_result($request);
 
 	if (!empty($current_functions))
 	{

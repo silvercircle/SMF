@@ -72,7 +72,7 @@ function ViewErrorLog()
 		$filter = array(
 			'variable' => $_GET['filter'],
 			'value' => array(
-				'sql' => in_array($_GET['filter'], array('message', 'url', 'file')) ? base64_decode(strtr($_GET['value'], array(' ' => '+'))) : $smcFunc['db_escape_wildcard_string']($_GET['value']),
+				'sql' => in_array($_GET['filter'], array('message', 'url', 'file')) ? base64_decode(strtr($_GET['value'], array(' ' => '+'))) : smf_db_escape_wildcard_string($_GET['value']),
 			),
 			'href' => ';filter=' . $_GET['filter'] . ';value=' . $_GET['value'],
 			'entity' => $filters[$_GET['filter']]
@@ -83,7 +83,7 @@ function ViewErrorLog()
 		deleteErrors();
 
 	// Just how many errors are there?
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SELECT COUNT(*)
 		FROM {db_prefix}log_errors' . (isset($filter) ? '
 		WHERE ' . $filter['variable'] . ' LIKE {string:filter}' : ''),
@@ -91,8 +91,8 @@ function ViewErrorLog()
 			'filter' => isset($filter) ? $filter['value']['sql'] : '',
 		)
 	);
-	list ($num_errors) = $smcFunc['db_fetch_row']($result);
-	$smcFunc['db_free_result']($result);
+	list ($num_errors) = mysql_fetch_row($result);
+	mysql_free_result($result);
 
 	// If this filter is empty...
 	if ($num_errors == 0 && isset($filter))
@@ -110,7 +110,7 @@ function ViewErrorLog()
 	$context['start'] = $_GET['start'];
 
 	// Find and sort out the errors.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT id_error, id_member, ip, url, log_time, message, session, error_type, file, line
 		FROM {db_prefix}log_errors' . (isset($filter) ? '
 		WHERE ' . $filter['variable'] . ' LIKE {string:filter}' : '') . '
@@ -123,11 +123,11 @@ function ViewErrorLog()
 	$context['errors'] = array();
 	$members = array();
 
-	for ($i = 0; $row = $smcFunc['db_fetch_assoc']($request); $i ++)
+	for ($i = 0; $row = mysql_fetch_assoc($request); $i ++)
 	{
-		$search_message = preg_replace('~&lt;span class=&quot;remove&quot;&gt;(.+?)&lt;/span&gt;~', '%', $smcFunc['db_escape_wildcard_string']($row['message']));
+		$search_message = preg_replace('~&lt;span class=&quot;remove&quot;&gt;(.+?)&lt;/span&gt;~', '%', smf_db_escape_wildcard_string($row['message']));
 		if ($search_message == $filter['value']['sql'])
-			$search_message = $smcFunc['db_escape_wildcard_string']($row['message']);
+			$search_message = smf_db_escape_wildcard_string($row['message']);
 		$show_message = strtr(strtr(preg_replace('~&lt;span class=&quot;remove&quot;&gt;(.+?)&lt;/span&gt;~', '$1', $row['message']), array("\r" => '', '<br />' => "\n", '<' => '&lt;', '>' => '&gt;', '"' => '&quot;')), array("\n" => '<br />'));
 
 		$context['errors'][$row['id_error']] = array(
@@ -141,7 +141,7 @@ function ViewErrorLog()
 			'timestamp' => $row['log_time'],
 			'url' => array(
 				'html' => htmlspecialchars((substr($row['url'], 0, 1) == '?' ? $scripturl : '') . $row['url']),
-				'href' => base64_encode($smcFunc['db_escape_wildcard_string']($row['url']))
+				'href' => base64_encode(smf_db_escape_wildcard_string($row['url']))
 			),
 			'message' => array(
 				'html' => $show_message,
@@ -171,13 +171,13 @@ function ViewErrorLog()
 		// Make a list of members to load later.
 		$members[$row['id_member']] = $row['id_member'];
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// Load the member data.
 	if (!empty($members))
 	{
 		// Get some additional member info...
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_member, member_name, real_name
 			FROM {db_prefix}members
 			WHERE id_member IN ({array_int:member_list})
@@ -186,9 +186,9 @@ function ViewErrorLog()
 				'member_list' => $members,
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 			$members[$row['id_member']] = $row;
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
 		// This is a guest...
 		$members[0] = array(
@@ -246,7 +246,7 @@ function ViewErrorLog()
 
 	$sum = 0;
 	// What type of errors do we have and how many do we have?
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT error_type, COUNT(*) AS num_errors
 		FROM {db_prefix}log_errors
 		GROUP BY error_type
@@ -255,7 +255,7 @@ function ViewErrorLog()
 			'critical_type' => 'critical',
 		)
 	);
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 	{
 		// Total errors so far?
 		$sum += $row['num_errors'];
@@ -264,10 +264,10 @@ function ViewErrorLog()
 			'label' => (isset($txt['errortype_' . $row['error_type']]) ? $txt['errortype_' . $row['error_type']] : $row['error_type']) . ' (' . $row['num_errors'] . ')',
 			'description' => isset($txt['errortype_' . $row['error_type'] . '_desc']) ? $txt['errortype_' . $row['error_type'] . '_desc'] : '',
 			'url' => $scripturl . '?action=admin;area=logs;sa=errorlog' . ($context['sort_direction'] == 'down' ? ';desc' : '') . ';filter=error_type;value=' . $row['error_type'],
-			'is_selected' => isset($filter) && $filter['value']['sql'] == $smcFunc['db_escape_wildcard_string']($row['error_type']),
+			'is_selected' => isset($filter) && $filter['value']['sql'] == smf_db_escape_wildcard_string($row['error_type']),
 		);
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// Update the all errors tab with the total number of errors
 	$context['error_types']['all']['label'] .= ' (' . $sum . ')';
@@ -294,14 +294,14 @@ function deleteErrors()
 
 	// Delete all or just some?
 	if (isset($_POST['delall']) && !isset($filter))
-		$smcFunc['db_query']('truncate_table', '
+		smf_db_query('
 			TRUNCATE {db_prefix}log_errors',
 			array(
 			)
 		);
 	// Deleting all with a filter?
 	elseif (isset($_POST['delall']) && isset($filter))
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			DELETE FROM {db_prefix}log_errors
 			WHERE ' . $filter['variable'] . ' LIKE {string:filter}',
 			array(
@@ -311,7 +311,7 @@ function deleteErrors()
 	// Just specific errors?
 	elseif (!empty($_POST['delete']))
 	{
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			DELETE FROM {db_prefix}log_errors
 			WHERE id_error IN ({array_int:error_list})',
 			array(

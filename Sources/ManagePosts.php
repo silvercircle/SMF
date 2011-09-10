@@ -385,14 +385,14 @@ function getPrefixes()
 {
 	global $context, $smcFunc;
 	
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT * FROM {db_prefix}prefixes');
 	
-	while($row = $smcFunc['db_fetch_assoc']($request)) {
+	while($row = mysql_fetch_assoc($request)) {
 		$context['prefixes'][$row['id_prefix']] = $row;
 		$context['prefixes'][$row['id_prefix']]['preview'] = html_entity_decode($row['name']);
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 }
 
 function normalizeCommaDelimitedList($b)
@@ -427,7 +427,7 @@ function ModifyPrefixSettings()
 			if(isset($_POST['name_'.$id]) && strlen($_POST['name_'.$id]) >= 2) {
 				/*if($_POST['name_'.$id] != $prefix['name'] || $_POST['html_before_'.$id] != $prefix['html_before'] ||
 					$_POST['html_after_'.$id] != $prefix['html_after'] || $_POST['boards_'.$id] != $prefix['boards']) {
-						$smcFunc['db_query']('', '
+						smf_db_query( '
 							UPDATE {db_prefix}prefixes SET name = {string:name}, html_before = {string:html_before},
 							html_after = {string:html_after}, boards = {string:boards} WHERE id_prefix = {int:id_prefix}',
 							array('id_prefix' => $id, 'name' => $_POST['name_'.$id], 'html_before' => htmlentities($_POST['html_before_'.$id]), 
@@ -435,7 +435,7 @@ function ModifyPrefixSettings()
 				if($_POST['name_'.$id] != $prefix['name'] || $_POST['boards_'.$id] != $prefix['boards'] || $_POST['groups_'.$id] != $prefix['groups']) {
 					$boards = normalizeCommaDelimitedList($_POST['boards_'.$id]);
 					$groups = normalizeCommaDelimitedList($_POST['groups_'.$id]);
-					$smcFunc['db_query']('', '
+					smf_db_query( '
 						UPDATE {db_prefix}prefixes SET name = {string:name}, boards = {string:boards}, groups = {string:groups} WHERE id_prefix = {int:id_prefix}',
 						array('id_prefix' => $id, 'name' => htmlentities($_POST['name_'.$id]),
 						'boards' => $boards, 'groups' => $groups));
@@ -445,14 +445,14 @@ function ModifyPrefixSettings()
 		// check the new fields
 		for($i = 0; $i < 5; $i++) {
 			if(isset($_POST['name_new_'.$i]) && strlen($_POST['name_new_'.$i]) >= 2) {
-				/*$smcFunc['db_query']('', '
+				/*smf_db_query( '
 					INSERT INTO {db_prefix}prefixes (name, html_before, html_after, boards) VALUES({string:name},
 					{string:html_before}, {string:html_after}, {string:boards})',
 					array('name' => $_POST['name_new_'.$i], 'html_before' => htmlentities($_POST['html_before_new_'.$i]),
 						'html_after' => htmlentities($_POST['html_after_new_'.$i]), 'boards' => $_POST['boards_new_'.$i]));*/
 				$boards = normalizeCommaDelimitedList($_POST['boards_new_'.$id]);
 				$groups = normalizeCommaDelimitedList($_POST['groups_new_'.$id]);
-				$smcFunc['db_query']('', '
+				smf_db_query( '
 					INSERT INTO {db_prefix}prefixes (name, boards, groups) VALUES({string:name},
 					{string:boards}, {string:groups})',
 					array('name' => htmlentities($_POST['name_new_'.$i]), 'boards' => $boards, 'groups' => $groups));

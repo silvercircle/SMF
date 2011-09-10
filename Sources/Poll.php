@@ -79,7 +79,7 @@ function Vote()
 	loadLanguage('Post');
 
 	// Check if they have already voted, or voting is locked.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT IFNULL(lp.id_choice, -1) AS selected, p.voting_locked, p.id_poll, p.expire_time, p.max_votes, p.change_vote,
 			p.guest_vote, p.reset_poll, p.num_guest_voters
 		FROM {db_prefix}topics AS t
@@ -93,10 +93,10 @@ function Vote()
 			'not_guest' => 0,
 		)
 	);
-	if ($smcFunc['db_num_rows']($request) == 0)
+	if (mysql_num_rows($request) == 0)
 		fatal_lang_error('poll_error', false);
-	$row = $smcFunc['db_fetch_assoc']($request);
-	$smcFunc['db_free_result']($request);
+	$row = mysql_fetch_assoc($request);
+	mysql_free_result($request);
 
 	// If this is a guest can they vote?
 	if ($user_info['is_guest'])
@@ -146,7 +146,7 @@ function Vote()
 		$pollOptions = array();
 
 		// Find out what they voted for before.
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_choice
 			FROM {db_prefix}log_polls
 			WHERE id_member = {int:current_member}
@@ -156,15 +156,15 @@ function Vote()
 				'id_poll' => $row['id_poll'],
 			)
 		);
-		while ($choice = $smcFunc['db_fetch_row']($request))
+		while ($choice = mysql_fetch_row($request))
 			$pollOptions[] = $choice[0];
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
 		// Just skip it if they had voted for nothing before.
 		if (!empty($pollOptions))
 		{
 			// Update the poll totals.
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				UPDATE {db_prefix}poll_choices
 				SET votes = votes - 1
 				WHERE id_poll = {int:id_poll}
@@ -178,7 +178,7 @@ function Vote()
 			);
 
 			// Delete off the log.
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				DELETE FROM {db_prefix}log_polls
 				WHERE id_member = {int:current_member}
 					AND id_poll = {int:id_poll}',
@@ -215,14 +215,14 @@ function Vote()
 	}
 
 	// Add their vote to the tally.
-	$smcFunc['db_insert']('insert',
+	smf_db_insert('insert',
 		'{db_prefix}log_polls',
 		array('id_poll' => 'int', 'id_member' => 'int', 'id_choice' => 'int'),
 		$inserts,
 		array('id_poll', 'id_member', 'id_choice')
 	);
 
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		UPDATE {db_prefix}poll_choices
 		SET votes = votes + 1
 		WHERE id_poll = {int:id_poll}
@@ -242,7 +242,7 @@ function Vote()
 		$_COOKIE['guest_poll_vote'] .= ';' . $row['id_poll'] . ',' . time() . ',' . (count($pollOptions) > 1 ? explode(',' . $pollOptions) : $pollOptions[0]);
 
 		// Increase num guest voters count by 1
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			UPDATE {db_prefix}polls
 			SET num_guest_voters = num_guest_voters + 1
 			WHERE id_poll = {int:id_poll}',
@@ -268,7 +268,7 @@ function LockVoting()
 	checkSession('get');
 
 	// Get the poll starter, ID, and whether or not it is locked.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT t.id_member_started, t.id_poll, p.voting_locked
 		FROM {db_prefix}topics AS t
 			INNER JOIN {db_prefix}polls AS p ON (p.id_poll = t.id_poll)
@@ -278,7 +278,7 @@ function LockVoting()
 			'current_topic' => $topic,
 		)
 	);
-	list ($memberID, $pollID, $voting_locked) = $smcFunc['db_fetch_row']($request);
+	list ($memberID, $pollID, $voting_locked) = mysql_fetch_row($request);
 
 	// If the user _can_ modify the poll....
 	if (!allowedTo('poll_lock_any'))
@@ -301,7 +301,7 @@ function LockVoting()
 		$voting_locked = '1';
 
 	// Lock!  *Poof* - no one can vote.
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		UPDATE {db_prefix}polls
 		SET voting_locked = {int:voting_locked}
 		WHERE id_poll = {int:id_poll}',
@@ -330,7 +330,7 @@ function EditPoll()
 	$context['is_edit'] = isset($_REQUEST['add']) ? 0 : 1;
 
 	// Check if a poll currently exists on this topic, and get the id, question and starter.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT
 			t.id_member_started, p.id_poll, p.question, p.hide_results, p.expire_time, p.max_votes, p.change_vote,
 			m.subject, p.guest_vote, p.id_member AS poll_starter
@@ -345,11 +345,11 @@ function EditPoll()
 	);
 
 	// Assume the the topic exists, right?
-	if ($smcFunc['db_num_rows']($request) == 0)
+	if (mysql_num_rows($request) == 0)
 		fatal_lang_error('no_board');
 	// Get the poll information.
-	$pollinfo = $smcFunc['db_fetch_assoc']($request);
-	$smcFunc['db_free_result']($request);
+	$pollinfo = mysql_fetch_assoc($request);
+	mysql_free_result($request);
 
 	// If we are adding a new poll - make sure that there isn't already a poll there.
 	if (!$context['is_edit'] && !empty($pollinfo['id_poll']))
@@ -391,7 +391,7 @@ function EditPoll()
 		// Get all the choices - if this is an edit.
 		if ($context['is_edit'])
 		{
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT label, votes, id_choice
 				FROM {db_prefix}poll_choices
 				WHERE id_poll = {int:id_poll}',
@@ -400,7 +400,7 @@ function EditPoll()
 				)
 			);
 			$context['choices'] = array();
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = mysql_fetch_assoc($request))
 			{
 				// Get the highest id so we can add more without reusing.
 				if ($row['id_choice'] >= $last_id)
@@ -421,7 +421,7 @@ function EditPoll()
 					'is_last' => false
 				);
 			}
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 		}
 
 		// Work out how many options we have, so we get the 'is_last' field right...
@@ -515,7 +515,7 @@ function EditPoll()
 		// Get all the choices - if this is an edit.
 		if ($context['is_edit'])
 		{
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT label, votes, id_choice
 				FROM {db_prefix}poll_choices
 				WHERE id_poll = {int:id_poll}',
@@ -525,7 +525,7 @@ function EditPoll()
 			);
 			$context['choices'] = array();
 			$number = 1;
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = mysql_fetch_assoc($request))
 			{
 				censorText($row['label']);
 
@@ -537,7 +537,7 @@ function EditPoll()
 					'is_last' => false
 				);
 			}
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			$last_id = max(array_keys($context['choices'])) + 1;
 
@@ -615,7 +615,7 @@ function EditPoll2()
 	$isEdit = isset($_REQUEST['add']) ? 0 : 1;
 
 	// Get the starter and the poll's ID - if it's an edit.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT t.id_member_started, t.id_poll, p.id_member AS poll_starter, p.expire_time
 		FROM {db_prefix}topics AS t
 			LEFT JOIN {db_prefix}polls AS p ON (p.id_poll = t.id_poll)
@@ -625,10 +625,10 @@ function EditPoll2()
 			'current_topic' => $topic,
 		)
 	);
-	if ($smcFunc['db_num_rows']($request) == 0)
+	if (mysql_num_rows($request) == 0)
 		fatal_lang_error('no_board');
-	$bcinfo = $smcFunc['db_fetch_assoc']($request);
-	$smcFunc['db_free_result']($request);
+	$bcinfo = mysql_fetch_assoc($request);
+	mysql_free_result($request);
 
 	// Check their adding/editing is valid.
 	if (!$isEdit && !empty($bcinfo['id_poll']))
@@ -716,7 +716,7 @@ function EditPoll2()
 	// If we're editing, let's commit the changes.
 	if ($isEdit)
 	{
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			UPDATE {db_prefix}polls
 			SET question = {string:question}, change_vote = {int:change_vote},' . (allowedTo('moderate_board') ? '
 				hide_results = {int:hide_results}, expire_time = {int:expire_time}, max_votes = {int:max_votes},
@@ -739,7 +739,7 @@ function EditPoll2()
 	else
 	{
 		// Create the poll.
-		$smcFunc['db_insert']('',
+		smf_db_insert('',
 			'{db_prefix}polls',
 			array(
 				'question' => 'string-255', 'hide_results' => 'int', 'max_votes' => 'int', 'expire_time' => 'int', 'id_member' => 'int',
@@ -753,10 +753,10 @@ function EditPoll2()
 		);
 
 		// Set the poll ID.
-		$bcinfo['id_poll'] = $smcFunc['db_insert_id']('{db_prefix}polls', 'id_poll');
+		$bcinfo['id_poll'] = smf_db_insert_id('{db_prefix}polls', 'id_poll');
 
 		// Link the poll to the topic
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			UPDATE {db_prefix}topics
 			SET id_poll = {int:id_poll}
 			WHERE id_topic = {int:current_topic}',
@@ -768,7 +768,7 @@ function EditPoll2()
 	}
 
 	// Get all the choices.  (no better way to remove all emptied and add previously non-existent ones.)
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT id_choice
 		FROM {db_prefix}poll_choices
 		WHERE id_poll = {int:id_poll}',
@@ -777,9 +777,9 @@ function EditPoll2()
 		)
 	);
 	$choices = array();
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 		$choices[] = $row['id_choice'];
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	$delete_options = array();
 	foreach ($_POST['options'] as $k => $option)
@@ -803,7 +803,7 @@ function EditPoll2()
 
 		// If it's already there, update it.  If it's not... add it.
 		if (in_array($k, $choices))
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				UPDATE {db_prefix}poll_choices
 				SET label = {string:option_name}
 				WHERE id_poll = {int:id_poll}
@@ -815,7 +815,7 @@ function EditPoll2()
 				)
 			);
 		else
-			$smcFunc['db_insert']('',
+			smf_db_insert('',
 				'{db_prefix}poll_choices',
 				array(
 					'id_poll' => 'int', 'id_choice' => 'int', 'label' => 'string-255', 'votes' => 'int',
@@ -830,7 +830,7 @@ function EditPoll2()
 	// I'm sorry, but... well, no one was choosing you.  Poor options, I'll put you out of your misery.
 	if (!empty($delete_options))
 	{
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			DELETE FROM {db_prefix}log_polls
 			WHERE id_poll = {int:id_poll}
 				AND id_choice IN ({array_int:delete_options})',
@@ -839,7 +839,7 @@ function EditPoll2()
 				'id_poll' => $bcinfo['id_poll'],
 			)
 		);
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			DELETE FROM {db_prefix}poll_choices
 			WHERE id_poll = {int:id_poll}
 				AND id_choice IN ({array_int:delete_options})',
@@ -853,7 +853,7 @@ function EditPoll2()
 	// Shall I reset the vote count, sir?
 	if (isset($_POST['resetVoteCount']))
 	{
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			UPDATE {db_prefix}polls
 			SET num_guest_voters = {int:no_votes}, reset_poll = {int:time}
 			WHERE id_poll = {int:id_poll}',
@@ -863,7 +863,7 @@ function EditPoll2()
 				'time' => time(),
 			)
 		);
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			UPDATE {db_prefix}poll_choices
 			SET votes = {int:no_votes}
 			WHERE id_poll = {int:id_poll}',
@@ -872,7 +872,7 @@ function EditPoll2()
 				'id_poll' => $bcinfo['id_poll'],
 			)
 		);
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			DELETE FROM {db_prefix}log_polls
 			WHERE id_poll = {int:id_poll}',
 			array(
@@ -900,7 +900,7 @@ function RemovePoll()
 	// Check permissions.
 	if (!allowedTo('poll_remove_any'))
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT t.id_member_started, p.id_member AS poll_starter
 			FROM {db_prefix}topics AS t
 				INNER JOIN {db_prefix}polls AS p ON (p.id_poll = t.id_poll)
@@ -910,16 +910,16 @@ function RemovePoll()
 				'current_topic' => $topic,
 			)
 		);
-		if ($smcFunc['db_num_rows']($request) == 0)
+		if (mysql_num_rows($request) == 0)
 			fatal_lang_error('no_access', false);
-		list ($topicStarter, $pollStarter) = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
+		list ($topicStarter, $pollStarter) = mysql_fetch_row($request);
+		mysql_free_result($request);
 
 		isAllowedTo('poll_remove_' . ($topicStarter == $user_info['id'] || ($pollStarter != 0 && $user_info['id'] == $pollStarter) ? 'own' : 'any'));
 	}
 
 	// Retrieve the poll ID.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT id_poll
 		FROM {db_prefix}topics
 		WHERE id_topic = {int:current_topic}
@@ -928,11 +928,11 @@ function RemovePoll()
 			'current_topic' => $topic,
 		)
 	);
-	list ($pollID) = $smcFunc['db_fetch_row']($request);
-	$smcFunc['db_free_result']($request);
+	list ($pollID) = mysql_fetch_row($request);
+	mysql_free_result($request);
 
 	// Remove all user logs for this poll.
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		DELETE FROM {db_prefix}log_polls
 		WHERE id_poll = {int:id_poll}',
 		array(
@@ -940,7 +940,7 @@ function RemovePoll()
 		)
 	);
 	// Remove all poll choices.
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		DELETE FROM {db_prefix}poll_choices
 		WHERE id_poll = {int:id_poll}',
 		array(
@@ -948,7 +948,7 @@ function RemovePoll()
 		)
 	);
 	// Remove the poll itself.
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		DELETE FROM {db_prefix}polls
 		WHERE id_poll = {int:id_poll}',
 		array(
@@ -956,7 +956,7 @@ function RemovePoll()
 		)
 	);
 	// Finally set the topic poll ID back to 0!
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		UPDATE {db_prefix}topics
 		SET id_poll = {int:no_poll}
 		WHERE id_topic = {int:current_topic}',

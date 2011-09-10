@@ -394,7 +394,7 @@ function findMembers($names, $use_wildcards = false, $buddies_only = false, $max
 	$real_name = $smcFunc['db_case_sensitive'] ? 'LOWER(real_name)' : 'real_name';
 
 	// Search by username, display name, and email address.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT id_member, member_name, real_name, email_address, hide_email
 		FROM {db_prefix}members
 		WHERE ({raw:member_name_search}
@@ -410,7 +410,7 @@ function findMembers($names, $use_wildcards = false, $buddies_only = false, $max
 			'limit' => $max,
 		)
 	);
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 	{
 		$results[$row['id_member']] = array(
 			'id' => $row['id_member'],
@@ -421,7 +421,7 @@ function findMembers($names, $use_wildcards = false, $buddies_only = false, $max
 			'link' => '<a href="' . $scripturl . '?action=profile;u=' . $row['id_member'] . '">' . $row['real_name'] . '</a>'
 		);
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// Return all the results.
 	return $results;
@@ -506,7 +506,7 @@ function RequestMembers()
 	if (function_exists('iconv'))
 		header('Content-Type: text/plain; charset=UTF-8');
 
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT real_name
 		FROM {db_prefix}members
 		WHERE real_name LIKE {string:search}' . (isset($_REQUEST['buddies']) ? '
@@ -518,7 +518,7 @@ function RequestMembers()
 			'search' => $_REQUEST['search'],
 		)
 	);
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 	{
 		if (function_exists('iconv'))
 		{
@@ -546,7 +546,7 @@ function RequestMembers()
 
 		echo $row['real_name'], "\n";
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	obExit(false);
 }
@@ -561,7 +561,7 @@ function resetPassword($memID, $username = null)
 	require_once($sourcedir . '/Subs-Post.php');
 
 	// Get some important details.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT member_name, email_address, lngfile
 		FROM {db_prefix}members
 		WHERE id_member = {int:id_member}',
@@ -569,8 +569,8 @@ function resetPassword($memID, $username = null)
 			'id_member' => $memID,
 		)
 	);
-	list ($user, $email, $lngfile) = $smcFunc['db_fetch_row']($request);
-	$smcFunc['db_free_result']($request);
+	list ($user, $email, $lngfile) = mysql_fetch_row($request);
+	mysql_free_result($request);
 
 	if ($username !== null)
 	{
@@ -671,7 +671,7 @@ function rebuildModCache()
 
 	if ($group_query == '0=1')
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_group
 			FROM {db_prefix}group_moderators
 			WHERE id_member = {int:current_member}',
@@ -680,9 +680,9 @@ function rebuildModCache()
 			)
 		);
 		$groups = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 			$groups[] = $row['id_group'];
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
 		if (empty($groups))
 			$group_query = '0=1';
@@ -707,7 +707,7 @@ function rebuildModCache()
 	$boards_mod = array();
 	if (!$user_info['is_guest'])
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_board
 			FROM {db_prefix}moderators
 			WHERE id_member = {int:current_member}',
@@ -715,9 +715,9 @@ function rebuildModCache()
 				'current_member' => $user_info['id'],
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 			$boards_mod[] = $row['id_board'];
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 	}
 
 	$mod_query = empty($boards_mod) ? '0=1' : 'b.id_board IN (' . implode(',', $boards_mod) . ')';

@@ -251,7 +251,7 @@ function loadForumTests()
 				}
 
 				// Make sure that no topics claim the first/last message as theirs.
-				$smcFunc[\'db_query\'](\'\', \'
+				smf_db_query(\'
 					UPDATE {db_prefix}topics
 					SET id_first_msg = 0
 					WHERE id_first_msg = {int:id_first_msg}\',
@@ -259,7 +259,7 @@ function loadForumTests()
 						\'id_first_msg\' => $row[\'myid_first_msg\'],
 					)
 				);
-				$smcFunc[\'db_query\'](\'\', \'
+				smf_db_query(\'
 					UPDATE {db_prefix}topics
 					SET id_last_msg = 0
 					WHERE id_last_msg = {int:id_last_msg}\',
@@ -1372,15 +1372,15 @@ function findForumErrors($do_fix = false)
 		if (isset($test['substeps']))
 		{
 			$step_size = isset($test['substeps']['step_size']) ? $test['substeps']['step_size'] : 100;
-			$request = $smcFunc['db_query']('',
+			$request = smf_db_query(
 				$test['substeps']['step_max'],
 				array(
 				)
 			);
-			list ($step_max) = $smcFunc['db_fetch_row']($request);
+			list ($step_max) = mysql_fetch_row($request);
 
 			$total_queries++;
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 		}
 
 		// We in theory keep doing this... the substeps.
@@ -1398,7 +1398,7 @@ function findForumErrors($do_fix = false)
 				$test_query = isset($test['fix_query']) ? 'fix_query' : 'check_query';
 
 			// Do the test...
-			$request = $smcFunc['db_query']('',
+			$request = smf_db_query(
 				isset($test['substeps']) ? strtr($test[$test_query], array('{STEP_LOW}' => $_GET['substep'], '{STEP_HIGH}' => $_GET['substep'] + $step_size - 1)) : $test[$test_query],
 				array(
 				)
@@ -1407,9 +1407,9 @@ function findForumErrors($do_fix = false)
 
 			// Does it need a fix?
 			if (!empty($test['check_type']) && $test['check_type'] == 'count')
-				list ($needs_fix) = $smcFunc['db_fetch_row']($request);
+				list ($needs_fix) = mysql_fetch_row($request);
 			else
-				$needs_fix = $smcFunc['db_num_rows']($request);
+				$needs_fix = mysql_num_rows($request);
 
 			$total_queries++;
 
@@ -1427,7 +1427,7 @@ function findForumErrors($do_fix = false)
 					// One per row!
 					elseif (isset($test['messages']))
 					{
-						while ($row = $smcFunc['db_fetch_assoc']($request))
+						while ($row = mysql_fetch_assoc($request))
 						{
 							$variables = $test['messages'];
 							foreach ($variables as $k => $v)
@@ -1446,7 +1446,7 @@ function findForumErrors($do_fix = false)
 					{
 						// Find out if there are actually errors.
 						$found_errors = false;
-						while ($row = $smcFunc['db_fetch_assoc']($request))
+						while ($row = mysql_fetch_assoc($request))
 							$found_errors |= $test['message_function']($row);
 					}
 
@@ -1462,7 +1462,7 @@ function findForumErrors($do_fix = false)
 					if (isset($test['fix_collect']))
 					{
 						$ids = array();
-						while ($row = $smcFunc['db_fetch_assoc']($request))
+						while ($row = mysql_fetch_assoc($request))
 							$ids[] = $row[$test['fix_collect']['index']];
 						if (!empty($ids))
 						{
@@ -1473,7 +1473,7 @@ function findForumErrors($do_fix = false)
 
 					// Simply executing a fix it query?
 					elseif (isset($test['fix_it_query']))
-						$smcFunc['db_query']('',
+						smf_db_query(
 							$test['fix_it_query'],
 							array(
 							)
@@ -1482,7 +1482,7 @@ function findForumErrors($do_fix = false)
 					// Do we have some processing to do?
 					elseif (isset($test['fix_processing']))
 					{
-						while ($row = $smcFunc['db_fetch_assoc']($request))
+						while ($row = mysql_fetch_assoc($request))
 							$test['fix_processing']($row);
 					}
 
@@ -1501,7 +1501,7 @@ function findForumErrors($do_fix = false)
 			}
 
 			// Free the result.
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 			// Keep memory down.
 			$db_cache = '';
 
@@ -1565,7 +1565,7 @@ function createSalvageArea()
 	loadLanguage('Admin', $language);
 
 	// Check to see if a 'Salvage Category' exists, if not => insert one.
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SELECT id_cat
 		FROM {db_prefix}categories
 		WHERE name = {string:cat_name}
@@ -1574,30 +1574,30 @@ function createSalvageArea()
 			'cat_name' => $txt['salvaged_category_name'],
 		)
 	);
-	if ($smcFunc['db_num_rows']($result) != 0)
-		list ($salvageCatID) = $smcFunc['db_fetch_row']($result);
-	$smcFunc['db_free_result']($result);
+	if (mysql_num_rows($result) != 0)
+		list ($salvageCatID) = mysql_fetch_row($result);
+	mysql_free_result($result);
 
 	if (empty($salveageCatID))
 	{
-		$smcFunc['db_insert']('',
+		smf_db_insert('',
 			'{db_prefix}categories',
 			array('name' => 'string-255', 'cat_order' => 'int'),
 			array($txt['salvaged_category_name'], -1),
 			array('id_cat')
 		);
 
-		if ($smcFunc['db_affected_rows']() <= 0)
+		if (smf_db_affected_rows() <= 0)
 		{
 			loadLanguage('Admin');
 			fatal_lang_error('salvaged_category_error', false);
 		}
 
-		$salvageCatID = $smcFunc['db_insert_id']('{db_prefix}categories', 'id_cat');
+		$salvageCatID = smf_db_insert_id('{db_prefix}categories', 'id_cat');
 	}
 
 	// Check to see if a 'Salvage Board' exists, if not => insert one.
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SELECT id_board
 		FROM {db_prefix}boards
 		WHERE id_cat = {int:id_cat}
@@ -1608,29 +1608,29 @@ function createSalvageArea()
 			'board_name' => $txt['salvaged_board_name'],
 		)
 	);
-	if ($smcFunc['db_num_rows']($result) != 0)
-		list ($salvageBoardID) = $smcFunc['db_fetch_row']($result);
-	$smcFunc['db_free_result']($result);
+	if (mysql_num_rows($result) != 0)
+		list ($salvageBoardID) = mysql_fetch_row($result);
+	mysql_free_result($result);
 
 	if (empty($salvageBoardID))
 	{
-		$smcFunc['db_insert']('',
+		smf_db_insert('',
 			'{db_prefix}boards',
 			array('name' => 'string-255', 'description' => 'string-255', 'id_cat' => 'int', 'member_groups' => 'string', 'board_order' => 'int', 'redirect' => 'string'),
 			array($txt['salvaged_board_name'], $txt['salvaged_board_description'], $salvageCatID, '1', -1, ''),
 			array('id_board')
 		);
 
-		if ($smcFunc['db_affected_rows']() <= 0)
+		if (smf_db_affected_rows() <= 0)
 		{
 			loadLanguage('Admin');
 			fatal_lang_error('salvaged_board_error', false);
 		}
 
-		$salvageBoardID = $smcFunc['db_insert_id']('{db_prefix}boards', 'id_board');
+		$salvageBoardID = smf_db_insert_id('{db_prefix}boards', 'id_board');
 	}
 
-	$smcFunc['db_query']('alter_table_boards', '
+	smf_db_query('
 		ALTER TABLE {db_prefix}boards
 		ORDER BY board_order',
 		array(

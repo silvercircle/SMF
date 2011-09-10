@@ -142,7 +142,7 @@ function Who()
 		$context['show_by'] = $_SESSION['who_online_filter'] = 'all';
 
 	// Get the total amount of members online.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT COUNT(*)
 		FROM {db_prefix}log_online AS lo
 			LEFT JOIN {db_prefix}members AS mem ON (lo.id_member = mem.id_member)' . (!empty($conditions) ? '
@@ -150,15 +150,15 @@ function Who()
 		array(
 		)
 	);
-	list ($totalMembers) = $smcFunc['db_fetch_row']($request);
-	$smcFunc['db_free_result']($request);
+	list ($totalMembers) = mysql_fetch_row($request);
+	mysql_free_result($request);
 
 	// Prepare some page index variables.
 	$context['page_index'] = constructPageIndex($scripturl . '?action=who;sort=' . $context['sort_by'] . ($context['sort_direction'] == 'up' ? ';asc' : '') . ';show=' . $context['show_by'], $_REQUEST['start'], $totalMembers, $modSettings['defaultMaxMembers']);
 	$context['start'] = $_REQUEST['start'];
 
 	// Look for people online, provided they don't mind if you see they are.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT
 			lo.log_time, lo.id_member, lo.url, INET_NTOA(lo.ip) AS ip, mem.real_name,
 			lo.session, mg.online_color, IFNULL(mem.show_online, 1) AS show_online,
@@ -180,7 +180,7 @@ function Who()
 	$context['members'] = array();
 	$member_ids = array();
 	$url_data = array();
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 	{
 		$actions = @unserialize($row['url']);
 		if ($actions === false)
@@ -202,7 +202,7 @@ function Who()
 		$url_data[$row['session']] = array($row['url'], $row['id_member']);
 		$member_ids[] = $row['id_member'];
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// Load the user data for these members.
 	loadMemberData($member_ids);
@@ -382,7 +382,7 @@ function determineActions($urls, $preferred_prefix = false)
 				// Find out what message they are accessing.
 				$msgid = (int) (isset($actions['msg']) ? $actions['msg'] : (isset($actions['quote']) ? $actions['quote'] : 0));
 
-				$result = $smcFunc['db_query']('', '
+				$result = smf_db_query( '
 					SELECT m.id_topic, m.subject
 					FROM {db_prefix}messages AS m
 						INNER JOIN {db_prefix}boards AS b ON (b.id_board = m.id_board)
@@ -396,9 +396,9 @@ function determineActions($urls, $preferred_prefix = false)
 						'id_msg' => $msgid,
 					)
 				);
-				list ($id_topic, $subject) = $smcFunc['db_fetch_row']($result);
+				list ($id_topic, $subject) = mysql_fetch_row($result);
 				$data[$k] = sprintf($txt['whopost_' . $actions['action']], $id_topic, $subject);
-				$smcFunc['db_free_result']($result);
+				mysql_free_result($result);
 
 				if (empty($id_topic))
 					$data[$k] = $txt['who_hidden'];
@@ -436,7 +436,7 @@ function determineActions($urls, $preferred_prefix = false)
 	// Load topic names.
 	if (!empty($topic_ids))
 	{
-		$result = $smcFunc['db_query']('', '
+		$result = smf_db_query( '
 			SELECT t.id_topic, m.subject
 			FROM {db_prefix}topics AS t
 				INNER JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
@@ -451,19 +451,19 @@ function determineActions($urls, $preferred_prefix = false)
 				'limit' => count($topic_ids),
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($result))
+		while ($row = mysql_fetch_assoc($result))
 		{
 			// Show the topic's subject for each of the actions.
 			foreach ($topic_ids[$row['id_topic']] as $k => $session_text)
 				$data[$k] = sprintf($session_text, $row['id_topic'], censorText($row['subject']));
 		}
-		$smcFunc['db_free_result']($result);
+		mysql_free_result($result);
 	}
 
 	// Load board names.
 	if (!empty($board_ids))
 	{
-		$result = $smcFunc['db_query']('', '
+		$result = smf_db_query( '
 			SELECT b.id_board, b.name
 			FROM {db_prefix}boards AS b
 			WHERE {query_see_board}
@@ -473,19 +473,19 @@ function determineActions($urls, $preferred_prefix = false)
 				'board_list' => array_keys($board_ids),
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($result))
+		while ($row = mysql_fetch_assoc($result))
 		{
 			// Put the board name into the string for each member...
 			foreach ($board_ids[$row['id_board']] as $k => $session_text)
 				$data[$k] = sprintf($session_text, $row['id_board'], $row['name']);
 		}
-		$smcFunc['db_free_result']($result);
+		mysql_free_result($result);
 	}
 
 	// Load member names for the profile.
 	if (!empty($profile_ids) && (allowedTo('profile_view_any') || allowedTo('profile_view_own')))
 	{
-		$result = $smcFunc['db_query']('', '
+		$result = smf_db_query( '
 			SELECT id_member, real_name
 			FROM {db_prefix}members
 			WHERE id_member IN ({array_int:member_list})
@@ -494,7 +494,7 @@ function determineActions($urls, $preferred_prefix = false)
 				'member_list' => array_keys($profile_ids),
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($result))
+		while ($row = mysql_fetch_assoc($result))
 		{
 			// If they aren't allowed to view this person's profile, skip it.
 			if (!allowedTo('profile_view_any') && $user_info['id'] != $row['id_member'])
@@ -504,7 +504,7 @@ function determineActions($urls, $preferred_prefix = false)
 			foreach ($profile_ids[$row['id_member']] as $k => $session_text)
 				$data[$k] = sprintf($session_text, $row['id_member'], $row['real_name']);
 		}
-		$smcFunc['db_free_result']($result);
+		mysql_free_result($result);
 	}
 
 	if (!is_array($urls))

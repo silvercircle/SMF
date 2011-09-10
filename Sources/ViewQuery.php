@@ -139,7 +139,7 @@ function ViewQuery()
 		// Explain the query.
 		if ($query_id == $q && $is_select_query)
 		{
-			$result = $smcFunc['db_query']('', '
+			$result = smf_db_query( '
 				EXPLAIN ' . $select,
 				array(
 				)
@@ -148,7 +148,7 @@ function ViewQuery()
 			{
 				echo '
 		<table border="1" cellpadding="4" cellspacing="0" style="empty-cells: show; font-family: serif; margin-bottom: 2ex;">
-			<tr><td>', $smcFunc['db_error']($db_connection), '</td></tr>
+			<tr><td>', mysql_error($db_connection), '</td></tr>
 		</table>';
 				continue;
 			}
@@ -156,7 +156,7 @@ function ViewQuery()
 			echo '
 		<table border="1" rules="all" cellpadding="4" cellspacing="0" style="empty-cells: show; font-family: serif; margin-bottom: 2ex;">';
 
-			$row = $smcFunc['db_fetch_assoc']($result);
+			$row = mysql_fetch_assoc($result);
 
 			echo '
 			<tr>
@@ -164,8 +164,8 @@ function ViewQuery()
 				<th>', array_keys($row)) . '</th>
 			</tr>';
 
-			$smcFunc['db_data_seek']($result, 0);
-			while ($row = $smcFunc['db_fetch_assoc']($result))
+			mysql_data_seek($result, 0);
+			while ($row = mysql_fetch_assoc($result))
 			{
 				echo '
 			<tr>
@@ -173,7 +173,7 @@ function ViewQuery()
 				<td>', $row) . '</td>
 			</tr>';
 			}
-			$smcFunc['db_free_result']($result);
+			mysql_free_result($result);
 
 			echo '
 		</table>';

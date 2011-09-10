@@ -61,7 +61,7 @@ function smf_db_create_word_search($size)
 	else
 		$size = 'int(10)';
 
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		CREATE TABLE {db_prefix}log_search_words (
 			id_word {raw:size} unsigned NOT NULL default {string:string_zero},
 			id_msg int(10) unsigned NOT NULL default {string:string_zero},

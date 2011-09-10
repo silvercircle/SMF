@@ -377,7 +377,7 @@ function updateAdminPreferences()
 	$options['admin_preferences'] = serialize($context['admin_preferences']);
 
 	// Just check we haven't ended up with something theme exclusive somehow.
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		DELETE FROM {db_prefix}themes
 		WHERE id_theme != {int:default_theme}
 		AND variable = {string:admin_preferences}',
@@ -388,7 +388,7 @@ function updateAdminPreferences()
 	);
 
 	// Update the themes table.
-	$smcFunc['db_insert']('replace',
+	smf_db_insert('replace',
 		'{db_prefix}themes',
 		array('id_member' => 'int', 'id_theme' => 'int', 'variable' => 'string-255', 'value' => 'string-65534'),
 		array($user_info['id'], 1, 'admin_preferences', $options['admin_preferences']),
@@ -408,7 +408,7 @@ function emailAdmins($template, $replacements = array(), $additional_recipients 
 	require_once($sourcedir . '/Subs-Post.php');
 
 	// Load all groups which are effectively admins.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT id_group
 		FROM {db_prefix}permissions
 		WHERE permission = {string:admin_forum}
@@ -421,11 +421,11 @@ function emailAdmins($template, $replacements = array(), $additional_recipients 
 		)
 	);
 	$groups = array(1);
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 		$groups[] = $row['id_group'];
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT id_member, member_name, real_name, lngfile, email_address
 		FROM {db_prefix}members
 		WHERE (id_group IN ({array_int:group_list}) OR FIND_IN_SET({raw:group_array_implode}, additional_groups) != 0)
@@ -438,7 +438,7 @@ function emailAdmins($template, $replacements = array(), $additional_recipients 
 		)
 	);
 	$emails_sent = array();
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 	{
 		// Stick their particulars in the replacement data.
 		$replacements['IDMEMBER'] = $row['id_member'];
@@ -454,7 +454,7 @@ function emailAdmins($template, $replacements = array(), $additional_recipients 
 		// Track who we emailed so we don't do it twice.
 		$emails_sent[] = $row['email_address'];
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// Any additional users we must email this to?
 	if (!empty($additional_recipients))

@@ -1851,7 +1851,7 @@ p#whoisviewing
 {
 	overflow: hidden;
 }
-.poster li.avatar img, #mcard_inner img.avatar, .horizontal_userblock img.avatar, #basicinfo img.avatar {
+.avatar img, #mcard_inner img.avatar, .horizontal_userblock img.avatar, #basicinfo img.avatar {
 	width:auto;
 	height:auto;
 	border:1px solid #cc6000;

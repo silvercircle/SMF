@@ -355,17 +355,17 @@ function AddMembergroup()
 
 		// !!! Check for members with same name too?
 
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT MAX(id_group)
 			FROM {db_prefix}membergroups',
 			array(
 			)
 		);
-		list ($id_group) = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
+		list ($id_group) = mysql_fetch_row($request);
+		mysql_free_result($request);
 		$id_group++;
 
-		$smcFunc['db_insert']('',
+		smf_db_insert('',
 			'{db_prefix}membergroups',
 			array(
 				'id_group' => 'int', 'description' => 'string', 'group_name' => 'string-80', 'min_posts' => 'int',
@@ -400,7 +400,7 @@ function AddMembergroup()
 			// Are you a powerful admin?
 			if (!allowedTo('admin_forum'))
 			{
-				$request = $smcFunc['db_query']('', '
+				$request = smf_db_query( '
 					SELECT group_type
 					FROM {db_prefix}membergroups
 					WHERE id_group = {int:copy_from}
@@ -410,8 +410,8 @@ function AddMembergroup()
 						'limit' => 1,
 					)
 				);
-				list ($copy_type) = $smcFunc['db_fetch_row']($request);
-				$smcFunc['db_free_result']($request);
+				list ($copy_type) = mysql_fetch_row($request);
+				mysql_free_result($request);
 
 				// Protected groups are... well, protected!
 				if ($copy_type == 1)
@@ -422,7 +422,7 @@ function AddMembergroup()
 			require_once($sourcedir . '/ManagePermissions.php');
 			loadIllegalPermissions();
 
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT permission, add_deny
 				FROM {db_prefix}permissions
 				WHERE id_group = {int:copy_from}',
@@ -431,22 +431,22 @@ function AddMembergroup()
 				)
 			);
 			$inserts = array();
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = mysql_fetch_assoc($request))
 			{
 				if (empty($context['illegal_permissions']) || !in_array($row['permission'], $context['illegal_permissions']))
 					$inserts[] = array($id_group, $row['permission'], $row['add_deny']);
 			}
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			if (!empty($inserts))
-				$smcFunc['db_insert']('insert',
+				smf_db_insert('insert',
 					'{db_prefix}permissions',
 					array('id_group' => 'int', 'permission' => 'string', 'add_deny' => 'int'),
 					$inserts,
 					array('id_group', 'permission')
 				);
 
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT id_profile, permission, add_deny
 				FROM {db_prefix}board_permissions
 				WHERE id_group = {int:copy_from}',
@@ -455,12 +455,12 @@ function AddMembergroup()
 				)
 			);
 			$inserts = array();
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = mysql_fetch_assoc($request))
 				$inserts[] = array($id_group, $row['id_profile'], $row['permission'], $row['add_deny']);
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			if (!empty($inserts))
-				$smcFunc['db_insert']('insert',
+				smf_db_insert('insert',
 					'{db_prefix}board_permissions',
 					array('id_group' => 'int', 'id_profile' => 'int', 'permission' => 'string', 'add_deny' => 'int'),
 					$inserts,
@@ -470,7 +470,7 @@ function AddMembergroup()
 			// Also get some membergroup information if we're copying and not copying from guests...
 			if ($copy_id > 0 && $_POST['perm_type'] == 'copy')
 			{
-				$request = $smcFunc['db_query']('', '
+				$request = smf_db_query( '
 					SELECT online_color, max_messages, stars
 					FROM {db_prefix}membergroups
 					WHERE id_group = {int:copy_from}
@@ -479,11 +479,11 @@ function AddMembergroup()
 						'copy_from' => $copy_id,
 					)
 				);
-				$group_info = $smcFunc['db_fetch_assoc']($request);
-				$smcFunc['db_free_result']($request);
+				$group_info = mysql_fetch_assoc($request);
+				mysql_free_result($request);
 
 				// ...and update the new membergroup with it.
-				$smcFunc['db_query']('', '
+				smf_db_query( '
 					UPDATE {db_prefix}membergroups
 					SET
 						online_color = {string:online_color},
@@ -501,7 +501,7 @@ function AddMembergroup()
 			// If inheriting say so...
 			elseif ($_POST['perm_type'] == 'inherit')
 			{
-				$smcFunc['db_query']('', '
+				smf_db_query( '
 					UPDATE {db_prefix}membergroups
 					SET id_parent = {int:copy_from}
 					WHERE id_group = {int:current_group}',
@@ -520,7 +520,7 @@ function AddMembergroup()
 
 		// Only do this if they have special access requirements.
 		if (!empty($_POST['boardaccess']))
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				UPDATE {db_prefix}boards
 				SET member_groups = CASE WHEN member_groups = {string:blank_string} THEN {string:group_id_string} ELSE CONCAT(member_groups, {string:comma_group}) END
 				WHERE id_board IN ({array_int:board_list})',
@@ -555,7 +555,7 @@ function AddMembergroup()
 	$context['undefined_group'] = !isset($_REQUEST['postgroup']) && !isset($_REQUEST['generalgroup']);
 	$context['allow_protected'] = allowedTo('admin_forum');
 
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SELECT id_group, group_name
 		FROM {db_prefix}membergroups
 		WHERE (id_group > {int:moderator_group} OR id_group = {int:global_mod_group})' . (empty($modSettings['permission_enable_postgroups']) ? '
@@ -570,14 +570,14 @@ function AddMembergroup()
 		)
 	);
 	$context['groups'] = array();
-	while ($row = $smcFunc['db_fetch_assoc']($result))
+	while ($row = mysql_fetch_assoc($result))
 		$context['groups'][] = array(
 			'id' => $row['id_group'],
 			'name' => $row['group_name']
 		);
-	$smcFunc['db_free_result']($result);
+	mysql_free_result($result);
 
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SELECT id_board, name, child_level
 		FROM {db_prefix}boards
 		ORDER BY board_order',
@@ -585,14 +585,14 @@ function AddMembergroup()
 		)
 	);
 	$context['boards'] = array();
-	while ($row = $smcFunc['db_fetch_assoc']($result))
+	while ($row = mysql_fetch_assoc($result))
 		$context['boards'][] = array(
 			'id' => $row['id_board'],
 			'name' => $row['name'],
 			'child_level' => $row['child_level'],
 			'selected' => false
 		);
-	$smcFunc['db_free_result']($result);
+	mysql_free_result($result);
 }
 
 // Deleting a membergroup by URL (not implemented).
@@ -619,7 +619,7 @@ function EditMembergroup()
 	// Make sure this group is editable.
 	if (!empty($_REQUEST['group']))
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_group
 			FROM {db_prefix}membergroups
 			WHERE id_group = {int:current_group}' . (allowedTo('admin_forum') ? '' : '
@@ -631,8 +631,8 @@ function EditMembergroup()
 				'limit' => 1,
 			)
 		);
-		list ($_REQUEST['group']) = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
+		list ($_REQUEST['group']) = mysql_fetch_row($request);
+		mysql_free_result($request);
 	}
 
 	// Now, do we have a valid id?
@@ -658,7 +658,7 @@ function EditMembergroup()
 		// Can they really inherit from this group?
 		if ($_POST['group_inherit'] != -2 && !allowedTo('admin_forum'))
 		{
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT group_type
 				FROM {db_prefix}membergroups
 				WHERE id_group = {int:inherit_from}
@@ -668,8 +668,8 @@ function EditMembergroup()
 					'limit' => 1,
 				)
 			);
-			list ($inherit_type) = $smcFunc['db_fetch_row']($request);
-			$smcFunc['db_free_result']($request);
+			list ($inherit_type) = mysql_fetch_row($request);
+			mysql_free_result($request);
 		}
 
 		// Set variables to their proper value.
@@ -684,7 +684,7 @@ function EditMembergroup()
 		// !!! Don't set online_color for the Moderators group?
 
 		// Do the update of the membergroup settings.
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			UPDATE {db_prefix}membergroups
 			SET group_name = {string:group_name}, online_color = {string:online_color},
 				max_messages = {int:max_messages}, min_posts = {int:min_posts}, stars = {string:stars},
@@ -713,7 +713,7 @@ function EditMembergroup()
 				$_POST['boardaccess'][$key] = (int) $value;
 
 			// Find all board this group is in, but shouldn't be in.
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT id_board, member_groups
 				FROM {db_prefix}boards
 				WHERE FIND_IN_SET({string:current_group}, member_groups) != 0' . (empty($_POST['boardaccess']) ? '' : '
@@ -723,8 +723,8 @@ function EditMembergroup()
 					'board_access_list' => $_POST['boardaccess'],
 				)
 			);
-			while ($row = $smcFunc['db_fetch_assoc']($request))
-				$smcFunc['db_query']('', '
+			while ($row = mysql_fetch_assoc($request))
+				smf_db_query( '
 					UPDATE {db_prefix}boards
 					SET member_groups = {string:member_group_access}
 					WHERE id_board = {int:current_board}',
@@ -733,11 +733,11 @@ function EditMembergroup()
 						'member_group_access' => implode(',', array_diff(explode(',', $row['member_groups']), array($_REQUEST['group']))),
 					)
 				);
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			// Add the membergroup to all boards that hadn't been set yet.
 			if (!empty($_POST['boardaccess']))
-				$smcFunc['db_query']('', '
+				smf_db_query( '
 					UPDATE {db_prefix}boards
 					SET member_groups = CASE WHEN member_groups = {string:blank_string} THEN {string:group_id_string} ELSE CONCAT(member_groups, {string:comma_group}) END
 					WHERE id_board IN ({array_int:board_list})
@@ -755,7 +755,7 @@ function EditMembergroup()
 		// Remove everyone from this group!
 		if ($_POST['min_posts'] != -1)
 		{
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				UPDATE {db_prefix}members
 				SET id_group = {int:regular_member}
 				WHERE id_group = {int:current_group}',
@@ -765,7 +765,7 @@ function EditMembergroup()
 				)
 			);
 
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT id_member, additional_groups
 				FROM {db_prefix}members
 				WHERE FIND_IN_SET({string:current_group}, additional_groups) != 0',
@@ -774,9 +774,9 @@ function EditMembergroup()
 				)
 			);
 			$updates = array();
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = mysql_fetch_assoc($request))
 				$updates[$row['additional_groups']][] = $row['id_member'];
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			foreach ($updates as $additional_groups => $memberArray)
 				updateMemberData($memberArray, array('additional_groups' => implode(',', array_diff(explode(',', $additional_groups), array((int) $_REQUEST['group'])))));
@@ -786,7 +786,7 @@ function EditMembergroup()
 			// Making it a hidden group? If so remove everyone with it as primary group (Actually, just make them additional).
 			if ($_POST['group_hidden'] == 2)
 			{
-				$request = $smcFunc['db_query']('', '
+				$request = smf_db_query( '
 					SELECT id_member, additional_groups
 					FROM {db_prefix}members
 					WHERE id_group = {int:current_group}
@@ -796,14 +796,14 @@ function EditMembergroup()
 					)
 				);
 				$updates = array();
-				while ($row = $smcFunc['db_fetch_assoc']($request))
+				while ($row = mysql_fetch_assoc($request))
 					$updates[$row['additional_groups']][] = $row['id_member'];
-				$smcFunc['db_free_result']($request);
+				mysql_free_result($request);
 
 				foreach ($updates as $additional_groups => $memberArray)
 					updateMemberData($memberArray, array('additional_groups' => implode(',', array_merge(explode(',', $additional_groups), array((int) $_REQUEST['group'])))));
 
-				$smcFunc['db_query']('', '
+				smf_db_query( '
 					UPDATE {db_prefix}members
 					SET id_group = {int:regular_member}
 					WHERE id_group = {int:current_group}',
@@ -815,7 +815,7 @@ function EditMembergroup()
 			}
 
 			// Either way, let's check our "show group membership" setting is correct.
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT COUNT(*)
 				FROM {db_prefix}membergroups
 				WHERE group_type > {int:non_joinable}',
@@ -823,8 +823,8 @@ function EditMembergroup()
 					'non_joinable' => 1,
 				)
 			);
-			list ($have_joinable) = $smcFunc['db_fetch_row']($request);
-			$smcFunc['db_free_result']($request);
+			list ($have_joinable) = mysql_fetch_row($request);
+			mysql_free_result($request);
 
 			// Do we need to update the setting?
 			if ((empty($modSettings['show_group_membership']) && $have_joinable) || (!empty($modSettings['show_group_membership']) && !$have_joinable))
@@ -840,7 +840,7 @@ function EditMembergroup()
 
 		// Finally, moderators!
 		$moderator_string = isset($_POST['group_moderators']) ? trim($_POST['group_moderators']) : '';
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			DELETE FROM {db_prefix}group_moderators
 			WHERE id_group = {int:current_group}',
 			array(
@@ -867,7 +867,7 @@ function EditMembergroup()
 				$group_moderators = array();
 				if (!empty($moderators))
 				{
-					$request = $smcFunc['db_query']('', '
+					$request = smf_db_query( '
 						SELECT id_member
 						FROM {db_prefix}members
 						WHERE member_name IN ({array_string:moderators}) OR real_name IN ({array_string:moderators})
@@ -876,9 +876,9 @@ function EditMembergroup()
 							'moderators' => $moderators,
 						)
 					);
-					while ($row = $smcFunc['db_fetch_assoc']($request))
+					while ($row = mysql_fetch_assoc($request))
 						$group_moderators[] = $row['id_member'];
-					$smcFunc['db_free_result']($request);
+					mysql_free_result($request);
 				}
 			}
 			else
@@ -890,7 +890,7 @@ function EditMembergroup()
 				$group_moderators = array();
 				if (!empty($moderators))
 				{
-					$request = $smcFunc['db_query']('', '
+					$request = smf_db_query( '
 						SELECT id_member
 						FROM {db_prefix}members
 						WHERE id_member IN ({array_int:moderators})
@@ -900,9 +900,9 @@ function EditMembergroup()
 							'num_moderators' => count($moderators),
 						)
 					);
-					while ($row = $smcFunc['db_fetch_assoc']($request))
+					while ($row = mysql_fetch_assoc($request))
 						$group_moderators[] = $row['id_member'];
-					$smcFunc['db_free_result']($request);
+					mysql_free_result($request);
 				}
 			}
 
@@ -913,7 +913,7 @@ function EditMembergroup()
 				foreach ($group_moderators as $moderator)
 					$mod_insert[] = array($_REQUEST['group'], $moderator);
 
-				$smcFunc['db_insert']('insert',
+				smf_db_insert('insert',
 					'{db_prefix}group_moderators',
 					array('id_group' => 'int', 'id_member' => 'int'),
 					$mod_insert,
@@ -936,7 +936,7 @@ function EditMembergroup()
 	}
 
 	// Fetch the current group information.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT group_name, description, min_posts, online_color, max_messages, stars, group_type, hidden, id_parent
 		FROM {db_prefix}membergroups
 		WHERE id_group = {int:current_group}
@@ -945,10 +945,10 @@ function EditMembergroup()
 			'current_group' => (int) $_REQUEST['group'],
 		)
 	);
-	if ($smcFunc['db_num_rows']($request) == 0)
+	if (mysql_num_rows($request) == 0)
 		fatal_lang_error('membergroup_does_not_exist', false);
-	$row = $smcFunc['db_fetch_assoc']($request);
-	$smcFunc['db_free_result']($request);
+	$row = mysql_fetch_assoc($request);
+	mysql_free_result($request);
 
 	$row['stars'] = explode('#', $row['stars']);
 
@@ -972,7 +972,7 @@ function EditMembergroup()
 	);
 
 	// Get any moderators for this group
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT mem.id_member, mem.real_name
 		FROM {db_prefix}group_moderators AS mods
 			INNER JOIN {db_prefix}members AS mem ON (mem.id_member = mods.id_member)
@@ -982,9 +982,9 @@ function EditMembergroup()
 		)
 	);
 	$context['group']['moderators'] = array();
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 		$context['group']['moderators'][$row['id_member']] = $row['real_name'];
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	$context['group']['moderator_list'] = empty($context['group']['moderators']) ? '' : '&quot;' . implode('&quot;, &quot;', $context['group']['moderators']) . '&quot;';
 
@@ -995,7 +995,7 @@ function EditMembergroup()
 	$context['boards'] = array();
 	if ($_REQUEST['group'] == 2 || $_REQUEST['group'] > 3)
 	{
-		$result = $smcFunc['db_query']('', '
+		$result = smf_db_query( '
 			SELECT id_board, name, child_level, FIND_IN_SET({string:current_group}, member_groups) != 0 AS can_access
 			FROM {db_prefix}boards
 			ORDER BY board_order',
@@ -1003,18 +1003,18 @@ function EditMembergroup()
 				'current_group' => (int) $_REQUEST['group'],
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($result))
+		while ($row = mysql_fetch_assoc($result))
 			$context['boards'][] = array(
 				'id' => $row['id_board'],
 				'name' => $row['name'],
 				'child_level' => $row['child_level'],
 				'selected' => !(empty($row['can_access']) || $row['can_access'] == 'f'),
 			);
-		$smcFunc['db_free_result']($result);
+		mysql_free_result($result);
 	}
 
 	// Finally, get all the groups this could be inherited off.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT id_group, group_name
 		FROM {db_prefix}membergroups
 		WHERE id_group != {int:current_group}' .
@@ -1031,9 +1031,9 @@ function EditMembergroup()
 		)
 	);
 	$context['inheritable_groups'] = array();
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 		$context['inheritable_groups'][$row['id_group']] = $row['group_name'];
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	$context['sub_template'] = 'edit_group';
 	$context['page_title'] = $txt['membergroups_edit_group'];

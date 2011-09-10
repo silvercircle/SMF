@@ -262,7 +262,7 @@ function EditSearchMethod()
 	if ($db_type == 'mysql')
 	{
 		if (preg_match('~^`(.+?)`\.(.+?)$~', $db_prefix, $match) !== 0)
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SHOW TABLE STATUS
 				FROM {string:database_name}
 				LIKE {string:table_name}',
@@ -272,26 +272,26 @@ function EditSearchMethod()
 				)
 			);
 		else
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SHOW TABLE STATUS
 				LIKE {string:table_name}',
 				array(
 					'table_name' => str_replace('_', '\_', $db_prefix) . 'messages',
 				)
 			);
-		if ($request !== false && $smcFunc['db_num_rows']($request) == 1)
+		if ($request !== false && mysql_num_rows($request) == 1)
 		{
 			// Only do this if the user has permission to execute this query.
-			$row = $smcFunc['db_fetch_assoc']($request);
+			$row = mysql_fetch_assoc($request);
 			$context['table_info']['data_length'] = $row['Data_length'];
 			$context['table_info']['index_length'] = $row['Index_length'];
 			$context['table_info']['fulltext_length'] = $row['Index_length'];
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 		}
 
 		// Now check the custom index table, if it exists at all.
 		if (preg_match('~^`(.+?)`\.(.+?)$~', $db_prefix, $match) !== 0)
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SHOW TABLE STATUS
 				FROM {string:database_name}
 				LIKE {string:table_name}',
@@ -301,20 +301,20 @@ function EditSearchMethod()
 				)
 			);
 		else
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SHOW TABLE STATUS
 				LIKE {string:table_name}',
 				array(
 					'table_name' => str_replace('_', '\_', $db_prefix) . 'log_search_words',
 				)
 			);
-		if ($request !== false && $smcFunc['db_num_rows']($request) == 1)
+		if ($request !== false && mysql_num_rows($request) == 1)
 		{
 			// Only do this if the user has permission to execute this query.
-			$row = $smcFunc['db_fetch_assoc']($request);
+			$row = mysql_fetch_assoc($request);
 			$context['table_info']['index_length'] += $row['Data_length'] + $row['Index_length'];
 			$context['table_info']['custom_index_length'] = $row['Data_length'] + $row['Index_length'];
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 		}
 	}
 	else
@@ -430,7 +430,7 @@ function CreateMessageIndex()
 			'todo' => 0,
 		);
 
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_msg >= {int:starting_id} AS todo, COUNT(*) AS num_messages
 			FROM {db_prefix}messages
 			GROUP BY todo',
@@ -438,7 +438,7 @@ function CreateMessageIndex()
 				'starting_id' => $context['start'],
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 			$num_messages[empty($row['todo']) ? 'done' : 'todo'] = $row['num_messages'];
 
 		if (empty($num_messages['todo']))
@@ -454,7 +454,7 @@ function CreateMessageIndex()
 			while (time() < $stop)
 			{
 				$inserts = array();
-				$request = $smcFunc['db_query']('', '
+				$request = smf_db_query( '
 					SELECT id_msg, body
 					FROM {db_prefix}messages
 					WHERE id_msg BETWEEN {int:starting_id} AND {int:ending_id}
@@ -467,7 +467,7 @@ function CreateMessageIndex()
 				);
 				$forced_break = false;
 				$number_processed = 0;
-				while ($row = $smcFunc['db_fetch_assoc']($request))
+				while ($row = mysql_fetch_assoc($request))
 				{
 					// In theory it's possible for one of these to take friggin ages so add more timeout protection.
 					if ($stop < time())
@@ -484,12 +484,12 @@ function CreateMessageIndex()
 				}
 				$num_messages['done'] += $number_processed;
 				$num_messages['todo'] -= $number_processed;
-				$smcFunc['db_free_result']($request);
+				mysql_free_result($request);
 
 				$context['start'] += $forced_break ? $number_processed : $messages_per_batch;
 
 				if (!empty($inserts))
-					$smcFunc['db_insert']('ignore',
+					smf_db_insert('ignore',
 						'{db_prefix}log_search_words',
 						array('id_word' => 'int', 'id_msg' => 'int'),
 						$inserts,
@@ -524,7 +524,7 @@ function CreateMessageIndex()
 
 			while (time() < $stop)
 			{
-				$request = $smcFunc['db_query']('', '
+				$request = smf_db_query( '
 					SELECT id_word, COUNT(id_word) AS num_words
 					FROM {db_prefix}log_search_words
 					WHERE id_word BETWEEN {int:starting_id} AND {int:ending_id}
@@ -536,14 +536,14 @@ function CreateMessageIndex()
 						'minimum_messages' => $max_messages,
 					)
 				);
-				while ($row = $smcFunc['db_fetch_assoc']($request))
+				while ($row = mysql_fetch_assoc($request))
 					$stop_words[] = $row['id_word'];
-				$smcFunc['db_free_result']($request);
+				mysql_free_result($request);
 
 				updateSettings(array('search_stopwords' => implode(',', $stop_words)));
 
 				if (!empty($stop_words))
-					$smcFunc['db_query']('', '
+					smf_db_query( '
 						DELETE FROM {db_prefix}log_search_words
 						WHERE id_word in ({array_int:stop_words})',
 						array(
@@ -568,7 +568,7 @@ function CreateMessageIndex()
 		$context['sub_template'] = 'create_index_done';
 
 		updateSettings(array('search_index' => 'custom', 'search_custom_index_config' => serialize($context['index_settings'])));
-		$smcFunc['db_query']('', '
+		smf_db_query( '
 			DELETE FROM {db_prefix}settings
 			WHERE variable = {string:search_custom_index_resume}',
 			array(

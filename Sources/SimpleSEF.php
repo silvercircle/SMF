@@ -759,7 +759,7 @@ class SimpleSEF {
         if (!$force && cache_get_data('simplesef_fixhooks', 3600) !== NULL)
             return;
 
-        $request = $smcFunc['db_query']('', '
+        $request = smf_db_query( '
             SELECT variable, value
             FROM {db_prefix}settings
             WHERE variable LIKE {string:variable}', array(
@@ -768,9 +768,9 @@ class SimpleSEF {
         );
 
         $hooks = array();
-        while (($row = $smcFunc['db_fetch_assoc']($request)))
+        while (($row = mysql_fetch_assoc($request)))
             $hooks[$row['variable']] = $row['value'];
-        $smcFunc['db_free_result']($request);
+        mysql_free_result($request);
         self::$queryCount++;
 
         $fixups = array();
@@ -1053,12 +1053,12 @@ class SimpleSEF {
 
         if ($force || (self::$boardNames = cache_get_data('simplesef_board_list', 3600)) == NULL) {
             loadLanguage('index', $language, false);
-            $request = $smcFunc['db_query']('', '
+            $request = smf_db_query( '
 				SELECT id_board, name
 				FROM {db_prefix}boards', array()
             );
             $boards = array();
-            while ($row = $smcFunc['db_fetch_assoc']($request)) {
+            while ($row = mysql_fetch_assoc($request)) {
                 // A bit extra overhead to account for duplicate board names
                 $temp_name = self::encode($row['name']);
                 $i = 0;
@@ -1066,7 +1066,7 @@ class SimpleSEF {
                     $i++;
                 $boards[$temp_name . (!empty($i) ? $i + 1 : '')] = $row['id_board'];
             }
-            $smcFunc['db_free_result']($request);
+            mysql_free_result($request);
 
             self::$boardNames = array_flip($boards);
 
@@ -1090,7 +1090,7 @@ class SimpleSEF {
         $ids = is_array($ids) ? $ids : array($ids);
 
         // Fill the topic 'cache' in one fell swoop
-        $request = $smcFunc['db_query']('', '
+        $request = smf_db_query( '
 			SELECT t.id_topic, m.subject, t.id_board
 			FROM {db_prefix}topics AS t
 				INNER JOIN {db_prefix}messages AS m ON (m.id_msg = t.id_first_msg)
@@ -1098,13 +1098,13 @@ class SimpleSEF {
             'topics' => $ids,
             )
         );
-        while ($row = $smcFunc['db_fetch_assoc']($request)) {
+        while ($row = mysql_fetch_assoc($request)) {
             self::$topicNames[$row['id_topic']] = array(
                 'subject' => self::encode($row['subject']),
                 'board_id' => $row['id_board'],
             );
         }
-        $smcFunc['db_free_result']($request);
+        mysql_free_result($request);
         self::$queryCount++;
     }
 
@@ -1120,16 +1120,16 @@ class SimpleSEF {
 
         $ids = is_array($ids) ? $ids : array($ids);
 
-        $request = $smcFunc['db_query']('', '
+        $request = smf_db_query( '
 			SELECT id_member, real_name
 			FROM {db_prefix}members
 			WHERE id_member IN ({array_int:members})', array(
             'members' => $ids,
             )
         );
-        while ($row = $smcFunc['db_fetch_assoc']($request))
+        while ($row = mysql_fetch_assoc($request))
             self::$userNames[$row['id_member']] = self::encode($row['real_name']);
-        $smcFunc['db_free_result']($request);
+        mysql_free_result($request);
         self::$queryCount++;
     }
 

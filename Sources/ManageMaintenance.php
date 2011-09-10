@@ -233,7 +233,7 @@ function MaintainMembers()
 	global $context, $smcFunc, $txt;
 
 	// Get membergroups - for deleting members and the like.
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query( '
 		SELECT id_group, group_name
 		FROM {db_prefix}membergroups',
 		array(
@@ -245,14 +245,14 @@ function MaintainMembers()
 			'name' => $txt['maintain_members_ungrouped']
 		),
 	);
-	while ($row = $smcFunc['db_fetch_assoc']($result))
+	while ($row = mysql_fetch_assoc($result))
 	{
 		$context['membergroups'][] = array(
 			'id' => $row['id_group'],
 			'name' => $row['group_name']
 		);
 	}
-	$smcFunc['db_free_result']($result);
+	mysql_free_result($result);
 }
 
 // Supporting function for the topics maintenance area.
@@ -261,7 +261,7 @@ function MaintainTopics()
 	global $context, $smcFunc, $txt;
 
 	// Let's load up the boards in case they are useful.
-	$result = $smcFunc['db_query']('order_by_board_order', '
+	$result = smf_db_query('
 		SELECT b.id_board, b.name, b.child_level, c.name AS cat_name, c.id_cat
 		FROM {db_prefix}boards AS b
 			LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)
@@ -272,7 +272,7 @@ function MaintainTopics()
 		)
 	);
 	$context['categories'] = array();
-	while ($row = $smcFunc['db_fetch_assoc']($result))
+	while ($row = mysql_fetch_assoc($result))
 	{
 		if (!isset($context['categories'][$row['id_cat']]))
 			$context['categories'][$row['id_cat']] = array(
@@ -286,7 +286,7 @@ function MaintainTopics()
 			'child_level' => $row['child_level']
 		);
 	}
-	$smcFunc['db_free_result']($result);
+	mysql_free_result($result);
 
 	if (isset($_GET['done']) && $_GET['done'] == 'purgeold')
 		$context['maintenance_finished'] = $txt['maintain_old'];
@@ -322,33 +322,33 @@ function MaintainEmptyUnimportantLogs()
 	checkSession();
 
 	// No one's online now.... MUHAHAHAHA :P.
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		DELETE FROM {db_prefix}log_online');
 
 	// Dump the banning logs.
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		DELETE FROM {db_prefix}log_banned');
 
 	// Start id_error back at 0 and dump the error log.
-	$smcFunc['db_query']('truncate_table', '
+	smf_db_query('
 		TRUNCATE {db_prefix}log_errors');
 
 	// Clear out the spam log.
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		DELETE FROM {db_prefix}log_floodcontrol');
 
 	// Clear out the karma actions.
-	$smcFunc['db_query']('', '
+	smf_db_query( '
 		DELETE FROM {db_prefix}log_karma');
 
 	// Last but not least, the search logs!
-	$smcFunc['db_query']('truncate_table', '
+	smf_db_query('
 		TRUNCATE {db_prefix}log_search_topics');
 
-	$smcFunc['db_query']('truncate_table', '
+	smf_db_query('
 		TRUNCATE {db_prefix}log_search_messages');
 
-	$smcFunc['db_query']('truncate_table', '
+	smf_db_query('
 		TRUNCATE {db_prefix}log_search_results');
 
 	updateSettings(array('search_pointer' => 0));
@@ -408,16 +408,16 @@ function ConvertUtf8()
 	);
 
 	// Get a list of character sets supported by your MySQL server.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SHOW CHARACTER SET',
 		array(
 		)
 	);
 	$db_charsets = array();
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 		$db_charsets[] = $row['Charset'];
 
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// Character sets supported by both MySQL and SMF's language files.
 	$charsets = array_intersect($charsets, $db_charsets);
@@ -430,7 +430,7 @@ function ConvertUtf8()
 			fatal_lang_error('utf8_db_version_too_low');
 
 		// Use the messages.body column as indicator for the database charset.
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SHOW FULL COLUMNS
 			FROM {db_prefix}messages
 			LIKE {string:body_like}',
@@ -438,8 +438,8 @@ function ConvertUtf8()
 				'body_like' => 'body',
 			)
 		);
-		$column_info = $smcFunc['db_fetch_assoc']($request);
-		$smcFunc['db_free_result']($request);
+		$column_info = mysql_fetch_assoc($request);
+		mysql_free_result($request);
 
 		// A collation looks like latin1_swedish. We only need the character set.
 		list($context['database_charset']) = explode('_', $column_info['Collation']);
@@ -586,7 +586,7 @@ function ConvertUtf8()
 
 	// Grab a list of tables.
 	if (preg_match('~^`(.+?)`\.(.+?)$~', $db_prefix, $match) === 1)
-		$queryTables = $smcFunc['db_query']('', '
+		$queryTables = smf_db_query( '
 			SHOW TABLE STATUS
 			FROM `' . strtr($match[1], array('`' => '')) . '`
 			LIKE {string:table_name}',
@@ -595,7 +595,7 @@ function ConvertUtf8()
 			)
 		);
 	else
-		$queryTables = $smcFunc['db_query']('', '
+		$queryTables = smf_db_query( '
 			SHOW TABLE STATUS
 			LIKE {string:table_name}',
 			array(
@@ -603,7 +603,7 @@ function ConvertUtf8()
 			)
 		);
 
-	while ($table_info = $smcFunc['db_fetch_assoc']($queryTables))
+	while ($table_info = mysql_fetch_assoc($queryTables))
 	{
 		// Just to make sure it doesn't time out.
 		if (function_exists('apache_reset_timeout'))
@@ -612,13 +612,13 @@ function ConvertUtf8()
 		$table_charsets = array();
 
 		// Loop through each column.
-		$queryColumns = $smcFunc['db_query']('', '
+		$queryColumns = smf_db_query( '
 			SHOW FULL COLUMNS
 			FROM ' . $table_info['Name'],
 			array(
 			)
 		);
-		while ($column_info = $smcFunc['db_fetch_assoc']($queryColumns))
+		while ($column_info = mysql_fetch_assoc($queryColumns))
 		{
 			// Only text'ish columns have a character set and need converting.
 			if (strpos($column_info['Type'], 'text') !== false || strpos($column_info['Type'], 'char') !== false)
@@ -635,7 +635,7 @@ function ConvertUtf8()
 				}
 			}
 		}
-		$smcFunc['db_free_result']($queryColumns);
+		mysql_free_result($queryColumns);
 
 		// Only change the column if the data doesn't match the current charset.
 		if ((count($table_charsets) === 1 && key($table_charsets) !== $charsets[$_POST['src_charset']]) || count($table_charsets) > 1)
@@ -657,7 +657,7 @@ function ConvertUtf8()
 			}
 
 			// Change the columns to binary form.
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				ALTER TABLE {raw:table_name}{raw:updates_blob}',
 				array(
 					'table_name' => $table_info['Name'],
@@ -674,7 +674,7 @@ function ConvertUtf8()
 						$update .= '
 							' . $column['Field'] . ' = ' . strtr($replace, array('%field%' => $column['Field'])) . ',';
 
-				$smcFunc['db_query']('', '
+				smf_db_query( '
 					UPDATE {raw:table_name}
 					SET {raw:updates}',
 					array(
@@ -685,7 +685,7 @@ function ConvertUtf8()
 			}
 
 			// Change the columns back, but with the proper character set.
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				ALTER TABLE {raw:table_name}{raw:updates_text}',
 				array(
 					'table_name' => $table_info['Name'],
@@ -696,7 +696,7 @@ function ConvertUtf8()
 
 		// Now do the actual conversion (if still needed).
 		if ($charsets[$_POST['src_charset']] !== 'utf8')
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				ALTER TABLE {raw:table_name}
 				CONVERT TO CHARACTER SET utf8',
 				array(
@@ -704,7 +704,7 @@ function ConvertUtf8()
 				)
 			);
 	}
-	$smcFunc['db_free_result']($queryTables);
+	mysql_free_result($queryTables);
 
 	// Let the settings know we have a new character set.
 	updateSettings(array('global_character_set' => 'UTF-8', 'previousCharacterSet' => (empty($translation_tables[$_POST['src_charset']])) ? $charsets[$_POST['src_charset']] : $translation_tables[$_POST['src_charset']]));
@@ -796,24 +796,24 @@ function ConvertEntities()
 
 		// Get a list of text columns.
 		$columns = array();
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SHOW FULL COLUMNS
 			FROM {db_prefix}' . $cur_table,
 			array(
 			)
 		);
-		while ($column_info = $smcFunc['db_fetch_assoc']($request))
+		while ($column_info = mysql_fetch_assoc($request))
 			if (strpos($column_info['Type'], 'text') !== false || strpos($column_info['Type'], 'char') !== false)
 				$columns[] = strtolower($column_info['Field']);
 
 		// Get the column with the (first) primary key.
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SHOW KEYS
 			FROM {db_prefix}' . $cur_table,
 			array(
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 		{
 			if ($row['Key_name'] === 'PRIMARY')
 			{
@@ -823,7 +823,7 @@ function ConvertEntities()
 				$primary_keys[] = $row['Column_name'];
 			}
 		}
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
 		// No primary key, no glory.
 		// Same for columns. Just to be sure we've work to do!
@@ -831,14 +831,14 @@ function ConvertEntities()
 			continue;
 
 		// Get the maximum value for the primary key.
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT MAX(' . $primary_key . ')
 			FROM {db_prefix}' . $cur_table,
 			array(
 			)
 		);
-		list($max_value) = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
+		list($max_value) = mysql_fetch_row($request);
+		mysql_free_result($request);
 
 		if (empty($max_value))
 			continue;
@@ -846,7 +846,7 @@ function ConvertEntities()
 		while ($context['start'] <= $max_value)
 		{
 			// Retrieve a list of rows that has at least one entity to convert.
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT {raw:primary_keys}, {raw:columns}
 				FROM {db_prefix}{raw:cur_table}
 				WHERE {raw:primary_key} BETWEEN {int:start} AND {int:start} + 499
@@ -861,7 +861,7 @@ function ConvertEntities()
 					'like_compare' => '(' . implode(' LIKE \'%&#%\' OR ', $columns) . ' LIKE \'%&#%\')',
 				)
 			);
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = mysql_fetch_assoc($request))
 			{
 				$insertion_variables = array();
 				$changes = array();
@@ -881,7 +881,7 @@ function ConvertEntities()
 
 				// Update the row.
 				if (!empty($changes))
-					$smcFunc['db_query']('', '
+					smf_db_query( '
 						UPDATE {db_prefix}' . $cur_table . '
 						SET
 							' . implode(',
@@ -890,7 +890,7 @@ function ConvertEntities()
 						$insertion_variables
 					);
 			}
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 			$context['start'] += 500;
 
 			// After ten seconds interrupt.
@@ -994,14 +994,14 @@ function AdminBoardRecount()
 	@set_time_limit(600);
 
 	// Step the number of topics at a time so things don't time out...
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT MAX(id_topic)
 		FROM {db_prefix}topics',
 		array(
 		)
 	);
-	list ($max_topics) = $smcFunc['db_fetch_row']($request);
-	$smcFunc['db_free_result']($request);
+	list ($max_topics) = mysql_fetch_row($request);
+	mysql_free_result($request);
 
 	$increment = min(max(50, ceil($max_topics / 4)), 2000);
 	if (empty($_REQUEST['start']))
@@ -1017,7 +1017,7 @@ function AdminBoardRecount()
 		while ($_REQUEST['start'] < $max_topics)
 		{
 			// Recount approved messages
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT /*!40001 SQL_NO_CACHE */ t.id_topic, MAX(t.num_replies) AS num_replies,
 					CASE WHEN COUNT(ma.id_msg) >= 1 THEN COUNT(ma.id_msg) - 1 ELSE 0 END AS real_num_replies
 				FROM {db_prefix}topics AS t
@@ -1032,8 +1032,8 @@ function AdminBoardRecount()
 					'max_id' => $_REQUEST['start'] + $increment,
 				)
 			);
-			while ($row = $smcFunc['db_fetch_assoc']($request))
-				$smcFunc['db_query']('', '
+			while ($row = mysql_fetch_assoc($request))
+				smf_db_query( '
 					UPDATE {db_prefix}topics
 					SET num_replies = {int:num_replies}
 					WHERE id_topic = {int:id_topic}',
@@ -1042,10 +1042,10 @@ function AdminBoardRecount()
 						'id_topic' => $row['id_topic'],
 					)
 				);
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			// Recount unapproved messages
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT /*!40001 SQL_NO_CACHE */ t.id_topic, MAX(t.unapproved_posts) AS unapproved_posts,
 					COUNT(mu.id_msg) AS real_unapproved_posts
 				FROM {db_prefix}topics AS t
@@ -1060,8 +1060,8 @@ function AdminBoardRecount()
 					'max_id' => $_REQUEST['start'] + $increment,
 				)
 			);
-			while ($row = $smcFunc['db_fetch_assoc']($request))
-				$smcFunc['db_query']('', '
+			while ($row = mysql_fetch_assoc($request))
+				smf_db_query( '
 					UPDATE {db_prefix}topics
 					SET unapproved_posts = {int:unapproved_posts}
 					WHERE id_topic = {int:id_topic}',
@@ -1070,7 +1070,7 @@ function AdminBoardRecount()
 						'id_topic' => $row['id_topic'],
 					)
 				);
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			$_REQUEST['start'] += $increment;
 
@@ -1090,7 +1090,7 @@ function AdminBoardRecount()
 	if ($_REQUEST['step'] <= 1)
 	{
 		if (empty($_REQUEST['start']))
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				UPDATE {db_prefix}boards
 				SET num_posts = {int:num_posts}
 				WHERE redirect = {string:redirect}',
@@ -1102,7 +1102,7 @@ function AdminBoardRecount()
 
 		while ($_REQUEST['start'] < $max_topics)
 		{
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT /*!40001 SQL_NO_CACHE */ m.id_board, COUNT(*) AS real_num_posts
 				FROM {db_prefix}messages AS m
 				WHERE m.id_topic > {int:id_topic_min}
@@ -1115,8 +1115,8 @@ function AdminBoardRecount()
 					'is_approved' => 1,
 				)
 			);
-			while ($row = $smcFunc['db_fetch_assoc']($request))
-				$smcFunc['db_query']('', '
+			while ($row = mysql_fetch_assoc($request))
+				smf_db_query( '
 					UPDATE {db_prefix}boards
 					SET num_posts = num_posts + {int:real_num_posts}
 					WHERE id_board = {int:id_board}',
@@ -1125,7 +1125,7 @@ function AdminBoardRecount()
 						'real_num_posts' => $row['real_num_posts'],
 					)
 				);
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			$_REQUEST['start'] += $increment;
 
@@ -1145,7 +1145,7 @@ function AdminBoardRecount()
 	if ($_REQUEST['step'] <= 2)
 	{
 		if (empty($_REQUEST['start']))
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				UPDATE {db_prefix}boards
 				SET num_topics = {int:num_topics}',
 				array(
@@ -1155,7 +1155,7 @@ function AdminBoardRecount()
 
 		while ($_REQUEST['start'] < $max_topics)
 		{
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT /*!40001 SQL_NO_CACHE */ t.id_board, COUNT(*) AS real_num_topics
 				FROM {db_prefix}topics AS t
 				WHERE t.approved = {int:is_approved}
@@ -1168,8 +1168,8 @@ function AdminBoardRecount()
 					'id_topic_max' => $_REQUEST['start'] + $increment,
 				)
 			);
-			while ($row = $smcFunc['db_fetch_assoc']($request))
-				$smcFunc['db_query']('', '
+			while ($row = mysql_fetch_assoc($request))
+				smf_db_query( '
 					UPDATE {db_prefix}boards
 					SET num_topics = num_topics + {int:real_num_topics}
 					WHERE id_board = {int:id_board}',
@@ -1178,7 +1178,7 @@ function AdminBoardRecount()
 						'real_num_topics' => $row['real_num_topics'],
 					)
 				);
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			$_REQUEST['start'] += $increment;
 
@@ -1198,7 +1198,7 @@ function AdminBoardRecount()
 	if ($_REQUEST['step'] <= 3)
 	{
 		if (empty($_REQUEST['start']))
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				UPDATE {db_prefix}boards
 				SET unapproved_posts = {int:unapproved_posts}',
 				array(
@@ -1208,7 +1208,7 @@ function AdminBoardRecount()
 
 		while ($_REQUEST['start'] < $max_topics)
 		{
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT /*!40001 SQL_NO_CACHE */ m.id_board, COUNT(*) AS real_unapproved_posts
 				FROM {db_prefix}messages AS m
 				WHERE m.id_topic > {int:id_topic_min}
@@ -1221,8 +1221,8 @@ function AdminBoardRecount()
 					'is_approved' => 0,
 				)
 			);
-			while ($row = $smcFunc['db_fetch_assoc']($request))
-				$smcFunc['db_query']('', '
+			while ($row = mysql_fetch_assoc($request))
+				smf_db_query( '
 					UPDATE {db_prefix}boards
 					SET unapproved_posts = unapproved_posts + {int:unapproved_posts}
 					WHERE id_board = {int:id_board}',
@@ -1231,7 +1231,7 @@ function AdminBoardRecount()
 						'unapproved_posts' => $row['real_unapproved_posts'],
 					)
 				);
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			$_REQUEST['start'] += $increment;
 
@@ -1251,7 +1251,7 @@ function AdminBoardRecount()
 	if ($_REQUEST['step'] <= 4)
 	{
 		if (empty($_REQUEST['start']))
-			$smcFunc['db_query']('', '
+			smf_db_query( '
 				UPDATE {db_prefix}boards
 				SET unapproved_topics = {int:unapproved_topics}',
 				array(
@@ -1261,7 +1261,7 @@ function AdminBoardRecount()
 
 		while ($_REQUEST['start'] < $max_topics)
 		{
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT /*!40001 SQL_NO_CACHE */ t.id_board, COUNT(*) AS real_unapproved_topics
 				FROM {db_prefix}topics AS t
 				WHERE t.approved = {int:is_approved}
@@ -1274,8 +1274,8 @@ function AdminBoardRecount()
 					'id_topic_max' => $_REQUEST['start'] + $increment,
 				)
 			);
-			while ($row = $smcFunc['db_fetch_assoc']($request))
-				$smcFunc['db_query']('', '
+			while ($row = mysql_fetch_assoc($request))
+				smf_db_query( '
 					UPDATE {db_prefix}boards
 					SET unapproved_topics = unapproved_topics + {int:real_unapproved_topics}
 					WHERE id_board = {int:id_board}',
@@ -1284,7 +1284,7 @@ function AdminBoardRecount()
 						'real_unapproved_topics' => $row['real_unapproved_topics'],
 					)
 				);
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			$_REQUEST['start'] += $increment;
 
@@ -1303,7 +1303,7 @@ function AdminBoardRecount()
 	// Get all members with wrong number of personal messages.
 	if ($_REQUEST['step'] <= 5)
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT /*!40001 SQL_NO_CACHE */ mem.id_member, COUNT(pmr.id_pm) AS real_num,
 				MAX(mem.instant_messages) AS instant_messages
 			FROM {db_prefix}members AS mem
@@ -1314,11 +1314,11 @@ function AdminBoardRecount()
 				'is_not_deleted' => 0,
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 			updateMemberData($row['id_member'], array('instant_messages' => $row['real_num']));
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT /*!40001 SQL_NO_CACHE */ mem.id_member, COUNT(pmr.id_pm) AS real_num,
 				MAX(mem.unread_messages) AS unread_messages
 			FROM {db_prefix}members AS mem
@@ -1330,9 +1330,9 @@ function AdminBoardRecount()
 				'is_not_read' => 0,
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 			updateMemberData($row['id_member'], array('unread_messages' => $row['real_num']));
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
 		if (array_sum(explode(' ', microtime())) - array_sum(explode(' ', $time_start)) > 3)
 		{
@@ -1348,7 +1348,7 @@ function AdminBoardRecount()
 	{
 		while ($_REQUEST['start'] < $modSettings['maxMsgID'])
 		{
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT /*!40001 SQL_NO_CACHE */ t.id_board, m.id_msg
 				FROM {db_prefix}messages AS m
 					INNER JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic AND t.id_board != m.id_board)
@@ -1360,12 +1360,12 @@ function AdminBoardRecount()
 				)
 			);
 			$boards = array();
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = mysql_fetch_assoc($request))
 				$boards[$row['id_board']][] = $row['id_msg'];
-			$smcFunc['db_free_result']($request);
+			mysql_free_result($request);
 
 			foreach ($boards as $board_id => $messages)
-				$smcFunc['db_query']('', '
+				smf_db_query( '
 					UPDATE {db_prefix}messages
 					SET id_board = {int:id_board}
 					WHERE id_msg IN ({array_int:id_msg_array})',
@@ -1390,7 +1390,7 @@ function AdminBoardRecount()
 	}
 
 	// Update the latest message of each board.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT m.id_board, MAX(m.id_msg) AS local_last_msg
 		FROM {db_prefix}messages AS m
 		WHERE m.approved = {int:is_approved}
@@ -1400,23 +1400,23 @@ function AdminBoardRecount()
 		)
 	);
 	$realBoardCounts = array();
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 		$realBoardCounts[$row['id_board']] = $row['local_last_msg'];
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query( '
 		SELECT /*!40001 SQL_NO_CACHE */ id_board, id_parent, id_last_msg, child_level, id_msg_updated
 		FROM {db_prefix}boards',
 		array(
 		)
 	);
 	$resort_me = array();
-	while ($row = $smcFunc['db_fetch_assoc']($request))
+	while ($row = mysql_fetch_assoc($request))
 	{
 		$row['local_last_msg'] = isset($realBoardCounts[$row['id_board']]) ? $realBoardCounts[$row['id_board']] : 0;
 		$resort_me[$row['child_level']][] = $row;
 	}
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	krsort($resort_me);
 
@@ -1432,7 +1432,7 @@ function AdminBoardRecount()
 
 			// If what is and what should be the latest message differ, an update is necessary.
 			if ($row['local_last_msg'] != $row['id_last_msg'] || $curLastModifiedMsg != $row['id_msg_updated'])
-				$smcFunc['db_query']('', '
+				smf_db_query( '
 					UPDATE {db_prefix}boards
 					SET id_last_msg = {int:id_last_msg}, id_msg_updated = {int:id_msg_updated}
 					WHERE id_board = {int:id_board}',
@@ -1556,13 +1556,13 @@ function MaintainPurgeInactiveMembers()
 			$where = 'mem.last_login < {int:time_limit}';
 
 		// Need to get *all* groups then work out which (if any) we avoid.
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT id_group, group_name, min_posts
 			FROM {db_prefix}membergroups',
 			array(
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 		{
 			// Avoid this one?
 			if (!in_array($row['id_group'], $groups))
@@ -1580,7 +1580,7 @@ function MaintainPurgeInactiveMembers()
 				}
 			}
 		}
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
 		// If we have ungrouped unselected we need to avoid those guys.
 		if (!in_array(0, $groups))
@@ -1590,7 +1590,7 @@ function MaintainPurgeInactiveMembers()
 		}
 
 		// Select all the members we're about to murder/remove...
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT mem.id_member, IFNULL(m.id_member, 0) AS is_mod
 			FROM {db_prefix}members AS mem
 				LEFT JOIN {db_prefix}moderators AS m ON (m.id_member = mem.id_member)
@@ -1598,12 +1598,12 @@ function MaintainPurgeInactiveMembers()
 			$where_vars
 		);
 		$members = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = mysql_fetch_assoc($request))
 		{
 			if (!$row['is_mod'] || !in_array(3, $groups))
 				$members[] = $row['id_member'];
 		}
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 
 		require_once($sourcedir . '/Subs-Members.php');
 		deleteMembers($members);
@@ -1651,7 +1651,7 @@ function MaintainMassMoveTopics()
 	// How many topics are we converting?
 	if (!isset($_REQUEST['totaltopics']))
 	{
-		$request = $smcFunc['db_query']('', '
+		$request = smf_db_query( '
 			SELECT COUNT(*)
 			FROM {db_prefix}topics
 			WHERE id_board = {int:id_board_from}',
@@ -1659,8 +1659,8 @@ function MaintainMassMoveTopics()
 				'id_board_from' => $id_board_from,
 			)
 		);
-		list ($total_topics) = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
+		list ($total_topics) = mysql_fetch_row($request);
+		mysql_free_result($request);
 	}
 	else
 		$total_topics = (int) $_REQUEST['totaltopics'];
@@ -1674,7 +1674,7 @@ function MaintainMassMoveTopics()
 		while ($context['start'] <= $total_topics)
 		{
 			// Lets get the topics.
-			$request = $smcFunc['db_query']('', '
+			$request = smf_db_query( '
 				SELECT id_topic
 				FROM {db_prefix}topics
 				WHERE id_board = {int:id_board_from}
@@ -1686,7 +1686,7 @@ function MaintainMassMoveTopics()
 
 			// Get the ids.
 			$topics = array();
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = mysql_fetch_assoc($request))
 				$topics[] = $row['id_topic'];
 
 			// Just return if we don't have any topics left to move.
