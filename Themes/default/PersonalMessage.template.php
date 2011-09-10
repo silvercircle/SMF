@@ -963,7 +963,7 @@ function template_send()
 				</div>';
 	}
 
-	// Send, Preview, spellcheck buttons.
+	// Send, Preview buttons.
 	echo '
 				<p><label for="outbox"><input type="checkbox" name="outbox" id="outbox" value="1" tabindex="', $context['tabindex']++, '"', $context['copy_to_outbox'] ? ' checked="checked"' : '', ' class="input_check" /> ', $txt['pm_save_outbox'], '</label></p>
 				<p id="shortcuts" class="smalltext">

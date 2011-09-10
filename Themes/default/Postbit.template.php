@@ -4,19 +4,18 @@ function template_postbit_normal(&$message, $ignoring)
 	global $context, $settings, $options, $txt, $scripturl, $modSettings, $topic;
 	
 	// Show the message anchor and a "new" anchor if this message is new.
-	$cclass = $message['approved'] ? ($message['alternate'] == 0 ? 'windowbg ' : 'windowbg2 ') : 'approvebg ';
 	echo '
-	<div class="',$cclass,'post_wrapper light_shadow" data-mid="',$message['id'], '">';
+	<div id="msg',$message['id'], '" class="post_wrapper" data-mid="',$message['id'], '">
+	<div class="flat_container transparent" style="padding:0;">';
 
 	if ($message['id'] != $context['first_message'])
-		echo '
-	<a id="msg', $message['id'], '"></a>', $message['first_new'] ? '<a id="new"></a>' : '';
+		echo $message['first_new'] ? '<a id="new"></a>' : '';
 	
 	// Show information about the poster of this message.
 	echo '
 	<div class="poster">
 	<h4>', $message['member']['link'], '</h4>
-	<div itemscope="itemscope" itemtype="http://data-vocabulary.org/Person" class="poster_details orange_container" style="margin-top:4px;">
+	<div itemscope="itemscope" itemtype="http://data-vocabulary.org/Person" class="poster_details blue_container" style="margin-top:4px;">
 	<ul class="reset smalltext" id="msg_', $message['id'], '_extra_info">';
 
 	// Don't show these things for guests.
@@ -120,7 +119,6 @@ function template_postbit_normal(&$message, $ignoring)
 		</div></div>
 		<div class="postarea">
 			<div class="keyinfo">
-			<div>
 			<div class="messageicon">
 			<img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' id="msg_icon_' . $message['id'] . '"' : '', ' />
 			</div>
@@ -132,7 +130,7 @@ function template_postbit_normal(&$message, $ignoring)
 			<div id="msg_', $message['id'], '_quick_mod"></div>';
 
 		echo '
-		</div><div class="clear_right"></div></div>';
+		</div><div class="clear_right"></div>';
 
 	// Ignoring this user? Hide the post.
 	if ($ignoring)
@@ -348,7 +346,8 @@ function template_postbit_normal(&$message, $ignoring)
 	//	echo '
 	//						<a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $txt['logged'], '</a>';
 	echo '
-		</div><div class="clear"></div></div></div>';
+		</div><div class="clear">
+		</div></div></div></div>';
 }
 
 function template_postbit_blog(&$message, $ignoring)
@@ -356,9 +355,9 @@ function template_postbit_blog(&$message, $ignoring)
 	global $context, $settings, $options, $txt, $scripturl, $modSettings, $topic;
 	
 	// Show the message anchor and a "new" anchor if this message is new.
-	$cclass = $message['approved'] ? ($message['alternate'] == 0 ? 'windowbg ' : 'windowbg2 ') : 'approvebg ';
-	echo '<div class="',$cclass,'post_wrapper light_shadow" data-mid="',$message['id'], '">';
-
+	echo '
+	<div class="post_wrapper" data-mid="',$message['id'], '">
+	<div class="flat_container transparent" style="padding:0;">';
 	if ($message['id'] != $context['first_message'])
 		echo '
 			<a id="msg', $message['id'], '"></a>', $message['first_new'] ? '<a id="new"></a>' : '';
@@ -631,7 +630,7 @@ function template_postbit_blog(&$message, $ignoring)
 						</div><div class="clear"></div></div>';
 
 
-	echo "</div>";
+	echo "</div></div>";
 }
 
 function template_postbit_compact(&$message, $ignoring)

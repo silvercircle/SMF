@@ -188,8 +188,6 @@ function ModifyPostSettings($return_config = false)
 			// Simple post options...
 			array('check', 'removeNestedQuotes'),
 			array('check', 'enableEmbeddedFlash', 'subtext' => $txt['enableEmbeddedFlash_warning']),
-			// Note show the warning as read if pspell not installed!
-			array('check', 'enableSpellChecking', 'subtext' => (function_exists('pspell_new') ? $txt['enableSpellChecking_warning'] : ('<span class="alert">' . $txt['enableSpellChecking_warning'] . '</span>'))),
 			array('check', 'disable_wysiwyg'),
 			array('check', 'use_post_cache'),
 			array('int', 'post_cache_cutoff'),

@@ -49,7 +49,7 @@ function template_init()
 	/* The version this template/theme is for.
 		This should probably be the version of SMF it was created for. */
 	$settings['theme_version'] = '2.0';
-	$context['jsver'] = '?v=144';
+	$context['jsver'] = '?v=1455';
 }
 
 // The main sub template above the content.
@@ -62,8 +62,6 @@ function template_html_above()
 <!DOCTYPE html ', $context['right_to_left'] ? ' dir="rtl"' : '', '>
 <html id="_S_" lang="en-US">
 <head>';
-
-	// The ?fin20 part of this link is just here to make sure browsers don't cache it wrongly.
 	echo '
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css',$context['jsver'],'" />';
 
@@ -315,40 +313,6 @@ function template_body_below()
 		sa.parentNode.insertBefore(ga, sa);
 		';
 	}
-	/*
-	if($fbxml) {
-			echo '
-			window.fbAsyncInit = function() {
-   				FB.init({appId: \'',$modSettings['fb_appid'],'\', status: true, cookie: true, xfbml: true});
-  			};
-  			(function() {
-    			var e = document.createElement(\'script\'); e.async = true;
-    			e.src = \'http://connect.facebook.net/en_US/all.js\';
-				document.getElementById(\'fb-root\').appendChild(e);
-  			}());
-			';
-	}
-	if($twitter_widgets) {
-			echo '
-			var t1 = document.createElement(\'SCRIPT\');
-
-			t1.src = \'http://platform.twitter.com/widgets.js\'; 
-			t1.type = "text/javascript"; 
-			t1.async = true;
-			anchor.parentNode.insertBefore(t1, anchor);
-			';
-	}
-	if($plusone) {
-		echo '
-		var t4 = document.createElement(\'SCRIPT\');
-
-		t4.src = \'http://apis.google.com/js/plusone.js\'; 
-		t4.type = "text/javascript"; 
-		t4.async = true;
-		anchor.parentNode.insertBefore(t4, anchor);
-		';
-	}
-	*/
 	echo $txt['jquery_timeago_loc'],'
 	// ]]>
 	</script>';
@@ -374,7 +338,7 @@ function template_body_below()
 	echo '
 	</div>
 	</footer>';
-	if(1) { // piwik
+	if(1) { // piwik, todo: make configurable in admin area!
 		echo '
 		<script type="text/javascript">
  		var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.miranda.or.at/" : "http://piwik.miranda.or.at/");

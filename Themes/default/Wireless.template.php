@@ -1015,7 +1015,6 @@ function template_wap2_display()
 				'<br />* ',
 				'',
 			), $message['body']), '<br>');
-
 		echo $message['first_new'] ? '
 		<a id="new"></a>' : '', '
 		<p class="windowbg', $alternate ? '' : '2', '">

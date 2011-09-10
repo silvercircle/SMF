@@ -10,9 +10,9 @@
 CREATE TABLE {$db_prefix}messages_cache (
   id_msg int(10) unsigned NOT NULL default '0',
   body mediumtext NOT NULL,
-  style tinyint(2) NOT NULL default '0',
-  lang  tinyint(2) NOT NULL default '0',
-  updated int(4) NOT NULL default '0',
+  style tinyint(3) NOT NULL default '0',
+  lang  tinyint(3) NOT NULL default '0',
+  updated int(10) NOT NULL default '0',
   PRIMARY KEY (id_msg, style, lang),
   KEY updated (updated)
 ) ENGINE=MyISAM;
@@ -163,9 +163,10 @@ ALTER TABLE {$db_prefix}topics ADD id_prefix smallint(5) unsigned NOT NULL defau
 
 # make the first post of a topic "sticky" on every page and (optionally) give it a different
 # postbit layout
-# highest bit (0x80) indicates a sticky post, bits 0-7 (id_layout & 0x7f) are the layout it
-ALTER TABLE {$db_prefix}topics ADD id_layout tinyint(2) NOT NULL default '0';
+# highest bit (0x80) indicates a sticky post, bits 0-7 (id_layout & 0x7f) are the layout id
+ALTER TABLE {$db_prefix}topics ADD id_layout tinyint(3) NOT NULL default '0';
 
+# no longer supported, but might be a good idea to leave in the db...
 ALTER TABLE {$db_prefix}members DROP aim;
 ALTER TABLE {$db_prefix}members DROP yim;
 ALTER TABLE {$db_prefix}members DROP msn;

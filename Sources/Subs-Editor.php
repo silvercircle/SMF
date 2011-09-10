@@ -1447,30 +1447,6 @@ function create_control_richedit($editorOptions)
 			}
 		// ]]></script>
 		<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/editor.js?fin20"></script>';
-
-		$context['show_spellchecking'] = !empty($modSettings['enableSpellChecking']) && function_exists('pspell_new');
-		if ($context['show_spellchecking'])
-		{
-			$context['html_headers'] .= '
-		<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/spellcheck.js"></script>';
-
-			// Some hidden information is needed in order to make the spell checking work.
-			if (!isset($_REQUEST['xml']))
-				$context['insert_after_template'] .= '
-		<form name="spell_form" id="spell_form" method="post" accept-charset="' . $context['character_set'] . '" target="spellWindow" action="' . $scripturl . '?action=spellcheck">
-			<input type="hidden" name="spellstring" value="" />
-		</form>';
-
-			// Also make sure that spell check works with rich edit.
-			$context['html_headers'] .= '
-		<script type="text/javascript"><!-- // --><![CDATA[
-		function spellCheckDone()
-		{
-			for (i = 0; i < smf_editorArray.length; i++)
-				setTimeout("smf_editorArray[" + i + "].spellCheckEnd()", 150);
-		}
-		// ]]></script>';
-		}
 	}
 
 	// Start off the editor...

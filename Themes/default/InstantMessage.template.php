@@ -259,10 +259,6 @@ function template_send()
 {
 	global $context, $settings, $options, $scripturl, $modSettings, $txt;
 
-	if ($context['show_spellchecking'])
-		echo '
-		<script language="JavaScript1.2" type="text/javascript" src="', $settings['default_theme_url'], '/spellcheck.js"></script>';
-
 	echo '
 		<table border="0" width="75%" cellpadding="3" align="center" cellspacing="0">
 			<tr>
@@ -364,15 +360,12 @@ function template_send()
 	// Show BBC buttons, smileys and textbox.
 	theme_postbox($context['message']);
 
-	// Send, Preview, spellcheck buttons.
+	// Send, Preview buttons.
 	echo '
 							<tr>
 								<td align="right" colspan="2">
 									<input type="submit" value="', $txt['send_message'], '" onclick="return submitThisOnce(this);" accesskey="s" />
 									<input type="submit" name="preview" value="', $txt['preview'], '" onclick="return submitThisOnce(this);" accesskey="p" />';
-	if ($context['show_spellchecking'])
-		echo '
-									<input type="button" value="', $txt['spell_check'], '" onclick="spellCheck( \'postmodify\', \'message\');">';
 	echo '
 								</td>
 							</tr>
@@ -389,11 +382,6 @@ function template_send()
 				</td>
 			</tr>
 		</table>';
-
-	// Some hidden information is needed in order to make the spell checking work.
-	if ($context['show_spellchecking'])
-		echo '
-		<form name="spell_form" id="spell_form" method="post" target="spellWindow" action="', $scripturl, '?action=spellcheck"><input type="hidden" name="spell_formname" value="" /><input type="hidden" name="spell_fieldname" value="" /><input type="hidden" name="spellstring" value="" /></form>';
 
 	// Show the message you're replying to.
 	if ($context['reply'])

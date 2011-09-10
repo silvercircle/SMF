@@ -35,8 +35,8 @@ function template_main()
 
 	// Show the anchor for the top and for the first message. If the first message is new, say so.
 	echo '
-			<a id="top"></a>
-			<a id="msg', $context['first_message'], '"></a>', $context['first_new_message'] ? '<a id="new"></a>' : '';
+		<a id="top"></a>
+		', $context['first_new_message'] ? '<a id="new"></a>' : '';
 
 	// Is this topic also a poll?
 	if ($context['is_poll'])
@@ -260,20 +260,13 @@ function template_main()
 			
 	if ($context['can_reply'] && !empty($options['display_quick_reply']))
 	{
+		$collapser = array('id' => 'quickReplyOptions', 'title' => $txt['quick_reply'], 'bodyclass' => 'flat_container largepadding');
 		echo '
 			<a id="quickreply"></a>
 			<div class="clear"></div>
-			<div class="tborder" id="quickreplybox">
-				<div class="cat_bar">
-					<h3>
-						<span class="ie6_header floatleft"><a href="javascript:oQuickReply.swap();">
-							<img src="', $settings['images_url'], '/', $options['display_quick_reply'] == 2 ? 'collapse' : 'expand', '.gif" alt="+" id="quickReplyExpand" class="icon" />
-						</a>
-						<a href="javascript:oQuickReply.swap();">', $txt['quick_reply'], '</a>
-						</span>
-					</h3>
-				</div>
-				<div class="flat_container largepadding" id="quickReplyOptions"', $options['display_quick_reply'] == 2 ? '' : ' style="display: none"', '>
+			<div class="tborder" id="quickreplybox">';
+				template_create_collapsible_container($collapser);
+				echo '
 					<div>
 						<p class="smalltext lefttext">', $txt['quick_reply_desc'], '</p>
 						', $context['is_locked'] ? '<p class="alert smalltext">' . $txt['quick_reply_warning'] . '</p>' : '',
@@ -303,18 +296,19 @@ function template_main()
 				echo '
 							<strong>', $txt['verification'], ':</strong>', template_control_verification($context['visual_verification_id'], 'quick_reply'), '<br />';
 
+			if($context['user']['avatar']['image'])
+				echo '
+					<div class="floatleft blue_container mediumpadding">',
+					$context['user']['avatar']['image'],'
+					</div>';
 			echo '
-							<div class="quickReplyContent">
-								<textarea cols="600" rows="7" name="message" tabindex="', $context['tabindex']++, '"></textarea>
+							<div class="quickReplyContent" style="margin-left:150px;">
+								<textarea style="width:100%;" rows="7" name="message" tabindex="', $context['tabindex']++, '"></textarea>
 							</div>
 							<div class="righttext padding">
 								<input type="submit" name="post" value="', $txt['post'], '" onclick="return submitThisOnce(this);" accesskey="s" tabindex="', $context['tabindex']++, '" class="button_submit" />
 								<input type="submit" name="preview" value="', $txt['preview'], '" onclick="return submitThisOnce(this);" accesskey="p" tabindex="', $context['tabindex']++, '" class="button_submit" />';
 
-			if ($context['show_spellchecking'])
-				echo '
-								<input type="button" value="', $txt['spell_check'], '" onclick="spellCheck(\'postmodify\', \'message\');" tabindex="', $context['tabindex']++, '" class="button_submit" />';
-								
 			if (!empty($context['save_draft']))
 				echo '
 								<input type="hidden" id="draft_id" name="draft_id" value="', empty($context['draft_id']) ? '0' : $context['draft_id'], '" />
@@ -340,7 +334,7 @@ function template_main()
 								</script>
 								';
 								
-			echo '
+			echo '			
 							</div>
 						</form>
 					</div>
@@ -477,11 +471,6 @@ function template_main()
 	// Show the jumpto box, or actually...let Javascript do it.
 	echo '
 			<div class="plainbox" id="display_jump_to">&nbsp;</div>';
-
-	if ($context['show_spellchecking'])
-		echo '
-			<form action="', $scripturl, '?action=spellcheck" method="post" accept-charset="', $context['character_set'], '" name="spell_form" id="spell_form" target="spellWindow"><input type="hidden" name="spellstring" value="" /></form>
-				<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/spellcheck.js"></script>';
 
 	echo '
 				<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/topic.js',$context['jsver'],'"></script>
