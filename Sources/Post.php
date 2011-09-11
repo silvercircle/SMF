@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Simple Machines Forum (SMF)
  *
@@ -2393,7 +2392,7 @@ function AnnounceTopic()
 // Allow a user to chose the membergroups to send the announcement to.
 function AnnouncementSelectMembergroup()
 {
-	global $txt, $context, $topic, $board, $board_info, $smcFunc;
+	global $txt, $context, $topic, $board, $board_info;
 
 	$groups = array_merge($board_info['groups'], array(1));
 	foreach ($groups as $id => $group)
@@ -2793,7 +2792,7 @@ function getTopic()
 
 function QuoteFast()
 {
-	global $modSettings, $user_info, $txt, $settings, $context, $options;
+	global $modSettings, $user_info, $context, $options;
 	global $sourcedir, $smcFunc;
 
 	loadLanguage('Post');
@@ -3173,7 +3172,7 @@ function JavaScriptModify()
 // Main draft saving function
 function saveDraft()
 {
-	global $context, $txt, $smcFunc, $topic, $board, $user_info, $modSettings, $options;
+	global $smcFunc, $topic, $board, $user_info, $modSettings, $options;
 
 	if (!isset($_REQUEST['draft']) || $user_info['is_guest'] || empty($modSettings['masterSaveDrafts']) || empty($options['use_drafts']))
 		return false;

@@ -2532,7 +2532,10 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	// Cleanup whitespace.
 	$message = strtr($message, array('  ' => ' &nbsp;', "\r" => '', "\n" => '<br />', '<br /> ' => '<br />&nbsp;', '&#13;' => "\n"));
 
-	call_integration_hook('integrate_parse_bbc_after', array(&$message, &$parse_tags));
+	/*
+	 * experimental hook... this could be used to support mods like footnotes, for example
+	 */
+	call_integration_hook('integrate_parse_bbc_after', array(&$message, &$parse_tags, &$smileys));
 
 	// Cache the output if it took some time...
 	if (isset($cache_key, $cache_t) && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)

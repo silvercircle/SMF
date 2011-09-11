@@ -68,7 +68,7 @@ function ViewTags()
 			FROM ({db_prefix}tags_log as l, {db_prefix}boards AS b, {db_prefix}topics as t, {db_prefix}messages as m)
 			WHERE l.ID_TAG = {int:tagid} AND b.ID_BOARD = t.ID_BOARD AND l.ID_TOPIC = t.id_topic  AND t.approved = 1 
 			AND t.ID_FIRST_MSG = m.ID_MSG AND {query_see_board} ORDER BY m.ID_MSG DESC LIMIT {int:start}, 25',
-			array('id' => $tagid, 'start' => $context['start']));
+			array('tagid' => $id, 'start' => $context['start']));
 
 		$context['tags_topics'] = array();
 		while ($row = mysql_fetch_assoc($result)) {
@@ -341,16 +341,14 @@ function TaggingSystem_Submit()
 
 function TaggingSystem_Delete()
 {
-	global $txt, $smcFunc, $user_info;
+	global $txt, $user_info;
 
 	$isajax = $_REQUEST['action'] == 'xmlhttp' ? true : false;
 
 	if(!$isajax)
 		isAllowedTo('smftags_del');
-	else {
-		if(!allowedTo('smftags_del'))
-			TagErrorMsg($txt['cannot_smftags_del'], $isajax);
-	}
+	else if(!allowedTo('smftags_del'))
+		TagErrorMsg($txt['cannot_smftags_del'], $isajax);
 	
 	$id = (int) $_REQUEST['tagid'];
 
@@ -372,9 +370,9 @@ function TaggingSystem_Delete()
 	TagCleanUp($row['id_tag']);
 
 	if($isajax) {
-		$output = RegenerateTagList($topic);
+		$output = RegenerateTagList($topic);		// todo: do this with a template maybe?
 		echo $output;
-		die;
+		obExit(false);
 	}
 	redirectexit('topic=' . $row['id_topic']);
 }
