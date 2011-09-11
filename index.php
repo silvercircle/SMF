@@ -103,6 +103,11 @@ set_error_handler('error_handler');
 // Start the session. (assuming it hasn't already been.)
 loadSession();
 
+// todo: testing hooks...
+
+//add_integration_function('integrate_pre_include', $sourcedir . 'contrib/footnotes.php', TRUE);
+//add_integration_function('integrate_parse_bbc_after', 'fnotes_parse', TRUE);
+
 // Determine if this is using WAP, WAP2, or imode.  Technically, we should check that wap comes before application/xhtml or text/html, but this doesn't work in practice as much as it should.
 if (isset($_REQUEST['wap']) || isset($_REQUEST['wap2']) || isset($_REQUEST['imode']))
 	unset($_SESSION['nowap']);

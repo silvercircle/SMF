@@ -1252,7 +1252,6 @@ function share_popup (url_add, width, height)  {
 };
 
 var _timer = null;
-var req = null;
 var _is_locked = false;
 
 Array.prototype.remove = function(from, to) {
@@ -1504,7 +1503,6 @@ function cContainer(el)
 	var id = '#' + raw_id + '_body';
 	var is_visible = ($(id).css('display') == 'none' ? false : true);
 	if(is_visible) {
-		$(id).attr('data-height', $(id).css('height'));
 		$(id).fadeOut(500);
 		el.removeClass('_collapse');
 		el.addClass('_expand');
@@ -1545,10 +1543,6 @@ function firePreview(topic_id, ele)
 
 function timeOutError() 
 {
-	if(req) {
-		req.abort();
-		req = null;
-	}
 	setBusy(0);
 	alert('Error: Connection has timed out.');
 };
@@ -1570,26 +1564,16 @@ function sendRequest(uri, request, anchor_element)
 	if(_is_locked)
 		return;
 		
-	var xmlrequest = new XMLHttpRequest();
-	if(xmlrequest) {
-		if(typeof(sSessionVar) == 'undefined')
-			sSessionVar = 'sesc';
-		
-		request = request + ';' + sSessionVar + '='	+ sSessionId + ';xml';
-		var sUrl = uri + '?' + request;
-		setTimeOut(10000);
-		req = xmlrequest;
-		xmlrequest.onreadystatechange = function() { response(anchor_element) };
-		xmlrequest.open('GET', sUrl, true);
-		setBusy(1);
-		xmlrequest.send(null);
-	}
+	request = request + ';' + sSessionVar + '='	+ sSessionId + ';xml';
+	var sUrl = smf_prepareScriptUrl(smf_scripturl) + request;
+	setBusy(1);
+	sendXMLDocumentWithAnchor(sUrl, '', response, anchor_element);
 };
 
 function openResult(html, width)
 {
 	$('#wrap').css('opacity', '0.6');
-	$('#mcard_inner').html(req.responseText);
+	$('#mcard_inner').html(html);
 	if(width > 0)
 		$('#mcard').css('width', width + 'px');
 	else
@@ -1605,59 +1589,51 @@ function openResult(html, width)
 /*
  * generic handler for XMLHttp response. Determines its origin by observing ele
  */
-function response(ele)
+function response(ele, responseText)
 {
 	var com, srch, err;
 	try {
 		clearTimeOut();
-		if(req.readyState == 4) {
-			if(req.status == 200) {
-				setBusy(0);
-				if(ele.attr('class') == 'whoposted') {
-					openResult(req.responseText, 0);
-					return;
-				}
-				if(ele.attr('class') == 'tpeek') {
-					openResult(req.responseText, 710);
-    				$('div#mcard_inner abbr.timeago').timeago();
-					return;
-				}
-				if(ele.attr('class') == 'givelike') {
-					var id = '#likers_msg_' + ele.attr('data-id');
-					$(id).html(req.responseText);
-					if(ele.attr('data-fn') == 'give') {
-						ele.attr('data-fn', 'remove');
-						ele.html(smf_unlikelabel);
-					}
-					else if(ele.attr('data-fn') == 'remove'){
-						ele.attr('data-fn', 'give');
-						ele.html(smf_likelabel);
-					}
-					return;
-				}
-				if(ele.attr('id') == 'addtag') {
-					$('#addtag').before(req.responseText);
-					return;
-				}
-				if(ele.attr('id') == 'tags') {
-					ele.html(req.responseText);
-					return;
-				}
-				if(ele.hasClass('collapse'))
-					return;
-				if(ele.attr('id') == 'sidebar') {
-					ele.html(req.responseText);
-					sidebar_content_loaded = true;
-					return;
-				}
-				openResult(req.responseText, 500);
-   				$('div#mcard_inner abbr.timeago').timeago();
-			} else if(req.status == 500) {
-				setBusy(0);
-				clearTimeOut();
-				err = req.responseText || req.statusText;
-			}
+		setBusy(0);
+		if(ele.attr('class') == 'whoposted') {
+			openResult(responseText, 0);
+			return;
 		}
+		if(ele.attr('class') == 'tpeek') {
+			openResult(responseText, 710);
+    		$('div#mcard_inner abbr.timeago').timeago();
+			return;
+		}
+		if(ele.attr('class') == 'givelike') {
+			var id = '#likers_msg_' + ele.attr('data-id');
+			$(id).html(responseText);
+			if(ele.attr('data-fn') == 'give') {
+				ele.attr('data-fn', 'remove');
+				ele.html(smf_unlikelabel);
+			}
+			else if(ele.attr('data-fn') == 'remove'){
+				ele.attr('data-fn', 'give');
+				ele.html(smf_likelabel);
+			}
+			return;
+		}
+		if(ele.attr('id') == 'addtag') {
+			$('#addtag').before(responseText);
+			return;
+		}
+		if(ele.attr('id') == 'tags') {
+			ele.html(responseText);
+			return;
+		}
+		if(ele.hasClass('collapse'))
+			return;
+		if(ele.attr('id') == 'sidebar') {
+			ele.html(responseText);
+			sidebar_content_loaded = true;
+			return;
+		}
+		openResult(responseText, 500);
+   		$('div#mcard_inner abbr.timeago').timeago();
 	} catch(e) {
 		clearTimeOut();
 		setBusy(0);

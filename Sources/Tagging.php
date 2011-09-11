@@ -42,38 +42,37 @@ function ViewTags()
 		$id = (int) $_REQUEST['tagid'];
 
 		// Find Tag Name
-		$dbresult = smf_db_query( '
+		$result = smf_db_query( '
 			SELECT tag FROM {db_prefix}tags	WHERE ID_TAG = {int:id} LIMIT 1', array('id' => $id));
-		$row = mysql_fetch_assoc($dbresult);
-		mysql_free_result($dbresult);
+		$row = mysql_fetch_assoc($result);
+		mysql_free_result($result);
 
+		$context['start'] = (int)$_REQUEST['start'];
 		$context['tag_search'] = $row['tag'];
 		$context['page_title'] = $mbname . ' - ' . $txt['smftags_resultsfor'] . $context['tag_search'];
-		$context['start'] = (int) $_REQUEST['start'];
 		
-		$dbresult = smf_db_query( "
-		SELECT count(*) as total 
-		FROM ({db_prefix}tags_log as l, {db_prefix}boards AS b, {db_prefix}topics as t, {db_prefix}messages as m)
-		
-		WHERE l.ID_TAG = $id AND b.ID_BOARD = t.ID_BOARD AND l.ID_TOPIC = t.id_topic  AND t.approved = 1 
-		AND t.ID_FIRST_MSG = m.ID_MSG AND " . $user_info['query_see_board'] . " 
-		");
-		$totalRow = mysql_fetch_assoc($dbresult);
+		$result = smf_db_query('
+			SELECT count(*) as total 
+			FROM ({db_prefix}tags_log as l, {db_prefix}boards AS b, {db_prefix}topics as t, {db_prefix}messages as m)
+			WHERE l.ID_TAG = {int:tagid} AND b.ID_BOARD = t.ID_BOARD AND l.ID_TOPIC = t.id_topic  AND t.approved = 1 
+			AND t.ID_FIRST_MSG = m.ID_MSG AND {query_see_board}',
+			array('tagid' => $id)
+		);
+		$totalRow = mysql_fetch_assoc($result);
 		$numofrows = $totalRow['total'];
+		mysql_free_result($result);
 		
 		// Find Results
-		$dbresult = smf_db_query( "
-		SELECT t.num_replies,t.num_views,m.id_member,m.poster_name,m.subject,m.id_topic,m.poster_time, t.ID_BOARD
-		FROM ({db_prefix}tags_log as l, {db_prefix}boards AS b, {db_prefix}topics as t, {db_prefix}messages as m)
-		
-		WHERE l.ID_TAG = $id AND b.ID_BOARD = t.ID_BOARD AND l.ID_TOPIC = t.id_topic  AND t.approved = 1 
-		AND t.ID_FIRST_MSG = m.ID_MSG AND " . $user_info['query_see_board'] . " 
-		ORDER BY m.ID_MSG DESC LIMIT $context[start],25 ");
+		$result = smf_db_query('
+			SELECT t.num_replies,t.num_views,m.id_member,m.poster_name,m.subject,m.id_topic,m.poster_time, t.ID_BOARD
+			FROM ({db_prefix}tags_log as l, {db_prefix}boards AS b, {db_prefix}topics as t, {db_prefix}messages as m)
+			WHERE l.ID_TAG = {int:tagid} AND b.ID_BOARD = t.ID_BOARD AND l.ID_TOPIC = t.id_topic  AND t.approved = 1 
+			AND t.ID_FIRST_MSG = m.ID_MSG AND {query_see_board} ORDER BY m.ID_MSG DESC LIMIT {int:start}, 25',
+			array('id' => $tagid, 'start' => $context['start']));
 
 		$context['tags_topics'] = array();
-		while ($row = mysql_fetch_assoc($dbresult))
-		{
-				$context['tags_topics'][] = array(
+		while ($row = mysql_fetch_assoc($result)) {
+			$context['tags_topics'][] = array(
 				'id_member' => $row['id_member'],
 				'poster_name' => $row['poster_name'],
 				'subject' => $row['subject'],
@@ -81,40 +80,32 @@ function ViewTags()
 				'poster_time' => $row['poster_time'],
 				'num_views' => $row['num_views'],
 				'num_replies' => $row['num_replies'],
-
-				);
+			);
 		}
-		mysql_free_result($dbresult);
+		mysql_free_result($result);
 		$context['sub_template']  = 'tagging_results';
 		$context['page_index'] = constructPageIndex($scripturl . '?action=tags;tagid=' . $id, $_REQUEST['start'], $numofrows, 25);
 	}
 	else
 	{
 		$context['page_title'] = $mbname . ' - ' . $txt['smftags_popular'];
-
-		// Tag cloud from http://www.prism-perfect.net/archive/php-tag-cloud-tutorial/
-		$result = smf_db_query( "
-		SELECT 
-			t.tag AS tag, l.ID_TAG, COUNT(l.ID_TAG) AS quantity
-		 FROM {db_prefix}tags as t, {db_prefix}tags_log as l WHERE t.ID_TAG = l.ID_TAG
-		  GROUP BY l.ID_TAG
-		  ORDER BY COUNT(l.ID_TAG) DESC, RAND() LIMIT " .  $modSettings['smftags_set_cloud_tags_to_show']);
+		$result = smf_db_query('
+			SELECT t.tag AS tag, l.ID_TAG, COUNT(l.ID_TAG) AS quantity
+		 	FROM {db_prefix}tags as t, {db_prefix}tags_log as l WHERE t.ID_TAG = l.ID_TAG
+		  	GROUP BY l.ID_TAG  ORDER BY COUNT(l.ID_TAG) DESC, RAND() LIMIT {int:nr_tags}',
+		  	array('nr_tags' => $modSettings['smftags_set_cloud_tags_to_show']));
 
 		$tags = array();
 		$tags2 = array();
-
 		while ($row = mysql_fetch_assoc($result)) {
 		    $tags[$row['tag']] = $row['quantity'];
 		    $tags2[$row['tag']] = $row['ID_TAG'];
 		}
-
-		if (count($tags2) > 0)
-		{
-			// change these font sizes if you will
+		mysql_free_result($result);
+		if (count($tags2) > 0) {
 			$max_size = $modSettings['smftags_set_cloud_max_font_size_precent']; // max font size in %
 			$min_size = $modSettings['smftags_set_cloud_min_font_size_precent']; // min font size in %
 
-			// get the largest and smallest array values
 			$max_qty = max(array_values($tags));
 			$min_qty = min(array_values($tags));
 
@@ -124,16 +115,11 @@ function ViewTags()
 			 { // we don't want to divide by zero
 			    $spread = 1;
 			}
-
-			// determine the font-size increment
-			// this is the increase per tag quantity (times used)
 			$step = ($max_size - $min_size)/($spread);
 
-			// loop through our tag array
 			$context['poptags'] = '';
 			$row_count = 0;
-			foreach ($tags as $key => $value)
-			{
+			foreach ($tags as $key => $value) {
 				$row_count++;
 			    $size = $min_size + (($value - $min_qty) * $step);
 		    	$context['poptags'] .= '<a href="' . $scripturl . '?action=tags;tagid=' . $tags2[$key] . '" style="font-size: '.$size.'%"';
@@ -143,22 +129,20 @@ function ViewTags()
 			   		$context['poptags'] .= '<br />';
 			   		$row_count =0;
 			    }
-			    // notice the space at the end of the link
 			}
 		}
 		
-		$dbresult = smf_db_query( "
+		$result = smf_db_query('
 			SELECT DISTINCT l.ID_TOPIC, t.num_replies,t.num_views,m.id_member,
-				m.poster_name,m.subject,m.id_topic,m.poster_time, 
-				t.id_board, g.tag, g.ID_TAG 
-		 		FROM ({db_prefix}tags_log as l, {db_prefix}boards AS b, {db_prefix}topics as t, {db_prefix}messages as m) 
-		  		LEFT JOIN {db_prefix}tags AS g ON (l.ID_TAG = g.ID_TAG)
-		 		WHERE b.ID_BOARD = t.id_board AND l.ID_TOPIC = t.id_topic AND t.approved = 1 AND t.id_first_msg = m.id_msg AND {query_see_board} ORDER BY l.ID DESC LIMIT 20");
+			m.poster_name,m.subject,m.id_topic,m.poster_time, 
+			t.id_board, g.tag, g.ID_TAG 
+		 	FROM ({db_prefix}tags_log as l, {db_prefix}boards AS b, {db_prefix}topics as t, {db_prefix}messages as m) 
+		  	LEFT JOIN {db_prefix}tags AS g ON (l.ID_TAG = g.ID_TAG)
+		 	WHERE b.ID_BOARD = t.id_board AND l.ID_TOPIC = t.id_topic AND t.approved = 1 AND t.id_first_msg = m.id_msg AND {query_see_board} ORDER BY l.ID DESC LIMIT 20');
 
 		$context['tags_topics'] = array();
-		while ($row = mysql_fetch_assoc($dbresult))
-		{
-				$context['tags_topics'][] = array(
+		while ($row = mysql_fetch_assoc($result))	{
+			$context['tags_topics'][] = array(
 				'id_member' => $row['id_member'],
 				'poster_name' => $row['poster_name'],
 				'subject' => $row['subject'],
@@ -168,15 +152,14 @@ function ViewTags()
 				'num_replies' => $row['num_replies'],
 				'ID_TAG' => $row['ID_TAG'],
 				'tag' => $row['tag'],
-
-				);
+			);
 		}
-		mysql_free_result($dbresult);
+		mysql_free_result($result);
 	}
 	$context['linktree'][] = array(
-					'url' => $scripturl . '?action=tags',
-					'name' => $txt['smftags_menu']
-				);
+		'url' => $scripturl . '?action=tags',
+		'name' => $txt['smftags_menu']
+	);
 }
 
 /*
@@ -236,7 +219,7 @@ function RegenerateTagList($topic)
 	
 	// construct the new tag list and return it for DOM insertion
 	
-	$result= smf_db_query( 'SELECT t.tag, l.id, t.id_tag
+	$result = smf_db_query('SELECT t.tag, l.id, t.id_tag
        	FROM {db_prefix}tags_log as l, {db_prefix}tags as t
        	WHERE t.id_tag = l.id_tag && l.id_topic = {int:topic}',
        	array('topic' => $topic));
@@ -307,8 +290,7 @@ function TaggingSystem_Submit()
 	
 	$tags = explode(',',htmlspecialchars($tag,ENT_QUOTES));
 
-	foreach($tags as $tag)
-	{
+	foreach($tags as $tag) {
 		$tag = trim($tag);
 		if (strlen($tag) < $modSettings['smftags_set_mintaglength'])
 			continue;

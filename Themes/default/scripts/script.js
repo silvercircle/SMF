@@ -86,6 +86,33 @@ function getXMLDocument(sUrl, funcCallback)
 };
 
 // Send a post form to the server using XMLHttpRequest.
+function sendXMLDocumentWithAnchor(sUrl, sContent, funcCallback, ele)
+{
+	if (!window.XMLHttpRequest)
+		return false;
+
+	var oSendDoc = new window.XMLHttpRequest();
+	if (typeof(funcCallback) != 'undefined')
+	{
+		oSendDoc.onreadystatechange = function () {
+			if (oSendDoc.readyState != 4)
+				return;
+
+			if (oSendDoc.responseXML != null && oSendDoc.status == 200)
+				funcCallback(ele, oSendDoc.responseText);
+			else         
+				funcCallback(ele, oSendDoc.responseText);
+		};
+	}
+	oSendDoc.open('POST', sUrl, true);
+	if ('setRequestHeader' in oSendDoc)
+		oSendDoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	oSendDoc.send(sContent);
+
+	return true;
+};
+
+// Send a post form to the server using XMLHttpRequest.
 function sendXMLDocument(sUrl, sContent, funcCallback)
 {
 	if (!window.XMLHttpRequest)

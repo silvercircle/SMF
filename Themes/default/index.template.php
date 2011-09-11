@@ -49,7 +49,7 @@ function template_init()
 	/* The version this template/theme is for.
 		This should probably be the version of SMF it was created for. */
 	$settings['theme_version'] = '2.0';
-	$context['jsver'] = '?v=1455';
+	$context['jsver'] = '?v=1460';
 }
 
 // The main sub template above the content.
@@ -673,33 +673,6 @@ function template_sidebar_content()
 	if(($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar']))) {
 		$collapser = array('id' => 'social_panel', 'title' => 'Socialize');
 		template_create_collapsible_container($collapser);
-	    /*echo '<div class="mediumpadding lefttext">
-		  	<script type="text/javascript">
-			//<![CDATA[
-			';
-			if(isset($modSettings['fb_appid']) && !empty($modSettings['fb_appid'])) {
-       			$fbxml = 1;
-       			echo '(function() {
-        			document.write(\'<div style="margin-bottom:10px;"><fb:like href="',$boardurl,'" layout="button_count" send="true" show_faces="false" action="recommend" font="verdana"></fb:like></div>\');
-    			})();';
-			}
-    		echo '//]]>
-       		</script>';
-			$twitter_widgets = 1;
-			$plusone++;
-			echo '
-			<div style="overflow:hidden;">
-   	    	<div class="floatleft"><a href="http://twitter.com/share" style="border:none;" class="twitter-share-button" data-count="horizontal" data-url="',$boardurl,'"></a></div>
-			<div style="display:inline;max-width:70px;"><div class="g-plusone" data-href="',$boardurl,'" data-size="medium" data-count="true"></div></div>';
-			if(isset($modSettings['twitter_id']) && !empty($modSettings['twitter_id']))
-				echo '<div style="margin-top:8px;"><a href="http://twitter.com/',$modSettings['twitter_id'],'" class="twitter-follow-button" data-show-count="false">Follow @',$modSettings['twitter_id'],'</a></div>';
-       		echo '<noscript>This requires JavaScript</noscript>
-       		</div>
-       		<div class="clear"></div>
-       		</div>
-			</div>
-			<div class="cContainer_end"></div>
-		';*/
 		$plusone++;
 		echo '
 		<div id="socialshareprivacy"></div>
@@ -823,7 +796,7 @@ function template_create_collapsible_container(array &$_c)
 	if(!isset($_c['headerstyle']))
 		$_c['headerstyle'] = '';
 	else
-		$_c['headerstyle'] = 'style="'.$_c['headerstyle'].'"';
+		$_c['headerstyle'] = ' style="'.$_c['headerstyle'].'"';
 	echo '
 		<div class="',$_c['headerclass'],'"',$_c['headerstyle'],'>
 		<div class="csrcwrapper16px floatright"><img onclick="cContainer($(this));" class="cContainer_c clipsrc ',($state ? '_expand' : '_collapse'),'" id="',$id,'" src="',$settings['images_url'].'/clipsrc.png" alt="*" /></div>';
@@ -835,7 +808,7 @@ function template_create_collapsible_container(array &$_c)
 	if(!isset($_c['bodystyle']))
 		$_c['bodystyle'] = '';
 	else
-		$_c['bodystyle'] = 'style="'.$_c['bodystyle'].'"';
+		$_c['bodystyle'] = ' style="'.$_c['bodystyle'].'"';
 		
 	echo '
 		<div id="',$id,'_body" class="',$_c['bodyclass'],'"',$_c['bodystyle'],'>

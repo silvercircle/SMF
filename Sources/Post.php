@@ -3194,8 +3194,7 @@ function saveDraft()
 		fatal_lang_error('empty_draft', false);
 
 	// Hrm, so is this a new draft or not?
-	if (isset($_REQUEST['draft_id']) && (int) $_REQUEST['draft_id'] > 0 || $msgid)
-	{
+	if (isset($_REQUEST['draft_id']) && (int) $_REQUEST['draft_id'] > 0 || $msgid) {
 		$_REQUEST['draft_id'] = (int) $_REQUEST['draft_id'];
 
 		$id_cond = $msgid ? ' 1=1 ' : ' id_draft = {int:draft} ';
@@ -3282,7 +3281,6 @@ function draftXmlReturn($draft)
 	<response>
 		<lastsave id="', $draft, '"><![CDATA[', $txt['last_saved_on'], ': ', timeformat(time()), ']', ']></lastsave>
 	</response>';
-
 	obExit(false);
 }
 ?>

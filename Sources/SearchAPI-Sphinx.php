@@ -114,12 +114,11 @@ class sphinx_search
 	public function searchQuery($search_params, $searchWords, $excludedIndexWords, &$participants, &$searchArray)
 	{
 		global $modSettings, $context, $sourcedir, $user_info, $scripturl;
-		if (($cached_results = cache_get_data('search_results_' . md5($user_info['query_see_board'] . '_' . $context['params']))) === null)
-		{
+		if (($cached_results = cache_get_data('search_results_' . md5($user_info['query_see_board'] . '_' . $context['params']))) === null)	{
 			require_once($sourcedir . '/contrib/sphinxapi.php');
 
 			$mySphinx = new SphinxClient();
-			$mySphinx->SetServer($modSettings['sphinx_searchd_server'], (int) $modSettings['sphinx_searchd_port']);
+			$mySphinx->SetServer($modSettings['sphinx_searchd_server'], (int)$modSettings['sphinx_searchd_port']);
 			$mySphinx->SetLimits(0, (int) $modSettings['sphinx_max_results']);
 			$mySphinx->SetMatchMode(SPH_MATCH_BOOLEAN);
 			if(!$search_params['show_complete'])
@@ -135,10 +134,8 @@ class sphinx_search
 			if (!empty($search_params['memberlist']))
 				$mySphinx->SetFilter('ID_MEMBER', $search_params['memberlist']);
 			
-			// Construct the (binary mode) query.
 			$orResults = array();
-			foreach ($searchWords as $orIndex => $words)
-			{
+			foreach ($searchWords as $orIndex => $words) {
 				$andResult = '';
 				foreach ($words['indexed_words'] as $sphinxWord) {
 					$andResult .= (in_array($sphinxWord, $excludedIndexWords) ? '-' : '') . $sphinxWord . ' & ';
@@ -159,7 +156,6 @@ class sphinx_search
 				'matches' => array(),
 				'num_results' => $request['total'],
 			);
-			//log_error('results = '.$cached_results['num_results']);
 			if (isset($request['matches'])) {
 				foreach ($request['matches'] as $msgID => $match) {
 					$cached_results['matches'][$msgID] = array(
@@ -172,12 +168,9 @@ class sphinx_search
 						$cached_results['matches'][$msgID]['num_matches'] = $match['attrs']['@count'];
 				}
 			}
-
-			// Store the search results in the cache.
 			cache_put_data('search_results_' . md5($user_info['query_see_board']) . '_' . $context['params'], $cached_results, 600);
 		}
-		foreach (array_slice(array_keys($cached_results['matches']), $_REQUEST['start'], $modSettings['search_results_per_page']) as $msgID)
-		{
+		foreach (array_slice(array_keys($cached_results['matches']), $_REQUEST['start'], $modSettings['search_results_per_page']) as $msgID) {
 			$context['topics'][$msgID] = $cached_results['matches'][$msgID];
 			$participants[$cached_results['matches'][$msgID]['id']] = false;
 		}
