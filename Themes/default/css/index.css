@@ -63,7 +63,6 @@ form
 
 img.icon {vertical-align:middle;padding:0;margin:0 3px;border:0;height:16px;}
 #search_form {
-	margin-bottom:0px;
 	position:absolute;top:-70px;right:30px;padding:5px 10px 0 10px;
 	background-color:white;border-top-left-radius:6px;border-top-right-radius:6px;
 	border:1px solid white;
@@ -503,8 +502,7 @@ div.pagesection div.floatright input
 #tagstrip {
 	font-size:12px;
 	float:right;
-	padding:5px;
-	padding-left:18px;
+	padding:5px 5px 5px 18px;
 	background: transparent url(../images/theme/sprite.png) 0 -239px no-repeat;
 }
 #tagstrip a {text-decoration: none;}
@@ -1154,10 +1152,7 @@ ul#navigation li
 
 #content_section
 {
-    padding-left:20px;
-    padding-right:20px;
-    padding-top:10px;
-    padding-bottom:5px;
+    padding: 10px 20px 5px 20px;
 }
 
 
@@ -1909,19 +1904,17 @@ p#whoisviewing
 .modifybutton
 {
 	float: right;
-	margin: 0;
+	margin: 0 10px 0 0;
 	text-align: right;
-	margin-right:10px;
 	font: bold 0.85em arial, sans-serif;
 	color: #334466;	
 }
 ul.quickbuttons
 {
-	margin: 0 4px 0 0;
+	margin: 0 4px 0 20px;
 	clear: right;
 	float: right;
 	text-align: right;
-	margin-left:20px;
 }
 ul.quickbuttons li, .buttonlist ul li, ul.quickbuttons_linkstyle li
 {
@@ -2111,7 +2104,6 @@ ul.post_options li
 {
 	overflow: hidden;
 	margin: .5em 0;
-	padding: 0;
 	border-bottom: 1px solid #cacdd3;
 	padding: 0.5em;
 }
@@ -3073,7 +3065,6 @@ div#profile_success
 	margin: 0 1em;
 	min-height: 80px;
 	height: auto !important;
-	height: 80px;
 }
 
 .topic .mod_icons
@@ -3716,7 +3707,6 @@ div#mcard_inner, .tcard_inner {
 #mcard_inner div {overflow:hidden !important;max-width:712px;}
 div#mcard_close, div#tcard_close {
 	float:right;
-	color:black;
 	font-size:10px;
 	padding:5px;
 	margin-right:10px;
@@ -3754,9 +3744,8 @@ div#ajaxbusy {
 	border-top:0;
 	border-right:0;
 	border-bottom-left-radius:12px;
-	background-color:#ddd;
 	padding:10px 20px;
-	background:#576D82;
+	background-color:#576D82;
 	opacity:0.7;
 }
 /*
@@ -4010,7 +3999,7 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
   line-height: 8px !important;
 }
 .syntaxhighlighter.ie .toolbar a {
-  padding-top: 0px !important;
+  padding-top: 0 !important;
 }
 .syntaxhighlighter.printing .line.alt1 .content,
 .syntaxhighlighter.printing .line.alt2 .content,
@@ -4384,7 +4373,6 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
 			}
 			
 			.pp_gallery ul a {
-				border: 1px #000 solid;
 				border: 1px rgba(0,0,0,0.5) solid;
 				display: block;
 				float: left;
@@ -4405,7 +4393,7 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
 			}
 			
 			.pp_gallery li.default a {
-				background: url(../images/prettyPhoto/facebook/default_thumbnail.gif) 0 0 no-repeat;
+				background: url(../images/prettyPhoto/default/default_thumb.png) 0 0 no-repeat;
 				display: block;
 				height: 33px;
 				width: 50px;
@@ -4419,7 +4407,7 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
 			}
 		
 		a.pp_next {
-			background: url(../images/prettyPhoto/light_rounded/btnNext.png) 10000px 10000px no-repeat;
+			background: url(../images/prettyPhoto/default/sprite_next.png) 10000px 10000px no-repeat;
 			display: block;
 			float: right;
 			height: 100%;
@@ -4428,7 +4416,7 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
 		}
 			
 		a.pp_previous {
-			background: url(../images/prettyPhoto/light_rounded/btnNext.png) 10000px 10000px no-repeat;
+			background: url(../images/prettyPhoto/default/sprite_prev.png) 10000px 10000px no-repeat;
 			display: block;
 			float: left;
 			height: 100%;

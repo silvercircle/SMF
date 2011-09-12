@@ -62,9 +62,9 @@ if (!defined('SMF'))
 // The central part of the board - topic display.
 function Display()
 {
-	global $scripturl, $txt, $modSettings, $context, $settings, $boardurl;
+	global $scripturl, $txt, $modSettings, $context, $settings;
 	global $options, $sourcedir, $user_info, $board_info, $topic, $board, $time_now;
-	global $attachments, $messages_request, $topicinfo, $language, $smcFunc, $cache_parsed;
+	global $attachments, $messages_request, $topicinfo, $language, $cache_parsed;
 
 	$context['need_synhlt'] = true;
 	
@@ -1171,13 +1171,16 @@ function Display()
 		foreach ($stable_icons as $icon)
 			$context['icon_sources'][$icon] = 'images_url';
 	}
+
+    if(!empty($modSettings['enableAdvancedHooks']))
+        call_integration_hook('integrate_display', array(&$context));
 }
 
 // Callback for the message display.
 function prepareDisplayContext($reset = false)
 {
-	global $settings, $txt, $modSettings, $scripturl, $options, $user_info, $smcFunc, $sourcedir, $board, $time_now;
-	global $memberContext, $context, $messages_request, $topic, $attachments, $topicinfo, $cache_parsed;
+	global $settings, $txt, $modSettings, $scripturl, $options, $user_info, $time_now;
+	global $memberContext, $context, $messages_request, $topic, $cache_parsed;
 
 	static $counter = null;
 
@@ -1281,7 +1284,7 @@ function prepareDisplayContext($reset = false)
 			'timestamp' => forum_time(true, $message['modified_time']),
 			'name' => $message['modified_name']
 		),
-		'body' => $message['body'],
+		'body' => &$message['body'],
 		'new' => empty($message['is_read']),
 		'approved' => $message['approved'],
 		'first_new' => isset($context['start_from']) && $context['start_from'] == $counter,
@@ -1309,6 +1312,9 @@ function prepareDisplayContext($reset = false)
 		$counter++;
 	else
 		$counter--;
+
+    if(!empty($modSettings['enableAdvancedHooks']))
+        call_integration_hook('integrate_postbit', array(&$context, &$output));
 
 	return $output;
 }
@@ -1836,5 +1842,4 @@ function QuickInTopicModeration()
 
 	redirectexit(!empty($topicGone) ? 'board=' . $board : 'topic=' . $topic . '.' . $_REQUEST['start']);
 }
-
 ?>

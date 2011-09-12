@@ -2063,100 +2063,75 @@ function Post2()
 		if (isset($topicOptions['id']))
 			$topic = $topicOptions['id'];
 	
-	
-//Tagging System
+        if(isset($_REQUEST['tags']) && !isset($_REQUEST['num_replies'])) {
+            global $user_info;
+            $result = smf_db_query('
+              SELECT COUNT(*) as total
+              FROM {db_prefix}tags_log
+              WHERE ID_TOPIC = {int:id_topic}',
+                array('id_topic' => $topic)
+            );
+            $row = mysql_fetch_assoc($result);
+            $nr_tags = $row['total'];
+            mysql_free_result($result);
 
-	
-	if(isset($_REQUEST['tags']) && !isset($_REQUEST['num_replies']))
-	{
-		global $user_info;
-		//Get how many tags there have been for the topic
-		$dbresult = smf_db_query( "
-		SELECT 
-			COUNT(*) as total 
-		FROM {db_prefix}tags_log 
-		WHERE ID_TOPIC = " . $topic);
-		$row = mysql_fetch_assoc($dbresult);
-		$totaltags = $row['total'];
-		mysql_free_result($dbresult);
+            // Check Tag restrictions
+            $tags = explode(',',htmlspecialchars($_REQUEST['tags'],ENT_QUOTES));
 
-		// Check Tag restrictions
-		$tags = explode(',',htmlspecialchars($_REQUEST['tags'],ENT_QUOTES));
-
-		if($totaltags < $modSettings['smftags_set_maxtags'])
-		{
-			$tagcount = 0;
-			foreach($tags as $tag)
-			{
-			
-				$tag = trim($tag);
-				
-				if($tagcount >= $modSettings['smftags_set_maxtags'])
-					continue;
-
-
-				if(empty($tag))
-					continue;
-
-				//Check min tag length	
-				if (strlen($tag) < $modSettings['smftags_set_mintaglength'])
-					continue;
-				//Check max tag length
-				if (strlen($tag) > $modSettings['smftags_set_maxtaglength'])
-					continue;
-
-				//Insert The tag
-				$dbresult = smf_db_query( "
-				SELECT 
-					ID_TAG 
-				FROM {db_prefix}tags 
-				WHERE tag = '$tag'");
-				
-				if (smf_db_affected_rows() == 0)
-				{
-					//Insert into Tags table
-					smf_db_query( "INSERT INTO {db_prefix}tags
-						(tag, approved)
-					VALUES ('$tag',1)");	
-					$ID_TAG = smf_db_insert_id("{db_prefix}tags",'ID_TAG');
-					//Insert into Tags log
-					smf_db_query( "INSERT INTO {db_prefix}tags_log
-						(ID_TAG,ID_TOPIC, ID_MEMBER)
-					VALUES ($ID_TAG,$topic,$user_info[id])");
-
-					$tagcount++;
-				}
-				else 
-				{
-					$row = mysql_fetch_assoc($dbresult);
-					$ID_TAG = $row['ID_TAG'];
-					$dbresult2= smf_db_query( "
-					SELECT 
-						ID FROM {db_prefix}tags_log 
-					WHERE ID_TAG  =  $ID_TAG  AND ID_TOPIC = $topic");
-					if (smf_db_affected_rows() != 0)
-					{
-						continue;
-
-					}
-					mysql_free_result($dbresult2);
-					//Insert into Tags log
-
-					smf_db_query( "INSERT INTO {db_prefix}tags_log
-						(ID_TAG,ID_TOPIC, ID_MEMBER)
-					VALUES ($ID_TAG,$topic,$user_info[id])");
-					$tagcount++;
-
-				}
-				mysql_free_result($dbresult);
-			}
-		}
-	}
-	
-	//End Tagging System
-	
-	
-
+            if($nr_tags < $modSettings['smftags_set_maxtags']) {
+                $count = 0;
+                foreach($tags as $tag)	{
+                    $tag = trim($tag);
+                    if(empty($tag))
+                        continue;
+                    if($count >= $modSettings['smftags_set_maxtags'])
+                        continue;
+                    if (strlen($tag) < $modSettings['smftags_set_mintaglength'])
+                        continue;
+                    if (strlen($tag) > $modSettings['smftags_set_maxtaglength'])
+                        continue;
+                    $result = smf_db_query('
+                      SELECT ID_TAG
+                      FROM {db_prefix}tags
+                      WHERE tag = {string:tag}',
+                        array('tag' => $tag)
+                    );
+                    if (0 == smf_db_affected_rows()) {
+                        smf_db_query('INSERT INTO {db_prefix}tags
+                          (tag, approved)
+                          VALUES ({string:tag}, 1)',
+                          array('tag' => $tag)
+                        );
+                        $ID_TAG = smf_db_insert_id('{db_prefix}tags','ID_TAG');
+                        smf_db_query('INSERT INTO {db_prefix}tags_log
+                            (ID_TAG, ID_TOPIC, ID_MEMBER)
+                            VALUES ({int:id_tag}, {int:topic}, {int:userid})',
+                            array('id_tag' => $ID_TAG, 'topic' => $topic, 'userid' => $user_info['id'])
+                        );
+                        $count++;
+                    }
+                    else {
+                        $row = mysql_fetch_assoc($result);
+                        $ID_TAG = $row['ID_TAG'];
+                        $result2= smf_db_query('
+                          SELECT ID FROM {db_prefix}tags_log
+                          WHERE ID_TAG = {int:id_tag} AND ID_TOPIC = {int:topic}',
+                            array('id_tag' => $ID_TAG, 'topic' => $topic)
+                        );
+                        if (smf_db_affected_rows() != 0)
+                            continue;
+                        mysql_free_result($result2);
+                        smf_db_query('INSERT INTO {db_prefix}tags_log
+                            (ID_TAG, ID_TOPIC, ID_MEMBER)
+                            VALUES ({int:id_tag}, {int:topic}, {int:userid})',
+                            array('id_tag' => $ID_TAG, 'topic' => $topic, 'userid' => $user_info['id'])
+                        );
+                        $count++;
+                    }
+                    mysql_free_result($result);
+                }
+            }
+        }
 	}
 
 	// Editing or posting an event?

@@ -1905,6 +1905,7 @@ INSERT INTO {$db_prefix}settings
 	(variable, value)
 VALUES ('use_post_cache', '0'),
 	('post_cache_cutoff', '30'),
+	('enableAdvancedHooks', '0'),
 	('fb_appid', ''),
 	('GA_tracker_id', ''),
 	('GA_domain_name', ''),

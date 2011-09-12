@@ -177,7 +177,7 @@ function template_main()
 
 function template_info_center()
 {
-	global $context, $settings, $options, $txt, $scripturl, $modSettings;
+	global $context, $settings, $txt, $scripturl, $modSettings;
 
 	// "Users online" - in order of activity.
 	echo '<div class="clear"></div>';

@@ -1272,7 +1272,7 @@ function stopEventPropagation(_e)
    else if(window.event){
       window.event.cancelBubble = true;
    }
-};
+}
 
 function setBusy(mode)
 {
@@ -1290,7 +1290,7 @@ function setBusy(mode)
 		_is_locked = false;
 		el.hide();
 	}
-};
+}
 
 var menu_active = false;
 
@@ -1591,7 +1591,6 @@ function openResult(html, width)
  */
 function response(ele, responseText)
 {
-	var com, srch, err;
 	try {
 		clearTimeOut();
 		setBusy(0);

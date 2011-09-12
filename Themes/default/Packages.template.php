@@ -1272,14 +1272,13 @@ function template_install_options()
 	echo '
 	<div id="admincenter">
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['package_install_options'], '</h3>
+			<h3>', $txt['package_install_options'], '</h3>
 		</div>
-		<div class="information">
+		<div class="yellow_container">
 			', $txt['package_install_options_ftp_why'], '
 		</div>
-
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<br>
+		<div class="blue_container">
 			<div class="content">
 				<form action="', $scripturl, '?action=admin;area=packages;sa=options" method="post" accept-charset="', $context['character_set'], '">
 					<dl class="settings">
@@ -1303,13 +1302,13 @@ function template_install_options()
 						</dd>
 					</dl>
 					<label for="package_make_backups"><input type="checkbox" name="package_make_backups" id="package_make_backups" value="1" class="input_check"', $context['package_make_backups'] ? ' checked="checked"' : '', ' /> ', $txt['package_install_options_make_backups'], '</label><br /><br />
-					<div class="righttext">
+					<label for="enableAdvancedHooks"><input type="checkbox" name="enableAdvancedHooks" id="enableAdvancedHooks" value="1" class="input_check"', $context['enableAdvancedHooks'] ? ' checked="checked"' : '', ' /> ', $txt['enable_advanced_hooks'], '</label><br /><br />
+					<div class="righttext ">
 						<input type="submit" name="submit" value="', $txt['save'], '" class="button_submit" />
 						<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 					</div>
 				</form>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 	</div>
 	<br class="clear" />';

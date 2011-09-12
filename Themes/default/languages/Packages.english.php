@@ -259,4 +259,5 @@ $txt['package_confirm_go_back'] = 'Go back';
 $txt['package_readme_default'] = 'Default';
 $txt['package_available_readme_language'] = 'Available Readme Languages:';
 
+$txt['enable_advanced_hooks'] = 'Enable advanced hooks';
 ?>

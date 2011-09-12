@@ -29,7 +29,7 @@ if (!defined('SMF'))
  
 function GiveLike($mid)
 {
-	global $context, $settings, $user_info, $sourcedir, $smcFunc, $txt;
+	global $context, $user_info, $sourcedir, $txt;
 	$total = array();
 	$content_type = 1;			// > post content type, we should define them elsewhere later when we have more than just this one
 	
@@ -79,7 +79,7 @@ function GiveLike($mid)
 		 * doesn't show the like button for own messages, but this check is still necessary
 		 */		
 		
-		$request = smf_db_query( '
+		$request = smf_db_query('
 			SELECT id_member, id_board, id_topic, subject FROM {db_prefix}messages AS m WHERE m.id_msg = '.$mid);
 
 		$m = mysql_fetch_row($request);
@@ -151,8 +151,6 @@ function GiveLike($mid)
 
 function LikesUpdate($mid)
 {
-	global $context;
-	global $settings, $user_info, $sourcedir, $smcFunc;
 	$first = true;
 	$like_string = '';
 	$count = 0;
@@ -205,7 +203,7 @@ function LikesUpdate($mid)
  */
 function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_liked)
 {
-	global $user_info, $scripturl, $like_template, $txt;
+	global $user_info, $scripturl, $txt;
 	
 	$like_template = array();
 	$like_template[1] = $txt['1like'];
