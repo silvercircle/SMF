@@ -97,7 +97,6 @@ function sendXMLDocumentWithAnchor(sUrl, sContent, funcCallback, ele)
 		oSendDoc.onreadystatechange = function () {
 			if (oSendDoc.readyState != 4)
 				return;
-
 			if (oSendDoc.responseXML != null && oSendDoc.status == 200)
 				funcCallback(ele, oSendDoc.responseText);
 			else         
@@ -125,7 +124,6 @@ function sendXMLDocument(sUrl, sContent, funcCallback)
 		oSendDoc.onreadystatechange = function () {
 			if (oSendDoc.readyState != 4)
 				return;
-
 			if (oSendDoc.responseXML != null && oSendDoc.status == 200)
 				funcCallback.call(oCaller, oSendDoc.responseXML);
 			else

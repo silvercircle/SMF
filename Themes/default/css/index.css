@@ -31,7 +31,7 @@ table
 body
 {
 	background:#333355;
-	font-family: "Trebuchet MS", "Verdana", "Arial", "Helvetica", "sans-serif";
+	font-family: "Trebuchet MS", "Verdana", "Arial", helvetica, sans-serif;
 	font-size:10pt;
 	margin: 0;
 	padding: 0;
@@ -115,7 +115,7 @@ input:focus, textarea:focus, select:focus
 /* Add some padding to the options instead. */
 select option
 {
-	padding: 0px;
+	padding: 0;
 }
 
 /* The font size of textareas should be just a little bit larger. */
@@ -848,7 +848,7 @@ table.table_grid
 {
 	margin-top: 0.1em;
 	border-collapse: separate;
-	border-spacing:1px 0px;
+	border-spacing:1px 0;
 }
 table.table_grid td
 {
@@ -919,7 +919,7 @@ table.table_grid thead tr.catbg th
 	padding: 0 0.5em;
 	background-color:#98AABA;
 	font-size:10px;
-	font-family:Verdana,Arial,Helvetica;
+	font-family:Verdana,Arial,helvetica,sans-serif;
 	text-shadow:black 2px 2px 4px;
 	font-weight:bold;
 }
@@ -974,7 +974,6 @@ table.table_grid thead tr.catbg th
 	z-index: 90;
 	display: none;
 	position: absolute;
-	width: auto;
 	top:24px;
 	background-color:#98AABA;
 	padding: 0 0 0 0;
@@ -1110,10 +1109,9 @@ ul#navigation li
 #adm_submenus li {
 	margin:0 1px;
 	color:black;
-	padding:0;
+	padding:0 0 4px 0;
 	position:relative;
 	top:4px;
-	padding-bottom:4px;
 }
 
 #adm_submenus li a {
@@ -1175,7 +1173,7 @@ ul#navigation li
 #sidebar, #sbar {
 	float:right;
 	min-height:500px;
-	padding:0px;
+	padding:0;
 }
 #sbtoggle {
  float:right;
@@ -1326,12 +1324,11 @@ div#upper_section div.news form
 /* The navigation list (i.e. linktree) */
 div.navigate_section
 {
-	padding: 0;
+	padding: 0 0 0 10px;
 	margin-top:10px;
 	background-color:#f2f5fe;
 	border:1px solid #d5ecfa;
 	border-radius:3px;
-	padding-left:10px;
 	font-size:14px;
 }
 .navigate_section ul
@@ -1379,7 +1376,7 @@ table.table_list
 	width: 100%;
 	line-height:110%;
 	border-collapse: separate;
-	border-spacing:1px 0px;
+	border-spacing:1px 0;
 }
 
 table.table_list tbody.divider td {border:0;}
@@ -1421,9 +1418,8 @@ ol.category {
 	list-style:none;
 	width:100%;
 	padding:0;
-	margin:0;
-	margin-bottom:10px;
-	box-shadow:1px 1px 5px 0px #ddd;
+	margin:0 0 10px 0;
+	box-shadow:1px 1px 5px 0 #ddd;
 }
 ol.category > li {
 	padding:4px 2px 4px 8px;
@@ -1770,7 +1766,6 @@ p#whoisviewing
 {
 	width:auto;
 	border:2px solid #ddd;
-	padding:0 0 0 0;
 	border-radius:4px;
 	padding:2px;
 	margin-bottom:10px;
@@ -1883,10 +1878,9 @@ p#whoisviewing
 {
 	font-size:12px;
 	margin-left:-205px;
-	padding:2px 10px 0 10px;
+	padding:2px 10px 0 205px;
 	min-height:24px;
 	max-height:24px;
-	padding-left:205px;
 	line-height:150%;
 	background:#f2f2f2 url(../images/theme/sprite.png) 0 -946px repeat-x;
 }
@@ -1926,7 +1920,7 @@ ul.quickbuttons li, .buttonlist ul li, ul.quickbuttons_linkstyle li
 }
 ul.quickbuttons_linkstyle li a {
 	font-size:10px !important;
-	font-family:Verdana,arial,helvetica;
+	font-family:Verdana,arial,sans-serif;
 	line-height:18px !important;
 	float:left;
 	padding:0 4px;
@@ -1934,7 +1928,7 @@ ul.quickbuttons_linkstyle li a {
 ul.quickbuttons li a, .buttonlist ul li a, span.button
 {
 	font-size:10px !important;
-	font-family:Verdana,arial,helvetica;
+	font-family:Verdana,arial,sans-serif;
 	font-weight:bold;
 	text-shadow: white 1px 1px 8px;
 	float: left;
@@ -2578,7 +2572,7 @@ tr.titlebg td
 	border:1px solid #ddd;
 	border-bottom: 2px solid #ddd;
 	border-radius: 3px 3px 0 0;
-	padding:3px 4px 0px 10px;
+	padding:3px 4px 0 10px;
 	margin-bottom:1px;
 	height:20px;
 	text-shadow:#fff 2px 2px 5px;
@@ -2638,7 +2632,7 @@ tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td
 table.topic_table
 {
 	width: 100%;
-	border-spacing:0px;
+	border-spacing:0;
 }
 table.topic_table td {
 	padding:2px 5px;
@@ -3550,7 +3544,7 @@ span.hidelink
 .cContainer_body {
 	border-top:0;
 	border-radius: 0 0 3px 3px;
-	box-shadow:1px 1px 5px 0px #ddd;
+	box-shadow:1px 1px 5px 0 #ddd;
 }
 img.cContainer_c {
 	cursor:pointer;
@@ -3604,7 +3598,7 @@ span.arrow {
 	margin:10px 10px 0 20px;
 }
 .codeheader {
-	margin:10px 0px 0 0px;
+	margin:10px 0 0 0;
 }
 /* page links (navpages) */
 
@@ -3621,6 +3615,10 @@ span.small_avatar img, li.medium_avatar img {
 	border-radius:2px;
 	background-color:#f0f0f0;
 	padding:2px;
+}
+img.fourtyeight {
+	width:48px !important;
+	height:48px !important;
 }
 li.medium_avatar img {
 	height:48px;
@@ -3641,19 +3639,18 @@ span.avatar_overlay img {
 	width:18px;
 	height:18px;
 	border:1px solid #fff;
-	box-shadow:2px 2px 5px 0px #aaa;
+	box-shadow:2px 2px 5px 0 #aaa;
 	padding:0;
 }
 
 tbody.divider tr {background:white;}
 div.td_children {
 	font-size:12px;
-	padding:1px 0;
+	padding:1px 0 0 20px;
 	border-top:1px solid #ddd;
 	margin-top:3px;
 	list-style: none;
 	background: transparent url(../images/theme/sprite.png) -16px -521px no-repeat;
-	padding-left:20px;
 	margin-left:-10px;
 }
 div.td_children table {
@@ -3690,7 +3687,7 @@ div#mcard, .tcard {
 	border-bottom-width:6px;
 	border-right-width:6px;
 	border-radius:4px;
-	box-shadow: 0px 5px 12px 4px #888;
+	box-shadow: 0 5px 12px 4px #888;
 	max-width:720px;
 	width:auto;
 }
@@ -3754,7 +3751,7 @@ div#ajaxbusy {
  
 .rounded_bottom {border-bottom-left-radius:5px !important;border-bottom-right-radius:5px !important;}
 .rounded_tl {border-top-left-radius:5px !important;}
-.light_shadow {	box-shadow: 0px 5px 12px 0px #bbb;}
+.light_shadow {	box-shadow: 0 5px 12px 0 #bbb;}
 .borderless {border:0 !important;}
 a.tpeek {margin-left:10px;}
 abbr.timeago {border:0;color:#888;}
@@ -3799,7 +3796,7 @@ div.bmbar > div.title {
 }
 .share_button {
 	font-size:10px !important;
-	font-family:Verdana,arial,helvetica;
+	font-family:Verdana,arial,sans-serif;
 	font-weight:bold;
 	text-shadow: white 2px 2px 10px;
 	float: left;
@@ -3944,7 +3941,7 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
   padding: 0 1em !important;
 }
 .syntaxhighlighter.nogutter td.code .container textarea, .syntaxhighlighter.nogutter td.code .line {
-  padding-left: 0em !important;
+  padding-left: 0 !important;
 }
 .syntaxhighlighter.show {
   display: block !important;
@@ -3953,7 +3950,7 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
   display: none !important;
 }
 .syntaxhighlighter.collapsed .toolbar {
-  padding: 0.1em 0.8em 0em 0.8em !important;
+  padding: 0.1em 0.8em 0 0.8em !important;
   font-size: 1em !important;
   position: static !important;
   width: auto !important;
@@ -4215,7 +4212,7 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
 	div.pp_default a.pp_arrow_next { left: 52px; background-position: -82px -3px; } /* The next arrow in the bottom nav */
 	div.pp_default .pp_content_container .pp_details { margin-top: 5px; }
 	div.pp_default .pp_nav { clear: none; height: 30px; width: 110px; position: relative; }
-	div.pp_default .pp_nav .currentTextHolder{ font-family: Georgia; font-style: italic; color:#999; font-size: 11px; left: 75px; line-height: 25px; margin: 0; padding: 0 0 0 10px; position: absolute; top: 2px; }
+	div.pp_default .pp_nav .currentTextHolder{ font-family: Georgia,serif; font-style: italic; color:#999; font-size: 11px; left: 75px; line-height: 25px; margin: 0; padding: 0 0 0 10px; position: absolute; top: 2px; }
 	
 	div.pp_default .pp_close:hover, div.pp_default .pp_nav .pp_play:hover, div.pp_default .pp_nav .pp_pause:hover, div.pp_default .pp_arrow_next:hover, div.pp_default .pp_arrow_previous:hover { opacity:0.7; }
 
@@ -4710,9 +4707,7 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
     float: left; 
     font-size: 11px; 
     line-height: 24px; 
-	-moz-transition: color .5s ease-in; 
-	-webkit-transition: color .5s ease-in; 
-	transition: color .5s ease-in; 
+	transition: color .5s ease-in;
 }
 .social_share_privacy_area li.settings_info .settings_info_menu form fieldset label.checked {
 	color: #090; 

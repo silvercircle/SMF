@@ -1404,6 +1404,11 @@ jQuery(document).ready(function() {
  * all "onclick" handlers
  */
 
+function getLikes(mid, el)
+{
+	sendRequest(smf_scripturl, 'action=like;sa=getlikes;m=' + mid, el);
+}
+
 function brdModeratorsPopup(el)
 {
 	el.children('.brd_moderators_chld').show();
@@ -1586,6 +1591,7 @@ function openResult(html, width)
 	el.show();
 	el.css('z-index', '100');
 };
+
 /*
  * generic handler for XMLHttp response. Determines its origin by observing ele
  */
@@ -1629,6 +1635,11 @@ function response(ele, responseText)
 		if(ele.attr('id') == 'sidebar') {
 			ele.html(responseText);
 			sidebar_content_loaded = true;
+			return;
+		}
+		if(ele.attr('class') == 'likedpost') {
+			openResult(responseText, 600);
+			$('div#mcard_inner abbr.timeago').timeago();
 			return;
 		}
 		openResult(responseText, 500);

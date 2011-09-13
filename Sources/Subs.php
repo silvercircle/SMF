@@ -944,7 +944,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 {
 	global $txt, $scripturl, $context, $modSettings, $user_info, $smcFunc;
 	static $bbc_codes = array(), $itemcodes = array(), $no_autolink_tags = array();
-	static $disabled, $feet;
+	static $disabled;
 
 	// Don't waste cycles
 	if ($message === '')

@@ -310,6 +310,8 @@ function MoveTopic2()
 			'board' => $board,
 			'lock_mode' => 1,
 			'mark_as_read' => true,
+			'topic_prefix' => 0,
+			'topic_layout' => 0,
 		);
 		$posterOptions = array(
 			'id' => $user_info['id'],

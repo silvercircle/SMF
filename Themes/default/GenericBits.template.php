@@ -222,4 +222,35 @@ function template_topicbit(&$topic)
 	echo '
 		</tr>';
 }
+/**
+ * @param $member
+ * @return void
+ *
+ * create a compact "userbit" with 3 lines of text alongside the avatar
+ */
+function template_userbit_compact(&$member)
+{
+	global $scripturl, $settings;
+
+	echo '
+	  <span class="small_avatar floatleft">';
+		if(!empty($member['avatar']['image'])) {
+			echo '
+		<a href="', $scripturl, '?action=profile;u=', $member['id'], '">
+		  <img class="fourtyeight" src="', $member['avatar']['href'], '" alt="avatar" />
+		</a>';
+		}
+		else {
+			echo '
+		<a href="', $scripturl, '?action=profile;u=', $member['id'], '">
+		  <img class="fourtyeight" src="',$settings['images_url'],'/unknown.png" alt="avatar" />
+		</a>';
+		}
+	echo '
+	  </span>
+	  <div style="padding-left:10px;">
+	  <strong><h3>', $member['link'],'</h3></strong>
+	  </div>
+	  <div class="clear"></div>';
+}
 ?>
