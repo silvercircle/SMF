@@ -94,37 +94,11 @@ function template_main()
 	if (!empty($context['members'])) {
 		echo '<div><ol class="tiles" id="membertiles">';
 		foreach ($context['members'] as $member) {
-			$loc = array();
 			echo '
-				<li>
-				<div class="blue_container" style="margin:2px;overflow:hidden;">
-				<div class="floatleft" style="width:67px;">';
-				if(!empty($member['avatar']['image']))
-					echo $member['avatar']['image'];
-				else
-					echo '<img class="avatar" src="',$settings['images_url'], '/unknown.png" alt="avatar" />';
-				
+				<li class="blue_container">';
+				template_userbit_compact($member);
 				echo '
-					</div>
-					<span style="font-size:15px;"><strong>',$member['link'],'</strong></span><br>
-					<span class="smalltext">';
-				if(!empty($member['gender']['name']))
-					$loc[0] = $member['gender']['image'].$member['gender']['name'];
-			
-				if(isset($member['birth_date']) && !empty($member['birth_date'])) {
-					$l = idate('Y', time()) - intval($member['birth_date']);
-					if($l < 100)
-					$loc[1] = $l;
-				}
-			
-				if(!empty($member['location']))
-					$loc[2] = 'from '.$member['location'];
-			
-				if(!empty($loc)) 
-					echo implode(', ', $loc), '<br />';
-				
-				echo '</span>
-				</div></li>';
+				</li>';
 		}
 		echo '</ol><br class="clear" /></div>
 			';

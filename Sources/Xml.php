@@ -80,13 +80,11 @@ function ListMessageIcons()
 	$context['sub_template'] = 'message_icons';
 }
 
-function AjaxErrorMsg($msg)
+function AjaxErrorMsg($msg, $xml)
 {
 	global $context;
 	
-	$xmlreq = (isset($_REQUEST['action']) && $_REQUEST['action'] == 'xmlhttp') ? true : false;
-
-	if($xmlreq) {
+	if($xml) {
 		$context['ajax_error_message'] = $msg;
 		$context['error_container_id'] = 'ajax_error_container';
 		$context['sub_template'] = 'ajax_error';

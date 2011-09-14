@@ -464,7 +464,7 @@ function MessageIndex()
 						'name' => $row['first_display_name'],
 						'id' => $row['first_id_member'],
 						'href' => !empty($row['first_id_member']) ? $scripturl . '?action=profile;u=' . $row['first_id_member'] : '',
-						'link' => !empty($row['first_id_member']) ? '<a href="' . $scripturl . '?action=profile;u=' . $row['first_id_member'] . '" title="' . $txt['profile_of'] . ' ' . $row['first_display_name'] . '">' . $row['first_display_name'] . '</a><span class="mcard" data-id="'.$row['first_id_member'].'">&nbsp;&nbsp;</span>' : $row['first_display_name'],
+						'link' => !empty($row['first_id_member']) ? '<a href="' . $scripturl . '?action=profile;u=' . $row['first_id_member'] . '" title="' . $txt['profile_of'] . ' ' . $row['first_display_name'] . '">' . $row['first_display_name'] . '</a><span onclick="getMcard('.$row['first_id_member'].', $(this));return(false);" class="mcard">&nbsp;&nbsp;</span>' : $row['first_display_name'],
 					),
 					'time' => timeformat($row['first_poster_time']),
 					'timestamp' => forum_time(true, $row['first_poster_time']),
@@ -482,7 +482,7 @@ function MessageIndex()
 						'name' => $row['last_display_name'],
 						'id' => $row['last_id_member'],
 						'href' => !empty($row['last_id_member']) ? $scripturl . '?action=profile;u=' . $row['last_id_member'] : '',
-						'link' => !empty($row['last_id_member']) ? '<a href="' . $scripturl . '?action=profile;u=' . $row['last_id_member'] . '">' . $row['last_display_name'] . '</a><span class="mcard" data-id="'.$row['last_id_member'].'">&nbsp;&nbsp;</span>' : $row['last_display_name']
+						'link' => !empty($row['last_id_member']) ? '<a href="' . $scripturl . '?action=profile;u=' . $row['last_id_member'] . '">' . $row['last_display_name'] . '</a><span onclick="getMcard('.$row['last_id_member'].', $(this));return(false);" class="mcard">&nbsp;&nbsp;</span>' : $row['last_display_name']
 					),
 					'time' => timeformat($row['last_poster_time']),
 					'timestamp' => forum_time(true, $row['last_poster_time']),

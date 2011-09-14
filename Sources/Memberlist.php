@@ -53,7 +53,7 @@ function Memberlist()
 	isAllowedTo('view_mlist');
 
 	loadTemplate('Memberlist');
-
+	loadTemplate('GenericBits');
 	$context['listing_by'] = !empty($_GET['sa']) ? $_GET['sa'] : 'all';
 
 	MLSearch();

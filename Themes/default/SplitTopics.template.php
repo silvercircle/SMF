@@ -19,14 +19,13 @@ function template_ask()
 		<form action="', $scripturl, '?action=splittopics;sa=execute;topic=', $context['current_topic'], '.0" method="post" accept-charset="', $context['character_set'], '">
 			<input type="hidden" name="at" value="', $context['message']['id'], '" />
 			<div class="cat_bar">
-				<h3 class="catbg">', $txt['split'], '</h3>
+				<h3>', $txt['split'], '</h3>
 			</div>
-			<div class="windowbg">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container">
 				<div class="content">
 					<p class="split_topics">
 						<strong><label for="subname">', $txt['subject_new_topic'], '</label>:</strong>
-						<input type="text" name="subname" id="subname" value="', $context['message']['subject'], '" size="25" class="input_text" />
+						<input type="text" name="subname" id="subname" value="', $context['message']['subject'], '" size="60" class="input_text" />
 					</p>
 					<ul class="reset split_topics">
 						<li>
@@ -43,7 +42,6 @@ function template_ask()
 						<input type="submit" value="', $txt['split'], '" class="button_submit" />
 					</div>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 			<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 		</form>
@@ -57,10 +55,9 @@ function template_main()
 	echo '
 	<div id="split_topics">
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['split'], '</h3>
+			<h3>', $txt['split'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content">
 				<p>', $txt['split_successful'], '</p>
 				<ul class="reset">
@@ -75,7 +72,6 @@ function template_main()
 					</li>
 				</ul>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 	</div>';
 }
@@ -284,13 +280,13 @@ function template_merge()
 	echo '
 		<div id="merge_topics">
 			<div class="cat_bar">
-				<h3 class="catbg">', $txt['merge'], '</h3>
+				<h3>', $txt['merge'], '</h3>
 			</div>
-			<div class="information">
+			<div class="information yellow_container">
 				', $txt['merge_desc'], '
 			</div>
-			<div class="windowbg">
-				<span class="topslice"><span></span></span>
+			<br>
+			<div class="blue_container">
 				<div class="content">
 					<dl class="settings merge_topic">
 						<dt>
@@ -339,16 +335,14 @@ function template_merge()
 		echo '
 					</dl>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div><br />
 			<div class="cat_bar">
-				<h3 class="catbg">', $txt['target_topic'], '</h3>
+				<h3>', $txt['target_topic'], '</h3>
 			</div>
 			<div class="pagesection">
 				<strong>', $txt['pages'], ':</strong> ', $context['page_index'], '
 			</div>
-			<div class="windowbg2">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container">
 				<div class="content">
 					<ul class="reset merge_topics">';
 
@@ -356,15 +350,15 @@ function template_merge()
 
 		foreach ($context['topics'] as $topic)
 			echo '
-						<li>
+						<li class="clear smallpadding">
 							<a href="', $scripturl, '?action=mergetopics;sa=options;board=', $context['current_board'], '.0;from=', $context['origin_topic'], ';to=', $topic['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $merge_button, '</a>&nbsp;
 							<a href="', $scripturl, '?topic=', $topic['id'], '.0" target="_blank" class="new_win">', $topic['subject'], '</a> ', $txt['started_by'], ' ', $topic['poster']['link'], '
-						</li>';
+						</li>
+						';
 
 		echo '
 					</ul>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 			<div class="pagesection">
 				<strong>', $txt['pages'], ':</strong> ', $context['page_index'], '

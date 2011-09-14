@@ -230,27 +230,44 @@ function template_topicbit(&$topic)
  */
 function template_userbit_compact(&$member)
 {
-	global $scripturl, $settings;
+	global $scripturl, $settings, $txt;
+	$loc = array();
 
 	echo '
-	  <span class="small_avatar floatleft">';
-		if(!empty($member['avatar']['image'])) {
-			echo '
-		<a href="', $scripturl, '?action=profile;u=', $member['id'], '">
-		  <img class="fourtyeight" src="', $member['avatar']['href'], '" alt="avatar" />
-		</a>';
-		}
-		else {
-			echo '
-		<a href="', $scripturl, '?action=profile;u=', $member['id'], '">
-		  <img class="fourtyeight" src="',$settings['images_url'],'/unknown.png" alt="avatar" />
-		</a>';
-		}
+	<div class="userbit_compact">
+	<div class="floatleft">
+	<span class="small_avatar">';
+	if(!empty($member['avatar']['image'])) {
+		echo '
+	<img class="fourtyeight" src="', $member['avatar']['href'], '" alt="avatar" />';
+	}
+	else {
+		echo '
+	<img class="fourtyeight" src="',$settings['images_url'],'/unknown.png" alt="avatar" />';
+	}
 	echo '
-	  </span>
-	  <div style="padding-left:10px;">
-	  <strong><h3>', $member['link'],'</h3></strong>
-	  </div>
-	  <div class="clear"></div>';
+	</span>
+	</div>
+	<div style="margin-left:62px;">
+	<h2>', $member['link'],'</h2>
+	',$member['group'], '<br>';
+
+	if(!empty($member['gender']['name']))
+		$loc[0] = $member['gender']['image'].$member['gender']['name'];
+
+	if(isset($member['birth_date']) && !empty($member['birth_date'])) {
+		$l = idate('Y', time()) - intval($member['birth_date']);
+		if($l < 100)
+			$loc[1] = $l;
+	}
+	if(!empty($member['location']))
+		$loc[2] = 'from '.$member['location'];
+	if(!empty($loc))
+		echo implode(', ', $loc);
+
+	  echo '
+	<br>',$member['posts'], ' ', $txt['posts'], ' ', $txt['and'], ' ', $member['liked'], ' ',$txt['likes'],'
+	</div>
+	</div>';
 }
 ?>

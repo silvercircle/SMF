@@ -1796,6 +1796,16 @@ p#whoisviewing
 	margin: 10px 10px 5px 5px !important;
 	padding:2px 2px 5px 2px !important;
 }
+div.userbit_compact {
+	font-size:11px;
+	color:#888;
+	line-height:150%;
+}
+div.userbit_compact h2 {
+	display:inline;
+	font-size:12px;
+	font-weight:bold;
+}
 .postarea, .moderatorbar
 {
 	margin: 0 0 5px 205px;

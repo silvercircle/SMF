@@ -1332,13 +1332,6 @@ jQuery(document).ready(function() {
 		share_popup($(this).attr('href'), 700, 400);
 		return(false);
 	});
-	// initiate a ajax request to open a member card
-	$('.mcard').click(function() {
-		var uid = $(this).attr('data-id');
-		if(uid > 0)
-			sendRequest(smf_scripturl, 'action=xmlhttp;sa=mcard;u=' + parseInt(uid), $(this));
-		return(false);
-	});
 	$('.givelike').click(function() {
 		var mid = parseInt($(this).attr('data-id'));
 		if(mid > 0) {
@@ -1403,6 +1396,14 @@ jQuery(document).ready(function() {
 /*
  * all "onclick" handlers
  */
+
+function getMcard(uid, el)
+{
+	// initiate a ajax request to open a member card
+	if(uid > 0)
+		sendRequest(smf_scripturl, 'action=xmlhttp;sa=mcard;u=' + parseInt(uid), el);
+	return(false);
+}
 
 function getLikes(mid, el)
 {
@@ -1638,7 +1639,7 @@ function response(ele, responseText)
 			return;
 		}
 		if(ele.attr('class') == 'likedpost') {
-			openResult(responseText, 600);
+			openResult(responseText, 450);
 			$('div#mcard_inner abbr.timeago').timeago();
 			return;
 		}

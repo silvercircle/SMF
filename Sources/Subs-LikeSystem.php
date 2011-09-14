@@ -40,7 +40,7 @@ function GiveLike($mid)
 		$update_mode = false;
 		
 		if($user_info['is_guest'])
-			AjaxErrorMsg($txt['no_like_for_guests']);
+			AjaxErrorMsg($txt['no_like_for_guests'], $is_xmlreq);
 
 		/* check for dupes */
 		$request = smf_db_query( '
@@ -72,7 +72,7 @@ function GiveLike($mid)
 				redirectexit();
 		}
 		if($c > 0 && !$remove_it)		// duplicate like (but not when removing it)
-			AjaxErrorMsg($txt['like_verify_error']);
+			AjaxErrorMsg($txt['like_verify_error'], $is_xmlreq);
 			
 		/*
 		 * you cannot like your own post - the front end handles this with a seperate check and
@@ -90,10 +90,10 @@ function GiveLike($mid)
 		$topic_title = $m[3];
 		
 		if($like_receiver == $uid)
-			AjaxErrorMsg($txt['cannot_like_own']);
+			AjaxErrorMsg($txt['cannot_like_own'], $is_xmlreq);
 		
 		if(!allowedTo('like_give', $m[1]))			// no permission to give likes in this board
-			AjaxErrorMsg($txt['like_no_permission']);
+			AjaxErrorMsg($txt['like_no_permission'], $is_xmlreq);
 
 		if($remove_it && $c > 0) {
 			if($like_owner == $uid) {
@@ -138,7 +138,7 @@ function GiveLike($mid)
 					'topic_id' => $id_topic, 'id_message' => $mid, 'topic_title' => $topic_title), $id_board);
 			}
 			else
-				AjaxErrorMsg($txt['like_cannot_like']);
+				AjaxErrorMsg($txt['like_cannot_like'], $is_xmlreq);
 				
 		}
 		$total = LikesUpdate($mid);
@@ -224,7 +224,7 @@ function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_l
 					$results[0] = $txt['you_liker'];
 					continue;
 				}
-				$results[$n++] = '<a rel="nofollow" class="mcard" data-id="'.$liker_components[0].'" href="'.$scripturl.'?action=profile;u='.$liker_components[0].'">'.$liker_components[1].'</a>';
+				$results[$n++] = '<a rel="nofollow" onclick="getMcard('.$liker_components[0].', $(this));return(false);" class="mcard" href="'.$scripturl.'?action=profile;u='.$liker_components[0].'">'.$liker_components[1].'</a>';
 			}
 		}
 	}

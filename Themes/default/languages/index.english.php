@@ -785,4 +785,5 @@ $txt['who_summary'] = 'A total of %d guest(s) and %d registered user(s) were onl
 $txt['who_showby'] = 'Show online users sorted by: ';
 $txt['who_lastact'] = 'Last activity';
 $txt['a_page'] = 'A page';
+$txt['and'] = 'and';
 ?>
