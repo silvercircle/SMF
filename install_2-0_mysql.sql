@@ -1432,9 +1432,14 @@ CREATE TABLE {$db_prefix}log_activities (
 	params varchar(600) NOT NULL default '',
 	is_private tinyint(2) NOT NULL default '0',
 	id_board smallint(5) NOT NULL default '0',
+	id_topic int(10) UNSIGNED NOT NULL default '0',
+	id_content int(10) UNSIGNED NOT NULL default '0',
 	KEY (id_member),
 	KEY (id_type),
-	KEY (updated)
+	KEY (updated),
+	KEY (id_topic),
+	KEY (id_board),
+	KEY (id_content)
 ) Engine=MyISAM;
 
 #

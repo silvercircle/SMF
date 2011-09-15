@@ -1,40 +1,16 @@
 <?php
 /**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.0
+ * @version %%@productversion@%%
  */
-
-/*	This template is, perhaps, the most important template in the theme. It
-	contains the main template layer that displays the header and footer of
-	the forum, namely with main_above and main_below. It also contains the
-	menu sub template, which appropriately displays the menu; the init sub
-	template, which is there to set the theme up; (init can be missing.) and
-	the linktree sub template, which sorts out the link tree.
-
-	The init sub template should load any data and set any hardcoded options.
-
-	The main_above sub template is what is shown above the main content, and
-	should contain anything that should be shown up there.
-
-	The main_below sub template, conversely, is shown after the main content.
-	It should probably contain the copyright statement and some other things.
-
-	The linktree sub template should display the link tree, using the data
-	in the $context['linktree'] variable.
-
-	The menu sub template should display all the relevant buttons the user
-	wants and or needs.
-
-	For more information on the templating system, please see the site at:
-	http://www.simplemachines.org/
-*/
-
 // Initialize the template... mainly little settings.
 function template_init()
 {
@@ -49,7 +25,7 @@ function template_init()
 	/* The version this template/theme is for.
 		This should probably be the version of SMF it was created for. */
 	$settings['theme_version'] = '2.0';
-	$context['jsver'] = '?v=1460';
+	$context['jsver'] = '?v=1462';
 }
 
 // The main sub template above the content.
@@ -292,26 +268,26 @@ function template_body_below()
 
 	if(isset($context['need_synhlt']))  // include syntax highlighter js when needed. 
 		echo '
-		var t3 = document.createElement(\'SCRIPT\');
-		t3.type = "text/javascript";
-		t3.async = true;
-		t3.src = "',$settings['theme_url'],'/scripts/shlt.js?ver=1.1.0";
-		anchor.parentNode.insertBefore(t3, anchor);';
+	var t3 = document.createElement(\'SCRIPT\');
+	t3.type = "text/javascript";
+	t3.async = true;
+	t3.src = "',$settings['theme_url'],'/scripts/shlt.js?ver=1.1.0";
+	anchor.parentNode.insertBefore(t3, anchor);';
 
 	
 	if(isset($modSettings['embed_GA']) && $modSettings['embed_GA'] && ($context['user']['is_guest'] || (empty($options['disable_analytics']) ? 1 : !$options['disable_analytics'])))	{
 		echo '
-   		var _gaq = _gaq || [];
-   		_gaq.push([\'_setAccount\', \'',$modSettings['GA_tracker_id'], '\']);
-		_gaq.push([\'_setDomainName\', \'',$modSettings['GA_domain_name'],'\']);
-   		_gaq.push([\'_trackPageview\']);
+	var _gaq = _gaq || [];
+	_gaq.push([\'_setAccount\', \'',$modSettings['GA_tracker_id'], '\']);
+	_gaq.push([\'_setDomainName\', \'',$modSettings['GA_domain_name'],'\']);
+   	_gaq.push([\'_trackPageview\']);
 	
-		var ga = document.createElement(\'script\');
-		var sa = document.getElementsByTagName(\'script\')[0];
-		ga.async = true;
-		ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\';
-		sa.parentNode.insertBefore(ga, sa);
-		';
+	var ga = document.createElement(\'script\');
+	var sa = document.getElementsByTagName(\'script\')[0];
+	ga.async = true;
+	ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\';
+	sa.parentNode.insertBefore(ga, sa);
+	';
 	}
 	echo $txt['jquery_timeago_loc'],'
 	// ]]>
@@ -325,35 +301,33 @@ function template_body_below()
 		
 	$time_now = forum_time(false);
 	$tz = date_default_timezone_get();
-	echo '<div class="smalltext righttext floatright">',$loadtime,'<br />Forum time: ',strftime($modSettings['time_format'], $time_now) . ' '. $tz,'</div>';
-	
-	
 	echo '
-		<div class="copyright">', my_theme_copyright(), '</div>
-		<div><a id="button_xhtml" href="http://validator.w3.org/check?uri=referer" target="_blank" class="new_win" title="Valid HTML"><span>HTML</span></a> | 
-		', !empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']) ? '<a id="button_rss" href="' . $scripturl . '?action=.xml;type=rss" class="new_win"><span>' . $txt['rss'] . '</span></a> | ' : '', '
-		<a id="button_wap2" href="', $scripturl , '?wap2" class="new_win"><span>', $txt['wap2'], '</span></a>
-		</div>';
-
+	<div class="smalltext righttext floatright">',$loadtime,'<br>Forum time: ',strftime($modSettings['time_format'], $time_now) . ' '. $tz,'</div>';
+	echo '
+	<div class="copyright">', my_theme_copyright(), '</div>
+	<div><a id="button_xhtml" href="http://validator.w3.org/check?uri=referer" target="_blank" class="new_win" title="Valid HTML"><span>HTML</span></a> |
+	', !empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']) ? '<a id="button_rss" href="' . $scripturl . '?action=.xml;type=rss" class="new_win"><span>' . $txt['rss'] . '</span></a> | ' : '', '
+	<a id="button_wap2" href="', $scripturl , '?wap2" class="new_win"><span>', $txt['wap2'], '</span></a>
+	</div>';
 	echo '
 	</div>
 	</footer>';
 	if(1) { // piwik, todo: make configurable in admin area!
 		echo '
-		<script type="text/javascript">
- 		var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.miranda.or.at/" : "http://piwik.miranda.or.at/");
- 		document.write(unescape("%3Cscript src=\'" + pkBaseURL + "piwik.js\' type=\'text/javascript\'%3E%3C/script%3E"));
- 		</script>
- 		<script type="text/javascript">
- 			try {
- 				var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
- 				piwikTracker.trackPageView();
- 				piwikTracker.enableLinkTracking();
- 			} catch( err ) {}
- 		</script>
- 		<noscript>
- 		  <div style="width:0px;height:0px;"><img src="http://piwik.miranda.or.at/piwik.php?idsite=1" style="border:0" alt="" /></div>
- 		</noscript>';
+	<script type="text/javascript">
+	var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.miranda.or.at/" : "http://piwik.miranda.or.at/");
+	document.write(unescape("%3Cscript src=\'" + pkBaseURL + "piwik.js\' type=\'text/javascript\'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+		try {
+			var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+			piwikTracker.trackPageView();
+			piwikTracker.enableLinkTracking();
+		} catch( err ) {}
+	</script>
+	<noscript>
+	  <div style="width:0px;height:0px;"><img src="http://piwik.miranda.or.at/piwik.php?idsite=1" style="border:0" alt="" /></div>
+	</noscript>';
 	}
 }
 

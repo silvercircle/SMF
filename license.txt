@@ -1,3 +1,8 @@
+%%@productname@%%
+copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+
+This software is a derived product, based on:
+
 Copyright © 2011 Simple Machines.  All rights reserved.
 
 Developed by: Simple Machines Forum Project

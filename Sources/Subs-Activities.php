@@ -1,13 +1,15 @@
 <?php
 /**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines http://www.simplemachines.org
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.0
+ * @version %%@productversion@%%
  */
 
 if (!defined('SMF'))
@@ -21,7 +23,7 @@ define('ACT_LIKED', 1);			// a user's post was liked by another member (for noti
 // values of $data are matched on their key names
 // Example: _vsprintf(%member_name$s did something in %id_topic$s, array('member_name' => 'foo', 'id_topic' => 1202)
 // Output: foo did something in 1202
-function _vsprintf( $format, array $data)
+function _vsprintf($format, &$data)
 {
 	preg_match_all( '/ (?<!%) % ( (?: [[:alpha:]_-][[:alnum:]_-]* | ([-+])? [0-9]+ (?(2) (?:\.[0-9]+)? | \.[0-9]+ ) ) ) \$ [-+]? \'? .? -? [0-9]* (\.[0-9]+)? \w/x', $format, $match, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
 	$offset = 0;
@@ -39,12 +41,14 @@ function _vsprintf( $format, array $data)
 function stream_add_activity($id_member, $atype, $params, $id_board)
 {
 	global $smcFunc;
-	
+
+	$topic = isset($params['topic_id']) ? $params['topic_id'] : 0;
+	$content = isset($params['id_content']) ? $params['id_content'] : 0;
 	smf_db_query( '
-		INSERT INTO {db_prefix}log_activities (id_member, id_type, updated, params, is_private, id_board) 
-			VALUES({int:id_member}, {int:id_type}, {int:updated}, {string:params}, {int:private}, {int:board})',
+		INSERT INTO {db_prefix}log_activities (id_member, id_type, updated, params, is_private, id_board, id_topic, id_content)
+			VALUES({int:id_member}, {int:id_type}, {int:updated}, {string:params}, {int:private}, {int:board}, {int:topic}, {int:content})',
 			array('id_member' => (int)$id_member, 'id_type' => (int)$atype, 'updated' => time(),
-			'params' => serialize($params), 'private' => 0, 'board' => (int)$id_board));
+			'params' => serialize($params), 'private' => 0, 'board' => (int)$id_board, 'topic' => $topic, 'content' => $content));
 			
 	//$out = _vsprintf($txt['actfmt_like_given'], $params);
 	//echo preg_replace('/@SCRIPTURL@/', $scripturl, $out);
@@ -64,17 +68,17 @@ function actfmt_like_out(&$params)
 // in $row and will format it, using the formatter callback function
 function stream_format_activity(&$row)
 {
-	global $scripturl;
+	global $scripturl, $txt;
 	
 	$params = unserialize($row['params']);
 	
 	$callback = $row['formatter'];
 	if(function_exists($callback)) {
-		$out = $callback($params);
+		$out = call_user_func_array($callback, array(&$params));
 		$row['formatted_result'] = preg_replace('/@SCRIPTURL@/', $scripturl, $out);
 	}
 	else
-		$row['formatted_result'] = 'unknown activity stream type';
+		$row['formatted_result'] = $txt['unknown activity stream type'];
 }
 
 // format a activity row
@@ -82,8 +86,6 @@ function stream_format_test()
 {
 	loadLanguage('Activities');
 	
-	global $smcFunc, $txt, $scripturl;
-
 	$result = smf_db_query('
 		SELECT a.*, t.formatter FROM {db_prefix}log_activities AS a 
 		LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)');
@@ -92,7 +94,6 @@ function stream_format_test()
 		stream_format_activity($row);
 		echo $row['formatted_result'];
 	}
-		
 	mysql_free_result($result);
 }
 ?>

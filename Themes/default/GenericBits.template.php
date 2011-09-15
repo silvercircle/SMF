@@ -1,5 +1,16 @@
 <?php
-// output a board row (used in BoardIndex, MessageIndex for child boards)
+/**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
+ * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
+ *
+ * @version %%@productversion@%%
+ */
 // todo: use this for subscribed boards as well
 function template_boardbit(&$board)
 {
@@ -230,7 +241,7 @@ function template_topicbit(&$topic)
  */
 function template_userbit_compact(&$member)
 {
-	global $scripturl, $settings, $txt;
+	global $settings, $txt;
 	$loc = array();
 
 	echo '
@@ -248,12 +259,12 @@ function template_userbit_compact(&$member)
 	echo '
 	</span>
 	</div>
-	<div style="margin-left:62px;">
+	<div class="userbit_compact_textpart">
 	<h2>', $member['link'],'</h2>
 	',$member['group'], '<br>';
 
 	if(!empty($member['gender']['name']))
-		$loc[0] = $member['gender']['image'].$member['gender']['name'];
+		$loc[0] = $member['gender']['name'];
 
 	if(isset($member['birth_date']) && !empty($member['birth_date'])) {
 		$l = idate('Y', time()) - intval($member['birth_date']);
@@ -261,7 +272,7 @@ function template_userbit_compact(&$member)
 			$loc[1] = $l;
 	}
 	if(!empty($member['location']))
-		$loc[2] = 'from '.$member['location'];
+		$loc[2] = ' '.$txt['ufrom'].' '.$member['location'];
 	if(!empty($loc))
 		echo implode(', ', $loc);
 

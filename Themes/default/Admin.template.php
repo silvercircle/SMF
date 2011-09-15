@@ -1,15 +1,16 @@
 <?php
 /**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.0
+ * @version %%@productversion@%%
  */
-
 // This is the administration center home.
 function template_admin()
 {
@@ -38,7 +39,7 @@ function template_admin()
 	echo $txt['admin_center'], '
 			</h3>
 		</div>
-		<div class="red_container mediumtext mediumpadding">
+		<div class="yellow_container mediumtext mediumpadding">
 			<div id="welcome">
 				<strong>', $txt['hello_guest'], ' ', $context['user']['name'], '!</strong>
 				', sprintf($txt['admin_main_welcome'], $txt['admin_center'], $txt['help'], $txt['help']), '
@@ -53,6 +54,7 @@ function template_admin()
 		<div id="admin_main_section">';
 
 	// Display the "live news" from simplemachines.org.
+	/*
 	echo '
 			<div id="live_news" class="floatleft">
 				<div class="cat_bar">
@@ -66,7 +68,7 @@ function template_admin()
 					</div>
 				</div>
 			</div>';
-
+    */
 	// Show the user version information from their server.
 	echo '
 			<div id="supportVersionsTable" class="floatright">

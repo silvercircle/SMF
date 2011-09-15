@@ -1590,7 +1590,7 @@ function openResult(html, width)
 	el.css("top", (($(window).height() - el.outerHeight()) / 2) -200 + "px");
 	el.css("left", (($(window).width() - el.outerWidth()) / 2) + $(window).scrollLeft() + "px");
 	el.show();
-	el.css('z-index', '100');
+	el.css('z-index', '10000');
 };
 
 /*

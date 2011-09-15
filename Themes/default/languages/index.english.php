@@ -786,4 +786,5 @@ $txt['who_showby'] = 'Show online users sorted by: ';
 $txt['who_lastact'] = 'Last activity';
 $txt['a_page'] = 'A page';
 $txt['and'] = 'and';
+$txt['ufrom'] = 'from';
 ?>

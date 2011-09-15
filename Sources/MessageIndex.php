@@ -1,16 +1,16 @@
 <?php
-
 /**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines http://www.simplemachines.org
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.0
+ * @version %%@productversion@%%
  */
-
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
@@ -464,7 +464,7 @@ function MessageIndex()
 						'name' => $row['first_display_name'],
 						'id' => $row['first_id_member'],
 						'href' => !empty($row['first_id_member']) ? $scripturl . '?action=profile;u=' . $row['first_id_member'] : '',
-						'link' => !empty($row['first_id_member']) ? '<a href="' . $scripturl . '?action=profile;u=' . $row['first_id_member'] . '" title="' . $txt['profile_of'] . ' ' . $row['first_display_name'] . '">' . $row['first_display_name'] . '</a><span onclick="getMcard('.$row['first_id_member'].', $(this));return(false);" class="mcard">&nbsp;&nbsp;</span>' : $row['first_display_name'],
+						'link' => !empty($row['first_id_member']) ? '<a onclick="getMcard('.$row['first_id_member'].', $(this));return(false);" href="' . $scripturl . '?action=profile;u=' . $row['first_id_member'] . '" title="' . $txt['profile_of'] . ' ' . $row['first_display_name'] . '">' . $row['first_display_name'] : $row['first_display_name'],
 					),
 					'time' => timeformat($row['first_poster_time']),
 					'timestamp' => forum_time(true, $row['first_poster_time']),
@@ -482,7 +482,7 @@ function MessageIndex()
 						'name' => $row['last_display_name'],
 						'id' => $row['last_id_member'],
 						'href' => !empty($row['last_id_member']) ? $scripturl . '?action=profile;u=' . $row['last_id_member'] : '',
-						'link' => !empty($row['last_id_member']) ? '<a href="' . $scripturl . '?action=profile;u=' . $row['last_id_member'] . '">' . $row['last_display_name'] . '</a><span onclick="getMcard('.$row['last_id_member'].', $(this));return(false);" class="mcard">&nbsp;&nbsp;</span>' : $row['last_display_name']
+						'link' => !empty($row['last_id_member']) ? '<a onclick="getMcard('.$row['last_id_member'].', $(this));return(false);" href="' . $scripturl . '?action=profile;u=' . $row['last_id_member'] . '">' . $row['last_display_name'] . '</a>' : $row['last_display_name']
 					),
 					'time' => timeformat($row['last_poster_time']),
 					'timestamp' => forum_time(true, $row['last_poster_time']),

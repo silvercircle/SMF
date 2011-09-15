@@ -1,16 +1,16 @@
 <?php
-
 /**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines http://www.simplemachines.org
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.0
+ * @version %%@productversion@%%
  */
-
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
@@ -1858,6 +1858,13 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 					'id_msg' => $new_msg_id, 'id_old_msg' => $msg_to_update
 				)
 			);
+			smf_db_query('
+				UPDATE {db_prefix}likes SET id_msg = {int:id_msg_new} WHERE id_msg = {int:id_msg} AND ctype = 1',
+				array('id_msg' => $msg_to_update, 'id_msg_new' => $new_msg_id));
+
+			smf_db_query('
+				UPDATE {db_prefix}like_cache SET id_msg = {int:id_msg_new} WHERE id_msg = {int:id_msg} AND ctype = 1',
+				array('id_msg' => $msg_to_update, 'id_msg_new' => $new_msg_id));
 			$msg_to_update = $new_msg_id;
 		}
 		else

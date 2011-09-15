@@ -38,7 +38,8 @@ body
 }
 
 #wrap {
-	background: #f0f0f0 url(../images/bodybg-blue2.png) left -45px repeat-x;
+	/*background: #f0f0f0 url(../images/bodybg-blue2.png) left -45px repeat-x;*/
+	background-color:#D0D1E6;
 	margin:0 auto;
 }
 /* Help popups require a different styling of the body element. */
@@ -976,11 +977,9 @@ table.table_grid thead tr.catbg th
 	position: absolute;
 	top:24px;
 	background-color:#98AABA;
-	padding: 0 0 0 0;
+	padding: 0;
 	width:20em;
-	box-shadow: 1px 1px 4px 1px #888;
-	border:1px solid #888;
-	border-top:0;
+	box-shadow: 1px 3px 6px 1px #888;
 }
 
 .dropmenu li li
@@ -1006,9 +1005,10 @@ table.table_grid thead tr.catbg th
 /* the active button */
 .dropmenu li.active a.firstlevel, .dropmenu li.active span.m_downarrow
 {
-	color: white;
+	color: black;
+	text-shadow:white 1px 1px 6px;
 	font-weight: bold;
-	background-color:#333355;
+	background-color:#D0D1E6;
 	border-top:2px solid #FFC6C6;
 	margin-top:-2px;
 }
@@ -1164,8 +1164,10 @@ ul#navigation li
 	min-height: 200px;
 	margin:0 auto 20px auto;
 	border:1px solid #aaa;
-	border-top-left-radius:10px;
-	border-top-right-radius:10px;
+	/*
+	border-top-left-radius:5px;
+	border-top-right-radius:5px;
+	*/
 	box-shadow: 0 10px 10px 1px #aaa;
 	padding:10px;
 }
@@ -1805,6 +1807,9 @@ div.userbit_compact h2 {
 	display:inline;
 	font-size:12px;
 	font-weight:bold;
+}
+div.userbit_compact_textpart {
+	margin-left:62px;
 }
 .postarea, .moderatorbar
 {

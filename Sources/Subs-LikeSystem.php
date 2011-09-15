@@ -1,15 +1,16 @@
 <?php
 /**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines http://www.simplemachines.org
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.0
+ * @version %%@productversion@%%
  */
-
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
@@ -23,8 +24,8 @@ if (!defined('SMF'))
  * TODO: remove likes from the database when a user is deleted
  * TODO: make it work without AJAX and JavaScript
  * TODO: allow likes for more than just post content types (i.e. profile messages in a later stage)
- *       ctype is already available as content type in the database, but right now, 
- *       there is only one content type: a post (ctype == 1)
+ * ctype is already available as content type in the database, but right now,
+ * there is only one content type: a post (ctype == 1)
  */
  
 function GiveLike($mid)
@@ -135,7 +136,7 @@ function GiveLike($mid)
 				$update_mode = true;
 				
 				stream_add_activity($uid, ACT_LIKE, array('member_name' => $context['user']['name'], 'id_member' => $uid, 
-					'topic_id' => $id_topic, 'id_message' => $mid, 'topic_title' => $topic_title), $id_board);
+					'topic_id' => $id_topic, 'id_content' => $mid, 'topic_title' => $topic_title), $id_board);
 			}
 			else
 				AjaxErrorMsg($txt['like_cannot_like'], $is_xmlreq);
