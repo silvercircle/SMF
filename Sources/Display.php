@@ -1,16 +1,16 @@
 <?php
-
 /**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines http://www.simplemachines.org
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.0
+ * @version %%@productversion@%%
  */
-
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
@@ -1173,7 +1173,7 @@ function Display()
 	}
 
     if(!empty($modSettings['enableAdvancedHooks']))
-        call_integration_hook('integrate_display', array(&$context));
+        call_integration_hook('integrate_display', array());
 }
 
 // Callback for the message display.

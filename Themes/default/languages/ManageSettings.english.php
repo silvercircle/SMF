@@ -359,4 +359,7 @@ $txt['languages_download_complete'] = 'Installation Complete';
 $txt['languages_download_complete_desc'] = 'Language pack installed successfully. Please click <a href="%1$s">here</a> to return to the languages page';
 $txt['languages_delete_confirm'] = 'Are you sure you want to delete this language?';
 
+$txt['core_settings_item_as'] = 'Activity stream';
+$txt['core_settings_item_as_desc'] = 'Enabling this feature will add a social component that records forum activity. It will allow users to see what happened in boards, topics and elsewhere.';
+
 ?>

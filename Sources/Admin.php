@@ -11,7 +11,6 @@
  *
  * @version %%@productversion@%%
  */
-
 if (!defined('SMF'))
 	die('Hacking attempt...');
 

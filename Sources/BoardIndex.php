@@ -115,6 +115,9 @@ function BoardIndex()
 		$context['show_calendar'] = false;
 
 	$context['page_title'] = sprintf($txt['forum_index'], $context['forum_name']);
+
+	if(!empty($modSettings['enableAdvancedHooks']))
+		call_integration_hook('integrate_boardindex', array());
 }
 
 // Collapse or expand a category

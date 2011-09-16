@@ -1,16 +1,16 @@
 <?php
-
 /**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines http://www.simplemachines.org
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.0
+ * @version %%@productversion@%%
  */
-
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
@@ -989,6 +989,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 			mem.birthdate, mem.member_ip, mem.member_ip2, mem.posts, mem.last_login,
 			mem.karma_good, mem.id_post_group, mem.karma_bad, mem.lngfile, mem.id_group, mem.time_offset, mem.show_online,
 			mem.buddy_list, mg.online_color AS member_group_color, IFNULL(mg.group_name, {string:blank_string}) AS member_group,
+			mem.likes_received AS liked, mem.likes_given AS likesgiven,
 			pg.online_color AS post_group_color, IFNULL(pg.group_name, {string:blank_string}) AS post_group, mem.is_activated, mem.warning,
 			CASE WHEN mem.id_group = 0 OR mg.stars = {string:blank_string} THEN pg.stars ELSE mg.stars END AS stars' . (!empty($modSettings['titlesEnable']) ? ',
 			mem.usertitle' : '');

@@ -10,19 +10,23 @@
  * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
  * @version %%@productversion@%%
+ *
+ * implements activity stream helper functions. Activity stream is an (optional) core
+ * feature.
  */
-
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
 define('ACT_LIKE', 1);			// user liked a post (for activities)
 define('ACT_LIKED', 1);			// a user's post was liked by another member (for notification / alerts)
+define('ACT_NEWTOPIC', 2);
+define('ACT_REPLIED', 3);
 
-// vsprintf for associative arrays, originally found somewhere on the net, slightly modified to fit the purpose here
-// takes a formatting string like:  %member_name$s did something in %id_topic$s
-// values of $data are matched on their key names
-// Example: _vsprintf(%member_name$s did something in %id_topic$s, array('member_name' => 'foo', 'id_topic' => 1202)
-// Output: foo did something in 1202
+/**
+ * vsprintf for associative arrays
+ * takes a formatting string like:  %member_name$s did something in %id_topic$s
+ * values of $data are matched on their key names
+ */
 function _vsprintf($format, &$data)
 {
 	preg_match_all( '/ (?<!%) % ( (?: [[:alpha:]_-][[:alnum:]_-]* | ([-+])? [0-9]+ (?(2) (?:\.[0-9]+)? | \.[0-9]+ ) ) ) \$ [-+]? \'? .? -? [0-9]* (\.[0-9]+)? \w/x', $format, $match, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
@@ -38,24 +42,32 @@ function _vsprintf($format, &$data)
 	return vsprintf($format, $data);
 }
 
-function stream_add_activity($id_member, $atype, $params, $id_board)
+/**
+ * add a stream activity
+ *
+ * @param $id_member		the member id who owns this activity (= who did it)
+ * @param $atype			activity type (numeric)
+ * @param $params			array with parameters, mostly for formatting
+ * @param int $id_board		the board id where it happened (if applicable)
+ * @param int $id_topic		the topic id where it happened (if applicable)
+ * @param int $id_content	the content id. this can be a message id but could also be a user id
+ * 							(e.g. when a member posts on the profile of another member).
+ */
+function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $id_content = 0)
 {
-	global $smcFunc;
-
-	$topic = isset($params['topic_id']) ? $params['topic_id'] : 0;
-	$content = isset($params['id_content']) ? $params['id_content'] : 0;
 	smf_db_query( '
 		INSERT INTO {db_prefix}log_activities (id_member, id_type, updated, params, is_private, id_board, id_topic, id_content)
 			VALUES({int:id_member}, {int:id_type}, {int:updated}, {string:params}, {int:private}, {int:board}, {int:topic}, {int:content})',
 			array('id_member' => (int)$id_member, 'id_type' => (int)$atype, 'updated' => time(),
-			'params' => serialize($params), 'private' => 0, 'board' => (int)$id_board, 'topic' => $topic, 'content' => $content));
-			
-	//$out = _vsprintf($txt['actfmt_like_given'], $params);
-	//echo preg_replace('/@SCRIPTURL@/', $scripturl, $out);
-	//echo @serialize($params);
-	//stream_format_test();
+			'params' => serialize($params), 'private' => 0, 'board' => (int)$id_board, 'topic' => $id_topic, 'content' => $id_content));
 }
 
+/**
+ * @param $params
+ * @return string
+ *
+ * just for testing (will go away)
+ */
 function actfmt_like_out(&$params)
 {
 	global $txt;
@@ -64,14 +76,49 @@ function actfmt_like_out(&$params)
 	return $out;
 }
 
-// this expects a full row of log_activities.* and activity_types.formatter
-// in $row and will format it, using the formatter callback function
-function stream_format_activity(&$row)
+/**
+ * @param $params (array with relevant stream entry data)
+ *
+ * standard formatter for activity stream entries. Gets the formatting string from the language
+ * file. format must be: activity_format_x (where x = the numeric activity type)
+ *
+ * a matching activity_format_x_you must exist to format stream entries that belong
+ * to the current user (e.g. You liked a post in [topic]).
+ *
+ * there will be a hook to add stream activity types and matching corresponding
+ * formatter functions in the future.
+ *
+ */
+function actfmt_default(&$params)
+{
+	global $user_info, $txt;
+
+	$key = 'activity_format_' . trim($params['atype']);
+	if($params['id_member'] == $user_info['id'])
+		$key .= '_you';
+	return(_vsprintf($txt[$key], $params));
+}
+/**
+ * @param $row - a full row from log_activities and activity_type
+ * @return void
+ *
+ * this expects a full row of log_activities.* and activity_types.formatter
+ * in $row and will format it, using the formatter callback function
+ * we move things like id_topic, id_board et all into the array so the
+ * formatting function can use them.
+ */
+function aStreamFormatActivity(&$row)
 {
 	global $scripturl, $txt;
 	
 	$params = unserialize($row['params']);
-	
+	// populate the array with the remaining database columns
+	$params['id_board'] = $row['id_board'];
+	$params['id_topic'] = $row['id_topic'];
+	$params['id_content'] = $row['id_content'];
+	$params['id_member'] = $row['id_member'];
+	$params['atype'] = $row['id_type'];
+
 	$callback = $row['formatter'];
 	if(function_exists($callback)) {
 		$out = call_user_func_array($callback, array(&$params));
@@ -91,7 +138,7 @@ function stream_format_test()
 		LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)');
 		
 	while($row = mysql_fetch_assoc($result)) {
-		stream_format_activity($row);
+		aStreamFormatActivity($row);
 		echo $row['formatted_result'];
 	}
 	mysql_free_result($result);

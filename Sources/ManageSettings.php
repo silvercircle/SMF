@@ -1,16 +1,16 @@
 <?php
-
 /**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines http://www.simplemachines.org
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.0
+ * @version %%@productversion@%%
  */
-
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
@@ -409,6 +409,12 @@ function ModifyCoreFeatures($return_config = false)
 				require_once($sourcedir . \'/ManageSearchEngines.php\');
 				recacheSpiderNames();
 			'),
+		),
+		'as' => array(
+			'url' => 'action=admin;area=astream',
+			'settings' => array(
+				'astream_enabled' => 1,
+			),
 		),
 	);
 

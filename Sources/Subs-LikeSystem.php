@@ -116,7 +116,6 @@ function GiveLike($mid)
 			/* store the like */
 			global $memberContext;
 			
-			require_once($sourcedir . '/Subs-Activities.php');
 			if($like_receiver) {					// we do have a member, but still allow to like posts made by guests
 				loadMemberData($like_receiver);		// but banned users shall not receive likes
 				loadMemberContext($like_receiver);
@@ -134,9 +133,14 @@ function GiveLike($mid)
 					array('uid' => $uid));
 					
 				$update_mode = true;
-				
-				stream_add_activity($uid, ACT_LIKE, array('member_name' => $context['user']['name'], 'id_member' => $uid, 
-					'topic_id' => $id_topic, 'id_content' => $mid, 'topic_title' => $topic_title), $id_board);
+
+				if(in_array('as', $context['admin_features'])) {
+					require_once($sourcedir . '/Subs-Activities.php');
+					aStreamAdd($uid, ACT_LIKE,
+							array('member_name' => $context['user']['name'],
+							  'topic_title' => $topic_title),
+							$id_board, $id_topic, $mid);
+				}
 			}
 			else
 				AjaxErrorMsg($txt['like_cannot_like'], $is_xmlreq);

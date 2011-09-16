@@ -1933,6 +1933,12 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		
 		// What if we want to export new topics out to a CMS?
 		call_integration_hook('integrate_create_topic', array($msgOptions, $topicOptions, $posterOptions));
+		if(in_array('as', $context['admin_features'])) {
+			require_once($sourcedir . '/Subs-Activities.php');
+			aStreamAdd($posterOptions['id'], ACT_NEWTOPIC,
+				   		array('member_name' => $posterOptions['name'], 'topic_title' => $msgOptions['subject']),
+				   		$topicOptions['board'], $topicOptions['id'], $msgOptions['id']);
+		}
 	}
 	// The topic already exists, it only needs a little updating.
 	else
@@ -1963,6 +1969,13 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		// One new post has been added today.
 		if(false === $automerge_posts)
 			trackStats(array('posts' => '+'));
+
+		if(in_array('as', $context['admin_features'])) {
+			require_once($sourcedir . '/Subs-Activities.php');
+			aStreamAdd($posterOptions['id'], ACT_REPLIED,
+				   		array('member_name' => $posterOptions['name'], 'topic_title' => $msgOptions['subject']),
+				   		$topicOptions['board'], $topicOptions['id'], $msg_to_update);
+		}
 	}
 
 	// Creating is modifying...in a way.

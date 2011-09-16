@@ -1375,7 +1375,6 @@ function template_core_features()
 	{
 		echo '
 			<div class="blue_container" style="margin-bottom:5px;">
-				<span class="topslice"><span></span></span>
 				<div class="content features">
 					<img class="features_image png_fix" src="', $settings['default_images_url'], '/admin/feature_', $id, '.png" alt="', $feature['title'], '" />
 					<div class="features_switch" id="js_feature_', $id, '" style="display: none;">
@@ -1390,7 +1389,6 @@ function template_core_features()
 						<label for="plain_feature_', $id, '_radio_off"><input type="radio" name="feature_plain_', $id, '" id="plain_feature_', $id, '_radio_off" value="0"', !$feature['enabled'] ? ' checked="checked"' : '', ' class="input_radio" />', $txt['core_settings_disabled'], '</label>
 					</div>
 				</div>
-				<span class="botslice clear_right"><span></span></span>
 			</div>';
 
 		$alternate = !$alternate;
