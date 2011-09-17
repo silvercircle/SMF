@@ -93,7 +93,7 @@ function GiveLike($mid)
 		if($like_receiver == $uid)
 			AjaxErrorMsg($txt['cannot_like_own'], $is_xmlreq);
 		
-		if(!allowedTo('like_give', $m[1]))			// no permission to give likes in this board
+		if(!allowedTo('like_give', $id_board))			// no permission to give likes in this board
 			AjaxErrorMsg($txt['like_no_permission'], $is_xmlreq);
 
 		if($remove_it && $c > 0) {
@@ -139,7 +139,8 @@ function GiveLike($mid)
 					aStreamAdd($uid, ACT_LIKE,
 							array('member_name' => $context['user']['name'],
 							  'topic_title' => $topic_title),
-							$id_board, $id_topic, $mid);
+							$id_board, $id_topic, $mid, $like_receiver);
+					stream_format_test();
 				}
 			}
 			else
@@ -179,7 +180,6 @@ function LikesUpdate($mid)
 	$like_string = implode("|", $likers);
 	mysql_free_result($request);
 	
-	
 	$request = smf_db_query( '
 		SELECT COUNT(id_msg) as count
 			FROM {db_prefix}likes AS l WHERE l.id_msg = {int:id_msg} AND l.ctype = {int:ctype}', 
@@ -189,12 +189,10 @@ function LikesUpdate($mid)
 	mysql_free_result($request);
 	$totalcount = $count[0];
 
-	$time = time();	
-	
 	smf_db_query( '
 		INSERT INTO {db_prefix}like_cache(id_msg, likes_count, like_status, updated, ctype) VALUES({int:id_msg}, {int:total}, {string:like_status}, {int:updated}, {int:ctype}) 
 			ON DUPLICATE KEY UPDATE updated = {int:updated}, likes_count = {int:total}, like_status = {string:like_status}',
-			array('id_msg' => $mid, 'total' => $totalcount, 'updated' => $time, 'like_status' => $like_string, 'ctype' => $content_type));
+			array('id_msg' => $mid, 'total' => $totalcount, 'updated' => time(), 'like_status' => $like_string, 'ctype' => $content_type));
 
 	$result['count'] = $totalcount;
 	$result['status'] = $like_string;
@@ -268,12 +266,12 @@ function AddLikeBar(&$row, $can_give_like, $now)
 	global $user_info, $txt;
 	
 	$row['likers'] = '';
-	$have_liked_it = false;
+
+	$have_liked_it = (int)$row['liked'] > 0 ? true : false;
+
 	if($can_give_like) {
-		if((int)$row['liked'] > 0) {
+		if($have_liked_it)
 			$row['likelink'] = '<a rel="nofollow" class="givelike" data-fn="remove" href="#" data-id="'.$row['id_msg'].'">'.$txt['unlike_label'].'</a>';
-			$have_liked_it = true;
-		}
 		else if(!$user_info['is_guest']) {
 			if($row['id_member'] != $user_info['id'])
 				$row['likelink'] = '<a rel="nofollow" class="givelike" data-fn="give" href="#" data-id="'.$row['id_msg'].'">'.$txt['like_label'].'</a>';
@@ -281,12 +279,9 @@ function AddLikeBar(&$row, $can_give_like, $now)
 				$row['likelink'] = '&nbsp;';
 		}
 	}
-	else {
-		if((int)$row['liked'] > 0)
-			$have_liked_it = true;
+	else
 		$row['likelink'] = '';
-	}
-			
+
 	// todo: admin gets a "repair likes" link (just a debugging tool, will probably go away...)
 	if($user_info['is_admin'])
 		$row['likelink'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$row['id_msg'].'">Repair Likes</a>';

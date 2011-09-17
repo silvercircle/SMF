@@ -18,7 +18,6 @@ if (!defined('SMF'))
 	die('Hacking attempt...');
 
 define('ACT_LIKE', 1);			// user liked a post (for activities)
-define('ACT_LIKED', 1);			// a user's post was liked by another member (for notification / alerts)
 define('ACT_NEWTOPIC', 2);
 define('ACT_REPLIED', 3);
 
@@ -53,29 +52,24 @@ function _vsprintf($format, &$data)
  * @param int $id_content	the content id. this can be a message id but could also be a user id
  * 							(e.g. when a member posts on the profile of another member).
  */
-function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $id_content = 0)
+function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $id_content = 0, $id_owner = 0)
 {
 	smf_db_query( '
-		INSERT INTO {db_prefix}log_activities (id_member, id_type, updated, params, is_private, id_board, id_topic, id_content)
-			VALUES({int:id_member}, {int:id_type}, {int:updated}, {string:params}, {int:private}, {int:board}, {int:topic}, {int:content})',
+		INSERT INTO {db_prefix}log_activities (id_member, id_type, updated, params, is_private, id_board, id_topic, id_content, id_owner)
+			VALUES({int:id_member}, {int:id_type}, {int:updated}, {string:params}, {int:private}, {int:board}, {int:topic}, {int:content}, {int:id_owner})',
 			array('id_member' => (int)$id_member, 'id_type' => (int)$atype, 'updated' => time(),
-			'params' => serialize($params), 'private' => 0, 'board' => (int)$id_board, 'topic' => $id_topic, 'content' => $id_content));
+			'params' => serialize($params), 'private' => 0, 'board' => (int)$id_board, 'topic' => $id_topic, 'content' => $id_content, 'id_owner' => $id_owner));
 }
 
-/**
- * @param $params
- * @return string
- *
- * just for testing (will go away)
- */
-function actfmt_like_out(&$params)
+function aStreamGetMemberIntro(&$params)
 {
-	global $txt;
-	
-	$out = _vsprintf($txt['actfmt_like_given'], $params);
-	return $out;
-}
+	global $txt, $user_info;
 
+	if($params['id_member'] == $user_info['id'])
+		return($txt['activity_format_member_intro_you']);
+	else
+		return($txt['activity_format_member_intro_you']);
+}
 /**
  * @param $params (array with relevant stream entry data)
  *
@@ -93,10 +87,19 @@ function actfmt_default(&$params)
 {
 	global $user_info, $txt;
 
-	$key = 'activity_format_' . trim($params['atype']);
-	if($params['id_member'] == $user_info['id'])
-		$key .= '_you';
-	return(_vsprintf($txt[$key], $params));
+	$key = $params['f_neutral'];
+	if($params['id_member'] == $user_info['id'] && $params['id_owner'] && $params['id_owner'] == $user_info['id'])
+		$key = $params['f_you_your'];
+	else if($params['id_member'] == $user_info['id'])
+		$key = $params['f_you'];
+	else if($params['id_owner'] && $params['id_owner'] == $user_info['id'])
+	    $key = $params['f_your'];
+
+	$_k = 'acfmt_' . $params['id_desc'] . '_' . trim($key);
+	if(isset($txt[$_k]))
+		return(_vsprintf($txt[$_k], $params));
+	else
+		return(sprintf($txt['activity_missing_format'], $params['id_type']));
 }
 /**
  * @param $row - a full row from log_activities and activity_type
@@ -112,13 +115,9 @@ function aStreamFormatActivity(&$row)
 	global $scripturl, $txt;
 	
 	$params = unserialize($row['params']);
+	unset($row['params']);
 	// populate the array with the remaining database columns
-	$params['id_board'] = $row['id_board'];
-	$params['id_topic'] = $row['id_topic'];
-	$params['id_content'] = $row['id_content'];
-	$params['id_member'] = $row['id_member'];
-	$params['atype'] = $row['id_type'];
-
+	$params = array_merge($params, $row);
 	$callback = $row['formatter'];
 	if(function_exists($callback)) {
 		$out = call_user_func_array($callback, array(&$params));
@@ -134,8 +133,9 @@ function stream_format_test()
 	loadLanguage('Activities');
 	
 	$result = smf_db_query('
-		SELECT a.*, t.formatter FROM {db_prefix}log_activities AS a 
-		LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)');
+		SELECT a.*, t.*, b.name AS board_name FROM {db_prefix}log_activities AS a
+		LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
+		LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)');
 		
 	while($row = mysql_fetch_assoc($result)) {
 		aStreamFormatActivity($row);

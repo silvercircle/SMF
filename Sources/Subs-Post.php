@@ -1924,20 +1924,20 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		updateStats('topic', true);
 		updateStats('subject', $topicOptions['id'], $msgOptions['subject']);
 
-		// Added by Related Topics
+		// todo supporting code for related topics mod (should go away - the mod is not included)
 		if(isset($modSettings['have_related_topics']) && $modSettings['have_related_topics']) {
 			require_once($sourcedir . '/Subs-Related.php');
 			relatedUpdateTopics($topicOptions['id']);
 		}
-		// Related Topics END		
-		
+
 		// What if we want to export new topics out to a CMS?
 		call_integration_hook('integrate_create_topic', array($msgOptions, $topicOptions, $posterOptions));
+		// record the activity
 		if(in_array('as', $context['admin_features'])) {
 			require_once($sourcedir . '/Subs-Activities.php');
 			aStreamAdd($posterOptions['id'], ACT_NEWTOPIC,
 				   		array('member_name' => $posterOptions['name'], 'topic_title' => $msgOptions['subject']),
-				   		$topicOptions['board'], $topicOptions['id'], $msgOptions['id']);
+				   		$topicOptions['board'], $topicOptions['id'], $msgOptions['id'], $posterOptions['id']);
 		}
 	}
 	// The topic already exists, it only needs a little updating.
@@ -1974,7 +1974,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			require_once($sourcedir . '/Subs-Activities.php');
 			aStreamAdd($posterOptions['id'], ACT_REPLIED,
 				   		array('member_name' => $posterOptions['name'], 'topic_title' => $msgOptions['subject']),
-				   		$topicOptions['board'], $topicOptions['id'], $msg_to_update);
+				   		$topicOptions['board'], $topicOptions['id'], $msg_to_update, $topicOptions['id_member_started']);
 		}
 	}
 
@@ -2837,7 +2837,6 @@ function approvePosts($msgs, $approve = true)
 				'id_topic' => $id,
 			)
 		);
-
 	// ... finally the boards...
 	foreach ($board_changes as $id => $changes)
 		smf_db_query( '

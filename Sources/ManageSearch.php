@@ -644,8 +644,8 @@ function ManageSphinx()
 		//checkSession();
 		$context['checkresult']['message'] = 'All tests successfully passed. It appears your sphinx search daemon is running and can accept connections and search queries.';
 		$context['checkresult']['result'] = true;
-		if(@file_exists($sourcedir . '/sphinxapi.php')) {
-			include_once($sourcedir . '/sphinxapi.php');
+		if(@file_exists($sourcedir . '/contrib/sphinxapi.php')) {
+			include_once($sourcedir . '/contrib/sphinxapi.php');
 			$mySphinx = new SphinxClient();
 			$mySphinx->SetServer($modSettings['sphinx_searchd_server'], (int) $modSettings['sphinx_searchd_port']);
 			$mySphinx->SetLimits(0, (int) $modSettings['sphinx_max_results']);

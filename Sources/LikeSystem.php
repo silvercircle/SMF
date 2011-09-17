@@ -1,20 +1,18 @@
 <?php
 /**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines http://www.simplemachines.org
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
+ * @version %%@productversion@%%
  *
- * @version 2.0
- */
-
-/**
- * generate list of "likers" for the message id in ;m and output it
- * @return void
- *
- * todo: support pagination
+ * implements activity stream helper functions. Activity stream is an (optional) core
+ * feature.
  */
 function LikeDispatch()
 {
@@ -49,7 +47,7 @@ function LikeDispatch()
 			$request = smf_db_query('
 				SELECT l.* FROM {db_prefix}likes AS l WHERE l.id_msg = {int:idmsg} AND l.ctype = {int:ctype}
 					ORDER BY l.updated DESC LIMIT {int:start}, 20',
-				array('idmsg' => $mid, 'ctype' => $ctype, 'start' => $start));
+				array('idmsg' => $mid, 'ctype' => $ctype, 'start' => $start)); // todo: paging and limit per page should be configurable
 
 			while($row = mysql_fetch_assoc($request)) {
 				$row['dateline'] = timeformat($row['updated']);

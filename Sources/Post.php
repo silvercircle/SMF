@@ -2029,6 +2029,7 @@ function Post2()
 		'automerge' => !empty($topic) ? $topic_info['automerge'] : 0,
 		'id_first_msg' => !empty($topic) ? $topic_info['id_first_msg'] : 0,
 		'id_last_msg' => !empty($topic) ? $topic_info['id_last_msg'] : 0,
+		'id_member_started' => !empty($topic) ? $topic_info['id_member_started'] : 0,
 		'id_member_updated' => !empty($topic) ? $topic_info['id_member_updated'] : 0,
 		'is_approved' => !$modSettings['postmod_active'] || empty($topic) || !empty($board_info['cur_topic_approved']),
 		'num_replies' => !empty($topic) ? $topic_info['num_replies'] : 0,

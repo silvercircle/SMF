@@ -1417,9 +1417,13 @@ CREATE TABLE {$db_prefix}tags_log (
 # activity types
 #
 CREATE TABLE {$db_prefix}activity_types (
-	id_type tinyint(3) NOT NULL auto_increment,
+	id_type tinyint(3) NOT NULL default '0',
 	id_desc varchar(150) NOT NULL default '',
 	formatter varchar(50) NOT NULL default 'act_format_default',
+	f_neutral int(8) NOT NULL default '0',
+	f_you int(8) NOT NULL default '0',
+	f_your int(8) NOT NULL default '0',
+	f_you_your int(8) NOT NULL default '0',
 	PRIMARY KEY (id_type)
 ) Engine=MyISAM;
 #
@@ -1429,11 +1433,12 @@ CREATE TABLE {$db_prefix}log_activities (
 	id_member int(10) unsigned NOT NULL default '0',
 	updated   int(10) NOT NULL default '0',
 	id_type tinyint(3) NOT NULL default '0',
-	params varchar(600) NOT NULL default '',
+	params varchar(300) NOT NULL default '',
 	is_private tinyint(2) NOT NULL default '0',
 	id_board smallint(5) NOT NULL default '0',
 	id_topic int(10) UNSIGNED NOT NULL default '0',
 	id_content int(10) UNSIGNED NOT NULL default '0',
+	id_owner int(10) UNSIGNED NOT NULL default '0',
 	KEY (id_member),
 	KEY (id_type),
 	KEY (updated),
@@ -1919,10 +1924,11 @@ VALUES ('use_post_cache', '0'),
 	('embed_GA', '0');
 
 INSERT INTO {$db_prefix}activity_types
-	(id_desc, formatter)
+	(id_type, id_desc, formatter, f_neutral, f_you, f_your, f_you_your)
 VALUES 
-	('like_given', 'actfmt_like_out'),
-	('like_received', 'actfmt_like_in');
+	(1, 'like_given', 'actfmt_default', 1, 2, 3, 3),
+	(2, 'new_topic', 'actfmt_default', 4, 5, 5, 5),
+	(3, 'new_reply', 'actfmt_default', 6, 7, 8, 9);
 	
 # --------------------------------------------------------
 
