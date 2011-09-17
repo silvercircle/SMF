@@ -1928,7 +1928,8 @@ INSERT INTO {$db_prefix}activity_types
 VALUES 
 	(1, 'like_given', 'actfmt_default', 1, 2, 3, 3),
 	(2, 'new_topic', 'actfmt_default', 4, 5, 5, 5),
-	(3, 'new_reply', 'actfmt_default', 6, 7, 8, 9);
+	(3, 'new_reply', 'actfmt_default', 6, 7, 8, 9),
+	(4, 'signed_up', 'actfmt_default', 10, 10, 10, 10);
 	
 # --------------------------------------------------------
 

@@ -138,6 +138,20 @@ function template_body_above()
 {
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
+	$scope = 0;
+	$search_label = 'Search';
+	$astream_link = '<a data-board="all" onclick="getAStream($(this));return(false);" href="'.$scripturl . '?action=astream;sa=get;all">Recent activity</a>';
+
+	if (isset($context['current_topic']) && $context['current_topic']) {
+		$search_label = 'Search this topic';
+		$scope = 2;
+	}
+	// If we're on a certain board, limit it to this board ;).
+	elseif (isset($context['current_board'])) {
+		$search_label = 'Search this board';
+		$scope = 1;
+		$astream_link = '<a data-board="'.$context['current_board'].'" onclick="getAStream($(this));return(false);" href="'.$scripturl . '?action=astream;sa=get;b=' . $context['current_board']. '">Recent activity</a>';
+	}
 	echo '
 	<div id="ajaxbusy" style="display:none;"><img src="',$settings['images_url'],'/ajax-loader.gif" alt="loader" /></div>
 	<div id="mcard" style="display:none;"><div onclick="mcardClose();" id="mcard_close">X</div><div id="mcard_inner"></div></div>
@@ -147,6 +161,7 @@ function template_body_above()
 	<div id="upper_section" class="middletext">
 		<div class="notibar">
 			<div class="floatright" style="line-height:24px;font-size:10px;font-family:Verdana;">
+				',$astream_link,'
 				<span style="color:white;" id="curfontsize"></span>
 				<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
 				<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
@@ -194,20 +209,9 @@ function template_body_above()
 		echo '
 			<div onclick="sbToggle($(this));" id="sbtoggle">',$sidebar_vis ? '&nbsp;&gt;' : '&nbsp;&lt;','</div>';
 	// Show the navigation tree.
-	$scope = 0;
 	echo '<div style="position:relative;">
 		  <form onmouseout="return false;" onsubmit="submitSearchBox();" class="floatright" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
 			// Search within current topic?
-			$search_label = 'Search';
-			if (isset($context['current_topic']) && $context['current_topic']) {
-				$search_label = 'Search this topic';
-				$scope = 2;
-			}
-			// If we're on a certain board, limit it to this board ;).
-			elseif (isset($context['current_board'])) {
-				$search_label = 'Search this board';
-				$scope = 1;
-			}
 			echo '
 				<div id="adv_search" style="width:246px;padding:0;" class="smalltext">
 				<input style="width:215px;padding-left:26px;margin:0;" onclick="var s_event = arguments[0] || window.event;openAdvSearch(s_event);return(false);" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" name="search" value="',$search_label,'" class="searchfield" />

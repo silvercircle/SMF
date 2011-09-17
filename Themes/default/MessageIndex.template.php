@@ -28,7 +28,7 @@ function template_main()
 		
 		echo '<br>';
 		template_create_collapsible_container($collapser);
-		echo '<ol id="board_', $context['current_board'], '_children" class="category">';
+		echo '<ol id="board_', $context['current_board'], '_children" class="commonlist category">';
 
 		$alternate = 1;
 		foreach ($context['boards'] as $board)

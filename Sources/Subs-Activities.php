@@ -13,6 +13,8 @@
  *
  * implements activity stream helper functions. Activity stream is an (optional) core
  * feature.
+ *
+ * also implements notification helper functions
  */
 if (!defined('SMF'))
 	die('Hacking attempt...');
@@ -88,11 +90,11 @@ function actfmt_default(&$params)
 	global $user_info, $txt;
 
 	$key = $params['f_neutral'];
-	if($params['id_member'] == $user_info['id'] && $params['id_owner'] && $params['id_owner'] == $user_info['id'])
+	if((int)$params['id_member'] === (int)$user_info['id'] && $params['id_owner'] && (int)$params['id_owner'] === (int)$user_info['id'])
 		$key = $params['f_you_your'];
-	else if($params['id_member'] == $user_info['id'])
+	else if((int)$params['id_member'] === (int)$user_info['id'])
 		$key = $params['f_you'];
-	else if($params['id_owner'] && $params['id_owner'] == $user_info['id'])
+	else if($params['id_owner'] && (int)$params['id_owner'] === (int)$user_info['id'])
 	    $key = $params['f_your'];
 
 	$_k = 'acfmt_' . $params['id_desc'] . '_' . trim($key);
@@ -125,22 +127,5 @@ function aStreamFormatActivity(&$row)
 	}
 	else
 		$row['formatted_result'] = $txt['unknown activity stream type'];
-}
-
-// format a activity row
-function stream_format_test()
-{
-	loadLanguage('Activities');
-	
-	$result = smf_db_query('
-		SELECT a.*, t.*, b.name AS board_name FROM {db_prefix}log_activities AS a
-		LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
-		LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)');
-		
-	while($row = mysql_fetch_assoc($result)) {
-		aStreamFormatActivity($row);
-		echo $row['formatted_result'];
-	}
-	mysql_free_result($result);
 }
 ?>

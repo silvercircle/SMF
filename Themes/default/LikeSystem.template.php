@@ -20,7 +20,7 @@ function template_getlikes()
 		<h1>',$txt['members_who_liked'],'</h1>
 	</div>
 	<div class="mediummargin">
-	<ol class="category">';
+	<ol class="commonlist">';
 
 	foreach($context['likes'] as $like) {
 		echo '

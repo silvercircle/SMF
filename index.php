@@ -333,6 +333,7 @@ function smf_main()
 		'xmlhttp' => array('Xml.php', 'XMLhttpMain'),
 		'like' => array('LikeSystem.php', 'LikeDispatch'),
 		'tags' => array('Tagging.php', 'TagsMain'),
+		'astream' => array('Activities.php', 'aStreamDispatch'),
 	);
 
 	// Allow modifying $actionArray easily.

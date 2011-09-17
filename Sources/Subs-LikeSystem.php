@@ -140,7 +140,6 @@ function GiveLike($mid)
 							array('member_name' => $context['user']['name'],
 							  'topic_title' => $topic_title),
 							$id_board, $id_topic, $mid, $like_receiver);
-					stream_format_test();
 				}
 			}
 			else

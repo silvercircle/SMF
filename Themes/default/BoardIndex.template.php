@@ -112,7 +112,7 @@ function template_main()
 		//if (!$category['is_collapsed'])
 		//{
 		echo '
-			<ol class="category" ',$category['is_collapsed'] ? 'style="display:none;" ' : '', ' id="category_', $category['id'], '_boards">
+			<ol class="commonlist category" ',$category['is_collapsed'] ? 'style="display:none;" ' : '', ' id="category_', $category['id'], '_boards">
 			<li class="brow glass">
 				<div class="floatright centertext lastpost">',$txt['last_post'],'</div>
 				<div class="floatright centertext stats">',$txt['content_label'],'</div>

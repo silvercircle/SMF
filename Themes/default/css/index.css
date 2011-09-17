@@ -1238,6 +1238,9 @@ h3, h4
 	position:relative;
 	top:51px;
 }
+.notibar a {
+	color:white !important;
+}
 .notibar_intro {
 	background: transparent url(../images/clipsrc.png) 0 -32px no-repeat;
 	line-height:24px;
@@ -1416,19 +1419,23 @@ table.table_list tbody.content td.icon
 
 /* Styles for the board index.
 ------------------------------------------------- */
-ol.category {
+ol.commonlist {
 	list-style:none;
-	width:100%;
 	padding:0;
 	margin:0 0 10px 0;
 	box-shadow:1px 1px 5px 0 #ddd;
 }
-ol.category > li {
+ol.commonlist > li {
 	padding:4px 2px 4px 8px;
-	border-left: 1px solid #d5ecfa !important;
-	border-right: 1px solid #d5ecfa !important;
 	border-bottom: 1px solid #d5ecfa !important;
 	border-top:0;
+	line-height:130%;
+}
+ol.commonlist.category {
+	border-left: 1px solid #d5ecfa !important;
+	border-right: 1px solid #d5ecfa !important;
+}
+ol.commonlist.category li {
 	line-height:110%;
 }
 ol.category > li > div.lastpost {
@@ -3634,6 +3641,10 @@ span.small_avatar img, li.medium_avatar img {
 img.fourtyeight {
 	width:48px !important;
 	height:48px !important;
+}
+img.twentyfour {
+	width:24px !important;
+	height:24px !important;
 }
 li.medium_avatar img {
 	height:48px;

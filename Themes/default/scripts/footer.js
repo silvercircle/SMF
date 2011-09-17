@@ -1337,13 +1337,13 @@ jQuery(document).ready(function() {
 		if(mid > 0) {
 			switch($(this).attr('data-fn')) {
 				case 'give':
-					sendRequest(smf_scripturl, 'action=xmlhttp;sa=givelike;m=' + mid, $(this));
+					sendRequest('action=xmlhttp;sa=givelike;m=' + mid, $(this));
 				    break;
 				case 'remove':
-					sendRequest(smf_scripturl, 'action=xmlhttp;sa=givelike;remove=1;m=' + mid, $(this));
+					sendRequest('action=xmlhttp;sa=givelike;remove=1;m=' + mid, $(this));
 				    break;
 				case 'repair':
-					sendRequest(smf_scripturl, 'action=xmlhttp;sa=givelike;repair=1;m=' + mid, $(this));
+					sendRequest('action=xmlhttp;sa=givelike;repair=1;m=' + mid, $(this));
 					break;
 				default:
 					break;
@@ -1397,17 +1397,23 @@ jQuery(document).ready(function() {
  * all "onclick" handlers
  */
 
+function getAStream(el) {
+	if(el.attr('data-board') == 'all')
+		sendRequest('action=astream;sa=get;all', el);
+	else
+		sendRequest('action=astream;sa=get;b=' + el.attr('data-board'), el);
+}
 function getMcard(uid, el)
 {
 	// initiate a ajax request to open a member card
 	if(uid > 0)
-		sendRequest(smf_scripturl, 'action=xmlhttp;sa=mcard;u=' + parseInt(uid), el);
+		sendRequest('action=xmlhttp;sa=mcard;u=' + parseInt(uid), el);
 	return(false);
 }
 
 function getLikes(mid, el)
 {
-	sendRequest(smf_scripturl, 'action=like;sa=getlikes;m=' + mid, el);
+	sendRequest('action=like;sa=getlikes;m=' + mid, el);
 }
 
 function brdModeratorsPopup(el)
@@ -1449,7 +1455,7 @@ function whoPosted(el)
 {
 	var t = el.attr('data-topic');
 	if(t)
-		sendRequest(smf_scripturl, 'action=xmlhttp;sa=whoposted;t=' + t, el);
+		sendRequest('action=xmlhttp;sa=whoposted;t=' + t, el);
 	return(false);
 }
 
@@ -1459,7 +1465,7 @@ function catCollapse(el)
 	var img = el.find('img:first');
 	var is_collapsed = (img.hasClass('_expand')) ? 1 : 0;
 	var request = 'action=xmlhttp;sa=collapse;c=' + el.attr('data-id') + (is_collapsed ? ';expand=1' : ';collapse=1');
-	sendRequest(smf_scripturl, request, el);
+	sendRequest(request, el);
 	var id = '#category_' + el.attr('data-id') + '_boards';
 	var src = img.attr('src');
 	if(is_collapsed) {
@@ -1538,13 +1544,13 @@ function cContainer(el)
 
 function submitTagForm(ele)
 {
-	sendRequest(smf_scripturl, 'action=xmlhttp;sa=tags;submittag=1;topic=' + $('#tagtopic').val() + ';tag=' + encodeURIComponent($('#newtags').val()), ele);
+	sendRequest('action=xmlhttp;sa=tags;submittag=1;topic=' + $('#tagtopic').val() + ';tag=' + encodeURIComponent($('#newtags').val()), ele);
 	$('#tagform').remove();
 };
 // submit ajax request for a topic preview
 function firePreview(topic_id, ele)
 {
-	sendRequest(smf_scripturl, 'action=xmlhttp;sa=mpeek;t=' + topic_id, ele);
+	sendRequest('action=xmlhttp;sa=mpeek;t=' + topic_id, ele);
 };
 
 function timeOutError() 
@@ -1565,7 +1571,7 @@ function clearTimeOut()
 	}
 };
 
-function sendRequest(uri, request, anchor_element)
+function sendRequest(request, anchor_element)
 {
 	if(_is_locked)
 		return;
