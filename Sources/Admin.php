@@ -216,6 +216,7 @@ function AdminMain()
 					'function' => 'ModifySocialSettings',
 					'subsections' => array(
 						'general' => array($txt['socialsettings_general']),
+						'astream' => array($txt['socialsettings_astream']),
 					),
 				),
 			),

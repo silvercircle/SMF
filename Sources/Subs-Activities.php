@@ -22,6 +22,8 @@ if (!defined('SMF'))
 define('ACT_LIKE', 1);			// user liked a post (for activities)
 define('ACT_NEWTOPIC', 2);
 define('ACT_REPLIED', 3);
+define('ACT_MODIFY_POST', 4);
+define('ACT_NEWMEMBER', 5);
 
 /**
  * vsprintf for associative arrays
@@ -56,11 +58,41 @@ function _vsprintf($format, &$data)
  */
 function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $id_content = 0, $id_owner = 0)
 {
-	smf_db_query( '
-		INSERT INTO {db_prefix}log_activities (id_member, id_type, updated, params, is_private, id_board, id_topic, id_content, id_owner)
-			VALUES({int:id_member}, {int:id_type}, {int:updated}, {string:params}, {int:private}, {int:board}, {int:topic}, {int:content}, {int:id_owner})',
-			array('id_member' => (int)$id_member, 'id_type' => (int)$atype, 'updated' => time(),
-			'params' => serialize($params), 'private' => 0, 'board' => (int)$id_board, 'topic' => $id_topic, 'content' => $id_content, 'id_owner' => $id_owner));
+	$act_must_notify = array(ACT_LIKE, ACT_REPLIED);	// these activity types will trigger a notification for $id_owner
+
+	smf_db_insert('',
+		'{db_prefix}log_activities',
+		array(
+			'id_member' => 'int', 'id_type' => 'int', 'updated' => 'int',
+			'params' => 'string', 'is_private' => 'int', 'id_board' => 'int',
+			'id_topic' => 'int', 'id_content' => 'int', 'id_owner' => 'int'
+		),
+		array(
+			(int)$id_member, (int)$atype, time(),
+			serialize($params), 0, (int)$id_board, (int)$id_topic, (int)$id_content, (int)$id_owner
+		),
+	    array('id_act')
+	);
+	$id_act = smf_db_insert_id('{db_prefix}log_activities', 'id_act');
+
+	// if this activity triggers a notification for the id_owner, use the $id_act to link it
+	// to the notifications table and increment the members notification counter.
+	if($id_owner && in_array($atype, $act_must_notify)) {
+		smf_db_insert('',
+			'{db_prefix}log_notifications',
+			array(
+				'id_member' => 'int', 'id_act' => 'int'
+			),
+			array(
+				$id_owner, $id_act
+			),
+			array('id_act')
+		);
+
+		smf_db_query('
+			UPDATE {db_prefix}members SET notifications = notifications + 1 WHERE id_member = {int:id_member}',
+			array('id_member' => $id_owner));
+	}
 }
 
 function aStreamGetMemberIntro(&$params)
@@ -76,10 +108,7 @@ function aStreamGetMemberIntro(&$params)
  * @param $params (array with relevant stream entry data)
  *
  * standard formatter for activity stream entries. Gets the formatting string from the language
- * file. format must be: activity_format_x (where x = the numeric activity type)
- *
- * a matching activity_format_x_you must exist to format stream entries that belong
- * to the current user (e.g. You liked a post in [topic]).
+ * file. format must be: acfmt_activity_id_x (where x is the subtype)
  *
  * there will be a hook to add stream activity types and matching corresponding
  * formatter functions in the future.

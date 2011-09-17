@@ -19,6 +19,7 @@ $txt['admin_template_edit'] = 'Edit Your Forum Template';
 $txt['admin_modifications'] = 'Modification Settings';
 $txt['admin_social'] = 'Social features';
 $txt['socialsettings_general'] = 'General';
+$txt['socialsettings_astream'] = 'Activity stream';
 $txt['admin_security_moderation'] = 'Security and Moderation';
 $txt['admin_server_settings'] = 'Server Settings';
 $txt['admin_reserved_set'] = 'Set Reserved Names';

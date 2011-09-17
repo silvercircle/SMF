@@ -31,8 +31,9 @@ function template_activitybit(&$a)
 
 function template_showactivity()
 {
-	global $context;
+	global $context, $txt;
 
+	if($context['act_results']) {
 	echo '
 	<ol class="commonlist">
 	<li class="glass centertext">',$context['titletext'],'</li>';
@@ -40,21 +41,37 @@ function template_showactivity()
 		template_activitybit($activity);
 	echo '
 	</ol>';
+	}
+	else
+		echo '
+	<div class="red_container">
+	',$txt['act_no_results'],'
+	</div>';
 }
+
 function template_showactivity_xml()
 {
-	global $context;
+	global $context, $txt;
 
 	echo '
 	<div class="title_bar">
 		<h1>',$context['titletext'],'</h1>
 	</div>
-	<div class="smallpadding">
+	<div class="smallpadding">';
+	if($context['act_results']) {
+		echo '
 	<ol class="commonlist">';
 	foreach($context['activities'] as $activity)
 		template_activitybit($activity);
 	echo '
-	</ol>
+	</ol>';
+	}
+	else
+		echo '
+	<div class="red_container">
+	',$txt['act_no_results'],'
+	</div>';
+	echo '
 	</div>';
 }
 ?>

@@ -512,7 +512,7 @@ function Register2($verifiedOpenID = false)
 
 function Activate()
 {
-	global $context, $txt, $modSettings, $scripturl, $sourcedir, $smcFunc, $language;
+	global $context, $txt, $modSettings, $scripturl, $sourcedir, $language;
 
 	loadLanguage('Login');
 	loadTemplate('Login');
@@ -649,6 +649,14 @@ function Activate()
 		require_once($sourcedir . '/Subs-Post.php');
 
 		adminNotify('activation', $row['id_member'], $row['member_name']);
+
+		// add to the activity stream
+		if(in_array('as', $context['admin_features'])) {
+			require_once($sourcedir . '/Subs-Activities.php');
+			aStreamAdd($row['id_member'], ACT_NEWMEMBER,
+					array('member_name' => $row['member_name']),
+					0, 0, 0, 0);
+		}
 	}
 
 	$context += array(

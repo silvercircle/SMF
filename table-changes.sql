@@ -111,6 +111,7 @@ CREATE TABLE {$db_prefix}activity_types (
 # log activities
 #
 CREATE TABLE {$db_prefix}log_activities (
+	id_act int(10) unsigned NOT NULL auto_increment,
 	id_member int(10) unsigned NOT NULL default '0',
 	updated   int(10) NOT NULL default '0',
 	id_type tinyint(3) NOT NULL default '0',
@@ -120,6 +121,7 @@ CREATE TABLE {$db_prefix}log_activities (
 	id_topic int(10) UNSIGNED NOT NULL default '0',
 	id_content int(10) UNSIGNED NOT NULL default '0',
 	id_owner int(10) UNSIGNED NOT NULL default '0',
+	PRIMARY KEY (id_act),
 	KEY (id_member),
 	KEY (id_type),
 	KEY (updated),
@@ -128,6 +130,12 @@ CREATE TABLE {$db_prefix}log_activities (
 	KEY (id_content)
 ) Engine=MyISAM;
 
+CREATE TABLE {$db_prefix}log_notifications (
+	id_member int(10) unsigned NOT NULL default '0',
+	id_act int(10) unsigned NOT NULL default '0',
+	unread tinyint(2) NOT NULL default '1',
+	PRIMARY KEY(id_member, id_act)
+) Engine=MyISAM;
 
 #
 # drafts
@@ -157,6 +165,7 @@ ALTER TABLE {$db_prefix}messages ADD has_img tinyint(2) NOT NULL default '0';
 # like stats for members
 ALTER TABLE {$db_prefix}members ADD likes_received int(4) unsigned NOT NULL default '0';
 ALTER TABLE {$db_prefix}members ADD likes_given int(4) unsigned NOT NULL default '0';
+ALTER TABLE {$db_prefix}members ADD notifications mediumint(5) unsigned NOT NULL default '0';
 
 # allow topics = 0 - board acts as a pure sub-category and cannot have own topics
 ALTER TABLE {$db_prefix}boards ADD allow_topics tinyint(4) unsigned NOT NULL default '1';

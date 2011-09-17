@@ -1253,6 +1253,7 @@ CREATE TABLE {$db_prefix}members (
   pm_receive_from tinyint(4) unsigned NOT NULL default '1',
   likes_received int(4) unsigned NOT NULL default '0',
   likes_given int(4) unsigned NOT NULL default '0',
+  notifications mediumint(5) unsigned NOT NULL default '0',
   PRIMARY KEY (id_member),
   KEY member_name (member_name),
   KEY real_name (real_name),
@@ -1430,6 +1431,7 @@ CREATE TABLE {$db_prefix}activity_types (
 # log activities
 #
 CREATE TABLE {$db_prefix}log_activities (
+	id_act int(10) unsigned NOT NULL auto_increment,
 	id_member int(10) unsigned NOT NULL default '0',
 	updated   int(10) NOT NULL default '0',
 	id_type tinyint(3) NOT NULL default '0',
@@ -1439,12 +1441,20 @@ CREATE TABLE {$db_prefix}log_activities (
 	id_topic int(10) UNSIGNED NOT NULL default '0',
 	id_content int(10) UNSIGNED NOT NULL default '0',
 	id_owner int(10) UNSIGNED NOT NULL default '0',
+	PRIMARY KEY (id_act),
 	KEY (id_member),
 	KEY (id_type),
 	KEY (updated),
 	KEY (id_topic),
 	KEY (id_board),
 	KEY (id_content)
+) Engine=MyISAM;
+
+CREATE TABLE {$db_prefix}log_notifications (
+	id_member int(10) unsigned NOT NULL default '0',
+	id_act int(10) unsigned NOT NULL default '0',
+	unread tinyint(2) NOT NULL default '1',
+	PRIMARY KEY(id_member, id_act)
 ) Engine=MyISAM;
 
 #
@@ -1921,6 +1931,7 @@ VALUES ('use_post_cache', '0'),
 	('GA_domain_name', ''),
 	('tidy_child_display_columns', '4'),
 	('child_board_desc_shortened', '0'),
+	('astream_expire_days', '30'),
 	('embed_GA', '0');
 
 INSERT INTO {$db_prefix}activity_types
@@ -1929,7 +1940,8 @@ VALUES
 	(1, 'like_given', 'actfmt_default', 1, 2, 3, 3),
 	(2, 'new_topic', 'actfmt_default', 4, 5, 5, 5),
 	(3, 'new_reply', 'actfmt_default', 6, 7, 8, 9),
-	(4, 'signed_up', 'actfmt_default', 10, 10, 10, 10);
+	(4, 'modify_post', 'actfmt_default', 1, 2, 3, 4),
+	(5, 'signed_up', 'actfmt_default', 10, 10, 10, 10);
 	
 # --------------------------------------------------------
 

@@ -362,4 +362,5 @@ $txt['languages_delete_confirm'] = 'Are you sure you want to delete this languag
 $txt['core_settings_item_as'] = 'Activity stream';
 $txt['core_settings_item_as_desc'] = 'Enabling this feature will add a social component that records forum activity. It will allow users to see what happened in boards, topics and elsewhere.';
 
+$txt['astream_expire_days'] = 'Number of days to keep the activity stream';
 ?>

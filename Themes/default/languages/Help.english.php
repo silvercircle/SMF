@@ -409,6 +409,8 @@ $helptxt['GA_domain_name'] = 'The domain you have configured in Google Analytics
 $helptxt['countChildPosts'] = 'Checking this option will mean that posts and topics in a board\'s child board will count toward its totals on the index page.<br /><br />This will make things notably slower, but means that a parent with no posts in it won\'t show \'0\'.';
 $helptxt['fixLongWords'] = 'This option breaks words longer than a certain length into pieces so they don\'t disturb the forum\'s layout. (as much...)  This option should not be set to a value under 40. This option will not work with forums using UTF-8 and PHP less than 4.4.0. This ' . (empty($GLOBALS['context']['utf8']) || version_compare(PHP_VERSION, '4.4.0') != -1 ? 'WILL' : 'WILL NOT') . ' work on your server';
 $helptxt['allow_ignore_boards'] = 'Checking this option will allow users to select boards they wish to ignore.';
+$helptxt['astream_expire_days'] = 'Specify the number of days to keep activity stream entries in the database. Note that, for a busy forum, you may want to keep this at 30 days most, otherwise the activity stream table can grow very large.<br><br>The activity stream is purged on a weekly base, so the lowest value that makes sense here is seven days.';
+
 
 $helptxt['who_enabled'] = 'This option allows you to turn on or off the ability for users to see who is browsing the forum and what they are doing.';
 

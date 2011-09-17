@@ -198,24 +198,10 @@ function ModifyModSettings()
 	$subActions[$_REQUEST['sa']]();
 }
 
-function ModifySocialSettings($return_config)
+function ModifySocialSettingsGeneral()
 {
-	
-	global $context, $txt, $scripturl, $modSettings, $settings;
+	global $context, $scripturl, $txt;
 
-	$subActions = array(
-		'general' => 'ModifySocialSettings',
-	);
-	
-	loadGeneralSettingParameters($subActions, 'general');
-	$context[$context['admin_menu_name']]['tab_data'] = array(
-		'title' => $txt['admin_social'],
-		'description' => $txt['socialsettings_desc'],
-		'tabs' => array(
-			'general' => array(
-			),
-		),
-	);
 	$config_vars = array(
 			array('check', 'embed_GA'),
 			array('text', "GA_tracker_id"),
@@ -224,9 +210,6 @@ function ModifySocialSettings($return_config)
 			array('text', 'twitter_id'),
 	);
 	$context['page_title'] = $txt['admin_social'];
-	
-	if ($return_config)
-		return $config_vars;
 
 	// Saving?
 	if (isset($_GET['save']))
@@ -244,7 +227,7 @@ function ModifySocialSettings($return_config)
 		}
 		else
 			$_POST['embed_GA'] = 0;
-			
+
 		saveDBSettings($config_vars);
 		writeLog();
 		redirectexit('action=admin;area=socialsettings;sa=general');
@@ -254,6 +237,52 @@ function ModifySocialSettings($return_config)
 	$context['settings_title'] = $txt['admin_social'];
 
 	prepareDBSettingContext($config_vars);
+}
+
+function ModifyActivityStreamSettings()
+{
+	global $context, $scripturl, $txt;
+
+	$config_vars = array(
+		array('int', 'astream_expire_days'),
+	);
+
+	if (isset($_GET['save']))
+	{
+		checkSession();
+		saveDBSettings($config_vars);
+		writeLog();
+		redirectexit('action=admin;area=socialsettings;sa=astream');
+	}
+
+	$context['post_url'] = $scripturl . '?action=admin;area=socialsettings;save;sa=astream';
+	$context['settings_title'] = $txt['socialsettings_astream'];
+
+	prepareDBSettingContext($config_vars);
+}
+
+function ModifySocialSettings($return_config = false)
+{
+	
+	global $context, $txt, $scripturl, $modSettings, $settings;
+
+	$subActions = array(
+		'general' => 'ModifySocialSettingsGeneral',
+		'astream' => 'ModifyActivityStreamSettings'
+	);
+	
+	loadGeneralSettingParameters($subActions, 'general');
+	$context[$context['admin_menu_name']]['tab_data'] = array(
+		'title' => $txt['admin_social'],
+		'description' => $txt['socialsettings_desc'],
+		'tabs' => array(
+			'general' => array(),
+			'astream' => array(),
+		),
+	);
+
+	$_REQUEST['sa'] = isset($_REQUEST['sa']) && isset($subActions[$_REQUEST['sa']]) ? $_REQUEST['sa'] : '';
+	$subActions[$_REQUEST['sa']]();
 }
 // This is an overall control panel enabling/disabling lots of SMF's key feature components.
 function ModifyCoreFeatures($return_config = false)
@@ -411,7 +440,7 @@ function ModifyCoreFeatures($return_config = false)
 			'),
 		),
 		'as' => array(
-			'url' => 'action=admin;area=astream',
+			'url' => 'action=admin;area=socialsettings;sa=astream',
 			'settings' => array(
 				'astream_enabled' => 1,
 			),
