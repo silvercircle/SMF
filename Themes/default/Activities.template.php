@@ -5,7 +5,7 @@ function template_activitybit(&$a)
 
 	if(isset($a['member'])) {		// if we have member data available, show the avatar, otherwise just the activity
 		echo '
-	<li class="smalltext">
+	<li data-unread="1">
 	  <div class="floatleft" style="margin-right:10px;">
 	   <span class="small_avatar">';
 	if(!empty($a['member']['avatar']['image'])) {
@@ -60,7 +60,7 @@ function template_showactivity_xml()
 	<div class="smallpadding">';
 	if($context['act_results']) {
 		echo '
-	<ol class="commonlist">';
+	<ol class="commonlist notifications">';
 	foreach($context['activities'] as $activity)
 		template_activitybit($activity);
 	echo '
@@ -70,6 +70,31 @@ function template_showactivity_xml()
 		echo '
 	<div class="red_container">
 	',$txt['act_no_results'],'
+	</div>';
+	echo '
+	</div>';
+}
+
+function template_notifications_xml()
+{
+	global $context, $txt;
+
+	echo '
+	<div class="inlinePopup notifications" id="notificationsBody">
+	<h1 class="bigheader">',$txt['act_recent_notifications'],'</h1>
+	';
+	if($context['act_results']) {
+		echo '
+	<ol class="commonlist notifications">';
+	foreach($context['activities'] as $activity)
+		template_activitybit($activity);
+	echo '
+	</ol>';
+	}
+	else
+		echo '
+	<div class="red_container centertext">'
+	,$txt['act_no_unread_notifications'],'
 	</div>';
 	echo '
 	</div>';

@@ -1397,7 +1397,15 @@ jQuery(document).ready(function() {
  * all "onclick" handlers
  */
 
-function getAStream(el) {
+function getNotifications(el)
+{
+	if($('#notify_wrapper').length > 0)		// it already exists in the dom tree
+		return;
+	sendRequest('action=astream;sa=notifications', el);
+}
+
+function getAStream(el)
+{
 	if(el.attr('data-board') == 'all')
 		sendRequest('action=astream;sa=get;all', el);
 	else
@@ -1593,7 +1601,7 @@ function openResult(html, width)
 	var el = $('#mcard');
    	//el.css("position","absolute");		// for cbox
    	el.css("position",'fixed');
-	el.css("top", (($(window).height() - el.outerHeight()) / 2) -200 + "px");
+	el.css("top", (($(window).height() - el.outerHeight()) / 2) + $(window).scrollTop() + "px");
 	el.css("left", (($(window).width() - el.outerWidth()) / 2) + $(window).scrollLeft() + "px");
 	el.show();
 	el.css('z-index', '10000');
@@ -1607,6 +1615,16 @@ function response(ele, responseText)
 	try {
 		clearTimeOut();
 		setBusy(0);
+		if(ele.attr('id') == 'notification_anchor') {
+			var wrapper = $('<div id="notify_wrapper" class="popup_wrapper"></div>');
+			wrapper.html(responseText);
+			$('#notification_target').append(wrapper);
+			$('div.inlinePopup abbr.timeago').timeago();
+			$('#notificationsBody').live('mouseleave',function(event) {
+				$('#notify_wrapper').remove();
+			});
+			return;
+		}
 		if(ele.attr('class') == 'whoposted') {
 			openResult(responseText, 0);
 			return;

@@ -41,6 +41,7 @@ body
 	/*background: #f0f0f0 url(../images/bodybg-blue2.png) left -45px repeat-x;*/
 	background-color:#D0D1E6;
 	margin:0 auto;
+	overflow:hidden;
 }
 /* Help popups require a different styling of the body element. */
 body#help_popup
@@ -79,6 +80,24 @@ img.icon {vertical-align:middle;padding:0;margin:0 3px;border:0;height:16px;}
 }
 .searchfield {background:#fff url(../images/theme/sicon.png) 3px center no-repeat;font-weight:bold;font-size:12px;border:1px solid #A3B2D0;min-height:16px;}
 
+div.inlinePopup {
+	background:#f0f0f0;
+	box-shadow:1px 1px 5px 0 #ddd;
+	border: 2px solid #d5ecfa;
+	border-top: 4px solid #d5ecfa;
+	border-radius:0 0 4px 4px;
+	font-family: "Trebuchet MS", "Verdana", "Arial", helvetica, sans-serif;
+	font-size:10pt;
+}
+div.inlinePopup.notifications {
+	width:300px;
+}
+div.popup_wrapper {
+	z-index:9999;
+	position:absolute;
+	right:0;
+	top:20px;
+}
 input, select, textarea
 {
 	color: #000;
@@ -1164,10 +1183,6 @@ ul#navigation li
 	min-height: 200px;
 	margin:0 auto 20px auto;
 	border:1px solid #aaa;
-	/*
-	border-top-left-radius:5px;
-	border-top-right-radius:5px;
-	*/
 	box-shadow: 0 10px 10px 1px #aaa;
 	padding:10px;
 }
@@ -1226,7 +1241,6 @@ h3, h4
 	height:75px;
 	max-height:75px;
 	min-height:75px;
-	overflow:hidden;
 	font-size:12px;
 }
 .notibar {
@@ -1437,6 +1451,22 @@ ol.commonlist.category {
 }
 ol.commonlist.category li {
 	line-height:110%;
+}
+ol.commonlist.notifications {
+	box-shadow:none !important;
+	font-size:11px;
+	background-color:white;
+	margin-bottom:0;
+	padding: 0 5px 5px 5px;
+}
+ol.commonlist.notifications li a {
+	color: #cc6600 !important;
+}
+ol.commonlist.notifications li a:hover {
+	text-decoration:underline;
+}
+ol.commonlist.notifications li:hover {
+	background-color:#d5ecfa;
 }
 ol.category > li > div.lastpost {
 	float:right;
@@ -1916,15 +1946,6 @@ div.userbit_compact_textpart {
 	border-right:0;
 	border-bottom-left-radius:8px;
 }
-
-.modifybutton
-{
-	float: right;
-	margin: 0 10px 0 0;
-	text-align: right;
-	font: bold 0.85em arial, sans-serif;
-	color: #334466;	
-}
 ul.quickbuttons
 {
 	margin: 0 4px 0 20px;
@@ -1964,6 +1985,26 @@ ul.quickbuttons li a, .buttonlist ul li a, span.button
 	cursor:pointer;
 }
 span.button {margin: 0 0.3em;}
+
+span.button.notify {
+	font-size:10px !important;
+	line-height:20px !important;
+	border:0;
+	background:transparent;
+	padding:1px 7px;
+	text-shadow:black 2px 2px 4px;
+}
+span.button.notify:hover {
+	background-color:#ccc;
+}
+#alerts {
+	background-color: #ff9933;
+	font-weight:bold;
+	color:white;
+	padding:2px 5px 3px 5px;
+	border-radius:2px;
+	line-height:100%;
+}
 ul.quickbuttons li a:hover, span.button:hover, .buttonlist ul li a:hover {
 	background:white;
 }
@@ -2033,22 +2074,6 @@ img.smiley
 /* Styles for the quick reply area.
 ---------------------------------------------------- */
 
-#quickreplybox
-{
-	padding-bottom: 1px;
-}
-#quickReplyOptions .roundframe
-{
-	padding: 0 10%;
-}
-#quickReplyOptions form textarea
-{
-	height: 100px;
-	width: 635px;
-	max-width: 100%;
-	min-width: 100%;
-	margin: 0.25em 0 1em 0;
-}
 /* The jump to box */
 #display_jump_to
 {

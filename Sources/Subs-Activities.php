@@ -19,11 +19,20 @@
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
+// activity types, reflect the id_type in log_activities and activity_types tables
+// mods will most likely be able to register their own activity types and provide
+// formatting for them.
 define('ACT_LIKE', 1);			// user liked a post (for activities)
 define('ACT_NEWTOPIC', 2);
 define('ACT_REPLIED', 3);
 define('ACT_MODIFY_POST', 4);
 define('ACT_NEWMEMBER', 5);
+
+// privacy levels (note that admin can always see all activity, that's why they are admins)
+define('ACT_PLEVEL_PUBLIC', 0);		// everyone can see this
+define('ACT_PLEVEL_USER', 1);		// user can see his own activities, other users cannot see this
+define('ACT_PLEVEL_MOD', 2);		// forum moderators can see this
+define('ACT_PLEVEL_ADMIN', 3);		// only admins can see it
 
 /**
  * vsprintf for associative arrays
@@ -55,8 +64,11 @@ function _vsprintf($format, &$data)
  * @param int $id_topic		the topic id where it happened (if applicable)
  * @param int $id_content	the content id. this can be a message id but could also be a user id
  * 							(e.g. when a member posts on the profile of another member).
+ * @param int $priv_level   privacy level for is_private.
+ *
+ * @return unique id of the inserted activity type
  */
-function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $id_content = 0, $id_owner = 0)
+function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $id_content = 0, $id_owner = 0, $priv_level = 0, $dont_notify = false)
 {
 	$act_must_notify = array(ACT_LIKE, ACT_REPLIED);	// these activity types will trigger a notification for $id_owner
 
@@ -69,29 +81,42 @@ function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $
 		),
 		array(
 			(int)$id_member, (int)$atype, time(),
-			serialize($params), 0, (int)$id_board, (int)$id_topic, (int)$id_content, (int)$id_owner
+			serialize($params), $priv_level, (int)$id_board, (int)$id_topic, (int)$id_content, (int)$id_owner
 		),
 	    array('id_act')
 	);
 	$id_act = smf_db_insert_id('{db_prefix}log_activities', 'id_act');
 
 	// if this activity triggers a notification for the id_owner, use the $id_act to link it
-	// to the notifications table and increment the members notification counter.
-	if($id_owner && in_array($atype, $act_must_notify)) {
+	// to the notifications table.
+	if($id_owner && in_array($atype, $act_must_notify) && !$dont_notify)
+		aStreamAddNotification($id_owner, $id_act);
+	return($id_act);
+}
+
+/**
+ * @param $users    int member_id or array of member_ids
+ * @param $id_act   int id of the activity to send as notification
+ *
+ * this takes a list of member ids and an activity id and sends out notifications to
+ * all the users.
+ */
+function aStreamAddNotification(&$users, $id_act)
+{
+	$users = !is_array($users) ? array($users) : array_unique($users);
+
+	foreach($users as $user) {
 		smf_db_insert('',
 			'{db_prefix}log_notifications',
 			array(
 				'id_member' => 'int', 'id_act' => 'int'
 			),
 			array(
-				$id_owner, $id_act
+				$user, $id_act
 			),
 			array('id_act')
 		);
-
-		smf_db_query('
-			UPDATE {db_prefix}members SET notifications = notifications + 1 WHERE id_member = {int:id_member}',
-			array('id_member' => $id_owner));
+		updateMemberData($user, array('last_login' => time()));
 	}
 }
 

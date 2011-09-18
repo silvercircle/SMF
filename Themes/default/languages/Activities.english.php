@@ -5,6 +5,8 @@ $txt['act_recent_board'] = 'Recent activity for: %s';
 $txt['act_recent_global'] = 'Recent site activity';
 $txt['act_no_results'] = 'The activity stream for the current context is empty';
 $txt['act_no_results_title'] = 'No results';
+$txt['act_recent_notifications'] = 'Recent notifications';
+$txt['act_no_unread_notifications'] = 'You currently have no unread notifications';
 
 $txt['acfmt_like_given_1'] = '<a href="@SCRIPTURL@?action=profile;u=%id_member$s">%member_name$s</a> liked <a href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
 $txt['acfmt_like_given_2'] = 'You liked <a href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';

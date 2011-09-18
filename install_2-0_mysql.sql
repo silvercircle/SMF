@@ -1253,7 +1253,6 @@ CREATE TABLE {$db_prefix}members (
   pm_receive_from tinyint(4) unsigned NOT NULL default '1',
   likes_received int(4) unsigned NOT NULL default '0',
   likes_given int(4) unsigned NOT NULL default '0',
-  notifications mediumint(5) unsigned NOT NULL default '0',
   PRIMARY KEY (id_member),
   KEY member_name (member_name),
   KEY real_name (real_name),
@@ -1454,7 +1453,8 @@ CREATE TABLE {$db_prefix}log_notifications (
 	id_member int(10) unsigned NOT NULL default '0',
 	id_act int(10) unsigned NOT NULL default '0',
 	unread tinyint(2) NOT NULL default '1',
-	PRIMARY KEY(id_member, id_act)
+	PRIMARY KEY(id_member, id_act),
+	KEY (unread)
 ) Engine=MyISAM;
 
 #

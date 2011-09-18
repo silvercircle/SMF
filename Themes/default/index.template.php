@@ -11,7 +11,6 @@
  *
  * @version %%@productversion@%%
  */
-// Initialize the template... mainly little settings.
 function template_init()
 {
 	global $context, $settings, $options, $txt;
@@ -136,8 +135,9 @@ function template_html_above()
 
 function template_body_above()
 {
-	global $context, $settings, $options, $scripturl, $txt, $modSettings;
+	global $context, $settings, $scripturl, $txt, $user_info;
 
+	$alerts = $user_info['notify_count'] > 0 ? $user_info['notify_count'] : '';
 	$scope = 0;
 	$search_label = 'Search';
 	$astream_link = '<a data-board="all" onclick="getAStream($(this));return(false);" href="'.$scripturl . '?action=astream;sa=get;all">Recent activity</a>';
@@ -161,7 +161,11 @@ function template_body_above()
 	<div id="upper_section" class="middletext">
 		<div class="notibar">
 			<div class="floatright" style="line-height:24px;font-size:10px;font-family:Verdana;">
-				',$astream_link,'
+				<span class="button notify">',$astream_link,'</span>';
+	if(!$context['user']['is_guest'])
+		echo '
+				<span class="button notify"><a>Your notifications</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="notification_anchor" onclick="getNotifications($(this));return(false);" style="position:absolute;top:0;" class="m_downarrow">&nbsp;&nbsp;&nbsp;</span><span style="',($alerts > 0 ? '':'display:none;'),'position:absolute;top:-8px;" id="alerts">',$alerts,'</span></span><div id="notification_target" style="display:inline;position:relative;"></div>';
+	echo '
 				<span style="color:white;" id="curfontsize"></span>
 				<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
 				<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
@@ -169,22 +173,15 @@ function template_body_above()
 		</div>
 		<div class="notibar_intro"></div>
 		<div class="floatleft" style="color:#ddd;text-shadow:black 2px 2px 10px;font-size:35px;font-family:Comic Sans MS;padding:20px 30px;"><strong><em>SMF pLayGround</em></strong><br />
-		<div style="font-size:16px;height:26px;padding-top:20px;">...Test</div>
-	</div>';
+	</div><div class="clear"></div>';
 
 	echo '
 			<div class="news normaltext">';
 	// Show a random news item? (or you could pick one from news_lines...)
-	if (!empty($settings['enable_news']))
-		echo '
-				<h2>', $txt['news'], ': </h2>
-				<p>', $context['random_news_line'], '</p>';
-
 	echo '
 			</div>
-		</div><nav>';
-
-
+		</div>
+	   <nav>';
 	// Show the menu here, according to the menu sub template.
 	template_menu();
 

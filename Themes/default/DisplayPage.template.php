@@ -247,7 +247,7 @@ function template_main()
 		echo '
 			<a id="quickreply"></a>
 			<div class="clear"></div>
-			<div class="tborder" id="quickreplybox">';
+			<div style="overflow:hidden;" id="quickreplybox">';
 				template_create_collapsible_container($collapser);
 				echo '
 					<div>

@@ -264,7 +264,7 @@ function template_main()
 		echo '
 			<a id="quickreply"></a>
 			<div class="clear"></div>
-			<div class="tborder" id="quickreplybox">';
+			<div style="overflow:hidden;" id="quickreplybox">';
 				template_create_collapsible_container($collapser);
 				echo '
 					<div>
@@ -303,7 +303,7 @@ function template_main()
 					</div>';
 			echo '
 							<div class="quickReplyContent" style="margin-left:150px;">
-								<textarea style="width:100%;" rows="7" name="message" tabindex="', $context['tabindex']++, '"></textarea>
+								<textarea style="width:99%;" rows="7" name="message" tabindex="', $context['tabindex']++, '"></textarea>
 							</div>
 							<div class="righttext padding">
 								<input type="submit" name="post" value="', $txt['post'], '" onclick="return submitThisOnce(this);" accesskey="s" tabindex="', $context['tabindex']++, '" class="button_submit" />

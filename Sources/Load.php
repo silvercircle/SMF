@@ -349,9 +349,10 @@ function loadUserSettings()
 		if (empty($modSettings['cache_enable']) || $modSettings['cache_enable'] < 2 || ($user_settings = cache_get_data('user_settings-' . $id_member, 60)) == null)
 		{
 			$request = smf_db_query( '
-				SELECT mem.*, IFNULL(a.id_attach, 0) AS id_attach, a.filename, a.attachment_type
+				SELECT mem.*, IFNULL(a.id_attach, 0) AS id_attach, a.filename, a.attachment_type, count(n.id_member) AS notify_count
 				FROM {db_prefix}members AS mem
 					LEFT JOIN {db_prefix}attachments AS a ON (a.id_member = {int:id_member})
+					LEFT JOIN {db_prefix}log_notifications AS n ON (n.id_member = mem.id_member AND n.unread = 1)
 				WHERE mem.id_member = {int:id_member}
 				LIMIT 1',
 				array(
@@ -513,6 +514,7 @@ function loadUserSettings()
 		'warning' => isset($user_settings['warning']) ? $user_settings['warning'] : 0,
 		'likesgiven' => isset($user_settings['likes_given']) ? $user_settings['likes_given'] : 0,
 		'likesreceived' => isset($user_settings['likes_received']) ? $user_settings['likes_received'] : 0,
+		'notify_count' => isset($user_settings['notify_count']) ? $user_settings['notify_count'] : 0,
 		'permissions' => array(),
 	);
 	

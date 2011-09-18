@@ -134,7 +134,8 @@ CREATE TABLE {$db_prefix}log_notifications (
 	id_member int(10) unsigned NOT NULL default '0',
 	id_act int(10) unsigned NOT NULL default '0',
 	unread tinyint(2) NOT NULL default '1',
-	PRIMARY KEY(id_member, id_act)
+	PRIMARY KEY(id_member, id_act),
+	KEY (unread)
 ) Engine=MyISAM;
 
 #
@@ -165,7 +166,6 @@ ALTER TABLE {$db_prefix}messages ADD has_img tinyint(2) NOT NULL default '0';
 # like stats for members
 ALTER TABLE {$db_prefix}members ADD likes_received int(4) unsigned NOT NULL default '0';
 ALTER TABLE {$db_prefix}members ADD likes_given int(4) unsigned NOT NULL default '0';
-ALTER TABLE {$db_prefix}members ADD notifications mediumint(5) unsigned NOT NULL default '0';
 
 # allow topics = 0 - board acts as a pure sub-category and cannot have own topics
 ALTER TABLE {$db_prefix}boards ADD allow_topics tinyint(4) unsigned NOT NULL default '1';
