@@ -43,7 +43,7 @@ function template_postbit_normal(&$message, $ignoring)
 			', $message['subject'], '
 			</h5>',
 			$txt['by'], ' ', $message['member']['link'],'
-			<span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a href="', $message['href'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span onclick="sharePost($(this));"><a href="#!">Share</a></span>' : ''),'</span>
+			<span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['href'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span onclick="sharePost($(this));"><a href="#!">Share</a></span>' : ''),'</span>
 			<span class="smalltext">&nbsp;',$message['time'], '</span>
 			<div id="msg_', $message['id'], '_quick_mod"></div>';
 
@@ -252,13 +252,14 @@ function template_postbit_blog(&$message, $ignoring)
 	// Show information about the poster of this message.
 	echo '
 		<div>
-		  <div class="smalltext righttext">
+		  <div class="smalltext">
+		  <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['href'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span onclick="sharePost($(this));"><a href="#!">Share</a></span>' : ''),'</span>
 		  Posted by: ',$message['member']['link'],',&nbsp;
 		  <span class="smalltext">',$message['time'], '</span>						  
 		  </div>
 		  <span style="display:none;" id="subject_', $message['id'], '">
 		 ', $message['subject'], '
-		  </span>	  
+		  </span>
 		</div>
 		<div id="msg_', $message['id'], '_quick_mod"></div>';
 

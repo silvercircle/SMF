@@ -24,6 +24,23 @@ function template_main()
 	}
 
 	echo '
+		<div class="inlinePopup centertext dark" style="display:none;position:fixed;" id="interpostlink_helper">
+		<div class="cat_bar">
+		<h3>Quick post link</h3>
+		</div>
+		<div class="flat_container lefttext smalltext">
+		You can use this BBCode to create a quick link to this post. Such links are created from your<br>
+		forum URL and will stay valid in case your forum should move to a different URL at a later time.
+		<br>
+		Hit Ctrl+C to copy the BBCode to the clipboard.
+		<br><br>
+		<dl class="common left">
+		<dt><strong>BBCode:</strong></dt><dd><input size="80" type="text" id="interpostlink_helper_content" value="foo" /></dd>
+		<dt><strong>Full link:</dt><dd></strong> <input size="80" type="text" id="interpostlink_helper_content_full" value="foo" /></dd>
+		</dl>
+		</div>
+		<div class="centertext smalltext"><a onclick="$(\'#interpostlink_helper\').hide();" href="#!">Click to dismiss (or press ESC)</a></div>
+		</div>
 		<div id="share_bar" style="display:none;position:absolute;right:0;white-space:nowrap;width:auto;">
 		<div class="bmbar">
 		 <a role="button" rel="nofollow" class="share_button share_fb" data-href="http://www.facebook.com/sharer.php?u=%%uri%%">Share</a>
@@ -518,7 +535,27 @@ function template_main()
 	}		
 
 	echo '
-				// ]]></script>';
+		function getIntralink(e, mid) {
+			var tid = ',$context['current_topic'],';
+			var _sid = "#subject_" + mid;
+			var el = $("#interpostlink_helper");
+			var _content = "[ilink topic=" + tid + " post=" + mid + "]" + $(_sid).html().trim() + "[/ilink]";
+			$("#interpostlink_helper_content").val(_content);
+			$("#interpostlink_helper_content_full").val(e.attr("href"));
+			el.css("top", (($(window).height() - el.outerHeight()) / 2) - 200 + "px");
+			el.css("left", (($(window).width() - el.outerWidth()) / 2) + "px");
+			el.css("z-index", 9999);
+			el.show();
+			$("#interpostlink_helper_content").focus();
+			$("#interpostlink_helper_content").select();
+		}
+		$(document).keydown(function(e) {
+    	if(e.keyCode == 27 && $("#interpostlink_helper").css("display") != "none") {
+        	$("#interpostlink_helper").hide();
+    	}
+		});
+		// ]]></script>
+		';
 }
 
 ?>

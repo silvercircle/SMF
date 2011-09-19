@@ -1319,8 +1319,13 @@ jQuery(document).ready(function() {
 			jQuery(this).children('ul').hide();
 		}
 	});
-	$('.bbc_resize_1').click(function() {
-		var url = $(this).parent().children('img.bbc_img:first').attr('src');
+	$('img.resize_1').live('mouseenter', function(event) {
+		var resizer = $(this).prev();
+		resizer.css({'position':'absolute', 'width': $(this).width()});
+		resizer.show();
+	});
+	$('div.bbc_img_resizer').click(function() {
+		var url = $(this).next().attr('src');
 		$.prettyPhoto.open(url);
 		return(false);
 	});

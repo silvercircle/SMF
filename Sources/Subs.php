@@ -1289,7 +1289,8 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 					'height' => array('optional' => true, 'value' => 'height:$1px;', 'match' => '(\d+)'),
 					'resized' => array('optional' => true, 'value' => '_$1', 'match' => '(\d+)'),
 				),
-				'content' => '<div class="bbc_img_cnt"><div class="bbc_resize{resized}">Resized image, click to zoom</div><br><img style="{width}{height}" src="$1" alt="{alt}" class="bbc_img resized" /></div><div class="clear"></div>',
+				//'content' => '<div class="bbc_img_cnt"><div class="bbc_resize{resized}">Resized image, click to zoom</div><br><img style="{width}{height}" src="$1" alt="{alt}" class="bbc_img resized" /></div><div class="clear"></div>',
+				'content' => '<div class="bbc_img_resizer" style="display:none;">Resized image, click here to zoom</div><img style="{width}{height}" src="$1" alt="{alt}" class="bbc_img resize{resized}" />',
 				'validate' => create_function('&$tag, &$data, $disabled', '
 					$data = strtr($data, array(\'<br />\' => \'\'));
 					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
@@ -1366,6 +1367,15 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'trim' => 'inside',
 				'require_children' => array('li'),
 				'block_level' => true,
+			),
+			array(
+				'tag' => 'ilink',
+				'before' => '<a href="'.$scripturl.'?topic={topic};msg={post}#msg{post}">',
+				'after' => '</a>',
+				'parameters' => array(
+					'topic' => array('match' => '([^<>]{1,192}?)'),
+					'post' => array('match' => '([^<>]{1,192}?)'),
+				),
 			),
 			array(
 				'tag' => 'ltr',
