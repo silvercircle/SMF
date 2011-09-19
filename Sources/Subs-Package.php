@@ -1485,13 +1485,14 @@ function compareVersions($version1, $version2)
 		preg_match('~(\d+)(?:\.(\d+|))?(?:\.)?(\d+|)(?:(alpha|beta|rc)(\d+|)(?:\.)?(\d+|))?(?:(dev))?(\d+|)~', $clean, $parts);
 
 		// Build an array of parts.
+		// Build an array of parts.
 		$versions[$id] = array(
 			'major' => (int) $parts[1],
-			'minor' => (int) $parts[2],
-			'patch' => (int) $parts[3],
+			'minor' => !empty($parts[2]) ? (int) $parts[2] : 0,
+			'patch' => !empty($parts[3]) ? (int) $parts[3] : 0,
 			'type' => empty($parts[4]) ? 'stable' : $parts[4],
-			'type_major' => (int) $parts[5],
-			'type_minor' => (int) $parts[6],
+			'type_major' => !empty($parts[6]) ? (int) $parts[5] : 0,
+			'type_minor' => !empty($parts[6]) ? (int) $parts[6] : 0,
 			'dev' => !empty($parts[7]),
 		);
 	}

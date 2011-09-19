@@ -793,4 +793,5 @@ $txt['search_topic'] = 'Search this topic only';
 $txt['search_all_boards'] = 'Search all public boards';
 $txt['search_show_complete_messages'] = 'Show results as messages';
 $txt['search_by_member'] = 'Search posts by member';
+$txt['img_resizebar_msg'] = 'Resized image, click here to zoom';
 ?>
