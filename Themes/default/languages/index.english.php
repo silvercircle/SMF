@@ -787,4 +787,10 @@ $txt['who_lastact'] = 'Last activity';
 $txt['a_page'] = 'A page';
 $txt['and'] = 'and';
 $txt['ufrom'] = 'from';
+
+$txt['search_board'] = 'Search this board only';
+$txt['search_topic'] = 'Search this topic only';
+$txt['search_all_boards'] = 'Search all public boards';
+$txt['search_show_complete_messages'] = 'Show results as messages';
+$txt['search_by_member'] = 'Search posts by member';
 ?>

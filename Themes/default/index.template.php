@@ -21,10 +21,9 @@ function template_init()
 		if this is 'never' or isn't set at all, images from the default theme will not be used. */
 	$settings['use_default_images'] = 'never';
 
-	/* The version this template/theme is for.
-		This should probably be the version of SMF it was created for. */
+	/*This should probably be the version of SMF it was created for. */
 	$settings['theme_version'] = '2.0';
-	$context['jsver'] = '?v=1462';
+	$context['jsver'] = '?v=1465';
 }
 
 // The main sub template above the content.
@@ -139,16 +138,16 @@ function template_body_above()
 
 	$alerts = $user_info['notify_count'] > 0 ? $user_info['notify_count'] : '';
 	$scope = 0;
-	$search_label = 'Search';
+	$search_label = $txt['search_all_boards'];
 	$astream_link = '<a data-board="all" onclick="getAStream($(this));return(false);" href="'.$scripturl . '?action=astream;sa=get;all">Recent activity</a>';
 
 	if (isset($context['current_topic']) && $context['current_topic']) {
-		$search_label = 'Search this topic';
+		$search_label = $txt['search_topic'];
 		$scope = 2;
 	}
 	// If we're on a certain board, limit it to this board ;).
 	elseif (isset($context['current_board'])) {
-		$search_label = 'Search this board';
+		$search_label = $txt['search_board'];
 		$scope = 1;
 		$astream_link = '<a data-board="'.$context['current_board'].'" onclick="getAStream($(this));return(false);" href="'.$scripturl . '?action=astream;sa=get;b=' . $context['current_board']. '">Recent activity</a>';
 	}
@@ -159,29 +158,33 @@ function template_body_above()
 	<header>
 	<div id="header">
 	<div id="upper_section" class="middletext">
-		<div class="notibar">
-			<div class="floatright" style="line-height:24px;font-size:10px;font-family:Verdana;">
-				<span class="button notify">',$astream_link,'</span>';
-	if(!$context['user']['is_guest'])
-		echo '
-				<span class="button notify"><a>Your notifications</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="notification_anchor" onclick="getNotifications($(this));return(false);" style="position:absolute;top:0;" class="m_downarrow">&nbsp;&nbsp;&nbsp;</span><span style="',($alerts > 0 ? '':'display:none;'),'position:absolute;top:-8px;" id="alerts">',$alerts,'</span></span><div id="notification_target" style="display:inline;position:relative;"></div>';
-	echo '
-				<span style="color:white;" id="curfontsize"></span>
-				<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
-				<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
-			</div>
-		</div>
-		<div class="notibar_intro"></div>
-		<div class="floatleft" style="color:#ddd;text-shadow:black 2px 2px 10px;font-size:35px;font-family:Comic Sans MS;padding:20px 30px;"><strong><em>SMF pLayGround</em></strong><br />
-	</div><div class="clear"></div>';
+		<div class="floatleft" style="color:#ddd;text-shadow:black 2px 2px 10px;font-size:35px;font-family:Comic Sans MS;padding:20px 30px;"><strong><em>SMF pLayGround</em></strong><br /></div>
+	<div class="clear"></div>';
 
 	echo '
 			<div class="news normaltext">';
 	// Show a random news item? (or you could pick one from news_lines...)
 	echo '
 			</div>
+	</div>
+		<div class="notibar">
+			<div class="notibar right">
+			<div class="floatright">
+			<span id="curfontsize"></span>
+			<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
+			<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
+			</div>
+			<div class="floatright" style="position:relative;">
+			<span class="button notify">',$astream_link,'</span>';
+	if(!$context['user']['is_guest'])
+		echo '
+				<span id="notification_anchor" onclick="getNotifications($(this));return(false);" class="button notify"><a>Your notifications</a></span><span style="',($alerts > 0 ? '':'display:none;'),'position:relative;top:-14px;right:14px;" id="alerts">',$alerts,'</span><div id="notification_target" style="display:inline;position:relative;"></div>';
+			echo '
+			</div>
+			</div>
+			<div class="notibar_intro"></div>
 		</div>
-	   <nav>';
+	<nav>';
 	// Show the menu here, according to the menu sub template.
 	template_menu();
 
@@ -195,7 +198,7 @@ function template_body_above()
 	// The main content should go here.
 	echo '
 	<div id="content_section">
-		<div id="main_content_section">';
+	<div id="main_content_section">';
 
 	// Custom banners and shoutboxes should be placed here, before the linktree.
 
@@ -212,23 +215,23 @@ function template_body_above()
 			echo '
 				<div id="adv_search" style="width:246px;padding:0;" class="smalltext">
 				<input style="width:215px;padding-left:26px;margin:0;" onclick="var s_event = arguments[0] || window.event;openAdvSearch(s_event);return(false);" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" name="search" value="',$search_label,'" class="searchfield" />
-				&nbsp;&nbsp;&nbsp;Search posts by member<br />
+				<br><br>&nbsp;&nbsp;&nbsp;',$txt['search_by_member'],'<br>
 				<div style="text-align:center;margin-bottom:10px;"><input style="width:90%;" class="input_text" type="text" name="userspec" id="userspec" value="*" /></div>
-				<input type="checkbox" name="show_complete" id="show_complete" value="1" />Show results as messages<br />';
+				<input type="checkbox" name="show_complete" id="show_complete" value="1" />',$txt['search_show_complete_messages'],'<br />';
 				if($scope == 2) {
-					echo '<div style="padding-left:20px;"><input type="radio" name="type" id="i_topic" class="input_radio" checked="checked" />Search this topic<br />
-						<input type="radio" name="type" id="i_board" class="input_radio" />Search this board<br />
-						<input type="radio" name="type" id="i_site" class="input_radio" />Search everything
+					echo '<div style="padding-left:20px;"><input type="radio" name="type" id="i_topic" class="input_radio" checked="checked" />',$txt['search_topic'],'<br />
+						<input type="radio" name="type" id="i_board" class="input_radio" />',$txt['search_board'],'<br />
+						<input type="radio" name="type" id="i_site" class="input_radio" />',$txt['search_all_boards'],'
 						<input type="hidden" id="s_topic" name="topic" value="', $context['current_topic'], '" />
 						<input type="hidden" id="s_board" name="brd[', $context['current_board'], ']" value="', $context['current_board'], '" /></div>';
 				}
 				else if($scope == 1) {
-						echo '<div style="padding-left:20px;"><input name="type" type="radio" id="i_board" checked="checked" class="input_radio" />Search this board<br />
-						<input type="radio" name="type" id="i_site" class="input_radio" />Search everything
+						echo '<div style="padding-left:20px;"><input name="type" type="radio" id="i_board" checked="checked" class="input_radio" />',$txt['search_board'],'<br />
+						<input type="radio" name="type" id="i_site" class="input_radio" />',$txt['search_all_boards'],'
 						<input type="hidden" id="s_board" name="brd[', $context['current_board'], ']" value="', $context['current_board'], '" /></div>';
 				}
 				echo '<input style="width:100%;margin:10px 0;" type="submit" name="submit" value="', 'Search now', '" class="button_submit" />
-			 	  <div style="text-align:center;"><a href="',$scripturl,'?action=search" >Go advanced</a></div>';
+			 	  <div class="centertext"><a href="',$scripturl,'?action=search" >',$txt['search_advanced'],'</a></div>';
 				echo '</div>
 				<noscript>
 				<input style="margin:0;" type="submit" name="submit" value="', $txt['go'], '" class="button_submit" />

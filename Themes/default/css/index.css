@@ -1236,21 +1236,24 @@ h3, h4
 }
 #upper_section
 {
-	/*background-color:#576D82;*/
 	background: #576d82 url(../images/theme/sprite.png) 0 -839px repeat-x;
-	height:75px;
-	max-height:75px;
-	min-height:75px;
+	height:65px;
+	max-height:65px;
+	min-height:65px;
 	font-size:12px;
 }
 .notibar {
-	background: #98AABA;
+	background: #5C738A;
 	line-height:24px;
-	float:right;
 	height:24px;
+	line-height:24px;
+	font-size:10px;
+	font-family:Verdana;
+}
+.notibar.right {
+	float:right;
 	width:500px;
-	position:relative;
-	top:51px;
+	background:#98AABA;
 }
 .notibar a {
 	color:white !important;
@@ -1261,8 +1264,6 @@ h3, h4
 	float:right;
 	height:24px;
 	width:100px;
-	position:relative;
-	top:51px;
 }
 li.greeting
 {
@@ -1458,8 +1459,10 @@ ol.commonlist.notifications {
 	background-color:white;
 	margin-bottom:0;
 	padding: 0 5px 5px 5px;
+	max-height:50%;
+	overflow:auto;
 }
-ol.commonlist.notifications li a {
+ol.commonlist.notifications li a, div.inlinePopup a {
 	color: #cc6600 !important;
 }
 ol.commonlist.notifications li a:hover {
@@ -1993,6 +1996,7 @@ span.button.notify {
 	background:transparent;
 	padding:1px 7px;
 	text-shadow:black 2px 2px 4px;
+	display:inline;
 }
 span.button.notify:hover {
 	background-color:#ccc;
@@ -3646,6 +3650,8 @@ span.arrow {
 }
 .codeheader {
 	margin:10px 0 0 0;
+	padding: 2px 1em;
+	background-color:#ddd;
 }
 /* page links (navpages) */
 
@@ -3941,7 +3947,7 @@ a.fnote_ref {text-decoration: none;vertical-align: 5px;font-size:10px;}
 
 .syntaxhighlighter {
   width: 100% !important;
-  margin: 1em 0 1em 0 !important;
+  margin: 0 0 1em 0 !important;
   position: relative !important;
   overflow: auto !important;
   font-size: 1em !important;

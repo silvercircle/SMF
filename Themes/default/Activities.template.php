@@ -5,7 +5,7 @@ function template_activitybit(&$a)
 
 	if(isset($a['member'])) {		// if we have member data available, show the avatar, otherwise just the activity
 		echo '
-	<li data-unread="1">
+	<li data-id="',$a['id_act'],'">
 	  <div class="floatleft" style="margin-right:10px;">
 	   <span class="small_avatar">';
 	if(!empty($a['member']['avatar']['image'])) {
@@ -26,7 +26,9 @@ function template_activitybit(&$a)
 	}
 	else
 		echo '
-	<li>',$a['formatted_result'],'</li>';
+	<li data-id="',$a['id_act'],'">
+	',$a['formatted_result'],'
+	</li>';
 }
 
 function template_showactivity()
@@ -75,9 +77,25 @@ function template_showactivity_xml()
 	</div>';
 }
 
+/**
+ * output the js code for dealing with the inline list of notifications
+ * this contains code for marking notifications as read among a few other things
+ */
+function template_notifications_scripts()
+{
+	echo '
+	<script>
+	// <![CDATA[
+	function markAllNotificationsRead()
+	{
+	}
+	// ]]>
+	</script>';
+}
+
 function template_notifications_xml()
 {
-	global $context, $txt;
+	global $context, $txt, $scripturl;
 
 	echo '
 	<div class="inlinePopup notifications" id="notificationsBody">
@@ -97,6 +115,18 @@ function template_notifications_xml()
 	,$txt['act_no_unread_notifications'],'
 	</div>';
 	echo '
+	<div class="yellow_container smalltext">
+	<dl class="common">
+	<dt>
+	<a onclick="markAllNotificationsRead();return(false);" href="',$scripturl,'?action=astream;sa=markread;act=all">',$txt['act_mark_all_read'],'</a>
+	</dt>
+	<dd class="righttext">
+	<a href="',$scripturl,'?action=astream;sa=notifications;view=all">',$txt['act_view_all'],'</a>
+	</dd>
+	</dl>
 	</div>';
+	echo '
+	</div>';
+	template_notifications_scripts();
 }
 ?>

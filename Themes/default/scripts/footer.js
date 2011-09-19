@@ -1592,17 +1592,14 @@ function sendRequest(request, anchor_element)
 
 function openResult(html, width)
 {
+	var el = $('#mcard');
+
 	$('#wrap').css('opacity', '0.6');
 	$('#mcard_inner').html(html);
-	if(width > 0)
-		$('#mcard').css('width', width + 'px');
-	else
-		$('#mcard').css('width', 'auto');
-	var el = $('#mcard');
-   	//el.css("position","absolute");		// for cbox
+	el.css('width', width > 0 ? width + 'px' : 'auto');
    	el.css("position",'fixed');
-	el.css("top", (($(window).height() - el.outerHeight()) / 2) + $(window).scrollTop() + "px");
-	el.css("left", (($(window).width() - el.outerWidth()) / 2) + $(window).scrollLeft() + "px");
+	el.css("top", (($(window).height() - el.outerHeight()) / 2) + "px");
+	el.css("left", (($(window).width() - el.outerWidth()) / 2) + "px");
 	el.show();
 	el.css('z-index', '10000');
 };

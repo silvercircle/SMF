@@ -11,7 +11,6 @@ $txt['search_post_age'] = 'Message age';
 $txt['search_between'] = 'between';
 $txt['search_and'] = 'and';
 $txt['search_options'] = 'Options';
-$txt['search_show_complete_messages'] = 'Show results as messages';
 $txt['search_subject_only'] = 'Search in topic subjects only';
 $txt['search_relevance'] = 'Relevance';
 $txt['search_date_posted'] = 'Date Posted';

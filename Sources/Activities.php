@@ -30,7 +30,8 @@ function aStreamDispatch()
 	$sub_actions = array(
 		'get' => array('function' => 'aStreamGetStream'),
 		'add' => array('function' => 'aStreamAdd'),
-		'notifications' => array('function' => 'aStreamGetNotifications')
+		'notifications' => array('function' => 'aStreamGetNotifications'),
+		'markread' => array('function' => 'aStreamMarkNotificationRead')
 	);
 	if (!isset($_REQUEST['sa'], $sub_actions[$_REQUEST['sa']]))
 		fatal_lang_error('no_access', false);
@@ -39,15 +40,26 @@ function aStreamDispatch()
 }
 
 /**
- * @return void
- *
  * get the notifications for the current user.
+ *
+ * $_REQUEST['view'] tells us what to get:
+ * a) 'recent' (default) - the most recent and unread notifications
+ * b) 'unread' - all unread notifications
+ * c) 'all' - everything (this is for the profile page mainly).
+ *
+ * since notifications are basically references into the activity stream, they are pruned
+ * together with actitvities. default activity expiration is 30 days.
  */
 function aStreamGetNotifications()
 {
 	global $user_info, $context;
 
+	if($user_info['is_guest'])				// guests don't get anything, they can't have notifications
+		fatal_lang_error('no_access');
+
 	$xml = isset($_REQUEST['xml']) ? true : false;
+	$view = isset($_REQUEST['view']) ? $_REQUEST['view'] : 'recent';
+
 	loadTemplate('Activities');
 	loadLanguage('Activities');
 	$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
@@ -55,12 +67,14 @@ function aStreamGetNotifications()
 	$context['get_notifications'] = true;
 	$context['rich_output'] = true;		// todo: this indicates whether we want simple or rich activity bits (rich = with avatar)
 
+	$where = 'WHERE n.id_member = {int:id_member} AND ({query_see_board} OR a.id_board = 0) ';
+
 	$result = smf_db_query('
-		SELECT n.*, a.updated, a.id_type, a.params, a.is_private, a.id_board, a.id_topic, a.id_content, a.id_owner, t.*, b.name AS board_name FROM {db_prefix}log_notifications AS n
+		SELECT n.id_act, a.id_member, a.updated, a.id_type, a.params, a.is_private, a.id_board, a.id_topic, a.id_content, a.id_owner, t.*, b.name AS board_name FROM {db_prefix}log_notifications AS n
 		LEFT JOIN {db_prefix}log_activities AS a ON (a.id_act = n.id_act)
 		LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
-		LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
-		WHERE n.id_member = {int:id_member} AND n.unread = 1 AND ({query_see_board} OR a.id_board = 0) ORDER BY n.id_act DESC LIMIT {int:start}, 20',
+		LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board) '.
+		$where .'AND n.unread = 1 ORDER BY n.id_act DESC LIMIT {int:start}, 20',
 		array('id_member' => $user_info['id'], 'start' => $start));
 
 	aStreamOutput($result);
@@ -71,6 +85,34 @@ function aStreamGetNotifications()
 	}
 	else
 		$context['sub_template'] = 'notifications';
+}
+
+/**
+ * @return void
+ *
+ * marks one ore more notifications as read
+ */
+function aStreamMarkNotificationRead()
+{
+	global $context, $user_info;
+
+	if($user_info['is_guest'])
+		return;
+
+	$new_act_ids = array();
+	if(isset($_REQUEST['act'])) {
+		if($_REQUEST['act'] === 'all')
+			$where = 'WHERE id_member = {int:id_member}';
+		else {
+			$act_ids = explode(',', $_REQUEST['act']);
+			foreach($act_ids as $act)
+				$new_act_ids[] = (int)$act;
+			$new_act = join(',', $new_act_ids);
+			$where = 'WHERE id_member = {int:id_member} AND id_act IN('.$new_act.')';
+		}
+		$query = 'UPDATE {db_prefix}log_notifications SET unread = 0 WHERE ' . $where;
+		echo $query;
+	}
 }
 /**
  * dispatch the get sub-action. Right now, it is possible to retrieve the
