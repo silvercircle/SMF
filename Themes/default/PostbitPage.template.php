@@ -6,8 +6,7 @@ function template_postbit_normal(&$message, $ignoring)
 	// Show the message anchor and a "new" anchor if this message is new.
 	$cclass = $message['approved'] ? ($message['alternate'] == 0 ? 'windowbg ' : 'windowbg2 ') : 'approvebg ';
 	echo '
-	<div id="msg',$message['id'], '" class="post_wrapper" data-mid="',$message['id'], '">
-	<div class="flat_container transparent" style="padding:0;">';
+	<div id="msg',$message['id'], '" class="post_wrapper" data-mid="',$message['id'], '">';
 
 	if ($message['id'] != $context['first_message'])
 		echo 
@@ -38,7 +37,7 @@ function template_postbit_normal(&$message, $ignoring)
 		</div>
 		<div class="postarea" style="margin-left:60px;">
 			<div>
-			<div class="keyinfo" style="margin-left:-60px;border:0;padding-left:60px;">
+			<div class="keyinfo" style="margin-left:-61px;border:0;padding-left:60px;">
 			<h5 style="display:inline;" id="subject_', $message['id'], '">
 			', $message['subject'], '
 			</h5>',
@@ -233,7 +232,7 @@ function template_postbit_normal(&$message, $ignoring)
 	//						<a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $txt['logged'], '</a>';
 	echo '
 		</div><div class="clear"></div>
-		</div></div></div>';
+		</div></div>';
 }
 
 function template_postbit_blog(&$message, $ignoring)
@@ -251,8 +250,8 @@ function template_postbit_blog(&$message, $ignoring)
 	
 	// Show information about the poster of this message.
 	echo '
-		<div>
-		  <div class="smalltext">
+		<div class="keyinfo clean">
+		  <div>
 		  <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['href'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span onclick="sharePost($(this));"><a href="#!">Share</a></span>' : ''),'</span>
 		  Posted by: ',$message['member']['link'],',&nbsp;
 		  <span class="smalltext">',$message['time'], '</span>						  

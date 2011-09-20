@@ -5,8 +5,7 @@ function template_postbit_normal(&$message, $ignoring)
 	
 	// Show the message anchor and a "new" anchor if this message is new.
 	echo '
-	<div id="msg',$message['id'], '" class="post_wrapper" data-mid="',$message['id'], '">
-	<div class="flat_container transparent" style="padding:0;">';
+	<div id="msg',$message['id'], '" class="post_wrapper" data-mid="',$message['id'], '">';
 
 	if ($message['id'] != $context['first_message'])
 		echo $message['first_new'] ? '<a id="new"></a>' : '';
@@ -347,7 +346,7 @@ function template_postbit_normal(&$message, $ignoring)
 	//						<a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $txt['logged'], '</a>';
 	echo '
 		</div><div class="clear">
-		</div></div></div></div>';
+		</div></div></div>';
 }
 
 function template_postbit_blog(&$message, $ignoring)
@@ -356,15 +355,30 @@ function template_postbit_blog(&$message, $ignoring)
 	
 	// Show the message anchor and a "new" anchor if this message is new.
 	echo '
-	<div class="post_wrapper" data-mid="',$message['id'], '">
-	<div class="flat_container transparent" style="padding:0;">';
+	<div class="post_wrapper" data-mid="',$message['id'], '">';
 	if ($message['id'] != $context['first_message'])
 		echo '
 			<a id="msg', $message['id'], '"></a>', $message['first_new'] ? '<a id="new"></a>' : '';
 	
 	// Show information about the poster of this message.
-	echo '<div class="keyinfo" style="margin-left:0px;padding:3px 0 3px 10px;">
-		<div class="floatright horizontal_userblock" style="text-align:center;">
+	echo '
+	<div class="keyinfo" style="margin-left:-1px;padding:0 10px;">';
+				echo '<div>
+					  <div class="messageicon">
+					  <img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' id="msg_icon_' . $message['id'] . '"' : '', ' />
+					  </div>
+					  <h5 style="display:inline;" id="subject_', $message['id'], '">
+					  ',$message['subject'],'
+					  </h5>	  
+					  <span class="smalltext">&nbsp;',$message['time'], '</span>						  
+					  <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['href'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span onclick="sharePost($(this));"><a href="#!">Share</a></span>' : ''),'</span>
+					  </div>
+					  <div id="msg_', $message['id'], '_quick_mod"></div>';
+
+	// Done with the information about the poster... on to the post itself.
+	echo '
+	</div>
+	<div class="floatright horizontal_userblock" style="text-align:center;">
 			<h4>', $message['member']['link'], '</h4>
 			<div class="smalltext" id="msg_', $message['id'], '_extra_info">';
 
@@ -374,7 +388,7 @@ function template_postbit_blog(&$message, $ignoring)
 			<div class="membergroup">', $message['member']['group'], '</div>';
 	else
 		echo '';
-		
+
 	if (!$message['member']['is_guest'])
 	{
 		// Show avatars, images, etc.?
@@ -400,7 +414,7 @@ function template_postbit_blog(&$message, $ignoring)
 		echo '
 							<li class="email"><a href="', $scripturl, '?action=emailuser;sa=email;msg=', $message['id'], '" rel="nofollow">', ($settings['use_image_buttons'] ? '<img src="' . $settings['images_url'] . '/email_sm.gif" alt="' . $txt['email'] . '" title="' . $txt['email'] . '" />' : $txt['email']), '</a></li>';
 
-	
+
 	// Show the member's custom title, if they have one.
 	if (!empty($message['member']['title']))
 		echo '
@@ -408,20 +422,6 @@ function template_postbit_blog(&$message, $ignoring)
 
 	echo '</div>
 		</div>';
-				echo '<div>
-					  <div class="messageicon">
-					  <img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' id="msg_icon_' . $message['id'] . '"' : '', ' />
-					  </div>
-					  <h5 style="display:inline;" id="subject_', $message['id'], '">
-					  ',$message['subject'],'
-					  </h5>	  
-					  <span class="smalltext">&nbsp;',$message['time'], '</span>						  
-					  <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['href'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span onclick="sharePost($(this));"><a href="#!">Share</a></span>' : ''),'</span>
-					  </div>
-					  <div id="msg_', $message['id'], '_quick_mod"></div>';
-
-	// Done with the information about the poster... on to the post itself.
-	echo '</div>';						
 
 	// Ignoring this user? Hide the post.
 	if ($ignoring)
@@ -628,10 +628,9 @@ function template_postbit_blog(&$message, $ignoring)
 	//	echo '
 	//						<a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $txt['logged'], '</a>';
 	echo '
-						</div><div class="clear"></div></div>';
-
-
-	echo "</div></div>";
+		</div><div class="clear"></div></div>';
+	echo '
+	</div>';
 }
 
 function template_postbit_compact(&$message, $ignoring)
