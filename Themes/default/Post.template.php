@@ -112,12 +112,12 @@ function template_main()
 	// If the user wants to see how their message looks - the preview section is where it's at!
 	echo '
 			<div id="preview_section"', isset($context['preview_message']) ? '' : ' style="display: none;"', '>
-				<div class="cat_bar rounded_top">
+				<div class="cat_bar">
 					<h3>
 						<span id="preview_subject">', empty($context['preview_subject']) ? '' : $context['preview_subject'], '</span>
 					</h3>
 				</div>
-				<div class="blue_container">
+				<div class="blue_container cleantop">
 					<div class="content">
 						<div id="preview_body">
 							', empty($context['preview_message']) ? '<br />' : $context['preview_message'], '

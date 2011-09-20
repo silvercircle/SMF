@@ -146,7 +146,7 @@ function aStreamGetStream()
 
 function aStreamGet($b = 0, $xml = false, $global = false)
 {
-	global $board, $context, $txt;
+	global $board, $context, $user_info;
 
 	if(!isset($board) || !$board)
 		$board = $b;
@@ -155,13 +155,18 @@ function aStreamGet($b = 0, $xml = false, $global = false)
 	$context['xml'] = $xml;
 	$context['act_global'] = false;
 
+	if($user_info['is_admin'])
+		$pquery = '';
+	else
+		$pquery = ' AND (a.is_private = 0 OR a.id_member = {int:id_user} OR a.id_owner = {int:id_user}) ';
+
 	if($global) {
 		$result = smf_db_query('
 			SELECT a.*, t.*, b.name AS board_name FROM {db_prefix}log_activities AS a
 			LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
 			LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
-			WHERE {query_see_board} OR a.id_board = 0 ORDER BY a.id_act DESC LIMIT {int:start}, 20',
-			array('start' => $start));
+			WHERE ({query_see_board} OR a.id_board = 0)'.$pquery.' ORDER BY a.id_act DESC LIMIT {int:start}, 20',
+			array('start' => $start, 'id_user' => $user_info['id']));
 
 		$context['act_global'] = true;
 	}
@@ -170,8 +175,8 @@ function aStreamGet($b = 0, $xml = false, $global = false)
 			SELECT a.*, t.*, b.name AS board_name FROM {db_prefix}log_activities AS a
 			LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
 			INNER JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
-			WHERE a.id_board = {int:id_board} AND {query_see_board} ORDER BY a.id_act DESC LIMIT {int:start}, 20',
-			array('id_board' => $board, 'start' => $start));
+			WHERE a.id_board = {int:id_board} AND {query_see_board}'.$pquery.' ORDER BY a.id_act DESC LIMIT {int:start}, 20',
+			array('id_board' => $board, 'start' => $start, 'id_user' => $user_info['id']));
 
 	aStreamOutput($result);
 }

@@ -4,8 +4,7 @@ a:link, a:visited {
 }
 
 a:hover {
-	text-decoration: none;
-	color: #99cc00;
+	text-decoration: underline;
 }
 
 /* Links that open in a new window. */
@@ -95,16 +94,14 @@ img.icon {
 
 div.inlinePopup {
 	background: #f0f0f0;
-	box-shadow: 1px 1px 5px 0 #ddd;
-	border: 2px solid #d5ecfa;
-	border-top: 4px solid #d5ecfa;
+	box-shadow: 0 0 7px 2px #666;
+	border: 2px solid #888;
 	border-radius: 0 0 4px 4px;
 	font-family: "Trebuchet MS", "Verdana", "Arial", helvetica, sans-serif;
 	font-size: 10pt;
 }
 
 div.inlinePopup.dark {
-	border-color: #bbb;
 	background: #e0e0e0;
 }
 
@@ -1376,12 +1373,6 @@ div.navigate_section {
 #footer_section a {
 	color: #ccccee;
 }
-
-select.qaction, input.qaction {
-	font-size: 0.85em;
-	padding: 0;
-}
-
 /* Styles for a typical table.
 ------------------------------------------------------- */
 table.table_list {
@@ -1447,6 +1438,7 @@ ol.commonlist > li {
 ol.commonlist.category {
 	border-left: 1px solid #d5ecfa !important;
 	border-right: 1px solid #d5ecfa !important;
+	margin: 0;
 }
 
 ol.commonlist.category li {
@@ -1499,7 +1491,7 @@ ol.category > li > div.info {
 ol.category > li > div.info h3 {
 	color: #0066aa;
 	display: inline;
-	font-size: 120%;
+	font-size: 110%;
 }
 
 /* the posting icons */
@@ -1933,6 +1925,7 @@ span.button.notify {
 	padding: 1px 7px;
 	text-shadow: 0 0 0 transparent, 2px 2px 4px black;
 	display: inline;
+	border-radius: 0 0 3px 3px;
 }
 
 span.button.notify:hover {
@@ -2556,11 +2549,14 @@ tr.titlebg td {
 	padding: 0 10px;
 	border-radius:2px 2px 0 0;
 }
-.cContainer_header h3, .cContainer_header a {
+.cContainer_header h3, .cat_bar2 h3 {
 	color:white;
 	text-shadow: 0 0 0 transparent, 1px 1px 1px black;
 }
-
+.cContainer_header a, .cat_bar2 a {
+	color: #dbdbfa;
+	text-shadow: 0 0 0 transparent, 1px 1px 1px black;
+}
 .cContainer_header img {
 	margin-top:4px;
 }
@@ -3712,10 +3708,8 @@ div#mcard, .tcard {
 	color: #225;
 	text-align: left;
 	border: 4px solid #888;
-	border-bottom-width: 6px;
-	border-right-width: 6px;
 	border-radius: 4px;
-	box-shadow: 0 5px 12px 4px #888;
+	box-shadow: 0 0 7px 2px #666;
 	max-width: 720px;
 	width: auto;
 }

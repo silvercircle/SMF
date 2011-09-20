@@ -257,8 +257,8 @@ function template_show_month_grid($grid_name)
 	if (empty($calendar_data['disable_title']))
 	{
 		echo '
-			<div class="cat_bar rounded_top">
-				<h3 class="catbg centertext" style="font-size: ', $calendar_data['size'] == 'large' ? 'medium' : 'small', ';">';
+			<div class="cat_bar2">
+				<h3 class="centertext" style="font-size: ', $calendar_data['size'] == 'large' ? 'medium' : 'small', ';">';
 
 		if (empty($calendar_data['previous_calendar']['disabled']) && $calendar_data['show_next_prev'])
 			echo '
@@ -281,22 +281,22 @@ function template_show_month_grid($grid_name)
 	}
 
 	echo '
-				<table class="calendar_table generic_container">';
+		<table class="calendar_table">';
 
 	// Show each day of the week.
 	if (empty($calendar_data['disable_day_titles']))
 	{
 		echo '
-					<tr class="red_container">';
+					<tr>';
 
 		if (!empty($calendar_data['show_week_links']))
 			echo '
-						<th>&nbsp;</th>';
+						<th class="glass">&nbsp;</th>';
 
 		foreach ($calendar_data['week_days'] as $day)
 		{
 			echo '
-						<th class="days" scope="col" ', $calendar_data['size'] == 'small' ? 'style="font-size: x-small;"' : '', '>', !empty($calendar_data['short_day_titles']) ? ($smcFunc['substr']($txt['days'][$day], 0, 1)) : $txt['days'][$day], '</th>';
+						<th class="glass days" scope="col" ', $calendar_data['size'] == 'small' ? 'style="font-size: x-small;"' : '', '>', !empty($calendar_data['short_day_titles']) ? ($smcFunc['substr']($txt['days'][$day], 0, 1)) : $txt['days'][$day], '</th>';
 		}
 		echo '
 					</tr>';

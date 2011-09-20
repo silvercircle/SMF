@@ -411,28 +411,28 @@ function template_showPosts()
 	else
 	{
 		echo '
-		<table class="table_grid" style="width:100%;">
+		<table class="table_grid mlist" style="width:100%;">
 			<thead>
 				<tr>
-					<th class="red_container lefttext" scope="col" style="width:25%;">
+					<th class="glass lefttext" scope="col" style="width:25%;">
 						<a href="', $scripturl, '?action=profile;u=', $context['current_member'], ';area=showposts;sa=attach;sort=filename', ($context['sort_direction'] == 'down' && $context['sort_order'] == 'filename' ? ';asc' : ''), '">
 							', $txt['show_attach_filename'], '
 							', ($context['sort_order'] == 'filename' ? '<img src="' . $settings['images_url'] . '/sort_' . ($context['sort_direction'] == 'down' ? 'down' : 'up') . '.gif" alt="" />' : ''), '
 						</a>
 					</th>
-					<th class="red_container" scope="col" style="width:12%;">
+					<th class="glass" scope="col" style="width:12%;">
 						<a href="', $scripturl, '?action=profile;u=', $context['current_member'], ';area=showposts;sa=attach;sort=downloads', ($context['sort_direction'] == 'down' && $context['sort_order'] == 'downloads' ? ';asc' : ''), '">
 							', $txt['show_attach_downloads'], '
 							', ($context['sort_order'] == 'downloads' ? '<img src="' . $settings['images_url'] . '/sort_' . ($context['sort_direction'] == 'down' ? 'down' : 'up') . '.gif" alt="" />' : ''), '
 						</a>
 					</th>
-					<th class="red_container lefttext" scope="col" style="width:30%;">
+					<th class="glass lefttext" scope="col" style="width:30%;">
 						<a href="', $scripturl, '?action=profile;u=', $context['current_member'], ';area=showposts;sa=attach;sort=subject', ($context['sort_direction'] == 'down' && $context['sort_order'] == 'subject' ? ';asc' : ''), '">
 							', $txt['message'], '
 							', ($context['sort_order'] == 'subject' ? '<img src="' . $settings['images_url'] . '/sort_' . ($context['sort_direction'] == 'down' ? 'down' : 'up') . '.gif" alt="" />' : ''), '
 						</a>
 					</th>
-					<th class="red_container last_th lefttext" scope="col">
+					<th class="glass last_th lefttext" scope="col">
 						<a href="', $scripturl, '?action=profile;u=', $context['current_member'], ';area=showposts;sa=attach;sort=posted', ($context['sort_direction'] == 'down' && $context['sort_order'] == 'posted' ? ';asc' : ''), '">
 						', $txt['show_attach_posted'], '
 						', ($context['sort_order'] == 'posted' ? '<img src="' . $settings['images_url'] . '/sort_' . ($context['sort_direction'] == 'down' ? 'down' : 'up') . '.gif" alt="" />' : ''), '
@@ -693,8 +693,10 @@ function template_trackIP()
 	// This function always defaults to the last IP used by a member but can be set to track any IP.
 	// The first table in the template gives an input box to allow the admin to enter another IP to track.
 	echo '
-		<h1 class="bigheader">', $txt['trackIP'], '</h1>
-		<div class="blue_container">
+		<div class="cat_bar">
+			<h3>', $txt['trackIP'], '</h3>
+		</div>
+		<div class="blue_container cleantop">
 			<form action="', $context['base_url'], '" method="post" accept-charset="', $context['character_set'], '">
 				<div class="padding">', $txt['enter_ip'], ':&nbsp;&nbsp;<input type="text" name="searchip" value="', $context['ip'], '" class="input_text" />&nbsp;&nbsp;<input type="submit" value="', $txt['trackIP'], '" class="button_submit" /></div>
 			</form>
@@ -726,15 +728,16 @@ function template_trackIP()
 		</div>';
 	if (empty($context['ips']))
 		echo '
-		<p class="blue_container description"><em>', $txt['no_members_from_ip'], '</em></p>';
+		<div class="orange_container cleantop mediumpadding"><em>', $txt['no_members_from_ip'], '</em></p>';
 	else
 	{
 		echo '
+		<div class="blue_container cleantop">
 		<table class="table_grid" style="width:100%;">
 			<thead>
 				<tr>
-					<th class="first_th red_container" scope="col">', $txt['ip_address'], '</th>
-					<th class="last_th red_container" scope="col">', $txt['display_name'], '</th>
+					<th class="first_th glass" scope="col">', $txt['ip_address'], '</th>
+					<th class="last_th glass" scope="col">', $txt['display_name'], '</th>
 				</tr>
 			</thead>
 			<tbody>';
@@ -750,6 +753,7 @@ function template_trackIP()
 		echo '
 			</tbody>
 		</table>
+		</div>
 		<br />';
 	}
 
@@ -2071,12 +2075,14 @@ function template_issueWarning()
 
 	if (!$context['user']['is_owner'])
 		echo '
-		<p class="description">', $txt['profile_warning_desc'], '</p>';
-
+		<div class="orange_container cleantop mediumpadding">', $txt['profile_warning_desc'], '</div>
+		<br>
+		<div class="blue_container">';
+	else
+		echo '
+		<div class="blue_container cleantop">';
 	echo '
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
-			<div class="content">
+		<div class="content">
 				<dl class="settings">';
 
 	if (!$context['user']['is_owner'])
@@ -2164,6 +2170,7 @@ function template_issueWarning()
 
 		echo '
 						</select>
+						<br>
 						<span class="smalltext" id="new_template_link" style="display: none;">[<a href="', $scripturl, '?action=moderate;area=warnings;sa=templateedit;tid=0" target="_blank" class="new_win">', $txt['profile_warning_new_template'], '</a>]</span><br />
 						<textarea name="warn_body" id="warn_body" cols="40" rows="8">', $context['warning_data']['notify_body'], '</textarea>
 					</dd>';
@@ -2182,17 +2189,18 @@ function template_issueWarning()
 	// Previous warnings?
 	echo '<br />
 		<div class="cat_bar">
-			<h3 class="catbg">
+			<h3>
 				', $txt['profile_warning_previous'], '
 			</h3>
 		</div>
-		<table border="0" width="100%" cellspacing="0" cellpadding="5" class="table_grid">
+		<div class="blue_container cleantop">
+		<table class="table_grid" style="width:100%;">
 			<thead>
-				<tr class="titlebg lefttext">
-					<th class="first_th" scope="col" width="20%">', $txt['profile_warning_previous_issued'], '</th>
-					<th scope="col" width="30%">', $txt['profile_warning_previous_time'], '</th>
-					<th scope="col">', $txt['profile_warning_previous_reason'], '</th>
-					<th class="last_th" scope="col" width="6%">', $txt['profile_warning_previous_level'], '</th>
+				<tr>
+					<th class="glass first_th" scope="col" width="20%">', $txt['profile_warning_previous_issued'], '</th>
+					<th class="glass" scope="col" style="width:30%;">', $txt['profile_warning_previous_time'], '</th>
+					<th class="glass" scope="col">', $txt['profile_warning_previous_reason'], '</th>
+					<th class="glass last_th" scope="col" style="width:6%;">', $txt['profile_warning_previous_level'], '</th>
 				</tr>
 			</thead>
 			<tbody>';
@@ -2233,8 +2241,8 @@ function template_issueWarning()
 	echo '
 			</tbody>
 		</table>
-		<div class="pagesection">', $txt['pages'], ': ', $context['page_index'], '</div>';
-
+		<div class="pagesection">', $txt['pages'], ': ', $context['page_index'], '</div>
+	    </div>';
 	// Do our best to get pretty javascript enabled.
 	echo '
 	<script type="text/javascript"><!-- // --><![CDATA[

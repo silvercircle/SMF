@@ -24,7 +24,7 @@ function template_search_members()
 				</h3>
 			</div>
 			<input type="hidden" name="sa" value="query" />
-			<div class="windowbg">
+			<div class="blue_container cleantop">
 				<div class="content">
 					<div class="flow_hidden">
 						<div class="msearch_details floatleft">
@@ -158,16 +158,14 @@ function template_search_members()
 				<span class="botslice clear_right"><span></span></span>
 			</div>
 			<br />
-			<div class="cat_bar">
-				<h3>', $txt['member_part_of_these_membergroups'], '</h3>
-			</div>
+			<h1 class="bigheader">', $txt['member_part_of_these_membergroups'], '</h1>
 			<div class="flow_hidden">
 				<table style="width:49%;" class="table_grid floatleft">
 					<thead>
 						<tr>
-							<th scope="col" class="red_container first_th">', $txt['membergroups'], '</th>
-							<th scope="col" class="red_container">', $txt['primary'], '</th>
-							<th scope="col" class="red_container last_th">', $txt['additional'], '</th>
+							<th scope="col" class="glass first_th">', $txt['membergroups'], '</th>
+							<th scope="col" class="glass">', $txt['primary'], '</th>
+							<th scope="col" class="glass last_th">', $txt['additional'], '</th>
 						</tr>
 					</thead>
 					<tbody>';
@@ -202,10 +200,10 @@ function template_search_members()
 				<table style="width:49%;" class="table_grid floatright">
 					<thead>
 						<tr>
-							<th scope="col" class="red_container first_th">
+							<th scope="col" class="glass first_th">
 								', $txt['membergroups_postgroups'], '
 							</th>
-							<th class="red_container last_th">&nbsp;</th>
+							<th class="glass last_th">&nbsp;</th>
 						</tr>
 					</thead>
 					</tbody>';

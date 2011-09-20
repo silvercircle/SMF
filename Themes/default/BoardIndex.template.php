@@ -127,7 +127,8 @@ function template_main()
 			foreach ($category['boards'] as $board)
 				template_boardbit($board);
 		echo '
-			</ol>';
+			</ol>
+			<div class="cContainer_end"></div>';
 		//}
 	}
 	echo '

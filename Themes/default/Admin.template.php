@@ -771,7 +771,7 @@ function template_show_settings()
 	// Have we got some custom code to insert?
 	if (!empty($context['settings_message']))
 		echo '
-			<div class="red_container">', $context['settings_message'], '</div>';
+			<div class="red_container mediumpadding cleantop">', $context['settings_message'], '</div><br>';
 
 	// Now actually loop through all the variables.
 	$is_open = false;
@@ -1355,18 +1355,20 @@ function template_core_features()
 					', $txt['core_settings_welcome_msg'], '
 				</h3>
 			</div>
-			<div class="red_container">
+			<div class="red_container cleantop">
 				', $txt['core_settings_welcome_msg_desc'], '
-			</div>';
+			</div>
+			<br>';
 	}
 
 	echo '
 		<form action="', $scripturl, '?action=admin;area=corefeatures;" method="post" accept-charset="', $context['character_set'], '">
-			<div class="cat_bar">
+			<div class="cat_bar2">
 				<h3>
 					', $txt['core_settings_title'], '
 				</h3>
-			</div>';
+			</div>
+			<br>';
 
 	$alternate = true;
 	foreach ($context['features'] as $id => $feature)

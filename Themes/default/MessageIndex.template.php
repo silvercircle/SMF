@@ -142,7 +142,7 @@ function template_main()
 		{
 			echo '
 				<tr>
-					<td colspan="6" class="blue_container mediumpadding" style="border-top:0;text-align:right;">
+					<td colspan="6" class="glass righttext">
 						<select class="qaction" name="qaction"', $context['can_move'] ? ' onchange="this.form.moveItTo.disabled = (this.options[this.selectedIndex].value != \'move\');"' : '', '>
 							<option value="">--------</option>', $context['can_remove'] ? '
 							<option value="remove">' . $txt['quick_mod_remove'] . '</option>' : '', $context['can_lock'] ? '

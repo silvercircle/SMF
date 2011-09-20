@@ -577,19 +577,11 @@ function template_search()
 	global $context, $settings, $options, $scripturl, $modSettings, $txt;
 
 	echo '
-	<script type="text/javascript"><!-- // --><![CDATA[
-		function expandCollapseLabels()
-		{
-			var current = document.getElementById("searchLabelsExpand").style.display != "none";
-
-			document.getElementById("searchLabelsExpand").style.display = current ? "none" : "";
-			document.getElementById("expandLabelsIcon").src = smf_images_url + (current ? "/expand.gif" : "/collapse.gif");
-		}
-	// ]]></script>
 	<form action="', $scripturl, '?action=pm;sa=search2" method="post" accept-charset="', $context['character_set'], '" name="searchform" id="searchform">
-		<div class="cat_bar">
-			<h3 class="catbg">', $txt['pm_search_title'], '</h3>
-		</div>';
+		<div class="cat_bar2">
+			<h3>', $txt['pm_search_title'], '</h3>
+		</div>
+		<div class="blue_container mediumpadding cleantop">';
 
 	if (!empty($context['search_errors']))
 	{
@@ -673,15 +665,11 @@ function template_search()
 		// Do we have some labels setup? If so offer to search by them!
 		if ($context['currently_using_labels'])
 		{
+			$collapser = array('title' => $txt['pm_search_choose_label'], 'id' => 'pmsearchlabels');
+			template_create_collapsible_container($collapser);
 			echo '
 		<fieldset class="labels">
-			<div class="roundframe">
-				<div class="cat_bar">
-					<h3>
-						<span class="ie6_header floatleft"><a href="javascript:void(0);" onclick="expandCollapseLabels(); return false;"><img src="', $settings['images_url'], '/expand.gif" id="expandLabelsIcon" alt="" /></a> <a href="javascript:void(0);" onclick="expandCollapseLabels(); return false;"><strong>', $txt['pm_search_choose_label'], '</strong></a></span>
-					</h3>
-				</div>
-				<ul id="searchLabelsExpand" class="reset" ', $context['check_all'] ? 'style="display: none;"' : '', '>';
+				<ul id="searchLabelsExpand" class="reset">';
 
 			foreach ($context['search_labels'] as $label)
 				echo '
@@ -696,12 +684,13 @@ function template_search()
 					<span class="floatleft"><input type="checkbox" name="all" id="check_all" value="" ', $context['check_all'] ? 'checked="checked"' : '', ' onclick="invertAll(this, this.form, \'searchlabel\');" class="input_check" /><em> <label for="check_all">', $txt['check_all'], '</label></em></span>
 					<input type="submit" name="submit" value="', $txt['pm_search_go'], '" class="button_submit floatright" />
 				</p><br class="clear" />
-			</div>
-		</fieldset>';
+		</fieldset>
+		</div>';
 		}
 	}
 
 	echo '
+	</div>
 	</form>';
 }
 
@@ -1070,18 +1059,16 @@ function template_prune()
 
 	echo '
 	<form action="', $scripturl, '?action=pm;sa=prune" method="post" accept-charset="', $context['character_set'], '" onsubmit="return confirm(\'', $txt['pm_prune_warning'], '\');">
-		<div class="cat_bar">
-			<h3 class="catbg">', $txt['pm_prune'], '</h3>
+		<div class="cat_bar2">
+			<h3>', $txt['pm_prune'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content">
 				<p>', $txt['pm_prune_desc1'], ' <input type="text" name="age" size="3" value="14" class="input_text" /> ', $txt['pm_prune_desc2'], '</p>
 				<div class="righttext">
 					<input type="submit" value="', $txt['delete'], '" class="button_submit" />
 				</div>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 		<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 	</form>';
@@ -1094,19 +1081,20 @@ function template_labels()
 
 	echo '
 	<form action="', $scripturl, '?action=pm;sa=manlabels" method="post" accept-charset="', $context['character_set'], '">
-		<div class="cat_bar">
-			<h3 class="catbg">', $txt['pm_manage_labels'], '</h3>
+		<div class="cat_bar2">
+			<h3>', $txt['pm_manage_labels'], '</h3>
 		</div>
-		<div class="description">
+		<div class="orange_container cleantop mediumpadding">
 			', $txt['pm_labels_desc'], '
 		</div>
+		<br>
 		<table width="100%" class="table_grid">
 		<thead>
-			<tr class="catbg">
-				<th class="lefttext first_th">
+			<tr>
+				<th class="lefttext first_th glass">
 					', $txt['pm_label_name'], '
 				</th>
-				<th class="centertext last_th" width="4%">';
+				<th class="centertext glass last_th" width="4%">';
 
 	if (count($context['labels']) > 2)
 		echo '
@@ -1157,10 +1145,9 @@ function template_labels()
 	</form>
 	<form action="', $scripturl, '?action=pm;sa=manlabels" method="post" accept-charset="', $context['character_set'], '" style="margin-top: 1ex;">
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['pm_label_add_new'], '</h3>
+			<h3>', $txt['pm_label_add_new'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content">
 				<dl class="settings">
 					<dt>
@@ -1174,7 +1161,6 @@ function template_labels()
 					<input type="submit" name="add" value="', $txt['pm_label_add_new'], '" class="button_submit" />
 				</div>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 		<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 	</form><br />';
@@ -1262,19 +1248,20 @@ function template_rules()
 
 	echo '
 	<form action="', $scripturl, '?action=pm;sa=manrules" method="post" accept-charset="', $context['character_set'], '" name="manRules" id="manrules">
-		<div class="cat_bar">
-			<h3 class="catbg">', $txt['pm_manage_rules'], '</h3>
+		<div class="cat_bar2">
+			<h3>', $txt['pm_manage_rules'], '</h3>
 		</div>
-		<div class="description">
+		<div class="orange_container cleantop mediumpadding">
 			', $txt['pm_manage_rules_desc'], '
 		</div>
+		<br>
 		<table width="100%" class="table_grid">
 		<thead>
-			<tr class="catbg">
-				<th class="lefttext first_th">
+			<tr>
+				<th class="lefttext glass first_th">
 					', $txt['pm_rule_title'], '
 				</th>
-				<th width="4%" class="centertext last_th">';
+				<th width="4%" class="centertext glass last_th">';
 
 	if (!empty($context['rules']))
 		echo '
@@ -1506,11 +1493,10 @@ function template_add_rule()
 
 	echo '
 	<form action="', $scripturl, '?action=pm;sa=manrules;save;rid=', $context['rid'], '" method="post" accept-charset="', $context['character_set'], '" name="addrule" id="addrule" class="flow_hidden">
-		<div class="cat_bar">
+		<div class="cat_bar2">
 			<h3 class="catbg">', $context['rid'] == 0 ? $txt['pm_add_rule'] : $txt['pm_edit_rule'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content">
 				<dl class="addrules">
 					<dt class="floatleft">
@@ -1621,14 +1607,14 @@ function template_add_rule()
 					<a href="#" onclick="addActionOption(); return false;" id="addonjs2" style="display: none;">(', $txt['pm_rule_add_action'], ')</a>
 				</fieldset>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div><br class="clear" />
 		<div class="cat_bar">
 			<h3 class="catbg">', $txt['pm_rule_description'], '</h3>
 		</div>
-		<div class="information">
+		<div class="blue_container cleantop mediumpadding">
 			<div id="ruletext">', $txt['pm_rule_js_disabled'], '</div>
 		</div>
+		<br>
 		<div class="righttext">
 			<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 			<input type="submit" name="save" value="', $txt['pm_rule_save'], '" class="button_submit" />

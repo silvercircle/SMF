@@ -46,19 +46,19 @@ function template_tagging_results()
 {
 	global $scripturl, $txt, $context;
 echo '
-	<div class="orange_container mediumpadding" style="width:80%;margin-left:auto;margin-right:auto;">
-	<div class="cat_bar">
+	<div class="cat_bar2">
 		<h3>',
 		$txt['smftags_resultsfor'] . $context['tag_search'],'
 		</h3>
 	</div>
+	<div class="blue_container cleantop mediumpadding">
 	<table class="table_grid mlist">
 		<thead>
   		<tr>
-			<th class="red_container" style="width:100%;">',$txt['smftags_subject'],'</th>
-			<th class="red_container centertext nowrap">',$txt['smftags_startedby'],'</th>
-			<th class="red_container centertext">',$txt['smftags_replies'],'</th>
-			<th class="red_container centertext">',$txt['smftags_views'], '</th>
+			<th class="glass" style="width:100%;">',$txt['smftags_subject'],'</th>
+			<th class="glass centertext nowrap">',$txt['smftags_startedby'],'</th>
+			<th class="glass centertext">',$txt['smftags_replies'],'</th>
+			<th class="glass centertext">',$txt['smftags_views'], '</th>
 		</tr>
 		</thead><tbody>';
 		foreach ($context['tags_topics'] as $i => $topic)
@@ -74,7 +74,9 @@ echo '
 	<tr>
 	  <td class="blue_container" colspan="4">' . $txt['smftags_pages'] . $context['page_index'] . '</td>
   	</tr>
-  	</tbody></table></div>';
+  	</tbody>
+  	</table>
+  	</div>';
 }
 
 function template_addtag()
