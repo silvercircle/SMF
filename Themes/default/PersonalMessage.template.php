@@ -473,19 +473,19 @@ function template_subject_list()
 	<table width="100%" id="messageindex" class="table_grid mediumpadding ">
 	<thead>
 		<tr>
-			<th width="4%" class="centertext blue_container first_th">
+			<th width="4%" class="centertext glass first_th">
 				<a href="', $scripturl, '?action=pm;view;f=', $context['folder'], ';start=', $context['start'], ';sort=', $context['sort_by'], ($context['sort_direction'] == 'up' ? '' : ';desc'), ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : ''), '"><img src="', $settings['images_url'], '/im_switch.gif" alt="', $txt['pm_change_view'], '" title="', $txt['pm_change_view'], '" width="16" height="16" /></a>
 			</th>
-			<th class="blue_container lefttext" style="width:22%;">
+			<th class="glass lefttext" style="width:22%;">
 				<a href="', $scripturl, '?action=pm;f=', $context['folder'], ';start=', $context['start'], ';sort=date', $context['sort_by'] == 'date' && $context['sort_direction'] == 'up' ? ';desc' : '', $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', '">', $txt['date'], $context['sort_by'] == 'date' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 			</th>
-			<th class="blue_container lefttext" width="46%">
+			<th class="glass lefttext" width="46%">
 				<a href="', $scripturl, '?action=pm;f=', $context['folder'], ';start=', $context['start'], ';sort=subject', $context['sort_by'] == 'subject' && $context['sort_direction'] == 'up' ? ';desc' : '', $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', '">', $txt['subject'], $context['sort_by'] == 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 			</th>
-			<th class="blue_container lefttext">
+			<th class="glass lefttext">
 				<a href="', $scripturl, '?action=pm;f=', $context['folder'], ';start=', $context['start'], ';sort=name', $context['sort_by'] == 'name' && $context['sort_direction'] == 'up' ? ';desc' : '', $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', '">', ($context['from_or_to'] == 'from' ? $txt['from'] : $txt['to']), $context['sort_by'] == 'name' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 			</th>
-			<th width="4%" class="centertext blue_container last_th">
+			<th width="4%" class="centertext glass last_th">
 				<input type="checkbox" onclick="invertAll(this, this.form);" class="input_check" />
 			</th>
 		</tr>
@@ -831,10 +831,9 @@ function template_send()
 	{
 		echo '
 			<div class="cat_bar">
-				<h3 class="catbg">', $txt['pm_send_report'], '</h3>
+				<h3>', $txt['pm_send_report'], '</h3>
 			</div>
 			<div class="windowbg">
-				<span class="topslice"><span></span></span>
 				<div class="content">';
 				if (!empty($context['send_log']['sent']))
 					foreach ($context['send_log']['sent'] as $log_entry)
@@ -844,7 +843,6 @@ function template_send()
 						echo '<span class="error">', $log_entry, '</span><br />';
 				echo '
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 			<br />';
 	}
@@ -853,9 +851,9 @@ function template_send()
 	if (isset($context['preview_message']))
 	echo '
 		<div class="cat_bar">
-			<h3 class="catbg">', $context['preview_subject'], '</h3>
+			<h3>', $context['preview_subject'], '</h3>
 		</div>
-		<div class="blue_container">
+		<div class="blue_container cleantop">
 			<div class="content">
 				', $context['preview_message'], '
 			</div>
@@ -864,7 +862,7 @@ function template_send()
 
 	// Main message editing box.
 	echo '
-		<div class="cat_bar">
+		<div class="cat_bar2">
 			<h3 class="catbg">
 					<span class="ie6_header floatleft">', $txt['new_message'], '
 			</h3>
@@ -873,7 +871,7 @@ function template_send()
 	echo '
 	<form action="', $scripturl, '?action=pm;sa=send2" method="post" accept-charset="', $context['character_set'], '" name="postmodify" id="postmodify" class="flow_hidden" onsubmit="submitonce(this);smc_saveEntities(\'postmodify\', [\'subject\', \'message\']);">
 		<div>
-			<div class="blue_container mediumpadding"><br class="clear" />';
+			<div class="blue_container cleantop mediumpadding"><br class="clear" />';
 
 	// If there were errors for sending the PM, show them.
 	if (!empty($context['post_error']['messages']))

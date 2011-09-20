@@ -25,10 +25,9 @@ function template_maintain_database()
 	echo '
 	<div id="manage_maintenance">
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['maintain_optimize'], '</h3>
+			<h3>', $txt['maintain_optimize'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content">
 				<form action="', $scripturl, '?action=admin;area=maintain;sa=database;activity=optimize" method="post" accept-charset="', $context['character_set'], '">
 					<p>', $txt['maintain_optimize_info'], '</p>
@@ -36,17 +35,16 @@ function template_maintain_database()
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 				</form>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
+		<br>
 
 		<div class="cat_bar">
-			<h3 class="catbg">
-			<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=maintenance_backup" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" alt="', $txt['help'], '" /></a> ', $txt['maintain_backup'], '</span>
+			<h3>
+			<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=maintenance_backup" onclick="return reqWin(this.href);" class="help"><img class="icon" src="', $settings['images_url'], '/helptopics.png" alt="', $txt['help'], '" /></a> ', $txt['maintain_backup'], '</span>
 			</h3>
 		</div>
 
-		<div class="windowbg2">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content">
 				<form action="', $scripturl, '?action=admin;area=maintain;sa=database;activity=backup" method="post" accept-charset="', $context['character_set'], '">
 					<p>', $txt['maintain_backup_info'], '</p>';
@@ -65,8 +63,8 @@ function template_maintain_database()
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 				</form>
 			</div>
-			<span class="botslice"><span></span></span>
-		</div>';
+		</div>
+		<br>';
 
 	// Show an option to convert to UTF-8 if we're not on UTF-8 yet.
 	if ($context['convert_utf8'])
@@ -75,8 +73,7 @@ function template_maintain_database()
 		<div class="cat_bar">
 			<h3 class="catbg">', $txt['utf8_title'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content">
 				<form action="', $scripturl, '?action=admin;area=maintain;sa=database;activity=convertutf8" method="post" accept-charset="', $context['character_set'], '">
 					<p>', $txt['utf8_introduction'], '</p>
@@ -85,8 +82,8 @@ function template_maintain_database()
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 				</form>
 			</div>
-			<span class="botslice"><span></span></span>
-		</div>';
+		</div>
+		<br>';
 	}
 
 	// We might want to convert entities if we're on UTF-8.
@@ -96,8 +93,7 @@ function template_maintain_database()
 		<div class="cat_bar">
 			<h3 class="catbg">', $txt['entity_convert_title'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content">
 				<form action="', $scripturl, '?action=admin;area=maintain;sa=database;activity=convertentities" method="post" accept-charset="', $context['character_set'], '">
 					<p>', $txt['entity_convert_introduction'], '</p>
@@ -105,7 +101,6 @@ function template_maintain_database()
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 				</form>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>';
 	}
 
@@ -310,7 +305,7 @@ function template_maintain_members()
 		<div class="cat_bar">
 			<h3 class="catbg">
 				<span class="ie6_header floatleft">
-					<a href="', $scripturl, '?action=helpadmin;help=maintenance_members" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" alt="', $txt['help'], '" /></a> ', $txt['maintain_members'], '
+					<a href="', $scripturl, '?action=helpadmin;help=maintenance_members" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" alt="', $txt['help'], '" /></a> ', $txt['maintain_members'], '
 				</span>
 			</h3>
 		</div>

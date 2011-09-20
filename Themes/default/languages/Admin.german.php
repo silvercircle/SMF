@@ -52,7 +52,7 @@ $txt['admin_credits'] = 'Credits';
 $txt['admin_agreement'] = 'Nutzungsbedingungen anzeigen und bei Registrierung Zustimmung verlangen?';
 $txt['admin_delete_members'] = 'Ausgew&auml;hlte Mitglieder l&ouml;schen';
 $txt['admin_repair'] = 'Alle Boards und Themen reparieren';
-$txt['admin_main_welcome'] = 'Das ist Ihr \'%s\'. Sie k&ouml;nnen hier die Einstellungen &auml;ndern, das Forum warten, Protokolle anschauen, Pakete installieren, das Template sowie viele weitere Optionen ver&auml;ndern.<br /><br />Sollten Sie Probleme haben, lesen Sie bitte den Abschnitt "Allgemeiner Support & Fehler" im Bereich Support & Credits, bevor Sie in irgendeiner Weise Support beanspruchen. Bitte klicken Sie auch das <img src="' . $settings['images_url'] . '/helptopics.gif" alt="%s" border="0" /> Symbol an, um eine Beschreibung der Funktion zu erhalten. Sollten diese Informationen nicht helfen, k&ouml;nnen Sie auch im <a href="http://www.simplemachines.org/community/index.php" target="_blank">Support Forum</a> nach Hilfe fragen.';
+$txt['admin_main_welcome'] = 'Das ist Ihr \'%s\'. Sie k&ouml;nnen hier die Einstellungen &auml;ndern, das Forum warten, Protokolle anschauen, Pakete installieren, das Template sowie viele weitere Optionen ver&auml;ndern.<br /><br />Sollten Sie Probleme haben, lesen Sie bitte den Abschnitt "Allgemeiner Support & Fehler" im Bereich Support & Credits, bevor Sie in irgendeiner Weise Support beanspruchen. Bitte klicken Sie auch das <img src="' . $settings['images_url'] . '/helptopics.png" alt="%s" border="0" /> Symbol an, um eine Beschreibung der Funktion zu erhalten. Sollten diese Informationen nicht helfen, k&ouml;nnen Sie auch im <a href="http://www.simplemachines.org/community/index.php" target="_blank">Support Forum</a> nach Hilfe fragen.';
 $txt['admin_news_desc'] = 'Hier k&ouml;nnen Sie News Meldungen hinzuf&uuml;gen oder l&ouml;schen. Bitte schreiben Sie eine News Meldung pro Textfeld. BBC Tags wie [b], [i] und [u] sind erlaubt, ebenso Smileys und HTML Code. L&ouml;schen Sie den Text eines Textfeldes, um die Meldung zu entfernen.';
 $txt['administrators'] = 'Forum Administratoren';
 $txt['admin_reserved_desc'] = 'Das Reservieren von Namen hindert Benutzer daran, sich unter diesem Namen anzumelden oder ihn im angezeigten Namen zu verwenden. W&auml;hlen Sie die ben&ouml;tigten Optionen vor dem Speichern.';
@@ -241,7 +241,7 @@ $txt['maintain_old2'] = ' Tagen nicht geantwortet wurde.';
 $txt['maintain_old_all'] = 'Alle Boards';
 $txt['maintain_old_choose'] = 'W&auml;hle Boards';
 $txt['maintain_old_remove'] = 'Entfernen';
-$txt['maintain_old_confirm'] = 'Sind Sie sicher, dass Sie alle alten Beiträge löschen wollen?\\n\\nDies kann nicht r&uuml;ckg&auml;ngig gemacht werden!';
+$txt['maintain_old_confirm'] = 'Sind Sie sicher, dass Sie alle alten Beitrï¿½ge lï¿½schen wollen?\\n\\nDies kann nicht r&uuml;ckg&auml;ngig gemacht werden!';
 
 $txt['db_error_send'] = 'Sendet E-Mails bei MySQL Verbindungsfehler';
 $txt['db_persist'] = 'Benutze dauerhafte Datenbank Verbindung';
@@ -324,7 +324,7 @@ $txt['wild_cards_allowed'] = 'Wildcard Zeichen * und ? sind erlaubt';
 $txt['search_for'] = 'Suche nach';
 $txt['member_part_of_these_membergroups'] = 'Mitglied ist Teil folgender Mitgliedergruppen';
 $txt['membergroups'] = 'Mitgliedergruppen';
-$txt['confirm_delete_members'] = 'Sind Sie sicher, dass Sie die markierten Mitglieder löschen wollen?';
+$txt['confirm_delete_members'] = 'Sind Sie sicher, dass Sie die markierten Mitglieder lï¿½schen wollen?';
 
 $txt['support_credits_title'] = 'Support und Credits';
 $txt['support_credits_info'] = 'Erhalten Sie Hilfe bei h&auml;ufigen Problemen und Informationen &uuml;ber Ihre aktuelle Version.';

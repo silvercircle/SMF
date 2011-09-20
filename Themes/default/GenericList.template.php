@@ -30,7 +30,7 @@ function template_show_list($list_id = null)
 	// Show the title of the table (if any).
 	if (!empty($cur_list['title']))
 		echo '
-			<div class="bigheader">
+			<div class="cat_bar">
 				<h3>
 					', $cur_list['title'], '
 				</h3>
@@ -42,7 +42,7 @@ function template_show_list($list_id = null)
 	if (isset($cur_list['additional_rows']['after_title']))
 	{
 		echo '
-			<div class="orange_container">';
+			<div class="orange_container cleantop">';
 		template_additional_rows('after_title', $cur_list);
 		echo '
 			</div>';
@@ -97,7 +97,7 @@ function template_show_list($list_id = null)
 				$col_header['class'] = 'last_th';
 
 			echo '
-					<th scope="col"', empty($col_header['class']) ? ' class="red_container"' : ' class="red_container ' . $col_header['class'] . '"', empty($col_header['style']) ? '' : ' style="' . $col_header['style'] . '"', empty($col_header['colspan']) ? '' : ' colspan="' . $col_header['colspan'] . '"', '>', empty($col_header['href']) ? '' : '<a href="' . $col_header['href'] . '" rel="nofollow">', empty($col_header['label']) ? '&nbsp;' : $col_header['label'], empty($col_header['href']) ? '' : '</a>', empty($col_header['sort_image']) ? '' : ' <img src="' . $settings['images_url'] . '/sort_' . $col_header['sort_image'] . '.gif" alt="" />', '</th>';
+					<th scope="col"', empty($col_header['class']) ? ' class="glass"' : ' class="glass ' . $col_header['class'] . '"', empty($col_header['style']) ? '' : ' style="' . $col_header['style'] . '"', empty($col_header['colspan']) ? '' : ' colspan="' . $col_header['colspan'] . '"', '>', empty($col_header['href']) ? '' : '<a href="' . $col_header['href'] . '" rel="nofollow">', empty($col_header['label']) ? '&nbsp;' : $col_header['label'], empty($col_header['href']) ? '' : '</a>', empty($col_header['sort_image']) ? '' : ' <img src="' . $settings['images_url'] . '/sort_' . $col_header['sort_image'] . '.gif" alt="" />', '</th>';
 		}
 
 		echo '

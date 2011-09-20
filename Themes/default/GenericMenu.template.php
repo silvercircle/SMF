@@ -207,7 +207,7 @@ function template_generic_menu_tabs(&$menu_context)
 	$tab_context = &$menu_context['tab_data'];
 
 	echo '
-	<div class="cat_bar">
+	<div class="cat_bar2">
 		<h3>';
 
 	// Exactly how many tabs do we have?
@@ -253,26 +253,7 @@ function template_generic_menu_tabs(&$menu_context)
 		}
 	}
 
-	// Show an icon and/or a help item?
-	if (!empty($selected_tab['icon']) || !empty($tab_context['icon']) || !empty($selected_tab['help']) || !empty($tab_context['help']))
-	{
-		echo '
-			<span class="ie6_header floatleft">';
-
-		if (!empty($selected_tab['icon']) || !empty($tab_context['icon']))
-			echo '<img src="', $settings['images_url'], '/icons/', !empty($selected_tab['icon']) ? $selected_tab['icon'] : $tab_context['icon'], '" alt="" class="icon" />';
-
-		if (!empty($selected_tab['help']) || !empty($tab_context['help']))
-			echo '<a href="', $scripturl, '?action=helpadmin;help=', !empty($selected_tab['help']) ? $selected_tab['help'] : $tab_context['help'], '" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" alt="', $txt['help'], '" class="icon" /></a>';
-
-		echo $tab_context['title'], '
-			</span>';
-	}
-	else
-	{
-		echo '
-			', $tab_context['title'];
-	}
+	echo $tab_context['title'];
 
 	echo '
 		</h3>
@@ -280,9 +261,10 @@ function template_generic_menu_tabs(&$menu_context)
 
 	// Shall we use the tabs?
 	echo '
-	<p class="orange_container">
+	<div class="orange_container cleantop mediumpadding">
 		', !empty($selected_tab['description']) ? $selected_tab['description'] : $tab_context['description'], '
-	</p>';
+	</div>
+	<br>';
 
 		// The admin tabs.
 		echo '

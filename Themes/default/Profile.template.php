@@ -51,13 +51,13 @@ function template_summary()
 	// Display the basic information about the user
 	echo '
 <div id="profileview" class="flow_auto">
-	<div class="cat_bar">
+	<div class="cat_bar2">
 		<h3>
 			',$txt['summary'],'
 		</h3>
 	</div>
 	<div id="basicinfo">
-		<div class="blue_container">
+		<div class="blue_container cleantop">
 			<div class="content flow_auto">
 				<div class="username"><h4>', $context['member']['name'], ' <span class="position">', (!empty($context['member']['group']) ? $context['member']['group'] : $context['member']['post_group']), '</span></h4></div>
 				', $context['member']['avatar']['image'], '
@@ -641,7 +641,7 @@ function template_trackActivity()
 
 	// The last IP the user used.
 	echo '
-			<div id="tracking" class="blue_container">
+			<div id="tracking" class="blue_container cleantop">
 				<div class="content">
 					<dl class="noborder">
 						<dt>', $txt['most_recent_ip'], ':
@@ -765,7 +765,7 @@ function template_showPermissions()
 	global $context, $settings, $options, $scripturl, $txt;
 
 	echo '
-		<div class="cat_bar">
+		<div class="cat_bar2">
 			<h3>
 				', $txt['showPermissions'], '
 			</h3>
@@ -774,30 +774,30 @@ function template_showPermissions()
 	if ($context['member']['has_all_permissions'])
 	{
 		echo '
-		<p class="red_container">', $txt['showPermissions_all'], '</p>';
+		<div class="red_container cleantop mediumpadding">', $txt['showPermissions_all'], '</div>';
 	}
 	else
 	{
 		echo '
-		<p class="blue_container">',$txt['showPermissions_help'],'</p>
+		<div class="orange_container cleantop mediumpadding">',$txt['showPermissions_help'],'</div>
+		<br>
 		<div id="permissions" class="flow_hidden">';
 
 		if (!empty($context['no_access_boards']))
 		{
 			echo '
 				<div class="cat_bar">
-					<h3 class="catbg">', $txt['showPermissions_restricted_boards'], '</h3>
+					<h3>', $txt['showPermissions_restricted_boards'], '</h3>
 				</div>
-				<div class="windowbg smalltext">
-					<span class="topslice"><span></span></span>
+				<div class="blue_container cleantop smalltext">
 					<div class="content">', $txt['showPermissions_restricted_boards_desc'], ':<br />';
 				foreach ($context['no_access_boards'] as $no_access_board)
 					echo '
 						<a href="', $scripturl, '?board=', $no_access_board['id'], '.0">', $no_access_board['name'], '</a>', $no_access_board['is_last'] ? '' : ', ';
 				echo '
 					</div>
-					<span class="botslice"><span></span></span>
-				</div>';
+				</div>
+				<br>';
 		}
 
 		// General Permissions section.
@@ -812,8 +812,8 @@ function template_showPermissions()
 					<table class="table_grid" style="width:100%;">
 						<thead>
 							<tr>
-								<th class="lefttext red_container nowrap" scope="col" style="width:50%;">', $txt['showPermissions_permission'], '</th>
-								<th class="lefttext red_container nowrap" scope="col" style="width:50%;">', $txt['showPermissions_status'], '</th>
+								<th class="lefttext glass nowrap" scope="col" style="width:50%;">', $txt['showPermissions_permission'], '</th>
+								<th class="lefttext glass nowrap" scope="col" style="width:50%;">', $txt['showPermissions_status'], '</th>
 							</tr>
 						</thead>
 						<tbody>';
@@ -876,8 +876,8 @@ function template_showPermissions()
 				<table class="table_grid" style="width:100%;">
 					<thead>
 						<tr>
-							<th class="lefttext red_container nowrap" scope="col" style="width:50%;">', $txt['showPermissions_permission'], '</th>
-							<th class="lefttext red_container nowrap" scope="col" style="width:50%;">', $txt['showPermissions_status'], '</th>
+							<th class="lefttext glass nowrap" scope="col" style="width:50%;">', $txt['showPermissions_permission'], '</th>
+							<th class="lefttext glass nowrap" scope="col" style="width:50%;">', $txt['showPermissions_status'], '</th>
 						</tr>
 					</thead>
 					<tbody>';
@@ -926,39 +926,36 @@ function template_statPanel()
 	echo '
 	<div id="profileview">
 		<div id="generalstats">
-			<div class="cat_bar">
+			<div class="cat_bar2">
 				<h3>
 					', $txt['statPanel_generalStats'], ' - ', $context['member']['name'], '
 				</h3>
 			</div>
-			<div class="windowbg2">
-				<div class="content blue_container mediumpadding">
-					<dl>
-						<dt>', $txt['statPanel_total_time_online'], ':</dt>
-						<dd>', $context['time_logged_in'], '</dd>
-						<dt>', $txt['statPanel_total_posts'], ':</dt>
-						<dd>', $context['num_posts'], ' ', $txt['statPanel_posts'], '</dd>
-						<dt>', $txt['statPanel_total_topics'], ':</dt>
-						<dd>', $context['num_topics'], ' ', $txt['statPanel_topics'], '</dd>
-						<dt>', $txt['statPanel_users_polls'], ':</dt>
-						<dd>', $context['num_polls'], ' ', $txt['statPanel_polls'], '</dd>
-						<dt>', $txt['statPanel_users_votes'], ':</dt>
-						<dd>', $context['num_votes'], ' ', $txt['statPanel_votes'], '</dd>
-					</dl>
-				</div>
+			<div class="content blue_container cleantop mediumpadding">
+				<dl>
+					<dt>', $txt['statPanel_total_time_online'], ':</dt>
+					<dd>', $context['time_logged_in'], '</dd>
+					<dt>', $txt['statPanel_total_posts'], ':</dt>
+					<dd>', $context['num_posts'], ' ', $txt['statPanel_posts'], '</dd>
+					<dt>', $txt['statPanel_total_topics'], ':</dt>
+					<dd>', $context['num_topics'], ' ', $txt['statPanel_topics'], '</dd>
+					<dt>', $txt['statPanel_users_polls'], ':</dt>
+					<dd>', $context['num_polls'], ' ', $txt['statPanel_polls'], '</dd>
+					<dt>', $txt['statPanel_users_votes'], ':</dt>
+					<dd>', $context['num_votes'], ' ', $txt['statPanel_votes'], '</dd>
+				</dl>
 			</div>
 		</div>';
 
 	// This next section draws a graph showing what times of day they post the most.
 	echo '
 		<div id="activitytime" class="flow_hidden">
-			<div class="cat_bar">
+			<div class="cat_bar2">
 				<h3>
 				', $txt['statPanel_activityTime'], '
 				</h3>
 			</div>
-			<div class="windowbg2">
-				<div class="content blue_container mediumpadding">';
+			<div class="content blue_container cleantop mediumpadding">';
 
 	// If they haven't post at all, don't draw the graph.
 	if (empty($context['posts_by_time']))
@@ -991,7 +988,6 @@ function template_statPanel()
 
 	echo '
 					<span class="clear"></span>
-				</div>
 			</div>
 		</div>';
 
@@ -999,13 +995,12 @@ function template_statPanel()
 	echo '
 		<div class="flow_hidden">
 			<div id="popularposts">
-				<div class="cat_bar">
+				<div class="cat_bar2">
 					<h3>
 						', $txt['statPanel_topBoards'], '
 					</h3>
 				</div>
-				<div class="windowbg2">
-					<div class="content blue_container mediumpadding">';
+					<div class="content blue_container cleantop mediumpadding">';
 
 	if (empty($context['popular_boards']))
 		echo '
@@ -1034,17 +1029,15 @@ function template_statPanel()
 	}
 	echo '
 					</div>
-				</div>
 			</div>';
 	echo '
 			<div id="popularactivity">
-				<div class="cat_bar">
+				<div class="cat_bar2">
 					<h3>
 					', $txt['statPanel_topBoardsActivity'], '
 					</h3>
 				</div>
-				<div class="windowbg2">
-					<div class="content blue_container mediumpadding">';
+					<div class="content blue_container cleantop mediumpadding">';
 
 	if (empty($context['board_activity']))
 		echo '
@@ -1072,7 +1065,6 @@ function template_statPanel()
 	}
 	echo '
 					</div>
-				</div>
 			</div>
 		</div>';
 
@@ -1089,7 +1081,7 @@ function template_edit_options()
 	// The main header!
 	echo '
 		<form action="', (!empty($context['profile_custom_submit_url']) ? $context['profile_custom_submit_url'] : $scripturl . '?action=profile;area=' . $context['menu_item_selected'] . ';u=' . $context['id_member'] . ';save'), '" method="post" accept-charset="', $context['character_set'], '" name="creator" id="creator" enctype="multipart/form-data" onsubmit="return checkProfileSubmit();">
-			<div class="cat_bar">
+			<div class="cat_bar2">
 				<h3>';
 		// Don't say "Profile" if this isn't the profile...
 		if (!empty($context['profile_header_text']))
@@ -1106,7 +1098,7 @@ function template_edit_options()
 	// Have we some description?
 	if ($context['page_desc'])
 		echo '
-			<p class="red_container mediumpadding">', $context['page_desc'], '</p>';
+			<div class="orange_container cleantop mediumpadding">', $context['page_desc'], '</div><br>';
 
 	echo '
 			<div class="blue_container">
@@ -1542,12 +1534,12 @@ function template_notification()
 
 	// The main containing header.
 	echo '
-			<div class="cat_bar">
+			<div class="cat_bar2">
 				<h3>
 					<span class="ie6_header floatleft">', $txt['profile'], '</span>
 				</h3>
 			</div>
-			<p class="red_container description">', $txt['notification_info'], '</p>
+			<div class="orange_container cleantop mediumpadding">', $txt['notification_info'], '</div><br>
 			<div class="blue_container">
 				<div class="content">
 					<form action="', $scripturl, '?action=profile;area=notification;save" method="post" accept-charset="', $context['character_set'], '" id="notify_options" class="flow_hidden">';
@@ -1789,9 +1781,9 @@ function template_ignoreboards()
 	// ]]></script>
 
 	<form action="', $scripturl, '?action=profile;area=ignoreboards;save" method="post" accept-charset="', $context['character_set'], '" name="creator" id="creator">
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/profile_sm.gif" alt="" class="icon" />', $txt['profile'], '</span>
+		<div class="cat_bar2">
+			<h3>
+				<span class="ie6_header floatleft">', $txt['profile'], '</span>
 			</h3>
 		</div>
 		<p class="description">', $txt['ignoreboards_info'], '</p>
@@ -2069,9 +2061,9 @@ function template_issueWarning()
 
 	echo '
 	<form action="', $scripturl, '?action=profile;u=', $context['id_member'], ';area=issuewarning" method="post" class="flow_hidden" accept-charset="', $context['character_set'], '">
-		<div class="cat_bar">
-			<h3 class="catbg">
-				<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/profile_sm.gif" alt="" class="icon" />
+		<div class="cat_bar2">
+			<h3>
+				<span class="ie6_header floatleft">
 				', $context['user']['is_owner'] ? $txt['profile_warning_level'] : $txt['profile_issue_warning'], '
 				</span>
 			</h3>
@@ -2741,7 +2733,7 @@ function template_profile_timeformat_modify()
 	echo '
 							<dt>
 								<strong>', $txt['time_format'], ':</strong><br />
-								<a href="', $scripturl, '?action=helpadmin;help=time_format" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" alt="', $txt['help'], '" class="floatleft" /></a>
+								<a href="', $scripturl, '?action=helpadmin;help=time_format" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" alt="', $txt['help'], '" class="floatleft" /></a>
 								<span class="smalltext">&nbsp;', $txt['date_format'], '</span>
 							</dt>
 							<dd>

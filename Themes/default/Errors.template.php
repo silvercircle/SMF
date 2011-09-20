@@ -49,7 +49,7 @@ function template_error_log()
 			// ]]></script>
 			<div class="cat_bar clear_right">
 				<h3>
-					<a href="', $scripturl, '?action=helpadmin;help=error_log" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" alt="', $txt['help'], '" align="top" /></a> ', $txt['errlog'], '
+					<a href="', $scripturl, '?action=helpadmin;help=error_log" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" alt="', $txt['help'], '" align="top" /></a> ', $txt['errlog'], '
 				</h3>
 			</div>
 			<table class="table_grid mlist" style="margin-top:1em;" id="error_log">

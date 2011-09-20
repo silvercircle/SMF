@@ -21,7 +21,7 @@ function template_main()
 			<input type="hidden" value="0" name="options[theme_allow]" />
 			<div class="cat_bar">
 				<h3 class="catbg">
-					<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=themes" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" class="icon" alt="', $txt['help'], '" align="top" /></a>
+					<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=themes" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" class="icon" alt="', $txt['help'], '" align="top" /></a>
 					', $txt['themeadmin_title'], '
 					</span>
 				</h3>
@@ -103,7 +103,7 @@ function template_main()
 		<br />
 		<div class="cat_bar">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=latest_themes" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" class="icon" alt="', $txt['help'], '" /></a> ', $txt['theme_latest'], '</span>
+				<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=latest_themes" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" class="icon" alt="', $txt['help'], '" /></a> ', $txt['theme_latest'], '</span>
 			</h3>
 		</div>
 		<div class="windowbg">
@@ -126,7 +126,7 @@ function template_main()
 		<form action="', $scripturl, '?action=admin;area=theme;sa=install" method="post" accept-charset="', $context['character_set'], '" enctype="multipart/form-data" onsubmit="return confirm(\'', $txt['theme_install_new_confirm'], '\');">
 			<div class="cat_bar">
 				<h3 class="catbg">
-					<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=theme_install" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" class="icon" alt="', $txt['help'], '" /></a> ', $txt['theme_install'], '</span>
+					<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=theme_install" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" class="icon" alt="', $txt['help'], '" /></a> ', $txt['theme_install'], '</span>
 				</h3>
 			</div>
 			<div class="windowbg">
@@ -425,7 +425,7 @@ function template_set_settings()
 		<form action="', $scripturl, '?action=admin;area=theme;sa=settings;th=', $context['theme_settings']['theme_id'], '" method="post" accept-charset="', $context['character_set'], '">
 			<div class="cat_bar">
 				<h3>
-					<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=theme_settings" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" alt="', $txt['help'], '" class="icon" /></a> ', $txt['theme_settings'], ' - ', $context['theme_settings']['name'], '</span>
+					<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=theme_settings" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" alt="', $txt['help'], '" class="icon" /></a> ', $txt['theme_settings'], ' - ', $context['theme_settings']['name'], '</span>
 				</h3>
 			</div>';
 

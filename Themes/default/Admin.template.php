@@ -19,7 +19,7 @@ function template_admin()
 	// Welcome message for the admin.
 	echo '
 	<div id="admincenter">
-		<div class="cat_bar" style="height:22px;">
+		<div class="cat_bar2">
 			<h3>';
 
 	if ($context['user']['is_admin'])
@@ -39,7 +39,7 @@ function template_admin()
 	echo $txt['admin_center'], '
 			</h3>
 		</div>
-		<div class="yellow_container mediumtext mediumpadding">
+		<div class="orange_container cleantop mediumpadding">
 			<div id="welcome">
 				<strong>', $txt['hello_guest'], ' ', $context['user']['name'], '!</strong>
 				', sprintf($txt['admin_main_welcome'], $txt['admin_center'], $txt['help'], $txt['help']), '
@@ -59,7 +59,7 @@ function template_admin()
 			<div id="live_news" class="floatleft">
 				<div class="cat_bar">
 					<h3>
-						<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=live_news" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" class="icon" alt="', $txt['help'], '" /></a> ', $txt['live'], '</span>
+						<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=live_news" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" class="icon" alt="', $txt['help'], '" /></a> ', $txt['live'], '</span>
 					</h3>
 				</div>
 				<div class="blue_container">
@@ -71,14 +71,13 @@ function template_admin()
     */
 	// Show the user version information from their server.
 	echo '
-			<div id="supportVersionsTable" class="floatright">
+			<div id="supportVersionsTable">
 				<div class="cat_bar">
 					<h3>
 						<a href="', $scripturl, '?action=admin;area=credits">', $txt['support_title'], '</a>
 					</h3>
 				</div>
-				<div class="blue_container">
-					<span class="topslice"><span></span></span>
+				<div class="blue_container cleantop">
 					<div class="content">
 						<div id="version_details">
 							<strong>', $txt['support_versions'], ':</strong><br />
@@ -101,7 +100,6 @@ function template_admin()
 	echo '
 						</div>
 					</div>
-					<span class="botslice"><span></span></span>
 				</div>
 			</div>
 		</div>';
@@ -237,7 +235,7 @@ function template_credits()
 	echo '<br />
 		<div class="cat_bar">
 			<h3>
-				<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=latest_support" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" class="icon" alt="', $txt['help'], '" /></a> ', $txt['support_latest'], '</span>
+				<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=latest_support" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" class="icon" alt="', $txt['help'], '" /></a> ', $txt['support_latest'], '</span>
 			</h3>
 		</div>
 		<div class="blue_container">
@@ -359,17 +357,17 @@ function template_view_versions()
 				', $txt['admin_version_check'], '
 			</h3>
 		</div>
-		<div class="information">', $txt['version_check_desc'], '</div>
+		<div class="blue_container cleantop">', $txt['version_check_desc'], '</div><br>
 			<table width="100%" class="table_grid">
 				<thead>
-					<tr class="catbg" align="left">
-						<th class="first_th" scope="col" width="50%">
+					<tr>
+						<th class="first_th glass" scope="col" width="50%">
 							<strong>', $txt['admin_smffile'], '</strong>
 						</th>
-						<th scope="col" width="25%">
+						<th class="glass" scope="col" width="25%">
 							<strong>', $txt['dvc_your'], '</strong>
 						</th>
-						<th class="last_th" scope="col"" width="25%">
+						<th class="last_th glass" scope="col"" width="25%">
 							<strong>', $txt['dvc_current'], '</strong>
 						</th>
 					</tr>
@@ -798,7 +796,7 @@ function template_show_settings()
 				echo '
 					<br /><div class="cat_bar">
 						<h3', !empty($config_var['force_div_id']) ? ' id="' . $config_var['force_div_id'] . '"' : '', '>
-							', ($config_var['help'] ? '<a href="' . $scripturl . '?action=helpadmin;help=' . $config_var['help'] . '" onclick="return reqWin(this.href);" class="help"><img src="' . $settings['images_url'] . '/helptopics.gif" class="icon" alt="' . $txt['help'] . '" /></a>' : ''), '
+							', ($config_var['help'] ? '<a href="' . $scripturl . '?action=helpadmin;help=' . $config_var['help'] . '" onclick="return reqWin(this.href);" class="help"><img src="' . $settings['images_url'] . '/helptopics.png" class="icon" alt="' . $txt['help'] . '" /></a>' : ''), '
 							', $config_var['label'], '
 						</h3>
 					</div>';
@@ -858,7 +856,7 @@ function template_show_settings()
 				// Show the [?] button.
 				if ($config_var['help'])
 					echo '
-							<a id="setting_', $config_var['name'], '" href="', $scripturl, '?action=helpadmin;help=', $config_var['help'], '" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" class="icon" alt="', $txt['help'], '" /></a><span', ($config_var['disabled'] ? ' style="color: #777777;"' : ($config_var['invalid'] ? ' class="error"' : '')), '><label for="', $config_var['name'], '">', $config_var['label'], '</label>', $subtext, ($config_var['type'] == 'password' ? '<br /><em>' . $txt['admin_confirm_password'] . '</em>' : ''), '</span>
+							<a id="setting_', $config_var['name'], '" href="', $scripturl, '?action=helpadmin;help=', $config_var['help'], '" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" class="icon" alt="', $txt['help'], '" /></a><span', ($config_var['disabled'] ? ' style="color: #777777;"' : ($config_var['invalid'] ? ' class="error"' : '')), '><label for="', $config_var['name'], '">', $config_var['label'], '</label>', $subtext, ($config_var['type'] == 'password' ? '<br /><em>' . $txt['admin_confirm_password'] . '</em>' : ''), '</span>
 						</dt>';
 				else
 					echo '
@@ -1110,7 +1108,7 @@ function template_edit_profile_field()
 								</select>
 							</dd>
 							<dt>
-								<a id="field_show_enclosed" href="', $scripturl, '?action=helpadmin;help=field_show_enclosed" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" class="icon" alt="', $txt['help'], '" align="top" /></a>
+								<a id="field_show_enclosed" href="', $scripturl, '?action=helpadmin;help=field_show_enclosed" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" class="icon" alt="', $txt['help'], '" align="top" /></a>
 								<strong>', $txt['custom_edit_enclose'], ':</strong><br />
 								<span class="smalltext">', $txt['custom_edit_enclose_desc'], '</span>
 							</dt>
@@ -1155,7 +1153,7 @@ function template_edit_profile_field()
 								<input type="checkbox" name="bbc"', $context['field']['bbc'] ? ' checked="checked"' : '', ' class="input_check" />
 							</dd>
 							<dt id="options_dt">
-								<a href="', $scripturl, '?action=helpadmin;help=customoptions" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" class="icon" alt="', $txt['help'], '" /></a>
+								<a href="', $scripturl, '?action=helpadmin;help=customoptions" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" class="icon" alt="', $txt['help'], '" /></a>
 								<strong>', $txt['custom_edit_options'], ':</strong><br />
 								<span class="smalltext">', $txt['custom_edit_options_desc'], '</span>
 							</dt>
@@ -1184,7 +1182,7 @@ function template_edit_profile_field()
 						<legend>', $txt['custom_edit_advanced'], '</legend>
 						<dl class="settings">
 							<dt id="mask_dt">
-								<a id="custom_mask" href="', $scripturl, '?action=helpadmin;help=custom_mask" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.gif" class="icon" alt="', $txt['help'], '" align="top" /></a>
+								<a id="custom_mask" href="', $scripturl, '?action=helpadmin;help=custom_mask" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" class="icon" alt="', $txt['help'], '" align="top" /></a>
 								<strong>', $txt['custom_edit_mask'], ':</strong><br />
 								<span class="smalltext">', $txt['custom_edit_mask_desc'], '</span>
 							</dt>

@@ -249,7 +249,7 @@
 														<b><xsl:value-of select="time-format" />:</b><br />
 														<!-- Don't move the closing anchor tag to a new line. -->
 														<a href="../../../index.php?action=helpadmin;help=time_format" onclick="return reqWin(this.href);" class="help">
-															<img src="../images/helptopics.gif" alt="{help}" border="0" align="left" style="padding-right: 1ex;" /></a>
+															<img src="../images/helptopics.png" alt="{help}" border="0" align="left" style="padding-right: 1ex;" /></a>
 														<span class="smalltext"><xsl:value-of select="caption-date" /></span>
 													</td>
 													<td>

@@ -461,13 +461,13 @@ tr.titlebg th a:link, tr.titlebg th a:visited {
 	font-size: 11px;
 	font-weight: bold !important;
 	border: 0 !important;
-	height:25px;
-	max-height:25px;
+	height:25px !important;
+	max-height:25px !important;
 	min-height:25px !important;
 	margin: 0 !important;
 	border:0 !important;
 	line-height:24px !important;
-	padding:0 5px !important;
+	padding:0 10px !important;
 	text-shadow: white 1px 1px 1px;
 }
 
@@ -1218,7 +1218,7 @@ h3, h4 {
 }
 
 #upper_section {
-	background: #1f559f;
+	background: #1c4885;
 	height: 65px;
 	max-height: 65px;
 	min-height: 65px;
@@ -1226,7 +1226,7 @@ h3, h4 {
 }
 
 .notibar {
-	background: #1f559f;
+	background: #1c4885;
 	line-height: 24px;
 	height: 24px;
 	line-height: 24px;
@@ -2541,9 +2541,9 @@ tr.titlebg td {
 	border: 1px solid #ddd;
 	border-bottom: 2px solid #ddd;
 	border-radius: 2px 2px 0 0;
-	padding: 3px 4px 0 10px;
-	margin-bottom: 2px;
-	height: 20px;
+	height:24px;
+	line-height:24px;
+	padding:0 10px;
 	text-shadow: 0 0 0 transparent, 2px 2px 5px white;
 }
 
@@ -2566,9 +2566,10 @@ tr.titlebg td {
 }
 .cat_bar2 {
 	margin-bottom: 0;
-	background: #286BC8 url(../images/theme/sprite.png) 0 -839px repeat-x;
+	background: #f2f2f2 url(../images/theme/sprite.png) 0 -920px repeat-x;
 	border:0;
-	border-radius:0;
+	height:26px;
+	line-height:26px;
 }
 
 .cat_bar2 h3 {
@@ -3508,7 +3509,6 @@ span.hidelink {
 	padding: 2px 4px;
 	border-radius: 3px;
 }
-
 .cContainer_body {
 	border-top: 0;
 	border-radius: 0 0 3px 3px;
@@ -3554,6 +3554,11 @@ div.cContainer_end {
 	border: 1px solid #FFCACA;
 	padding: 2px 4px;
 	border-radius: 3px;
+}
+
+.blue_container.cleantop, .orange_container.cleantop, .red_container.cleantop, .yellow_container.cleantop {
+	border-top:0;
+	border-radius:0 0 3px 3px;
 }
 
 .flat_container {

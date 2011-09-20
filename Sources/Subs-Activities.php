@@ -63,8 +63,10 @@ function _vsprintf($format, &$data)
  * @param int $id_board		the board id where it happened (if applicable)
  * @param int $id_topic		the topic id where it happened (if applicable)
  * @param int $id_content	the content id. this can be a message id but could also be a user id
- * 							(e.g. when a member posts on the profile of another member).
+ * 							(e.g. when a member posts on the profile of another member). depends on the context
+ * @param int $id_owner     the content owner (id_member)
  * @param int $priv_level   privacy level for is_private.
+ * @param int $dont_notify  do not send the owner a notification for the activity.
  *
  * @return unique id of the inserted activity type
  */

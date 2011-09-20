@@ -10,8 +10,8 @@ function template_main()
 	global $txt, $context, $scripturl;
 
 	echo '
-	<div class="orange_container mediumpadding floatright" style="width:250px;">
-		<div class="cat_bar">
+	<div class="flat_container mediumpadding floatright" style="width:250px;">
+		<div class="cat_bar2">
 			<h3>',$txt['smftags_popular'],'</h3>
 		</div>';
   		if (isset($context['poptags']))
@@ -22,11 +22,11 @@ function template_main()
   	 <table class="table_grid">
   	 <thead>
 	  <tr>
-		<th class="red_container">',$txt['smftags_subject'],'</th>
-		<th class="red_container" style="width:11%;">',$txt['smftags_topictag'],'</th>
-		<th class="red_container" style="width:11%;">',$txt['smftags_startedby'],'</th>
-	  	<th class="red_container centertext" style="width:4%;">',$txt['smftags_replies'],'</th>
-	  	<th class="red_container centertext" style="width:4%;">', $txt['smftags_views'], '</th>
+		<th class="glass">',$txt['smftags_subject'],'</th>
+		<th class="glass" style="width:11%;">',$txt['smftags_topictag'],'</th>
+		<th class="glass" style="width:11%;">',$txt['smftags_startedby'],'</th>
+	  	<th class="glass centertext" style="width:4%;">',$txt['smftags_replies'],'</th>
+	  	<th class="glass centertext" style="width:4%;">', $txt['smftags_views'], '</th>
 	  </tr>';
 	  foreach ($context['tags_topics'] as $i => $topic)	{
 	  	echo '<tr>';
