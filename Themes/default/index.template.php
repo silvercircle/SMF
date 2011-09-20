@@ -23,7 +23,7 @@ function template_init()
 
 	/*This should probably be the version of SMF it was created for. */
 	$settings['theme_version'] = '2.0';
-	$context['jsver'] = '?v=1465';
+	$context['jsver'] = '?v=1467';
 }
 
 // The main sub template above the content.
@@ -217,7 +217,7 @@ function template_body_above()
 				<input style="width:215px;padding-left:26px;margin:0;" onclick="var s_event = arguments[0] || window.event;openAdvSearch(s_event);return(false);" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" name="search" value="',$search_label,'" class="searchfield" />
 				<br><br>&nbsp;&nbsp;&nbsp;',$txt['search_by_member'],'<br>
 				<div style="text-align:center;margin-bottom:10px;"><input style="width:90%;" class="input_text" type="text" name="userspec" id="userspec" value="*" /></div>
-				<input type="checkbox" name="show_complete" id="show_complete" value="1" />',$txt['search_show_complete_messages'],'<br />';
+				<input class="input_check" type="checkbox" name="show_complete" id="show_complete" value="1" />',$txt['search_show_complete_messages'],'<br />';
 				if($scope == 2) {
 					echo '<div style="padding-left:20px;"><input type="radio" name="type" id="i_topic" class="input_radio" checked="checked" />',$txt['search_topic'],'<br />
 						<input type="radio" name="type" id="i_board" class="input_radio" />',$txt['search_board'],'<br />

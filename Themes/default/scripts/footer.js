@@ -1321,7 +1321,7 @@ jQuery(document).ready(function() {
 	});
 	$('img.resize_1').live('mouseenter', function(event) {
 		var resizer = $(this).prev();
-		resizer.css({'position':'absolute', 'width': $(this).width()});
+		resizer.css({'position':'absolute', 'width': $(this).width(), 'left': $(this).position().left});
 		resizer.show();
 	});
 	$('div.bbc_img_resizer').click(function() {
@@ -1330,7 +1330,7 @@ jQuery(document).ready(function() {
 		return(false);
 	});
 	// bbcode img tag and attachment handlers
-	$('a.attach_thumb').prettyPhoto({social_tools:'', deeplinking:false, overlay_gallery:false, animation_speed:0});
+	$('a.attach_thumb').prettyPhoto({social_tools:'', deeplinking:false, animation_speed:0});
 	// passive share button (for sharing a topic)
 	$('.share_button').click(function() {
 		$('#share_bar').hide();

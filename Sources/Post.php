@@ -1534,6 +1534,7 @@ function Post2()
 		if (mysql_num_rows($request) == 0)
 			fatal_lang_error('cant_find_messages', false);
 		$row = mysql_fetch_assoc($request);
+		$msg_owner = $row['id_member'];
 		mysql_free_result($request);
 
 		if (!empty($topic_info['locked']) && !allowedTo('moderate_board'))
@@ -2016,6 +2017,7 @@ function Post2()
 		'smileys_enabled' => !isset($_POST['ns']),
 		'attachments' => empty($attachIDs) ? array() : $attachIDs,
 		'approved' => $becomesApproved,
+		'id_owner' => isset($msg_owner) ? $msg_owner : 0,
 	);
 	$topicOptions = array(
 		'id' => empty($topic) ? 0 : $topic,
@@ -3018,6 +3020,7 @@ function JavaScriptModify()
 			'subject' => isset($_POST['subject']) ? $_POST['subject'] : null,
 			'body' => isset($_POST['message']) ? $_POST['message'] : null,
 			'icon' => isset($_REQUEST['icon']) ? preg_replace('~[\./\\\\*\':"<>]~', '', $_REQUEST['icon']) : null,
+			'id_owner' => $row['id_member'],
 		);
 		$topicOptions = array(
 			'id' => $topic,

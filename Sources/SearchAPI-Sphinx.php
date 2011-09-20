@@ -131,6 +131,8 @@ class sphinx_search
 				$mySphinx->SetIDRange(empty($search_params['min_msg_id']) ? 0 : (int) $search_params['min_msg_id'], empty($search_params['max_msg_id']) ? (int) $modSettings['maxMsgID'] : (int) $search_params['max_msg_id']);
 			if (!empty($search_params['brd']))
 				$mySphinx->SetFilter('ID_BOARD', $search_params['brd']);
+			if (!empty($search_params['prefix']))
+				$mySphinx->SetFilter('ID_PREFIX', $search_params['prefix']);
 			if (!empty($search_params['memberlist']))
 				$mySphinx->SetFilter('ID_MEMBER', $search_params['memberlist']);
 			

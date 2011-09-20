@@ -2681,9 +2681,9 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	// record in activity stream
 	if(in_array('as', $context['admin_features'])) {
 		require_once($sourcedir . '/Subs-Activities.php');
-		aStreamAdd($posterOptions['id'], ACT_MODIFY_POST,
-					   array('member_name' => $posterOptions['name'], 'topic_title' => $msgOptions['subject']),
-					   $topicOptions['board'], $topicOptions['id'], $msgOptions['id'], $posterOptions['id']);
+		aStreamAdd($user_info['id'], ACT_MODIFY_POST,
+					   array('member_name' => $user_info['name'], 'topic_title' => $msgOptions['subject']),
+					   $topicOptions['board'], $topicOptions['id'], $msgOptions['id'], $msgOptions['id_owner']);
 	}
 
 	return true;
