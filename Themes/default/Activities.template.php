@@ -104,13 +104,11 @@ function template_notifications_scripts()
 		setBusy(0);
 		var data = $(responseXML);
 		var response = data.find("response");
-		var q = data.find("query");
 		var ids = response.children("[name=\'markedread\']");
 
 		var total = parseInt($("#alerts").html());
 
 		if(ids.length == 1 && $(ids[0]).text() == "all") {
-			alert("all");
 			total = 0;
 		}
 		else {
@@ -122,7 +120,7 @@ function template_notifications_scripts()
 			});
 		}
 		$("#alerts").html(total);
-		if(total == 0)
+		if(total <= 0)
 			$("#alerts").hide();
 	}
 	$("ol#notifylist li.unread a._m").live("click", function() {

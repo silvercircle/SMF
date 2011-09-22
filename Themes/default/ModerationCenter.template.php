@@ -17,16 +17,16 @@ function template_moderation_center()
 	// Show a welcome message to the user.
 	echo '
 	<div id="modcenter">
-		<div class="cat_bar">
+		<div class="cat_bar2">
 			<h3>', $txt['moderation_center'], '</h3>
 		</div>
-		<div class="information blue_container">
+		<div class="information blue_container cleantop">
 			<strong>', $txt['hello_guest'], ' ', $context['user']['name'], '!</strong>
 			<p>
 				', $txt['mc_description'], '
 			</p>
-
-		</div>';
+		</div>
+		<br>';
 
 	$alternate = true;
 	// Show all the blocks they want to see.
@@ -59,7 +59,7 @@ function template_latest_news()
 				<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=live_news" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" alt="', $txt['help'], '" class="icon" /></a> ', $txt['mc_latest_news'], '</span>
 			</h3>
 		</div>
-		<div class="blue_container">
+		<div class="blue_container cleantop">
 			<div class="content">
 				<div id="smfAnnouncements" class="smalltext">', $txt['mc_cannot_connect_sm'], '</div>
 			</div>
@@ -104,7 +104,7 @@ function template_group_requests_block()
 				<a href="', $scripturl, '?action=groups;sa=requests">', $txt['mc_group_requests'], '</a>
 			</h3>
 		</div>
-		<div class="blue_container">
+		<div class="blue_container cleantop">
 			<div class="content modbox">
 				<ul class="reset">';
 
@@ -138,7 +138,7 @@ function template_reported_posts_block()
 				<a href="', $scripturl, '?action=moderate;area=reports">', $txt['mc_recent_reports'], '</a>
 			</h3>
 		</div>
-		<div class="blue_container">
+		<div class="blue_container cleantop">
 			<div class="content modbox">
 				<ul class="reset">';
 
@@ -171,7 +171,7 @@ function template_watched_users()
 				<a href="', $scripturl, '?action=moderate;area=userwatch">', $txt['mc_watched_users'], '</a>
 			</h3>
 		</div>
-		<div class="blue_container">
+		<div class="blue_container cleantop">
 			<div class="content modbox">
 				<ul class="reset">';
 
@@ -204,7 +204,7 @@ function template_notes()
 			<div class="cat_bar">
 				<h3>', $txt['mc_notes'], '</h3>
 			</div>
-			<div class="blue_container">
+			<div class="blue_container cleantop">
 				<div class="content modbox">';
 
 		if (!empty($context['notes']))
@@ -665,10 +665,10 @@ function template_moderation_settings()
 	echo '
 	<div id="modcenter">
 		<form action="', $scripturl, '?action=moderate;area=settings" method="post" accept-charset="', $context['character_set'], '">
-			<div class="cat_bar">
+			<div class="cat_bar2">
 				<h3>', $txt['mc_prefs_title'], '</h3>
 			</div>
-			<div class="red_container">
+			<div class="orange_container cleantop mediumpadding">
 				', $txt['mc_prefs_desc'], '
 			</div>
 			<br />

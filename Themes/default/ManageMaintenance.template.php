@@ -125,10 +125,9 @@ function template_maintain_routine()
 	echo '
 	<div id="manage_maintenance">
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['maintain_version'], '</h3>
+			<h3>', $txt['maintain_version'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content">
 				<form action="', $scripturl, '?action=admin;area=maintain;sa=routine;activity=version" method="post" accept-charset="', $context['character_set'], '">
 					<p>', $txt['maintain_version_info'], '</p>
@@ -136,13 +135,12 @@ function template_maintain_routine()
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 				</form>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
+		<br>
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['maintain_errors'], '</h3>
+			<h3>', $txt['maintain_errors'], '</h3>
 		</div>
-		<div class="windowbg2">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content">
 				<form action="', $scripturl, '?action=admin;area=repairboards" method="post" accept-charset="', $context['character_set'], '">
 					<p>', $txt['maintain_errors_info'], '</p>
@@ -150,13 +148,12 @@ function template_maintain_routine()
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 				</form>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
+		<br>
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['maintain_recount'], '</h3>
+			<h3>', $txt['maintain_recount'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content">
 				<form action="', $scripturl, '?action=admin;area=maintain;sa=routine;activity=recount" method="post" accept-charset="', $context['character_set'], '">
 					<p>', $txt['maintain_recount_info'], '</p>
@@ -164,13 +161,12 @@ function template_maintain_routine()
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 				</form>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
+		<br>
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['maintain_logs'], '</h3>
+			<h3>', $txt['maintain_logs'], '</h3>
 		</div>
-		<div class="windowbg2">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content">
 				<form action="', $scripturl, '?action=admin;area=maintain;sa=routine;activity=logs" method="post" accept-charset="', $context['character_set'], '">
 					<p>', $txt['maintain_logs_info'], '</p>
@@ -178,13 +174,12 @@ function template_maintain_routine()
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 				</form>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
+		<br>
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['maintain_cache'], '</h3>
+			<h3>', $txt['maintain_cache'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content">
 				<form action="', $scripturl, '?action=admin;area=maintain;sa=routine;activity=cleancache" method="post" accept-charset="', $context['character_set'], '">
 					<p>', $txt['maintain_cache_info'], '</p>
@@ -192,7 +187,6 @@ function template_maintain_routine()
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 				</form>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 	</div>
 	<br class="clear" />';
@@ -263,10 +257,9 @@ function template_maintain_members()
 	// ]]></script>
 	<div id="manage_maintenance">
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['maintain_reattribute_posts'], '</h3>
+			<h3>', $txt['maintain_reattribute_posts'], '</h3>
 		</div>
-		<div class="windowbg2">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content">
 				<form action="', $scripturl, '?action=admin;area=maintain;sa=members;activity=reattribute" method="post" accept-charset="', $context['character_set'], '">
 					<p><strong>', $txt['reattribute_guest_posts'], '</strong></p>
@@ -300,17 +293,16 @@ function template_maintain_members()
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 				</form>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
+		<br>
 		<div class="cat_bar">
-			<h3 class="catbg">
+			<h3>
 				<span class="ie6_header floatleft">
-					<a href="', $scripturl, '?action=helpadmin;help=maintenance_members" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" alt="', $txt['help'], '" /></a> ', $txt['maintain_members'], '
+					<a href="', $scripturl, '?action=helpadmin;help=maintenance_members" onclick="return reqWin(this.href);" class="help"><img class="icon" src="', $settings['images_url'], '/helptopics.png" alt="', $txt['help'], '" /></a> ', $txt['maintain_members'], '
 				</span>
 			</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content">
 				<form action="', $scripturl, '?action=admin;area=maintain;sa=members;activity=purgeinactive" method="post" accept-charset="', $context['character_set'], '" id="membersForm">
 					<p><a id="membersLink"></a>', $txt['maintain_members_since1'], '
@@ -333,7 +325,6 @@ function template_maintain_members()
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 				</form>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 	</div>
 	<br class="clear" />
@@ -394,10 +385,9 @@ function template_maintain_topics()
 	echo '
 	<div id="manage_maintenance">
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['maintain_old'], '</h3>
+			<h3>', $txt['maintain_old'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content flow_auto">
 				<form action="', $scripturl, '?action=admin;area=maintain;sa=topics;activity=pruneold" method="post" accept-charset="', $context['character_set'], '">';
 
@@ -459,13 +449,12 @@ function template_maintain_topics()
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 				</form>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
+		<br>
 		<div class="cat_bar">
-			<h3 class="catbg">', $txt['move_topics_maintenance'], '</h3>
+			<h3>', $txt['move_topics_maintenance'], '</h3>
 		</div>
-		<div class="windowbg2">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content">
 				<form action="', $scripturl, '?action=admin;area=maintain;sa=topics;activity=massmove" method="post" accept-charset="', $context['character_set'], '">
 					<p><label for="id_board_from">', $txt['move_topics_from'], ' </label>
@@ -509,7 +498,6 @@ function template_maintain_topics()
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 				</form>
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 	</div>
 	<br class="clear" />';

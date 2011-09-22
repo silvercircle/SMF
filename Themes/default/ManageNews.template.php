@@ -21,9 +21,9 @@ function template_edit_news()
 			<table class="table_grid" width="100%">
 				<thead>
 					<tr>
-						<th class="red_container" style="width:50%;">', $txt['admin_edit_news'], '</th>
-						<th class="red_container lefttext" style="width:45%;">', $txt['preview'], '</th>
-						<th class="red_container centertext"><input type="checkbox" class="input_check" onclick="invertAll(this, this.form);" /></th>
+						<th class="glass" style="width:50%;">', $txt['admin_edit_news'], '</th>
+						<th class="glass lefttext" style="width:45%;">', $txt['preview'], '</th>
+						<th class="glass centertext"><input type="checkbox" class="input_check" onclick="invertAll(this, this.form);" /></th>
 					</tr>
 				</thead>
 				<tbody>';
@@ -102,11 +102,11 @@ function template_email_members()
 			<div class="cat_bar">
 				<h3 class="catbg">', $txt['admin_newsletters'], '</h3>
 			</div>
-			<div class="information">
+			<div class="orange_container cleantop mediumpadding">
 				', $txt['admin_news_select_recipients'], '
 			</div>
-			<div class="windowbg">
-				<span class="topslice"><span></span></span>
+			<br>
+			<div class="blue_container">
 				<div class="content">
 					<dl class="settings">
 						<dt>
@@ -127,21 +127,11 @@ function template_email_members()
 						</dd>
 					</dl><br class="clear" />
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
-			<br />
-
-			<div class="cat_bar">
-				<h3 class="catbg" id="advanced_select_div" style="display: none;">
-					<span class="ie6_header floatleft">
-						<a href="#" onclick="toggleAdvanced(1); return false;" id="goadvanced"><img src="', $settings['images_url'], '/selected.gif" alt="', $txt['advanced'], '" />&nbsp;<strong>', $txt['advanced'], '</strong></a>
-						<a href="#" onclick="toggleAdvanced(0); return false;" id="gosimple" style="display: none;"><img src="', $settings['images_url'], '/sort_down.gif" alt="', $txt['simple'], '" />&nbsp;<strong>', $txt['simple'], '</strong></a>
-					</span>
-				</h3>
-			</div>
-
-			<div class="windowbg2" id="advanced_settings_div" style="display: none;">
-				<span class="topslice"><span></span></span>
+			<br />';
+			$collapser = array('id' => 'email_members_adv', 'title' => $txt['advanced']);
+			template_create_collapsible_container($collapser);
+			echo '
 				<div class="content">
 					<dl class="settings">
 						<dt>
@@ -196,8 +186,8 @@ function template_email_members()
 						</dd>
 					</dl><br class="clear" />
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
+			<br>
 			<div class="righttext">
 				<input type="submit" value="', $txt['admin_next'], '" class="button_submit" />
 				<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />

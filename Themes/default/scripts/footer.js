@@ -1411,10 +1411,11 @@ function getNotifications(el)
 
 function getAStream(el)
 {
-	if(el.attr('data-board') == 'all')
-		sendRequest('action=astream;sa=get;all', el);
+	var _el = el.children('a:first');
+	if(_el.attr('data-board') == 'all')
+		sendRequest('action=astream;sa=get;all', _el);
 	else
-		sendRequest('action=astream;sa=get;b=' + el.attr('data-board'), el);
+		sendRequest('action=astream;sa=get;b=' + _el.attr('data-board'), _el);
 }
 function getMcard(uid, el)
 {

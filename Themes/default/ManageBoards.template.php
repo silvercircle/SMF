@@ -28,12 +28,10 @@ function template_main()
 	// No categories so show a label.
 	if (empty($context['categories']))
 		echo '
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container">
 			<div class="content centertext">
 				', $txt['mboards_no_cats'], '
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>';
 
 	// Loop through every category, listing the boards in each as we go.
@@ -42,7 +40,7 @@ function template_main()
 		// Link to modify the category.
 		echo '
 			<div class="cat_bar">
-				<h3 class="catbg">
+				<h3>
 					<a href="' . $scripturl . '?action=admin;area=manageboards;sa=cat;cat=' . $category['id'] . '">', $category['name'], '</a> <a href="' . $scripturl . '?action=admin;area=manageboards;sa=cat;cat=' . $category['id'] . '">', $txt['catModify'], '</a>
 				</h3>
 			</div>';
@@ -50,8 +48,7 @@ function template_main()
 		// Boards table header.
 		echo '
 		<form action="', $scripturl, '?action=admin;area=manageboards;sa=newboard;cat=', $category['id'], '" method="post" accept-charset="', $context['character_set'], '">
-			<div class="windowbg">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container cleantop">
 				<div class="content">
 					<ul id="category_', $category['id'], '" class="floatleft" style="width:100%;">';
 
@@ -97,9 +94,9 @@ function template_main()
 						<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 					</div>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
-		</form>';
+		</form>
+		<br>';
 	}
 	echo '
 	</div>
@@ -117,11 +114,11 @@ function template_modify_category()
 		<form action="', $scripturl, '?action=admin;area=manageboards;sa=cat2" method="post" accept-charset="', $context['character_set'], '">
 			<input type="hidden" name="cat" value="', $context['category']['id'], '" />
 				<div class="cat_bar">
-					<h3 class="catbg">
+					<h3>
 					', isset($context['category']['is_new']) ? $txt['mboards_new_cat_name'] : $txt['catEdit'], '
 					</h3>
 				</div>
-				<div class="blue_container">
+				<div class="blue_container cleantop">
 					<div class="content">
 						<dl class="settings">';
 	// If this isn't the only category, let the user choose where this category should be positioned down the board index.

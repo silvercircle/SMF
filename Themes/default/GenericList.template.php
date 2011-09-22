@@ -30,7 +30,7 @@ function template_show_list($list_id = null)
 	// Show the title of the table (if any).
 	if (!empty($cur_list['title']))
 		echo '
-			<div class="cat_bar">
+			<div class="cat_bar2">
 				<h3>
 					', $cur_list['title'], '
 				</h3>

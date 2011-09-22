@@ -23,7 +23,7 @@ function template_init()
 
 	/*This should probably be the version of SMF it was created for. */
 	$settings['theme_version'] = '2.0';
-	$context['jsver'] = '?v=1468';
+	$context['jsver'] = '?v=1469';
 }
 
 // The main sub template above the content.
@@ -53,7 +53,7 @@ function template_html_above()
 	// Here comes the JavaScript bits!
 		echo '
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js?v=162"></script>
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js',$context['jsver'],'"></script>';
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/script.js',$context['jsver'],'"></script>';
 	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin')
 		echo '
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/admin.js',$context['jsver'],'"></script>';
@@ -139,7 +139,7 @@ function template_body_above()
 	$alerts = $user_info['notify_count'] > 0 ? $user_info['notify_count'] : '';
 	$scope = 0;
 	$search_label = $txt['search_all_boards'];
-	$astream_link = '<a data-board="all" onclick="getAStream($(this));return(false);" href="'.$scripturl . '?action=astream;sa=get;all">Recent activity</a>';
+	$astream_link = '<a data-board="all" href="'.$scripturl . '?action=astream;sa=get;all">Recent activity</a>';
 
 	if (isset($context['current_topic']) && $context['current_topic']) {
 		$search_label = $txt['search_topic'];
@@ -149,7 +149,7 @@ function template_body_above()
 	elseif (isset($context['current_board'])) {
 		$search_label = $txt['search_board'];
 		$scope = 1;
-		$astream_link = '<a data-board="'.$context['current_board'].'" onclick="getAStream($(this));return(false);" href="'.$scripturl . '?action=astream;sa=get;b=' . $context['current_board']. '">Recent activity</a>';
+		$astream_link = '<a data-board="'.$context['current_board'].'" href="'.$scripturl . '?action=astream;sa=get;b=' . $context['current_board']. '">Recent activity</a>';
 	}
 	echo '
 	<div id="ajaxbusy" style="display:none;"><img src="',$settings['images_url'],'/ajax-loader.gif" alt="loader" /></div>
@@ -177,7 +177,7 @@ function template_body_above()
 			<div class="floatright" style="position:relative;">';
 			if($modSettings['astream_active']) {
 				echo '
-			<span class="button notify">',$astream_link,'</span>';
+			<span onclick="getAStream($(this));return(false);" class="button notify">',$astream_link,'</span>';
 			if(!$context['user']['is_guest'])
 				echo '
 			<span id="notification_anchor" onclick="getNotifications($(this));return(false);" class="button notify"><a>Your notifications</a></span><span style="',($alerts > 0 ? '':'display:none;'),'position:relative;top:-14px;right:14px;" id="alerts">',$alerts,'</span><div id="notification_target" style="display:inline;position:relative;"></div>';

@@ -127,8 +127,7 @@ function aStreamMarkNotificationRead()
 		if($xml) {		// construct xml response for the JavaScript markread handler
 			header('Content-Type: text/xml; charset=' . (empty($context['character_set']) ? 'UTF-8' : $context['character_set']));
 			echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>
-			<response>
-			<query>',$query,'</query>';
+			<response>';
 			if($markallread)
 				echo '
 				<markedread name="markedread"><![CDATA[all]]></markedread>

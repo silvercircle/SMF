@@ -18,16 +18,17 @@ function template_report_type()
 	echo '
 	<div id="admincenter">
 		<form action="', $scripturl, '?action=admin;area=reports" method="post" accept-charset="', $context['character_set'], '">
-			<div class="cat_bar">
+			<div class="cat_bar2">
 				<h3 class="catbg">', $txt['generate_reports'], '</h3>
 			</div>
-			<div class="information orange_container">
+			<div class="orange_container cleantop mediumpadding">
 				', $txt['generate_reports_desc'], '
 			</div>
+			<br>
 			<div class="cat_bar">
 				<h3>', $txt['generate_reports_type'], '</h3>
 			</div>
-			<div class="blue_container">
+			<div class="blue_container cleantop">
 				<div class="content">
 					<dl class="generate_report">';
 
@@ -69,9 +70,10 @@ function template_main()
 
 	echo '
 	<div id="admincenter">
-		<div class="cat_bar">
+		<div class="cat_bar2">
 			<h3>', $txt['results'], '</h3>
 		</div>
+		<br>
 		<div id="report_buttons">';
 
 	if (!empty($report_buttons))
@@ -90,7 +92,7 @@ function template_main()
 			echo '
 			<thead>
 				<tr>
-					<th class="red_container" scope="col" colspan="', $table['column_count'], '">', $table['title'], '</th>
+					<th class="glass" scope="col" colspan="', $table['column_count'], '">', $table['title'], '</th>
 				</tr>
 			</thead>
 			<tbody>';
