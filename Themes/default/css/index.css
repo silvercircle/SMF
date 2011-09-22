@@ -1456,17 +1456,21 @@ ol.commonlist.notifications {
 }
 
 ol.commonlist.notifications li a, div.inlinePopup a {
-	color: #cc6600 !important;
+	color: #b9732c !important;
 }
-
+ol.commonlist.notifications li.unread a._m {
+	color:red !important;
+}
 ol.commonlist.notifications li a:hover {
 	text-decoration: underline;
 }
 
+ol.commonlist.notifications li.unread {
+	background-color: #ffeeff;
+}
 ol.commonlist.notifications li:hover {
 	background-color: #d5ecfa;
 }
-
 ol.category > li > div.lastpost {
 	float: right;
 	min-width: 330px;
@@ -1901,7 +1905,7 @@ ul.quickbuttons li a, .buttonlist ul li a, span.button {
 	font-size: 10px !important;
 	font-family: Verdana, arial, sans-serif;
 	font-weight: bold;
-	text-shadow: 0 0 0 transparent, 1px 1px 8px white;
+	text-shadow: 0 0 0 rgb(0,0,0,0), 1px 1px 8px white;
 	float: left;
 	line-height: 18px !important;
 	text-decoration: none;
@@ -2537,9 +2541,10 @@ tr.titlebg td {
 	height:24px;
 	line-height:24px;
 	padding:0 10px;
+}
+.cat_bar h3 {
 	text-shadow: 0 0 0 transparent, 2px 2px 5px white;
 }
-
 .cContainer_header {
 	margin-bottom: 0;
 	background: #f2f2f2 url(../images/theme/sprite.png) 0 -920px repeat-x;
@@ -2575,7 +2580,7 @@ tr.titlebg td {
 }
 
 #boardindex_table .cat_bar, #mcard .title_bar {
-	background: #ddd url(../images/theme/sprite.png) 0 -839px repeat-x;
+	background: #377AD8 url(../images/theme/sprite.png) 0 -839px repeat-x;
 	padding: 3px 9px;
 	height: 20px;
 	overflow: hidden;
@@ -2591,8 +2596,8 @@ tr.titlebg td {
 }
 
 #boardindex_table div.cat_bar > h2, #boardindex_table div.cat_bar a {
-	text-shadow: 0 0 0 transparent, 1px 1px 3px black !important;
 	color:white;
+	text-shadow: 0 0 0 transparent, 2px 2px 5px black;
 }
 
 #main_admsection .catbg {
@@ -3781,6 +3786,9 @@ div#ajaxbusy {
  * some generic classes
  */
 
+.norounded {
+	border-radius:0 !important;
+}
 .rounded_bottom {
 	border-bottom-left-radius: 5px !important;
 	border-bottom-right-radius: 5px !important;

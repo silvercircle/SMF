@@ -834,9 +834,9 @@ function Post()
 		
 			if($allow == 0)
 				fatal_lang_error('no_board', false);
+
+			$context['can_merge_with_last'] = $automerge > 0;
 		}
-		
-		$context['can_merge_with_last'] = $automerge > 0;
 		if ($user_info['is_guest'])
 		{
 			$context['name'] = isset($_SESSION['guest_name']) ? $_SESSION['guest_name'] : '';

@@ -16,10 +16,10 @@
 
 function aStreamDispatch()
 {
-	global $context, $sourcedir;
+	global $context, $sourcedir, $modSettings;
 
 	$xml = isset($_REQUEST['xml']) ? true : false;
-	if(!in_array('as', $context['admin_features'])) {
+	if(!$modSettings['astream_active']) {
 		if(!$xml)
 	    	redirectexit();
 		else
@@ -70,14 +70,14 @@ function aStreamGetNotifications()
 	$where = 'WHERE n.id_member = {int:id_member} AND ({query_see_board} OR a.id_board = 0) ';
 
 	$result = smf_db_query('
-		SELECT n.id_act, a.id_member, a.updated, a.id_type, a.params, a.is_private, a.id_board, a.id_topic, a.id_content, a.id_owner, t.*, b.name AS board_name FROM {db_prefix}log_notifications AS n
+		SELECT n.id_act, n.unread, a.id_member, a.updated, a.id_type, a.params, a.is_private, a.id_board, a.id_topic, a.id_content, a.id_owner, t.*, b.name AS board_name FROM {db_prefix}log_notifications AS n
 		LEFT JOIN {db_prefix}log_activities AS a ON (a.id_act = n.id_act)
 		LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
 		LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board) '.
 		$where .'AND n.unread = 1 ORDER BY n.id_act DESC LIMIT {int:start}, 20',
 		array('id_member' => $user_info['id'], 'start' => $start));
 
-	aStreamOutput($result);
+	aStreamOutput($result, true);
 
 	if($xml) {
 		$context['template_layers'] = array();
@@ -96,23 +96,56 @@ function aStreamMarkNotificationRead()
 {
 	global $context, $user_info;
 
+	$xml = isset($_REQUEST['xml']) ? true : false;
 	if($user_info['is_guest'])
 		return;
 
 	$new_act_ids = array();
 	if(isset($_REQUEST['act'])) {
-		if($_REQUEST['act'] === 'all')
-			$where = 'WHERE id_member = {int:id_member}';
+		if($_REQUEST['act'] === 'all') {
+			$where = 'id_member = {int:id_member}';
+			$markallread = true;
+		}
 		else {
 			$act_ids = explode(',', $_REQUEST['act']);
-			foreach($act_ids as $act)
-				$new_act_ids[] = (int)$act;
+			foreach($act_ids as $act) {
+				if((int)$act > 0)
+					$new_act_ids[] = (int)$act;
+			}
 			$new_act = join(',', $new_act_ids);
-			$where = 'WHERE id_member = {int:id_member} AND id_act IN('.$new_act.')';
+			$where = 'id_member = {int:id_member} AND id_act IN('.$new_act.')';
+			$markallread = false;
 		}
-		$query = 'UPDATE {db_prefix}log_notifications SET unread = 0 WHERE ' . $where;
-		echo $query;
+
+		if($markallread || count($new_act_ids) > 0) {
+			$query = 'UPDATE {db_prefix}log_notifications SET unread = 0 WHERE ' . $where;
+			smf_db_query($query,
+				array('id_member' => $user_info['id']));
+			updateMemberData($user_info['id'], array('last_login' => time()));
+		}
+
+		if($xml) {		// construct xml response for the JavaScript markread handler
+			header('Content-Type: text/xml; charset=' . (empty($context['character_set']) ? 'UTF-8' : $context['character_set']));
+			echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>
+			<response>
+			<query>',$query,'</query>';
+			if($markallread)
+				echo '
+				<markedread name="markedread"><![CDATA[all]]></markedread>
+				';
+			else {
+		 		foreach($new_act_ids as $act)
+				     echo '
+				     <markedread name="markedread"><![CDATA[',$act,']]></markedread>
+				     ';
+			}
+			echo '
+			</response>
+			';
+			obExit(false);
+		}
 	}
+	redirectexit();
 }
 /**
  * dispatch the get sub-action. Right now, it is possible to retrieve the
@@ -187,7 +220,7 @@ function aStreamGet($b = 0, $xml = false, $global = false)
  *
  * output the result of a activity stream query
  */
-function aStreamOutput($result)
+function aStreamOutput($result, $is_notification = false)
 {
 	global $context, $memberContext, $txt;
 
@@ -197,8 +230,9 @@ function aStreamOutput($result)
 		if(!isset($context['board_name']))
 			$context['board_name'] = $row['board_name'];
 		$users[] = $row['id_member'];
-		aStreamFormatActivity($row);
+		aStreamFormatActivity($row, $is_notification);
 		$row['dateline'] = timeformat($row['updated']);
+		$row['unread'] = isset($row['unread']) ? $row['unread'] : false;
 		$context['activities'][] = $row;
 		$context['act_results']++;
 	}

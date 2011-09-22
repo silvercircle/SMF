@@ -134,7 +134,7 @@ function GiveLike($mid)
 					
 				$update_mode = true;
 
-				if(in_array('as', $context['admin_features'])) {
+				if($context['astream_active']) {
 					require_once($sourcedir . '/Subs-Activities.php');
 					aStreamAdd($uid, ACT_LIKE,
 							array('member_name' => $context['user']['name'],

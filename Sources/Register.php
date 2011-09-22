@@ -646,17 +646,17 @@ function Activate()
 
 	if (!isset($_POST['new_email']))
 	{
+		$actid = 0;
 		require_once($sourcedir . '/Subs-Post.php');
 
-		adminNotify('activation', $row['id_member'], $row['member_name']);
-
 		// add to the activity stream
-		if(in_array('as', $context['admin_features'])) {
+		if($modSettings['astream_active']) {
 			require_once($sourcedir . '/Subs-Activities.php');
-			aStreamAdd($row['id_member'], ACT_NEWMEMBER,
-					array('member_name' => $row['member_name']),
-					0, 0, 0, 0);
+			$actid = aStreamAdd($row['id_member'], ACT_NEWMEMBER,
+						array('member_name' => $row['member_name']),
+						0, 0, 0, 0);
 		}
+		adminNotify('activation', $row['id_member'], $row['member_name'], $actid);
 	}
 
 	$context += array(

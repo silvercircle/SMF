@@ -275,6 +275,7 @@ function reloadSettings()
 
 	// Is post moderation alive and well?
 	$modSettings['postmod_active'] = isset($modSettings['admin_features']) ? in_array('pm', explode(',', $modSettings['admin_features'])) : true;
+	$modSettings['astream_active'] = isset($modSettings['admin_features']) ? in_array('as', explode(',', $modSettings['admin_features'])) : true;
 
 	// Integration is cool.
 	if (defined('SMF_INTEGRATION_SETTINGS'))
@@ -345,8 +346,15 @@ function loadUserSettings()
 	// Only load this stuff if the user isn't a guest.
 	if ($id_member != 0)
 	{
+		$_reload = false;
+		// do we have a notification to dismiss (mark as seen) with this request?
+		if(isset($_REQUEST['nmdismiss']) && (int)$_REQUEST['nmdismiss'] > 0) {
+			smf_db_query('UPDATE {db_prefix}log_notifications SET unread = 0 WHERE id_member = {int:id_user} AND id_act = {int:idact}',
+				array('id_user' => $id_member, 'idact' => (int)$_REQUEST['nmdismiss']));
+			$_reload = true;
+		}
 		// Is the member data cached?
-		if (empty($modSettings['cache_enable']) || $modSettings['cache_enable'] < 2 || ($user_settings = cache_get_data('user_settings-' . $id_member, 60)) == null)
+		if (empty($modSettings['cache_enable']) || $modSettings['cache_enable'] < 2 || ($user_settings = cache_get_data('user_settings-' . $id_member, 60)) == null || $_reload)
 		{
 			$request = smf_db_query( '
 				SELECT mem.*, IFNULL(a.id_attach, 0) AS id_attach, a.filename, a.attachment_type, count(n.id_member) AS notify_count
@@ -1672,10 +1680,6 @@ function loadTheme($id_theme = 0, $initialize = true)
 	// Initialize the theme.
 	loadSubTemplate('init', 'ignore');
 
-	// Load the compatibility stylesheet if the theme hasn't been updated for 2.0 RC2 (yet).
-	if (isset($settings['theme_version']) && (version_compare($settings['theme_version'], '2.0 RC2', '<') || strpos($settings['theme_version'], '2.0 Beta') !== false))
-		loadTemplate(false, 'compat');
-
 	// Guests may still need a name.
 	if ($context['user']['is_guest'] && empty($context['user']['name']))
 		$context['user']['name'] = $txt['guest_title'];
@@ -1703,10 +1707,6 @@ function loadTheme($id_theme = 0, $initialize = true)
 		$context['theme_variant'] = '_' . $context['theme_variant'];
 		$context['theme_variant_url'] = $context['theme_variant'] . '/';
 	}
-
-	// Let's be compatible with old themes!
-	if (!function_exists('template_html_above') && in_array('html', $context['template_layers']))
-		$context['template_layers'] = array('main');
 
 	// Allow overriding the board wide time/number formats.
 	if (empty($user_settings['time_format']) && !empty($txt['time_format']))
@@ -1739,7 +1739,7 @@ function loadTheme($id_theme = 0, $initialize = true)
 
 	// This allows us to change the way things look for the admin.
 	$context['admin_features'] = isset($modSettings['admin_features']) ? explode(',', $modSettings['admin_features']) : array('cd,cp,k,w,rg,ml,pm');
-
+	$context['astream_active'] = in_array('as', $context['admin_features']);
 	// If we think we have mail to send, let's offer up some possibilities... robots get pain (Now with scheduled task support!)
 	if ((!empty($modSettings['mail_next_send']) && $modSettings['mail_next_send'] < time() && empty($modSettings['mail_queue_use_cron'])) || empty($modSettings['next_task_time']) || $modSettings['next_task_time'] < time())
 	{

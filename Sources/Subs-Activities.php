@@ -97,7 +97,7 @@ function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $
 }
 
 /**
- * @param $users    int member_id or array of member_ids
+ * @param $users    array member_id or array of member_ids
  * @param $id_act   int id of the activity to send as notification
  *
  * this takes a list of member ids and an activity id and sends out notifications to
@@ -107,18 +107,15 @@ function aStreamAddNotification(&$users, $id_act)
 {
 	$users = !is_array($users) ? array($users) : array_unique($users);
 
-	foreach($users as $user) {
-		smf_db_insert('',
-			'{db_prefix}log_notifications',
-			array(
-				'id_member' => 'int', 'id_act' => 'int'
-			),
-			array(
-				$user, $id_act
-			),
-			array('id_act')
-		);
-		updateMemberData($user, array('last_login' => time()));
+	$values = array();
+	foreach($users as $user)
+		$values[] = '('.(int)$user.', '.(int)$id_act.')';
+	if(count($values)) {
+		$q = 'INSERT INTO {db_prefix}log_notifications (id_member, id_act) VALUES ' . join(',', $values);
+		smf_db_query($q);
+
+		foreach($users as $user)
+			updateMemberData($user, array('last_login' => time()));
 	}
 }
 
@@ -168,7 +165,7 @@ function actfmt_default(&$params)
  * we move things like id_topic, id_board et all into the array so the
  * formatting function can use them.
  */
-function aStreamFormatActivity(&$row)
+function aStreamFormatActivity(&$row, $is_notification = false)
 {
 	global $scripturl, $txt;
 	
@@ -179,7 +176,8 @@ function aStreamFormatActivity(&$row)
 	$callback = $row['formatter'];
 	if(function_exists($callback)) {
 		$out = call_user_func_array($callback, array(&$params));
-		$row['formatted_result'] = preg_replace('/@SCRIPTURL@/', $scripturl, $out);
+		$out = preg_replace('/@SCRIPTURL@/', $scripturl, $out);
+		$row['formatted_result'] = preg_replace('/@NM@/', $is_notification ? ';nmdismiss=' . $row['id_act'] : '', $out);
 	}
 	else
 		$row['formatted_result'] = $txt['unknown activity stream type'];

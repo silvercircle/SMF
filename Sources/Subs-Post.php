@@ -1933,7 +1933,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		// What if we want to export new topics out to a CMS?
 		call_integration_hook('integrate_create_topic', array($msgOptions, $topicOptions, $posterOptions));
 		// record the activity
-		if(in_array('as', $context['admin_features'])) {
+		if($context['astream_active']) {
 			require_once($sourcedir . '/Subs-Activities.php');
 			aStreamAdd($posterOptions['id'], ACT_NEWTOPIC,
 				   		array('member_name' => $posterOptions['name'], 'topic_title' => $msgOptions['subject']),
@@ -1970,7 +1970,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		if(false === $automerge_posts)
 			trackStats(array('posts' => '+'));
 
-		if(in_array('as', $context['admin_features'])) {
+		if($context['astream_active']) {
 			require_once($sourcedir . '/Subs-Activities.php');
 			aStreamAdd($posterOptions['id'], ACT_REPLIED,
 				   		array('member_name' => $posterOptions['name'], 'topic_title' => $msgOptions['subject']),
@@ -2679,7 +2679,7 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		approvePosts($msgOptions['id'], $msgOptions['approved']);
 
 	// record in activity stream
-	if(in_array('as', $context['admin_features'])) {
+	if($context['astream_active']) {
 		require_once($sourcedir . '/Subs-Activities.php');
 		aStreamAdd($user_info['id'], ACT_MODIFY_POST,
 					   array('member_name' => $user_info['name'], 'topic_title' => $msgOptions['subject']),
@@ -3195,9 +3195,9 @@ function updateLastMessages($setboards, $id_msg = 0)
 }
 
 // This simple function gets a list of all administrators and sends them an email to let them know a new member has joined.
-function adminNotify($type, $memberID, $member_name = null)
+function adminNotify($type, $memberID, $member_name = null, $actid = 0)
 {
-	global $txt, $modSettings, $language, $scripturl, $user_info, $context, $smcFunc;
+	global $txt, $modSettings, $language, $scripturl, $user_info, $context, $sourcedir;
 
 	// If the setting isn't enabled then just exit.
 	if (empty($modSettings['notify_new_registration']))
@@ -3256,6 +3256,7 @@ function adminNotify($type, $memberID, $member_name = null)
 			'group_array_implode' => implode(', additional_groups) != 0 OR FIND_IN_SET(', $groups),
 		)
 	);
+	$notify_users = array();
 	while ($row = mysql_fetch_assoc($request))
 	{
 		$replacements = array(
@@ -3275,8 +3276,13 @@ function adminNotify($type, $memberID, $member_name = null)
 
 		// And do the actual sending...
 		sendmail($row['email_address'], $emaildata['subject'], $emaildata['body'], null, null, false, 0);
+		$notify_users[] = $row['id_member'];
 	}
 	mysql_free_result($request);
+	if($actid && $modSettings['astream_active'] && count($notify_users)) {
+		require_once($sourcedir . '/Subs-Activities.php');
+		aStreamAddNotification($notify_users, $actid);
+	}
 
 	if (isset($current_language) && $current_language != $user_info['language'])
 		loadLanguage('Login');

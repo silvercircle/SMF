@@ -53,7 +53,7 @@ function template_html_above()
 	// Here comes the JavaScript bits!
 		echo '
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js?v=162"></script>
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/script.js',$context['jsver'],'"></script>';
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js',$context['jsver'],'"></script>';
 	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin')
 		echo '
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/admin.js',$context['jsver'],'"></script>';
@@ -134,7 +134,7 @@ function template_html_above()
 
 function template_body_above()
 {
-	global $context, $settings, $scripturl, $txt, $user_info;
+	global $context, $settings, $scripturl, $txt, $user_info, $modSettings;
 
 	$alerts = $user_info['notify_count'] > 0 ? $user_info['notify_count'] : '';
 	$scope = 0;
@@ -174,11 +174,14 @@ function template_body_above()
 			<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
 			<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
 			</div>
-			<div class="floatright" style="position:relative;">
+			<div class="floatright" style="position:relative;">';
+			if($modSettings['astream_active']) {
+				echo '
 			<span class="button notify">',$astream_link,'</span>';
-	if(!$context['user']['is_guest'])
-		echo '
-				<span id="notification_anchor" onclick="getNotifications($(this));return(false);" class="button notify"><a>Your notifications</a></span><span style="',($alerts > 0 ? '':'display:none;'),'position:relative;top:-14px;right:14px;" id="alerts">',$alerts,'</span><div id="notification_target" style="display:inline;position:relative;"></div>';
+			if(!$context['user']['is_guest'])
+				echo '
+			<span id="notification_anchor" onclick="getNotifications($(this));return(false);" class="button notify"><a>Your notifications</a></span><span style="',($alerts > 0 ? '':'display:none;'),'position:relative;top:-14px;right:14px;" id="alerts">',$alerts,'</span><div id="notification_target" style="display:inline;position:relative;"></div>';
+			}
 			echo '
 			</div>
 			</div>
