@@ -86,6 +86,7 @@ function Post()
 	global $user_info, $sc, $board_info, $context, $settings;
 	global $sourcedir, $options, $smcFunc, $language;
 
+	$context['need_synhlt'] = true;
 	loadLanguage('Post');
 	loadLanguage('Tagging');
 	$context['tagging_ui'] = '';
@@ -1315,6 +1316,7 @@ function Post2()
 	global $board, $topic, $txt, $modSettings, $sourcedir, $context;
 	global $user_info, $board_info, $options, $smcFunc;
 
+	$context['need_synhlt'] = true;
 	// Sneaking off, are we?
 	if (empty($_POST) && empty($topic))
 		redirectexit('action=post;board=' . $board . '.0');

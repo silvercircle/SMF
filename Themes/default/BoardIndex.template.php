@@ -90,7 +90,7 @@ function template_main()
 
 		echo '
 			<div class="category" id="category_', $category['id'], '">
- 			  <div class="cat_bar rounded_top">';
+ 			  <div class="cat_bar2">';
 
 		// If this category even can collapse, show a link to collapse it.
 		if ($category['can_collapse'])
@@ -102,7 +102,7 @@ function template_main()
 					<a class="unreadlink" href="', $scripturl, '?action=unread;c=', $category['id'], '">', $txt['view_unread_category'], '</a>';
 
 		echo '
-				<h2 class="catbg">
+				<h2>
 				', $category['link'], '
 			  	</h2>
 		      </div>
@@ -113,7 +113,7 @@ function template_main()
 		//{
 		echo '
 			<ol class="commonlist category" ',$category['is_collapsed'] ? 'style="display:none;" ' : '', ' id="category_', $category['id'], '_boards">
-			<li class="brow glass">
+			<li class="brow glass cleantop">
 				<div class="floatright centertext lastpost">',$txt['last_post'],'</div>
 				<div class="floatright centertext stats">',$txt['content_label'],'</div>
 				<div class="centertext">',$txt['board'],'</div>

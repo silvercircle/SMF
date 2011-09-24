@@ -467,7 +467,9 @@ tr.titlebg th a:link, tr.titlebg th a:visited {
 	padding:0 10px !important;
 	text-shadow: white 1px 1px 1px;
 }
-
+.glass.cleantop {
+	background: #F0F0F5 url(../images/theme/sprite.png) 0 -615px repeat-x;
+}
 .glass > div {
 	padding:0 !important;
 }
@@ -2533,6 +2535,9 @@ tr.titlebg td {
 	border-right: 1px solid #F8DA8B;
 }
 
+#boardindex_table .cat_bar2 img {
+	margin-top:4px;
+}
 .cat_bar, #left_admsection .cat_bar, #main_admsection .cat_bar, .cat_bar2 {
 	background: #E2E2E2 url(../images/theme/sprite.png) 0 -118px repeat-x;
 	border: 1px solid #ddd;
@@ -2555,19 +2560,19 @@ tr.titlebg td {
 	border-radius:2px 2px 0 0;
 }
 .cContainer_header h3, .cat_bar2 h3 {
-	color:white;
-	text-shadow: 0 0 0 transparent, 1px 1px 1px black;
+	color:rgba(255,255,255,0.99);
+	text-shadow: 1px 1px 1px black;
 }
 .cContainer_header a, .cat_bar2 a {
-	color: #dbdbfa;
-	text-shadow: 0 0 0 transparent, 1px 1px 1px black;
+	color: rgba(219, 219, 250, 0.99);
+	text-shadow: 1px 1px 1px black;
 }
 .cContainer_header img {
 	margin-top:4px;
 }
 .cat_bar2 {
 	margin-bottom: 0;
-	background: #f2f2f2 url(../images/theme/sprite.png) 0 -920px repeat-x;
+	background: #819DE1 url(../images/theme/sprite.png) 0 -920px repeat-x;
 	border:0;
 	height:26px;
 	line-height:26px;
@@ -2579,7 +2584,7 @@ tr.titlebg td {
 	height:24px;
 }
 
-#boardindex_table .cat_bar, #mcard .title_bar {
+#mcard .title_bar {
 	background: #377AD8 url(../images/theme/sprite.png) 0 -839px repeat-x;
 	padding: 3px 9px;
 	height: 20px;
@@ -2594,12 +2599,6 @@ tr.titlebg td {
 	color: white;
 	text-shadow: 0 0 0 transparent, 2px 2px 5px black;
 }
-
-#boardindex_table div.cat_bar > h2, #boardindex_table div.cat_bar a {
-	color:white;
-	text-shadow: 0 0 0 transparent, 2px 2px 5px black;
-}
-
 #main_admsection .catbg {
 	height: 18px;
 	margin: 0;

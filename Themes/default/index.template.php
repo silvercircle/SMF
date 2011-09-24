@@ -23,7 +23,7 @@ function template_init()
 
 	/*This should probably be the version of SMF it was created for. */
 	$settings['theme_version'] = '2.0';
-	$context['jsver'] = '?v=1469';
+	$context['jsver'] = '?v=1470';
 }
 
 // The main sub template above the content.

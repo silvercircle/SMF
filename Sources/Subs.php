@@ -3220,8 +3220,6 @@ function setupThemeContext($forceload = false)
 		// If we've upgraded recently, go easy on the passwords.
 		if (!empty($modSettings['disableHashTime']) && ($modSettings['disableHashTime'] == 1 || time() < $modSettings['disableHashTime']))
 			$context['disable_login_hashing'] = true;
-		elseif ($context['browser']['is_ie5'] || $context['browser']['is_ie5.5'])
-			$context['disable_login_hashing'] = true;
 	}
 
 	// Setup the main menu items.

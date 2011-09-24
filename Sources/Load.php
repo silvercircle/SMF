@@ -347,7 +347,7 @@ function loadUserSettings()
 	if ($id_member != 0)
 	{
 		$_reload = false;
-		// do we have a notification to dismiss (mark as seen) with this request?
+		// do we have a notification to dismiss (mark as seen) with this request? (we can only mark one per request, but that should be sufficient)
 		if(isset($_REQUEST['nmdismiss']) && (int)$_REQUEST['nmdismiss'] > 0) {
 			smf_db_query('UPDATE {db_prefix}log_notifications SET unread = 0 WHERE id_member = {int:id_user} AND id_act = {int:idact}',
 				array('id_user' => $id_member, 'idact' => (int)$_REQUEST['nmdismiss']));
@@ -1302,12 +1302,12 @@ function detectBrowser()
 	// The following determines the user agent (browser) as best it can.
 	$context['browser'] = array(
 		'is_opera' => strpos($_SERVER['HTTP_USER_AGENT'], 'Opera') !== false,
-		'is_opera6' => strpos($_SERVER['HTTP_USER_AGENT'], 'Opera 6') !== false,
-		'is_opera7' => strpos($_SERVER['HTTP_USER_AGENT'], 'Opera 7') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Opera/7') !== false,
-		'is_opera8' => strpos($_SERVER['HTTP_USER_AGENT'], 'Opera 8') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Opera/8') !== false,
+		'is_opera6' => false,
+		'is_opera7' => false,
+		'is_opera8' => false,
 		'is_opera9' => preg_match('~Opera[ /]9(?!\\.[89])~', $_SERVER['HTTP_USER_AGENT']) === 1,
 		'is_opera10' => preg_match('~Opera[ /]10\\.~', $_SERVER['HTTP_USER_AGENT']) === 1 || (preg_match('~Opera[ /]9\\.[89]~', $_SERVER['HTTP_USER_AGENT']) === 1 && preg_match('~Version/1[0-9]\\.~', $_SERVER['HTTP_USER_AGENT']) === 1),
-		'is_ie4' => strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 4') !== false && strpos($_SERVER['HTTP_USER_AGENT'], 'WebTV') === false,
+		'is_ie4' => false,
 		'is_webkit' => strpos($_SERVER['HTTP_USER_AGENT'], 'AppleWebKit') !== false,
 		'is_mac_ie' => strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 5.') !== false && strpos($_SERVER['HTTP_USER_AGENT'], 'Mac') !== false,
 		'is_web_tv' => strpos($_SERVER['HTTP_USER_AGENT'], 'WebTV') !== false,
@@ -1327,15 +1327,12 @@ function detectBrowser()
 	// Internet Explorer 5 and 6 are often "emulated".
 	$context['browser']['is_ie8'] = !$context['browser']['is_opera'] && !$context['browser']['is_gecko'] && !$context['browser']['is_web_tv'] && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 8') !== false;
 	$context['browser']['is_ie7'] = !$context['browser']['is_opera'] && !$context['browser']['is_gecko'] && !$context['browser']['is_web_tv'] && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 7') !== false && !$context['browser']['is_ie8'];
-	$context['browser']['is_ie6'] = !$context['browser']['is_opera'] && !$context['browser']['is_gecko'] && !$context['browser']['is_web_tv'] && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 6') !== false && !$context['browser']['is_ie8'] && !$context['browser']['is_ie7'];
-	$context['browser']['is_ie5.5'] = !$context['browser']['is_opera'] && !$context['browser']['is_gecko'] && !$context['browser']['is_web_tv'] && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 5.5') !== false;
-	$context['browser']['is_ie5'] = !$context['browser']['is_opera'] && !$context['browser']['is_gecko'] && !$context['browser']['is_web_tv'] && strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 5.0') !== false;
 
-	$context['browser']['is_ie'] = $context['browser']['is_ie4'] || $context['browser']['is_ie5'] || $context['browser']['is_ie5.5'] || $context['browser']['is_ie6'] || $context['browser']['is_ie7'] || $context['browser']['is_ie8'];
+	$context['browser']['is_ie'] = $context['browser']['is_ie7'] || $context['browser']['is_ie8'];
 	// Before IE8 we need to fix IE... lots!
-	$context['browser']['ie_standards_fix'] = !$context['browser']['is_ie8'];
+	$context['browser']['ie_standards_fix'] = false;//!$context['browser']['is_ie8'];
 
-	$context['browser']['needs_size_fix'] = ($context['browser']['is_ie5'] || $context['browser']['is_ie5.5'] || $context['browser']['is_ie4'] || $context['browser']['is_opera6']) && strpos($_SERVER['HTTP_USER_AGENT'], 'Mac') === false;
+	$context['browser']['needs_size_fix'] = false;
 
 	// This isn't meant to be reliable, it's just meant to catch most bots to prevent PHPSESSID from showing up.
 	$context['browser']['possibly_robot'] = !empty($user_info['possibly_robot']);
@@ -1729,10 +1726,6 @@ function loadTheme($id_theme = 0, $initialize = true)
 
 	$context['tabindex'] = 1;
 
-	// Fix font size with HTML 4.01, etc.
-	if (isset($settings['doctype']))
-		$context['browser']['needs_size_fix'] |= $settings['doctype'] == 'html' && $context['browser']['is_ie6'];
-
 	// Compatibility.
 	if (!isset($settings['theme_version']))
 		$modSettings['memberCount'] = $modSettings['totalMembers'];
@@ -1835,8 +1828,8 @@ function loadTemplate($template_name, $style_sheets = array(), $fatal = true)
 	if ($loaded)
 	{
 		// For compatibility reasons, if this is the index template without new functions, include compatible stuff.
-		if (substr($template_name, 0, 5) == 'index' && !function_exists('template_button_strip'))
-			loadTemplate('Compat');
+		//if (substr($template_name, 0, 5) == 'index' && !function_exists('template_button_strip'))
+		//	loadTemplate('Compat');
 
 		if ($db_show_debug === true)
 			$context['debug']['templates'][] = $template_name . ' (' . basename($template_dir) . ')';
@@ -2263,9 +2256,7 @@ function template_include($filename, $once = false)
 				$data2 = preg_split('~\<br( /)?\>~', $data2);
 
 				// Fix the PHP code stuff...
-				if ($context['browser']['is_ie4'] || $context['browser']['is_ie5'] || $context['browser']['is_ie5.5'])
-					$data2 = str_replace("\t", '<pre style="display: inline;">' . "\t" . '</pre>', $data2);
-				elseif (!$context['browser']['is_gecko'])
+				if (!$context['browser']['is_gecko'])
 					$data2 = str_replace("\t", '<span style="white-space: pre;">' . "\t" . '</span>', $data2);
 				else
 					$data2 = str_replace('<pre style="display: inline;">' . "\t" . '</pre>', "\t", $data2);

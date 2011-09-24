@@ -33,7 +33,7 @@ if (!defined('SMF'))
 // Get the latest post.
 function getLastPost()
 {
-	global $user_info, $scripturl, $modSettings, $smcFunc;
+	global $scripturl, $modSettings, $smcFunc;
 
 	// Find it by the board - better to order by board than sort the entire messages table.
 	$request = smf_db_query('
@@ -80,8 +80,9 @@ function getLastPost()
 // Find the ten most recent posts.
 function RecentPosts()
 {
-	global $txt, $scripturl, $user_info, $context, $modSettings, $sourcedir, $board, $smcFunc;
+	global $txt, $scripturl, $user_info, $context, $modSettings, $board;
 
+	$context['need_synhlt'] = true;
 	loadTemplate('Recent');
 	$context['page_title'] = $txt['recent_posts'];
 

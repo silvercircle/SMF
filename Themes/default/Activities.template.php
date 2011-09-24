@@ -192,4 +192,45 @@ function template_notifications_xml()
 	</div>';
 	template_notifications_scripts();
 }
+function template_notifications()
+{
+	global $context, $txt, $scripturl;
+
+	echo '
+	<div class="cat_bar2 norounded">
+	<h3>',$txt['act_recent_notifications'],'</h3>
+	</div>
+	';
+	if($context['act_results']) {
+		echo '
+	<ol id="notifylist" class="commonlist notifications">';
+	foreach($context['activities'] as $activity)
+		template_activitybit($activity);
+	echo '
+	</ol>';
+	}
+	else
+		echo '
+	<div class="red_container cleantop centertext smalltext">'
+	  ,$txt['act_no_unread_notifications'],'
+	</div>';
+	echo '
+	<div class="yellow_container smalltext cleantop">
+	<dl class="common">
+	<dt>';
+	if($context['act_results'] && $context['unread_count'] > 0)
+		echo '
+		<a onclick="markAllNotificationsRead();return(false);" href="',$scripturl,'?action=astream;sa=markread;act=all">',$txt['act_mark_all_read'],'</a>';
+	echo '
+	</dt>
+	<dd class="righttext">';
+	if(!$context['view_all'])
+		echo '
+	<a href="',$scripturl,'?action=astream;sa=notifications;view=all">',$txt['act_view_all'],'</a>';
+	echo '
+	</dd>
+	</dl>
+	</div>';
+	template_notifications_scripts();
+}
 ?>

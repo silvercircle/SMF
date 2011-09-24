@@ -25,7 +25,6 @@ function aStreamDispatch()
 		else
 			obExit(false);
 	}
-
 	require_once($sourcedir . '/Subs-Activities.php');
 	$sub_actions = array(
 		'get' => array('function' => 'aStreamGetStream'),
@@ -65,16 +64,21 @@ function aStreamGetNotifications()
 	$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
 
 	$context['get_notifications'] = true;
-	$context['rich_output'] = true;		// todo: this indicates whether we want simple or rich activity bits (rich = with avatar)
+	$context['rich_output'] = true;		// todo: this indicates whether we want simple or rich activity bits (rich = with avatar and possibly other member data)
 
 	$where = 'WHERE n.id_member = {int:id_member} AND ({query_see_board} OR a.id_board = 0) ';
-
+	if($view != 'all') {
+		$where .= ' AND n.unread = 1 ';
+		$context['view_all'] = false;
+	}
+	else
+		$context['view_all'] = true;
 	$result = smf_db_query('
 		SELECT n.id_act, n.unread, a.id_member, a.updated, a.id_type, a.params, a.is_private, a.id_board, a.id_topic, a.id_content, a.id_owner, t.*, b.name AS board_name FROM {db_prefix}log_notifications AS n
 		LEFT JOIN {db_prefix}log_activities AS a ON (a.id_act = n.id_act)
 		LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
 		LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board) '.
-		$where .'AND n.unread = 1 ORDER BY n.id_act DESC LIMIT {int:start}, 20',
+		$where . 'ORDER BY n.id_act DESC LIMIT {int:start}, 20',
 		array('id_member' => $user_info['id'], 'start' => $start));
 
 	aStreamOutput($result, true);
@@ -100,8 +104,8 @@ function aStreamMarkNotificationRead()
 	if($user_info['is_guest'])
 		return;
 
-	$new_act_ids = array();
 	if(isset($_REQUEST['act'])) {
+		$new_act_ids = array();
 		if($_REQUEST['act'] === 'all') {
 			$where = 'id_member = {int:id_member}';
 			$markallread = true;
@@ -225,6 +229,7 @@ function aStreamOutput($result, $is_notification = false)
 
 	$users = array();
 	$context['act_results'] = 0;
+	$context['unread_count'] = 0;
 	while($row = mysql_fetch_assoc($result)) {
 		if(!isset($context['board_name']))
 			$context['board_name'] = $row['board_name'];
@@ -232,12 +237,13 @@ function aStreamOutput($result, $is_notification = false)
 		aStreamFormatActivity($row, $is_notification);
 		$row['dateline'] = timeformat($row['updated']);
 		$row['unread'] = isset($row['unread']) ? $row['unread'] : false;
+		$context['unread_count'] += ($row['unread'] ? 1 : 0);			// needed when showing notifications
 		$context['activities'][] = $row;
 		$context['act_results']++;
 	}
 	mysql_free_result($result);
-	$n = 0;
 	if($context['rich_output']) {
+		$n = 0;
 		loadMemberData($users);
 		foreach($users as $user) {
 			loadMemberContext($user);

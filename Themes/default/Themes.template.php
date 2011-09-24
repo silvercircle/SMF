@@ -195,14 +195,7 @@ function template_main()
 			}
 		// ]]></script>';
 
-	// Gotta love IE4, and its hatefulness...
-	if ($context['browser']['is_ie4'])
-		echo '
-		<script type="text/javascript"><!-- // --><![CDATA[
-			addLoadEvent(smfSetLatestThemes);
-		// ]]></script>';
-	else
-		echo '
+	echo '
 		<script type="text/javascript"><!-- // --><![CDATA[
 			smfSetLatestThemes();
 		// ]]></script>';

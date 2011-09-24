@@ -627,7 +627,6 @@ function template_main()
 					document.getElementById(\'preview_section\').style.display = \'\';
 					setInnerHTML(document.getElementById(\'preview_subject\'), txt_preview_title);
 					setInnerHTML(document.getElementById(\'preview_body\'), txt_preview_fetch);
-
 					return false;
 				}
 				else
@@ -653,6 +652,7 @@ function template_main()
 					bodyText += preview.getElementsByTagName(\'body\')[0].childNodes[i].nodeValue;
 
 				setInnerHTML(document.getElementById(\'preview_body\'), bodyText);
+				shConfig();
 
 				// Show a list of errors (if any).
 				var errors = XMLDoc.getElementsByTagName(\'smf\')[0].getElementsByTagName(\'errors\')[0];

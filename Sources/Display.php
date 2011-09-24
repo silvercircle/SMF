@@ -1449,12 +1449,8 @@ function Download()
 	header('Connection: close');
 	header('ETag: ' . $eTag);
 
-	// IE 6 just doesn't play nice. As dirty as this seems, it works.
-	if ($context['browser']['is_ie6'] && isset($_REQUEST['image']))
-		unset($_REQUEST['image']);
-
 	// Make sure the mime type warrants an inline display.
-	elseif (isset($_REQUEST['image']) && !empty($mime_type) && strpos($mime_type, 'image/') !== 0)
+	if (isset($_REQUEST['image']) && !empty($mime_type) && strpos($mime_type, 'image/') !== 0)
 		unset($_REQUEST['image']);
 
 	// Does this have a mime type?
