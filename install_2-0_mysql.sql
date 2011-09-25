@@ -1466,6 +1466,7 @@ CREATE TABLE {$db_prefix}drafts (
 	id_topic  int(10) unsigned NOT NULL default '0',
 	id_board  smallint(5) unsigned NOT NULL default '0',
 	id_msg	  int(10) unsigned NOT NULL default '0',
+	id_owner  int(10) unsigned NOT NULL default '0',
 	updated   int(10) NOT NULL default '0',
 	icon	  varchar(20) NOT NULL default '',
 	smileys   tinyint(2) NOT NULL default '1',
@@ -1932,6 +1933,7 @@ VALUES ('use_post_cache', '0'),
 	('tidy_child_display_columns', '4'),
 	('child_board_desc_shortened', '0'),
 	('astream_expire_days', '30'),
+	('enableAutoSaveDrafts', '0'),
 	('embed_GA', '0');
 
 INSERT INTO {$db_prefix}activity_types

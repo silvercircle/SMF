@@ -367,4 +367,12 @@ $txt['permissionhelp_smftags_del'] = 'Users may delete tags from topics they hav
 $txt['permissionname_smftags_manage'] = 'Add and delete tags in any topic';
 $txt['permissionhelp_smftags_manage'] = 'User can add and delete tags from any topic. This permission should only be available to administrators and moderators.';
 
+$txt['permissiongroup_drafts'] = 'Drafts';
+$txt['permissiongroup_simple_drafts'] = 'Drafts';
+
+$txt['permissionname_drafts_allow'] = 'Can use drafts';
+$txt['permissionhelp_drafts_allow'] = 'A user can save a draft when posting new or modifying existing messages.';
+
+$txt['permissionname_drafts_autosave_allow'] = 'Can save drafts automatically';
+$txt['permissionhelp_drafts_autosave_allow'] = 'The user\'s drafts will be saved automatically if this feature has been enabled in the admin area. Be aware that this can consume a considerable amount of server load and bandwith. Use with care, especially make sure to set the time interval to a reasonable value.';
 ?>

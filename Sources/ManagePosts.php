@@ -69,6 +69,9 @@ function ManagePostSettings()
 		'tags' => 'ModifyTagSettings',
 	);
 
+	if(in_array('dr', $context['admin_features']))
+		$subActions['drafts'] = 'ModifyDraftSettings';
+
 	// Default the sub-action to 'posts'.
 	$_REQUEST['sa'] = isset($_REQUEST['sa']) && isset($subActions[$_REQUEST['sa']]) ? $_REQUEST['sa'] : 'posts';
 
@@ -94,8 +97,11 @@ function ManagePostSettings()
 			),
 		),
 	);
-
-	// Call the right function for this sub-action.
+	if(in_array('dr', $context['admin_features']))
+		$context[$context['admin_menu_name']]['tab_data']['tabs']['drafts'] = array(
+			'label' => $txt['manageposts_draft_label'],
+			'description' => $txt['manageposts_draft_settings_desc'],
+		);
 	$subActions[$_REQUEST['sa']]();
 }
 
@@ -201,10 +207,6 @@ function ModifyPostSettings($return_config = false)
 			array('int', 'spamWaitTime', 'postinput' => $txt['manageposts_seconds']),
 			array('int', 'edit_wait_time', 'postinput' => $txt['manageposts_seconds']),
 			array('int', 'edit_disable_time', 'subtext' => $txt['edit_disable_time_zero'], 'postinput' => $txt['manageposts_minutes']),
-			
-			array('check', 'masterSaveDrafts', 'subtext' => $txt['draftsave_subnote']),
-			array('check', 'masterAutoSaveDrafts', 'subtext' => $txt['draftautosave_subnote']),
-			array('int', 'masterAutoSaveDraftsDelay', 'postinput' => $txt['manageposts_seconds']),
 	);
 
 	if($modSettings['post_cache_cutoff'] < 10)
@@ -330,7 +332,7 @@ function ModifyBBCSettings($return_config = false)
 // Function for modifying topic settings. Not very exciting.
 function ModifyTopicSettings($return_config = false)
 {
-	global $context, $txt, $modSettings, $sourcedir, $scripturl;
+	global $context, $txt, $sourcedir, $scripturl;
 
 	// Here are all the topic settings.
 	$config_vars = array(
@@ -408,9 +410,39 @@ function normalizeCommaDelimitedList($b)
 	return(implode(',', $bnew));
 }
 
+function ModifyDraftSettings($return_config = false)
+{
+	global $txt, $sourcedir, $context, $scripturl;
+	$config_vars = array(
+		array('int', 'enableAutoSaveDrafts', 'subtext' => $txt['draftsave_subnote'], 'postinput' => $txt['manageposts_seconds']),
+	);
+
+	$context['page_title'] = $txt['manageposts_draft_settings'];
+	$context['sub_template'] = 'show_settings';
+
+	if ($return_config)
+		return $config_vars;
+
+	require_once($sourcedir . '/ManageServer.php');
+
+	if (isset($_GET['save']))
+	{
+		checkSession();
+
+		saveDBSettings($config_vars);
+		redirectexit('action=admin;area=postsettings;sa=drafts');
+	}
+
+	// Final settings...
+	$context['post_url'] = $scripturl . '?action=admin;area=postsettings;save;sa=drafts';
+	$context['settings_title'] = $txt['manageposts_draft_settings'];
+
+	prepareDBSettingContext($config_vars);
+}
+
 function ModifyPrefixSettings()
 {
-	global $context, $txt, $modSettings, $sourcedir, $scripturl, $smcFunc;
+	global $context, $txt;
 	
 	$context['page_title'] = $txt['manageposts_prefix_settings'];
 	$context['settings_title'] = $txt['manageposts_prefix_settings'];
@@ -464,9 +496,8 @@ function ModifyPrefixSettings()
 
 function ModifyTagSettings()
 {
-	global $context, $txt, $modSettings, $sourcedir, $scripturl, $smcFunc;
+	global $context, $txt;
 
-	// Check permission
 	isAllowedTo('smftags_manage');
 	loadLanguage('Tagging');
 	$context['page_title'] = $txt['manageposts_tag_settings'];

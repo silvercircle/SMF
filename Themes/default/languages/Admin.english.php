@@ -483,6 +483,10 @@ $txt['manageposts_topic_settings_submit'] = 'Save';
 $txt['manageposts_prefix_settings'] = 'Topic prefixes';
 $txt['manageposts_tag_settings'] = 'Topic tagging';
 
+$txt['manageposts_draft_settings'] = 'Draft settings';
+$txt['manageposts_draft_settings_desc'] = 'Here you can configure the drafts feature. Note that you must still set permissions for normal user groups to enable drafts for ordinary forum users.';
+$txt['manageposts_draft_label'] = 'Drafts';
+
 $txt['prefix_name'] = 'Prefix name';
 $txt['prefix_html_before'] = 'HTML before';
 $txt['prefix_html_after'] = 'HTML after';
@@ -631,10 +635,6 @@ $txt['paid_subscriptions'] = 'Paid Subscriptions';
 $txt['paid_subs_view'] = 'View Subscriptions';
 
 // Admin options
-$txt['masterSaveDrafts'] = 'Enable saving of post drafts';
-$txt['masterAutoSaveDrafts'] = 'Enable automatic saving of post drafts';
-$txt['draftsave_subnote'] = 'Note that the user must still have permission in the Permissions area.';
-$txt['draftautosave_subnote'] = 'This does not override the above option, merely extending it. Also, user must have permission.';
-$txt['masterAutoSaveDraftsDelay'] = 'How often should posts be autosaved?';
-
+$txt['enableAutoSaveDrafts'] = 'Automatically save drafts every';
+$txt['draftsave_subnote'] = 'A user must still have permission to use this feature<br><br>If set to 0, auto-saving will be globally disabled for all users, including administrators.<br>Be aware that this feature can consume considerable server load and bandwidth, so do not set the auto-saving interval too low.';
 ?>

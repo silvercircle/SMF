@@ -100,8 +100,8 @@ function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $
  * @param $users    array member_id or array of member_ids
  * @param $id_act   int id of the activity to send as notification
  *
- * this takes a list of member ids and an activity id and sends out notifications to
- * all the users.
+ * this takes a single id_member or an array of such ids plus an activity id
+ * and sends out notifications to the members.
  */
 function aStreamAddNotification(&$users, $id_act)
 {

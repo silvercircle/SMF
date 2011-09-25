@@ -139,7 +139,7 @@ function template_body_above()
 	$alerts = $user_info['notify_count'] > 0 ? $user_info['notify_count'] : '';
 	$scope = 0;
 	$search_label = $txt['search_all_boards'];
-	$astream_link = '<a data-board="all" href="'.$scripturl . '?action=astream;sa=get;all">Recent activity</a>';
+	$astream_link = '<a rel="nofollow" data-board="all" href="'.$scripturl . '?action=astream;sa=get;all">Recent activity</a>';
 
 	if (isset($context['current_topic']) && $context['current_topic']) {
 		$search_label = $txt['search_topic'];
@@ -245,7 +245,6 @@ function template_body_above()
 	<div class="clear cContainer_end"></div>';
 	echo '<aside>
 		  <div id="sidebar" style="width:255px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
-		//if(($sidebar_allowed && $sidebar_vis) || (isset($_COOKIE['smf_jsavail']) && !$_COOKIE['smf_jsavail']))
 		if($sidebar_allowed)
 			template_sidebar_content();
 	echo '</div>

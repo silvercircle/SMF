@@ -1495,6 +1495,8 @@ function loadAllPermissions($loadType = 'classic')
 			'smftags_add' => array(false, 'smftags', 'smftags'),
 			'smftags_del' => array(false, 'smftags', 'smftags'),
 			'smftags_manage' => array(false, 'smftags', 'smftags'),
+			'drafts_allow' => array(false, 'drafts', 'drafts'),
+			'drafts_autosave_allow' => array(false, 'drafts', 'drafts'),
 		),
 		'board' => array(
 			'moderate_board' => array(false, 'general_board', 'moderate'),

@@ -2550,7 +2550,7 @@ tr.titlebg td {
 .cat_bar h3 {
 	text-shadow: 0 0 0 transparent, 2px 2px 5px white;
 }
-.cContainer_header {
+.cContainer_header, .cat_bar2 {
 	margin-bottom: 0;
 	background: #f2f2f2 url(../images/theme/sprite.png) 0 -920px repeat-x;
 	border:0 !important;
@@ -2560,24 +2560,16 @@ tr.titlebg td {
 	border-radius:2px 2px 0 0;
 }
 .cContainer_header h3, .cat_bar2 h3 {
-	color:rgba(255,255,255,0.99);
-	text-shadow: 1px 1px 1px black;
+	color:white;
+	text-shadow: 1px 1px 2px black;
 }
 .cContainer_header a, .cat_bar2 a {
-	color: rgba(219, 219, 250, 0.99);
-	text-shadow: 1px 1px 1px black;
+	color: #ddddfa;
+	text-shadow: 1px 1px 2px black;
 }
 .cContainer_header img {
 	margin-top:4px;
 }
-.cat_bar2 {
-	margin-bottom: 0;
-	background: #819DE1 url(../images/theme/sprite.png) 0 -920px repeat-x;
-	border:0;
-	height:26px;
-	line-height:26px;
-}
-
 .cat_bar2 h3 {
 	color:white;
 	text-shadow: black 2px 2px 3px;

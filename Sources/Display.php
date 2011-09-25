@@ -1122,9 +1122,6 @@ function Display()
 	
 	// Cleanup all the permissions with extra stuff...
 	
-	$context['save_draft'] = $context['can_reply'] && !$context['user']['is_guest'] && !empty($modSettings['masterSaveDrafts']) && !empty($options['use_drafts']);
-	$context['save_draft_auto'] = $context['save_draft'] && !empty($modSettings['masterAutoSaveDrafts']);
-	
 	$context['can_mark_notify'] &= !$context['user']['is_guest'];
 	$context['can_sticky'] &= !empty($modSettings['enableStickyTopics']);
 	$context['calendar_post'] &= !empty($modSettings['cal_enabled']);
@@ -1171,6 +1168,9 @@ function Display()
 		foreach ($stable_icons as $icon)
 			$context['icon_sources'][$icon] = 'images_url';
 	}
+
+	$context['can_save_draft'] = $context['can_reply'] && !$context['user']['is_guest'] && in_array('dr', $context['admin_features']) && !empty($options['use_drafts']) && allowedTo('drafts_allow');
+	$context['can_autosave_draft'] = $context['can_save_draft'] && !empty($modSettings['enableAutoSaveDrafts']) && allowedTo('drafts_autosave_allow');
 
     if(!empty($modSettings['enableAdvancedHooks']))
         call_integration_hook('integrate_display', array());

@@ -445,6 +445,13 @@ function ModifyCoreFeatures($return_config = false)
 				'astream_enabled' => 1,
 			),
 		),
+		'dr' => array(
+			'url' => 'action=admin;area=postsettings;sa=drafts',
+			'settings' => array(
+				'drafts_enabled' => 0,
+				'drafts_autosave_interval' => 600
+			),
+		),
 	);
 
 	// Anyone who would like to add a core feature?

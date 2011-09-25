@@ -35,20 +35,20 @@ function template_permission_index()
 			<table style="width:100%;" class="table_grid mlist mediumpadding">
 				<thead>
 					<tr>
-						<th class="red_container">', $txt['membergroups_name'], '</th>
-						<th class="red_container" width="10%" align="center" valign="middle">', $txt['membergroups_members_top'], '</th>';
+						<th class="glass">', $txt['membergroups_name'], '</th>
+						<th class="glass centertext" style="width:100%;">', $txt['membergroups_members_top'], '</th>';
 
 			if (empty($modSettings['permission_enable_deny']))
 				echo '
-						<th class="red_container" width="16%" align="center">', $txt['membergroups_permissions'], '</th>';
+						<th class="glass" width="16%" align="center">', $txt['membergroups_permissions'], '</th>';
 			else
 				echo '
-						<th class="red_container" width="8%" align="center">', $txt['permissions_allowed'], '</th>
-						<th class="red_container" width="8%" align="center">', $txt['permissions_denied'], '</th>';
+						<th class="glass" width="8%" align="center">', $txt['permissions_allowed'], '</th>
+						<th class="glass" width="8%" align="center">', $txt['permissions_denied'], '</th>';
 
 			echo '
-						<th class="red_container" width="10%" align="center" valign="middle">', $context['can_modify'] ? $txt['permissions_modify'] : $txt['permissions_view'], '</th>
-						<th class="red_container" class="last_th" width="4%" align="center" valign="middle">
+						<th class="glass centertext" style="width:8%;">', $context['can_modify'] ? $txt['permissions_modify'] : $txt['permissions_view'], '</th>
+						<th class="glass centertext" class="last_th" style="width:4%;">
 							', $context['can_modify'] ? '<input type="checkbox" class="input_check" onclick="invertAll(this, this.form, \'group\');" />' : '', '
 						</th>
 					</tr>
@@ -61,7 +61,7 @@ function template_permission_index()
 		$alternate = !$alternate;
 		echo '
 					<tr class="windowbg', $alternate ? '2' : '', '">
-						<td>
+						<td class="nowrap">
 							', $group['name'], $group['id'] == -1 ? ' (<a href="' . $scripturl . '?action=helpadmin;help=membergroup_guests" onclick="return reqWin(this.href);">?</a>)' : ($group['id'] == 0 ? ' (<a href="' . $scripturl . '?action=helpadmin;help=membergroup_regular_members" onclick="return reqWin(this.href);">?</a>)' : ($group['id'] == 1 ? ' (<a href="' . $scripturl . '?action=helpadmin;help=membergroup_administrator" onclick="return reqWin(this.href);">?</a>)' : ($group['id'] == 3 ? ' (<a href="' . $scripturl . '?action=helpadmin;help=membergroup_moderator" onclick="return reqWin(this.href);">?</a>)' : '')));
 
 		if (!empty($group['children']))
@@ -258,7 +258,7 @@ function template_by_board()
 		<div class="cat_bar">
 			<h3>', $txt['permissions_boards'], '</h3>
 		</div>
-		<div class="red_container">
+		<div class="orange_container cleantop">
 			', $txt['permissions_boards_desc'], '
 		</div>
 		<div class="bigheader" id="board_permissions">
@@ -282,7 +282,7 @@ function template_by_board()
 
 		if (!empty($category['boards']))
 			echo '
-		<div class="blue_container">
+		<div class="blue_container cleantop">
 			<div class="content">
 				<ul class="perm_boards flow_hidden">';
 
@@ -324,7 +324,8 @@ function template_by_board()
 			echo '
 				</ul>
 			</div>
-		</div>';
+		</div>
+		<br>';
 	}
 
 	echo '
@@ -359,9 +360,9 @@ function template_edit_profiles()
 			<table class="table_grid mediumpadding mlist" style="margin-top:10px;width:100%;">
 				<thead>
 					<tr>
-						<th class="red_container">', $txt['permissions_profile_name'], '</th>
-						<th class="red_container">', $txt['permissions_profile_used_by'], '</th>
-						<th class="red_container" width="5%">', $txt['delete'], '</th>
+						<th class="glass">', $txt['permissions_profile_name'], '</th>
+						<th class="glass">', $txt['permissions_profile_used_by'], '</th>
+						<th class="glass" style="width:5%;">', $txt['delete'], '</th>
 					</tr>
 				</thead>
 				<tbody>';
@@ -410,7 +411,7 @@ function template_edit_profiles()
 			<div class="cat_bar">
 				<h3>', $txt['permissions_profile_new'], '</h3>
 			</div>
-			<div class="blue_container">
+			<div class="blue_container cleantop">
 				<div class="content">
 					<dl class="settings">
 						<dt>
@@ -494,7 +495,7 @@ function template_modify_group()
 	echo '
 				</h3>
 			</div>
-			<div class="yellow_container">
+			<div class="blue_container cleantop">
 				<div class="content">
 					', $txt['permissions_change_view'], ': ', ($context['view_type'] == 'simple' ? '<img src="' . $settings['images_url'] . '/selected.gif" alt="*" />' : ''), '<a href="', $scripturl, '?action=admin;area=permissions;sa=modify;group=', $context['group']['id'], ($context['permission_type'] == 'board' ? ';pid=' . $context['profile']['id'] : ''), ';view=simple">', $txt['permissions_view_simple'], '</a> |
 					', ($context['view_type'] == 'classic' ? '<img src="' . $settings['images_url'] . '/selected.gif" alt="*" />' : ''), '<a href="', $scripturl, '?action=admin;area=permissions;sa=modify;group=', $context['group']['id'], ($context['permission_type'] == 'board' ? ';pid=' . $context['profile']['id'] : ''), ';view=classic">', $txt['permissions_view_classic'], '</a>
@@ -561,15 +562,15 @@ function template_modify_group_simple($type)
 			<table style="width:100%;" class="mlist mediumpadding table_grid">
 				<thead>
 					<tr>
-						<th colspan="2" width="100%" align="left" class="red_container"></th>';
+						<th colspan="2" width="100%" align="left" class="glass"></th>';
 				if (empty($modSettings['permission_enable_deny']) || $context['group']['id'] == -1)
 					echo '
-						<th colspan="3" width="9"  class="red_container">&nbsp;</th>';
+						<th colspan="3" width="9"  class="glass">&nbsp;</th>';
 				else
 					echo '
-						<th class="red_container">', $txt['permissions_option_on'], '</th>
-						<th class="red_container">', $txt['permissions_option_off'], '</th>
-						<th class="red_container">', $txt['permissions_option_deny'], '</th>';
+						<th class="glass">', $txt['permissions_option_on'], '</th>
+						<th class="glass">', $txt['permissions_option_off'], '</th>
+						<th class="glass">', $txt['permissions_option_deny'], '</th>';
 					echo '
 					</tr>
 				</thead>
@@ -865,10 +866,10 @@ function template_modify_group_classic($type)
 				{
 					echo '
 							<tr>
-								<th colspan="2" width="100%" class="red_container lefttext"><strong class="smalltext">', $permissionGroup['name'], '</strong></th>';
+								<th colspan="2" width="100%" class="glass lefttext"><strong class="smalltext">', $permissionGroup['name'], '</strong></th>';
 					if (empty($modSettings['permission_enable_deny']) || $context['group']['id'] == -1)
 						echo '
-								<th class="red_container" colspan="3" width="10">&nbsp;</th>';
+								<th class="glass" colspan="3" width="10">&nbsp;</th>';
 					else
 						echo '
 								<th align="center"><div>', $txt['permissions_option_on'], '</div></th>
@@ -1077,7 +1078,7 @@ function template_postmod_permissions()
 	// Got advanced permissions - if so warn!
 	if (!empty($modSettings['permission_enable_deny']))
 		echo '
-				<div class="red_container">', $txt['permissions_post_moderation_deny_note'], '</div>';
+				<div class="red_container cleantop">', $txt['permissions_post_moderation_deny_note'], '</div>';
 
 	echo '
 				<div class="righttext padding">
@@ -1096,17 +1097,17 @@ function template_postmod_permissions()
 			<table class="table_grid mlist mediumpadding" style="width:100%;">
 				<thead>
 					<tr>
-						<th class="red_container"></th>
-						<th colspan="3" class="red_container centertext">
+						<th class="glass"></th>
+						<th colspan="3" class="glass centertext">
 							', $txt['permissions_post_moderation_new_topics'], '
 						</th>
-						<th colspan="3" class="red_container centertext">
+						<th colspan="3" class="glass centertext">
 							', $txt['permissions_post_moderation_replies_own'], '
 						</th>
-						<th colspan="3" class="red_container centertext">
+						<th colspan="3" class="glass centertext">
 							', $txt['permissions_post_moderation_replies_any'], '
 						</th>
-						<th colspan="3" class="red_container centertext">
+						<th colspan="3" class="glass centertext">
 							', $txt['permissions_post_moderation_attachments'], '
 						</th>
 					</tr>

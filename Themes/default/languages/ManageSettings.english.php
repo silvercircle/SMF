@@ -362,5 +362,8 @@ $txt['languages_delete_confirm'] = 'Are you sure you want to delete this languag
 $txt['core_settings_item_as'] = 'Activity stream';
 $txt['core_settings_item_as_desc'] = 'Enabling this feature will add a social component that records forum activity. It will allow users to see what happened in boards, topics and elsewhere.';
 
+$txt['core_settings_item_dr'] = 'Drafts';
+$txt['core_settings_item_dr_desc'] = 'Allow users to store drafts when posting new or modifying existing messages. Drafts can be used to temporarily save an unfinished post before submitting it or to protect against general problems like browser crashes or networking issues while posting on the forum<br><br>Drafts come with a handy auto-saving feature - never lose a post again.';
+
 $txt['astream_expire_days'] = 'Number of days to keep the activity stream';
 ?>

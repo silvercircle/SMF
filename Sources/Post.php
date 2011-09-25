@@ -1154,8 +1154,8 @@ function Post()
 
 	// Now create the editor.
 	
-	$context['save_draft'] = !$context['user']['is_guest'] && !empty($modSettings['masterSaveDrafts']) && !empty($options['use_drafts']);
-	$context['save_draft_auto'] = $context['save_draft'] && !empty($modSettings['masterAutoSaveDrafts']);
+	$context['can_save_draft'] = !$context['user']['is_guest'] && in_array('dr', $context['admin_features']) && !empty($options['use_drafts']) && allowedTo('drafts_allow');
+	$context['can_autosave_draft'] = $context['can_save_draft'] && !empty($modSettings['enableAutoSaveDrafts']) && allowedTo('drafts_autosave_allow');
 
 	// Grab the draft id early; this way even if we come from, say, auto save into 'num replies has changed', we keep the id to kill it later, but we don't trash the contents we have in $_POST already
 	if (!empty($_REQUEST['draft_id'])) {
@@ -1165,9 +1165,8 @@ function Post()
 
 	$msgid = isset($_REQUEST['msg']) ? $_REQUEST['msg'] : 0;
 	
-	// Loading a draft here? (Draft id in URL, not guest, has permission and there's not a message already in the editor)
-	if ((!empty($_REQUEST['draft_id']) && !empty($user_info['id']) && $context['save_draft'] && empty($_POST['subject']) && empty($_POST['message'])) || 
-		(!empty($user_info['id']) && $context['save_draft'] && 0 != $msgid && empty($_POST['message']))) {
+	if ((!empty($_REQUEST['draft_id']) && !empty($user_info['id']) && $context['can_save_draft'] && empty($_POST['subject']) && empty($_POST['message'])) ||
+		(!empty($user_info['id']) && $context['can_save_draft'] && 0 != $msgid && empty($_POST['message']))) {
 		
 		$id_cond = empty($_REQUEST['draft_id']) ? '1=1' : ' id_draft = {int:draft} ';
 		$id_sel = $msgid ? ' AND id_msg = {int:message} ' : ' AND id_board = {int:board} AND id_topic = {int:topic} ';
@@ -1462,16 +1461,19 @@ function Post2()
 		else
 			$_POST['lock_draft'] = !empty($topic_info['locked']) ? 1 : 0; // it's not, grab from topic's current info
 
-		$draft = saveDraft();
-		if (!empty($draft) && !in_array('session_timeout', $post_errors))
-		{
-			if (isset($_REQUEST['xml']))
-				draftXmlReturn($draft);
-			loadTemplate('Post');
-			$context['page_title'] = $txt['draft_saved_short'];
-			$context['sub_template'] = 'draft_saved';
-			return;
-		}		
+		if(in_array('dr', $context['admin_features'])) {
+			require_once($sourcedir . '/Subs-Drafts.php');
+			$draft = saveDraft();
+			if (!empty($draft) && !in_array('session_timeout', $post_errors))
+			{
+				if (isset($_REQUEST['xml']))
+					draftXmlReturn($draft);
+				loadTemplate('Post');
+				$context['page_title'] = $txt['draft_saved_short'];
+				$context['sub_template'] = 'draft_saved';
+				return;
+			}
+		}
 		$posterIsGuest = $user_info['is_guest'];
 	}
 	// Posting a new topic.
@@ -2805,18 +2807,18 @@ function QuoteFast()
 		)
 	);
 	
+	$context['close_window'] = mysql_num_rows($request) == 0;
+	$row = mysql_fetch_assoc($request);
+	mysql_free_result($request);
+
 	// quick modify, attempt to find existing drafts and load them
-	if(isset($_REQUEST['modify']) && !$user_info['is_guest'] && !empty($modSettings['masterSaveDrafts']) && !empty($options['use_drafts'])) {
+	if(!$context['close_window'] && isset($_REQUEST['modify']) && !$user_info['is_guest'] && in_array('dr', $context['admin_features']) && allowedTo('drafts_allow', $row['id_board']) && !empty($options['use_drafts'])) {
 		$draftrequest = smf_db_query( '
 			SELECT body FROM {db_prefix}drafts WHERE id_msg = {int:id_msg} AND id_member = {int:user}',
 				array('id_msg' => (int)$_REQUEST['quote'], 'user' => $user_info['id']));
 		$draftrow = mysql_fetch_assoc($draftrequest);
 		mysql_free_result($draftrequest);
 	}
-	
-	$context['close_window'] = mysql_num_rows($request) == 0;
-	$row = mysql_fetch_assoc($request);
-	mysql_free_result($request);
 
 	if(isset($_REQUEST['modify']) && isset($draftrow) && !empty($draftrow['body']) && !empty($row))
 		$row['body'] = $draftrow['body'];
@@ -3149,119 +3151,5 @@ function JavaScriptModify()
 	}
 	else
 		obExit(false);
-}
-
-// Main draft saving function
-function saveDraft()
-{
-	global $smcFunc, $topic, $board, $user_info, $modSettings, $options;
-
-	if (!isset($_REQUEST['draft']) || $user_info['is_guest'] || empty($modSettings['masterSaveDrafts']) || empty($options['use_drafts']))
-		return false;
-
-	$msgid = isset($_REQUEST['msg']) ? $_REQUEST['msg'] : 0;
-	
-	// Clean up what we may or may not have
-	$subject = isset($_POST['subject']) ? $_POST['subject'] : '';
-	$message = isset($_POST['message']) ? $_POST['message'] : '';
-	$icon = isset($_POST['icon']) ? preg_replace('~[\./\\\\*:"\'<>]~', '', $_POST['icon']) : 'xx';
-
-	// Sanitise what we do have
-	$subject = $smcFunc['htmltrim']($smcFunc['htmlspecialchars']($subject));
-	$message = $smcFunc['htmlspecialchars']($message, ENT_QUOTES);
-	preparsecode($message);
-
-	if ($smcFunc['htmltrim']($smcFunc['htmlspecialchars']($subject)) === '' && $smcFunc['htmltrim']($smcFunc['htmlspecialchars']($_POST['message']), ENT_QUOTES) === '')
-		fatal_lang_error('empty_draft', false);
-
-	// Hrm, so is this a new draft or not?
-	if (isset($_REQUEST['draft_id']) && (int) $_REQUEST['draft_id'] > 0 || $msgid) {
-		$_REQUEST['draft_id'] = (int) $_REQUEST['draft_id'];
-
-		$id_cond = $msgid ? ' 1=1 ' : ' id_draft = {int:draft} ';
-		$id_sel = $msgid ? ' AND id_msg = {int:message} ' : ' AND id_board = {int:board} AND id_topic = {int:topic} ';
-
-		// Does this draft exist?
-		smf_db_query( '
-			UPDATE {db_prefix}drafts
-			SET subject = {string:subject},
-				body = {string:body},
-				updated = {int:post_time},
-				icon = {string:post_icon},
-				smileys = {int:smileys_enabled},
-				is_locked = {int:locked},
-				is_sticky = {int:sticky}
-			WHERE '.$id_cond.'
-				AND id_member = {int:member}
-				'.$id_sel.'
-			LIMIT 1',
-			array(
-				'draft' => $_REQUEST['draft_id'],
-				'board' => $board,
-				'topic' => $topic,
-				'message' => $msgid,
-				'member' => $user_info['id'],
-				'subject' => $subject,
-				'body' => $message,
-				'post_time' => time(),
-				'post_icon' => $icon,
-				'smileys_enabled' => !isset($_POST['ns']) ? 1 : 0,
-				'locked' => !empty($_POST['lock_draft']) ? 1 : 0,
-				'sticky' => isset($_POST['sticky']) ? 1: 0,
-			)
-		);
-
-		if (smf_db_affected_rows() != 0)
-			return $_REQUEST['draft_id'];
-	}
-
-	// Guess it is a new draft after all
-	smf_db_insert('insert',
-		'{db_prefix}drafts',
-		array(
-			'id_board' => 'int',
-			'id_topic' => 'int',
-			'id_msg' => 'int',
-			'id_member' => 'int',
-			'subject' => 'string',
-			'body' => 'string',
-			'updated' => 'int',
-			'icon' => 'string',
-			'smileys' => 'int',
-			'is_locked' => 'int',
-			'is_sticky' => 'int',
-		),
-		array(
-			$board,
-			$topic,
-			$msgid,
-			$user_info['id'],
-			$subject,
-			$message,
-			time(),
-			$icon,
-			!isset($_POST['ns']) ? 1 : 0,
-			!empty($_POST['lock_draft']) ? 1 : 0,
-			isset($_POST['sticky']) ? 1: 0,
-		),
-		array('id_draft')
-	);
-
-	return smf_db_insert_id('{db_prefix}drafts');
-}
-
-// Output a block of XML that contains the details of our draft
-function draftXmlReturn($draft)
-{
-	if (empty($draft))
-		return;
-
-	global $txt, $context;
-	header('Content-Type: text/xml; charset=' . (empty($context['character_set']) ? 'ISO-8859-1' : $context['character_set']));
-	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>
-	<response>
-		<lastsave id="', $draft, '"><![CDATA[', $txt['last_saved_on'], ': ', timeformat(time()), ']', ']></lastsave>
-	</response>';
-	obExit(false);
 }
 ?>

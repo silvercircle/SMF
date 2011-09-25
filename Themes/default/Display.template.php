@@ -326,12 +326,12 @@ function template_main()
 								<input type="submit" name="post" value="', $txt['post'], '" onclick="return submitThisOnce(this);" accesskey="s" tabindex="', $context['tabindex']++, '" class="button_submit" />
 								<input type="submit" name="preview" value="', $txt['preview'], '" onclick="return submitThisOnce(this);" accesskey="p" tabindex="', $context['tabindex']++, '" class="button_submit" />';
 
-			if (!empty($context['save_draft']))
+			if (!empty($context['can_save_draft']))
 				echo '
 								<input type="hidden" id="draft_id" name="draft_id" value="', empty($context['draft_id']) ? '0' : $context['draft_id'], '" />
 								<input type="submit" name="draft" value="', $txt['save_draft'], '" onclick="return submitThisOnce(this);" accesskey="d" tabindex="', $context['tabindex']++, '" class="button_submit" />';
 								
-			if (!empty($context['save_draft_auto']))
+			if (!empty($context['can_autosave_draft']))
 				echo '
 								<div id="draft_lastautosave" class="clear righttext"></div>
 								<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/drafts.js?1.0"></script>
@@ -345,7 +345,7 @@ function template_main()
 										sLastNote: \'draft_lastautosave\',
 										sType: \'quickreply\',
 										iBoard: ', (empty($context['current_board']) ? 0 : $context['current_board']), ',
-										iFreq: ', (empty($modSettings['masterAutoSaveDraftsDelay']) ? 30000 : $modSettings['masterAutoSaveDraftsDelay'] * 1000), '
+										iFreq: ', (empty($modSettings['enableAutoSaveDrafts']) ? 30000 : $modSettings['enableAutoSaveDrafts'] * 1000), '
 									});
 								// ]]>
 								</script>
