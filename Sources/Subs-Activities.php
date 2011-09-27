@@ -72,8 +72,8 @@ function _vsprintf($format, &$data)
  */
 function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $id_content = 0, $id_owner = 0, $priv_level = 0, $dont_notify = false)
 {
-	$act_must_notify = array(ACT_LIKE, ACT_REPLIED);	// these activity types will trigger a notification for $id_owner
-
+	$act_must_notify = array(ACT_LIKE, ACT_REPLIED);	// these activity types will trigger a *mandatory*
+														// notification for $id_owner unless $dont_notify indicates otherwise
 	smf_db_insert('',
 		'{db_prefix}log_activities',
 		array(
@@ -119,15 +119,6 @@ function aStreamAddNotification(&$users, $id_act)
 	}
 }
 
-function aStreamGetMemberIntro(&$params)
-{
-	global $txt, $user_info;
-
-	if($params['id_member'] == $user_info['id'])
-		return($txt['activity_format_member_intro_you']);
-	else
-		return($txt['activity_format_member_intro_you']);
-}
 /**
  * @param $params (array with relevant stream entry data)
  *
@@ -153,8 +144,11 @@ function actfmt_default(&$params)
 	$_k = 'acfmt_' . $params['id_desc'] . '_' . trim($key);
 	if(isset($txt[$_k]))
 		return(_vsprintf($txt[$_k], $params));
-	else
-		return(sprintf($txt['activity_missing_format'], $params['id_type']));
+	else {
+		$_s = sprintf($txt['activity_missing_format'], $params['id_type']);
+		log_error($_s);
+		return($_s);
+	}
 }
 /**
  * @param $row - a full row from log_activities and activity_type
@@ -179,7 +173,10 @@ function aStreamFormatActivity(&$row, $is_notification = false)
 		$out = preg_replace('/@SCRIPTURL@/', $scripturl, $out);
 		$row['formatted_result'] = preg_replace('/@NM@/', $is_notification ? ';nmdismiss=' . $row['id_act'] : '', $out);
 	}
-	else
-		$row['formatted_result'] = $txt['unknown activity stream type'];
+	else {
+		$_s = sprintf($txt['activity_missing_callback'], $params['id_type']);
+		$row['formatted_result'] = $_s;
+		log_error($_s);
+	}
 }
 ?>

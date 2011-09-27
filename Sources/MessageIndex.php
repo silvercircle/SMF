@@ -624,6 +624,7 @@ function MessageIndex()
 	// If there are children, but no topics and no ability to post topics...
 	$context['no_topic_listing'] = !empty($context['boards']) && empty($context['topics']) && !$context['can_post_new'];
 
+	enqueueThemeScript('topic', 'scripts/topic.js', true);
 	if(!empty($modSettings['enableAdvancedHooks']))
 		call_integration_hook('integrate_messageindex', array());
 }

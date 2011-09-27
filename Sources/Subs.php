@@ -4222,4 +4222,11 @@ function getCachedPost(&$message)
 	else
 		$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
 }
+
+function enqueueThemeScript($key, $script, $footer = true, $default = true)
+{
+	global $context;
+
+	$context['theme_scripts'][$key] = array('name' => $script, 'default' => $default, 'footer' => $footer);
+}
 ?>

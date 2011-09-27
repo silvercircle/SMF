@@ -122,4 +122,45 @@ function draftXmlReturn($draft)
 	</response>';
 	obExit(false);
 }
+
+function getDraft($id_member, $id_board, $id_topic, $id_msg = 0)
+{
+	global $context;
+
+	$id_cond = empty($_REQUEST['draft_id']) ? '1=1' : ' id_draft = {int:draft} ';
+	$id_sel = $id_msg ? ' AND id_msg = {int:message} ' : ' AND id_board = {int:board} AND id_topic = {int:topic} ';
+
+	$query = smf_db_query( '
+		SELECT id_draft, id_board, id_topic, subject, body, icon, smileys, is_locked, is_sticky
+		FROM {db_prefix}drafts	WHERE ' . $id_cond . '
+			AND id_member = {int:member}
+			' . $id_sel .'
+		LIMIT 1',
+		array(
+			'draft' => isset($_REQUEST['draft_id']) ? $_REQUEST['draft_id'] : 0,
+			'member' => $id_member,
+			'board' => $id_board,
+			'topic' => $id_topic,
+			'message' => $id_msg,
+		)
+	);
+	if ($row = mysql_fetch_assoc($query)) {
+		$context['subject'] = $row['subject'];
+		$context['message'] = un_preparsecode($row['body']);
+		$context['use_smileys'] = !empty($row['smileys']);
+		$context['icon'] = $row['icon'];
+
+		$context['draft_locked'] = $context['locked'];
+		$context['locked'] = !empty($row['is_locked']);
+
+		$context['sticky'] = !empty($row['is_sticky']);
+
+		if($id_msg)
+			$context['draft_id'] = $row['id_draft'];
+	}
+	else
+		$context['draft_locked'] = $context['locked'];
+
+	mysql_free_result($query);
+}
 ?>

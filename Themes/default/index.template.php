@@ -13,7 +13,7 @@
  */
 function template_init()
 {
-	global $context, $settings, $options, $txt;
+	global $context, $settings;
 
 	/* Use images from default theme when using templates from the default theme?
 		if this is 'always', images from the default theme will be used.
@@ -54,9 +54,13 @@ function template_html_above()
 		echo '
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js?v=162"></script>
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/script.js',$context['jsver'],'"></script>';
-	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin')
-		echo '
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/admin.js',$context['jsver'],'"></script>';
+	if(!empty($context['theme_scripts'])) {
+		foreach($context['theme_scripts'] as $type => $script) {
+			if(!$script['footer'])
+				echo '
+	<script type="text/javascript" src="',($script['default'] ? $settings['default_theme_url'] : $settings['theme_url']) . '/' . $script['name'] . $context['jsver'], '"></script>';
+		}
+	}
 	echo '
 	<script type="text/javascript">
 	// <![CDATA[
@@ -342,7 +346,11 @@ function template_html_below()
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
 	echo '
-</div></body></html>';
+	</div>';
+	template_footer_scripts();
+	echo '
+	</body>
+	</html>';
 }
 
 // Show a linktree. This is that thing that shows "My Community | General Category | General Discussion"..
@@ -802,5 +810,27 @@ function template_create_collapsible_container(array &$_c)
 		</div>
 		<div class="cContainer_end"></div>
 		';
+}
+
+function template_footer_scripts()
+{
+	global $context, $settings;
+
+	if(!empty($context['theme_scripts'])) {
+		foreach($context['theme_scripts'] as $type => $script) {
+			if($script['footer'])
+				echo '
+	<script type="text/javascript" src="',($script['default'] ? $settings['default_theme_url'] : $settings['theme_url']) . '/' . $script['name'] . $context['jsver'], '"></script>';
+		}
+	}
+	if(!empty($context['inline_footer_script'])) {
+		echo '
+	<script type="text/javascript">
+	<!-- // --><![CDATA[
+	',$context['inline_footer_script'],'
+	// ]]>
+	</script>
+	';
+	}
 }
 ?>

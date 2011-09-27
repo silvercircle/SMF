@@ -15,6 +15,7 @@ $txt['act_view_all'] = 'View all';
 
 $txt['unknown activity stream type'] = 'Unknown activity stream type';
 $txt['activity_missing_format'] = 'Missing activity formatting string (atype = %d)';
+$txt['activity_missing_callback'] = 'Invalid or missing formatter callback for atype = %d';
 
 /**
  * format activities

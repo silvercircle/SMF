@@ -67,7 +67,7 @@ function Display()
 	global $attachments, $messages_request, $topicinfo, $language, $cache_parsed;
 
 	$context['need_synhlt'] = true;
-	
+
 	$cache_parsed = !empty($modSettings['use_post_cache']);
 	$time_now = time();
 	
@@ -1171,6 +1171,10 @@ function Display()
 
 	$context['can_save_draft'] = $context['can_reply'] && !$context['user']['is_guest'] && in_array('dr', $context['admin_features']) && !empty($options['use_drafts']) && allowedTo('drafts_allow');
 	$context['can_autosave_draft'] = $context['can_save_draft'] && !empty($modSettings['enableAutoSaveDrafts']) && allowedTo('drafts_autosave_allow');
+
+	enqueueThemeScript('topic', 'scripts/topic.js', true);
+	if($context['can_autosave_draft'])
+		enqueueThemeScript('drafts', 'scripts/drafts.js', true);
 
     if(!empty($modSettings['enableAdvancedHooks']))
         call_integration_hook('integrate_display', array());

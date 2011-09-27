@@ -217,31 +217,29 @@ function template_main()
 				<img src="' . $settings['images_url'] . '/topic/normal_poll.gif" alt="" /> ' . $txt['poll'] : '') . '
 			</p>';
 
+	$context['inline_footer_script'] .= '
+	if (typeof(window.XMLHttpRequest) != "undefined")
+		aJumpTo[aJumpTo.length] = new JumpTo({
+		sContainerId: "message_index_jump_to",
+		sJumpToTemplate: "<label class=\"smalltext\" for=\"%select_id%\">'.$context['jump_to']['label'].':<" + "/label> %dropdown_list%",
+		iCurBoardId: '.$context['current_board'].',
+		iCurBoardChildLevel: '.$context['jump_to']['child_level'].',
+		sCurBoardName: "'.$context['jump_to']['board_name'].'",
+		sBoardChildLevelIndicator: "==",
+		sBoardPrefix: "=> ",
+		sCatSeparator: "-----------------------------",
+		sCatPrefix: "",
+		sGoButtonLabel: "'.$txt['quick_mod_go'].'"
+	});
+	';
 	echo '
-			<script type="text/javascript"><!-- // --><![CDATA[
-				if (typeof(window.XMLHttpRequest) != "undefined")
-					aJumpTo[aJumpTo.length] = new JumpTo({
-						sContainerId: "message_index_jump_to",
-						sJumpToTemplate: "<label class=\"smalltext\" for=\"%select_id%\">', $context['jump_to']['label'], ':<" + "/label> %dropdown_list%",
-						iCurBoardId: ', $context['current_board'], ',
-						iCurBoardChildLevel: ', $context['jump_to']['child_level'], ',
-						sCurBoardName: "', $context['jump_to']['board_name'], '",
-						sBoardChildLevelIndicator: "==",
-						sBoardPrefix: "=> ",
-						sCatSeparator: "-----------------------------",
-						sCatPrefix: "",
-						sGoButtonLabel: "', $txt['quick_mod_go'], '"
-					});
-			// ]]></script>
 			<br class="clear" />
 		</div>
 	</div>';
 
 	// Javascript for inline editing.
-	echo '
-<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/topic.js',$context['jsver'],'"></script>
-<script type="text/javascript"><!-- // --><![CDATA[
 
+	$context['inline_footer_script'] .= '
 	// Hide certain bits during topic edit.
 	hide_prefixes.push("lockicon", "stickyicon", "pages", "newicon");
 
@@ -252,14 +250,14 @@ function template_main()
 	function modify_topic_click()
 	{
 		if (in_edit_mode == 1 && mouse_on_div == 0)
-			modify_topic_save("', $context['session_id'], '", "', $context['session_var'], '");
+			modify_topic_save("'.$context['session_id'].'", "'.$context['session_var'].'");
 	}
 
 	function modify_topic_keypress(oEvent)
 	{
 		if (typeof(oEvent.keyCode) != "undefined" && oEvent.keyCode == 13)
 		{
-			modify_topic_save("', $context['session_id'], '", "', $context['session_var'], '");
+			modify_topic_save("'.$context['session_id'].'", "'.$context['session_var'].'");
 			if (typeof(oEvent.preventDefault) == "undefined")
 				oEvent.returnValue = false;
 			else
@@ -278,10 +276,9 @@ function template_main()
 	function modify_topic_hide_edit(subject)
 	{
 		// Re-template the subject!
-		setInnerHTML(cur_subject_div, \'<a href="', $scripturl, '?topic=\' + cur_topic_id + \'.0">\' + subject + \'<\' +\'/a>\');
+		setInnerHTML(cur_subject_div, \'<a href="'.$scripturl.'?topic=\' + cur_topic_id + \'.0">\' + subject + \'<\' +\'/a>\');
 	}
-
-// ]]></script>';
+	';
 }
 
 function template_ajaxresponse_whoposted()

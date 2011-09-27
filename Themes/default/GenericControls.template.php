@@ -277,7 +277,6 @@ function template_control_richedit_buttons($editor_id)
 	if (!empty($context['save_draft_auto']))
 		echo '
 		<span id="draft_lastautosave" class="clear righttext" style="display: block;"></span>
-		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/drafts.js?1.0"></script>
 		<script type="text/javascript">
 			<!-- // --><![CDATA[
 			var oAutoSave = new draftAutosave({

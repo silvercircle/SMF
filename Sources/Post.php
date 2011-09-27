@@ -90,7 +90,14 @@ function Post()
 	loadLanguage('Post');
 	loadLanguage('Tagging');
 	$context['tagging_ui'] = '';
-	
+
+	if(in_array('dr', $context['admin_features'])) {
+		require_once($sourcedir . '/Subs-Drafts.php');
+		$context['have_drafts'] = true;
+	}
+	else
+		$context['have_drafts'] = false;
+
 	// You can't reply with a poll... hacker.
 	if (isset($_REQUEST['poll']) && !empty($topic) && !isset($_REQUEST['msg']))
 		unset($_REQUEST['poll']);
@@ -1154,7 +1161,7 @@ function Post()
 
 	// Now create the editor.
 	
-	$context['can_save_draft'] = !$context['user']['is_guest'] && in_array('dr', $context['admin_features']) && !empty($options['use_drafts']) && allowedTo('drafts_allow');
+	$context['can_save_draft'] = !$context['user']['is_guest'] && $context['have_drafts'] && !empty($options['use_drafts']) && allowedTo('drafts_allow');
 	$context['can_autosave_draft'] = $context['can_save_draft'] && !empty($modSettings['enableAutoSaveDrafts']) && allowedTo('drafts_autosave_allow');
 
 	// Grab the draft id early; this way even if we come from, say, auto save into 'num replies has changed', we keep the id to kill it later, but we don't trash the contents we have in $_POST already
@@ -1166,46 +1173,9 @@ function Post()
 	$msgid = isset($_REQUEST['msg']) ? $_REQUEST['msg'] : 0;
 	
 	if ((!empty($_REQUEST['draft_id']) && !empty($user_info['id']) && $context['can_save_draft'] && empty($_POST['subject']) && empty($_POST['message'])) ||
-		(!empty($user_info['id']) && $context['can_save_draft'] && 0 != $msgid && empty($_POST['message']))) {
-		
-		$id_cond = empty($_REQUEST['draft_id']) ? '1=1' : ' id_draft = {int:draft} ';
-		$id_sel = $msgid ? ' AND id_msg = {int:message} ' : ' AND id_board = {int:board} AND id_topic = {int:topic} ';
-
-		$query = smf_db_query( '
-			SELECT id_draft, id_board, id_topic, subject, body, icon, smileys, is_locked, is_sticky
-			FROM {db_prefix}drafts	WHERE ' . $id_cond . ' 
-				AND id_member = {int:member}
-				' . $id_sel .'
-			LIMIT 1',
-			array(
-				'draft' => isset($_REQUEST['draft_id']) ? $_REQUEST['draft_id'] : 0,
-				'member' => $user_info['id'],
-				'board' => $board,
-				'topic' => $topic,
-				'message' => $msgid,
-			)
-		);
-		if ($row = mysql_fetch_assoc($query)) {
-			// OK, we have a draft in storage for this post. Let's get down and dirty with it.
-			$context['subject'] = $row['subject'];
-			$context['message'] = un_preparsecode($row['body']);
-			$context['use_smileys'] = !empty($row['smileys']);
-			$context['icon'] = $row['icon'];
-			
-			$context['draft_locked'] = $context['locked'];
-			$context['locked'] = !empty($row['is_locked']);
-
-			$context['sticky'] = !empty($row['is_sticky']);
-			
-			if($msgid)
-				$context['draft_id'] = $row['id_draft'];
-		}
-		else
-			$context['draft_locked'] = $context['locked'];
-		
-		mysql_free_result($query);
-	}
-	else 
+		(!empty($user_info['id']) && $context['can_save_draft'] && 0 != $msgid && empty($_POST['message'])))
+			getDraft($user_info['id'], $board, $topic, $msgid);
+	else
 		$context['draft_locked'] = $context['locked'];
 		
 	$editorOptions = array(
@@ -1314,6 +1284,13 @@ function Post2()
 {
 	global $board, $topic, $txt, $modSettings, $sourcedir, $context;
 	global $user_info, $board_info, $options, $smcFunc;
+
+	if(in_array('dr', $context['admin_features'])) {
+		require_once($sourcedir . '/Subs-Drafts.php');
+		$context['have_drafts'] = true;
+	}
+	else
+		$context['have_drafts'] = false;
 
 	$context['need_synhlt'] = true;
 	// Sneaking off, are we?
@@ -1461,8 +1438,7 @@ function Post2()
 		else
 			$_POST['lock_draft'] = !empty($topic_info['locked']) ? 1 : 0; // it's not, grab from topic's current info
 
-		if(in_array('dr', $context['admin_features'])) {
-			require_once($sourcedir . '/Subs-Drafts.php');
+		if($context['have_drafts']) {
 			$draft = saveDraft();
 			if (!empty($draft) && !in_array('session_timeout', $post_errors))
 			{
