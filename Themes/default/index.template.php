@@ -284,7 +284,8 @@ function template_body_below()
 	t3.src = "',$settings['theme_url'],'/scripts/shlt.js?ver=1.1.0";
 	anchor.parentNode.insertBefore(t3, anchor);';
 
-	
+	$context['inline_footer_script'] .= $txt['jquery_timeago_loc'];
+
 	if(isset($modSettings['embed_GA']) && $modSettings['embed_GA'] && ($context['user']['is_guest'] || (empty($options['disable_analytics']) ? 1 : !$options['disable_analytics'])))	{
 		echo '
 	var _gaq = _gaq || [];
@@ -299,10 +300,9 @@ function template_body_below()
 	sa.parentNode.insertBefore(ga, sa);
 	';
 	}
-	echo $txt['jquery_timeago_loc'],'
-	// ]]>
-	</script>';
 	echo '
+	// ]]>
+	</script>
 	<footer>
 	<div id="footer_section">';
 	// Show the load time?
@@ -312,14 +312,12 @@ function template_body_below()
 	$time_now = forum_time(false);
 	$tz = date_default_timezone_get();
 	echo '
-	<div class="smalltext righttext floatright">',$loadtime,'<br>Forum time: ',strftime($modSettings['time_format'], $time_now) . ' '. $tz,'</div>';
-	echo '
+	<div class="smalltext righttext floatright">',$loadtime,'<br>Forum time: ',strftime($modSettings['time_format'], $time_now) . ' '. $tz,'</div>
 	<div class="copyright">', my_theme_copyright(), '</div>
 	<div><a id="button_xhtml" href="http://validator.w3.org/check?uri=referer" target="_blank" class="new_win" title="Valid HTML"><span>HTML</span></a> |
 	', !empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']) ? '<a id="button_rss" href="' . $scripturl . '?action=.xml;type=rss" class="new_win"><span>' . $txt['rss'] . '</span></a> | ' : '', '
 	<a id="button_wap2" href="', $scripturl , '?wap2" class="new_win"><span>', $txt['wap2'], '</span></a>
-	</div>';
-	echo '
+	</div>
 	</div>
 	</footer>';
 	if(1) { // piwik, todo: make configurable in admin area!
@@ -823,7 +821,7 @@ function template_footer_scripts()
 	<script type="text/javascript" src="',($script['default'] ? $settings['default_theme_url'] : $settings['theme_url']) . '/' . $script['name'] . $context['jsver'], '"></script>';
 		}
 	}
-	if(!empty($context['inline_footer_script'])) {
+	if(!empty($context['inline_footer_script']))
 		echo '
 	<script type="text/javascript">
 	<!-- // --><![CDATA[
@@ -831,6 +829,5 @@ function template_footer_scripts()
 	// ]]>
 	</script>
 	';
-	}
 }
 ?>

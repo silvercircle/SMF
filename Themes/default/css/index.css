@@ -824,8 +824,9 @@ h4.catbg, h4.catbg2, h3.catbg, h3.catbg2, .table_list tbody.header td.catbg {
 	padding-right: 9px;
 }
 
-table.table_list a.unreadlink, table.table_list a.collapse {
+.category a.unreadlink {
 	float: right;
+	margin-right:20px;
 }
 
 table.table_list a.collapse {

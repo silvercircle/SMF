@@ -57,8 +57,8 @@ function _vsprintf($format, &$data)
 /**
  * add a stream activity
  *
- * @param $id_member		the member id who owns this activity (= who did it)
- * @param $atype			activity type (numeric)
+ * @param int $id_member	the member id who owns this activity (= who did it)
+ * @param int $atype		activity type (numeric)
  * @param $params			array with parameters, mostly for formatting
  * @param int $id_board		the board id where it happened (if applicable)
  * @param int $id_topic		the topic id where it happened (if applicable)

@@ -1775,7 +1775,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	$automerge_posts = false;
 	$want_automerge = isset($_REQUEST['want_automerge']) && $_REQUEST['want_automerge'] > 0 ? true : false;
 	
-	if(!$new_topic && ($topicOptions['automerge'] > 0 || $want_automerge) && $topicOptions['num_replies'] > 0 && $topicOptions['id_member_updated'] == $posterOptions['id'] && empty($topicOptions['poll'])) {
+	if(!$new_topic && ($topicOptions['automerge'] > 0 || $want_automerge) && $topicOptions['id_member_updated'] == $posterOptions['id'] && empty($topicOptions['poll'])) {
 		$result = smf_db_query( '
 			SELECT poster_time, modified_time, body FROM {db_prefix}messages WHERE id_msg = {int:last_id}',
 			array('last_id' => $topicOptions['id_last_msg']));
@@ -1784,11 +1784,6 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			if($want_automerge || (time() - max($ptime, $mtime) < $topicOptions['automerge'] * 60)) {
 				$automerge_posts = true;
 				$msg_to_update = $topicOptions['id_last_msg'];
-				$ar_result = smf_db_query( '
-					SHOW TABLE STATUS LIKE "{db_prefix}messages"');
-				$row = mysql_fetch_assoc($ar_result);
-				$new_msg_id = $row['Auto_increment'];
-				mysql_free_result($ar_result);
 			}
 		}
 		mysql_free_result($result);
@@ -1830,15 +1825,15 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			);
 	}
 	else {
-		if($msg_to_update && $new_msg_id) {
+		if($msg_to_update) {
 			$newbody = $oldbody . "\n[hr][size=11px][color=red][b]      Posted: [time]".time()."[/time][/b][/color][/size]\n".$msgOptions['body'];	// todo: make the separator customizable
 			//todo: don't forget has_img here for marking message as uncacheable
 			//todo: it should be possible to customize the separator
 			smf_db_query( '
-				UPDATE {db_prefix}messages SET id_msg = {int:new_id}, body = {string:newbody}, modified_time = {int:now},
-					approved = {int:approved}, subject = {string:subject} WHERE id_msg = {int:id_msg}',
-				array('newbody' => $newbody, 'now' => time(), 'id_msg' => $msg_to_update, 'new_id' => $new_msg_id,
-					'approved' => $msgOptions['approved'], 'subject' => $msgOptions['subject']));
+				UPDATE {db_prefix}messages SET body = {string:newbody}, modified_time = {int:now},
+					approved = {int:approved} WHERE id_msg = {int:id_msg}',
+				array('newbody' => $newbody, 'now' => time(), 'id_msg' => $msg_to_update,
+					'approved' => $msgOptions['approved']));
 				
 			smf_db_query( 'DELETE FROM {db_prefix}messages_cache WHERE id_msg = {int:id_msg}',
 				array('id_msg' => $msg_to_update));
@@ -1852,20 +1847,12 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			smf_db_query( '
 				UPDATE {db_prefix}attachments
 				SET id_msg = {int:id_msg}
-				WHERE id_attach IN ({array_int:attachment_list}) OR id_msg = {int:id_old_msg}',
+				WHERE id_attach IN ({array_int:attachment_list})',
 				array(
 					'attachment_list' => $attachments,
-					'id_msg' => $new_msg_id, 'id_old_msg' => $msg_to_update
+					'id_msg' => $msg_to_update,
 				)
 			);
-			smf_db_query('
-				UPDATE {db_prefix}likes SET id_msg = {int:id_msg_new} WHERE id_msg = {int:id_msg} AND ctype = 1',
-				array('id_msg' => $msg_to_update, 'id_msg_new' => $new_msg_id));
-
-			smf_db_query('
-				UPDATE {db_prefix}like_cache SET id_msg = {int:id_msg_new} WHERE id_msg = {int:id_msg} AND ctype = 1',
-				array('id_msg' => $msg_to_update, 'id_msg_new' => $new_msg_id));
-			$msg_to_update = $new_msg_id;
 		}
 		else
 			return false;		// that should NOT happen...
@@ -1971,10 +1958,11 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			trackStats(array('posts' => '+'));
 
 		if($context['astream_active']) {
+			// add to activity stream, but do not notify when we reply to our own topic
 			require_once($sourcedir . '/Subs-Activities.php');
 			aStreamAdd($posterOptions['id'], ACT_REPLIED,
 				   		array('member_name' => $posterOptions['name'], 'topic_title' => $msgOptions['subject']),
-				   		$topicOptions['board'], $topicOptions['id'], $msg_to_update, $topicOptions['id_member_started']);
+				   		$topicOptions['board'], $topicOptions['id'], $msg_to_update, $topicOptions['id_member_started'], 0, $posterOptions['id'] == $topicOptions['id_member_started'] ? true : false);
 		}
 	}
 
@@ -1985,7 +1973,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		SET id_msg_modified = {int:id_msg}
 		WHERE id_msg = {int:id_msg}',
 		array(
-			'id_msg' => $msg_to_update,
+			'id_msg' => $automerge_posts ? $modSettings['maxMsgID'] : $msg_to_update,
 		)
 	);
 
@@ -2066,7 +2054,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			$text = $msgOptions['body'];
 			
 		$inserts = array();
-		foreach (text2words($msgOptions['body'], $customIndexSettings['bytes_per_word'], true) as $word)
+		foreach (text2words($text, $customIndexSettings['bytes_per_word'], true) as $word)
 			$inserts[] = array($word, $msg_to_update);
 
 		if (!empty($inserts))
@@ -2095,7 +2083,8 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		$_SESSION['topicseen_cache'][$topicOptions['board']]--;
 
 	// Update all the stats so everyone knows about this new topic and message.
-	updateStats('message', true, $msg_to_update);
+	if(false === $automerge_posts)
+		updateStats('message', true, $msg_to_update);
 
 	// Update the last message on the board assuming it's approved AND the topic is.
 	if ($msgOptions['approved'])

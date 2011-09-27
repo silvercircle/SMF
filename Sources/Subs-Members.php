@@ -350,6 +350,14 @@ function deleteMembers($users, $check_not_admin = false)
 		)
 	);
 
+	// delete activities and corresponding notifications
+	smf_db_query( '
+		DELETE a.*, n.* FROM {db_prefix}log_activities AS a LEFT JOIN {db_prefix}log_notifications AS n ON (n.id_act = a.id_act)
+		WHERE a.id_member IN ({array_int:users})',
+		array(
+			 'users' => $users
+		)
+	);
 	// Make their votes appear as guest votes - at least it keeps the totals right.
 	//!!! Consider adding back in cookie protection.
 	smf_db_query( '

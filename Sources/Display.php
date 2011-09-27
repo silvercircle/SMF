@@ -59,18 +59,20 @@ if (!defined('SMF'))
 
 */
 
+define('PCACHE_UPDATE_PER_VIEW', 5);
+
 // The central part of the board - topic display.
 function Display()
 {
 	global $scripturl, $txt, $modSettings, $context, $settings;
-	global $options, $sourcedir, $user_info, $board_info, $topic, $board, $time_now;
-	global $attachments, $messages_request, $topicinfo, $language, $cache_parsed;
+	global $options, $sourcedir, $user_info, $board_info, $topic, $board;
+	global $attachments, $messages_request, $topicinfo, $language;
 
 	$context['need_synhlt'] = true;
 
-	$cache_parsed = !empty($modSettings['use_post_cache']);
-	$time_now = time();
-	
+	$context['pcache_update_counter'] = !empty($modSettings['use_post_cache']) ? 0 : PCACHE_UPDATE_PER_VIEW + 1;
+	$context['time_cutoff_ref'] = time();
+
 	require_once($sourcedir . '/Subs-LikeSystem.php');
 	// What are you gonna display if these are empty?!
 	if (empty($topic))
@@ -1183,8 +1185,8 @@ function Display()
 // Callback for the message display.
 function prepareDisplayContext($reset = false)
 {
-	global $settings, $txt, $modSettings, $scripturl, $options, $user_info, $time_now;
-	global $memberContext, $context, $messages_request, $topic, $cache_parsed;
+	global $settings, $txt, $modSettings, $scripturl, $options, $user_info;
+	global $memberContext, $context, $messages_request, $topic;
 
 	static $counter = null;
 
@@ -1250,9 +1252,11 @@ function prepareDisplayContext($reset = false)
 
 	// create a cached (= parsed) version of the post on the fly
 	// but only if it's not older than the cutoff time.
+	// and do not cache more than PCACHE_UPDATE_PER_VIEW posts per thread view to reduce load spikes
 	$dateline = max($message['modified_time'], $message['poster_time']);
-	if($cache_parsed && (($time_now - $dateline) < ($modSettings['post_cache_cutoff'] * 86400))) {
+	if($context['pcache_update_counter'] < PCACHE_UPDATE_PER_VIEW && (($context['time_cutoff_ref'] - $dateline) < ($modSettings['post_cache_cutoff'] * 86400))) {
 		if(empty($message['cached_body'])) {
+			$context['pcache_update_counter']++;
 			$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
 			smf_db_insert('replace', '{db_prefix}messages_cache',
 				array('id_msg' => 'int', 'body' => 'string', 'style' => 'string', 'lang' => 'string', 'updated' => 'int'),
@@ -1306,7 +1310,7 @@ function prepareDisplayContext($reset = false)
 	);
 
 	if($context['can_see_like'])
-		AddLikeBar($output, $context['can_give_like'], $time_now);
+		AddLikeBar($output, $context['can_give_like'], $context['time_cutoff_ref']);
 	else
 		$output['likes_count'] = 0;
 	// Is this user the message author?
