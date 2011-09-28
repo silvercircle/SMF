@@ -1154,7 +1154,7 @@ ul#navigation li {
 /* inner content section, defines the width for the forum itself (but not the header or footer)*/
 #main_content_section {
 	min-width: 800px;
-	max-width: 1700px;
+	max-width: 1400px;
 	width: auto;
 	background-color: #fff;
 	min-height: 200px;
@@ -1871,6 +1871,9 @@ div.userbit_compact_textpart {
 	width: 16px;
 	height: 16px;
 }
+.keyinfo a {
+	color: #ffff99;
+}
 .horizontal_userblock {
 	padding: 3px 10px;
 	background: #ececec;
@@ -2133,10 +2136,17 @@ ul.post_options li {
 /* The smiley strip */
 #smileyBox_message {
 	margin: 0.5em;
+	max-width:200px;
+	position:absolute;
+	display: none;
 }
-
 #smileyBox_message div {
 	display: inline;
+}
+div.smiley_wrapper {
+	display:inline-block !important;
+	width:24px;
+	height:24px;
 }
 
 /* Styles for edit event section
@@ -3501,6 +3511,11 @@ span.hidelink {
 	border: 1px solid #d5ecfa;
 	padding: 2px 4px;
 	border-radius: 3px;
+}
+.blue_container div.content, .orange_container div.content, .yellow_container div.content {
+	border: 2px solid white;
+	border-radius: 3px;
+	margin:-2px -4px;
 }
 .cContainer_body {
 	border-top: 0;

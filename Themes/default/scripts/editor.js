@@ -1743,6 +1743,20 @@ smc_BBCButtonBox.prototype.setSelect = function (sSelectName, sValue)
 	}
 }
 
+function popupSmileySelector(el)
+{
+	var _e = $('#smileyBox_message');
+
+	if(_e.css('display') != 'none') {
+		_e.hide();
+		$('#message').focus();
+		return;
+	}
+	_e.css({"position": 'absolute', 'padding': '10px', 'top':el.position().top + el.height(), 'right': el.position().right, 'z-index':9999});
+	$('#smiley_popup_anchor').append(_e);
+	_e.show();
+}
+
 $(document).ready(function() {
 	var is_zoomed = false;
 	var old_width, old_height, old_editor_width, old_editor_height, old_rich_editor_height, old_rich_editor_width;
@@ -1789,5 +1803,12 @@ $(document).ready(function() {
 			$('.editor').css('height', $(window).height() - 130 + 'px');
 			$('.rich_editor_frame').css('height', $(window).height() - 130 + 'px');
 		}
+	});
+	$('#smileyBox_message div img').click(function() {
+		$('#smileyBox_message').hide();
+	});
+	$('#smileyBox_message').live('mouseleave', function() {
+		$(this).hide();
+		$('#message').focus();
 	});
 });

@@ -401,17 +401,17 @@ function template_main()
 
 	// Show the actual posting area...
 	echo '<div id="editor_main_content">
-		<div class="floatright"><span id="editor_main_content_zoom" class="button">',$txt['zoom_editor'],'</span></div>';
+		<div class="floatright">
+		 <div id="smiley_popup_anchor" style="position:relative;">
+		 <span id="editor_main_content_zoom" class="button">',$txt['zoom_editor'],'</span>
+		 <span onclick="popupSmileySelector($(this));return(false);" id="editor_main_smiley_popup" class="button">Smileys</span>
+		 </div>
+		</div>';
 	if ($context['show_bbc'])
 	{
 		echo '
 					<div id="bbcBox_message"></div>';
 	}
-
-	// What about smileys?
-	//if (!empty($context['smileys']['postform']) || !empty($context['smileys']['popup']))
-		//echo '<div id="smileyBox_message"></div>';
-
 	echo '
 					', template_control_richedit($context['post_box_name'], 'smileyBox_message', 'bbcBox_message');
 

@@ -88,7 +88,7 @@ function template_html_above()
 	var t2 = document.createElement(\'SCRIPT\');
 	t2.type = "text/javascript";
 	t2.async = true;
-	t2.src = "',$settings['theme_url'],'/scripts/footer.js',$context['jsver'],'";
+	t2.src = "',$settings['theme_url'],'/scripts/min/footer.js',$context['jsver'],'";
 	anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
 	</script>';

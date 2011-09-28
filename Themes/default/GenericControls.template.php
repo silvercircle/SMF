@@ -22,7 +22,7 @@ function template_control_richedit($editor_id, $smileyContainer = null, $bbcCont
 		<div>
 			<div>
 				<div>
-					<div id="smileyBox_message"></div>
+					<div id="smileyBox_message" class="blue_container"></div>
 					<textarea class="editor" name="', $editor_id, '" id="', $editor_id, '" rows="', $editor_context['rows'], '" cols="600" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onchange="storeCaret(this);" tabindex="', $context['tabindex']++, '" style="height: ', $editor_context['height'], '; ', isset($context['post_error']['no_message']) || isset($context['post_error']['long_message']) ? 'border: 1px solid red;' : '', '">', $editor_context['value'], '</textarea>
 				</div>
 				<div id="', $editor_id, '_resizer" class="richedit_resize"></div>
@@ -39,31 +39,35 @@ function template_control_richedit($editor_id, $smileyContainer = null, $bbcCont
 					sUniqueId: ', JavaScriptEscape('smileyBox_' . $editor_id), ',
 					sContainerDiv: ', JavaScriptEscape($smileyContainer), ',
 					sClickHandler: ', JavaScriptEscape('oEditorHandle_' . $editor_id . '.insertSmiley'), ',
-					oSmileyLocations: {';
+					oSmileyLocations: {
+						postform: [
+						[ ';
 
 			foreach ($context['smileys'] as $location => $smileyRows)
 			{
-				echo '
-						', $location, ': [';
+				//echo '
+				//		', $location, ': [';
 				foreach ($smileyRows as $smileyRow)
 				{
-					echo '
-							[';
+					//echo '
+					//		[';
 					foreach ($smileyRow['smileys'] as $smiley)
 						echo '
 								{
 									sCode: ', JavaScriptEscape($smiley['code']), ',
 									sSrc: ', JavaScriptEscape($settings['smileys_url'] . '/' . $smiley['filename']), ',
 									sDescription: ', JavaScriptEscape($smiley['description']), '
-								}', empty($smiley['isLast']) ? ',' : '';
+								}', empty($smiley['isLast']) ? ',' : ',';
 
-				echo '
-							]', empty($smileyRow['isLast']) ? ',' : '';
+				//echo '
+				//			]', empty($smileyRow['isLast']) ? ',' : '';
 				}
-				echo '
-						]', $location === 'postform' ? ',' : '';
+				//echo '
+				//		]', $location === 'postform' ? ',' : '';
 			}
-			echo '
+			echo ' ]
+					],
+					popup: [ [ {} ]]
 					},
 					sSmileyBoxTemplate: ', JavaScriptEscape('
 						%smileyRows% %moreSmileys%
@@ -72,10 +76,10 @@ function template_control_richedit($editor_id, $smileyContainer = null, $bbcCont
 						<div>%smileyRow%</div>
 					'), ',
 					sSmileyTemplate: ', JavaScriptEscape('
-						<img src="%smileySource%" align="bottom" alt="%smileyDescription%" title="%smileyDescription%" id="%smileyId%" />
+						<div class="smiley_wrapper"><img style="margin:auto;" src="%smileySource%" align="bottom" alt="%smileyDescription%" title="%smileyDescription%" id="%smileyId%" /></div>
 					'), ',
 					sMoreSmileysTemplate: ', JavaScriptEscape('
-						<a href="#" id="%moreSmileysId%">[' . (!empty($context['smileys']['postform']) ? $txt['more_smileys'] : $txt['more_smileys_pick']) . ']</a>
+						<a href="#" id="%moreSmileysId%"></a>
 					'), ',
 					sMoreSmileysLinkId: ', JavaScriptEscape('moreSmileys_' . $editor_id), ',
 					sMoreSmileysPopupTemplate: ', JavaScriptEscape('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -269,12 +273,12 @@ function template_control_richedit_buttons($editor_id)
 		echo '
 		<input type="submit" name="preview" value="', isset($editor_context['labels']['preview_button']) ? $editor_context['labels']['preview_button'] : $txt['preview'], '" tabindex="', $context['tabindex']++, '" onclick="', $editor_context['preview_type'] == 2 ? 'return event.ctrlKey || previewPost();' : 'return submitThisOnce(this);', '" accesskey="p" class="button_submit" />';
 
-	if (!empty($context['save_draft']))
+	if (!empty($context['can_save_draft']))
 		echo '
 		<input type="hidden" id="draft_id" name="draft_id" value="', empty($context['draft_id']) ? '0' : $context['draft_id'], '" />
 		<input type="submit" name="draft" value="', $txt['save_draft'], '" tabindex="', $context['tabindex']++, '" onclick="return submitThisOnce(this);" accesskey="d" class="button_submit" />';
 		
-	if (!empty($context['save_draft_auto']))
+	if (!empty($context['can_autosave_draft']))
 		echo '
 		<span id="draft_lastautosave" class="clear righttext" style="display: block;"></span>
 		<script type="text/javascript">

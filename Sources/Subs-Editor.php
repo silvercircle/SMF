@@ -1659,6 +1659,12 @@ function create_control_richedit($editorOptions)
 			);
 		}
 
+		$context['bbc_tags'][count($context['bbc_tags']) - 1][] = array(
+			'image' => 'toggle',
+			'code' => 'smiley',
+			'before' => '',
+			'description' => $txt['toggle_view'],
+		);
 		foreach ($context['bbc_tags'] as $row => $tagRow)
 			$context['bbc_tags'][$row][count($tagRow) - 1]['isLast'] = true;
 	}

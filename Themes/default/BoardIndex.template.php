@@ -184,12 +184,12 @@ function template_info_center()
 	echo '<div class="clear"></div>';
 	if(isset($context['show_who'])) {
 		echo '
-				<div class="cat_bar">
+				<div class="cat_bar2">
 					<h3>
 						', $context['show_who'] ? '<a href="' . $scripturl . '?action=who' . '">' : '', $txt['online_users'], $context['show_who'] ? '</a>' : '', '
 					</h3>
 				</div>
-				<div class="blue_container smallpadding smalltext">',
+				<div class="blue_container smallpadding smalltext cleantop">',
 					sprintf($txt['who_summary'], $context['num_guests'], $context['num_users_online'], $modSettings['lastActive']);
 
 		// Handle hidden users and buddies.
