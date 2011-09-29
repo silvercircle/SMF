@@ -1206,6 +1206,13 @@ h1.bigheader, div.bigheader {
 	color: #888;
 }
 
+h1.bigheader.secondary {
+	font-size: 13px;
+	font-weight:normal;
+	border-bottom: 1px solid #ccc;
+	color: #88c;
+	padding: 2px 20px;
+}
 .greyback {
 	background: #f0f0f5 url(../images/frow.png) bottom left repeat-x;
 	border-radius: 3px 3px 0 0;
@@ -1473,6 +1480,10 @@ ol.commonlist.notifications li.unread {
 }
 ol.commonlist.notifications li:hover {
 	background-color: #d5ecfa;
+}
+ol.commonlist.noshadow {
+	box-shadow: none !important;
+	margin:0 !important;
 }
 ol.category > li > div.lastpost {
 	float: right;

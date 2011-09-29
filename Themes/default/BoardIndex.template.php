@@ -14,70 +14,30 @@ function template_main()
 {
 	global $context, $settings, $options, $txt, $scripturl, $modSettings;
 
-	// Show the news fader?  (assuming there are things to show...)
-	if ($settings['show_newsfader'] && !empty($context['fader_news_lines']))
-	{
-		echo '
-	<div id="newsfader">
-		<div class="cat_bar rounded_top">
-			<h3 class="catbg">
-				<img id="newsupshrink" src="', $settings['images_url'], '/collapse.gif" alt="*" title="', $txt['upshrink_description'], '" style="display: none;" />
-				', $txt['news'], '
-			</h3>
-		</div>
-		<ul class="windowbg rounded_bottom reset" id="smfFadeScroller"', empty($options['collapse_news_fader']) ? '' : ' style="display: none;"', '>';
-
-			foreach ($context['news_lines'] as $news)
-				echo '
-			<li>', $news, '</li>';
-
 	echo '
-		</ul>
-	</div>
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/fader.js"></script>
-	<script type="text/javascript"><!-- // --><![CDATA[
 
-		// Create a news fader object.
-		var oNewsFader = new smf_NewsFader({
-			sSelf: \'oNewsFader\',
-			sFaderControlId: \'smfFadeScroller\',
-			sItemTemplate: ', JavaScriptEscape('<strong>%1$s</strong>'), ',
-			iFadeDelay: ', empty($settings['newsfader_time']) ? 5000 : $settings['newsfader_time'], '
-		});
-
-		// Create the news fader toggle.
-		var smfNewsFadeToggle = new smc_Toggle({
-			bToggleEnabled: true,
-			bCurrentlyCollapsed: ', empty($options['collapse_news_fader']) ? 'false' : 'true', ',
-			aSwappableContainers: [
-				\'smfFadeScroller\'
-			],
-			aSwapImages: [
-				{
-					sId: \'newsupshrink\',
-					srcExpanded: smf_images_url + \'/collapse.gif\',
-					altExpanded: ', JavaScriptEscape($txt['upshrink_description']), ',
-					srcCollapsed: smf_images_url + \'/expand.gif\',
-					altCollapsed: ', JavaScriptEscape($txt['upshrink_description']), '
-				}
-			],
-			oThemeOptions: {
-				bUseThemeSettings: ', $context['user']['is_guest'] ? 'false' : 'true', ',
-				sOptionName: \'collapse_news_fader\',
-				sSessionVar: ', JavaScriptEscape($context['session_var']), ',
-				sSessionId: ', JavaScriptEscape($context['session_id']), '
-			},
-			oCookieOptions: {
-				bUseCookie: ', $context['user']['is_guest'] ? 'true' : 'false', ',
-				sCookieName: \'newsupshrink\'
-			}
-		});
-	// ]]></script>';
-	}
-
-	echo '
 	<div id="boardindex_table">';
 
+	if($context['news_item_count']) {
+		$collapser = array('id' => 'news_boardindex', 'title' => 'NEWS', 'bodyclass' => 'blue_container');
+
+		template_create_collapsible_container($collapser);
+
+		echo '
+		<div class="content smallpadding">
+		<ol class="commonlist noshadow">';
+		foreach($context['news_items'] as $item) {
+			echo '
+			<li>'
+			,$item['body'],'
+			</li>';
+		}
+		echo '
+		</ol>
+		</div>
+		</div>
+		<div class="cContainer_end"></div>';
+	}
 	/* Each category in categories is made up of:
 	id, href, link, name, is_collapsed (is it collapsed?), can_collapse (is it okay if it is?),
 	new (is it new?), collapse_href (href to collapse/expand), collapse_image (up/down image),

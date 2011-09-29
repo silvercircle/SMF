@@ -397,19 +397,6 @@ function getPrefixes()
 	mysql_free_result($request);
 }
 
-function normalizeCommaDelimitedList($b)
-{
-	$_b = explode(',', $b);
-	$bnew = array();
-	
-	foreach($_b as $board) {
-		$btemp = intval(trim($board));
-		if($btemp)
-			array_push($bnew, $btemp);
-	}
-	return(implode(',', $bnew));
-}
-
 function ModifyDraftSettings($return_config = false)
 {
 	global $txt, $sourcedir, $context, $scripturl;

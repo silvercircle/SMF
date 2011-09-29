@@ -3136,22 +3136,6 @@ function setupThemeContext($forceload = false)
 	$context['current_action'] = isset($_GET['action']) ? $_GET['action'] : '';
 	$context['show_quick_login'] = !empty($modSettings['enableVBStyleLogin']) && $user_info['is_guest'];
 
-	// Get some news...
-	$context['news_lines'] = explode("\n", str_replace("\r", '', trim(addslashes($modSettings['news']))));
-	$context['fader_news_lines'] = array();
-	for ($i = 0, $n = count($context['news_lines']); $i < $n; $i++)
-	{
-		if (trim($context['news_lines'][$i]) == '')
-			continue;
-
-		// Clean it up for presentation ;).
-		$context['news_lines'][$i] = parse_bbc(stripslashes(trim($context['news_lines'][$i])), true, 'news' . $i);
-
-		// Gotta be special for the javascript.
-		$context['fader_news_lines'][$i] = strtr(addslashes($context['news_lines'][$i]), array('/' => '\/', '<a href=' => '<a hre" + "f='));
-	}
-	$context['random_news_line'] = $context['news_lines'][mt_rand(0, count($context['news_lines']) - 1)];
-
 	if (!$user_info['is_guest'])
 	{
 		$context['user']['messages'] = &$user_info['messages'];
@@ -4213,6 +4197,19 @@ function remove_integration_function($hook, $function)
 	$modSettings[$hook] = implode(',', $functions);
 }
 
+function normalizeCommaDelimitedList($b)
+{
+	$_b = explode(',', $b);
+	$bnew = array();
+
+	foreach($_b as $board) {
+		$btemp = intval(trim($board));
+		if($btemp)
+			array_push($bnew, $btemp);
+	}
+	return(implode(',', $bnew));
+}
+
 function getCachedPost(&$message)
 {
 	global $modSettings;
@@ -4228,5 +4225,62 @@ function enqueueThemeScript($key, $script, $footer = true, $default = true)
 	global $context;
 
 	$context['theme_scripts'][$key] = array('name' => $script, 'default' => $default, 'footer' => $footer);
+}
+
+/**
+ * @param int $board  board id or 0
+ * @param int $topic  topic id or 0
+ * @param int $force_full if set, don't use the shortened versions with a "read more" link.
+ * fetch news for the board index or a specific board or topic.
+ * Look at the current user group to determine whether the user
+ * is supposed to see the item.
+ */
+function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
+{
+	global $context, $user_info, $smcFunc;
+
+	$cached_news = array();
+	$context['news_items'] = array();
+	$gsel = '';
+	$context['news_item_count'] = 0;
+
+	$cache_key = 'news:board_'.trim($board).'_topic_'.trim($topic).'_groups_'.join(':',$user_info['groups']);
+	if (($cached_news = cache_get_data($cache_key, 360)) == null) {
+		if(0 == $board && 0 == $topic)
+			$sel = ' on_index = 1 ';
+		elseif($board)
+			$sel = ' (boards = "" OR FIND_IN_SET({int:board}, boards)) ';
+		elseif($topic)
+			$sel = ' (topics = "" OR FIND_IN_SET({int:topic}, topics)) ';
+		if(!$user_info['is_admin'])
+			$gsel = ' (groups = "" OR FIND_IN_SET({int:group}, groups)) AND ';
+
+		$result = smf_db_query('
+			SELECT id_news, body, is_long FROM {db_prefix}news WHERE ' . $gsel . $sel,
+			array('board' => (int)$board, 'topic' => (int)$topic, 'group' => (int)$user_info['groups']));
+
+		while($row = mysql_fetch_assoc($result)) {
+			$context['news_item_count']++;
+			$context['news_items'][] = array(
+				'id' => $row['id_news'],
+				'is_long' => $row['is_long'] && !$force_full,
+				'body' => $row['is_long'] ? parse_bbc($smcFunc['substr']($row['body'], 0, 200)) . '...' : parse_bbc($row['body']),
+			);
+		}
+		mysql_free_result($result);
+		if($context['news_item_count'])
+			cache_put_data($cache_key, $context['news_items'], 360);
+		else
+			cache_put_data($cache_key, 'none', 360);
+	}
+	else {
+		if($cached_news !== 'none') {
+			$context['news_items'] = $cached_news;
+			$context['news_item_count'] = count($cached_news);
+		}
+	}
+	// we have news items to show, we need the template
+	if($context['news_item_count'])
+		loadTemplate('News');
 }
 ?>

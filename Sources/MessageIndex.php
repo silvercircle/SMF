@@ -47,6 +47,8 @@ function MessageIndex()
 		redirectexit($board_info['redirect']);
 	}
 
+	fetchNewsItems($board, 0);
+
 	if (WIRELESS)
 		$context['sub_template'] = WIRELESS_PROTOCOL . '_messageindex';
 	else {

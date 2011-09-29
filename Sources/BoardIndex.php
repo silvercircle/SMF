@@ -118,6 +118,8 @@ function BoardIndex()
 
 	if(!empty($modSettings['enableAdvancedHooks']))
 		call_integration_hook('integrate_boardindex', array());
+
+	fetchNewsItems(0, 0);
 }
 
 // Collapse or expand a category

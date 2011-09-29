@@ -73,6 +73,7 @@ function ManageNews()
 	// Format: 'sub-action' => array('function', 'permission')
 	$subActions = array(
 		'editnews' => array('EditNews', 'edit_news'),
+		'editnewsitem' => array('EditNewsItem', 'edit_news'),
 		'mailingmembers' => array('SelectMailingMembers', 'send_mail'),
 		'mailingcompose' => array('ComposeMailing', 'send_mail'),
 		'mailingsend' => array('SendMailing', 'send_mail'),
@@ -107,6 +108,77 @@ function ManageNews()
 		$context[$context['admin_menu_name']]['current_subsection'] = 'mailingmembers';
 
 	$subActions[$_REQUEST['sa']][0]();
+}
+
+/**
+ * edit news items.
+ * todo: this needs LOTS of UX improvements, AJAX inline editing and stuff like that
+ * for now, a basic UI is ok to test the feature
+ */
+function EditNewsItem()
+{
+	global $txt, $context, $sourcedir, $scripturl, $smcFunc;
+
+	require_once($sourcedir . '/Subs-Post.php');
+	$id_item = isset($_REQUEST['itemid']) ? (int)$_REQUEST['itemid'] : '0';
+
+	if(isset($_GET['save'])) {
+
+		checkSession();
+
+		$_POST['body'] = $smcFunc['htmlspecialchars']($_POST['body'], ENT_QUOTES);
+		preparsecode($_POST['body']);
+
+		$_POST['showboards'] = isset($_POST['showboards']) ? normalizeCommaDelimitedList($_POST['showboards']) : '';
+		$_POST['showtopics'] = isset($_POST['showtopics']) ? normalizeCommaDelimitedList($_POST['showtopics']) : '';
+		$_POST['showgroups'] = isset($_POST['showgroups']) ? normalizeCommaDelimitedList($_POST['showgroups']) : '';
+		$_POST['showindex'] = isset($_POST['showindex']) ? 1 : 0;
+
+		if(isset($_POST['id']) && !empty($_POST['id'])) {		// modify existing
+			smf_db_query('
+				UPDATE {db_prefix}news SET body = {string:body}, groups = {string:groups}, boards = {string:boards},
+					topics = {string:topics}, on_index = {int:onindex} WHERE id_news = {int:idnews}',
+
+			array('body' => $_POST['body'], 'topics' => $_POST['showtopics'], 'boards' => $_POST['showboards'],
+				'groups' => $_POST['showgroups'], 'idnews' => $_POST['id'], 'onindex' => $_POST['showindex']));
+
+			$redirect_id = $_POST['id'];
+		}
+		else {													// add new
+			smf_db_insert('insert',
+				'{db_prefix}news',
+				array('body' => 'string', 'boards' => 'string', 'topics' => 'string', 'groups' => 'string', 'on_index' => 'int'),
+				array($_POST['body'], $_POST['showboards'], $_POST['showtopics'], $_POST['showgroups'], $_POST['showindex']),
+				array('id_news')
+			);
+			$redirect_id = smf_db_insert_id('{db_prefix}news', 'id_news');
+		}
+		redirectexit($scripturl . '?action=admin;area=news;sa=editnewsitem;itemid='.$redirect_id);
+	}
+	if($id_item) {
+		$result = smf_db_query('SELECT * FROM {db_prefix}news WHERE id_news = {int:id_item}',
+		array('id_item' => $id_item));
+
+		$row = mysql_fetch_assoc($result);
+		if($row) {
+			$context['news_item'] = array(
+				'id' => $row['id_news'],
+				'body' => un_preparsecode($row['body']),
+				'boards' => $row['boards'],
+				'topics' => $row['topics'],
+				'on_index' => $row['on_index'],
+				'groups' => $row['groups']
+			);
+		}
+		mysql_free_result($result);
+	}
+	else {
+		$context['news_item']['id'] = $context['news_item']['on_index'] = 0;
+		$context['news_item']['body'] = $context['news_item']['boards'] = $context['news_item']['topics'] = $context['news_item']['groups'] = '';
+	}
+	$context['sub_template'] = 'edit_news_item';
+	$context['page_title'] = $txt['admin_edit_news'];
+	$context['submit_url'] = $scripturl . '?action=admin;area=news;sa=editnewsitem;save';
 }
 
 // Let the administrator(s) edit the news.
@@ -158,13 +230,22 @@ function EditNews()
 		logAction('news');
 	}
 
-	// Ready the current news.
-	foreach (explode("\n", $modSettings['news']) as $id => $line)
-		$context['admin_current_news'][$id] = array(
-			'id' => $id,
-			'unparsed' => un_preparsecode($line),
-			'parsed' => preg_replace('~<([/]?)form[^>]*?[>]*>~i', '<em class="smalltext">&lt;$1form&gt;</em>', parse_bbc($line)),
+	$context['news_item_count'] = 0;
+	$result = smf_db_query('
+		SELECT * FROM {db_prefix}news');
+
+	while($row = mysql_fetch_assoc($result)) {
+		$context['news_item_count']++;
+		$context['news_items'][] = array(
+			'id' => $row['id_news'],
+			'is_long' => $row['is_long'],
+			'body' => parse_bbc($row['body']),
+			'boards' => $row['boards'],
+			'topic' => $row['topics'],
+			'groups' => $row['groups']
 		);
+	}
+	mysql_free_result($result);
 
 	$context['sub_template'] = 'edit_news';
 	$context['page_title'] = $txt['admin_edit_news'];

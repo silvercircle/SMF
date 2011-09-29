@@ -637,4 +637,11 @@ $txt['paid_subs_view'] = 'View Subscriptions';
 // Admin options
 $txt['enableAutoSaveDrafts'] = 'Automatically save drafts every';
 $txt['draftsave_subnote'] = 'A user must still have permission to use this feature<br><br>If set to 0, auto-saving will be globally disabled for all users, including administrators.<br>Be aware that this feature can consume considerable server load and bandwidth, so do not set the auto-saving interval too low.';
+
+$txt['newsitem_show_boardindex'] = 'Show this item on the board index';
+$txt['newsitem_show_boards'] = 'Show this item in the following boards only:';
+$txt['newsitem_show_topics'] = 'Show this item in the following topics only:';
+$txt['newsitem_show_groups'] = 'Only show it to the following user group(s):';
+$txt['newsitem_display_options'] = 'Display options';
+
 ?>

@@ -159,6 +159,21 @@ CREATE TABLE {$db_prefix}drafts (
 	KEY (id_member)
 ) Engine=MyISAM;
 
+#
+# Table structure for table `news`
+#
+
+CREATE TABLE {$db_prefix}news (
+	id_news mediumint(8) unsigned NOT NULL auto_increment,
+	body tinytext NOT NULL default '',
+	boards varchar(100) NOT NULL default '',
+	topics varchar(100) NOT NULL default '',
+	groups varchar(50) NOT NULL default '',
+	is_long tinyint(2) NOT NULL default '0',
+	on_index tinyint(2) NOT NULL default '0',
+	PRIMARY KEY (id_news)
+) ENGINE=MyISAM;
+
 # now the changes to stock smf 2 tables
 
 # this can be used to prevent a post from being cached (unimplemented as of now)

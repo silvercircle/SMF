@@ -10,6 +10,43 @@
  * @version 2.0
  */
 
+function template_edit_news_item()
+{
+	global $context, $txt;
+
+	echo '
+	<div id="admincenter">
+	<div class="cat_bar">
+	 <h3>Edit news item</h3>
+	</div>
+	<div class="blue_container cleantop">
+	 <div class="content">
+	 <form action="',$context['submit_url'],'" method="post" accept-charset="', $context['character_set'], '" name="editnewsitem" id="editnewsitem">
+	 <input type="hidden" name="id" value="',$context['news_item']['id'],'" />
+	 <textarea style="width:99%;height:20ex;" name="body">',$context['news_item']['body'],'</textarea>
+	 <br>
+	 <br>
+	 <h1 class="bigheader secondary">',$txt['newsitem_display_options'],'</h1>
+	 <dl class="settings mediumpadding">
+	 <dt>',$txt['newsitem_show_boardindex'],'</dt>
+	 <dd><input type="checkbox" name="showindex" value="1" class="input_check" ',$context['news_item']['on_index'] ? 'checked="checked"' : '', ' /></dd>
+	 <dt>',$txt['newsitem_show_boards'],'</dt>
+	 <dd><input type="text" size="40" name="showboards" value="',$context['news_item']['boards'],'" /></dd>
+	 <dt>',$txt['newsitem_show_topics'],'</dt>
+	 <dd><input type="text" size="40" name="showtopics" value="',$context['news_item']['topics'],'" /></dd>
+	 <dt>',$txt['newsitem_show_groups'],'</dt>
+	 <dd><input type="text" size="40" name="showgroups" value="',$context['news_item']['groups'],'" /></dd>
+	 </dl>
+	 <div class="floatright">
+	 <input type="submit" name="submit" class="button_submit" value="',$txt['save'],'" />
+	 </div>
+	 <div class="clear"></div>
+	 <input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
+	 </form>
+	 </div>
+	</div>
+	</div>';
+}
 // Form for editing current news on the site.
 function template_edit_news()
 {
@@ -21,24 +58,21 @@ function template_edit_news()
 			<table class="table_grid" width="100%">
 				<thead>
 					<tr>
-						<th class="glass" style="width:50%;">', $txt['admin_edit_news'], '</th>
-						<th class="glass lefttext" style="width:45%;">', $txt['preview'], '</th>
+						<th class="glass lefttext" style="width:100%;">', $txt['preview'], '</th>
 						<th class="glass centertext"><input type="checkbox" class="input_check" onclick="invertAll(this, this.form);" /></th>
 					</tr>
 				</thead>
 				<tbody>';
 
 	// Loop through all the current news items so you can edit/remove them.
-	foreach ($context['admin_current_news'] as $admin_news)
+	foreach ($context['news_items'] as $news)
 		echo '
 					<tr class="windowbg2">
-						<td align="center">
-
-							<div style="margin-bottom: 2ex;"><textarea rows="5" cols="65" name="news[]" style="' . ($context['browser']['is_ie8'] ? 'width: 635px; max-width: 85%; min-width: 85%' : 'width: 85%') . ';">', $admin_news['unparsed'], '</textarea></div>
-						</td><td align="left" valign="top">
-							<div style="overflow: auto; width: 100%; height: 20ex;">', $admin_news['parsed'], '</div>
+						<td align="left" valign="top">
+							<div style="overflow: auto; width: 100%;">', $news['body'], '</div>
+							<div class="floatright"><a href="',$scripturl,'?action=admin;area=news;sa=editnewsitem;itemid=',$news['id'],'">Edit</a></div>
 						</td><td align="center">
-							<input type="checkbox" name="remove[]" value="', $admin_news['id'], '" class="input_check" />
+							<input type="checkbox" name="remove[]" value="', $news['id'], '" class="input_check" />
 						</td>
 					</tr>';
 
@@ -55,22 +89,9 @@ function template_edit_news()
 					</tr>
 				</tbody>
 			</table>
-			<div class="floatleftpadding">
-				<div id="moreNewsItems_link" style="display: none;"><a href="javascript:void(0);" onclick="addNewsItem(); return false;">', $txt['editnews_clickadd'], '</a></div>
-				<script type="text/javascript"><!-- // --><![CDATA[
-					document.getElementById("moreNewsItems_link").style.display = "";
-					function addNewsItem()
-					{
-						document.getElementById("moreNews").style.display = "";
-						setOuterHTML(document.getElementById("moreNewsItems"), \'<div style="margin-bottom: 2ex;"><textarea rows="3" cols="65" name="news[]" style="' . ($context['browser']['is_ie8'] ? 'width: 635px; max-width: 85%; min-width: 85%' : 'width: 85%') . ';"><\' + \'/textarea><\' + \'/div><div id="moreNewsItems"><\' + \'/div>\');
-					}
-				// ]]></script>
-				<noscript>
-					<div style="margin-bottom: 2ex;"><textarea rows="3" cols="65" style="' . ($context['browser']['is_ie8'] ? 'width: 635px; max-width: 85%; min-width: 85%' : 'width: 85%') . ';" name="news[]"></textarea></div>
-				</noscript>
-			</div>
-			<div class="floatrightpadding">
-				<input type="submit" name="save_items" value="', $txt['save'], '" class="button_submit" /> <input type="submit" name="delete_selection" value="', $txt['editnews_remove_selected'], '" onclick="return confirm(\'', $txt['editnews_remove_confirm'], '\');" class="button_submit" />
+			<br>
+			<div class="floatright smalltext">
+				<div id="moreNewsItems_link"><a href="',$scripturl,'?action=admin;area=news;sa=editnewsitem;itemid=0">', $txt['editnews_clickadd'], '</a></div>
 			</div>
 			<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 		</form>
