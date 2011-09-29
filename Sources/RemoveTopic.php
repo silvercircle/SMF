@@ -1,16 +1,16 @@
 <?php
-
 /**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines http://www.simplemachines.org
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.0
+ * @version %%@productversion@%%
  */
-
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
@@ -492,6 +492,8 @@ function removeTopics($topics, $decreasePostCount = true, $ignoreRecycling = fal
 			);
 	}
 
+	require_once($sourcedir . '/Subs-Activities.php');
+	aStreamRemoveByTopic($topics);
 	// Delete anything related to the topic.
 	smf_db_query( '
 		DELETE FROM {db_prefix}messages
@@ -940,10 +942,12 @@ function removeMessage($message, $decreasePostCount = true)
 	// Only remove posts if they're not recycled.
 	if (!$recycle)
 	{
-		// Remove the message!
+		require_once($sourcedir . '/Subs-LikeSystem.php');
+		require_once($sourcedir . '/Subs-Activities.php');
+		// Remove the message + maybe its cached version
 		smf_db_query( '
-			DELETE FROM {db_prefix}messages
-			WHERE id_msg = {int:id_msg}',
+			DELETE m.*, c.* FROM {db_prefix}messages AS m LEFT JOIN {db_prefix}messages_cache AS c ON (c.id_msg = m.id_msg)
+			WHERE m.id_msg = {int:id_msg}',
 			array(
 				'id_msg' => $message,
 			)
@@ -972,6 +976,13 @@ function removeMessage($message, $decreasePostCount = true)
 			'id_msg' => $message,
 		);
 		removeAttachments($attachmentQuery);
+
+		// remove likes and like_cache
+		$likes_to_remove = array($message);
+		LikesRemoveByPosts($likes_to_remove);
+
+		// remove activities related to this post
+		aStreamRemoveByContent($likes_to_remove);
 	}
 
 	// Update the pesky statistics.

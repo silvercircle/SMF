@@ -1871,9 +1871,6 @@ div.userbit_compact_textpart {
 	width: 16px;
 	height: 16px;
 }
-.keyinfo a {
-	color: #ffff99;
-}
 .horizontal_userblock {
 	padding: 3px 10px;
 	background: #ececec;
@@ -3513,8 +3510,8 @@ span.hidelink {
 	border-radius: 3px;
 }
 .blue_container div.content, .orange_container div.content, .yellow_container div.content {
-	border: 2px solid white;
-	border-radius: 3px;
+	border: 3px solid white;
+	border-radius: 1px;
 	margin:-2px -4px;
 }
 .cContainer_body {

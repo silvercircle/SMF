@@ -62,4 +62,9 @@ $txt['acfmt_modify_post_3'] = '<a href="@SCRIPTURL@?action=profile;u=%id_member$
 $txt['acfmt_modify_post_4'] = 'You modified <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">your post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
 
 $txt['acfmt_signed_up_10'] = '<a class="_m" href="@SCRIPTURL@?action=profile;u=%id_member$s&@NM@">%member_name$s</a> signed up as a new member';
+
+$txt['acfmt_pm_sent_1'] = '<a href="@SCRIPTURL@?action=profile;u=%id_member$s">%member_name$s</a> has sent a new <a class="_m" href="@SCRIPTURL@?action=pm;pmid=%id_content$s;kstart;f=inbox;start=0@NM@#msg%id_content$s">private message</a>';
+$txt['acfmt_pm_sent_2'] = 'You have sent a new <a href="@SCRIPTURL@?action=pm;pmid=%id_content$s;kstart;f=sent;start=0@NM@#msg%id_content$s">private message</a>';
+$txt['acfmt_pm_sent_3'] = '';
+$txt['acfmt_pm_sent_4'] = '';
 ?>

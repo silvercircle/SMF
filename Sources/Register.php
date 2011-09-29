@@ -654,7 +654,7 @@ function Activate()
 			require_once($sourcedir . '/Subs-Activities.php');
 			$actid = aStreamAdd($row['id_member'], ACT_NEWMEMBER,
 						array('member_name' => $row['member_name']),
-						0, 0, 0, 0);
+						0, 0, 0, $row['id_member']);
 		}
 		adminNotify('activation', $row['id_member'], $row['member_name'], $actid);
 	}

@@ -917,7 +917,7 @@ function AddMailQueue($flush = false, $to_array = array(), $subject = '', $messa
 function sendpm($recipients, $subject, $message, $store_outbox = false, $from = null, $pm_head = 0)
 {
 	global $scripturl, $txt, $user_info, $language;
-	global $modSettings, $smcFunc;
+	global $modSettings, $smcFunc, $sourcedir;
 
 	// Make sure the PM language file is loaded, we might need something out of it.
 	loadLanguage('PersonalMessage');
@@ -1102,6 +1102,7 @@ function sendpm($recipients, $subject, $message, $store_outbox = false, $from = 
 		)
 	);
 	$notifications = array();
+	$as_notifications = array();
 	while ($row = mysql_fetch_assoc($request))
 	{
 		// Don't do anything for members to be deleted!
@@ -1159,6 +1160,7 @@ function sendpm($recipients, $subject, $message, $store_outbox = false, $from = 
 		if (!empty($row['email_address']) && ($row['pm_email_notify'] == 1 || ($row['pm_email_notify'] > 1 && (!empty($modSettings['enable_buddylist']) && $row['is_buddy']))) && $row['is_activated'] == 1)
 			$notifications[empty($row['lngfile']) || empty($modSettings['userLanguage']) ? $language : $row['lngfile']][] = $row['email_address'];
 
+		$as_notifications[] = $row['id_member'];
 		$log['sent'][$row['id_member']] = sprintf(isset($txt['pm_successfully_sent']) ? $txt['pm_successfully_sent'] : '', $row['real_name']);
 	}
 	mysql_free_result($request);
@@ -1182,6 +1184,13 @@ function sendpm($recipients, $subject, $message, $store_outbox = false, $from = 
 	);
 	$id_pm = smf_db_insert_id('{db_prefix}personal_messages', 'id_pm');
 
+	if($modSettings['astream_active']) {
+		require_once($sourcedir . '/Subs-Activities.php');
+		$id_act = aStreamAdd($from['id'], ACT_PM,
+					   array('member_name' => $from['username']),
+					   0, 0, $id_pm, $from['id'], ACT_PLEVEL_PRIVATE);
+		aStreamAddNotification($as_notifications, $id_act);
+	}
 	// Add the recipients.
 	if (!empty($id_pm))
 	{
@@ -1739,7 +1748,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		elseif ($posterOptions['id'] != $user_info['id'])
 		{
 			$request = smf_db_query( '
-				SELECT member_name, email_address
+				SELECT member_name, email_address, real_name
 				FROM {db_prefix}members
 				WHERE id_member = {int:id_member}
 				LIMIT 1',
@@ -1756,15 +1765,17 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 				$posterOptions['email'] = '';
 			}
 			else
-				list ($posterOptions['name'], $posterOptions['email']) = mysql_fetch_row($request);
+				list ($posterOptions['name'], $posterOptions['email'], $posterOptions['real_name']) = mysql_fetch_row($request);
 			mysql_free_result($request);
 		}
 		else
 		{
-			$posterOptions['name'] = $user_info['name'];
+			$posterOptions['name'] = $posterOptions['real_name'] = $user_info['name'];
 			$posterOptions['email'] = $user_info['email'];
 		}
 	}
+	else
+		$posterOptions['real_name'] = $user_info['name'];
 
 	// It's do or die time: forget any user aborts!
 	$previous_ignore_user_abort = ignore_user_abort(true);
@@ -1923,7 +1934,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		if($context['astream_active']) {
 			require_once($sourcedir . '/Subs-Activities.php');
 			aStreamAdd($posterOptions['id'], ACT_NEWTOPIC,
-				   		array('member_name' => $posterOptions['name'], 'topic_title' => $msgOptions['subject']),
+				   		array('member_name' => $posterOptions['real_name'], 'topic_title' => $msgOptions['subject']),
 				   		$topicOptions['board'], $topicOptions['id'], $msgOptions['id'], $posterOptions['id']);
 		}
 	}
@@ -1961,7 +1972,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			// add to activity stream, but do not notify when we reply to our own topic
 			require_once($sourcedir . '/Subs-Activities.php');
 			aStreamAdd($posterOptions['id'], ACT_REPLIED,
-				   		array('member_name' => $posterOptions['name'], 'topic_title' => $msgOptions['subject']),
+				   		array('member_name' => $posterOptions['real_name'], 'topic_title' => $msgOptions['subject']),
 				   		$topicOptions['board'], $topicOptions['id'], $msg_to_update, $topicOptions['id_member_started'], 0, $posterOptions['id'] == $topicOptions['id_member_started'] ? true : false);
 		}
 	}

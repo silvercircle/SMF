@@ -266,12 +266,11 @@ function template_body_below()
 {
 	global $context, $settings, $options, $scripturl, $txt, $modSettings, $fbxml, $twitter_widgets, $plusone;
 
-	echo '
+	echo '<div class="clear"></div>
 		</div></div></div>';    
 
 	// Show the "Powered by" and "Valid" logos, as well as the copyright. Remember, the copyright must be somewhere!
 	echo '
-  	<div id="fb-root"></div>
   	<script type="text/javascript">
 	// <![CDATA[
 	';
@@ -304,7 +303,7 @@ function template_body_below()
 	// ]]>
 	</script>
 	<footer>
-	<div id="footer_section">';
+	<div class="clear" id="footer_section">';
 	// Show the load time?
 	if ($context['show_load_time'])
 		$loadtime = $context['load_time']. 's CPU, '.$context['load_queries'] . $txt['queries'];

@@ -278,24 +278,22 @@ function template_control_richedit_buttons($editor_id)
 		<input type="hidden" id="draft_id" name="draft_id" value="', empty($context['draft_id']) ? '0' : $context['draft_id'], '" />
 		<input type="submit" name="draft" value="', $txt['save_draft'], '" tabindex="', $context['tabindex']++, '" onclick="return submitThisOnce(this);" accesskey="d" class="button_submit" />';
 		
-	if (!empty($context['can_autosave_draft']))
+	if (!empty($context['can_autosave_draft'])) {
 		echo '
-		<span id="draft_lastautosave" class="clear righttext" style="display: block;"></span>
-		<script type="text/javascript">
-			<!-- // --><![CDATA[
-			var oAutoSave = new draftAutosave({
-				sSelf: \'oAutoSave\',
-				sScriptUrl: smf_scripturl,
-				sSessionId: \'', $context['session_id'], '\',
-				sSessionVar: \'', $context['session_var'], '\',
-				sLastNote: \'draft_lastautosave\',
-				sType: \'full\',
-				iBoard: ', (empty($context['current_board']) ? 0 : $context['current_board']), ',
-				iFreq: ', (empty($modSettings['masterAutoSaveDraftsDelay']) ? 30000 : $modSettings['masterAutoSaveDraftsDelay'] * 1000), '
-			});
-			// ]]>
-			</script>
-			';
+		<span id="draft_lastautosave" class="clear righttext" style="display: block;"></span>';
+		$context['inline_footer_script'] .= '
+	var oAutoSave = new draftAutosave({
+		sSelf: \'oAutoSave\',
+		sScriptUrl: smf_scripturl,
+		sSessionId: \''. $context['session_id']. '\',
+		sSessionVar: \''. $context['session_var']. '\',
+		sLastNote: \'draft_lastautosave\',
+		sType: \'full\',
+		iBoard: '.(empty($context['current_board']) ? 0 : $context['current_board']). ',
+		iFreq: '.(empty($modSettings['enableAutoSaveDrafts']) ? 30000 : $modSettings['enableAutoSaveDrafts'] * 1000).'
+	});
+	';
+	}
 }
 
 // What's this, verification?!

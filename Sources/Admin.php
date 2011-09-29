@@ -53,7 +53,7 @@ function AdminMain()
 	loadLanguage('Admin');
 	loadTemplate('Admin', 'admin');
 
-	enqueueThemeScript('admin', 'admin.js', false);
+	enqueueThemeScript('admin', 'scripts/admin.js', false);
 	// No indexing evil stuff.
 	$context['robot_no_index'] = true;
 

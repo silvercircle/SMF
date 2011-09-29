@@ -181,11 +181,11 @@ function template_info_center()
 	global $context, $settings, $txt, $scripturl, $modSettings;
 
 	// "Users online" - in order of activity.
-	echo '<div class="clear"></div>';
+	echo '<div class="clear_left"></div>';
 	if(isset($context['show_who'])) {
 		echo '
 				<div class="cat_bar2">
-					<h3>
+					<h3 class="lefttext">
 						', $context['show_who'] ? '<a href="' . $scripturl . '?action=who' . '">' : '', $txt['online_users'], $context['show_who'] ? '</a>' : '', '
 					</h3>
 				</div>

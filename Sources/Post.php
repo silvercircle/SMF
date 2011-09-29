@@ -94,6 +94,7 @@ function Post()
 	if(in_array('dr', $context['admin_features'])) {
 		require_once($sourcedir . '/Subs-Drafts.php');
 		$context['have_drafts'] = true;
+		enqueueThemeScript('drafts', 'scripts/drafts.js', true);
 	}
 	else
 		$context['have_drafts'] = false;
@@ -1287,6 +1288,7 @@ function Post2()
 
 	if(in_array('dr', $context['admin_features'])) {
 		require_once($sourcedir . '/Subs-Drafts.php');
+		enqueueThemeScript('drafts', 'scripts/drafts.js', true);
 		$context['have_drafts'] = true;
 	}
 	else
@@ -1485,16 +1487,18 @@ function Post2()
 		
 		// Are we saving a draft? If so, hand over control to the draft code -- except, in the case of a session failure
 		$_POST['lock_draft'] = !empty($_POST['lock']) ? 1 : 0;
-		$draft = saveDraft();
-		if (!empty($draft) && !in_array('session_timeout', $post_errors))
-		{
-			if (isset($_REQUEST['xml']))
-				draftXmlReturn($draft);
+		if($context['have_drafts']) {
+			$draft = saveDraft();
+			if (!empty($draft) && !in_array('session_timeout', $post_errors))
+			{
+				if (isset($_REQUEST['xml']))
+					draftXmlReturn($draft);
 
-			loadTemplate('Post');
-			$context['page_title'] = $txt['draft_saved_short'];
-			$context['sub_template'] = 'draft_saved';
-			return;
+				loadTemplate('Post');
+				$context['page_title'] = $txt['draft_saved_short'];
+				$context['sub_template'] = 'draft_saved';
+				return;
+			}
 		}
 	}
 	// Modifying an existing message?

@@ -133,7 +133,6 @@ function template_notifications_scripts()
 	$(document).ready(function() {
 		$("ol#notifylist li.unread a._m").each(function() {
 			var _s = $(this).attr("href");
-			alert(_s);
 			if(_s.indexOf("#")) {
 				var _parts = _s.split("#");
 				_s = _parts[0] + ";nmdismiss=" + $(this).attr("data-id") + "#" + _parts[1];

@@ -1943,8 +1943,9 @@ VALUES
 	(2, 'new_topic', 'actfmt_default', 4, 5, 5, 5),
 	(3, 'new_reply', 'actfmt_default', 6, 7, 8, 9),
 	(4, 'modify_post', 'actfmt_default', 1, 2, 3, 4),
-	(5, 'signed_up', 'actfmt_default', 10, 10, 10, 10);
-	
+	(5, 'signed_up', 'actfmt_default', 10, 10, 10, 10),
+	(6, 'pm_sent', 'actfmt_default', 1, 2, 1, 1);
+
 # --------------------------------------------------------
 
 #

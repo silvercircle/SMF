@@ -192,7 +192,7 @@ function aStreamGet($b = 0, $xml = false, $global = false)
 	$context['act_global'] = false;
 
 	if($user_info['is_admin'])
-		$pquery = '';
+		$pquery = ' AND (a.is_private <= ' . ACT_PLEVEL_ADMIN . ' OR a.id_member = {int:id_user} OR a.id_owner = {int:id_user}) ';
 	else
 		$pquery = ' AND (a.is_private = 0 OR a.id_member = {int:id_user} OR a.id_owner = {int:id_user}) ';
 
