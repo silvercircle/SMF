@@ -1,16 +1,16 @@
 <?php
-
 /**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines http://www.simplemachines.org
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.0
+ * @version %%@productversion@%%
  */
-
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
@@ -4252,19 +4252,19 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 			$sel = ' (boards = "" OR FIND_IN_SET({int:board}, boards)) ';
 		elseif($topic)
 			$sel = ' (topics = "" OR FIND_IN_SET({int:topic}, topics)) ';
-		if(!$user_info['is_admin'])
-			$gsel = ' (groups = "" OR FIND_IN_SET({int:group}, groups)) AND ';
+
+		$gsel = '(groups = "" OR FIND_IN_SET(' . implode(', groups) != 0 OR FIND_IN_SET(', $user_info['groups']) . ', groups) != 0) AND ';
 
 		$result = smf_db_query('
-			SELECT id_news, body, is_long FROM {db_prefix}news WHERE ' . $gsel . $sel,
+			SELECT id_news, teaser, body FROM {db_prefix}news WHERE ' . $gsel . $sel,
 			array('board' => (int)$board, 'topic' => (int)$topic, 'group' => (int)$user_info['groups']));
 
 		while($row = mysql_fetch_assoc($result)) {
 			$context['news_item_count']++;
 			$context['news_items'][] = array(
 				'id' => $row['id_news'],
-				'is_long' => $row['is_long'] && !$force_full,
-				'body' => $row['is_long'] ? parse_bbc($smcFunc['substr']($row['body'], 0, 200)) . '...' : parse_bbc($row['body']),
+				'teaser' => parse_bbc($row['teaser']),
+				'body' => parse_bbc($row['body']),
 			);
 		}
 		mysql_free_result($result);
@@ -4282,5 +4282,23 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 	// we have news items to show, we need the template
 	if($context['news_item_count'])
 		loadTemplate('News');
+}
+
+/**
+ * @param $the_icon string the icon name (without extension)
+ *
+ * get the full icon url for $the_icon.
+ * todo: support customized post icons later, probably via a hook
+ */
+function getPostIcon($the_icon)
+{
+	global $context, $settings;
+
+	if(!isset($context['posticons'][$the_icon])) {
+		$context['posticons'][$the_icon] = $settings['posticons_url'] . $the_icon . '.png';
+		return($context['posticons'][$the_icon]);
+	}
+	else
+		return($context['posticons'][$the_icon]);
 }
 ?>

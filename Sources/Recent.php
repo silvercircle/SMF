@@ -1,16 +1,16 @@
 <?php
-
 /**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines http://www.simplemachines.org
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.0
+ * @version %%@productversion@%%
  */
-
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
@@ -660,12 +660,6 @@ function UnreadTopics()
 		$context['sub_template'] = $_REQUEST['action'] == 'unread' ? 'unread' : 'replies';
 	}
 
-	// Setup the default topic icons... for checking they exist and the like ;)
-	$stable_icons = array('xx', 'thumbup', 'thumbdown', 'exclamation', 'question', 'lamp', 'smiley', 'angry', 'cheesy', 'grin', 'sad', 'wink', 'moved', 'recycled', 'wireless', 'clip');
-	$context['icon_sources'] = array();
-	foreach ($stable_icons as $icon)
-		$context['icon_sources'][$icon] = 'images_url';
-
 	$is_topics = $_REQUEST['action'] == 'unread';
 
 	// This part is the same for each query.
@@ -1190,17 +1184,6 @@ function UnreadTopics()
 		else
 			$pages = '';
 
-		// We need to check the topic icons exist... you can never be too sure!
-		if (empty($modSettings['messageIconChecks_disable']))
-		{
-			// First icon first... as you'd expect.
-			if (!isset($context['icon_sources'][$row['first_icon']]))
-				$context['icon_sources'][$row['first_icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $row['first_icon'] . '.gif') ? 'images_url' : 'default_images_url';
-			// Last icon... last... duh.
-			if (!isset($context['icon_sources'][$row['last_icon']]))
-				$context['icon_sources'][$row['last_icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $row['last_icon'] . '.gif') ? 'images_url' : 'default_images_url';
-		}
-
 		// And build the array.
 		$context['topics'][$row['id_topic']] = array(
 			'id' => $row['id_topic'],
@@ -1217,7 +1200,7 @@ function UnreadTopics()
 				'subject' => $row['first_subject'],
 				'preview' => $row['first_body'],
 				'icon' => $row['first_icon'],
-				'icon_url' => $settings[$context['icon_sources'][$row['first_icon']]] . '/post/' . $row['first_icon'] . '.png',
+				'icon_url' => getPostIcon($row['first_icon']),
 				'href' => $scripturl . '?topic=' . $row['id_topic'] . '.0;topicseen',
 				'link' => '<a href="' . $scripturl . '?topic=' . $row['id_topic'] . '.0;topicseen">' . $row['first_subject'] . '</a>'
 			),
@@ -1234,7 +1217,7 @@ function UnreadTopics()
 				'subject' => $row['last_subject'],
 				'preview' => $row['last_body'],
 				'icon' => $row['last_icon'],
-				'icon_url' => $settings[$context['icon_sources'][$row['last_icon']]] . '/post/' . $row['last_icon'] . '.gif',
+				'icon_url' => getPostIcon($row['last_icon']),
 				'href' => $scripturl . '?topic=' . $row['id_topic'] . ($row['num_replies'] == 0 ? '.0' : '.msg' . $row['id_last_msg']) . ';topicseen#msg' . $row['id_last_msg'],
 				'link' => '<a href="' . $scripturl . '?topic=' . $row['id_topic'] . ($row['num_replies'] == 0 ? '.0' : '.msg' . $row['id_last_msg']) . ';topicseen#msg' . $row['id_last_msg'] . '" rel="nofollow">' . $row['last_subject'] . '</a>'
 			),
@@ -1249,7 +1232,7 @@ function UnreadTopics()
 			'is_very_hot' => $row['num_replies'] >= $modSettings['hotTopicVeryPosts'],
 			'is_posted_in' => false,
 			'icon' => $row['first_icon'],
-			'icon_url' => $settings[$context['icon_sources'][$row['first_icon']]] . '/post/' . $row['first_icon'] . '.gif',
+			'icon_url' => getPostIcon($row['first_icon']),
 			'subject' => $row['first_subject'],
 			'pages' => $pages,
 			'replies' => comma_format($row['num_replies']),

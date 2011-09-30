@@ -324,12 +324,6 @@ function MessageIndex()
 	else
 		$fake_ascending = false;
 
-	// Setup the default topic icons...
-	$stable_icons = array('xx', 'thumbup', 'thumbdown', 'exclamation', 'question', 'lamp', 'smiley', 'angry', 'cheesy', 'grin', 'sad', 'wink', 'moved', 'recycled', 'wireless', 'clip');
-	$context['icon_sources'] = array();
-	foreach ($stable_icons as $icon)
-		$context['icon_sources'][$icon] = 'images_url';
-
 	$topic_ids = array();
 	$context['topics'] = array();
 
@@ -440,21 +434,6 @@ function MessageIndex()
 			else
 				$pages = '';
 
-			// We need to check the topic icons exist...
-			if (empty($modSettings['messageIconChecks_disable']))
-			{
-				if (!isset($context['icon_sources'][$row['first_icon']]))
-					$context['icon_sources'][$row['first_icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $row['first_icon'] . '.gif') ? 'images_url' : 'default_images_url';
-				if (!isset($context['icon_sources'][$row['last_icon']]))
-					$context['icon_sources'][$row['last_icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $row['last_icon'] . '.gif') ? 'images_url' : 'default_images_url';
-			}
-			else
-			{
-				if (!isset($context['icon_sources'][$row['first_icon']]))
-					$context['icon_sources'][$row['first_icon']] = 'images_url';
-				if (!isset($context['icon_sources'][$row['last_icon']]))
-					$context['icon_sources'][$row['last_icon']] = 'images_url';
-			}
             $first_posters[$row['id_topic']] = $row['first_id_member'];
 			// 'Print' the topic info.
 			$context['topics'][$row['id_topic']] = array(
@@ -473,7 +452,7 @@ function MessageIndex()
 					'subject' => $row['first_subject'],
 					'preview' => $row['first_body'],
 					'icon' => $row['first_icon'],
-					'icon_url' => $settings[$context['icon_sources'][$row['first_icon']]] . '/post/' . $row['first_icon'] . '.png',
+					'icon_url' => getPostIcon($row['first_icon']),
 					'href' => $scripturl . '?topic=' . $row['id_topic'] . '.0',
 					'link' => '<a href="' . $scripturl . '?topic=' . $row['id_topic'] . '.0">' . $row['first_subject'] . '</a>'
 				),
@@ -491,7 +470,7 @@ function MessageIndex()
 					'subject' => $row['last_subject'],
 					'preview' => $row['last_body'],
 					'icon' => $row['last_icon'],
-					'icon_url' => $settings[$context['icon_sources'][$row['last_icon']]] . '/post/' . $row['last_icon'] . '.gif',
+					'icon_url' => getPostIcon($row['last_icon']),
 					'href' => $scripturl . '?topic=' . $row['id_topic'] . ($user_info['is_guest'] ? ('.' . (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) . '#msg' . $row['id_last_msg']) : (($row['num_replies'] == 0 ? '.0' : '.msg' . $row['id_last_msg']) . '#new')),
 					'link' => '<a href="' . $scripturl . '?topic=' . $row['id_topic'] . ($user_info['is_guest'] ? ('.' . (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) . '#msg' . $row['id_last_msg']) : (($row['num_replies'] == 0 ? '.0' : '.msg' . $row['id_last_msg']) . '#new')) . '" ' . ($row['num_replies'] == 0 ? '' : 'rel="nofollow"') . '>' . $row['last_subject'] . '</a>'
 				),
@@ -503,7 +482,7 @@ function MessageIndex()
 				'is_very_hot' => $row['num_replies'] >= $modSettings['hotTopicVeryPosts'],
 				'is_posted_in' => false,
 				'icon' => $row['first_icon'],
-				'icon_url' => $settings[$context['icon_sources'][$row['first_icon']]] . '/post/' . $row['first_icon'] . '.gif',
+				'icon_url' => getPostIcon($row['first_icon']),
 				'subject' => $row['first_subject'],
 				'new' => $row['new_from'] <= $row['id_msg_modified'],
 				'new_from' => $row['new_from'],

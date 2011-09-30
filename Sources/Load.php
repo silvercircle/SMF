@@ -1453,6 +1453,7 @@ function loadTheme($id_theme = 0, $initialize = true)
 	$settings['actual_theme_url'] = $settings['theme_url'];
 	$settings['actual_images_url'] = $settings['images_url'];
 	$settings['actual_theme_dir'] = $settings['theme_dir'];
+	$settings['posticons_url'] = $settings['images_url'] . '/post/';
 
 	$settings['template_dirs'] = array();
 	// This theme first.

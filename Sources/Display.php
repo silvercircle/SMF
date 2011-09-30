@@ -1162,15 +1162,6 @@ function Display()
 		$context['email'] = isset($_SESSION['guest_email']) ? $_SESSION['guest_email'] : '';
 	}
 	
-	// $context['icon_sources'] says where each icon should come from - here we set up the ones which will always exist!
-	if (empty($context['icon_sources']))
-	{
-		$stable_icons = array('xx', 'thumbup', 'thumbdown', 'exclamation', 'question', 'lamp', 'smiley', 'angry', 'cheesy', 'grin', 'sad', 'wink', 'moved', 'recycled', 'wireless', 'clip');
-		$context['icon_sources'] = array();
-		foreach ($stable_icons as $icon)
-			$context['icon_sources'][$icon] = 'images_url';
-	}
-
 	$context['can_save_draft'] = $context['can_reply'] && !$context['user']['is_guest'] && in_array('dr', $context['admin_features']) && !empty($options['use_drafts']) && allowedTo('drafts_allow');
 	$context['can_autosave_draft'] = $context['can_save_draft'] && !empty($modSettings['enableAutoSaveDrafts']) && allowedTo('drafts_autosave_allow');
 
@@ -1209,16 +1200,6 @@ function prepareDisplayContext($reset = false)
 		mysql_free_result($messages_request);
 		return false;
 	}
-
-	// Message Icon Management... check the images exist.
-	if (empty($modSettings['messageIconChecks_disable']))
-	{
-		// If the current icon isn't known, then we need to do something...
-		if (!isset($context['icon_sources'][$message['icon']]))
-			$context['icon_sources'][$message['icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $message['icon'] . '.png') ? 'images_url' : 'default_images_url';
-	}
-	elseif (!isset($context['icon_sources'][$message['icon']]))
-		$context['icon_sources'][$message['icon']] = 'images_url';
 
 	// If you're a lazy bum, you probably didn't give a subject...
 	$message['subject'] = $message['subject'] != '' ? $message['subject'] : $txt['no_subject'];
@@ -1281,7 +1262,7 @@ function prepareDisplayContext($reset = false)
 		'link' => '<a href="' . $scripturl . '?topic=' . $topic . '.msg' . $message['id_msg'] . '#msg' . $message['id_msg'] . '" rel="nofollow">' . $message['subject'] . '</a>',
 		'member' => &$memberContext[$message['id_member']],
 		'icon' => $message['icon'],
-		'icon_url' => $settings[$context['icon_sources'][$message['icon']]] . '/post/' . $message['icon'] . '.png',
+		'icon_url' => getPostIcon($message['icon']),
 		'subject' => $message['subject'],
 		'time' => timeformat($message['poster_time']),
 		'timestamp' => forum_time(true, $message['poster_time']),

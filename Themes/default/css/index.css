@@ -1949,7 +1949,9 @@ span.button.notify {
 span.button.notify:hover {
 	background-color: #ccc;
 }
-
+span.button.notify a {
+	text-decoration:none;
+}
 #alerts {
 	background-color: #ff9933;
 	font-weight: bold;

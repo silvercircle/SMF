@@ -1,16 +1,16 @@
 <?php
-
 /**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines http://www.simplemachines.org
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.0
+ * @version %%@productversion@%%
  */
-
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
@@ -127,7 +127,14 @@ function EditNewsItem()
 		checkSession();
 
 		$_POST['body'] = $smcFunc['htmlspecialchars']($_POST['body'], ENT_QUOTES);
-		preparsecode($_POST['body']);
+		if(stripos($_POST['body'], '[more]') !== false)
+			list($teaser, $body) = explode('[more]', $_POST['body']);
+		else {
+			$teaser = '';
+			$body = &$_POST['body'];
+		}
+		preparsecode($teaser);
+		preparsecode($body);
 
 		$_POST['showboards'] = isset($_POST['showboards']) ? normalizeCommaDelimitedList($_POST['showboards']) : '';
 		$_POST['showtopics'] = isset($_POST['showtopics']) ? normalizeCommaDelimitedList($_POST['showtopics']) : '';
@@ -136,10 +143,10 @@ function EditNewsItem()
 
 		if(isset($_POST['id']) && !empty($_POST['id'])) {		// modify existing
 			smf_db_query('
-				UPDATE {db_prefix}news SET body = {string:body}, groups = {string:groups}, boards = {string:boards},
+				UPDATE {db_prefix}news SET body = {string:body}, teaser = {string:teaser}, groups = {string:groups}, boards = {string:boards},
 					topics = {string:topics}, on_index = {int:onindex} WHERE id_news = {int:idnews}',
 
-			array('body' => $_POST['body'], 'topics' => $_POST['showtopics'], 'boards' => $_POST['showboards'],
+			array('body' => $body, 'teaser' => $teaser, 'topics' => $_POST['showtopics'], 'boards' => $_POST['showboards'],
 				'groups' => $_POST['showgroups'], 'idnews' => $_POST['id'], 'onindex' => $_POST['showindex']));
 
 			$redirect_id = $_POST['id'];
@@ -163,12 +170,16 @@ function EditNewsItem()
 		if($row) {
 			$context['news_item'] = array(
 				'id' => $row['id_news'],
-				'body' => un_preparsecode($row['body']),
+				'teaser' => $row['teaser'],
+				'body' => $row['body'],
 				'boards' => $row['boards'],
 				'topics' => $row['topics'],
 				'on_index' => $row['on_index'],
 				'groups' => $row['groups']
 			);
+			if(!empty($context['news_item']['teaser']))
+				$context['news_item']['body'] = $context['news_item']['teaser'] . '[more]' . $context['news_item']['body'];
+			$context['news_item']['body'] = un_preparsecode($context['news_item']['body']);
 		}
 		mysql_free_result($result);
 	}
@@ -207,43 +218,25 @@ function EditNews()
 
 		logAction('news');
 	}
-	// The 'Save' button was pressed.
-	elseif (!empty($_POST['save_items']))
-	{
-		checkSession();
-
-		foreach ($_POST['news'] as $i => $news)
-		{
-			if (trim($news) == '')
-				unset($_POST['news'][$i]);
-			else
-			{
-				$_POST['news'][$i] = $smcFunc['htmlspecialchars']($_POST['news'][$i], ENT_QUOTES);
-				preparsecode($_POST['news'][$i]);
-			}
-		}
-
-		// Send the new news to the database.
-		updateSettings(array('news' => implode("\n", $_POST['news'])));
-
-		// Log this into the moderation log.
-		logAction('news');
-	}
-
 	$context['news_item_count'] = 0;
 	$result = smf_db_query('
 		SELECT * FROM {db_prefix}news');
 
+	$n = 0;
 	while($row = mysql_fetch_assoc($result)) {
 		$context['news_item_count']++;
-		$context['news_items'][] = array(
+		$context['news_items'][$n] = array(
 			'id' => $row['id_news'],
-			'is_long' => $row['is_long'],
-			'body' => parse_bbc($row['body']),
+			'teaser' => $row['teaser'],
+			'body' => $row['body'],
 			'boards' => $row['boards'],
 			'topic' => $row['topics'],
 			'groups' => $row['groups']
 		);
+		if(!empty($context['news_items'][$n]['teaser']))
+			$context['news_items'][$n]['body'] = $context['news_items'][$n]['teaser'] . '[more]' . $context['news_items'][$n]['body'];
+		$context['news_items'][$n]['body'] = parse_bbc($context['news_items'][$n]['body']);
+		$n++;
 	}
 	mysql_free_result($result);
 

@@ -2158,10 +2158,10 @@ CREATE TABLE {$db_prefix}topics (
 CREATE TABLE {$db_prefix}news (
 	id_news mediumint(8) unsigned NOT NULL auto_increment,
 	body tinytext NOT NULL default '',
+	teaser tinytext NOT NULL default '',
 	boards varchar(100) NOT NULL default '',
 	topics varchar(100) NOT NULL default '',
 	groups varchar(50) NOT NULL default '',
-	is_long tinyint(2) NOT NULL default '0',
 	on_index tinyint(2) NOT NULL default '0',
 	PRIMARY KEY (id_news)
 ) ENGINE=MyISAM;

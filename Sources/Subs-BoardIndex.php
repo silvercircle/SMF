@@ -47,7 +47,7 @@ function getBoardIndex($boardIndexOptions)
 			CASE WHEN b.redirect != {string:blank_string} THEN 1 ELSE 0 END AS is_redirect,
 			b.num_posts, b.num_topics, b.unapproved_posts, b.unapproved_topics, b.id_parent,
 			IFNULL(m.poster_time, 0) AS poster_time, IFNULL(mem.member_name, m.poster_name) AS poster_name,
-			m.subject, m.id_topic, t.id_first_msg AS id_first_msg, m1.icon AS icon, IFNULL(mem.real_name, m.poster_name) AS real_name, p.name as topic_prefix,
+			m.subject, m.id_topic, t.id_first_msg AS id_first_msg, t.id_prefix, m1.icon AS icon, IFNULL(mem.real_name, m.poster_name) AS real_name, p.name as topic_prefix,
 			' . ($user_info['is_guest'] ? ' 1 AS is_read, 0 AS new_from,' : '
 			(IFNULL(lb.id_msg, 0) >= b.id_msg_updated) AS is_read, IFNULL(lb.id_msg, -1) + 1 AS new_from,' . ($boardIndexOptions['include_categories'] ? '
 			c.can_collapse, IFNULL(cc.id_member, 0) AS is_collapsed,' : '')) . '
@@ -236,12 +236,10 @@ function getBoardIndex($boardIndexOptions)
 
 		// Prepare the subject, and make sure it's not too long.
 		censorText($row_board['subject']);
-		$row_board['short_subject'] = shorten_subject($row_board['subject'], 40);
 		$this_last_post = array(
 			'id' => $row_board['id_msg'],
 			'time' => $row_board['poster_time'] > 0 ? timeformat($row_board['poster_time']) : $txt['not_applicable'],
 			'timestamp' => forum_time(true, $row_board['poster_time']),
-			'subject' => $row_board['short_subject'],
 			'member' => array(
 				'id' => $row_board['id_member'],
 				'username' => $row_board['poster_name'] != '' ? $row_board['poster_name'] : $txt['not_applicable'],
@@ -253,14 +251,14 @@ function getBoardIndex($boardIndexOptions)
 			'topic' => $row_board['id_topic'],
 			'prefix' => html_entity_decode($row_board['topic_prefix'])
 		);
-		
-		if (!isset($context['icon_sources'][$row_board['icon']]))
-			$context['icon_sources'][$row_board['icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $row_board['icon'] . '.gif') ? 'images_url' : 'default_images_url';
-		
+		// shorten subject for last post column, take prefix length into account
+		$row_board['short_subject'] = shorten_subject($row_board['subject'], 40 - ($row_board['id_prefix'] ? 15 : 0));
+		$this_last_post['subject'] = $row_board['short_subject'];
+
 		$this_first_post = array(
 			'id' => $row_board['id_first_msg'],
 			'icon' => $row_board['icon'],
-			'icon_url' => $settings[$context['icon_sources'][$row_board['icon']]] . '/post/' . $row_board['icon'] . '.png',
+			'icon_url' => getPostIcon($row_board['icon']),
 
 		);
 		// Provide the href and link.

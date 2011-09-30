@@ -26,12 +26,7 @@ function template_main()
 		echo '
 		<div class="content smallpadding">
 		<ol class="commonlist noshadow">';
-		foreach($context['news_items'] as $item) {
-			echo '
-			<li>'
-			,$item['body'],'
-			</li>';
-		}
+		template_news_listitems();
 		echo '
 		</ol>
 		</div>

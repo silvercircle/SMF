@@ -1,16 +1,16 @@
 <?php
-
 /**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines http://www.simplemachines.org
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.0
+ * @version %%@productversion@%%
  */
-
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
@@ -1711,12 +1711,6 @@ function PlushSearch2()
 
 	$context['key_words'] = &$searchArray;
 
-	// Setup the default topic icons... for checking they exist and the like!
-	$stable_icons = array('xx', 'thumbup', 'thumbdown', 'exclamation', 'question', 'lamp', 'smiley', 'angry', 'cheesy', 'grin', 'sad', 'wink', 'moved', 'recycled', 'wireless', 'clip');
-	$context['icon_sources'] = array();
-	foreach ($stable_icons as $icon)
-		$context['icon_sources'][$icon] = 'images_url';
-
 	$context['sub_template'] = 'results';
 	$context['page_title'] = $txt['search_results'];
 	$context['get_topics'] = 'prepareSearchContext';
@@ -1835,26 +1829,6 @@ function prepareSearchContext($reset = false)
 	// Make sure we don't end up with a practically empty message body.
 	$message['body'] = preg_replace('~^(?:&nbsp;)+$~', '', $message['body']);
 
-	// Sadly, we need to check the icon ain't broke.
-	if (empty($modSettings['messageIconChecks_disable']))
-	{
-		if (!isset($context['icon_sources'][$message['first_icon']]))
-			$context['icon_sources'][$message['first_icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $message['first_icon'] . '.png') ? 'images_url' : 'default_images_url';
-		if (!isset($context['icon_sources'][$message['last_icon']]))
-			$context['icon_sources'][$message['last_icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $message['last_icon'] . '.png') ? 'images_url' : 'default_images_url';
-		if (!isset($context['icon_sources'][$message['icon']]))
-			$context['icon_sources'][$message['icon']] = file_exists($settings['theme_dir'] . '/images/post/' . $message['icon'] . '.png') ? 'images_url' : 'default_images_url';
-	}
-	else
-	{
-		if (!isset($context['icon_sources'][$message['first_icon']]))
-			$context['icon_sources'][$message['first_icon']] = 'images_url';
-		if (!isset($context['icon_sources'][$message['last_icon']]))
-			$context['icon_sources'][$message['last_icon']] = 'images_url';
-		if (!isset($context['icon_sources'][$message['icon']]))
-			$context['icon_sources'][$message['icon']] = 'images_url';
-	}
-
 	// Do we have quote tag enabled?
 	$quote_enabled = empty($modSettings['disabledBBC']) || !in_array('quote', explode(',', $modSettings['disabledBBC']));
 
@@ -1879,7 +1853,7 @@ function prepareSearchContext($reset = false)
 			'href' => $scripturl . '?topic=' . $message['id_topic'] . '.0',
 			'link' => '<a href="' . $scripturl . '?topic=' . $message['id_topic'] . '.0">' . $message['first_subject'] . '</a>',
 			'icon' => $message['first_icon'],
-			'icon_url' => $settings[$context['icon_sources'][$message['first_icon']]] . '/post/' . $message['first_icon'] . '.png',
+			'icon_url' => getPostIcon($message['first_icon']),
 			'member' => array(
 				'id' => $message['first_member_id'],
 				'name' => $message['first_member_name'],
@@ -1895,7 +1869,7 @@ function prepareSearchContext($reset = false)
 			'href' => $scripturl . '?topic=' . $message['id_topic'] . ($message['num_replies'] == 0 ? '.0' : '.msg' . $message['last_msg']) . '#msg' . $message['last_msg'],
 			'link' => '<a href="' . $scripturl . '?topic=' . $message['id_topic'] . ($message['num_replies'] == 0 ? '.0' : '.msg' . $message['last_msg']) . '#msg' . $message['last_msg'] . '">' . $message['last_subject'] . '</a>',
 			'icon' => $message['last_icon'],
-			'icon_url' => $settings[$context['icon_sources'][$message['last_icon']]] . '/post/' . $message['last_icon'] . '.png',
+			'icon_url' => getPostIcon($message['last_icon']),
 			'member' => array(
 				'id' => $message['last_member_id'],
 				'name' => $message['last_member_name'],
@@ -1969,7 +1943,7 @@ function prepareSearchContext($reset = false)
 		'alternate' => $counter % 2,
 		'member' => &$memberContext[$message['id_member']],
 		'icon' => $message['icon'],
-		'icon_url' => $settings[$context['icon_sources'][$message['icon']]] . '/post/' . $message['icon'] . '.png',
+		'icon_url' => getPostIcon($message['icon']),
 		'subject' => $message['subject'],
 		'subject_highlighted' => $subject_highlighted,
 		'time' => timeformat($message['poster_time']),

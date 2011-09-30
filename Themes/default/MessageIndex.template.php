@@ -15,7 +15,19 @@ function template_main()
 	global $context, $settings, $options, $scripturl, $modSettings, $txt;
 
 	echo '
-	<a id="top"></a>
+	<a id="top"></a>';
+	if($context['news_item_count']) {
+		echo '
+	<div class="blue_container">
+	 <div class="content smallpadding">
+	 <ol class="commonlist noshadow">';
+	template_news_listitems();
+	 echo '
+	 </ol>
+	 </div>
+	</div>';
+	}
+	echo '
 	<h1 class="bigheader">',$context['name'],'</h1>';
 	
 	if (!empty($options['show_board_desc']) && $context['description'] != '')
