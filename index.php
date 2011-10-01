@@ -56,6 +56,7 @@ require_once($sourcedir . '/Subs.php');
 require_once($sourcedir . '/Errors.php');
 require_once($sourcedir . '/Load.php');
 require_once($sourcedir . '/Security.php');
+require_once($sourcedir . '/SimpleSEF.php');
 
 // If $maintenance is set specifically to 2, then we're upgrading or something.
 if (!empty($maintenance) && $maintenance == 2)

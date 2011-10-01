@@ -1934,6 +1934,14 @@ VALUES ('use_post_cache', '0'),
 	('child_board_desc_shortened', '0'),
 	('astream_expire_days', '30'),
 	('enableAutoSaveDrafts', '0'),
+	('simplesef_enable', '0'),
+	('simplesef_space', '_'),
+    ('simplesef_suffix', 'html'),
+    ('simplesef_lowercase','1'),
+    ('simplesef_strip_words','a,about,above,across,after,along,around,at,before,behind,below,beneath,beside,between,but,by,down,during,except,for,from,in,inside,into,like,near,of,off,on,onto,out,outside,over,since,through,the,till,to,toward,under,until,up,upon,with,within,without'),
+    ('simplesef_actions', 'activate,admin,announce,attachapprove,buddy,calendar,clock,collapse,coppa,credits,deletemsg,display,dlattach,editpoll,editpoll2,emailuser,findmember,groups,help,helpadmin,im,jseditor,jsmodify,jsoption,lock,lockvoting,login,login2,logout,markasread,mergetopics,mlist,moderate,modifycat,modifykarma,movetopic,movetopic2,notify,notifyboard,openidreturn,pm,post,post2,printpage,profile,quotefast,quickmod,quickmod2,recent,register,register2,reminder,removepoll,removetopic2,reporttm,requestmembers,restoretopic,search,search2,sendtopic,smstats,suggest,spellcheck,splittopics,stats,sticky,theme,trackip,about:mozilla,about:unknown,unread,unreadreplies,verificationcode,viewprofile,vote,viewquery,viewsmfile,who,.xml,xmlhttp,astream'),
+    ('simplesef_useractions', 'profile,pm'),
+	('simplesef_strip_chars', '&quot,&amp,&lt,&gt,`,~,!,@,#,$,%,^,&,*,(,),-,_,=,+,[,{,],},;,:,\',",",/,?,\,|'),
 	('embed_GA', '0');
 
 INSERT INTO {$db_prefix}activity_types

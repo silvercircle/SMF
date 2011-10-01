@@ -37,7 +37,7 @@ function template_main()
 	id, href, link, name, is_collapsed (is it collapsed?), can_collapse (is it okay if it is?),
 	new (is it new?), collapse_href (href to collapse/expand), collapse_image (up/down image),
 	and boards. (see below.) */
-	foreach ($context['categories'] as $category)
+	foreach ($context['categories'] as &$category)
 	{
 		// If theres no parent boards we can see, avoid showing an empty category (unless its collapsed)
 		if (empty($category['boards']) && !$category['is_collapsed'])
@@ -79,7 +79,7 @@ function template_main()
 			children (see below.), link_children (easier to use.), children_new (are they new?),
 			topics (# of), posts (# of), link, href, and last_post. (see below.) */
 			$alternate = 1;
-			foreach ($category['boards'] as $board)
+			foreach ($category['boards'] as &$board)
 				template_boardbit($board);
 		echo '
 			</ol>

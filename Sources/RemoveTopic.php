@@ -496,8 +496,11 @@ function removeTopics($topics, $decreasePostCount = true, $ignoreRecycling = fal
 	aStreamRemoveByTopic($topics);
 	// Delete anything related to the topic.
 	smf_db_query( '
-		DELETE FROM {db_prefix}messages
-		WHERE id_topic IN ({array_int:topics})',
+		DELETE m.*, l.*, c.*, mc.* FROM {db_prefix}messages AS m
+		LEFT JOIN {db_prefix}likes AS l ON (l.id_msg = m.id_msg AND l.ctype = 1)
+		LEFT JOIN {db_prefix}like_cache AS c ON (c.id_msg = m.id_msg AND c.ctype = 1)
+		LEFT JOIN {db_prefix}messages_cache AS mc ON (mc.id_msg = m.id_msg)
+		WHERE m.id_topic IN ({array_int:topics})',
 		array(
 			'topics' => $topics,
 		)

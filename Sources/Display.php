@@ -74,6 +74,7 @@ function Display()
 	$context['time_cutoff_ref'] = time();
 
 	require_once($sourcedir . '/Subs-LikeSystem.php');
+	fetchNewsItems($board, $topic);
 	// What are you gonna display if these are empty?!
 	if (empty($topic))
 		fatal_lang_error('no_board', false);

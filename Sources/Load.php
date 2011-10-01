@@ -299,6 +299,7 @@ function reloadSettings()
 
 	// Call pre load integration functions.
 	call_integration_hook('integrate_pre_load');
+	SimpleSEF::convertQueryString();
 }
 
 // Load all the important user information...
@@ -1781,6 +1782,8 @@ function loadTheme($id_theme = 0, $initialize = true)
 	$context['inline_footer_script'] = '';
 	// Call load theme integration functions.
 	call_integration_hook('integrate_load_theme');
+
+	SimpleSEF::loadTheme();
 
 	// We are ready to go.
 	$context['theme_loaded'] = true;

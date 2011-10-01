@@ -145,7 +145,7 @@ function template_main()
 				</tr>';
 		}
 
-		foreach ($context['topics'] as $topic)
+		foreach ($context['topics'] as &$topic)
 		{
 			template_topicbit($topic);
 		}

@@ -300,14 +300,14 @@ function AddLikeBar(&$row, $can_give_like, $now)
  *
  * remove the likes and like cache for a given set of message ids
  */
-function LikesRemoveByPosts($mid)
+function LikesRemoveByPosts($mid, $ctype = 1)
 {
 	smf_db_query('
-		DELETE FROM {db_prefix}likes WHERE id_msg IN ({array_int:id_msg}) AND ctype = 1',
-		array('id_msg' => $mid));
+		DELETE FROM {db_prefix}likes WHERE id_msg IN ({array_int:id_msg}) AND ctype = {int:ctype}',
+		array('id_msg' => $mid, 'ctype' => $ctype));
 
 	smf_db_query('
-		DELETE FROM {db_prefix}like_cache WHERE id_msg IN ({array_int:id_msg}) AND ctype = 1',
-		array('id_msg' => $mid));
+		DELETE FROM {db_prefix}like_cache WHERE id_msg IN ({array_int:id_msg}) AND ctype = {int:ctype}',
+		array('id_msg' => $mid, 'ctype' => $ctype));
 }
 ?>

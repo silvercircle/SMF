@@ -1133,115 +1133,6 @@ class SimpleSEF {
         self::$queryCount++;
     }
 
-	private static function encode_old($text)
-	{
-		global $modSettings, $txt;
-
-		//	Do you know your ABCs?
-		$characterHash = array (
-			'a'	=>	array ('a', 'A', 'Ã ', 'Ã€', 'Ã¡', 'Ã', 'Ã¢', 'Ã‚', 'Ã£', 'Ãƒ', 'Ã¤', 'Ã„', 'Ã¥', 'Ã…', 'Âª', 'Ä…', 'Ä„', 'Ð°', 'Ð', 'áº¡', 'áº ', 'áº£', 'áº¢', 'áº¦', 'áº§', 'áº¤', 'áº¥', 'áº¬', 'áº­', 'áº¨', 'áº©', 'áºª', 'áº«', 'Ä‚', 'Äƒ', 'áº®', 'áº¯', 'áº´', 'áºµ', 'áº¶', 'áº·', 'áº°', 'áº±', 'áº²', 'áº³'),
-			'ae'	=>	array ('Ã¦', 'Ã†'),
-			'b'	=>	array ('b', 'B'),
-			'c'	=>	array ('c', 'C', 'Ã§', 'Ã‡', 'Ä‡', 'Ä†', 'Ä', 'ÄŒ'),
-			'd'	=>	array ('d', 'D', 'Ã', 'Ä‘', 'Ä', 'Ä', 'ÄŽ'),
-			'e'	=>	array ('e', 'E', 'Ã¨', 'Ãˆ', 'Ã©', 'Ã‰', 'Ãª', 'ÃŠ', 'Ã«', 'Ã‹', 'Ä™', 'Ä˜', 'Ðµ', 'Ð•', 'Ñ‘', 'Ð', 'Ñ', 'Ð­', 'áº¸', 'áº¹', 'áºº', 'áº»', 'áº¼', 'áº½', 'á»€', 'á»', 'áº¾', 'áº¿', 'á»†', 'á»‡', 'á»‚', 'á»ƒ', 'á»„', 'á»…', 'Îµ', 'Î•', 'Ä›', 'Äš'),
-			'f'	=>	array ('f', 'F'),
-			'g'	=>	array ('g', 'G', 'ÄŸ', 'Äž'),
-			'h'	=>	array ('h', 'H'),
-			'i'	=>	array ('i', 'I', 'Ã¬', 'ÃŒ', 'Ã­', 'Ã', 'Ã®', 'ÃŽ', 'Ã¯', 'Ã', 'Ä±', 'Ä°', 'á»Š', 'á»‹', 'á»ˆ', 'á»‰', 'Ä¨', 'Ä©', 'Î™', 'Î¹'),
-			'j'	=>	array ('j', 'J'),
-			'k'	=>	array ('k', 'K', 'Ðº', 'Ðš', 'Îº', 'Îš'),
-			'l'	=>	array ('l', 'L', 'Å‚', 'Å'),
-			'm'	=>	array ('m', 'M', 'Ð¼', 'Ðœ', 'Îœ'),
-			'n'	=>	array ('n', 'N', 'Ã±', 'Ã‘', 'Å„', 'Åƒ', 'Åˆ', 'Å‡'),
-			'o'	=>	array ('o', 'O', 'Ã²', 'Ã’', 'Ã³', 'Ã“', 'Ã´', 'Ã”', 'Ãµ', 'Ã•', 'Ã¶', 'Ã–', 'Ã¸', 'Ã˜', 'Âº', 'Ð¾', 'Ðž', 'á»Œ', 'á»', 'á»Ž', 'á»', 'á»˜', 'á»™', 'á»', 'á»‘', 'á»–', 'á»—', 'á»’', 'á»“', 'á»”', 'á»•', 'Æ ', 'Æ¡', 'á»œ', 'á»', 'á»š', 'á»›', 'á»¢', 'á»£', 'á»ž', 'á»Ÿ', 'á» ', 'á»¡', 'Î¿', 'ÎŸ'),
-			'p'	=>	array ('p', 'P'),
-			'q'	=>	array ('q', 'Q'),
-			'r'	=>	array ('r', 'R', 'Å™', 'Å˜'),
-			's'	=>	array ('s', 'S', 'ÅŸ', 'Åž', 'Å›', 'Åš', 'Å¡', 'Å '),
-			'ss'	=>	array ('ÃŸ'),
-			't'	=>	array ('t', 'T', 'Ñ‚', 'Ð¢', 'Ï„', 'Î¤', 'Å£', 'Å¢', 'Å¥', 'Å¤'),
-			'u'	=>	array ('u', 'U', 'Ã¹', 'Ã™', 'Ãº', 'Ãš', 'Ã»', 'Ã›', 'Ã¼', 'Ãœ', 'á»¤', 'á»¥', 'á»¦', 'á»§', 'Å¨', 'Å©', 'Æ¯', 'Æ°', 'á»ª', 'á»«', 'á»¨', 'á»©', 'á»°', 'á»±', 'á»¬', 'á»­', 'á»®', 'á»¯', 'Å¯', 'Å®'),
-			'v'	=>	array ('v', 'V'),
-			'w'	=>	array ('w', 'W'),
-			'x'	=>	array ('x', 'X', 'Ã—'),
-			'y'	=>	array ('y', 'Y', 'Ã½', 'Ã', 'Ã¿', 'á»²', 'á»³', 'á»´', 'á»µ', 'á»¶', 'á»·', 'á»¸', 'á»¹'),
-			'z'	=>	array ('z', 'Z', 'Å¼', 'Å»', 'Åº', 'Å¹', 'Å¾', 'Å½', 'Î–'),
-			'-'	=>	array ('-', ' ', '.', ','),
-			'_'	=>	array ('_'),
-			'!'	=>	array ('!'),
-			'~'	=>	array ('~'),
-			'*'	=>	array ('*'),
-			"\x12"	=>	array ("'", '"'),
-			'('	=>	array ('(', '{', '['),
-			')'	=>	array (')', '}', ']'),
-			'$'	=>	array ('$'),
-			'0'	=>	array ('0'),
-			'1'	=>	array ('1', 'Â¹'),
-			'2'	=>	array ('2', 'Â²'),
-			'3'	=>	array ('3', 'Â³'),
-			'4'	=>	array ('4'),
-			'5'	=>	array ('5'),
-			'6'	=>	array ('6'),
-			'7'	=>	array ('7'),
-			'8'	=>	array ('8'),
-			'9'	=>	array ('9'),
-		);
-
-		//	Get or detect the database encoding, firstly from the settings or language files
-		if (isset($modSettings['global_character_set']))
-			$encoding = strtoupper($modSettings['global_character_set']);
-		else if (isset($txt['lang_character_set']))
-			$encoding = strtoupper($txt['lang_character_set']);
-		//	or try checking UTF-8 conformance
-		else if (preg_match('~.~su', $text))
-			$encoding = 'UTF-8';
-		//	or sadly... we may have to assume Latin-1
-		else
-			$encoding = 'ISO-8859-1';
-
-		//	If the database encoding isn't UTF-8 and multibyte string functions are available, try converting the text to UTF-8
-		if ($encoding != 'UTF-8' && function_exists('mb_convert_encoding'))
-			$text = mb_convert_encoding($text, 'UTF-8', $encoding);
-		//	Or maybe we can convert with iconv
-		else if ($encoding != 'UTF-8' && function_exists('iconv'))
-			$text = iconv($encoding, 'UTF-8', $text);
-		//	Fix Turkish
-		else if ($encoding == 'ISO-8859-9')
-		{
-			$text = str_replace(array("\xD0", "\xDD", "\xDE", "\xF0", "\xFD", "\xFE"), array('g', 'i', 's', 'g', 'i', 's'), $text);
-			$text = utf8_encode($text);
-		}
-		//	Latin-1 can be converted easily
-		else if ($encoding == 'ISO-8859-1')
-			$text = utf8_encode($text);
-
-		//	Change the entities back to normal characters
-		$text = str_replace(array('&amp;', '&quot;'), array('&', '"'), $text);
-		$prettytext = '';
-
-		//	Split up $text into UTF-8 letters
-		preg_match_all("~.~su", $text, $characters);
-		foreach ($characters[0] as $aLetter)
-		{
-			foreach ($characterHash as $replace => $search)
-			{
-				//	Found a character? Replace it!
-				if (in_array($aLetter, $search))
-				{
-					$prettytext .= $replace;
-					break;
-				}
-			}
-		}
-		//	Remove unwanted '-'s
-		$prettytext = preg_replace(array('~^-+|-+$~', '~-+~'), array('', '-'), $prettytext);
-        //$prettytext = urlencode($prettytext);
-        $prettytext = str_replace('%2F', '', $prettytext);
-        //$prettytext = str_replace(self::$stripChars, '', $prettytext);
-		return $prettytext;
-	}
-    
     /**
      * The encode function is responsible for transforming any string of text
      * in the URL into something that looks good and representable.  For forums
@@ -1272,16 +1163,14 @@ class SimpleSEF {
             elseif (function_exists('unicode_decode'))
                 $string = unicode_decode($string, $char_set);
         }
-        else {
-        	setlocale(LC_CTYPE, 'en_US.utf8');
-    		$string = iconv('UTF-8', "US-ASCII//TRANSLIT", $string); // TRANSLIT does the whole job
-        	$string = implode(' ', array_diff(explode(' ', $string), self::$stripWords));
-        	$string = str_replace(self::$stripChars, '', $string);
-    		$string = preg_replace('~[^\\pL0-9_]+~u', $modSettings['simplesef_space'], $string); // substitutes anything but letters, numbers and '_' with separator 
-        	if (!empty($modSettings['simplesef_lowercase']))
-            	$string = strtolower($string);
-    		return($string);
-        }
+       	setlocale(LC_CTYPE, 'en_US.utf8');
+   		$string = iconv('UTF-8', "UTF-8//TRANSLIT", $string); // TRANSLIT does the whole job
+       	$string = implode(' ', array_diff(explode(' ', $string), self::$stripWords));
+       	$string = str_replace(self::$stripChars, '', $string);
+   		$string = preg_replace('~[^\\pL0-9_]+~u', $modSettings['simplesef_space'], $string); // substitutes anything but letters, numbers and '_' with separator
+       	if (!empty($modSettings['simplesef_lowercase']))
+           	$string = strtolower($string);
+   		return($string);
 
         // A way to track/store the current character
         

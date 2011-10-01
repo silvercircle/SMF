@@ -418,7 +418,6 @@ function determineActions($urls, $preferred_prefix = false)
 			else
 				$data[$k] = $txt['who_unknown'];
 		}
-
 		// Maybe the action is integrated into another system?
 		if (count($integrate_actions = call_integration_hook('integrate_whos_online', array($actions))) > 0)
 		{
@@ -431,6 +430,8 @@ function determineActions($urls, $preferred_prefix = false)
 				}
 			}
 		}
+		if(!empty($modSettings['simplesef_enable']))
+			SimpleSEF::actionArray($actions);
 	}
 
 	// Load topic names.

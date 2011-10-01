@@ -2702,6 +2702,9 @@ function redirectexit($setLocation = '', $refresh = false)
 	// Maybe integrations want to change where we are heading?
 	call_integration_hook('integrate_redirect', array(&$setLocation, &$refresh));
 
+	if(!empty($modSettings['simplesef_enable']))
+		SimpleSEF::fixRedirectUrl($setLocation, $refresh);
+
 	// We send a Refresh header only in special cases because Location looks better. (and is quicker...)
 	if ($refresh && !WIRELESS)
 		header('Refresh: 0; URL=' . strtr($setLocation, array(' ' => '%20')));
@@ -2770,6 +2773,9 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 					ob_start($call);
 			}
 
+		if(!empty($modSettings['simplesef_enable']))
+			ob_start('SimpleSEF::ob_simplesef');
+
 		// Display the screen in the logical order.
 		template_header();
 		$header_done = true;
@@ -2807,6 +2813,9 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 
 	// Hand off the output to the portal, etc. we're integrated with.
 	call_integration_hook('integrate_exit', array($do_footer && !WIRELESS));
+
+	if(!empty($modSettings['simplesef_enable']))
+		SimpleSEF::fixXMLOutput($do_footer && !WIRELESS);
 
 	// Don't exit if we're coming from index.php; that will pass through normally.
 	if (!$from_index || WIRELESS)
@@ -4004,6 +4013,7 @@ function setupMenuContext()
 		// Allow editing menu buttons easily.
 		call_integration_hook('integrate_menu_buttons', array(&$buttons));
 
+		SimpleSEF::menuButtons($buttons);
 		// Now we put the buttons in the context so the theme can use them.
 		$menu_buttons = array();
 		foreach ($buttons as $act => $button)
