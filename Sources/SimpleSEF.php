@@ -1154,6 +1154,7 @@ class SimpleSEF {
             return '';
 
         // We need to make sure all strings are either ISO-8859-1 or UTF-8 and if not, convert to UTF-8 (if the host has stuff installed right)
+        /*
         $char_set = empty($modSettings['global_character_set']) ? $txt['lang_character_set'] : $modSettings['global_character_set'];
         if ($char_set != 'ISO-8859-1' && $char_set != 'UTF-8') {
             if (function_exists('iconv'))
@@ -1163,6 +1164,7 @@ class SimpleSEF {
             elseif (function_exists('unicode_decode'))
                 $string = unicode_decode($string, $char_set);
         }
+        */
        	setlocale(LC_CTYPE, 'en_US.utf8');
    		$string = iconv('UTF-8', "UTF-8//TRANSLIT", $string); // TRANSLIT does the whole job
        	$string = implode(' ', array_diff(explode(' ', $string), self::$stripWords));

@@ -140,7 +140,7 @@ function HandleLikeRequest()
 // todo: check permissions!!
 function TopicPeek()
 {
-	global $context;
+	global $context, $CAPI;
 	global $settings, $user_info, $sourcedir, $smcFunc, $board, $memberContext, $scripturl;
 	
 	$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
