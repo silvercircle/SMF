@@ -938,7 +938,7 @@ function OptimizeTables()
 	$real_prefix = preg_match('~^(`?)(.+?)\\1\\.(.*?)$~', $db_prefix, $match) === 1 ? $match[3] : $db_prefix;
 
 	// Get a list of tables, as well as how many there are.
-	$temp_tables = $smcFunc['db_list_tables'](false, $real_prefix . '%');
+	$temp_tables = smf_db_list_tables(false, $real_prefix . '%');
 	$tables = array();
 	foreach ($temp_tables as $table)
 		$tables[] = array('table_name' => $table);

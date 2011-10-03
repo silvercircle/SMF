@@ -540,7 +540,7 @@ function scheduled_auto_optimize()
 	db_extend();
 
 	// Get all the tables.
-	$tables = $smcFunc['db_list_tables'](false, $db_prefix . '%');
+	$tables = smf_db_list_tables(false, $db_prefix . '%');
 
 	// Actually do the optimisation.
 	if ($db_type == 'sqlite')

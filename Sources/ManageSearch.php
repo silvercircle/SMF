@@ -220,10 +220,10 @@ function EditSearchMethod()
 		checkSession('get');
 
 		db_extend();
-		$tables = $smcFunc['db_list_tables'](false, $db_prefix . 'log_search_words');
+		$tables = smf_db_list_tables(false, $db_prefix . 'log_search_words');
 		if (!empty($tables))
 		{
-			$smcFunc['db_search_query']('drop_words_table', '
+			smf_db_query('
 				DROP TABLE {db_prefix}log_search_words',
 				array(
 				)
@@ -404,17 +404,17 @@ function CreateMessageIndex()
 		if ($context['start'] === 0)
 		{
 			db_extend();
-			$tables = $smcFunc['db_list_tables'](false, $db_prefix . 'log_search_words');
+			$tables = smf_db_list_tables(false, $db_prefix . 'log_search_words');
 			if (!empty($tables))
 			{
-				$smcFunc['db_search_query']('drop_words_table', '
+				smf_db_query('
 					DROP TABLE {db_prefix}log_search_words',
 					array(
 					)
 				);
 			}
 
-			$smcFunc['db_create_word_search']($index_properties[$context['index_settings']['bytes_per_word']]['column_definition']);
+			smf_db_create_word_search($index_properties[$context['index_settings']['bytes_per_word']]['column_definition']);
 
 			// Temporarily switch back to not using a search index.
 			if (!empty($modSettings['search_index']) && $modSettings['search_index'] == 'custom')

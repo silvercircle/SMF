@@ -103,12 +103,12 @@ function smf_db_create_table($table_name, $columns, $indexes = array(), $paramet
 	$db_package_log[] = array('remove_table', $table_name);
 
 	// Slightly easier on MySQL than the others...
-	$tables = $smcFunc['db_list_tables']();
+	$tables = smf_db_list_tables();
 	if (in_array($full_table_name, $tables))
 	{
 		// This is a sad day... drop the table? If not, return false (error) by default.
 		if ($if_exists == 'overwrite')
-			$smcFunc['db_drop_table']($table_name);
+			smf_db_drop_table($table_name);
 		else
 			return $if_exists == 'ignore';
 	}
@@ -129,7 +129,7 @@ function smf_db_create_table($table_name, $columns, $indexes = array(), $paramet
 
 		// Sort out the size... and stuff...
 		$column['size'] = isset($column['size']) && is_numeric($column['size']) ? $column['size'] : null;
-		list ($type, $size) = $smcFunc['db_calculate_type']($column['type'], $column['size']);
+		list ($type, $size) = smf_db_calculate_type($column['type'], $column['size']);
 
 		// Allow unsigned integers (mysql only)
 		$unsigned = in_array($type, array('int', 'tinyint', 'smallint', 'mediumint', 'bigint')) && !empty($column['unsigned']) ? 'unsigned ' : '';
@@ -190,7 +190,7 @@ function smf_db_drop_table($table_name, $parameters = array(), $error = 'fatal')
 		return false;
 
 	// Does it exist?
-	if (in_array($full_table_name, $smcFunc['db_list_tables']()))
+	if (in_array($full_table_name, smf_db_list_tables()))
 	{
 		$query = 'DROP TABLE ' . $table_name;
 		smf_db_query(
@@ -218,20 +218,20 @@ function smf_db_add_column($table_name, $column_info, $parameters = array(), $if
 	$db_package_log[] = array('remove_column', $table_name, $column_info['name']);
 
 	// Does it exist - if so don't add it again!
-	$columns = $smcFunc['db_list_columns']($table_name, false);
+	$columns = smf_db_list_columns($table_name, false);
 	foreach ($columns as $column)
 		if ($column == $column_info['name'])
 		{
 			// If we're going to overwrite then use change column.
 			if ($if_exists == 'update')
-				return $smcFunc['db_change_column']($table_name, $column_info['name'], $column_info);
+				return smf_db_change_column($table_name, $column_info['name'], $column_info);
 			else
 				return false;
 		}
 
 	// Get the specifics...
 	$column_info['size'] = isset($column_info['size']) && is_numeric($column_info['size']) ? $column_info['size'] : null;
-	list ($type, $size) = $smcFunc['db_calculate_type']($column_info['type'], $column_info['size']);
+	list ($type, $size) = smf_db_calculate_type($column_info['type'], $column_info['size']);
 
 	// Allow unsigned integers (mysql only)
 	$unsigned = in_array($type, array('int', 'tinyint', 'smallint', 'mediumint', 'bigint')) && !empty($column_info['unsigned']) ? 'unsigned ' : '';
@@ -262,7 +262,7 @@ function smf_db_remove_column($table_name, $column_name, $parameters = array(), 
 	$table_name = str_replace('{db_prefix}', $db_prefix, $table_name);
 
 	// Does it exist?
-	$columns = $smcFunc['db_list_columns']($table_name, true);
+	$columns = smf_db_list_columns($table_name, true);
 	foreach ($columns as $column)
 		if ($column['name'] == $column_name)
 		{
@@ -289,7 +289,7 @@ function smf_db_change_column($table_name, $old_column, $column_info, $parameter
 	$table_name = str_replace('{db_prefix}', $db_prefix, $table_name);
 
 	// Check it does exist!
-	$columns = $smcFunc['db_list_columns']($table_name, true);
+	$columns = smf_db_list_columns($table_name, true);
 	$old_info = null;
 	foreach ($columns as $column)
 		if ($column['name'] == $old_column)
@@ -315,7 +315,7 @@ function smf_db_change_column($table_name, $old_column, $column_info, $parameter
 	if (!isset($column_info['unsigned']) || !in_array($column_info['type'], array('int', 'tinyint', 'smallint', 'mediumint', 'bigint')))
 		$column_info['unsigned'] = '';
 
-	list ($type, $size) = $smcFunc['db_calculate_type']($column_info['type'], $column_info['size']);
+	list ($type, $size) = smf_db_calculate_type($column_info['type'], $column_info['size']);
 
 	// Allow for unsigned integers (mysql only)
 	$unsigned = in_array($type, array('int', 'tinyint', 'smallint', 'mediumint', 'bigint')) && !empty($column_info['unsigned']) ? 'unsigned ' : '';
@@ -460,8 +460,8 @@ function smf_db_table_structure($table_name, $parameters = array())
 
 	return array(
 		'name' => $table_name,
-		'columns' => $smcFunc['db_list_columns']($table_name, true),
-		'indexes' => $smcFunc['db_list_indexes']($table_name, true),
+		'columns' => smf_db_list_columns($table_name, true),
+		'indexes' => smf_db_list_indexes($table_name, true),
 	);
 }
 

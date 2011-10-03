@@ -1086,11 +1086,11 @@ function PackageInstall()
 		foreach ($db_changes as $change)
 		{
 			if ($change[0] == 'remove_table' && isset($change[1]))
-				$smcFunc['db_drop_table']($change[1]);
+				smf_db_drop_table($change[1]);
 			elseif ($change[0] == 'remove_column' && isset($change[2]))
-				$smcFunc['db_remove_column']($change[1], $change[2]);
+				smf_db_remove_column($change[1], $change[2]);
 			elseif ($change[0] == 'remove_index' && isset($change[2]))
-				$smcFunc['db_remove_index']($change[1], $change[2]);
+				smf_db_remove_index($change[1], $change[2]);
 		}
 	}
 

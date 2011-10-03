@@ -1355,7 +1355,7 @@ function BackupDatabase()
 	// Get all the table names.
 	$filter = str_replace('_', '\_', preg_match('~^`(.+?)`\.(.+?)$~', $db_prefix, $match) != 0 ? $match[2] : $db_prefix) . '%';
 	$db = preg_match('~^`(.+?)`\.(.+?)$~', $db_prefix, $match) != 0 ? strtr($match[1], array('`' => '')) : false;
-	$tables = $smcFunc['db_list_tables']($db, $filter);
+	$tables = smf_db_list_tables($db, $filter);
 
 	$table_names = array();
 	foreach ($tables as $table)

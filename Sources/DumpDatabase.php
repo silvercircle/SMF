@@ -133,7 +133,7 @@ function DumpDatabase2()
 	}
 
 	// Dump each table.
-	$tables = $smcFunc['db_list_tables'](false, $db_prefix . '%');
+	$tables = smf_db_list_tables(false, $db_prefix . '%');
 	foreach ($tables as $tableName)
 	{
 		if (function_exists('apache_reset_timeout'))

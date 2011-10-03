@@ -1750,7 +1750,7 @@ function sortSmileyTable()
 	db_extend('packages');
 
 	// Add a sorting column.
-	$smcFunc['db_add_column']('{db_prefix}smileys', array('name' => 'temp_order', 'size' => 8, 'type' => 'mediumint', 'null' => false));
+	smf_db_add_column('{db_prefix}smileys', array('name' => 'temp_order', 'size' => 8, 'type' => 'mediumint', 'null' => false));
 
 	// Set the contents of this column.
 	smf_db_query('
@@ -1770,7 +1770,7 @@ function sortSmileyTable()
 	);
 
 	// Remove the sorting column.
-	$smcFunc['db_remove_column']('{db_prefix}smileys', 'temp_order');
+	smf_db_remove_column('{db_prefix}smileys', 'temp_order');
 }
 
 ?>
