@@ -210,7 +210,7 @@ function MLAll()
 
 	if (!is_numeric($_REQUEST['start']))
 	{
-		if (preg_match('~^[^\'\\\\/]~' . ($context['utf8'] ? 'u' : ''), $smcFunc['strtolower']($_REQUEST['start']), $match) === 0)
+		if (preg_match('~^[^\'\\\\/]~' . ($context['utf8'] ? 'u' : ''), commonAPI::strtolower($_REQUEST['start']), $match) === 0)
 			fatal_error('Hacker?', false);
 
 		$_REQUEST['start'] = $match[0];
@@ -349,7 +349,7 @@ function MLAll()
 		$last_letter = '';
 		foreach ($context['members'] as $i => $dummy)
 		{
-			$this_letter = $smcFunc['strtolower']($smcFunc['substr']($context['members'][$i]['name'], 0, 1));
+			$this_letter = commonAPI::strtolower(commonAPI::substr($context['members'][$i]['name'], 0, 1));
 
 			if ($this_letter != $last_letter && preg_match('~[a-z]~', $this_letter) === 1)
 			{
@@ -410,7 +410,7 @@ function MLSearch()
 			'regular_id_group' => 0,
 			'is_activated' => 1,
 			'blank_string' => '',
-			'search' => '%' . strtr($smcFunc['htmlspecialchars']($_POST['search'], ENT_QUOTES), array('_' => '\\_', '%' => '\\%', '*' => '%')) . '%',
+			'search' => '%' . strtr(commonAPI::htmlspecialchars($_POST['search'], ENT_QUOTES), array('_' => '\\_', '%' => '\\%', '*' => '%')) . '%',
 		);
 
 		// Search for a name?

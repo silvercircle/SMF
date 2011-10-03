@@ -363,7 +363,7 @@ function findMembers($names, $use_wildcards = false, $buddies_only = false, $max
 	foreach ($names as $i => $name)
 	{
 		// Trim, and fix wildcards for each name.
-		$names[$i] = trim($smcFunc['strtolower']($name));
+		$names[$i] = trim(commonAPI::strtolower($name));
 
 		$maybe_email |= strpos($name, '@') !== false;
 
@@ -445,7 +445,7 @@ function JSMembers()
 	}
 
 	if (isset($_REQUEST['search']))
-		$context['last_search'] = $smcFunc['htmlspecialchars']($_REQUEST['search'], ENT_QUOTES);
+		$context['last_search'] = commonAPI::htmlspecialchars($_REQUEST['search'], ENT_QUOTES);
 	else
 		$_REQUEST['start'] = 0;
 
@@ -466,7 +466,7 @@ function JSMembers()
 	// If the user has done a search, well - search.
 	if (isset($_REQUEST['search']))
 	{
-		$_REQUEST['search'] = $smcFunc['htmlspecialchars']($_REQUEST['search'], ENT_QUOTES);
+		$_REQUEST['search'] = commonAPI::htmlspecialchars($_REQUEST['search'], ENT_QUOTES);
 
 		$context['results'] = findMembers(array($_REQUEST['search']), true, $context['buddy_search']);
 		$total_results = count($context['results']);
@@ -499,8 +499,8 @@ function RequestMembers()
 
 	checkSession('get');
 
-	$_REQUEST['search'] = $smcFunc['htmlspecialchars']($_REQUEST['search']) . '*';
-	$_REQUEST['search'] = trim($smcFunc['strtolower']($_REQUEST['search']));
+	$_REQUEST['search'] = commonAPI::htmlspecialchars($_REQUEST['search']) . '*';
+	$_REQUEST['search'] = trim(commonAPI::strtolower($_REQUEST['search']));
 	$_REQUEST['search'] = strtr($_REQUEST['search'], array('%' => '\%', '_' => '\_', '*' => '%', '?' => '_', '&#038;' => '&amp;'));
 
 	if (function_exists('iconv'))
@@ -512,7 +512,7 @@ function RequestMembers()
 		WHERE real_name LIKE {string:search}' . (isset($_REQUEST['buddies']) ? '
 			AND id_member IN ({array_int:buddy_list})' : '') . '
 			AND is_activated IN (1, 11)
-		LIMIT ' . ($smcFunc['strlen']($_REQUEST['search']) <= 2 ? '100' : '800'),
+		LIMIT ' . (commonAPI::strlen($_REQUEST['search']) <= 2 ? '100' : '800'),
 		array(
 			'buddy_list' => $user_info['buddies'],
 			'search' => $_REQUEST['search'],
@@ -635,7 +635,7 @@ function validatePassword($password, $username, $restrict_in = array())
 	global $modSettings, $smcFunc;
 
 	// Perform basic requirements first.
-	if ($smcFunc['strlen']($password) < (empty($modSettings['password_strength']) ? 4 : 8))
+	if (commonAPI::strlen($password) < (empty($modSettings['password_strength']) ? 4 : 8))
 		return 'short';
 
 	// Is this enough?
@@ -645,7 +645,7 @@ function validatePassword($password, $username, $restrict_in = array())
 	// Otherwise, perform the medium strength test - checking if password appears in the restricted string.
 	if (preg_match('~\b' . preg_quote($password, '~') . '\b~', implode(' ', $restrict_in)) != 0)
 		return 'restricted_words';
-	elseif ($smcFunc['strpos']($password, $username) !== false)
+	elseif (commonAPI::strpos($password, $username) !== false)
 		return 'restricted_words';
 
 	// !!! If pspell is available, use it on the word, and return restricted_words if it doesn't give "bad spelling"?
@@ -656,7 +656,7 @@ function validatePassword($password, $username, $restrict_in = array())
 
 	// Otherwise, hard test next, check for numbers and letters, uppercase too.
 	$good = preg_match('~(\D\d|\d\D)~', $password) != 0;
-	$good &= $smcFunc['strtolower']($password) != $password;
+	$good &= commonAPI::strtolower($password) != $password;
 
 	return $good ? null : 'chars';
 }

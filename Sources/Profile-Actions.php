@@ -137,7 +137,7 @@ function issueWarning($memID)
 		$_POST['warn_reason'] = isset($_POST['warn_reason']) ? trim($_POST['warn_reason']) : '';
 		if ($_POST['warn_reason'] == '' && !$context['user']['is_owner'])
 			$issueErrors[] = 'warning_no_reason';
-		$_POST['warn_reason'] = $smcFunc['htmlspecialchars']($_POST['warn_reason']);
+		$_POST['warn_reason'] = commonAPI::htmlspecialchars($_POST['warn_reason']);
 
 		// If the value hasn't changed it's either no JS or a real no change (Which this will pass)
 		if ($_POST['warning_level'] == 'SAME')
@@ -176,7 +176,7 @@ function issueWarning($memID)
 						'subject' => 'string-255', 'body' => 'string-65534',
 					),
 					array(
-						$smcFunc['htmlspecialchars']($_POST['warn_sub']), $smcFunc['htmlspecialchars']($_POST['warn_body']),
+						commonAPI::htmlspecialchars($_POST['warn_sub']), commonAPI::htmlspecialchars($_POST['warn_body']),
 					),
 					array('id_notice')
 				);

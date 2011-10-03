@@ -82,7 +82,7 @@ function EditorMain()
 		$context['message'] = html_to_bbc($_REQUEST['message']);
 	}
 
-	$context['message'] = $smcFunc['htmlspecialchars']($context['message']);
+	$context['message'] = commonAPI::htmlspecialchars($context['message']);
 }
 
 // Convert only the BBC that can be edited in HTML mode for the editor.
@@ -945,68 +945,62 @@ function fetchTagAttributes($text)
 
 function getMessageIcons($board_id)
 {
-	global $modSettings, $context, $txt, $settings, $smcFunc;
+	global $txt, $settings;
 
-	if (empty($modSettings['messageIcons_enable']))
+	loadLanguage('Post');
+
+	$stable_icons = array(
+		array('value' => 'xx', 'name' => $txt['standard']),
+		array('value' => 'thumbup', 'name' => $txt['thumbs_up']),
+		array('value' => 'thumbdown', 'name' => $txt['thumbs_down']),
+		array('value' => 'exclamation', 'name' => $txt['excamation_point']),
+		array('value' => 'question', 'name' => $txt['question_mark']),
+		array('value' => 'lamp', 'name' => $txt['lamp']),
+		array('value' => 'smiley', 'name' => $txt['icon_smiley']),
+		array('value' => 'angry', 'name' => $txt['icon_angry']),
+		array('value' => 'cheesy', 'name' => $txt['icon_cheesy']),
+		array('value' => 'grin', 'name' => $txt['icon_grin']),
+		array('value' => 'sad', 'name' => $txt['icon_sad']),
+		array('value' => 'wink', 'name' => $txt['icon_wink'])
+	);
+
+	foreach ($stable_icons as $k => $dummy)
 	{
-		loadLanguage('Post');
+		$stable_icons[$k]['url'] = getPostIcon($dummy['value']);
+		$stable_icons[$k]['is_last'] = false;
+	}
 
-		$icons = array(
-			array('value' => 'xx', 'name' => $txt['standard']),
-			array('value' => 'thumbup', 'name' => $txt['thumbs_up']),
-			array('value' => 'thumbdown', 'name' => $txt['thumbs_down']),
-			array('value' => 'exclamation', 'name' => $txt['excamation_point']),
-			array('value' => 'question', 'name' => $txt['question_mark']),
-			array('value' => 'lamp', 'name' => $txt['lamp']),
-			array('value' => 'smiley', 'name' => $txt['icon_smiley']),
-			array('value' => 'angry', 'name' => $txt['icon_angry']),
-			array('value' => 'cheesy', 'name' => $txt['icon_cheesy']),
-			array('value' => 'grin', 'name' => $txt['icon_grin']),
-			array('value' => 'sad', 'name' => $txt['icon_sad']),
-			array('value' => 'wink', 'name' => $txt['icon_wink'])
+	if (($temp = cache_get_data('posting_icons-' . $board_id, 480)) == null)
+	{
+		$request = smf_db_query('
+			SELECT title, filename
+			FROM {db_prefix}message_icons
+			WHERE id_board IN (0, {int:board_id})',
+			array(
+				'board_id' => $board_id,
+			)
 		);
+		$icon_data = array();
+		while ($row = mysql_fetch_assoc($request))
+			$icon_data[] = $row;
+		mysql_free_result($request);
 
-		foreach ($icons as $k => $dummy)
-		{
-			$icons[$k]['url'] = $settings['images_url'] . '/post/' . $dummy['value'] . '.png';
-			$icons[$k]['is_last'] = false;
-		}
+		cache_put_data('posting_icons-' . $board_id, $icon_data, 480);
 	}
-	// Otherwise load the icons, and check we give the right image too...
 	else
+		$icon_data = $temp;
+
+	$icons = array();
+	foreach ($icon_data as $icon)
 	{
-		if (($temp = cache_get_data('posting_icons-' . $board_id, 480)) == null)
-		{
-			$request = smf_db_query('
-				SELECT title, filename
-				FROM {db_prefix}message_icons
-				WHERE id_board IN (0, {int:board_id})',
-				array(
-					'board_id' => $board_id,
-				)
-			);
-			$icon_data = array();
-			while ($row = mysql_fetch_assoc($request))
-				$icon_data[] = $row;
-			mysql_free_result($request);
-
-			cache_put_data('posting_icons-' . $board_id, $icon_data, 480);
-		}
-		else
-			$icon_data = $temp;
-
-		$icons = array();
-		foreach ($icon_data as $icon)
-		{
-			$icons[$icon['filename']] = array(
-				'value' => $icon['filename'],
-				'name' => $icon['title'],
-				'url' => $settings[file_exists($settings['theme_dir'] . '/images/post/' . $icon['filename'] . '.gif') ? 'images_url' : 'default_images_url'] . '/post/' . $icon['filename'] . '.gif',
-				'is_last' => false,
-			);
-		}
+		$icons[$icon['filename']] = array(
+			'value' => $icon['filename'],
+			'name' => $icon['title'],
+			'url' => $settings[file_exists($settings['theme_dir'] . '/images/post/' . $icon['filename'] . '.png') ? 'images_url' : 'default_images_url'] . '/post/' . $icon['filename'] . '.png',
+			'is_last' => false,
+		);
 	}
-
+	$icons = array_merge($icons, $stable_icons);
 	return array_values($icons);
 }
 
@@ -1948,7 +1942,7 @@ function create_control_verification(&$verificationOptions, $do_test = false)
 			$incorrectQuestions = array();
 			while ($row = mysql_fetch_assoc($request))
 			{
-				if (empty($_REQUEST[$verificationOptions['id'] . '_vv']['q'][$row['id_comment']]) || trim($smcFunc['htmlspecialchars'](strtolower($_REQUEST[$verificationOptions['id'] . '_vv']['q'][$row['id_comment']]))) != strtolower($row['answer']))
+				if (empty($_REQUEST[$verificationOptions['id'] . '_vv']['q'][$row['id_comment']]) || trim(commonAPI::htmlspecialchars(strtolower($_REQUEST[$verificationOptions['id'] . '_vv']['q'][$row['id_comment']]))) != strtolower($row['answer']))
 					$incorrectQuestions[] = $row['id_comment'];
 			}
 			mysql_free_result($request);
@@ -2007,7 +2001,7 @@ function create_control_verification(&$verificationOptions, $do_test = false)
 	{
 		// Same questions as before.
 		$questionIDs = !empty($_SESSION[$verificationOptions['id'] . '_vv']['q']) ? $_SESSION[$verificationOptions['id'] . '_vv']['q'] : array();
-		$thisVerification['text_value'] = !empty($_REQUEST[$verificationOptions['id'] . '_vv']['code']) ? $smcFunc['htmlspecialchars']($_REQUEST[$verificationOptions['id'] . '_vv']['code']) : '';
+		$thisVerification['text_value'] = !empty($_REQUEST[$verificationOptions['id'] . '_vv']['code']) ? commonAPI::htmlspecialchars($_REQUEST[$verificationOptions['id'] . '_vv']['code']) : '';
 	}
 
 	// Have we got some questions to load?
@@ -2031,7 +2025,7 @@ function create_control_verification(&$verificationOptions, $do_test = false)
 				'q' => parse_bbc($row['question']),
 				'is_error' => !empty($incorrectQuestions) && in_array($row['id_comment'], $incorrectQuestions),
 				// Remember a previous submission?
-				'a' => isset($_REQUEST[$verificationOptions['id'] . '_vv'], $_REQUEST[$verificationOptions['id'] . '_vv']['q'], $_REQUEST[$verificationOptions['id'] . '_vv']['q'][$row['id_comment']]) ? $smcFunc['htmlspecialchars']($_REQUEST[$verificationOptions['id'] . '_vv']['q'][$row['id_comment']]) : '',
+				'a' => isset($_REQUEST[$verificationOptions['id'] . '_vv'], $_REQUEST[$verificationOptions['id'] . '_vv']['q'], $_REQUEST[$verificationOptions['id'] . '_vv']['q'][$row['id_comment']]) ? commonAPI::htmlspecialchars($_REQUEST[$verificationOptions['id'] . '_vv']['q'][$row['id_comment']]) : '',
 			);
 			$_SESSION[$verificationOptions['id'] . '_vv']['q'][] = $row['id_comment'];
 		}
@@ -2087,7 +2081,7 @@ function AutoSuggest_Search_Member()
 {
 	global $user_info, $txt, $smcFunc, $context;
 
-	$_REQUEST['search'] = trim($smcFunc['strtolower']($_REQUEST['search'])) . '*';
+	$_REQUEST['search'] = trim(commonAPI::strtolower($_REQUEST['search'])) . '*';
 	$_REQUEST['search'] = strtr($_REQUEST['search'], array('%' => '\%', '_' => '\_', '*' => '%', '?' => '_', '&#038;' => '&amp;'));
 
 	// Find the member.
@@ -2097,7 +2091,7 @@ function AutoSuggest_Search_Member()
 		WHERE real_name LIKE {string:search}' . (!empty($context['search_param']['buddies']) ? '
 			AND id_member IN ({array_int:buddy_list})' : '') . '
 			AND is_activated IN (1, 11)
-		LIMIT ' . ($smcFunc['strlen']($_REQUEST['search']) <= 2 ? '100' : '800'),
+		LIMIT ' . (commonAPI::strlen($_REQUEST['search']) <= 2 ? '100' : '800'),
 		array(
 			'buddy_list' => $user_info['buddies'],
 			'search' => $_REQUEST['search'],
@@ -2129,7 +2123,7 @@ function AutoSuggest_Search_Tags()
 {
 	global $user_info, $txt, $smcFunc;
 
-	$_REQUEST['search'] = trim($smcFunc['strtolower']($_REQUEST['search'])) . '*';
+	$_REQUEST['search'] = trim(commonAPI::strtolower($_REQUEST['search'])) . '*';
 	$_REQUEST['search'] = strtr($_REQUEST['search'], array('%' => '\%', '_' => '\_', '*' => '%', '?' => '_', '&#038;' => '&amp;'));
 
 	// Find tags

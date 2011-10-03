@@ -163,7 +163,7 @@ function Register($reg_errors = array())
 		// We might have had some submissions on this front - go check.
 		foreach ($reg_fields as $field)
 			if (isset($_POST[$field]))
-				$cur_profile[$field] = $smcFunc['htmlspecialchars']($_POST[$field]);
+				$cur_profile[$field] = commonAPI::htmlspecialchars($_POST[$field]);
 
 		// Load all the fields in question.
 		setupProfileContext($reg_fields);
@@ -187,16 +187,16 @@ function Register($reg_errors = array())
 	if (!empty($_SESSION['openid']['verified']) && !empty($_SESSION['openid']['openid_uri']))
 	{
 		$context['openid'] = $_SESSION['openid']['openid_uri'];
-		$context['username'] = $smcFunc['htmlspecialchars'](!empty($_POST['user']) ? $_POST['user'] : $_SESSION['openid']['nickname']);
-		$context['email'] = $smcFunc['htmlspecialchars'](!empty($_POST['email']) ? $_POST['email'] : $_SESSION['openid']['email']);
+		$context['username'] = commonAPI::htmlspecialchars(!empty($_POST['user']) ? $_POST['user'] : $_SESSION['openid']['nickname']);
+		$context['email'] = commonAPI::htmlspecialchars(!empty($_POST['email']) ? $_POST['email'] : $_SESSION['openid']['email']);
 	}
 	// See whether we have some prefiled values.
 	else
 	{
 		$context += array(
 			'openid' => isset($_POST['openid_identifier']) ? $_POST['openid_identifier'] : '',
-			'username' => isset($_POST['user']) ? $smcFunc['htmlspecialchars']($_POST['user']) : '',
-			'email' => isset($_POST['email']) ? $smcFunc['htmlspecialchars']($_POST['email']) : '',
+			'username' => isset($_POST['user']) ? commonAPI::htmlspecialchars($_POST['user']) : '',
+			'email' => isset($_POST['email']) ? commonAPI::htmlspecialchars($_POST['email']) : '',
 		);
 	}
 
@@ -307,7 +307,7 @@ function Register2($verifiedOpenID = false)
 	if (isset($_POST['real_name']) && (!empty($modSettings['allow_editDisplayName']) || allowedTo('moderate_forum')))
 	{
 		$_POST['real_name'] = trim(preg_replace('~[\s]~' . ($context['utf8'] ? 'u' : ''), ' ', $_POST['real_name']));
-		if (trim($_POST['real_name']) != '' && !isReservedName($_POST['real_name']) && $smcFunc['strlen']($_POST['real_name']) < 60)
+		if (trim($_POST['real_name']) != '' && !isReservedName($_POST['real_name']) && commonAPI::strlen($_POST['real_name']) < 60)
 			$possible_strings[] = 'real_name';
 	}
 	// Handle a string as a birthdate...
@@ -357,7 +357,7 @@ function Register2($verifiedOpenID = false)
 	// Include the additional options that might have been filled in.
 	foreach ($possible_strings as $var)
 		if (isset($_POST[$var]))
-			$regOptions['extra_register_vars'][$var] = $smcFunc['htmlspecialchars']($_POST[$var], ENT_QUOTES);
+			$regOptions['extra_register_vars'][$var] = commonAPI::htmlspecialchars($_POST[$var], ENT_QUOTES);
 	foreach ($possible_ints as $var)
 		if (isset($_POST[$var]))
 			$regOptions['extra_register_vars'][$var] = (int) $_POST[$var];
@@ -407,7 +407,7 @@ function Register2($verifiedOpenID = false)
 		if (!in_array($row['field_type'], array('check', 'select', 'radio')))
 		{
 			// Is it too long?
-			if ($row['field_length'] && $row['field_length'] < $smcFunc['strlen']($value))
+			if ($row['field_length'] && $row['field_length'] < commonAPI::strlen($value))
 				$custom_field_errors[] = array('custom_field_too_long', array($row['field_name'], $row['field_length']));
 
 			// Any masks to apply?
@@ -829,8 +829,8 @@ function RegisterCheckUsername()
 
 	// Clean it up like mother would.
 	$context['checked_username'] = preg_replace('~[\t\n\r\x0B\0' . ($context['utf8'] ? ($context['server']['complex_preg_chars'] ? '\x{A0}' : "\xC2\xA0") : '\xA0') . ']+~' . ($context['utf8'] ? 'u' : ''), ' ', $context['checked_username']);
-	if ($smcFunc['strlen']($context['checked_username']) > 25)
-		$context['checked_username'] = $smcFunc['htmltrim']($smcFunc['substr']($context['checked_username'], 0, 25));
+	if (commonAPI::strlen($context['checked_username']) > 25)
+		$context['checked_username'] = commonAPI::htmltrim(commonAPI::substr($context['checked_username'], 0, 25));
 
 	// Only these characters are permitted.
 	if (preg_match('~[<>&"\'=\\\]~', preg_replace('~&#(?:\\d{1,7}|x[0-9a-fA-F]{1,6});~', '', $context['checked_username'])) != 0 || $context['checked_username'] == '_' || $context['checked_username'] == '|' || strpos($context['checked_username'], '[code') !== false || strpos($context['checked_username'], '[/code') !== false)

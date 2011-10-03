@@ -484,7 +484,7 @@ function BanEdit()
 		}
 		elseif ($_POST['bantype'] == 'user_ban')
 		{
-			$_POST['user'] = preg_replace('~&amp;#(\d{4,5}|[2-9]\d{2,4}|1[2-9]\d);~', '&#$1;', $smcFunc['htmlspecialchars']($_POST['user'], ENT_QUOTES));
+			$_POST['user'] = preg_replace('~&amp;#(\d{4,5}|[2-9]\d{2,4}|1[2-9]\d);~', '&#$1;', commonAPI::htmlspecialchars($_POST['user'], ENT_QUOTES));
 
 			$request = smf_db_query( '
 				SELECT id_member, (id_group = {int:admin_group} OR FIND_IN_SET({int:admin_group}, additional_groups) != 0) AS isAdmin
@@ -576,7 +576,7 @@ function BanEdit()
 			fatal_lang_error('ban_name_empty', false);
 
 		// Let's not allow HTML in ban names, it's more evil than beneficial.
-		$_POST['ban_name'] = $smcFunc['htmlspecialchars']($_POST['ban_name'], ENT_QUOTES);
+		$_POST['ban_name'] = commonAPI::htmlspecialchars($_POST['ban_name'], ENT_QUOTES);
 
 		// Check whether a ban with this name already exists.
 		$request = smf_db_query( '
@@ -594,8 +594,8 @@ function BanEdit()
 			fatal_lang_error('ban_name_exists', false, array($_POST['ban_name']));
 		mysql_free_result($request);
 
-		$_POST['reason'] = $smcFunc['htmlspecialchars']($_POST['reason'], ENT_QUOTES);
-		$_POST['notes'] = $smcFunc['htmlspecialchars']($_POST['notes'], ENT_QUOTES);
+		$_POST['reason'] = commonAPI::htmlspecialchars($_POST['reason'], ENT_QUOTES);
+		$_POST['notes'] = commonAPI::htmlspecialchars($_POST['notes'], ENT_QUOTES);
 		$_POST['notes'] = str_replace(array("\r", "\n", '  '), array('', '<br />', '&nbsp; '), $_POST['notes']);
 		$_POST['expiration'] = $_POST['expiration'] == 'never' ? 'NULL' : ($_POST['expiration'] == 'expired' ? '0' : ($_POST['expire_date'] != $_POST['old_expire'] ? time() + 24 * 60 * 60 * (int) $_POST['expire_date'] : 'expire_time'));
 		$_POST['full_ban'] = empty($_POST['full_ban']) ? '0' : '1';
@@ -674,7 +674,7 @@ function BanEdit()
 					// We got a username, let's find its ID.
 					if (empty($_POST['bannedUser']))
 					{
-						$_POST['user'] = preg_replace('~&amp;#(\d{4,5}|[2-9]\d{2,4}|1[2-9]\d);~', '&#$1;', $smcFunc['htmlspecialchars']($_POST['user'], ENT_QUOTES));
+						$_POST['user'] = preg_replace('~&amp;#(\d{4,5}|[2-9]\d{2,4}|1[2-9]\d);~', '&#$1;', commonAPI::htmlspecialchars($_POST['user'], ENT_QUOTES));
 
 						$request = smf_db_query( '
 							SELECT id_member, (id_group = {int:admin_group} OR FIND_IN_SET({int:admin_group}, additional_groups) != 0) AS isAdmin

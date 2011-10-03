@@ -371,7 +371,7 @@ function EditPoll()
 	// Want to make sure before you actually submit?  Must be a lot of options, or something.
 	if (isset($_POST['preview']))
 	{
-		$question = $smcFunc['htmlspecialchars']($_POST['question']);
+		$question = commonAPI::htmlspecialchars($_POST['question']);
 
 		// Basic theme info...
 		$context['poll'] = array(
@@ -434,7 +434,7 @@ function EditPoll()
 		// If an option exists, update it.  If it is new, add it - but don't reuse ids!
 		foreach ($_POST['options'] as $id => $label)
 		{
-			$label = $smcFunc['htmlspecialchars']($label);
+			$label = commonAPI::htmlspecialchars($label);
 			censorText($label);
 
 			if (isset($context['choices'][$id]))
@@ -678,7 +678,7 @@ function EditPoll2()
 	checkSubmitOnce('check');
 
 	// Now we've done all our error checking, let's get the core poll information cleaned... question first.
-	$_POST['question'] = $smcFunc['htmlspecialchars']($_POST['question']);
+	$_POST['question'] = commonAPI::htmlspecialchars($_POST['question']);
 	$_POST['question'] = $smcFunc['truncate']($_POST['question'], 255);
 
 	$_POST['poll_hide'] = (int) $_POST['poll_hide'];
@@ -799,7 +799,7 @@ function EditPoll2()
 		}
 
 		// Dress the option up for its big date with the database.
-		$option = $smcFunc['htmlspecialchars']($option);
+		$option = commonAPI::htmlspecialchars($option);
 
 		// If it's already there, update it.  If it's not... add it.
 		if (in_array($k, $choices))

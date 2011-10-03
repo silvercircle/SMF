@@ -154,7 +154,7 @@ if (!defined('SMF'))
  */
 function getPrefixSelector($board, $id = 0, $mandatory = 0)
 {
-	global $user_info, $modSettings, $smcFunc, $context;
+	global $user_info, $context;
 	$header = false;
 	$out = '';
 	
@@ -201,7 +201,7 @@ function getPrefixSelector($board, $id = 0, $mandatory = 0)
 // Parses some bbc before sending into the database...
 function preparsecode(&$message, $previewing = false)
 {
-	global $user_info, $modSettings, $smcFunc, $context;
+	global $user_info, $context;
 
 	// This line makes all languages *theoretically* work even with the wrong charset ;).
 	$message = preg_replace('~&amp;#(\d{4,5}|[2-9]\d{2,4}|1[2-9]\d);~', '&#$1;', $message);
@@ -421,8 +421,6 @@ function preparsecode(&$message, $previewing = false)
 // This is very simple, and just removes things done by preparsecode.
 function un_preparsecode($message)
 {
-	global $smcFunc;
-
 	$parts = preg_split('~(\[/code\]|\[code(?:=[^\]]+)?\])~i', $message, -1, PREG_SPLIT_DELIM_CAPTURE);
 
 	// We're going to unparse only the stuff outside [code]...
@@ -659,7 +657,6 @@ function fixTag(&$message, $myTag, $protocols, $embeddedUrl = false, $hasEqualSi
 function sendmail($to, $subject, $message, $from = null, $message_id = null, $send_html = false, $priority = 3, $hotmail_fix = null, $is_private = false)
 {
 	global $webmaster_email, $context, $modSettings, $txt, $scripturl;
-	global $smcFunc;
 
 	// Use sendmail if it's set or if no SMTP server is set.
 	$use_sendmail = empty($modSettings['mail_type']) || $modSettings['smtp_host'] == '';
@@ -827,7 +824,7 @@ function sendmail($to, $subject, $message, $from = null, $message_id = null, $se
 // Add an email to the mail queue.
 function AddMailQueue($flush = false, $to_array = array(), $subject = '', $message = '', $headers = '', $send_html = false, $priority = 3, $is_private = false)
 {
-	global $context, $modSettings, $smcFunc;
+	global $context;
 
 	static $cur_insert = array();
 	static $cur_insert_len = 0;
@@ -943,8 +940,8 @@ function sendpm($recipients, $subject, $message, $store_outbox = false, $from = 
 		$user_info['name'] = $from['name'];
 
 	// This is the one that will go in their inbox.
-	$htmlmessage = $smcFunc['htmlspecialchars']($message, ENT_QUOTES);
-	$htmlsubject = $smcFunc['htmlspecialchars']($subject);
+	$htmlmessage = commonAPI::htmlspecialchars($message, ENT_QUOTES);
+	$htmlsubject = commonAPI::htmlspecialchars($subject);
 	preparsecode($htmlmessage);
 
 	// Integrated PMs
@@ -958,7 +955,7 @@ function sendpm($recipients, $subject, $message, $store_outbox = false, $from = 
 		{
 			if (!is_numeric($recipients[$rec_type][$id]))
 			{
-				$recipients[$rec_type][$id] = $smcFunc['strtolower'](trim(preg_replace('/[<>&"\'=\\\]/', '', $recipients[$rec_type][$id])));
+				$recipients[$rec_type][$id] = commonAPI::strtolower(trim(preg_replace('/[<>&"\'=\\\]/', '', $recipients[$rec_type][$id])));
 				$usernames[$recipients[$rec_type][$id]] = 0;
 			}
 		}
@@ -974,8 +971,8 @@ function sendpm($recipients, $subject, $message, $store_outbox = false, $from = 
 			)
 		);
 		while ($row = mysql_fetch_assoc($request))
-			if (isset($usernames[$smcFunc['strtolower']($row['member_name'])]))
-				$usernames[$smcFunc['strtolower']($row['member_name'])] = $row['id_member'];
+			if (isset($usernames[commonAPI::strtolower($row['member_name'])]))
+				$usernames[commonAPI::strtolower($row['member_name'])] = $row['id_member'];
 		mysql_free_result($request);
 
 		// Replace the usernames with IDs. Drop usernames that couldn't be found.
@@ -1510,7 +1507,7 @@ function server_parse($message, $socket, $response)
 function sendNotifications($topics, $type, $exclude = array(), $members_only = array())
 {
 	global $txt, $scripturl, $language, $user_info;
-	global $modSettings, $sourcedir, $context, $smcFunc;
+	global $modSettings;
 
 	// Can't do it if there's no topics.
 	if (empty($topics))
@@ -1704,7 +1701,7 @@ function sendNotifications($topics, $type, $exclude = array(), $members_only = a
 // - Mandatory parameters are set.
 function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 {
-	global $user_info, $txt, $modSettings, $smcFunc, $context, $sourcedir;
+	global $user_info, $txt, $modSettings, $context, $sourcedir;
 
 	// Set optional parameters to the default value.
 	$msgOptions['icon'] = empty($msgOptions['icon']) ? 'xx' : $msgOptions['icon'];
@@ -2113,7 +2110,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 // !!!
 function createAttachment(&$attachmentOptions)
 {
-	global $modSettings, $sourcedir, $smcFunc, $context;
+	global $modSettings, $sourcedir;
 
 	require_once($sourcedir . '/Subs-Graphics.php');
 
@@ -2453,7 +2450,7 @@ function createAttachment(&$attachmentOptions)
 // !!!
 function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 {
-	global $user_info, $modSettings, $smcFunc, $context, $sourcedir;
+	global $user_info, $modSettings, $context, $sourcedir;
 
 	$topicOptions['poll'] = isset($topicOptions['poll']) ? (int) $topicOptions['poll'] : null;
 	$topicOptions['lock_mode'] = isset($topicOptions['lock_mode']) ? $topicOptions['lock_mode'] : null;
@@ -2694,7 +2691,7 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 // Approve (or not) some posts... without permission checks...
 function approvePosts($msgs, $approve = true)
 {
-	global $sourcedir, $smcFunc;
+	global $sourcedir;
 
 	if (!is_array($msgs))
 		$msgs = array($msgs);
@@ -2913,8 +2910,6 @@ function approvePosts($msgs, $approve = true)
 // Approve topics?
 function approveTopics($topics, $approve = true)
 {
-	global $smcFunc;
-
 	if (!is_array($topics))
 		$topics = array($topics);
 
@@ -2946,7 +2941,7 @@ function approveTopics($topics, $approve = true)
 function sendApprovalNotifications(&$topicData)
 {
 	global $txt, $scripturl, $language, $user_info;
-	global $modSettings, $sourcedir, $context, $smcFunc;
+	global $modSettings;
 
 	// Clean up the data...
 	if (!is_array($topicData) || empty($topicData))
@@ -3072,7 +3067,7 @@ function sendApprovalNotifications(&$topicData)
 // Update the last message in a board, and its parents.
 function updateLastMessages($setboards, $id_msg = 0)
 {
-	global $board_info, $board, $modSettings, $smcFunc;
+	global $board_info, $board;
 
 	// Please - let's be sane.
 	if (empty($setboards))

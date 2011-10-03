@@ -679,10 +679,10 @@ function splitTopic($split1_ID_TOPIC, $splitMessages, $new_subject)
 		fatal_lang_error('cant_insert_topic');
 
 	// Move the messages over to the other topic.
-	$new_subject = strtr($smcFunc['htmltrim']($smcFunc['htmlspecialchars']($new_subject)), array("\r" => '', "\n" => '', "\t" => ''));
+	$new_subject = strtr(commonAPI::htmltrim(commonAPI::htmlspecialchars($new_subject)), array("\r" => '', "\n" => '', "\t" => ''));
 	// Check the subject length.
-	if ($smcFunc['strlen']($new_subject) > 100)
-		$new_subject = $smcFunc['substr']($new_subject, 0, 100);
+	if (commonAPI::strlen($new_subject) > 100)
+		$new_subject = commonAPI::substr($new_subject, 0, 100);
 	// Valid subject?
 	if ($new_subject != '')
 	{
@@ -1189,10 +1189,10 @@ function MergeExecute($topics = array())
 	// Determine the subject of the newly merged topic - was a custom subject specified?
 	if (empty($_POST['subject']) && isset($_POST['custom_subject']) && $_POST['custom_subject'] != '')
 	{
-		$target_subject = strtr($smcFunc['htmltrim']($smcFunc['htmlspecialchars']($_POST['custom_subject'])), array("\r" => '', "\n" => '', "\t" => ''));
+		$target_subject = strtr(commonAPI::htmltrim(commonAPI::htmlspecialchars($_POST['custom_subject'])), array("\r" => '', "\n" => '', "\t" => ''));
 		// Keep checking the length.
-		if ($smcFunc['strlen']($target_subject) > 100)
-			$target_subject = $smcFunc['substr']($target_subject, 0, 100);
+		if (commonAPI::strlen($target_subject) > 100)
+			$target_subject = commonAPI::substr($target_subject, 0, 100);
 
 		// Nothing left - odd but pick the first topics subject.
 		if ($target_subject == '')

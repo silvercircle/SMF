@@ -26,11 +26,11 @@ function saveDraft()
 	$icon = isset($_POST['icon']) ? preg_replace('~[\./\\\\*:"\'<>]~', '', $_POST['icon']) : 'xx';
 
 	// Sanitise what we do have
-	$subject = $smcFunc['htmltrim']($smcFunc['htmlspecialchars']($subject));
-	$message = $smcFunc['htmlspecialchars']($message, ENT_QUOTES);
+	$subject = commonAPI::htmltrim(commonAPI::htmlspecialchars($subject));
+	$message = commonAPI::htmlspecialchars($message, ENT_QUOTES);
 	preparsecode($message);
 
-	if ($smcFunc['htmltrim']($smcFunc['htmlspecialchars']($subject)) === '' && $smcFunc['htmltrim']($smcFunc['htmlspecialchars']($_POST['message']), ENT_QUOTES) === '')
+	if (commonAPI::htmltrim(commonAPI::htmlspecialchars($subject)) === '' && commonAPI::htmltrim(commonAPI::htmlspecialchars($_POST['message']), ENT_QUOTES) === '')
 		fatal_lang_error('empty_draft', false);
 
 	// Hrm, so is this a new draft or not?

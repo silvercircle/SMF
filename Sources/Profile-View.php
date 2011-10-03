@@ -2067,7 +2067,7 @@ function displayDrafts($memID)
 		if (empty($row['body']))
 			$row['body'] = '';
 
-		$row['subject'] = $smcFunc['htmltrim']($row['subject']);
+		$row['subject'] = commonAPI::htmltrim($row['subject']);
 		if (empty($row['subject']))
 			$row['subject'] = $txt['no_subject'];
 

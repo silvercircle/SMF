@@ -894,8 +894,8 @@ function ModifySpamSettings($return_config = false)
 		$count_questions = 0;
 		foreach ($_POST['question'] as $id => $question)
 		{
-			$question = trim($smcFunc['htmlspecialchars']($question, ENT_COMPAT, $context['character_set']));
-			$answer = trim($smcFunc['strtolower']($smcFunc['htmlspecialchars']($_POST['answer'][$id], ENT_COMPAT, $context['character_set'])));
+			$question = trim(commonAPI::htmlspecialchars($question, ENT_COMPAT, $context['character_set']));
+			$answer = trim(commonAPI::strtolower(commonAPI::htmlspecialchars($_POST['answer'][$id], ENT_COMPAT, $context['character_set'])));
 
 			// Already existed?
 			if (isset($context['question_answers'][$id]))
@@ -1085,7 +1085,7 @@ function ModifySignatureSettings($return_config = false)
 
 				// Max characters...
 				if (!empty($sig_limits[1]))
-					$sig = $smcFunc['substr']($sig, 0, $sig_limits[1]);
+					$sig = commonAPI::substr($sig, 0, $sig_limits[1]);
 				// Max lines...
 				if (!empty($sig_limits[2]))
 				{
@@ -1756,8 +1756,8 @@ function EditCustomProfiles()
 		// Everyone needs a name - even the (bracket) unknown...
 		if (trim($_POST['field_name']) == '')
 			fatal_lang_error('custom_option_need_name');
-		$_POST['field_name'] = $smcFunc['htmlspecialchars']($_POST['field_name']);
-		$_POST['field_desc'] = $smcFunc['htmlspecialchars']($_POST['field_desc']);
+		$_POST['field_name'] = commonAPI::htmlspecialchars($_POST['field_name']);
+		$_POST['field_desc'] = commonAPI::htmlspecialchars($_POST['field_desc']);
 
 		// Checkboxes...
 		$show_reg = isset($_POST['reg']) ? (int) $_POST['reg'] : 0;
@@ -1786,7 +1786,7 @@ function EditCustomProfiles()
 			foreach ($_POST['select_option'] as $k => $v)
 			{
 				// Clean, clean, clean...
-				$v = $smcFunc['htmlspecialchars']($v);
+				$v = commonAPI::htmlspecialchars($v);
 				$v = strtr($v, array(',' => ''));
 
 				// Nada, zip, etc...
@@ -1812,7 +1812,7 @@ function EditCustomProfiles()
 		// Come up with the unique name?
 		if (empty($context['fid']))
 		{
-			$colname = $smcFunc['substr'](strtr($_POST['field_name'], array(' ' => '')), 0, 6);
+			$colname = commonAPI::substr(strtr($_POST['field_name'], array(' ' => '')), 0, 6);
 			preg_match('~([\w\d_-]+)~', $colname, $matches);
 
 			// If there is nothing to the name, then let's start out own - for foreign languages etc.

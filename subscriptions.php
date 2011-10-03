@@ -282,7 +282,7 @@ function generateSubscriptionError($text)
 	// Maybe we can try to give them the post data?
 	if (!empty($_POST))
 		foreach ($_POST as $key => $val)
-			$text .= '<br />' . $smcFunc['htmlspecialchars']($key) . ': ' . $smcFunc['htmlspecialchars']($val);
+			$text .= '<br />' . commonAPI::htmlspecialchars($key) . ': ' . commonAPI::htmlspecialchars($val);
 
 	// Then just log and die.
 	log_error($text);

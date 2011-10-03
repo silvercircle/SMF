@@ -371,7 +371,7 @@ function iCalDownload()
 
 	// How big is it?
 	if (empty($modSettings['enableCompressedOutput']))
-		header('Content-Length: ' . $smcFunc['strlen']($filecontents));
+		header('Content-Length: ' . commonAPI::strlen($filecontents));
 
 	// This is a calendar item!
 	header('Content-Type: text/calendar');

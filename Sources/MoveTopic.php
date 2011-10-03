@@ -233,10 +233,10 @@ function MoveTopic2()
 	// Rename the topic...
 	if (isset($_POST['reset_subject'], $_POST['custom_subject']) && $_POST['custom_subject'] != '')
 	{
-		$_POST['custom_subject'] = strtr($smcFunc['htmltrim']($smcFunc['htmlspecialchars']($_POST['custom_subject'])), array("\r" => '', "\n" => '', "\t" => ''));
+		$_POST['custom_subject'] = strtr(commonAPI::htmltrim(commonAPI::htmlspecialchars($_POST['custom_subject'])), array("\r" => '', "\n" => '', "\t" => ''));
 		// Keep checking the length.
-		if ($smcFunc['strlen']($_POST['custom_subject']) > 100)
-			$_POST['custom_subject'] = $smcFunc['substr']($_POST['custom_subject'], 0, 100);
+		if (commonAPI::strlen($_POST['custom_subject']) > 100)
+			$_POST['custom_subject'] = commonAPI::substr($_POST['custom_subject'], 0, 100);
 
 		// If it's still valid move onwards and upwards.
 		if ($_POST['custom_subject'] != '')
@@ -291,7 +291,7 @@ function MoveTopic2()
 		if ($user_info['language'] != $language)
 			loadLanguage('index', $language);
 
-		$_POST['reason'] = $smcFunc['htmlspecialchars']($_POST['reason'], ENT_QUOTES);
+		$_POST['reason'] = commonAPI::htmlspecialchars($_POST['reason'], ENT_QUOTES);
 		preparsecode($_POST['reason']);
 
 		// Add a URL onto the message.

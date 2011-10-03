@@ -26,6 +26,8 @@ $forum_version = 'SMF 2.0';
 
 // Get everything started up...
 define('SMF', 1);
+define('__APICOMPAT__', 0);			// if set to 1, smcFunc[] will be available like in SMF 2
+
 if (function_exists('set_magic_quotes_runtime'))
 	@set_magic_quotes_runtime(0);
 error_reporting(defined('E_STRICT') ? E_ALL | E_STRICT : E_ALL);

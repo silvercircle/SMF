@@ -1906,7 +1906,7 @@ function EditPermissionProfiles()
 		checkSession();
 
 		$_POST['copy_from'] = (int) $_POST['copy_from'];
-		$_POST['profile_name'] = $smcFunc['htmlspecialchars']($_POST['profile_name']);
+		$_POST['profile_name'] = commonAPI::htmlspecialchars($_POST['profile_name']);
 
 		// Insert the profile itself.
 		smf_db_insert('',
@@ -1955,7 +1955,7 @@ function EditPermissionProfiles()
 		{
 			foreach ($_POST['rename_profile'] as $id => $value)
 			{
-				$value = $smcFunc['htmlspecialchars']($value);
+				$value = commonAPI::htmlspecialchars($value);
 
 				if (trim($value) != '' && $id > 4)
 					smf_db_query( '

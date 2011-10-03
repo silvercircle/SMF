@@ -84,7 +84,7 @@ function Post()
 {
 	global $txt, $scripturl, $topic, $modSettings, $board;
 	global $user_info, $sc, $board_info, $context, $settings;
-	global $sourcedir, $options, $smcFunc, $language;
+	global $sourcedir, $options, $language;
 
 	$context['need_synhlt'] = true;
 	loadLanguage('Post');
@@ -438,7 +438,7 @@ function Post()
 				$context['post_error']['no_subject'] = true;
 			if (htmltrim__recursive(htmlspecialchars__recursive($_REQUEST['message'])) == '')
 				$context['post_error']['no_message'] = true;
-			if (!empty($modSettings['max_messageLength']) && $smcFunc['strlen']($_REQUEST['message']) > $modSettings['max_messageLength'])
+			if (!empty($modSettings['max_messageLength']) && commonAPI::strlen($_REQUEST['message']) > $modSettings['max_messageLength'])
 				$context['post_error']['long_message'] = true;
 
 			// Are you... a guest?
@@ -450,7 +450,7 @@ function Post()
 				// Validate the name and email.
 				if (!isset($_REQUEST['guestname']) || trim(strtr($_REQUEST['guestname'], '_', ' ')) == '')
 					$context['post_error']['no_name'] = true;
-				elseif ($smcFunc['strlen']($_REQUEST['guestname']) > 25)
+				elseif (commonAPI::strlen($_REQUEST['guestname']) > 25)
 					$context['post_error']['long_name'] = true;
 				else
 				{
@@ -494,15 +494,15 @@ function Post()
 		$context['can_announce'] &= $context['becomes_approved'];
 
 		// Set up the inputs for the form.
-		$form_subject = strtr($smcFunc['htmlspecialchars']($_REQUEST['subject']), array("\r" => '', "\n" => '', "\t" => ''));
-		$form_message = $smcFunc['htmlspecialchars']($_REQUEST['message'], ENT_QUOTES);
+		$form_subject = strtr(commonAPI::htmlspecialchars($_REQUEST['subject']), array("\r" => '', "\n" => '', "\t" => ''));
+		$form_message = commonAPI::htmlspecialchars($_REQUEST['message'], ENT_QUOTES);
 
 		// Make sure the subject isn't too long - taking into account special characters.
-		if ($smcFunc['strlen']($form_subject) > 100)
-			$form_subject = $smcFunc['substr']($form_subject, 0, 100);
+		if (commonAPI::strlen($form_subject) > 100)
+			$form_subject = commonAPI::substr($form_subject, 0, 100);
 
 		// Have we inadvertently trimmed off the subject of useful information?
-		if ($smcFunc['htmltrim']($form_subject) === '')
+		if (commonAPI::htmltrim($form_subject) === '')
 			$context['post_error']['no_subject'] = true;
 
 		// Any errors occurred?
@@ -531,7 +531,7 @@ function Post()
 
 		if (isset($_REQUEST['poll']))
 		{
-			$context['question'] = isset($_REQUEST['question']) ? $smcFunc['htmlspecialchars'](trim($_REQUEST['question'])) : '';
+			$context['question'] = isset($_REQUEST['question']) ? commonAPI::htmlspecialchars(trim($_REQUEST['question'])) : '';
 
 			$context['choices'] = array();
 			$choice_id = 0;
@@ -878,7 +878,7 @@ function Post()
 			mysql_free_result($request);
 
 			// Add 'Re: ' to the front of the quoted subject.
-			if (trim($context['response_prefix']) != '' && $smcFunc['strpos']($form_subject, trim($context['response_prefix'])) !== 0)
+			if (trim($context['response_prefix']) != '' && commonAPI::strpos($form_subject, trim($context['response_prefix'])) !== 0)
 				$form_subject = $context['response_prefix'] . $form_subject;
 
 			// Censor the message and subject.
@@ -924,7 +924,7 @@ function Post()
 			$form_subject = $first_subject;
 
 			// Add 'Re: ' to the front of the subject.
-			if (trim($context['response_prefix']) != '' && $form_subject != '' && $smcFunc['strpos']($form_subject, trim($context['response_prefix'])) !== 0)
+			if (trim($context['response_prefix']) != '' && $form_subject != '' && commonAPI::strpos($form_subject, trim($context['response_prefix'])) !== 0)
 				$form_subject = $context['response_prefix'] . $form_subject;
 
 			// Censor the subject.
@@ -1284,7 +1284,7 @@ function Post()
 function Post2()
 {
 	global $board, $topic, $txt, $modSettings, $sourcedir, $context;
-	global $user_info, $board_info, $options, $smcFunc;
+	global $user_info, $board_info, $options;
 
 	if(in_array('dr', $context['admin_features'])) {
 		require_once($sourcedir . '/Subs-Drafts.php');
@@ -1608,7 +1608,7 @@ function Post2()
 
 		if ($_POST['guestname'] == '' || $_POST['guestname'] == '_')
 			$post_errors[] = 'no_name';
-		if ($smcFunc['strlen']($_POST['guestname']) > 25)
+		if (commonAPI::strlen($_POST['guestname']) > 25)
 			$post_errors[] = 'long_name';
 
 		if (empty($modSettings['guest_post_no_email']))
@@ -1635,16 +1635,16 @@ function Post2()
 	}
 
 	// Check the subject and message.
-	if (!isset($_POST['subject']) || $smcFunc['htmltrim']($smcFunc['htmlspecialchars']($_POST['subject'])) === '')
+	if (!isset($_POST['subject']) || commonAPI::htmltrim(commonAPI::htmlspecialchars($_POST['subject'])) === '')
 		$post_errors[] = 'no_subject';
-	if (!isset($_POST['message']) || $smcFunc['htmltrim']($smcFunc['htmlspecialchars']($_POST['message']), ENT_QUOTES) === '')
+	if (!isset($_POST['message']) || commonAPI::htmltrim(commonAPI::htmlspecialchars($_POST['message']), ENT_QUOTES) === '')
 		$post_errors[] = 'no_message';
-	elseif (!empty($modSettings['max_messageLength']) && $smcFunc['strlen']($_POST['message']) > $modSettings['max_messageLength'])
+	elseif (!empty($modSettings['max_messageLength']) && commonAPI::strlen($_POST['message']) > $modSettings['max_messageLength'])
 		$post_errors[] = 'long_message';
 	else
 	{
 		// Prepare the message a bit for some additional testing.
-		$_POST['message'] = $smcFunc['htmlspecialchars']($_POST['message'], ENT_QUOTES);
+		$_POST['message'] = commonAPI::htmlspecialchars($_POST['message'], ENT_QUOTES);
 
 		// Preparse code. (Zef)
 		if ($user_info['is_guest'])
@@ -1652,10 +1652,10 @@ function Post2()
 		preparsecode($_POST['message']);
 
 		// Let's see if there's still some content left without the tags.
-		if ($smcFunc['htmltrim'](strip_tags(parse_bbc($_POST['message'], false), '<img>')) === '' && (!allowedTo('admin_forum') || strpos($_POST['message'], '[html]') === false))
+		if (commonAPI::htmltrim(strip_tags(parse_bbc($_POST['message'], false), '<img>')) === '' && (!allowedTo('admin_forum') || strpos($_POST['message'], '[html]') === false))
 			$post_errors[] = 'no_message';
 	}
-	if (isset($_POST['calendar']) && !isset($_REQUEST['deleteevent']) && $smcFunc['htmltrim']($_POST['evtitle']) === '')
+	if (isset($_POST['calendar']) && !isset($_REQUEST['deleteevent']) && commonAPI::htmltrim($_POST['evtitle']) === '')
 		$post_errors[] = 'no_event';
 	// You are not!
 	if (isset($_POST['message']) && strtolower($_POST['message']) == 'i am the administrator.' && !$user_info['is_admin'])
@@ -1735,13 +1735,13 @@ function Post2()
 	@set_time_limit(300);
 
 	// Add special html entities to the subject, name, and email.
-	$_POST['subject'] = strtr($smcFunc['htmlspecialchars']($_POST['subject']), array("\r" => '', "\n" => '', "\t" => ''));
+	$_POST['subject'] = strtr(commonAPI::htmlspecialchars($_POST['subject']), array("\r" => '', "\n" => '', "\t" => ''));
 	$_POST['guestname'] = htmlspecialchars($_POST['guestname']);
 	$_POST['email'] = htmlspecialchars($_POST['email']);
 
 	// At this point, we want to make sure the subject isn't too long.
-	if ($smcFunc['strlen']($_POST['subject']) > 100)
-		$_POST['subject'] = $smcFunc['substr']($_POST['subject'], 0, 100);
+	if (commonAPI::strlen($_POST['subject']) > 100)
+		$_POST['subject'] = commonAPI::substr($_POST['subject'], 0, 100);
 
 	// Make the poll...
 	if (isset($_REQUEST['poll']))
@@ -1783,7 +1783,7 @@ function Post2()
 
 		// Clean up the question and answers.
 		$_POST['question'] = htmlspecialchars($_POST['question']);
-		$_POST['question'] = $smcFunc['truncate']($_POST['question'], 255);
+		$_POST['question'] = commonAPI::truncate($_POST['question'], 255);
 		$_POST['question'] = preg_replace('~&amp;#(\d{4,5}|[2-9]\d{2,4}|1[2-9]\d);~', '&#$1;', $_POST['question']);
 		$_POST['options'] = htmlspecialchars__recursive($_POST['options']);
 	}
@@ -2193,7 +2193,7 @@ function Post2()
 					'end_date' => strftime('%Y-%m-%d', $start_time + $span * 86400),
 					'start_date' => strftime('%Y-%m-%d', $start_time),
 					'id_event' => $_REQUEST['eventid'],
-					'title' => $smcFunc['htmlspecialchars']($_REQUEST['evtitle'], ENT_QUOTES),
+					'title' => commonAPI::htmlspecialchars($_REQUEST['evtitle'], ENT_QUOTES),
 				)
 			);
 		}
@@ -2431,7 +2431,7 @@ function AnnouncementSelectMembergroup()
 function AnnouncementSend()
 {
 	global $topic, $board, $board_info, $context, $modSettings;
-	global $language, $scripturl, $txt, $user_info, $sourcedir, $smcFunc;
+	global $language, $scripturl, $txt, $user_info, $sourcedir;
 
 	checkSession();
 
@@ -2553,7 +2553,7 @@ function AnnouncementSend()
 function notifyMembersBoard(&$topicData)
 {
 	global $txt, $scripturl, $language, $user_info;
-	global $modSettings, $sourcedir, $board, $smcFunc, $context;
+	global $modSettings, $sourcedir;
 
 	require_once($sourcedir . '/Subs-Post.php');
 
@@ -2701,7 +2701,7 @@ function notifyMembersBoard(&$topicData)
 // Get the topic for display purposes.
 function getTopic()
 {
-	global $topic, $modSettings, $context, $smcFunc, $counter, $options;
+	global $topic, $modSettings, $context, $counter, $options;
 
 	if (isset($_REQUEST['xml']))
 		$limit = '
@@ -2756,7 +2756,7 @@ function getTopic()
 function QuoteFast()
 {
 	global $modSettings, $user_info, $context, $options;
-	global $sourcedir, $smcFunc;
+	global $sourcedir;
 
 	loadLanguage('Post');
 	if (!isset($_REQUEST['xml']))
@@ -2853,7 +2853,7 @@ function QuoteFast()
 		$context['quote']['text'] = strtr(un_htmlspecialchars($context['quote']['xml']), array('\'' => '\\\'', '\\' => '\\\\', "\n" => '\\n', '</script>' => '</\' + \'script>'));
 		$context['quote']['xml'] = strtr($context['quote']['xml'], array('&nbsp;' => '&#160;', '<' => '&lt;', '>' => '&gt;'));
 
-		$context['quote']['mozilla'] = strtr($smcFunc['htmlspecialchars']($context['quote']['text']), array('&quot;' => '"'));
+		$context['quote']['mozilla'] = strtr(commonAPI::htmlspecialchars($context['quote']['text']), array('&quot;' => '"'));
 	}
 	// !!! Needs a nicer interface.
 	// In case our message has been removed in the meantime.
@@ -2877,7 +2877,7 @@ function QuoteFast()
 function JavaScriptModify()
 {
 	global $sourcedir, $modSettings, $board, $topic, $txt;
-	global $user_info, $context, $smcFunc, $language;
+	global $user_info, $context, $language;
 
 	// We have to have a topic!
 	if (empty($topic))
@@ -2937,13 +2937,13 @@ function JavaScriptModify()
 	}
 
 	$post_errors = array();
-	if (isset($_POST['subject']) && $smcFunc['htmltrim']($smcFunc['htmlspecialchars']($_POST['subject'])) !== '')
+	if (isset($_POST['subject']) && commonAPI::htmltrim(commonAPI::htmlspecialchars($_POST['subject'])) !== '')
 	{
-		$_POST['subject'] = strtr($smcFunc['htmlspecialchars']($_POST['subject']), array("\r" => '', "\n" => '', "\t" => ''));
+		$_POST['subject'] = strtr(commonAPI::htmlspecialchars($_POST['subject']), array("\r" => '', "\n" => '', "\t" => ''));
 
 		// Maximum number of characters.
-		if ($smcFunc['strlen']($_POST['subject']) > 100)
-			$_POST['subject'] = $smcFunc['substr']($_POST['subject'], 0, 100);
+		if (commonAPI::strlen($_POST['subject']) > 100)
+			$_POST['subject'] = commonAPI::substr($_POST['subject'], 0, 100);
 	}
 	elseif (isset($_POST['subject']))
 	{
@@ -2953,23 +2953,23 @@ function JavaScriptModify()
 
 	if (isset($_POST['message']))
 	{
-		if ($smcFunc['htmltrim']($smcFunc['htmlspecialchars']($_POST['message'])) === '')
+		if (commonAPI::htmltrim(commonAPI::htmlspecialchars($_POST['message'])) === '')
 		{
 			$post_errors[] = 'no_message';
 			unset($_POST['message']);
 		}
-		elseif (!empty($modSettings['max_messageLength']) && $smcFunc['strlen']($_POST['message']) > $modSettings['max_messageLength'])
+		elseif (!empty($modSettings['max_messageLength']) && commonAPI::strlen($_POST['message']) > $modSettings['max_messageLength'])
 		{
 			$post_errors[] = 'long_message';
 			unset($_POST['message']);
 		}
 		else
 		{
-			$_POST['message'] = $smcFunc['htmlspecialchars']($_POST['message'], ENT_QUOTES);
+			$_POST['message'] = commonAPI::htmlspecialchars($_POST['message'], ENT_QUOTES);
 
 			preparsecode($_POST['message']);
 
-			if ($smcFunc['htmltrim'](strip_tags(parse_bbc($_POST['message'], false), '<img>')) === '')
+			if (commonAPI::htmltrim(strip_tags(parse_bbc($_POST['message'], false), '<img>')) === '')
 			{
 				$post_errors[] = 'no_message';
 				unset($_POST['message']);

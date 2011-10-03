@@ -537,12 +537,12 @@ function AddLanguage()
 			foreach ($lang_files as $file)
 			{
 				// Were we searching?
-				if (!empty($context['smf_search_term']) && strpos($file->fetch('name'), $smcFunc['strtolower']($context['smf_search_term'])) === false)
+				if (!empty($context['smf_search_term']) && strpos($file->fetch('name'), commonAPI::strtolower($context['smf_search_term'])) === false)
 					continue;
 
 				$context['smf_languages'][] = array(
 					'id' => $file->fetch('id'),
-					'name' => $smcFunc['ucwords']($file->fetch('name')),
+					'name' => commonAPI::ucwords($file->fetch('name')),
 					'version' => $file->fetch('version'),
 					'utf8' => $file->fetch('utf8'),
 					'description' => $file->fetch('description'),
@@ -1085,7 +1085,7 @@ function list_getLanguages()
 			'char_set' => $txt['lang_character_set'],
 			'default' => $language == $lang['filename'] || ($language == '' && $lang['filename'] == 'english'),
 			'locale' => $txt['lang_locale'],
-			'name' => $smcFunc['ucwords'](strtr($lang['filename'], array('_' => ' ', '-utf8' => ''))),
+			'name' => commonAPI::ucwords(strtr($lang['filename'], array('_' => ' ', '-utf8' => ''))),
 		);
 	}
 
@@ -1354,7 +1354,7 @@ function ModifyLanguage()
 	$context['lang_file_not_writable_message'] = is_writable($settings['default_theme_dir'] . '/languages/index.' . $context['lang_id'] . '.php') ? '' : sprintf($txt['lang_file_not_writable'], $settings['default_theme_dir'] . '/languages/index.' . $context['lang_id'] . '.php');
 	// Setup the primary settings context.
 	$context['primary_settings'] = array(
-		'name' => $smcFunc['ucwords'](strtr($context['lang_id'], array('_' => ' ', '-utf8' => ''))),
+		'name' => commonAPI::ucwords(strtr($context['lang_id'], array('_' => ' ', '-utf8' => ''))),
 		'character_set' => $txt['lang_character_set'],
 		'locale' => $txt['lang_locale'],
 		'dictionary' => $txt['lang_dictionary'],

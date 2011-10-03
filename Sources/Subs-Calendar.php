@@ -802,10 +802,10 @@ function validateEventPost()
 			fatal_lang_error('invalid_date', false);
 
 		// No title?
-		if ($smcFunc['htmltrim']($_POST['evtitle']) === '')
+		if (commonAPI::htmltrim($_POST['evtitle']) === '')
 			fatal_lang_error('no_event_title', false);
-		if ($smcFunc['strlen']($_POST['evtitle']) > 30)
-			$_POST['evtitle'] = $smcFunc['substr']($_POST['evtitle'], 0, 30);
+		if (commonAPI::strlen($_POST['evtitle']) > 30)
+			$_POST['evtitle'] = commonAPI::substr($_POST['evtitle'], 0, 30);
 		$_POST['evtitle'] = str_replace(';', '', $_POST['evtitle']);
 	}
 }
@@ -842,7 +842,7 @@ function insertEvent(&$eventOptions)
 	global $modSettings, $smcFunc;
 
 	// Add special chars to the title.
-	$eventOptions['title'] = $smcFunc['htmlspecialchars']($eventOptions['title'], ENT_QUOTES);
+	$eventOptions['title'] = commonAPI::htmlspecialchars($eventOptions['title'], ENT_QUOTES);
 
 	// Add some sanity checking to the span.
 	$eventOptions['span'] = isset($eventOptions['span']) && $eventOptions['span'] > 0 ? (int) $eventOptions['span'] : 0;
@@ -887,7 +887,7 @@ function modifyEvent($event_id, &$eventOptions)
 	global $smcFunc;
 
 	// Properly sanitize the title.
-	$eventOptions['title'] = $smcFunc['htmlspecialchars']($eventOptions['title'], ENT_QUOTES);
+	$eventOptions['title'] = commonAPI::htmlspecialchars($eventOptions['title'], ENT_QUOTES);
 
 	// Scan the start date for validity and get its components.
 	if (($num_results = sscanf($eventOptions['start_date'], '%d-%d-%d', $year, $month, $day)) !== 3)

@@ -167,6 +167,7 @@ function reloadSettings()
 			cache_put_data('modSettings', $modSettings, 90);
 	}
 
+	if(__APICOMPAT__) {
 	// Set a list of common functions.
 	$ent_list = empty($modSettings['disableEntityCheck']) ? '&(#\d{1,7}|quot|amp|lt|gt|nbsp);' : '&(#021|quot|amp|lt|gt|nbsp);';
 	$ent_check = empty($modSettings['disableEntityCheck']) ? array('preg_replace(\'~(&#(\d{1,7}|x[0-9a-fA-F]{1,6});)~e\', \'$smcFunc[\\\'entity_fix\\\'](\\\'\\2\\\')\', ', ')') : array('', '');
@@ -244,7 +245,7 @@ function reloadSettings()
 				$words[$i] = $smcFunc[\'ucfirst\']($words[$i]);
 			return implode(\'\', $words);'),
 	);
-
+	}
 	include_once($sourcedir . '/CommonAPI.php');
 
 	// Setting the timezone is a requirement for some functions in PHP >= 5.1.
@@ -1226,7 +1227,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 			'image_href' => $settings['images_url'] . '/' . ($profile['buddy'] ? 'buddy_' : '') . ($profile['is_online'] ? 'useron' : 'useroff') . '.gif',
 			'label' => $txt[$profile['is_online'] ? 'online' : 'offline']
 		),
-		'language' => $smcFunc['ucwords'](strtr($profile['lngfile'], array('_' => ' ', '-utf8' => ''))),
+		'language' => commonAPI::ucwords(strtr($profile['lngfile'], array('_' => ' ', '-utf8' => ''))),
 		'is_activated' => isset($profile['is_activated']) ? $profile['is_activated'] : 1,
 		'is_banned' => isset($profile['is_activated']) ? $profile['is_activated'] >= 10 : 0,
 		'options' => $profile['options'],
@@ -1587,8 +1588,8 @@ function loadTheme($id_theme = 0, $initialize = true)
 	$context['session_var'] = $_SESSION['session_var'];
 	$context['session_id'] = $_SESSION['session_value'];
 	$context['forum_name'] = $mbname;
-	$context['forum_name_html_safe'] = $smcFunc['htmlspecialchars']($context['forum_name']);
-	$context['header_logo_url_html_safe'] = empty($settings['header_logo_url']) ? '' : $smcFunc['htmlspecialchars']($settings['header_logo_url']);
+	$context['forum_name_html_safe'] = commonAPI::htmlspecialchars($context['forum_name']);
+	$context['header_logo_url_html_safe'] = empty($settings['header_logo_url']) ? '' : commonAPI::htmlspecialchars($settings['header_logo_url']);
 	$context['current_action'] = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 	$context['current_subaction'] = isset($_REQUEST['sa']) ? $_REQUEST['sa'] : null;
 	if (isset($modSettings['load_average']))
@@ -2087,7 +2088,7 @@ function getLanguages($use_cache = true, $favor_utf8 = true)
 					continue;
 
 				$context['languages'][$matches[1]] = array(
-					'name' => $smcFunc['ucwords'](strtr($matches[1], array('_' => ' '))),
+					'name' => commonAPI::ucwords(strtr($matches[1], array('_' => ' '))),
 					'selected' => false,
 					'filename' => $matches[1],
 					'location' => $language_dir . '/index.' . $matches[1] . '.php',
