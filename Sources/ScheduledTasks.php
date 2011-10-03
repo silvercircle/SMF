@@ -464,7 +464,7 @@ function scheduled_daily_maintenance()
 	}
 
 	// Check the database version - for some buggy MySQL version.
-	$server_version = $smcFunc['db_server_info']();
+	$server_version = mysql_get_server_info();
 	if ($db_type == 'mysql' && in_array(substr($server_version, 0, 6), array('5.0.50', '5.0.51')))
 		updateSettings(array('db_mysql_group_by_fix' => '1'));
 	elseif (!empty($modSettings['db_mysql_group_by_fix']))
@@ -544,10 +544,10 @@ function scheduled_auto_optimize()
 
 	// Actually do the optimisation.
 	if ($db_type == 'sqlite')
-		$smcFunc['db_optimize_table']($table[0]);
+		smf_db_optimize_table($table[0]);
 	else
 		foreach ($tables as $table)
-			$smcFunc['db_optimize_table']($table);
+			smf_db_optimize_table($table);
 
 	// Return for the log...
 	return true;

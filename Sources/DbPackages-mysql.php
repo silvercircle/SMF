@@ -362,7 +362,7 @@ function smf_db_add_index($table_name, $index_info, $parameters = array(), $if_e
 	$db_package_log[] = array('remove_index', $table_name, $index_info['name']);
 
 	// Let's get all our indexes.
-	$indexes = $smcFunc['db_list_indexes']($table_name, true);
+	$indexes = smf_db_list_indexes($table_name, true);
 	// Do we already have it?
 	foreach ($indexes as $index)
 	{
@@ -372,7 +372,7 @@ function smf_db_add_index($table_name, $index_info, $parameters = array(), $if_e
 			if ($if_exists != 'update' || $index['type'] == 'primary')
 				return false;
 			else
-				$smcFunc['db_remove_index']($table_name, $index_info['name']);
+				smf_db_remove_index($table_name, $index_info['name']);
 		}
 	}
 
@@ -407,7 +407,7 @@ function smf_db_remove_index($table_name, $index_name, $parameters = array(), $e
 	$table_name = str_replace('{db_prefix}', $db_prefix, $table_name);
 
 	// Better exist!
-	$indexes = $smcFunc['db_list_indexes']($table_name, true);
+	$indexes = smf_db_list_indexes($table_name, true);
 
 	foreach ($indexes as $index)
 	{

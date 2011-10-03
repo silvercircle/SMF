@@ -1138,7 +1138,7 @@ function template_package_list()
 					// Show the mod type?
 					if ($package['type'] != '')
 						echo '
-								<li class="package_section">', $txt['package_type'], ':&nbsp; ', $smcFunc['ucwords']($smcFunc['strtolower']($package['type'])), '</li>';
+								<li class="package_section">', $txt['package_type'], ':&nbsp; ', commonAPI::ucwords(commonAPI::strtolower($package['type'])), '</li>';
 					// Show the version number?
 					if ($package['version'] != '')
 						echo '

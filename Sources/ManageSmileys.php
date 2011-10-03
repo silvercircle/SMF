@@ -540,7 +540,7 @@ function AddSmiley()
 			FROM {db_prefix}smileys
 			WHERE code = {raw:mysql_binary_statement} {string:smiley_code}',
 			array(
-				'mysql_binary_statement' => $smcFunc['db_title'] == 'MySQL' ? 'BINARY' : '',
+				'mysql_binary_statement' => 'BINARY',
 				'smiley_code' => $_POST['smiley_code'],
 			)
 		);
@@ -831,7 +831,7 @@ function EditSmileys()
 						AND id_smiley != {int:current_smiley}'),
 					array(
 						'current_smiley' => $_POST['smiley'],
-						'mysql_binary_type' => $smcFunc['db_title'] == 'MySQL' ? 'BINARY' : '',
+						'mysql_binary_type' => 'BINARY',
 						'smiley_code' => $_POST['smiley_code'],
 					)
 				);

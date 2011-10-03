@@ -148,7 +148,7 @@ function DumpDatabase2()
 				'-- Table structure for table `', $tableName, '`', $crlf,
 				'--', $crlf,
 				$crlf,
-				$smcFunc['db_table_sql']($tableName), ';', $crlf;
+				smf_db_table_sql($tableName), ';', $crlf;
 		}
 
 		// How about the data?
@@ -156,7 +156,7 @@ function DumpDatabase2()
 			continue;
 
 		// Are there any rows in this table?
-		$get_rows = $smcFunc['db_insert_sql']($tableName);
+		$get_rows = smf_db_insert_sql($tableName);
 
 		// No rows to get - skip it.
 		if (empty($get_rows))

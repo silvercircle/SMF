@@ -209,7 +209,7 @@ function MaintainDatabase()
 	global $context, $db_type, $db_character_set, $modSettings, $smcFunc, $txt;
 
 	// Show some conversion options?
-	$context['convert_utf8'] = $db_type == 'mysql' && (!isset($db_character_set) || $db_character_set !== 'utf8' || empty($modSettings['global_character_set']) || $modSettings['global_character_set'] !== 'UTF-8') && version_compare('4.1.2', preg_replace('~\-.+?$~', '', $smcFunc['db_server_info']())) <= 0;
+	$context['convert_utf8'] = $db_type == 'mysql' && (!isset($db_character_set) || $db_character_set !== 'utf8' || empty($modSettings['global_character_set']) || $modSettings['global_character_set'] !== 'UTF-8') && version_compare('4.1.2', preg_replace('~\-.+?$~', '', mysql_get_server_info())) <= 0;
 	$context['convert_entities'] = $db_type == 'mysql' && isset($db_character_set, $modSettings['global_character_set']) && $db_character_set === 'utf8' && $modSettings['global_character_set'] === 'UTF-8';
 
 	if (isset($_GET['done']) && $_GET['done'] == 'convertutf8')
@@ -426,7 +426,7 @@ function ConvertUtf8()
 	if (!isset($_POST['proceed']))
 	{
 		// Character set conversions are only supported as of MySQL 4.1.2.
-		if (version_compare('4.1.2', preg_replace('~\-.+?$~', '', $smcFunc['db_server_info']())) > 0)
+		if (version_compare('4.1.2', preg_replace('~\-.+?$~', '', mysql_get_server_info())) > 0)
 			fatal_lang_error('utf8_db_version_too_low');
 
 		// Use the messages.body column as indicator for the database charset.
@@ -953,7 +953,7 @@ function OptimizeTables()
 	foreach ($tables as $table)
 	{
 		// Optimize the table!  We use backticks here because it might be a custom table.
-		$data_freed = $smcFunc['db_optimize_table']($table['table_name']);
+		$data_freed = smf_db_optimize_table($table['table_name']);
 
 		// Optimizing one sqlite table optimizes them all.
 		if ($db_type == 'sqlite')

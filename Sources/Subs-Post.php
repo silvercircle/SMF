@@ -965,7 +965,7 @@ function sendpm($recipients, $subject, $message, $store_outbox = false, $from = 
 		$request = smf_db_query('
 			SELECT id_member, member_name
 			FROM {db_prefix}members
-			WHERE ' . ($smcFunc['db_case_sensitive'] ? 'LOWER(member_name)' : 'member_name') . ' IN ({array_string:usernames})',
+			WHERE ' . ('member_name') . ' IN ({array_string:usernames})',
 			array(
 				'usernames' => array_keys($usernames),
 			)

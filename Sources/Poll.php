@@ -679,7 +679,7 @@ function EditPoll2()
 
 	// Now we've done all our error checking, let's get the core poll information cleaned... question first.
 	$_POST['question'] = commonAPI::htmlspecialchars($_POST['question']);
-	$_POST['question'] = $smcFunc['truncate']($_POST['question'], 255);
+	$_POST['question'] = commonAPI::truncate($_POST['question'], 255);
 
 	$_POST['poll_hide'] = (int) $_POST['poll_hide'];
 	$_POST['poll_expire'] = isset($_POST['poll_expire']) ? (int) $_POST['poll_expire'] : 0;

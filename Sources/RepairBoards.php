@@ -99,7 +99,7 @@ function RepairBoards()
 		require_once($sourcedir . '/Subs-Boards.php');
 
 		// Get the MySQL version for future reference.
-		$mysql_version = $smcFunc['db_server_info']($db_connection);
+		$mysql_version = mysql_get_server_info($db_connection);
 
 		// Actually do the fix.
 		findForumErrors(true);

@@ -53,7 +53,7 @@ function db_extra_init()
 {
 	global $smcFunc;
 
-	if (!isset($smcFunc['db_backup_table']) || $smcFunc['db_backup_table'] != 'smf_db_backup_table')
+	if (__APICOMPAT__ && (!isset($smcFunc['db_backup_table']) || $smcFunc['db_backup_table'] != 'smf_db_backup_table'))
 		$smcFunc += array(
 			'db_backup_table' => 'smf_db_backup_table',
 			'db_optimize_table' => 'smf_db_optimize_table',
@@ -299,7 +299,7 @@ function smf_db_insert_sql($tableName)
 
 		// Get the fields in this row...
 		$field_list = array();
-		for ($j = 0; $j < $smcFunc['db_num_fields']($result); $j++)
+		for ($j = 0; $j < mysql_num_fields($result); $j++)
 		{
 			// Try to figure out the type of each field. (NULL, number, or 'string'.)
 			if (!isset($row[$j]))
