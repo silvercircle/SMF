@@ -126,7 +126,7 @@ if (!defined('SMF'))
 // Load the $modSettings array.
 function reloadSettings()
 {
-	global $CAPI, $modSettings, $boarddir, $smcFunc, $txt, $db_character_set, $context, $sourcedir;
+	global $modSettings, $boarddir, $smcFunc, $db_character_set, $sourcedir;
 
 	// Most database systems have not set UTF-8 as their default input charset.
 	if (!empty($db_character_set))
@@ -166,9 +166,6 @@ function reloadSettings()
 		if (!empty($modSettings['cache_enable']))
 			cache_put_data('modSettings', $modSettings, 90);
 	}
-
-	// UTF-8 in regular expressions is unsupported on PHP(win) versions < 4.2.3.
-	//$utf8 = (empty($modSettings['global_character_set']) ? $txt['lang_character_set'] : $modSettings['global_character_set']) === 'UTF-8';
 
 	// Set a list of common functions.
 	$ent_list = empty($modSettings['disableEntityCheck']) ? '&(#\d{1,7}|quot|amp|lt|gt|nbsp);' : '&(#021|quot|amp|lt|gt|nbsp);';
@@ -247,6 +244,8 @@ function reloadSettings()
 				$words[$i] = $smcFunc[\'ucfirst\']($words[$i]);
 			return implode(\'\', $words);'),
 	);
+
+	include_once($sourcedir . '/CommonAPI.php');
 
 	// Setting the timezone is a requirement for some functions in PHP >= 5.1.
 	if (isset($modSettings['default_timezone']) && function_exists('date_default_timezone_set'))

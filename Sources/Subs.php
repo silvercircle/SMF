@@ -891,14 +891,12 @@ function un_htmlspecialchars($string)
 // Shorten a subject + internationalization concerns.
 function shorten_subject($subject, $len)
 {
-	global $smcFunc;
-
 	// It was already short enough!
-	if ($smcFunc['strlen']($subject) <= $len)
+	if (commonAPI::strlen($subject) <= $len)
 		return $subject;
 
 	// Shorten it by the length it was too long, and strip off junk from the end.
-	return $smcFunc['substr']($subject, 0, $len) . '...';
+	return commonAPI::substr($subject, 0, $len) . '...';
 }
 
 // The current time with offset.

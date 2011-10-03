@@ -140,8 +140,8 @@ function HandleLikeRequest()
 // todo: check permissions!!
 function TopicPeek()
 {
-	global $context, $CAPI;
-	global $settings, $user_info, $sourcedir, $smcFunc, $board, $memberContext, $scripturl;
+	global $context;
+	global $user_info, $board, $memberContext, $scripturl;
 	
 	$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
 	
@@ -194,13 +194,13 @@ function TopicPeek()
 			$context['preview'] = &$row;
 		
 			// truncate, censor and parse bbc
-			$_b = $smcFunc['substr']($context['preview']['first_body'], 0, 300) . '...';
+			$_b = commonAPI::substr($context['preview']['first_body'], 0, 300) . '...';
 			censorText($_b);
 			$context['preview']['first_body'] = parse_bbc($_b, false);
 			$context['preview']['first_time'] = timeformat($row['first_time']);
 		
 			if($context['member_lastpost']) {
-				$_b = $smcFunc['substr']($context['preview']['last_body'], 0, 600) . '...';
+				$_b = commonAPI::substr($context['preview']['last_body'], 0, 600) . '...';
 				censorText($_b);
 				$context['preview']['last_body'] = parse_bbc($_b, false);
 				$context['preview']['last_time'] = timeformat($row['last_time']);

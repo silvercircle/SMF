@@ -117,7 +117,7 @@ function ManageNews()
  */
 function EditNewsItem()
 {
-	global $txt, $context, $sourcedir, $scripturl, $smcFunc;
+	global $txt, $context, $sourcedir, $scripturl;
 
 	require_once($sourcedir . '/Subs-Post.php');
 	$id_item = isset($_REQUEST['itemid']) ? (int)$_REQUEST['itemid'] : '0';
@@ -126,7 +126,7 @@ function EditNewsItem()
 
 		checkSession();
 
-		$_POST['body'] = $smcFunc['htmlspecialchars']($_POST['body'], ENT_QUOTES);
+		$_POST['body'] = commonAPI::htmlspecialchars($_POST['body'], ENT_QUOTES);
 		if(stripos($_POST['body'], '[more]') !== false)
 			list($teaser, $body) = explode('[more]', $_POST['body']);
 		else {
