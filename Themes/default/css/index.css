@@ -134,14 +134,15 @@ input[type=button], .button_submit, .button_reset {
 	font-family: Verdana, arial, sans-serif;
 	font-weight: bold;
 	text-shadow: white 1px 1px 8px;
-	line-height: 18px !important;
+	line-height: 20px !important;
 	text-decoration: none;
-	padding: 3px 4px;
+	padding: 0 4px;
 	color: #555;
 	background: #d8dfea;
 	border: 1px solid #9bb1db;
 	border-radius: 2px;
 	cursor: pointer;
+	height:20px !important;
 }
 
 input:focus, textarea:focus, select:focus {
@@ -1487,10 +1488,12 @@ ol.commonlist.noshadow {
 }
 ol.category > li > div.lastpost {
 	float: right;
-	min-width: 330px;
-	max-width: 400px;
+	min-width: 350px;
+	max-width: 350px;
 	white-space: nowrap;
 	margin-left: 5px;
+	overflow:hidden;
+	text-overflow:ellipsis;
 }
 
 ol.category > li > div.stats {

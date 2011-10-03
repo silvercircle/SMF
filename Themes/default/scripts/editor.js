@@ -1397,10 +1397,7 @@ smc_SmileyBox.prototype.init = function ()
 
 	// Inject the HTML.
 	setInnerHTML(document.getElementById(this.opt.sContainerDiv), this.opt.sSmileyBoxTemplate.easyReplace({
-		smileyRows: this.oSmileyRowsContent.postform,
-		moreSmileys: this.opt.oSmileyLocations.popup.length == 0 ? '' : this.opt.sMoreSmileysTemplate.easyReplace({
-			moreSmileysId: this.opt.sUniqueId + '_addMoreSmileys'
-		})
+		smileyRows: this.oSmileyRowsContent.postform
 	}));
 
 	// Initialize the smileys.
@@ -1416,36 +1413,32 @@ smc_SmileyBox.prototype.getSmileyRowsContent = function (sLocation)
 
 	this.oSmileyRowsContent[sLocation] = '';
 
-	for (var iSmileyRowIndex = 0, iSmileyRowCount = this.opt.oSmileyLocations[sLocation].length; iSmileyRowIndex < iSmileyRowCount; iSmileyRowIndex++)
+	var sSmileyRowContent = '';
+	for (var iSmileyIndex = 0, iSmileyRowCount = this.opt.oSmileyLocations[sLocation].length; iSmileyIndex < iSmileyRowCount; iSmileyIndex++)
 	{
-		var sSmileyRowContent = '';
-		for (var iSmileyIndex = 0, iSmileyCount = this.opt.oSmileyLocations[sLocation][iSmileyRowIndex].length; iSmileyIndex < iSmileyCount; iSmileyIndex++)
-			sSmileyRowContent += this.opt.sSmileyTemplate.easyReplace({
-				smileySource: this.opt.oSmileyLocations[sLocation][iSmileyRowIndex][iSmileyIndex].sSrc.php_htmlspecialchars(),
-				smileyDescription: this.opt.oSmileyLocations[sLocation][iSmileyRowIndex][iSmileyIndex].sDescription.php_htmlspecialchars(),
-				smileyCode: this.opt.oSmileyLocations[sLocation][iSmileyRowIndex][iSmileyIndex].sCode.php_htmlspecialchars(),
-				smileyId: this.opt.sUniqueId + '_' + sLocation + '_' + iSmileyRowIndex.toString() + '_' + iSmileyIndex.toString()
+		sSmileyRowContent += this.opt.sSmileyTemplate.easyReplace({
+				smileySource: this.opt.oSmileyLocations[sLocation][iSmileyIndex].sSrc.php_htmlspecialchars(),
+				smileyDescription: this.opt.oSmileyLocations[sLocation][iSmileyIndex].sDescription.php_htmlspecialchars(),
+				smileyCode: this.opt.oSmileyLocations[sLocation][iSmileyIndex].sCode.php_htmlspecialchars(),
+				smileyId: this.opt.sUniqueId + '_' + sLocation + '_' + iSmileyIndex.toString() + '_' + iSmileyIndex.toString()
 			});
 
-		this.oSmileyRowsContent[sLocation] += this.opt.sSmileyRowTemplate.easyReplace({
-			smileyRow: sSmileyRowContent
-		});
 	}
+	this.oSmileyRowsContent[sLocation] += this.opt.sSmileyRowTemplate.easyReplace({
+		smileyRow: sSmileyRowContent
+	});
 }
 
 smc_SmileyBox.prototype.initSmileys = function (sLocation, oDocument)
 {
-	for (var iSmileyRowIndex = 0, iSmileyRowCount = this.opt.oSmileyLocations[sLocation].length; iSmileyRowIndex < iSmileyRowCount; iSmileyRowIndex++)
+	for (var iSmileyIndex = 0, iSmileyCount = this.opt.oSmileyLocations[sLocation].length; iSmileyIndex < iSmileyCount; iSmileyIndex++)
 	{
-		for (var iSmileyIndex = 0, iSmileyCount = this.opt.oSmileyLocations[sLocation][iSmileyRowIndex].length; iSmileyIndex < iSmileyCount; iSmileyIndex++)
-		{
-			var oSmiley = oDocument.getElementById(this.opt.sUniqueId + '_' + sLocation + '_' + iSmileyRowIndex.toString() + '_' + iSmileyIndex.toString());
-			oSmiley.instanceRef = this;
-			oSmiley.style.cursor = 'pointer';
-			oSmiley.onclick = function () {
-				this.instanceRef.clickHandler(this);
-				return false;
-			}
+		var oSmiley = oDocument.getElementById(this.opt.sUniqueId + '_' + sLocation + '_' + iSmileyIndex.toString() + '_' + iSmileyIndex.toString());
+		oSmiley.instanceRef = this;
+		oSmiley.style.cursor = 'pointer';
+		oSmiley.onclick = function () {
+			this.instanceRef.clickHandler(this);
+			return false;
 		}
 	}
 }
@@ -1461,7 +1454,7 @@ smc_SmileyBox.prototype.clickHandler = function (oSmileyImg)
 	var sLocation = aMatches[1];
 	var iSmileyRowIndex = aMatches[2];
 	var iSmileyIndex = aMatches[3];
-	var oProperties = this.opt.oSmileyLocations[sLocation][iSmileyRowIndex][iSmileyIndex];
+	var oProperties = this.opt.oSmileyLocations[sLocation][iSmileyIndex];
 
 	if ('sClickHandler' in this.opt)
 		eval(this.opt.sClickHandler + '(oProperties)');

@@ -4229,8 +4229,9 @@ function enqueueThemeScript($key, $script, $footer = true, $default = true)
  * @param int $board  board id or 0
  * @param int $topic  topic id or 0
  * @param int $force_full if set, don't use the shortened versions with a "read more" link.
+ *
  * fetch news for the board index or a specific board or topic.
- * Look at the current user group to determine whether the user
+ * Look at the current user group(s) to determine whether the user
  * is supposed to see the item.
  */
 function fetchNewsItems($board = 0, $topic = 0, $force_full = false)

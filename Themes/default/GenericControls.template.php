@@ -40,34 +40,24 @@ function template_control_richedit($editor_id, $smileyContainer = null, $bbcCont
 					sContainerDiv: ', JavaScriptEscape($smileyContainer), ',
 					sClickHandler: ', JavaScriptEscape('oEditorHandle_' . $editor_id . '.insertSmiley'), ',
 					oSmileyLocations: {
-						postform: [
+						postform:
 						[ ';
 
-			foreach ($context['smileys'] as $location => $smileyRows)
+			foreach ($context['smileys'] as $smileyRows)
 			{
-				//echo '
-				//		', $location, ': [';
 				foreach ($smileyRows as $smileyRow)
 				{
-					//echo '
-					//		[';
 					foreach ($smileyRow['smileys'] as $smiley)
 						echo '
 								{
 									sCode: ', JavaScriptEscape($smiley['code']), ',
 									sSrc: ', JavaScriptEscape($settings['smileys_url'] . '/' . $smiley['filename']), ',
 									sDescription: ', JavaScriptEscape($smiley['description']), '
-								}', empty($smiley['isLast']) ? ',' : ',';
+								}', empty($smiley['isLast']) ? ',' : '';
 
-				//echo '
-				//			]', empty($smileyRow['isLast']) ? ',' : '';
 				}
-				//echo '
-				//		]', $location === 'postform' ? ',' : '';
 			}
 			echo ' ]
-					],
-					popup: [ [ {} ]]
 					},
 					sSmileyBoxTemplate: ', JavaScriptEscape('
 						%smileyRows% %moreSmileys%
@@ -80,30 +70,7 @@ function template_control_richedit($editor_id, $smileyContainer = null, $bbcCont
 					'), ',
 					sMoreSmileysTemplate: ', JavaScriptEscape('
 						<a href="#" id="%moreSmileysId%"></a>
-					'), ',
-					sMoreSmileysLinkId: ', JavaScriptEscape('moreSmileys_' . $editor_id), ',
-					sMoreSmileysPopupTemplate: ', JavaScriptEscape('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-						<html>
-							<head>
-								<title>' . $txt['more_smileys_title'] . '</title>
-								<link rel="stylesheet" type="text/css" href="' . $settings['theme_url'] . '/css/index' . $context['theme_variant'] . '.css?fin20" />
-							</head>
-							<body id="help_popup">
-								<div class="padding windowbg">
-									<div class="cat_bar">
-										<h3 class="catbg">
-											' . $txt['more_smileys_pick'] . '
-										</h3>
-									</div>
-									<div class="padding">
-										%smileyRows%
-									</div>
-									<div class="smalltext centertext">
-										<a href="#" id="%moreSmileysCloseLinkId%">' . $txt['more_smileys_close_window'] . '</a>
-									</div>
-								</div>
-							</body>
-						</html>'), '
+					'), '
 				});';
 		}
 

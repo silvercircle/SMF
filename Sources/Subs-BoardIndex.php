@@ -252,7 +252,7 @@ function getBoardIndex($boardIndexOptions)
 			'prefix' => html_entity_decode($row_board['topic_prefix'])
 		);
 		// shorten subject for last post column, take prefix length into account
-		$row_board['short_subject'] = shorten_subject($row_board['subject'], 40 - ($row_board['id_prefix'] ? 15 : 0));
+		$row_board['short_subject'] = shorten_subject($row_board['subject'], 50);
 		$this_last_post['subject'] = $row_board['short_subject'];
 
 		$this_first_post = array(

@@ -26,7 +26,8 @@ $forum_version = 'SMF 2.0';
 
 // Get everything started up...
 define('SMF', 1);
-define('__APICOMPAT__', 0);			// if set to 1, smcFunc[] will be available like in SMF 2
+define('__APICOMPAT__', 0);			// if set to 1, smcFunc[] will be populated like in SMF 2
+									// todo: make this a admin-only setting (maybe in Settings.php)
 
 if (function_exists('set_magic_quotes_runtime'))
 	@set_magic_quotes_runtime(0);
@@ -53,6 +54,7 @@ if ((empty($cachedir) || !file_exists($cachedir)) && file_exists($boarddir . '/c
 	$cachedir = $boarddir . '/cache';
 
 // And important includes.
+require_once($sourcedir . '/CommonAPI.php');
 require_once($sourcedir . '/QueryString.php');
 require_once($sourcedir . '/Subs.php');
 require_once($sourcedir . '/Errors.php');

@@ -1776,7 +1776,7 @@ function create_control_richedit($editorOptions)
 					$row['filename'] = htmlspecialchars($row['filename']);
 					$row['description'] = htmlspecialchars($row['description']);
 
-					$context['smileys'][empty($row['hidden']) ? 'postform' : 'popup'][$row['smiley_row']]['smileys'][] = $row;
+					$context['smileys']['postform'][$row['smiley_row']]['smileys'][] = $row;
 				}
 				mysql_free_result($request);
 
