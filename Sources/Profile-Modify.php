@@ -320,9 +320,9 @@ function loadProfileFields($force_reload = false)
 			'permission' => 'profile_extra',
 			'enabled' => $modSettings['theme_allow'] || allowedTo('admin_forum'),
 			'preload' => create_function('', '
-				global $smcFunc, $context, $cur_profile, $txt;
+				global $context, $cur_profile, $txt;
 
-				$request = $smcFunc[\'db_query\'](\'\', \'
+				$request = smf_db_query(\'\', \'
 					SELECT value
 					FROM {db_prefix}themes
 					WHERE id_theme = {int:id_theme}
@@ -332,8 +332,8 @@ function loadProfileFields($force_reload = false)
 						\'variable\' => \'name\',
 					)
 				);
-				list ($name) = $smcFunc[\'db_fetch_row\']($request);
-				$smcFunc[\'db_free_result\']($request);
+				list ($name) = mysql_fetch_row($request);
+				mysql_free_result($request);
 
 				$context[\'member\'][\'theme\'] = array(
 					\'id\' => $cur_profile[\'id_theme\'],

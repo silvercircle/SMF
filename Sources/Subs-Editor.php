@@ -1440,7 +1440,7 @@ function create_control_richedit($editorOptions)
 				prompt_text_img: \'' . addcslashes($txt['prompt_text_img'], "'") . '\'
 			}
 		// ]]></script>
-		<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/editor.js?fin20"></script>';
+		<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/editor.js'.$context['jsver'].'"></script>';
 	}
 
 	// Start off the editor...

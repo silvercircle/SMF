@@ -1038,6 +1038,9 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 	else
 		trigger_error('loadMemberData(): Invalid member data set \'' . $set . '\'', E_USER_WARNING);
 
+	if(!empty($modSettings['enableAdvancedHooks']))
+		call_integration_hook('integrate_loadmemberdata', array(&$set, &$select_columns, &$select_tables));
+
 	if (!empty($users))
 	{
 		// Load the member's data.
@@ -1290,6 +1293,9 @@ function loadMemberContext($user, $display_custom_fields = false)
 			);
 		}
 	}
+
+	if(!empty($modSettings['enableAdvancedHooks']))
+		call_integration_hook('integrate_loadmembercontext', array(&$memberContext[$user], &$profile));
 
 	return true;
 }

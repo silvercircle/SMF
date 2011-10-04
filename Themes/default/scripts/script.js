@@ -361,7 +361,8 @@ function replaceText(text, oTextHandle)
 		if (oTextHandle.setSelectionRange)
 		{
 			oTextHandle.focus();
-			var goForward = is_opera ? text.match(/\n/g).length : 0;
+			//var goForward = is_opera ? text.match(/\n/g).length : 0;
+			var goForward = 0;
 			oTextHandle.setSelectionRange(begin.length + text.length + goForward, begin.length + text.length + goForward);
 		}
 		oTextHandle.scrollTop = scrollPos;
@@ -406,7 +407,8 @@ function surroundText(text1, text2, oTextHandle)
 
 		if (oTextHandle.setSelectionRange)
 		{
-			var goForward = is_opera ? text1.match(/\n/g).length : 0, goForwardAll = is_opera ? (text1 + text2).match(/\n/g).length : 0;
+			//var goForward = is_opera ? text1.match(/\n/g).length : 0, goForwardAll = is_opera ? (text1 + text2).match(/\n/g).length : 0;
+			var goForward = 0, goForwardAll = 0;
 			if (selection.length == 0)
 				oTextHandle.setSelectionRange(newCursorPos + text1.length + goForward, newCursorPos + text1.length + goForward);
 			else

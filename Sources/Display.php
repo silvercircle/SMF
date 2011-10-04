@@ -1023,23 +1023,33 @@ function Display()
 		// What?  It's not like it *couldn't* be only guests in this topic...
 		if (!empty($posters))
 			loadMemberData($posters);
-		$messages_request = smf_db_query( '
-			SELECT
-				m.id_msg, m.icon, m.subject, m.poster_time, m.poster_ip, m.id_member, m.modified_time, m.modified_name, m.body, mc.body AS cached_body,
-				m.smileys_enabled, m.poster_name, m.poster_email, m.approved, c.likes_count, c.like_status, c.updated AS like_updated, l.id_user AS liked,
-				m.id_msg_modified < {int:new_from} AS is_read
+
+		$sql_what = '
+			m.id_msg, m.icon, m.subject, m.poster_time, m.poster_ip, m.id_member, m.modified_time, m.modified_name, m.body, mc.body AS cached_body,
+			m.smileys_enabled, m.poster_name, m.poster_email, m.approved, c.likes_count, c.like_status, c.updated AS like_updated, l.id_user AS liked,
+			m.id_msg_modified < {int:new_from} AS is_read';
+
+		$sql_from = '
 			FROM {db_prefix}messages AS m
 			LEFT JOIN {db_prefix}likes AS l ON (l.id_msg = m.id_msg AND l.ctype = 1 AND l.id_user = '.$user_info['id'].')
 			LEFT JOIN {db_prefix}like_cache AS c ON (c.id_msg = m.id_msg AND c.ctype = 1)
-			LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang}
+			LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang}';
+
+		$sql_array = array(
+			'message_list' => $messages,
+			'new_from' => $topicinfo['new_from'],
+			'style' => $user_info['smiley_set_id'],
+			'lang' => $user_info['language_id'],
+		);
+
+		if(!empty($modSettings['enableAdvancedHooks']))
+			call_integration_hook('integrate_messagerequest', array(&$sql_what, &$sql_from, &$sql_array));
+
+		$messages_request = smf_db_query('
+			SELECT ' . $sql_what . ' ' . $sql_from . '
 			WHERE m.id_msg IN ({array_int:message_list})
 			ORDER BY m.id_msg' . (empty($options['view_newest_first']) ? '' : ' DESC'),
-			array(
-				'message_list' => $messages,
-				'new_from' => $topicinfo['new_from'],
-				'style' => $user_info['smiley_set_id'],
-				'lang' => $user_info['language_id'],
-			)
+			$sql_array
 		);
 
 		// Go to the last message if the given time is beyond the time of the last message.
