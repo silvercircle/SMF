@@ -1535,6 +1535,9 @@ function loadAllPermissions($loadType = 'classic')
 			'like_see' => array(false, 'like', 'like'),
 			'like_give' => array(false, 'like', 'like'),
 			'use_share' => array(false, 'share', 'share'),
+            'see_hidden1' => array(false, 'hide', 'hide'),
+            'see_hidden2' => array(false, 'hide', 'hide'),
+            'see_hidden3' => array(false, 'hide', 'hide'),
 		),
 	);
 

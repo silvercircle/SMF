@@ -25,7 +25,7 @@ function template_main()
 
 	echo '
 		<div class="inlinePopup centertext dark" style="display:none;position:fixed;" id="interpostlink_helper">
-		<div class="cat_bar2">
+		<div class="cat_bar2 norounded">
 		<h3>Quick post link</h3>
 		</div>
 		<div class="flat_container lefttext smalltext">

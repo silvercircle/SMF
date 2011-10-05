@@ -375,4 +375,11 @@ $txt['permissionhelp_drafts_allow'] = 'A user can save a draft when posting new 
 
 $txt['permissionname_drafts_autosave_allow'] = 'Can save drafts automatically';
 $txt['permissionhelp_drafts_autosave_allow'] = 'The user\'s drafts will be saved automatically if this feature has been enabled in the admin area. Be aware that this can consume a considerable amount of server load and bandwith. Use with care, especially make sure to set the time interval to a reasonable value.';
+
+$txt['permissiongroup_hide'] = 'See hidden content';
+$txt['permissiongroup_simple_hide'] = 'See hidden content';
+$txt['permissionname_see_hidden1'] = "Can see level 1 hidden content";
+$txt['permissionname_see_hidden2'] = "Can see level 2 hidden content";
+$txt['permissionname_see_hidden3'] = "Can see level 3 hidden content";
+
 ?>

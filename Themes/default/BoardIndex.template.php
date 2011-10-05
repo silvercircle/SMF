@@ -74,11 +74,7 @@ function template_main()
 				<div class="centertext">',$txt['board'],'</div>
 			</li>
 			';
-			/* Each board in each category's boards has:
-			new (is it new?), id, name, description, moderators (see below), link_moderators (just a list.),
-			children (see below.), link_children (easier to use.), children_new (are they new?),
-			topics (# of), posts (# of), link, href, and last_post. (see below.) */
-			$alternate = 1;
+			$context['alternate'] = 1;
 			foreach ($category['boards'] as &$board)
 				template_boardbit($board);
 		echo '

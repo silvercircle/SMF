@@ -45,8 +45,8 @@ function template_main()
 		template_create_collapsible_container($collapser);
 		echo '<ol id="board_', $context['current_board'], '_children" class="commonlist category">';
 
-		$alternate = 1;
-		foreach ($context['boards'] as $board)
+		$context['alternate'] = 1;
+		foreach ($context['boards'] as &$board)
 			template_boardbit($board);
 		echo '
 			</ol>

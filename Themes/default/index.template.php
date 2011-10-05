@@ -37,7 +37,7 @@ function template_html_above()
 <head>';
 	echo '
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css',$context['jsver'],'" />
-    <link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/secondary', $context['theme_variant'], '.css',$context['jsver'],'" />';
+    <link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/secondary', $context['theme_variant'], '.css" />';
 
 	// Some browsers need an extra stylesheet due to bugs/compatibility issues.
 	//foreach (array('ie7', 'ie6', 'webkit') as $cssfix)

@@ -16,7 +16,7 @@ function template_main()
 
 	echo '
 		<div class="inlinePopup centertext dark" style="display:none;position:fixed;" id="interpostlink_helper">
-		<div class="cat_bar2">
+		<div class="cat_bar2 norounded">
 		<h3>Quick post link</h3>
 		</div>
 		<div class="flat_container lefttext smalltext">
@@ -190,7 +190,7 @@ function template_main()
 	echo '
 			<div class="pagesection top">
 				<div class="nextlinks">', $context['previous_next'], '</div>', template_button_strip($normal_buttons, 'right');
-				echo '<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . ' &nbsp;&nbsp;<a href="#lastPost"><strong>' . $txt['go_down'] . '</strong></a>' : '', '</div>
+				echo '<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], $context['menu_separator'] . ' &nbsp;&nbsp;<a class="navPages topdown" href="#lastPost">' . $txt['go_down'] . '</a></div>
 			</div>';
 
 	// Show the topic information - icon, subject, etc.

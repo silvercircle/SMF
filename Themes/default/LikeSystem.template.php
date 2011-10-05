@@ -28,6 +28,7 @@ function template_getlikes()
 		<div class="floatright smalltext">', $like['dateline'], '</div>';
 		template_userbit_compact($like['member']);
 		echo '
+		<div class="clear"></div>
 		</li>';
 	}
 	echo '

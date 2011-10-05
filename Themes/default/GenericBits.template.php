@@ -14,10 +14,9 @@
 // todo: use this for subscribed boards as well
 function template_boardbit(&$board)
 {
-	global $alternate;
-	global $context, $settings, $options, $txt, $scripturl, $modSettings;
+	global $context, $txt, $scripturl, $modSettings, $settings;
 	
-	$_c = ($alternate = !$alternate) ? 'windowbg' : 'windowbg2';
+	$_c = ($context['alternate'] = !$context['alternate']) ? 'windowbg' : 'windowbg2';
 	echo '
 	<li id="board_', $board['id'], '" class="',$_c,'">';
 	if(!$board['is_page']) {

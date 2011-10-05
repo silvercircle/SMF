@@ -1,5 +1,5 @@
 a:link, a:visited {
-	color: #0066aa;
+	color: #666;
 	text-decoration: none;
 }
 a:hover {
@@ -144,11 +144,9 @@ input[type=button], .button_submit, .button_reset {
 input:focus, textarea:focus, select:focus {
 	border: 1px solid orange;
 }
-
 .button_submit:hover, .button_reset:hover, button:hover, input[type=button]:hover {
 	background-color: #eee;
 }
-
 /* Add some padding to the options instead. */
 select option {
 	padding: 0;
@@ -552,21 +550,21 @@ span.xtag:hover {
 
 /* Sticky topics get a different background */
 .stickybg {
-	background: #fff5e5;
+	background: rgba(100, 255, 226, 0.11);
 }
 
 .stickybg2 {
-	background: #fff5e5;
+	background: rgba(100, 255, 226, 0.11);
 }
 
 /* Locked posts get a different shade, too! */
 .lockedbg {
-	background: #e4ecf2;
+	background: rgba(240, 110, 20, 0.15);
 	font-style: italic;
 }
 
 .lockedbg2 {
-	background: #e8f1f7;
+	background: rgba(240, 110, 20, 0.15);
 	font-style: italic;
 }
 
@@ -1249,7 +1247,7 @@ h1.bigheader, div.bigheader {
 }
 
 h1.bigheader.secondary, div.spoiler.head {
-	font-size: 13px;
+	font-size: 12px;
 	font-weight:normal;
 	border-bottom: 1px solid #ccc;
 	color: #88c;
@@ -1258,7 +1256,8 @@ h1.bigheader.secondary, div.spoiler.head {
 div.spoiler.head {
 	border-bottom:0;
 	cursor:pointer;
-	margin-top:10px;
+	font-weight:bold;
+	background: transparent url(../images/theme/sprite.png) 0 -455px no-repeat;
 }
 div.spoiler.content {
 	padding:5px;
@@ -1490,7 +1489,7 @@ ol.commonlist {
 }
 
 ol.commonlist > li {
-	padding: 4px 2px 4px 8px;
+	padding: 4px 8px 4px 8px;
 	border-bottom: 1px solid #d5ecfa;
 	border-top: 0;
 	line-height: 130%;
@@ -1560,11 +1559,13 @@ ol.category > li > div.info {
 }
 
 ol.category > li > div.info h3 {
-	color: #0066aa;
 	display: inline;
 	font-size: 110%;
 }
 
+ol.category > li > div.info a {
+	color: #777;
+}
 /* the posting icons */
 #posting_icons {
 	padding: 0 1em 0.5em 1em;
@@ -1971,17 +1972,18 @@ ul.quickbuttons_linkstyle li a {
 ul.quickbuttons li a, .buttonlist ul li a, span.button {
 	font-size: 10px !important;
 	font-family: Verdana, arial, sans-serif;
-	font-weight: bold;
-	text-shadow: 0 0 0 rgb(0,0,0,0), 1px 1px 8px white;
+	text-shadow: 1px 1px 1px #fff;
 	float: left;
 	line-height: 18px !important;
 	text-decoration: none;
 	padding: 0 4px;
-	color: #555;
-	background: #d8dfea;
-	border: 1px solid #9bb1db;
+	color: #777;
+	font-weight:bold;
+	background: #d6dde8;
+	border: 1px solid #ccc;
 	border-radius: 2px;
 	cursor: pointer;
+	background: #E2E2E2 url(../images/theme/sprite.png) 0 -118px repeat-x;
 }
 
 span.button {
@@ -2025,8 +2027,6 @@ ul.quickbuttons li a:hover, span.button:hover, .buttonlist ul li a:hover {
 
 /* the active one */
 .buttonlist ul li a.active {
-	background-color: #a8aFbA !important;
-	color: white;
 	font-weight: bold;
 }
 
@@ -2718,7 +2718,9 @@ table.topic_table td {
 	width: 100%;
 	font-size: 1.0em;
 }
-
+.topic_table td.subject a {
+	color:#666;
+}
 .topic_table span.tpeek {
 	font-size: 1.1em;
 }
@@ -3659,13 +3661,26 @@ span.arrow {
 
 /* page links (navpages) */
 
-a.navPages {
-	padding: 0 4px;
-	border: 1px solid #ffcaca;
-	border-radius: 3px;
-	background-color: #fff2f2;
+a.navPages, .pagelinks span.current {
+	display:inline-block;
+	padding: 0;
+	border: 1px solid #aaa;
+	background-color: #eee;
+	height:15px;
+	line-height:15px;
+	text-align:center;
+	margin:0;
+	white-space:nowrap;
+	font-size:11px;
+	padding:0 4px;
 }
-
+.pagelinks span.current {
+	background-color:#ccc;
+	border:1px solid #888;
+}
+a.navPages.topdown {
+	width:auto !important;
+}
 span.small_avatar img, li.medium_avatar img {
 	height: 32px;
 	width: 32px;
