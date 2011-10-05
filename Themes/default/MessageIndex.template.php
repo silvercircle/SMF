@@ -34,6 +34,8 @@ function template_main()
 		echo '
 	<div class="smalltext">', $context['description'], '</div>';
 
+	//$foo = array('id' => 'testselector');
+	//template_create_dropselector($foo);
 	if (!empty($context['boards']) && (!empty($options['show_children']) || $context['start'] == 0))
 	{
 		$collapser = array('id' => $context['current_board'] . '_childboards',

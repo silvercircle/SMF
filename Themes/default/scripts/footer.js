@@ -1395,7 +1395,16 @@ jQuery(document).ready(function() {
 		$('abbr.timeago').timeago();
 		
 	if($('#socialshareprivacy'))
-    	$('#socialshareprivacy').socialSharePrivacy(); 
+    	$('#socialshareprivacy').socialSharePrivacy();
+
+	$('div.spoiler.head').click(function() {
+        var content = $(this).next();
+		if(content.css('display') != 'none')
+			content.hide();
+		else
+			content.show();
+        return(false);
+	});
 });
 
 /*
@@ -1484,15 +1493,11 @@ function catCollapse(el)
 	var src = img.attr('src');
 	if(is_collapsed) {
 		$(id).fadeIn();
-		//var dest = src.replace('expand.gif', 'collapse.gif');
-		//img.attr('src', dest);
 		img.removeClass('_expand');
 		img.addClass('_collapse');
 	}
 	else {
 		$(id).fadeOut();
-		//var dest = src.replace('collapse.gif', 'expand.gif');
-		//img.attr('src', dest);
 		img.removeClass('_collapse');
 		img.addClass('_expand');
 	}
@@ -1600,8 +1605,11 @@ function openResult(html, width)
 {
 	var el = $('#mcard');
 
+	var windowheight = $(window).height();
 	$('#wrap').css('opacity', '0.6');
 	$('#mcard_inner').html(html);
+	if($('#mcard_content'))
+		$('#mcard_content').css({'max-height': windowheight * 0.8 + 'px', 'overflow': 'auto'});
 	el.css('width', width > 0 ? width + 'px' : 'auto');
    	el.css("position",'fixed');
 	el.css("top", (($(window).height() - el.outerHeight()) / 2) + "px");

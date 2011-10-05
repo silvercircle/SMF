@@ -23,7 +23,6 @@ function template_init()
 
 	/*This should probably be the version of SMF it was created for. */
 	$settings['theme_version'] = '2.0';
-	$context['jsver'] = '?v=1473';
 }
 
 // The main sub template above the content.
@@ -37,7 +36,8 @@ function template_html_above()
 <html id="_S_" lang="en-US">
 <head>';
 	echo '
-	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css',$context['jsver'],'" />';
+	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css',$context['jsver'],'" />
+    <link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/secondary', $context['theme_variant'], '.css',$context['jsver'],'" />';
 
 	// Some browsers need an extra stylesheet due to bugs/compatibility issues.
 	//foreach (array('ie7', 'ie6', 'webkit') as $cssfix)
@@ -88,7 +88,7 @@ function template_html_above()
 	var t2 = document.createElement(\'SCRIPT\');
 	t2.type = "text/javascript";
 	t2.async = true;
-	t2.src = "',$settings['theme_url'],'/scripts/min/footer.js',$context['jsver'],'";
+	t2.src = "',$settings['theme_url'],'/scripts/footer.js',$context['jsver'],'";
 	anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
 	</script>';
@@ -809,6 +809,48 @@ function template_create_collapsible_container(array &$_c)
 		';
 }
 
+function template_create_dropselector(&$_c)
+{
+	$id = $_c['id'];
+	echo '
+	<div class="dropselect">
+	<div class="downarrow" id="',$id,'">
+	</div>
+	TESTING
+	<div class="dropselect_content left" id="',$id,'_content">';
+	if(isset($_c['content']))
+		echo $_c['content'];
+	elseif(isset($_c['items'])) {
+	echo '
+	<ol class="commonlist">';
+	foreach($_c['items'] as $item)
+		echo '
+		<li>
+		 ',$item['html'],'
+		</li>';
+	echo '
+	</ol>';
+	}
+	echo '
+	</div>
+	</div>';
+	if(!isset($context['footer_script_fragments']['dropselector'])) {
+		$script = '
+	$("div.downarrow").hover(function() {
+		var id = $(this).attr("id");
+		$("#" + id + "_content").show();
+	},
+	function() {
+
+	});
+	$("div.dropselect_content").live("mouseleave", function(event) {
+		$(this).hide();
+	});
+	';
+		registerFooterScriptFragment('dropselector', $script);
+	}
+}
+
 function template_footer_scripts()
 {
 	global $context, $settings;
@@ -825,6 +867,13 @@ function template_footer_scripts()
 	<script type="text/javascript">
 	<!-- // --><![CDATA[
 	',$context['inline_footer_script'],'
+
+	';
+	if(isset($context['footer_script_fragments'])) {
+		foreach($context['footer_script_fragments'] as $this_script)
+			echo $this_script;
+	}
+	echo '
 	// ]]>
 	</script>
 	';

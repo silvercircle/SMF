@@ -47,7 +47,7 @@ class commonAPI {
 	public static function substr($string, $start, $length = 0)
 	{
 		$ent_arr = preg_split('~(&#' . ('\d{1,7}') . ';|&quot;|&amp;|&lt;|&gt;|&nbsp;|.)~u', self::ent_check($string), -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
-		return $length === null ? implode('', array_slice($ent_arr, $start)) : implode('', array_slice($ent_arr, $start, $length));
+		return $length == 0 ? implode('', array_slice($ent_arr, $start)) : implode('', array_slice($ent_arr, $start, $length));
 	}
 
 	public static function strtolower($string)

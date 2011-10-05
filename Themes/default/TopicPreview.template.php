@@ -8,7 +8,7 @@ function template_main()
 			<div class="title_bar">
 				<h1>',$context['preview']['first_subject'],'</h1>
 			</div>
-			<div class="smallpadding">';
+			<div class="smallpadding" id="mcard_content">';
 		echo '
 			<div class="orange_container" style="padding:3px;margin-bottom:3px;"><strong>',$txt['started_by'], ': ', $context['member_started']['name'], ', ', $context['preview']['first_time'],'</strong></div>';
 		echo '

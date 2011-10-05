@@ -137,7 +137,7 @@ function reloadSettings()
 		);
 
 	// Try to load it from the cache first; it'll never get cached if the setting is off.
-	if (($modSettings = cache_get_data('modSettings', 90)) == null)
+	if (($modSettings = cache_get_data('modSettings', 360)) == null)
 	{
 		$request = smf_db_query( '
 			SELECT variable, value
@@ -164,7 +164,7 @@ function reloadSettings()
 			$modSettings['max_messageLength'] = 1024 * 1024;	// hard post length limit, 1M *should* be more than ever needed
 			
 		if (!empty($modSettings['cache_enable']))
-			cache_put_data('modSettings', $modSettings, 90);
+			cache_put_data('modSettings', $modSettings, 360);
 	}
 
 	if(__APICOMPAT__) {
@@ -216,6 +216,7 @@ function reloadSettings()
 			'substr' => create_function('$string, $start, $length = null', '
 				global $smcFunc;
 				$ent_arr = preg_split(\'~(&#' . (empty($modSettings['disableEntityCheck']) ? '\d{1,7}' : '021') . ';|&quot;|&amp;|&lt;|&gt;|&nbsp;|.)~' . 'u' . '\', ' . implode('$string', $ent_check) . ', -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+				var_dump($ent_arr);
 				return $length === null ? implode(\'\', array_slice($ent_arr, $start)) : implode(\'\', array_slice($ent_arr, $start, $length));'),
 			'strtolower' => (function_exists('mb_strtolower') ? create_function('$string', '
 				return mb_strtolower($string, \'UTF-8\');') : create_function('$string', '
@@ -1605,7 +1606,7 @@ function loadTheme($id_theme = 0, $initialize = true)
 	// This determines the server... not used in many places, except for login fixing.
 	$context['server'] = array(
 		'is_iis' => isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false,
-		'is_apache' => isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false,
+		'is_apache' => isset($_SERVER['SERVER_SOFTWARE']) && (strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false || strpos($_SERVER['SERVER_SOFTWARE'], 'LiteSpeed') !== false),
 		'is_lighttpd' => isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'lighttpd') !== false,
 		'is_nginx' => isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'], 'nginx') !== false,
 		'is_cgi' => isset($_SERVER['SERVER_SOFTWARE']) && strpos(php_sapi_name(), 'cgi') !== false,
@@ -1837,10 +1838,6 @@ function loadTemplate($template_name, $style_sheets = array(), $fatal = true)
 
 	if ($loaded)
 	{
-		// For compatibility reasons, if this is the index template without new functions, include compatible stuff.
-		//if (substr($template_name, 0, 5) == 'index' && !function_exists('template_button_strip'))
-		//	loadTemplate('Compat');
-
 		if ($db_show_debug === true)
 			$context['debug']['templates'][] = $template_name . ' (' . basename($template_dir) . ')';
 
@@ -2428,8 +2425,6 @@ function sessionClose()
 
 function sessionRead($session_id)
 {
-	global $smcFunc;
-
 	if (preg_match('~^[A-Za-z0-9,-]{16,32}$~', $session_id) == 0)
 		return false;
 
@@ -2451,8 +2446,6 @@ function sessionRead($session_id)
 
 function sessionWrite($session_id, $data)
 {
-	global $smcFunc;
-
 	if (preg_match('~^[A-Za-z0-9,-]{16,32}$~', $session_id) == 0)
 		return false;
 
@@ -2499,7 +2492,7 @@ function sessionDestroy($session_id)
 
 function sessionGC($max_lifetime)
 {
-	global $modSettings, $smcFunc;
+	global $modSettings;
 
 	// Just set to the default or lower?  Ignore it for a higher value. (hopefully)
 	if (!empty($modSettings['databaseSession_lifetime']) && ($max_lifetime <= 1440 || $modSettings['databaseSession_lifetime'] > $max_lifetime))
@@ -2652,7 +2645,7 @@ function cache_put_data($key, $value, $ttl = 120)
 
 function cache_get_data($key, $ttl = 120)
 {
-	global $boardurl, $sourcedir, $modSettings, $memcached;
+	global $modSettings, $memcached;
 	global $cache_hits, $cache_count, $db_show_debug, $cachedir, $__basekey;
 
 	if (empty($modSettings['cache_enable']) && !empty($modSettings))

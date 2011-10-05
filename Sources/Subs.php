@@ -1500,6 +1500,11 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				),
 			),
 			array(
+				'tag' => 'spoiler',
+				'before' => '<div class="spoiler head">Spoiler (click to toggle text visibility)</div><div class="spoiler content" style="display:none">',
+				'after' => '</div>',
+			),
+			array(
 				'tag' => 'sub',
 				'before' => '<sub>',
 				'after' => '</sub>',
@@ -4195,9 +4200,9 @@ function remove_integration_function($hook, $function)
 	$modSettings[$hook] = implode(',', $functions);
 }
 
-function normalizeCommaDelimitedList($b)
+function normalizeCommaDelimitedList($b, $sep = ',', $join = ',')
 {
-	$_b = explode(',', $b);
+	$_b = explode($sep, $b);
 	$bnew = array();
 
 	foreach($_b as $board) {
@@ -4205,7 +4210,7 @@ function normalizeCommaDelimitedList($b)
 		if($btemp)
 			array_push($bnew, $btemp);
 	}
-	return(implode(',', $bnew));
+	return(implode($join, $bnew));
 }
 
 function getCachedPost(&$message)
@@ -4218,6 +4223,14 @@ function getCachedPost(&$message)
 		$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
 }
 
+/**
+ * @param $key			string unique key
+ * @param $script		string path to script file - relative to theme root URL
+ * @param bool $footer	int output in footer?
+ * @param bool $default int use the default theme path?
+ *
+ * register a piece of external javascript.
+ */
 function enqueueThemeScript($key, $script, $footer = true, $default = true)
 {
 	global $context;
@@ -4225,6 +4238,22 @@ function enqueueThemeScript($key, $script, $footer = true, $default = true)
 	$context['theme_scripts'][$key] = array('name' => $script, 'default' => $default, 'footer' => $footer);
 }
 
+/**
+ * @param $key		string unique key
+ * @param $script	string javascript code
+ *
+ * register a javascript code fragment that will be part of the inline
+ * footer script block.
+ */
+function registerFooterScriptFragment($key, $script)
+{
+	global $context;
+
+	if(isset($context['footer_script_fragments'][$key]))
+		return;
+
+	$context['footer_script_fragments'][$key] = $script;
+}
 /**
  * @param int $board  board id or 0
  * @param int $topic  topic id or 0
