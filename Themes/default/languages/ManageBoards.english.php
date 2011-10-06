@@ -101,6 +101,8 @@ $txt['board_act_as_cat_desc'] = 'If this is checked, the board will act as a sub
 $txt['board_is_pageboard'] = 'Board is used for serving pages';
 $txt['board_is_pageboard_desc'] = 'Board is used for serving pages';
 
+$txt['mboards_desc'] = 'Description';
+$txt['mboards_desc_desc'] = 'Description for this category';
 $txt['tidy_child_display_columns'] = 'Number of columns to use for displaying child boards.';
 $txt['child_board_desc_shortened'] = 'Shorten description of child boards to that many characters (set to 0 to display descriptions at full length)';
 ?>

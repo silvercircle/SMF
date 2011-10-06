@@ -91,9 +91,9 @@ function Post()
 	loadLanguage('Tagging');
 	$context['tagging_ui'] = '';
 
-    $context['can_see_hidden_level1'] = allowedTo('see_hidden1');
-    $context['can_see_hidden_level2'] = allowedTo('see_hidden2');
-    $context['can_see_hidden_level2'] = allowedTo('see_hidden2');
+	$context['can_see_hidden_level1'] = allowedTo('see_hidden1');
+	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
+	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
 
 	if(in_array('dr', $context['admin_features'])) {
 		require_once($sourcedir . '/Subs-Drafts.php');
@@ -597,7 +597,7 @@ function Post()
 
 			// Do all bulletin board code tags, with or without smileys.
 			$context['preview_message'] = parse_bbc($context['preview_message'], isset($_REQUEST['ns']) ? 0 : 1);
-            parse_bbc_stage2($context['preview_message']);
+			parse_bbc_stage2($context['preview_message']);
 
 			if ($form_subject != '')
 			{
@@ -888,7 +888,7 @@ function Post()
 
 			// Censor the message and subject.
 			censorText($form_message);
-            parse_bbc_stage2($form_message, true);
+			parse_bbc_stage2($form_message, true);
 			censorText($form_subject);
 
 			// But if it's in HTML world, turn them into htmlspecialchar's so they can be edited!
@@ -2799,9 +2799,9 @@ function QuoteFast()
 
     $board = $row['id_board'];
 
-    $context['can_see_hidden_level1'] = allowedTo('see_hidden1');
-    $context['can_see_hidden_level2'] = allowedTo('see_hidden2');
-    $context['can_see_hidden_level2'] = allowedTo('see_hidden2');
+	$context['can_see_hidden_level1'] = allowedTo('see_hidden1');
+	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
+	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
 
 	// quick modify, attempt to find existing drafts and load them
 	if(!$context['close_window'] && isset($_REQUEST['modify']) && !$user_info['is_guest'] && in_array('dr', $context['admin_features']) && allowedTo('drafts_allow', $row['id_board']) && !empty($options['use_drafts'])) {
@@ -2840,7 +2840,7 @@ function QuoteFast()
 				'body' => $row['body'],
 				'subject' => addcslashes($row['subject'], '"'),
 			);
-            parse_bbc_stage2($context['message']['body'], true);
+			parse_bbc_stage2($context['message']['body'], true);
 			return;
 		}
 

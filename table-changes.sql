@@ -201,6 +201,9 @@ ALTER TABLE {$db_prefix}topics ADD id_prefix smallint(5) unsigned NOT NULL defau
 # highest bit (0x80) indicates a sticky post, bits 0-7 (id_layout & 0x7f) are the layout id
 ALTER TABLE {$db_prefix}topics ADD id_layout tinyint(3) NOT NULL default '0';
 
+# description for categories
+ALTER TABLE {$db_prefix}categories ADD description varchar(300) NOT NULL default '' AFTER name;
+
 # no longer supported, but might be a good idea to leave in the db...
 ALTER TABLE {$db_prefix}members DROP aim;
 ALTER TABLE {$db_prefix}members DROP yim;

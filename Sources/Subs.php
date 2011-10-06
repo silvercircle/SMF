@@ -2443,29 +2443,30 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
  */
 function parse_bbc_stage2(&$message, $is_for_editor = false)
 {
-    global $context, $txt;
+	global $context, $txt;
 
-    if(stripos($message, '[hide lev')) {
-        $allowed_level[1] = isset($context['can_see_hidden_level1']) ? $context['can_see_hidden_level1'] : 0;
-        $allowed_level[2] = isset($context['can_see_hidden_level2']) ? $context['can_see_hidden_level2'] : 0;
-        $allowed_level[3] = isset($context['can_see_hidden_level3']) ? $context['can_see_hidden_level3'] : 0;
+	if (stripos($message, '[hide lev')) {
+		$allowed_level[1] = isset($context['can_see_hidden_level1']) ? $context['can_see_hidden_level1'] : 0;
+		$allowed_level[2] = isset($context['can_see_hidden_level2']) ? $context['can_see_hidden_level2'] : 0;
+		$allowed_level[3] = isset($context['can_see_hidden_level3']) ? $context['can_see_hidden_level3'] : 0;
 
-        $matches = array();
-        $results = preg_match_all('~\s*\[hide level=([1-3])\](.*)\[/hide\]~iU', $message, $matches, PREG_SET_ORDER);
-        if($results > 0) {
-            foreach($matches as $match) {
-                if(isset($context['hide_all_hidden']))      // this is for recent posts, search results and such...
-                    $message = str_replace($match[0], '<div class="spoiler content">'.$txt['hidden_not_visible'].'</div>', $message);
-                else {
-                    if($allowed_level[(int)$match[1]] && !$is_for_editor)
-                        $message = str_replace($match[0], '<div class="spoiler head">'.$txt['hidden_show_content'].'</div><div class="spoiler content" style="display:none;">'. $match[2] . '</div>', $message);
-                    elseif(!$allowed_level[(int)$match[1]])
-                        $message = str_replace($match[0], $is_for_editor ? '' : '<div class="spoiler head">'.$txt['hidden_'.trim($match[1]).'_no_access'].'</div><div></div>', $message);
-                }
-            }
-        }
-    }
+		$matches = array();
+		$results = preg_match_all('~\s*\[hide level=([1-3])\](.*)\[/hide\]~iU', $message, $matches, PREG_SET_ORDER);
+		if ($results > 0) {
+			foreach ($matches as $match) {
+				if (isset($context['hide_all_hidden'])) // this is for recent posts, search results and such...
+					$message = str_replace($match[0], '<div class="spoiler content">' . $txt['hidden_not_visible'] . '</div>', $message);
+				else {
+					if ($allowed_level[(int)$match[1]] && !$is_for_editor)
+						$message = str_replace($match[0], '<div class="spoiler head">' . $txt['hidden_show_content'] . '</div><div class="spoiler content" style="display:none;">' . $match[2] . '</div>', $message);
+					elseif (!$allowed_level[(int)$match[1]])
+						$message = str_replace($match[0], $is_for_editor ? '' : '<div class="spoiler head">' . $txt['hidden_' . trim($match[1]) . '_no_access'] . '</div><div></div>', $message);
+				}
+			}
+		}
+	}
 }
+
 // Parse smileys in the passed message.
 function parsesmileys(&$message)
 {
@@ -4251,11 +4252,11 @@ function getCachedPost(&$message)
 	
 	if(!empty($modSettings['use_post_cache']) && !empty($message['cached_body'])) {
 		$message['body'] = $message['cached_body'];
-        parse_bbc_stage2($message['body']);
+		parse_bbc_stage2($message['body']);
     }
 	else {
 		$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
-        parse_bbc_stage2($message['body']);
+		parse_bbc_stage2($message['body']);
     }
 }
 

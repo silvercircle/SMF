@@ -104,6 +104,12 @@ function modifyCategory($category_id, $catOptions)
 		$catParameters['cat_name'] = $catOptions['cat_name'];
 	}
 
+	if (isset($catOptions['cat_desc']))
+	{
+		$catUpdates[] = 'description = {string:cat_desc}';
+		$catParameters['cat_desc'] = $catOptions['cat_desc'];
+	}
+
 	// Can a user collapse this category or is it too important?
 	if (isset($catOptions['is_collapsible']))
 	{
@@ -152,9 +158,10 @@ function createCategory($catOptions)
 		'{db_prefix}categories',
 		array(
 			'name' => 'string-48',
+			'description' => 'string-200',
 		),
 		array(
-			$catOptions['cat_name'],
+			$catOptions['cat_name'], $catOptions['cat_desc'],
 		),
 		array('id_cat')
 	);

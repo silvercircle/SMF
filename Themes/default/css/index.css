@@ -1,5 +1,5 @@
 a:link, a:visited {
-	color: #666;
+	color: #669;
 	text-decoration: none;
 }
 a:hover {
@@ -2649,7 +2649,15 @@ tr.titlebg td {
 	text-shadow: black 2px 2px 3px;
 	height:24px;
 }
-
+li.cat_desc {
+	background-color:#EFF0F2;
+	padding:0 5px 2px 5px;
+}
+li.cat_desc > h3 {
+	color:#666;
+	text-shadow:1px 1px 1px white;
+	font-size:0.9em;
+}
 #mcard .title_bar {
 	background: #377AD8 url(../images/theme/sprite.png) 0 -839px repeat-x;
 	padding: 3px 9px;

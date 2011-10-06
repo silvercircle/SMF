@@ -1161,9 +1161,9 @@ function Display()
 	$context['can_restore_topic'] &= !empty($modSettings['recycle_enable']) && $modSettings['recycle_board'] == $board && !empty($topicinfo['id_previous_board']);
 	$context['can_restore_msg'] &= !empty($modSettings['recycle_enable']) && $modSettings['recycle_board'] == $board && !empty($topicinfo['id_previous_topic']);
 
-    $context['can_see_hidden_level1'] = allowedTo('see_hidden1');
-    $context['can_see_hidden_level2'] = allowedTo('see_hidden2');
-    $context['can_see_hidden_level2'] = allowedTo('see_hidden2');
+	$context['can_see_hidden_level1'] = allowedTo('see_hidden1');
+	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
+	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
 	// Wireless shows a "more" if you can do anything special.
 	if (WIRELESS && WIRELESS_PROTOCOL != 'wap')
 	{
@@ -1260,16 +1260,16 @@ function prepareDisplayContext($reset = false)
 				array('id_msg' => 'int', 'body' => 'string', 'style' => 'string', 'lang' => 'string', 'updated' => 'int'),
 				array($message['id_msg'], $message['body'], $user_info['smiley_set_id'], $user_info['language_id'], $dateline),
 				array('id_msg', 'body', 'style', 'lang', 'updated'));
-            parse_bbc_stage2($message['body']);
+			parse_bbc_stage2($message['body']);
 		}
 		else {
 			$message['body'] = $message['cached_body'];
-            parse_bbc_stage2($message['body']);
+			parse_bbc_stage2($message['body']);
         }
 	}
 	else {
 		$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
-        parse_bbc_stage2($message['body']);
+		parse_bbc_stage2($message['body']);
     }
 
 	censorText($message['body']);

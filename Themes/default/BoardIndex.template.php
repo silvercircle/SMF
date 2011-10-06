@@ -62,12 +62,18 @@ function template_main()
 			  	</h2>
 		      </div>
 			</div>';
-
 		// Assuming the category hasn't been collapsed...
 		//if (!$category['is_collapsed'])
 		//{
 		echo '
-			<ol class="commonlist category" ',$category['is_collapsed'] ? 'style="display:none;" ' : '', ' id="category_', $category['id'], '_boards">
+			<ol class="commonlist category" ',$category['is_collapsed'] ? 'style="display:none;" ' : '', ' id="category_', $category['id'], '_boards">';
+		if(!empty($category['desc']))
+			echo '
+			<li class="cat_desc">
+			<h3>',$category['desc'],'</h3>
+			</li>';
+
+		echo '
 			<li class="brow glass cleantop">
 				<div class="floatright centertext lastpost">',$txt['last_post'],'</div>
 				<div class="floatright centertext stats">',$txt['content_label'],'</div>

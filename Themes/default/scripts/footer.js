@@ -1281,7 +1281,7 @@ function setBusy(mode)
     if(mode) {
     	_is_locked = true;
     	el.css('position','fixed');
-    	el.css('z-index', '100');
+    	el.css('z-index', '10000');
 		el.css('top', '0');
 		el.css('right', '0px');
 		el.show();
@@ -1424,7 +1424,7 @@ function getAStream(el)
 	if(_el.attr('data-board') == 'all')
 		sendRequest('action=astream;sa=get;all', _el);
 	else
-		sendRequest('action=astream;sa=get;b=' + _el.attr('data-board'), _el);
+		sendRequest('action=astream;sa=get;b=' + parseInt(_el.attr('data-board')), _el);
 }
 function getMcard(uid, el)
 {

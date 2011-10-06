@@ -83,7 +83,7 @@ function RecentPosts()
 	global $txt, $scripturl, $user_info, $context, $modSettings, $board;
 
 	$context['need_synhlt'] = true;
-    $context['hide_all_hidden'] = true;
+	$context['hide_all_hidden'] = true;
     loadTemplate('Recent');
 	$context['page_title'] = $txt['recent_posts'];
 
