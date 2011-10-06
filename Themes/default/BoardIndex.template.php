@@ -15,24 +15,7 @@ function template_main()
 	global $context, $settings, $options, $txt, $scripturl, $modSettings;
 
 	echo '
-
 	<div id="boardindex_table">';
-
-	if($context['news_item_count']) {
-		$collapser = array('id' => 'news_boardindex', 'title' => 'NEWS', 'bodyclass' => 'blue_container');
-
-		template_create_collapsible_container($collapser);
-
-		echo '
-		<div class="content smallpadding">
-		<ol class="commonlist noshadow">';
-		template_news_listitems();
-		echo '
-		</ol>
-		</div>
-		</div>
-		<div class="cContainer_end"></div>';
-	}
 	/* Each category in categories is made up of:
 	id, href, link, name, is_collapsed (is it collapsed?), can_collapse (is it okay if it is?),
 	new (is it new?), collapse_href (href to collapse/expand), collapse_image (up/down image),

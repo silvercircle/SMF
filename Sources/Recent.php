@@ -87,6 +87,11 @@ function RecentPosts()
     loadTemplate('Recent');
 	$context['page_title'] = $txt['recent_posts'];
 
+	$boards_hidden_1 = boardsAllowedTo(array('see_hidden2'));
+	$boards_hidden_2 = boardsAllowedTo('see_hidden2');
+	$boards_hidden_3 = boardsAllowedTo('see_hidden3');
+
+	var_dump($boards_hidden_1);
 	if (isset($_REQUEST['start']) && $_REQUEST['start'] > 95)
 		$_REQUEST['start'] = 95;
 

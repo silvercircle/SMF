@@ -1109,6 +1109,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'test' => '(rtl|ltr)\]',
 				'block_level' => true,
 			),
+			/*
 			array(
 				'tag' => 'black',
 				'before' => '<span style="color: black;" class="bbc_color">',
@@ -1119,6 +1120,17 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'before' => '<span style="color: blue;" class="bbc_color">',
 				'after' => '</span>',
 			),
+			array(
+				'tag' => 'green',
+				'before' => '<span style="color: green;" class="bbc_color">',
+				'after' => '</span>',
+			),
+			array(
+				'tag' => 'red',
+				'before' => '<span style="color: red;" class="bbc_color">',
+				'after' => '</span>',
+			),
+			*/
 			array(
 				'tag' => 'br',
 				'type' => 'closed',
@@ -1255,16 +1267,19 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'after' => $context['browser']['is_ie'] ? '</td></tr></table> ' : '</span>',
 			),*/
 			array(
-				'tag' => 'green',
-				'before' => '<span style="color: green;" class="bbc_color">',
-				'after' => '</span>',
-			),
-			array(
 				'tag' => 'html',
 				'type' => 'unparsed_content',
 				'content' => '$1',
 				'block_level' => true,
 				'disabled_content' => '$1',
+			),
+			array(
+				'tag' => 'h',
+				'type' => 'unparsed_equals',
+				'test' => '([1-4])\]',
+				'before' => '<span class="bbc_head l$1">',
+				'block_level' => false,
+				'after' => '</span>',
 			),
 			array(
 				'tag' => 'hr',
@@ -1367,7 +1382,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			),
 			array(
 				'tag' => 'ilink',
-				'before' => '<a href="'.$scripturl.'?topic={topic};msg={post}#msg{post}">',
+				'before' => '<a class="bbc_link" href="'.$scripturl.'?topic={topic};msg={post}#msg{post}">',
 				'after' => '</a>',
 				'parameters' => array(
 					'topic' => array('match' => '([^<>]{1,192}?)'),
@@ -1458,11 +1473,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'before' => '<div class="quoteheader">' . $txt['quote_from'] . ': {author}</div><blockquote>',
 				'after' => '</blockquote><div class="quotefooter"></div>',
 				'block_level' => true,
-			),
-			array(
-				'tag' => 'red',
-				'before' => '<span style="color: red;" class="bbc_color">',
-				'after' => '</span>',
 			),
 			array(
 				'tag' => 'right',

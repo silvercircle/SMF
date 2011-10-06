@@ -1785,6 +1785,8 @@ function loadTheme($id_theme = 0, $initialize = true)
 
 	$context['theme_scripts'] = array();
 	$context['inline_footer_script'] = '';
+	$context['news_item_count'] = 0;
+
 	// Call load theme integration functions.
 	call_integration_hook('integrate_load_theme');
 

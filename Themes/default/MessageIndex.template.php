@@ -20,7 +20,7 @@ function template_main()
 		echo '
 	<div class="blue_container">
 	 <div class="content smallpadding">
-	 <ol class="commonlist noshadow">';
+	 <ol class="commonlist noshadow news">';
 	template_news_listitems();
 	 echo '
 	 </ol>
@@ -74,7 +74,7 @@ function template_main()
 	{
 		echo '
 	<div class="pagesection top smallpadding">
-		<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a href="#bot"><strong>' . $txt['go_down'] . '</strong></a>' : '', '</div>
+		<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], '&nbsp;&nbsp;<a class="navPages" href="#bot">' . $txt['go_down'] . '</a></div>
 		', template_button_strip($normal_buttons, 'right'), '
 	</div>';
 
@@ -210,7 +210,7 @@ function template_main()
 		echo '
 	<div class="pagesection bottom smallpadding">
 		', template_button_strip($normal_buttons, 'right'), '
-		<div class="pagelinks">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . '&nbsp;&nbsp;<a href="#top"><strong>' . $txt['go_up'] . '</strong></a>' : '', '</div>
+		<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], '&nbsp;&nbsp;<a class="navPages" href="#top">' . $txt['go_up'] . '</a></div>
 	</div>';
 	}
 

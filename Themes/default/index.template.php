@@ -210,6 +210,7 @@ function template_body_above()
 	// Custom banners and shoutboxes should be placed here, before the linktree.
 
 	theme_linktree();
+
 	$sidebar_allowed = isset($context['is_board_index']);			// todo: make this more flexible and define a set of pages where the sidebar can show up
 	$sidebar_vis = (isset($_COOKIE['smf_sidebar_disabled']) && $_COOKIE['smf_sidebar_disabled'] == 1) ? false : true;
 	if($sidebar_allowed)
@@ -222,9 +223,9 @@ function template_body_above()
 			echo '
 				<div id="adv_search" style="width:246px;padding:0;" class="smalltext">
 				<input style="width:215px;padding-left:26px;margin:0;" onclick="var s_event = arguments[0] || window.event;openAdvSearch(s_event);return(false);" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" name="search" value="',$search_label,'" class="searchfield" />
-				<br><br>&nbsp;&nbsp;&nbsp;',$txt['search_by_member'],'<br>
+				<br><h3 class="bbc_head l2">',$txt['search_by_member'],'</h3>
 				<div style="text-align:center;margin-bottom:10px;"><input style="width:90%;" class="input_text" type="text" name="userspec" id="userspec" value="*" /></div>
-				<input class="input_check" type="checkbox" name="show_complete" id="show_complete" value="1" />',$txt['search_show_complete_messages'],'<br />';
+				<input class="input_check floatleft" style="margin-top:6px;" type="checkbox" name="show_complete" id="show_complete" value="1" /><h3 class="bbc_head l2 floatleft" style="margin-left:0;">',$txt['search_show_complete_messages'],'</h3><br class="clear">';
 				if($scope == 2) {
 					echo '<div style="padding-left:20px;"><input type="radio" name="type" id="i_topic" class="input_radio" checked="checked" />',$txt['search_topic'],'<br />
 						<input type="radio" name="type" id="i_board" class="input_radio" />',$txt['search_board'],'<br />
@@ -247,6 +248,20 @@ function template_body_above()
 	</form>
 	</div>
 	<div class="clear cContainer_end"></div>';
+	if($context['news_item_count'] && isset($context['is_board_index'])) {
+		//$collapser = array('id' => 'news_boardindex', 'title' => 'NEWS', 'bodyclass' => 'blue_container');
+		//template_create_collapsible_container($collapser);
+		echo '
+		<div class="blue_container">
+		<div class="content smallpadding">
+		<ol class="commonlist noshadow news">';
+		template_news_listitems();
+		echo '
+		</ol>
+		</div>
+		</div>
+		<div class="cContainer_end"></div>';
+	}
 	echo '<aside>
 		  <div id="sidebar" style="width:255px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
 		if($sidebar_allowed)
@@ -284,7 +299,6 @@ function template_body_below()
 	anchor.parentNode.insertBefore(t3, anchor);';
 
 	$context['inline_footer_script'] .= $txt['jquery_timeago_loc'];
-
 	if(isset($modSettings['embed_GA']) && $modSettings['embed_GA'] && ($context['user']['is_guest'] || (empty($options['disable_analytics']) ? 1 : !$options['disable_analytics'])))	{
 		echo '
 	var _gaq = _gaq || [];
@@ -320,18 +334,19 @@ function template_body_below()
 	</div>
 	</footer>';
 	if(1) { // piwik, todo: make configurable in admin area!
-		echo '
-	<script type="text/javascript">
+		$context['inline_footer_script'] .= <<<EOT
+
 	var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.miranda.or.at/" : "http://piwik.miranda.or.at/");
 	document.write(unescape("%3Cscript src=\'" + pkBaseURL + "piwik.js\' type=\'text/javascript\'%3E%3C/script%3E"));
-	</script>
-	<script type="text/javascript">
-		try {
-			var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
-			piwikTracker.trackPageView();
-			piwikTracker.enableLinkTracking();
-		} catch( err ) {}
-	</script>
+	try {
+		var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+		piwikTracker.trackPageView();
+		piwikTracker.enableLinkTracking();
+	}
+	catch( err ) {
+	}
+EOT;
+	echo '
 	<noscript>
 	  <div style="width:0px;height:0px;"><img src="http://piwik.miranda.or.at/piwik.php?idsite=1" style="border:0" alt="" /></div>
 	</noscript>';
@@ -580,7 +595,7 @@ function template_sidebar_content()
 					<li class="smalltext">',$user_info['likesreceived'],' ',$txt['likes'],'<li>
 					<li class="smalltext"><span class="smalltext floatright"><a href="',$scripturl,'?action=logout;',$context['session_var'],'=',$context['session_id'], '">Sign out</a></span><li>
 				 </ul>
-				 <div class="clear flat_container">
+				 <div class="clear">
 					<a href="', $scripturl, '?action=unread">', $txt['unread_since_visit'], '</a><br>
 					<a href="', $scripturl, '?action=unreadreplies">', $txt['show_unread_replies'], '</a>
 				 </div>';
@@ -645,10 +660,12 @@ function template_sidebar_content()
 				 if(!empty($settings['show_latest_member']))
 				 	echo '<dt>', $txt['latest_member'] . ': </dt><dd class="righttext"><strong>', $context['common_stats']['latest_member']['link'] . '</strong></dd>';
 				 echo '</dl>';
-				 //if(!empty($context['latest_post']))
-				 ///	echo '    ', $txt['latest_post'] . ': <br /><a href="',$context['latest_post']['href'],'" title="',$context['latest_post']['subject'], '">',shorten_subject($context['latest_post']['subject'], 20),'</a> ( ' . $context['latest_post']['time'] . ' )';
-				echo '<div class="flat_container"><div class="floatright righttext"><a href="', $scripturl, '?action=recent">', $txt['recent_view'], '</a>', $context['show_stats'] ? '</div>
-				<a href="' . $scripturl . '?action=stats">' . $txt['more_stats'] . '</a>' : '', '</div>
+				echo '
+				<div>
+				  <div class="floatright righttext"><a href="', $scripturl, '?action=recent">', $txt['recent_view'], '</a>', $context['show_stats'] ? '
+				  </div>
+				 <a href="' . $scripturl . '?action=stats">' . $txt['more_stats'] . '</a>' : '', '
+				</div>
 			</div>
 			</div>
 			<div class="cContainer_end"></div>';
@@ -835,7 +852,7 @@ function template_create_dropselector(&$_c)
 	</div>
 	</div>';
 	if(!isset($context['footer_script_fragments']['dropselector'])) {
-		$script = '
+		$script = <<<EOT
 	$("div.downarrow").hover(function() {
 		var id = $(this).attr("id");
 		$("#" + id + "_content").show();
@@ -846,7 +863,8 @@ function template_create_dropselector(&$_c)
 	$("div.dropselect_content").live("mouseleave", function(event) {
 		$(this).hide();
 	});
-	';
+EOT;
+
 		registerFooterScriptFragment('dropselector', $script);
 	}
 }

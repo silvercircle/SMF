@@ -150,7 +150,7 @@ function template_modify_category()
 							<span class="smalltext">', $txt['mboards_desc_desc'], '</span>
 						</dt>
 						<dd>
-							<input type="text" name="cat_desc" value="', $context['category']['desc'], '" size="80" tabindex="', $context['tabindex']++, '" class="input_text" />
+							<textarea name="cat_desc" rows="5" cols="70" tabindex="', $context['tabindex']++, '">', $context['category']['desc'],'</textarea>
 						</dd>
 						<dt>
 							<strong>' . $txt['collapse_enable'] . '</strong><br />

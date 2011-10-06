@@ -1405,6 +1405,10 @@ jQuery(document).ready(function() {
 			content.show();
         return(false);
 	});
+	$('a.bbc_link').each(function() {
+		if($(this).html().match(/<img .*>/))
+			$(this).css('border', 'none');
+	});
 });
 
 /*

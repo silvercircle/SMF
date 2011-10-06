@@ -794,7 +794,7 @@ $txt['search_all_boards'] = 'Search all public boards';
 $txt['search_show_complete_messages'] = 'Show results as messages';
 $txt['search_by_member'] = 'Search posts by member';
 $txt['img_resizebar_msg'] = 'Resized image, click here to zoom';
-
+$txt['show_all'] = 'View all';
 $txt['spoiler_title'] = 'Spoiler, click to toggle visibilty';
 $txt['hidden_not_visible'] = 'Hidden content is only supported in full topic view';
 $txt['hidden_show_content'] = 'Hidden content, click to view';
