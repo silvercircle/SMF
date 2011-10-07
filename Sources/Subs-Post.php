@@ -1930,7 +1930,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		// What if we want to export new topics out to a CMS?
 		call_integration_hook('integrate_create_topic', array($msgOptions, $topicOptions, $posterOptions));
 		// record the activity
-		if($context['astream_active']) {
+		if($context['astream_active'] && !$context['no_astream']) {
 			require_once($sourcedir . '/Subs-Activities.php');
 			aStreamAdd($posterOptions['id'], ACT_NEWTOPIC,
 				   		array('member_name' => $posterOptions['real_name'], 'topic_title' => $msgOptions['subject']),
@@ -1967,7 +1967,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		if(false === $automerge_posts)
 			trackStats(array('posts' => '+'));
 
-		if($context['astream_active']) {
+		if($context['astream_active'] && !$context['no_astream']) {
 			// add to activity stream, but do not notify when we reply to our own topic
 			require_once($sourcedir . '/Subs-Activities.php');
 			aStreamAdd($posterOptions['id'], ACT_REPLIED,
@@ -2678,7 +2678,7 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		approvePosts($msgOptions['id'], $msgOptions['approved']);
 
 	// record in activity stream
-	if($context['astream_active']) {
+	if($context['astream_active'] && !$context['no_astream']) {
 		require_once($sourcedir . '/Subs-Activities.php');
 		aStreamAdd($user_info['id'], ACT_MODIFY_POST,
 					   array('member_name' => $user_info['name'], 'topic_title' => $msgOptions['subject']),

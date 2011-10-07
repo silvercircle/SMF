@@ -1301,6 +1301,8 @@ function Post2()
 		$context['have_drafts'] = false;
 
 	$context['need_synhlt'] = true;
+	$context['no_astream'] = (isset($_REQUEST['noactivity']) && (int)$_REQUEST['noactivity'] == 1);
+
 	// Sneaking off, are we?
 	if (empty($_POST) && empty($topic))
 		redirectexit('action=post;board=' . $board . '.0');

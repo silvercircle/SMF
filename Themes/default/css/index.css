@@ -33,7 +33,6 @@ body {
 	/*background: #f0f0f0 url(../images/bodybg-blue2.png) left -45px repeat-x;*/
 	background-color: #D0D1E6;
 	margin: 0 auto;
-	overflow: hidden;
 }
 /* Help popups require a different styling of the body element. */
 body#help_popup {
@@ -809,43 +808,13 @@ dl.settings dt a img {
 	top: 2px;
 }
 
-/* Styles for rounded headers.
-------------------------------------------------------- */
-h2.catbg, h3.catbg2, h4.catbg {
-	overflow: hidden;
-	height: 20px;
-	line-height: 20px;
-	font-size: 1.05em;
-}
-
-h3.catbg2 a, h3.catbg2 {
-	color: #feb;
-}
-
 h4.catbg, h4.catbg2, h3.catbg, h3.catbg2, .table_list tbody.header td.catbg {
 	padding-right: 9px;
-}
-
-.category a.unreadlink {
-	float: right;
-	margin-right:20px;
 }
 
 table.table_list a.collapse {
 	margin: 0 5px 0 1em;
 }
-
-/* The half-round header bars for some tables. */
-.table_grid tr.catbg, .table_grid tr.titlebg {
-	font-size: 0.95em;
-	border-bottom: 1px solid #fff;
-}
-
-.table_grid tr.catbg th, .table_grid tr th {
-	height: 22px;
-	line-height: 22px;
-}
-
 .table_grid th.last_th input {
 	margin: 0 2px;
 }
@@ -853,7 +822,6 @@ table.table_list a.collapse {
 .table_grid th.lefttext {
 	padding: 0 0.7em;
 }
-
 /* a general table class */
 table.table_grid {
 	margin-top: 0.1em;
@@ -871,22 +839,11 @@ table.table_grid td {
 .additional_row {
 	padding: 0.2em 0 0.2em 0;
 }
-
-table.table_grid thead tr.catbg th {
-	white-space: nowrap;
-}
-
 /* table_grid styles for Profile > Show Permissions. */
 #permissions table.table_grid  td {
 	padding: 0.4em 0.8em;
 	cursor: default;
 }
-
-.postbg {
-	border-left: 1px solid #7f7f7f;
-	border-right: 1px solid #7f7f7f;
-}
-
 /* The main content area.
 ------------------------------------------------------- */
 .content {
@@ -898,25 +855,6 @@ table.table_grid thead tr.catbg th {
 .content p {
 	margin: 0 0 0.5em 0;
 }
-
-/* Styles used by the auto suggest control.
-------------------------------------------------------- */
-.auto_suggest_div {
-	border: 1px solid #000;
-	position: absolute;
-	visibility: hidden;
-}
-
-.auto_suggest_item {
-	background-color: #ddd;
-}
-
-.auto_suggest_item_hover {
-	background-color: #888;
-	cursor: pointer;
-	color: #eee;
-}
-
 /* dropdown */
 
 div.dropselect {
@@ -1211,13 +1149,10 @@ ul#navigation li {
 	padding: 10px;
 	padding-top:0;
 }
-
 #sidebar, #sbar {
 	float: right;
-	min-height: 500px;
 	padding: 0;
 }
-
 #sbtoggle {
 	float: right;
 	position: relative;
@@ -1356,13 +1291,6 @@ div.user .avatar img {
 	width: auto;
 	margin-right: 10px;
 }
-/* clearing the floats */
-#top_section {
-	min-height: 65px;
-	overflow: hidden;
-	margin-bottom: 3px;
-}
-
 /* The navigation list (i.e. linktree) */
 div.navigate_section {
 	padding: 0 0 0 10px;
@@ -1383,13 +1311,11 @@ div.navigate_section {
 	clear: both;
 	width: 100%;
 }
-
 .navigate_section ul li {
 	float: left;
 	padding: 0 0.5em 0 0;
 	font-size: 11px;
 }
-
 .navigate_section ul li a {
 	white-space: pre;
 	color:black;
@@ -1423,12 +1349,6 @@ table.table_list {
 table.table_list tbody.divider td {
 	border: 0;
 }
-
-tr.frow {
-	/*background:#f0f0f5 url(../images/frow.png) bottom left repeat-x;*/
-	background: #f0f0f5;
-}
-
 .table_list tr td {
 	border-bottom: 1px solid #d5ecfa;
 }
@@ -1547,6 +1467,10 @@ ol.category > li > div.info h3 {
 ol.category > li > div.info a {
 	color: #777;
 }
+a.unreadlink {
+	float:right;
+	margin-right:20px;
+}
 /*
 ol.commonlist li.windowbg {
 	background: #ffffff;
@@ -1605,20 +1529,6 @@ ol.commonlist li.windowbg2 {
 .mark_read {
 	padding: 0 0.5em;
 }
-
-/* the newsfader */
-#newsfader {
-	margin: 0 0 10px 0;
-}
-
-#smfFadeScroller {
-	text-align: left;
-	padding: 5px 2em;
-	overflow: auto;
-	margin: 0;
-	color: #575757; /* shouldn't be shorthand style due to a JS bug in IE! */
-}
-
 img.new_posts {
 	padding: 0 0.1em;
 }
@@ -1636,54 +1546,6 @@ div.table_frame .table_list {
 	border-radius: 5px;
 	padding: 3px;
 }
-
-/* the page navigation area */
-.childboards {
-	margin-bottom: 0.2em;
-}
-
-#childboards h3 {
-	padding-bottom: 0;
-}
-
-#childboards .table_list thead {
-	display: none;
-}
-
-#childboards .table_list {
-	margin-bottom: 1em;
-}
-
-/* Styles for the display template (topic view).
----------------------------------------------------- */
-
-#postbuttons div.buttons {
-	padding: 0.5em;
-	width: 40%;
-	float: right;
-}
-
-#postbuttons div.middletext {
-	width: 60%;
-}
-
-#postbuttons span {
-	display: block;
-	text-align: right;
-}
-
-#postbuttons span.lower {
-	clear: right;
-}
-
-#postbuttons .buttonlist {
-	float: right;
-}
-
-#postbuttons #pagelinks {
-	padding-top: 1em;
-}
-
 #moderationbuttons {
 	overflow: hidden;
 }
@@ -1798,11 +1660,6 @@ p#whoisviewing {
 	font-size: 11px;
 	line-height: 20px;
 }
-
-.windowbg .post_wrapper {
-	background-color: #f5f5ff;
-}
-
 .poster {
 	float: left;
 	width: 200px;
@@ -1810,7 +1667,6 @@ p#whoisviewing {
 	min-width: 200px;
 	text-align: center;
 }
-
 .poster_details {
 	text-align: center;
 	width: 180px;
@@ -1819,31 +1675,25 @@ p#whoisviewing {
 	margin: 10px 10px 5px 5px !important;
 	padding: 2px 2px 5px 2px !important;
 }
-
 div.userbit_compact {
 	font-size: 11px;
 	color: #888;
 	line-height: 150%;
 }
-
 div.userbit_compact h2 {
 	display: inline;
 	font-size: 12px;
 	font-weight: bold;
 }
-
 div.userbit_compact_textpart {
 	margin-left: 62px;
 }
-
 .postarea, .moderatorbar {
 	margin: 0 0 5px 205px;
 }
-
 .postarea div.flow_hidden {
 	margin-right: 10px;
 }
-
 .moderatorbar {
 	font-size: 12px;
 	clear: right;
@@ -1982,7 +1832,6 @@ ul.quickbuttons li a, .buttonlist ul li a, span.button {
 	padding: 0 4px;
 	color: #777;
 	font-weight:bold;
-	background: #d6dde8;
 	border: 1px solid #ccc;
 	border-radius: 2px;
 	cursor: pointer;
@@ -3592,7 +3441,7 @@ span.hidelink {
 	background: -webkit-linear-gradient(top, #eff7f9 72%,#deebed 100%,#827d73 100%);
 	background: -o-linear-gradient(top, #eff7f9 72%,#deebed 100%,#827d73 100%);
 	background: -ms-linear-gradient(top, #eff7f9 72%,#deebed 100%,#827d73 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eff7f9', endColorstr='#827d73',GradientType=0 );
+	/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eff7f9', endColorstr='#827d73',GradientType=0 );*/
 	background: linear-gradient(top, #eff7f9 72%,#deebed 100%,#827d73 100%);
 }
 .blue_container div.content, .orange_container div.content, .yellow_container div.content {
@@ -3681,7 +3530,6 @@ span.arrow {
 
 a.navPages, .pagelinks span.current {
 	display:inline-block;
-	padding: 0;
 	border: 1px solid #aaa;
 	background-color: #eee;
 	height:15px;
@@ -3762,12 +3610,13 @@ tbody.divider tr {
 
 div.td_children {
 	font-size: 12px;
-	padding: 1px 0 0 20px;
+	padding: 1px 0 0 0;
 	border-top: 1px solid #ddd;
 	margin-top: 3px;
 	list-style: none;
-	background: transparent url(../images/theme/sprite.png) -16px -521px no-repeat;
-	margin-left: -10px;
+/*	background: transparent url(../images/theme/sprite.png) -16px -521px no-repeat;*/
+	background: transparent;
+	/*margin-left: -10px;*/
 }
 
 div.td_children table {
@@ -4076,9 +3925,10 @@ a.fnote_ref {
 }
 
 .csrcwrapper16px {
-	position: relative;
+	position:relative;
 	height: 16px;
 	width: 16px;
+	overflow:hidden;
 }
 
 ._on {

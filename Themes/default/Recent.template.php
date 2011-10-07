@@ -123,30 +123,30 @@ function template_unread()
 			</div>';
 
 		echo '
-			<div class="tborder topic_table" id="unread">
+			<div class="topic_table" id="unread">
 				<table class="table_grid mlist">
 					<thead>
 						<tr>
-							<th scope="col" style="width:2%;" class="blue_container first_th" colspan="2">&nbsp;</th>
-							<th class="blue_container" scope="col">
+							<th scope="col" style="width:2%;" class="glass first_th" colspan="2">&nbsp;</th>
+							<th class="glass" scope="col">
 								<a href="', $scripturl, '?action=unread', $context['showing_all_topics'] ? ';all' : '', $context['querystring_board_limits'], ';sort=subject', $context['sort_by'] == 'subject' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['subject'], $context['sort_by'] == 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 							</th>
-							<th scope="col" style="width:14%;" class="blue_container centertext">
+							<th scope="col" style="width:14%;" class="glass centertext">
 								<a href="', $scripturl, '?action=unread', $context['showing_all_topics'] ? ';all' : '', $context['querystring_board_limits'], ';sort=replies', $context['sort_by'] == 'replies' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['replies'], $context['sort_by'] == 'replies' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 							</th>';
 
 		// Show a "select all" box for quick moderation?
 		if ($showCheckboxes)
 			echo '
-							<th scope="col" style="width:22%;" class="blue_container">
+							<th scope="col" style="width:22%;" class="glass">
 								<a href="', $scripturl, '?action=unread', $context['showing_all_topics'] ? ';all' : '', $context['querystring_board_limits'], ';sort=last_post', $context['sort_by'] == 'last_post' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['last_post'], $context['sort_by'] == 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 							</th>
-							<th class="blue_container last_th">
+							<th class="glass last_th">
 								<input type="checkbox" onclick="invertAll(this, this.form, \'topics[]\');" class="input_check" />
 							</th>';
 		else
 			echo '
-							<th scope="col" class="blue_container smalltext last_th" style="width:22%;">
+							<th scope="col" class="glass smalltext last_th" style="width:22%;">
 								<a href="', $scripturl, '?action=unread', $context['showing_all_topics'] ? ';all' : '', $context['querystring_board_limits'], ';sort=last_post', $context['sort_by'] == 'last_post' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['last_post'], $context['sort_by'] == 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 							</th>';
 		echo '
@@ -154,54 +154,8 @@ function template_unread()
 					</thead>
 					<tbody>';
 
-		foreach ($context['topics'] as $topic)
-		{
-			// Calculate the color class of the topic.
-			$color_class = '';
-			if (strpos($topic['class'], 'sticky') !== false)
-				$color_class = 'stickybg';
-			if (strpos($topic['class'], 'locked') !== false)
-				$color_class .= 'lockedbg';
-
-			$color_class2 = !empty($color_class) ? $color_class . '2' : '';
-
-			echo '
-						<tr>
-							<td class="', $color_class, ' icon1 windowbg">
-								<img src="', $settings['images_url'], '/topic/', $topic['class'], '.gif" alt="" />
-							</td>
-							<td class="', $color_class, ' icon2 windowbg">
-								<img src="', $topic['first_post']['icon_url'], '" alt="" />
-							</td>
-							<td class="subject ', $color_class2, ' windowbg2">
-								<div>
-									', $topic['is_sticky'] ? '<strong>' : '', '<span id="msg_' . $topic['first_post']['id'] . '">', $topic['first_post']['link'], '</span>', $topic['is_sticky'] ? '</strong>' : '', '
-									<a href="', $topic['new_href'], '" id="newicon', $topic['first_post']['id'], '"><img src="', $settings['lang_images_url'], '/new.gif" alt="', $txt['new'], '" /></a>
-									<p>
-										', $txt['started_by'], ' <strong>', $topic['first_post']['member']['link'], '</strong>
-										', $txt['in'], ' <em>', $topic['board']['link'], '</em>
-										<small id="pages', $topic['first_post']['id'], '">', $topic['pages'], '</small>
-									</p>
-								</div>
-							</td>
-							<td class="', $color_class, ' stats windowbg">
-								', $topic['replies'], ' ', $txt['replies'], '
-								<br />
-								', $topic['views'], ' ', $txt['views'], '
-							</td>
-							<td class="', $color_class, ' lastpost windowbg2">',
-								$txt['by'], ': ', $topic['last_post']['member']['link'], '<br />
-								<a class="lp_link" title="', $txt['last_post'], '" href="', $topic['last_post']['href'], '">',$topic['last_post']['time'], '</a>
-							</td>';
-
-			if ($showCheckboxes)
-				echo '
-							<td class="windowbg2 centertext">
-								<input type="checkbox" name="topics[]" value="', $topic['id'], '" class="input_check" />
-							</td>';
-			echo '
-						</tr>';
-		}
+		foreach ($context['topics'] as &$topic)
+			template_topicbit($topic);
 
 		if (!empty($context['topics']) && !$context['showing_all_topics'])
 			$mark_read['readall'] = array('text' => 'unread_topics_all', 'image' => 'markreadall.gif', 'lang' => true, 'url' => $scripturl . '?action=unread;all' . $context['querystring_board_limits'], 'active' => true);

@@ -164,7 +164,6 @@ function template_body_above()
 	<div id="upper_section" class="middletext">
 		<div class="floatleft" style="color:#ddd;text-shadow:black 2px 2px 10px;font-size:35px;font-family:Comic Sans MS;padding:20px 30px;"><strong><em>SMF pLayGround</em></strong><br /></div>
 	<div class="clear"></div>';
-
 	echo '
 			<div class="news normaltext">';
 	// Show a random news item? (or you could pick one from news_lines...)
@@ -201,12 +200,10 @@ function template_body_above()
     	setTextSize(textsize);
 	// ]]></script>
 	</div></header>';
-
 	// The main content should go here.
 	echo '
 	<div id="content_section">
 	<div id="main_content_section">';
-
 	// Custom banners and shoutboxes should be placed here, before the linktree.
 
 	theme_linktree();
@@ -280,7 +277,6 @@ function template_body_above()
 function template_body_below()
 {
 	global $context, $settings, $options, $scripturl, $txt, $modSettings, $fbxml, $twitter_widgets, $plusone;
-
 	echo '<div class="clear"></div>
 		</div></div></div>';    
 
@@ -334,10 +330,12 @@ function template_body_below()
 	</div>
 	</footer>';
 	if(1) { // piwik, todo: make configurable in admin area!
-		$context['inline_footer_script'] .= <<<EOT
-
+		echo <<<EOT
+	<script>
 	var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.miranda.or.at/" : "http://piwik.miranda.or.at/");
 	document.write(unescape("%3Cscript src=\'" + pkBaseURL + "piwik.js\' type=\'text/javascript\'%3E%3C/script%3E"));
+	</script>
+	<script>
 	try {
 		var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
 		piwikTracker.trackPageView();
@@ -345,11 +343,11 @@ function template_body_below()
 	}
 	catch( err ) {
 	}
-EOT;
-	echo '
+	</script>
 	<noscript>
 	  <div style="width:0px;height:0px;"><img src="http://piwik.miranda.or.at/piwik.php?idsite=1" style="border:0" alt="" /></div>
-	</noscript>';
+	</noscript>
+EOT;
 	}
 }
 

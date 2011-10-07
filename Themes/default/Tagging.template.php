@@ -51,7 +51,7 @@ echo '
 		$txt['smftags_resultsfor'] . $context['tag_search'],'
 		</h3>
 	</div>
-	<div class="blue_container cleantop mediumpadding">
+	<div class="flat_container cleantop smallpadding">
 	<table class="table_grid mlist">
 		<thead>
   		<tr>

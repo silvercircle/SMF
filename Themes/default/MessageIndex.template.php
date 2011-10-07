@@ -101,7 +101,7 @@ function template_main()
 			// Show a "select all" box for quick moderation?
 			if (!empty($context['can_quick_mod']) && $options['display_quick_mod'] > 0)
 				echo '
-					<th scope="col" class="glass" style="width:24px;"><input type="checkbox" onclick="invertAll(this, this.form, \'topics[]\');" class="input_check cb_invertall" /></th>';
+					<th scope="col" class="glass" style="width:24px;"><input type="checkbox" class="input_check cb_invertall" /></th>';
 
 			// If it's on in "image" mode, don't show anything but the column.
 			elseif (!empty($context['can_quick_mod']))

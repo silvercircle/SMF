@@ -197,5 +197,5 @@ $txt['restore_editor'] = 'Restore editor';
 $txt['first_post_sticky'] = 'Make first post appear on every page';
 $txt['first_post_layout'] = 'First post uses alternate postbit layout';
 $txt['want_automerge'] = 'When possible, merge this post with your last one';
-
+$txt['no_activity_record'] = 'Do not record in my activity stream';
 ?>

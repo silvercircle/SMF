@@ -505,7 +505,7 @@ function MessageIndex()
 			foreach($context['topics'] as &$_topic) {
 				loadMemberContext($first_posters[$_topic['id']], true);
 				if(isset($memberContext[$first_posters[$_topic['id']]]['avatar']['image']))
-					$_topic['first_post']['member']['avatar'] = $memberContext[$first_posters[$_topic['id']]]['avatar']['image'];
+					$_topic['first_post']['member']['avatar'] = &$memberContext[$first_posters[$_topic['id']]]['avatar']['image'];
 			}
 		}
 		mysql_free_result($result);

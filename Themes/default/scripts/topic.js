@@ -546,20 +546,27 @@ function expandThumb(thumbID)
 	return false;
 }
 
+function hltColumn(el, state)
+{
+	el.parent().parent().children('td').each(function() {
+		if(state)
+			$(this).addClass('inline_highlight');
+		else
+			$(this).removeClass('inline_highlight');
+	});
+}
+
 $(document).ready(function() {
 	$('input.cb_inline').change(function() {
 		var cbox = this;
-		$(this).parent().parent().children('td').each(function() {
-			if($(cbox).is(':checked'))
-				$(this).addClass('inline_highlight');
-			else
-				$(this).removeClass('inline_highlight');
-		});
+		var state = $(cbox).is(':checked');
+		hltColumn($(this), state);
 	});
 	
 	$('input.cb_invertall').change(function() {
+		var state = $(this).is(':checked');
 		$('input.cb_inline').each(function() {
-			$(this).change();
+			hltColumn($(this), state);
 		});
 	});
 	
