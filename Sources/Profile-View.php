@@ -250,6 +250,12 @@ function showPosts($memID)
 	global $txt, $user_info, $scripturl, $modSettings;
 	global $context, $user_profile, $sourcedir, $smcFunc, $board;
 
+	$boards_hidden_1  = boardsAllowedTo('see_hidden1');
+	$boards_hidden_2  = boardsAllowedTo('see_hidden2');
+	$boards_hidden_3  = boardsAllowedTo('see_hidden3');
+	$boards_like_see  = boardsAllowedTo('like_see');
+	$boards_like_give = boardsAllowedTo('like_give');
+
 	// Some initial context.
 	$context['start'] = (int) $_REQUEST['start'];
 	$context['current_member'] = $memID;
@@ -481,22 +487,27 @@ function showPosts($memID)
 	$board_ids = array('own' => array(), 'any' => array());
 	
 	require_once($sourcedir . '/Subs-LikeSystem.php');
-	$can_give_like = false;
-	
+
 	$time_now = time();
 	while ($row = mysql_fetch_assoc($request))
 	{
+		$check_boards = array(0, $row['id_board']);		// 0 is for admin
+
+		$context['can_see_hidden_level1'] = count(array_intersect($check_boards, $boards_hidden_1)) > 0;
+		$context['can_see_hidden_level2'] = count(array_intersect($check_boards, $boards_hidden_2)) > 0;
+		$context['can_see_hidden_level3'] = count(array_intersect($check_boards, $boards_hidden_3)) > 0;
+
+		$context['can_see_like'] = count(array_intersect($check_boards, $boards_like_see)) > 0;
+		$context['can_give_like'] = count(array_intersect($check_boards, $boards_like_give)) > 0;
+
 		// Censor....
 		censorText($row['body']);
 		censorText($row['subject']);
 
-		$can_see_like = allowedTo('like_see', $row['id_board']);
-		
 		getCachedPost($row);
-		AddLikeBar($row, $can_give_like, $time_now);
 		// And the array...
-		$row['likes_count'] = isset($row['likes_count']) ? $row['likes_count'] : 0;
-		$context['posts'][$counter += $reverse ? -1 : 1] = array(
+		$i = $counter += $reverse ? -1 : 1;
+		$context['posts'][$i] = array(
 			'body' => $row['body'],
 			'counter' => $counter,
 			'alternate' => $counter % 2,
@@ -514,15 +525,20 @@ function showPosts($memID)
 			'time' => timeformat($row['poster_time']),
 			'timestamp' => forum_time(true, $row['poster_time']),
 			'id' => $row['id_msg'],
+			'id_msg' => $row['id_msg'],
+			'id_member' => $memID,
 			'can_reply' => false,
 			'can_mark_notify' => false,
 			'can_delete' => false,
 			'delete_possible' => ($row['id_first_msg'] != $row['id_msg'] || $row['id_last_msg'] == $row['id_msg']) && (empty($modSettings['edit_disable_time']) || $row['poster_time'] + $modSettings['edit_disable_time'] * 60 >= time()),
 			'approved' => $row['approved'],
-			'likers' => $row['likers'],
-			'likelink' => $row['likelink'],
-			'likes_count' => $row['likes_count']
+			'likes_count' => $row['likes_count'],
+			'like_status' => $row['like_status'],
+			'liked' => $row['liked'],
+			'like_updated' => $row['like_updated'],
 		);
+		if($context['can_see_like'])
+			AddLikeBar($context['posts'][$i], $context['can_give_like'], $time_now);
 
 		if ($user_info['id'] == $row['id_member_started'])
 			$board_ids['own'][$row['id_board']][] = $counter;

@@ -327,6 +327,9 @@ function MessageIndex()
 	$topic_ids = array();
 	$context['topics'] = array();
 
+	$prefixid = isset($_REQUEST['prefix']) ? (int)$_REQUEST['prefix'] : 0;
+	$prefixfilter = !empty($prefixid) ? 't.id_prefix = {int:id_prefix} AND ' : '';
+
 	// Sequential pages are often not optimized, so we add an additional query.
 	$pre_query = $start > 0;
 	if ($pre_query && $maxindex > 0)
@@ -338,7 +341,7 @@ function MessageIndex()
 				INNER JOIN {db_prefix}messages AS mf ON (mf.id_msg = t.id_first_msg)' : '')) . ($context['sort_by'] === 'starter' ? '
 				LEFT JOIN {db_prefix}members AS memf ON (memf.id_member = mf.id_member)' : '') . ($context['sort_by'] === 'last_poster' ? '
 				LEFT JOIN {db_prefix}members AS meml ON (meml.id_member = ml.id_member)' : '') . '
-			WHERE t.id_board = {int:current_board}' . (!$modSettings['postmod_active'] || $context['can_approve_posts'] ? '' : '
+			WHERE ' . $prefixfilter . ' t.id_board = {int:current_board}' . (!$modSettings['postmod_active'] || $context['can_approve_posts'] ? '' : '
 				AND (t.approved = {int:is_approved}' . ($user_info['is_guest'] ? '' : ' OR t.id_member_started = {int:current_member}') . ')') . '
 			ORDER BY ' . (!empty($modSettings['enableStickyTopics']) ? 'is_sticky' . ($fake_ascending ? '' : ' DESC') . ', ' : '') . $_REQUEST['sort'] . ($ascending ? '' : ' DESC') . '
 			LIMIT {int:start}, {int:maxindex}',
@@ -349,6 +352,7 @@ function MessageIndex()
 				'id_member_guest' => 0,
 				'start' => $start,
 				'maxindex' => $maxindex,
+				'id_prefix' => $prefixid
 			)
 		);
 		$topic_ids = array();
@@ -366,7 +370,7 @@ function MessageIndex()
 			SELECT 
 				t.id_topic, t.num_replies, t.locked, t.num_views, t.is_sticky, t.id_poll, t.id_previous_board,
 				' . ($user_info['is_guest'] ? '0' : 'IFNULL(lt.id_msg, IFNULL(lmr.id_msg, -1)) + 1') . ' AS new_from,
-				t.id_last_msg, t.approved, t.unapproved_posts, ml.poster_time AS last_poster_time,
+				t.id_last_msg, t.approved, t.unapproved_posts, t.id_prefix, ml.poster_time AS last_poster_time,
 				ml.id_msg_modified, ml.subject AS last_subject, ml.icon AS last_icon,
 				ml.poster_name AS last_member_name, ml.id_member AS last_id_member,
 				IFNULL(meml.real_name, ml.poster_name) AS last_display_name, t.id_first_msg,
@@ -383,7 +387,7 @@ function MessageIndex()
 				LEFT JOIN {db_prefix}log_topics AS lt ON (lt.id_topic = t.id_topic AND lt.id_member = {int:current_member})
 				LEFT JOIN {db_prefix}log_mark_read AS lmr ON (lmr.id_board = {int:current_board} AND lmr.id_member = {int:current_member})'). '
 				LEFT JOIN {db_prefix}prefixes AS p ON p.id_prefix = t.id_prefix 
-			WHERE ' . ($pre_query ? 't.id_topic IN ({array_int:topic_list})' : 't.id_board = {int:current_board}') . (!$modSettings['postmod_active'] || $context['can_approve_posts'] ? '' : '
+			WHERE ' . $prefixfilter . ($pre_query ? 't.id_topic IN ({array_int:topic_list})' : 't.id_board = {int:current_board}') . (!$modSettings['postmod_active'] || $context['can_approve_posts'] ? '' : '
 				AND (t.approved = {int:is_approved}' . ($user_info['is_guest'] ? '' : ' OR t.id_member_started = {int:current_member}') . ')') . '
 			ORDER BY ' . ($pre_query ? 'FIND_IN_SET(t.id_topic, {string:find_set_topics})' : (!empty($modSettings['enableStickyTopics']) ? 'is_sticky' . ($fake_ascending ? '' : ' DESC') . ', ' : '') . $_REQUEST['sort'] . ($ascending ? '' : ' DESC')) . '
 			LIMIT ' . ($pre_query ? '' : '{int:start}, ') . '{int:maxindex}',
@@ -395,6 +399,7 @@ function MessageIndex()
 				'find_set_topics' => implode(',', $topic_ids),
 				'start' => $start,
 				'maxindex' => $maxindex,
+				'id_prefix' => $prefixid
 			)
 		);
 
@@ -474,7 +479,7 @@ function MessageIndex()
 					'href' => $scripturl . '?topic=' . $row['id_topic'] . ($user_info['is_guest'] ? ('.' . (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) . '#msg' . $row['id_last_msg']) : (($row['num_replies'] == 0 ? '.0' : '.msg' . $row['id_last_msg']) . '#new')),
 					'link' => '<a href="' . $scripturl . '?topic=' . $row['id_topic'] . ($user_info['is_guest'] ? ('.' . (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) . '#msg' . $row['id_last_msg']) : (($row['num_replies'] == 0 ? '.0' : '.msg' . $row['id_last_msg']) . '#new')) . '" ' . ($row['num_replies'] == 0 ? '' : 'rel="nofollow"') . '>' . $row['last_subject'] . '</a>'
 				),
-				'prefix' => $row['prefix_name'] ? (html_entity_decode($row['prefix_name']) . ($context['can_moderate_forum'] ? '&nbsp;<span class="inlineprefix" style="float:none;" data-board = "'.$board.'" data-topic="'.$row['id_topic'].'">&nbsp;</span>' : '')) : '',
+				'prefix' => $row['prefix_name'] ? '<a href="' . $scripturl . '?board=' . $board . ';prefix=' . $row['id_prefix'] . '" class="prefix">'.(html_entity_decode($row['prefix_name']) . '</a>' . ($context['can_moderate_forum'] ? '&nbsp;<span class="inlineprefix" data-board = "'.$board.'" data-topic="'.$row['id_topic'].'"></span>' : '')) : '',
 				'is_sticky' => !empty($modSettings['enableStickyTopics']) && !empty($row['is_sticky']),
 				'is_locked' => !empty($row['locked']),
 				'is_poll' => $modSettings['pollMode'] == '1' && $row['id_poll'] > 0,
@@ -501,7 +506,8 @@ function MessageIndex()
 				$context['topics'][$row['id_topic']]['prefix'] .= '&nbsp;';
 		}
 		if (!empty($settings['show_user_images']) && empty($options['show_no_avatars'])) {
-			loadMemberData($first_posters);
+			$all_posters = array_unique($first_posters);
+			loadMemberData($all_posters);
 			foreach($context['topics'] as &$_topic) {
 				loadMemberContext($first_posters[$_topic['id']], true);
 				if(isset($memberContext[$first_posters[$_topic['id']]]['avatar']['image']))

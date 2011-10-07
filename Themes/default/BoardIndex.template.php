@@ -56,13 +56,13 @@ function template_main()
 			<h3>',$category['desc'],'</h3>
 			</li>';
 
-		echo '
+		/*echo '
 			<li class="brow glass cleantop">
 				<div class="floatright centertext lastpost">',$txt['last_post'],'</div>
 				<div class="floatright centertext stats">',$txt['content_label'],'</div>
 				<div class="centertext">',$txt['board'],'</div>
 			</li>
-			';
+			';*/
 			$context['alternate'] = 1;
 			foreach ($category['boards'] as &$board)
 				template_boardbit($board);

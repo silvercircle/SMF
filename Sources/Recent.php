@@ -87,16 +87,21 @@ function getLastPost()
 // Find the ten most recent posts.
 function RecentPosts()
 {
-	global $txt, $scripturl, $user_info, $context, $modSettings, $board;
+	global $sourcedir, $txt, $scripturl, $user_info, $context, $modSettings, $board;
+
+	require_once($sourcedir . '/Subs-LikeSystem.php');
+	$context['time_now'] = time();
 
 	$context['need_synhlt'] = true;
 	//$context['hide_all_hidden'] = true;
     loadTemplate('Recent');
 	$context['page_title'] = $txt['recent_posts'];
 
-	$boards_hidden_1 = boardsAllowedTo('see_hidden1');
-	$boards_hidden_2 = boardsAllowedTo('see_hidden2');
-	$boards_hidden_3 = boardsAllowedTo('see_hidden3');
+	$boards_hidden_1  = boardsAllowedTo('see_hidden1');
+	$boards_hidden_2  = boardsAllowedTo('see_hidden2');
+	$boards_hidden_3  = boardsAllowedTo('see_hidden3');
+	$boards_like_see  = boardsAllowedTo('like_see');
+	$boards_like_give = boardsAllowedTo('like_give');
 
 	if (isset($_REQUEST['start']) && $_REQUEST['start'] > 95)
 		$_REQUEST['start'] = 95;
@@ -303,7 +308,7 @@ function RecentPosts()
 	$request = smf_db_query( '
 		SELECT
 			m.id_msg, m.subject, m.smileys_enabled, m.poster_time, m.body, m.id_topic, t.id_board, b.id_cat, mc.body AS cached_body,
-			b.name AS bname, c.name AS cname, t.num_replies, m.id_member, m2.id_member AS id_first_member,
+			b.name AS bname, c.name AS cname, t.num_replies, m.id_member, m2.id_member AS id_first_member, lc.likes_count, lc.like_status, lc.updated AS like_updated, l.id_user AS liked,
 			IFNULL(mem2.real_name, m2.poster_name) AS first_poster_name, t.id_first_msg,
 			IFNULL(mem.real_name, m.poster_name) AS poster_name, t.id_last_msg
 		FROM {db_prefix}messages AS m
@@ -313,6 +318,8 @@ function RecentPosts()
 			INNER JOIN {db_prefix}messages AS m2 ON (m2.id_msg = t.id_first_msg)
 			LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = m.id_member)
 			LEFT JOIN {db_prefix}members AS mem2 ON (mem2.id_member = m2.id_member)
+			LEFT JOIN {db_prefix}likes AS l ON (l.id_msg = m.id_msg AND l.ctype = 1 AND l.id_user = '.$user_info['id'].')
+			LEFT JOIN {db_prefix}like_cache AS lc ON (lc.id_msg = m.id_msg AND lc.ctype = 1)
 			LEFT JOIN {db_prefix}messages_cache AS mc ON (mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang})
 		WHERE m.id_msg IN ({array_int:message_list})
 		ORDER BY m.id_msg DESC
@@ -335,14 +342,18 @@ function RecentPosts()
 		$context['can_see_hidden_level2'] = count(array_intersect($check_boards, $boards_hidden_2)) > 0;
 		$context['can_see_hidden_level3'] = count(array_intersect($check_boards, $boards_hidden_3)) > 0;
 
+		$context['can_see_like'] = count(array_intersect($check_boards, $boards_like_see)) > 0;
+		$context['can_give_like'] = count(array_intersect($check_boards, $boards_like_give)) > 0;
+
 		// Censor everything.
 		censorText($row['body']);
 		censorText($row['subject']);
 
-		getCachedPost($row);
+		getCachedPost($row);    	// this will also care about bbc parsing...
 		// And build the array.
 		$context['posts'][$row['id_msg']] = array(
 			'id' => $row['id_msg'],
+			'id_msg' => $row['id_msg'],
 			'counter' => $counter++,
 			'alternate' => $counter % 2,
 			'category' => array(
@@ -376,12 +387,19 @@ function RecentPosts()
 				'href' => empty($row['id_member']) ? '' : $scripturl . '?action=profile;u=' . $row['id_member'],
 				'link' => empty($row['id_member']) ? $row['poster_name'] : '<a href="' . $scripturl . '?action=profile;u=' . $row['id_member'] . '">' . $row['poster_name'] . '</a>'
 			),
+			'id_member' => $row['id_member'],
 			'message' => $row['body'],
 			'can_reply' => false,
 			'can_mark_notify' => false,
 			'can_delete' => false,
 			'delete_possible' => ($row['id_first_msg'] != $row['id_msg'] || $row['id_last_msg'] == $row['id_msg']) && (empty($modSettings['edit_disable_time']) || $row['poster_time'] + $modSettings['edit_disable_time'] * 60 >= time()),
+			'likes_count' => $row['likes_count'],
+			'like_status' => $row['like_status'],
+			'liked' => $row['liked'],
+			'like_updated' => $row['like_updated'],
 		);
+		if($context['can_see_like'])
+			AddLikeBar($context['posts'][$row['id_msg']], $context['can_give_like'], $context['time_now']);
 
 		if ($user_info['id'] == $row['id_first_member'])
 			$board_ids['own'][$row['id_board']][] = $row['id_msg'];

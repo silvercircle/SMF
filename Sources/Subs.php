@@ -4256,6 +4256,12 @@ function normalizeCommaDelimitedList($b, $sep = ',', $join = ',')
 	return(implode($join, $bnew));
 }
 
+/**
+ * @param $message			array - a database request containing a message row
+ *
+ * retrieve cached version of a post if available. This does *not* on-demand update
+ * the cache. If no cached version is available, the normal version will be parsed and returned
+ */
 function getCachedPost(&$message)
 {
 	global $modSettings;

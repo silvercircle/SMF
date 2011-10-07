@@ -1250,6 +1250,7 @@ function scheduled_fetchSMfiles()
 {
 	global $sourcedir, $txt, $language, $settings, $forum_version, $modSettings, $smcFunc;
 
+	return;			// todo this does no longer make sense
 	// What files do we want to get
 	$request = smf_db_query( '
 		SELECT id_file, filename, path, parameters

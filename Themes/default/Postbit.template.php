@@ -124,7 +124,7 @@ function template_postbit_normal(&$message, $ignoring)
 			<h5 style="display:inline;" id="subject_', $message['id'], '">
 			', $message['subject'], '
 			</h5>
-			<span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['href'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span onclick="sharePost($(this));"><a href="#!">Share</a></span>' : ''),'</span>
+			<span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['permahref'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span onclick="sharePost($(this));"><a href="#!">Share</a></span>' : ''),'</span>
 			<span class="smalltext">&nbsp;',$message['time'], '</span>
 			<div id="msg_', $message['id'], '_quick_mod"></div>';
 
@@ -249,8 +249,8 @@ function template_postbit_normal(&$message, $ignoring)
 
 	echo '
 		</div>';
-					if($message['likes_count'] > 0 || !empty($message['likelink'])) 
-						echo '
+		if($message['likes_count'] > 0 || !empty($message['likelink']))
+			echo '
 		<div class="likebar">
 		<div class="floatright">',$message['likelink'],'</div>
 		<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
@@ -371,7 +371,7 @@ function template_postbit_blog(&$message, $ignoring)
 					  ',$message['subject'],'
 					  </h5>	  
 					  <span class="smalltext">&nbsp;',$message['time'], '</span>						  
-					  <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['href'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span onclick="sharePost($(this));"><a href="#!">Share</a></span>' : ''),'</span>
+					  <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['permahref'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span onclick="sharePost($(this));"><a href="#!">Share</a></span>' : ''),'</span>
 					  </div>
 					  <div id="msg_', $message['id'], '_quick_mod"></div>';
 

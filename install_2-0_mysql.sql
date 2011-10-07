@@ -2153,6 +2153,7 @@ CREATE TABLE {$db_prefix}topics (
   UNIQUE first_message (id_first_msg, id_board),
   UNIQUE poll (id_poll, id_topic),
   KEY is_sticky (is_sticky),
+  KEY id_prefix (id_prefix),
   KEY approved (approved),
   KEY id_board (id_board),
   KEY member_started (id_member_started, id_board),

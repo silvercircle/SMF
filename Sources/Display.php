@@ -384,7 +384,10 @@ function Display()
 			}
 
 			// We need to reverse the start as well in this case.
-			$_REQUEST['start'] = empty($options['view_newest_first']) ? $context['start_from'] : $context['total_visible_posts'] - $context['start_from'] - 1;
+			if(isset($_REQUEST['perma']))
+				$_REQUEST['start'] = $virtual_msg;
+			else
+				$_REQUEST['start'] = empty($options['view_newest_first']) ? $context['start_from'] : $context['total_visible_posts'] - $context['start_from'] - 1;
 		}
 	}
 
@@ -493,7 +496,8 @@ function Display()
 		$_REQUEST['start'] = -1;
 
 	// Construct the page index, allowing for the .START method...
-	$context['page_index'] = constructPageIndex($scripturl . '?topic=' . $topic . '.%1$d', $_REQUEST['start'], $context['total_visible_posts'], $context['messages_per_page'], true);
+	if(!isset($_REQUEST['perma']))
+		$context['page_index'] = constructPageIndex($scripturl . '?topic=' . $topic . '.%1$d', $_REQUEST['start'], $context['total_visible_posts'], $context['messages_per_page'], true);
 	$context['start'] = $_REQUEST['start'];
 
 	// This is information about which page is current, and which page we're on - in case you don't like the constructed page index. (again, wireles..)
@@ -510,7 +514,6 @@ function Display()
 		'last' => $_REQUEST['start'] + $context['messages_per_page'] < $context['total_visible_posts'] ? $scripturl . '?topic=' . $topic. '.' . (floor($context['total_visible_posts'] / $context['messages_per_page']) * $context['messages_per_page']) : '',
 		'up' => $scripturl . '?board=' . $board . '.0'
 	);
-
 	// If they are viewing all the posts, show all the posts, otherwise limit the number.
 	if ($can_show_all)
 	{
@@ -833,34 +836,51 @@ function Display()
 		$firstIndex = $limit - 1;
 	}
 
-	// Get each post and poster in this topic.
-	$request = smf_db_query('
-		SELECT id_msg, id_member, approved
-		FROM {db_prefix}messages
-		WHERE id_topic = {int:current_topic}' . (!$modSettings['postmod_active'] || allowedTo('approve_posts') ? '' : (!empty($modSettings['db_mysql_group_by_fix']) ? '' : '
-		GROUP BY id_msg') . '
-		HAVING (approved = {int:is_approved}' . ($user_info['is_guest'] ? '' : ' OR id_member = {int:current_member}') . ')') . '
-		ORDER BY id_msg ' . ($ascending ? '' : 'DESC') . ($context['messages_per_page'] == -1 ? '' : '
-		LIMIT ' . $start . ', ' . $limit),
-		array(
-			'current_member' => $user_info['id'],
-			'current_topic' => $topic,
-			'is_approved' => 1,
-			'blank_id_member' => 0,
-		)
-	);
+	if(!isset($_REQUEST['perma'])) {
+		// Get each post and poster in this topic.
+		$request = smf_db_query('
+			SELECT id_msg, id_member, approved
+			FROM {db_prefix}messages
+			WHERE id_topic = {int:current_topic}' . (!$modSettings['postmod_active'] || allowedTo('approve_posts') ? '' : (!empty($modSettings['db_mysql_group_by_fix']) ? '' : '
+			GROUP BY id_msg') . '
+			HAVING (approved = {int:is_approved}' . ($user_info['is_guest'] ? '' : ' OR id_member = {int:current_member}') . ')') . '
+			ORDER BY id_msg ' . ($ascending ? '' : 'DESC') . ($context['messages_per_page'] == -1 ? '' : '
+			LIMIT ' . $start . ', ' . $limit),
+			array(
+				'current_member' => $user_info['id'],
+				'current_topic' => $topic,
+				'is_approved' => 1,
+				'blank_id_member' => 0,
+			)
+		);
 
-	$messages = array();
-	$all_posters = array();
-	while ($row = mysql_fetch_assoc($request))
-	{
-		if (!empty($row['id_member']))
-			$all_posters[$row['id_msg']] = $row['id_member'];
-		$messages[] = $row['id_msg'];
+		$messages = array();
+		$all_posters = array();
+		while ($row = mysql_fetch_assoc($request))
+		{
+			if (!empty($row['id_member']))
+				$all_posters[$row['id_msg']] = $row['id_member'];
+			$messages[] = $row['id_msg'];
+		}
+		mysql_free_result($request);
+		$posters = array_unique($all_posters);
 	}
-	mysql_free_result($request);
-	$posters = array_unique($all_posters);
-
+	else {
+		$request = smf_db_query('
+			SELECT id_member, approved
+			FROM {db_prefix}messages
+			WHERE id_msg = {int:id_msg}',
+			array(
+				'id_msg' => $virtual_msg
+			)
+		);
+		list($id_member, $approved) = mysql_fetch_row($request);
+		mysql_free_result($request);
+		loadTemplate('DisplaySingle');
+		$context['sub_template'] = 'single_post';
+		$messages = array($virtual_msg);
+		$posters[$virtual_msg] = $id_member;
+	}
 	// Guests can't mark topics read or for notifications, just can't sorry.
 	if (!$user_info['is_guest'])
 	{
@@ -1281,6 +1301,7 @@ function prepareDisplayContext($reset = false)
 		'id' => $message['id_msg'],
 		'id_msg' => $message['id_msg'],
 		'href' => $scripturl . '?topic=' . $topic . '.msg' . $message['id_msg'] . '#msg' . $message['id_msg'],
+		'permahref' => $scripturl . '?msg=' . $message['id_msg'],
 		'link' => '<a href="' . $scripturl . '?topic=' . $topic . '.msg' . $message['id_msg'] . '#msg' . $message['id_msg'] . '" rel="nofollow">' . $message['subject'] . '</a>',
 		'member' => &$memberContext[$message['id_member']],
 		'icon' => $message['icon'],
