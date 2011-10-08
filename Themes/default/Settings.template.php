@@ -1,15 +1,16 @@
 <?php
 /**
+ * %%@productname@%%
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.0
+ * @version %%@productversion@%%
  */
-
 function template_options()
 {
 	global $context, $settings, $options, $scripturl, $txt;
@@ -194,15 +195,6 @@ function template_settings()
 			'label' => $txt['enable_random_news'],
 		),
 	'',
-		array(
-			'id' => 'show_newsfader',
-			'label' => $txt['news_fader'],
-		),
-		array(
-			'id' => 'newsfader_time',
-			'label' => $txt['admin_fader_delay'],
-			'type' => 'number',
-		),
 		array(
 			'id' => 'number_recent_posts',
 			'label' => $txt['number_recent_posts'],

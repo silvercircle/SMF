@@ -79,7 +79,6 @@ $txt['last_modification'] = 'Show last modification date on modified posts';
 $txt['user_avatars'] = 'Show user avatars in message view';
 $txt['user_text'] = 'Show personal text in message view';
 $txt['gender_images'] = 'Show gender images in message view';
-$txt['news_fader'] = 'Show news fader on board index';
 $txt['member_list_bar'] = 'Show members list bar on board index';
 $txt['current_pos_text_img'] = 'Show current position in forum as link instead of text';
 $txt['show_view_profile_button'] = 'Show view profile button under post';
