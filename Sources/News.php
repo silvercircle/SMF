@@ -888,7 +888,6 @@ function getXmlProfile($xml_format)
 			'author' => array(
 				'name' => $profile['real_name'],
 				'email' => in_array(showEmailAddress(!empty($profile['hide_email']), $profile['id']), array('yes', 'yes_permission_override')) ? $profile['email'] : null,
-				'uri' => !empty($profile['website']) ? $profile['website']['url'] : ''
 			),
 			'published' => gmstrftime('%Y-%m-%dT%H:%M:%SZ', $user_profile[$profile['id']]['date_registered']),
 			'updated' => gmstrftime('%Y-%m-%dT%H:%M:%SZ', $user_profile[$profile['id']]['last_login']),
@@ -927,12 +926,6 @@ function getXmlProfile($xml_format)
 			$data['location'] = cdata_parse($profile['location']);
 		if ($profile['title'] != '')
 			$data['title'] = cdata_parse($profile['title']);
-
-		if ($profile['website']['title'] != '')
-			$data['website'] = array(
-				'title' => cdata_parse($profile['website']['title']),
-				'link' => $profile['website']['url']
-			);
 
 		if ($profile['group'] != '')
 			$data['position'] = cdata_parse($profile['group']);

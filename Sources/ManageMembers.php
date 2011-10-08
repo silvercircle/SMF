@@ -285,10 +285,6 @@ function ViewMemberlist()
 				'db_fields' => array('email_address'),
 				'type' => 'string'
 			),
-			'website' => array(
-				'db_fields' => array('website_title', 'website_url'),
-				'type' => 'string'
-			),
 			'location' => array(
 				'db_fields' => array('location'),
 				'type' => 'string'

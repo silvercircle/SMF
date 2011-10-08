@@ -4,8 +4,6 @@
 global $scripturl, $context;
 
 $txt['no_profile_edit'] = 'You are not allowed to change this person\'s profile.';
-$txt['website_title'] = 'Website title';
-$txt['website_url'] = 'Website URL';
 $txt['signature'] = 'Signature';
 $txt['profile_posts'] = 'Posts';
 $txt['change_profile'] = 'Change profile';

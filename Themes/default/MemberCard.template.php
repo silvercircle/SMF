@@ -56,9 +56,7 @@ function template_main()
 		if(!empty($loc)) 
 			echo implode(', ', $loc), '<br />';
 		echo 'Member since: ', $member['registered'],'<br />';
-		if(!empty($member['website']['url']))
-			echo 'Web site: <a href="',$member['website']['url'],'">', $member['website']['title'], '</a><br />';
-		
+
 		echo '<br />',sprintf($txt['like_profile_report'], $member['name'], $member['likesgiven'], $member['liked'], $member['posts']), '<br /><br />';
 		
 		if($member['online']['is_online'])

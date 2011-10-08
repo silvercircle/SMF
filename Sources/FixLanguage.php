@@ -777,8 +777,6 @@ $txtChanges = array(
 	),
 	'Profile' => array(
 		80 => 'no_profile_edit',
-		83 => 'website_title',
-		84 => 'website_url',
 		85 => 'signature',
 		86 => 'profile_posts',
 		88 => 'change_profile',

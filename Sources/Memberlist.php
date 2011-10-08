@@ -277,10 +277,6 @@ function MLAll()
 			'down' => allowedTo('moderate_forum') ? 'mem.email_address DESC' : 'mem.hide_email DESC, mem.email_address DESC',
 			'up' => allowedTo('moderate_forum') ? 'mem.email_address ASC' : 'mem.hide_email ASC, mem.email_address ASC'
 		),
-		'website_url' => array(
-			'down' => 'LENGTH(mem.website_url) > 0 ASC, IFNULL(mem.website_url, 1=1) DESC, mem.website_url DESC',
-			'up' => 'LENGTH(mem.website_url) > 0 DESC, IFNULL(mem.website_url, 1=1) ASC, mem.website_url ASC'
-		),
 		'registered' => array(
 			'down' => 'mem.date_registered DESC',
 			'up' => 'mem.date_registered ASC'
@@ -418,9 +414,6 @@ function MLSearch()
 			$fields = array('member_name', 'real_name');
 		else
 			$fields = array();
-		// Search for websites.
-		if (in_array('website', $_POST['fields']))
-			$fields += array(7 => 'website_title', 'website_url');
 		// Search for groups.
 		if (in_array('group', $_POST['fields']))
 			$fields += array(9 => 'IFNULL(group_name, {string:blank_string})');
@@ -488,7 +481,6 @@ function MLSearch()
 			'name' => $txt['mlist_search_name'],
 			'email' => $txt['mlist_search_email'],
 			'messenger' => $txt['mlist_search_messenger'],
-			'website' => $txt['mlist_search_website'],
 			'group' => $txt['mlist_search_group'],
 		);
 

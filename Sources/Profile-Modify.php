@@ -681,31 +681,6 @@ function loadProfileFields($force_reload = false)
 			'permission' => 'profile_title',
 			'enabled' => !empty($modSettings['titlesEnable']),
 		),
-		'website_title' => array(
-			'type' => 'text',
-			'label' => $txt['website_title'],
-			'subtext' => $txt['include_website_url'],
-			'size' => 50,
-			'permission' => 'profile_extra',
-			'link_with' => 'website',
-		),
-		'website_url' => array(
-			'type' => 'text',
-			'label' => $txt['website_url'],
-			'subtext' => $txt['complete_url'],
-			'size' => 50,
-			'permission' => 'profile_extra',
-			// Fix the URL...
-			'input_validate' => create_function('&$value', '
-
-				if (strlen(trim($value)) > 0 && strpos($value, \'://\') === false)
-					$value = \'http://\' . $value;
-				if (strlen($value) < 8 || (substr($value, 0, 7) !== \'http://\' && substr($value, 0, 8) !== \'https://\'))
-					$value = \'\';
-				return true;
-			'),
-			'link_with' => 'website',
-		),
 	);
 
 	$disabled_fields = !empty($modSettings['disabled_profile_fields']) ? explode(',', $modSettings['disabled_profile_fields']) : array();
@@ -1573,7 +1548,6 @@ function forumProfile($memID)
 			'bday1', 'location', 'gender', 'hr',
 			'usertitle', 'signature', 'hr',
 			'karma_good', 'hr',
-			'website_title', 'website_url',
 		)
 	);
 }

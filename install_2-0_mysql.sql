@@ -1218,8 +1218,6 @@ CREATE TABLE {$db_prefix}members (
   personal_text varchar(255) NOT NULL default '',
   gender tinyint(4) unsigned NOT NULL default '0',
   birthdate date NOT NULL default '0001-01-01',
-  website_title varchar(255) NOT NULL default '',
-  website_url varchar(255) NOT NULL default '',
   location varchar(255) NOT NULL default '',
   hide_email tinyint(4) NOT NULL default '0',
   show_online tinyint(4) NOT NULL default '1',

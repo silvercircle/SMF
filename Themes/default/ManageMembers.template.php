@@ -111,12 +111,6 @@ function template_search_members()
 									<input type="text" name="email" value="" class="input_text" />
 								</dd>
 								<dt class="righttext">
-									<strong>', $txt['website'], ':</strong>
-								</dt>
-								<dd>
-									<input type="text" name="website" value="" class="input_text" />
-								</dd>
-								<dt class="righttext">
 									<strong>', $txt['location'], ':</strong>
 								</dt>
 								<dd>

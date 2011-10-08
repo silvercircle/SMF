@@ -455,8 +455,6 @@ function updateMemberData($members, $data)
 			'id_group',
 			'gender',
 			'birthdate',
-			'website_title',
-			'website_url',
 			'location',
 			'hide_email',
 			'time_format',

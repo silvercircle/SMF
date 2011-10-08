@@ -999,7 +999,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 		$select_columns = '
 			IFNULL(lo.log_time, 0) AS is_online, IFNULL(a.id_attach, 0) AS id_attach, a.filename, a.attachment_type,
 			mem.signature, mem.personal_text, mem.location, mem.gender, mem.avatar, mem.id_member, mem.member_name,
-			mem.real_name, mem.email_address, mem.hide_email, mem.date_registered, mem.website_title, mem.website_url,
+			mem.real_name, mem.email_address, mem.hide_email, mem.date_registered,
 			mem.birthdate, mem.member_ip, mem.member_ip2, mem.posts, mem.last_login,
 			mem.karma_good, mem.id_post_group, mem.karma_bad, mem.lngfile, mem.id_group, mem.time_offset, mem.show_online,
 			mem.buddy_list, mg.online_color AS member_group_color, IFNULL(mg.group_name, {string:blank_string}) AS member_group,
@@ -1018,7 +1018,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 		$select_columns = '
 			IFNULL(lo.log_time, 0) AS is_online, IFNULL(a.id_attach, 0) AS id_attach, a.filename, a.attachment_type,
 			mem.signature, mem.personal_text, mem.location, mem.gender, mem.avatar, mem.id_member, mem.member_name,
-			mem.real_name, mem.email_address, mem.hide_email, mem.date_registered, mem.website_title, mem.website_url,
+			mem.real_name, mem.email_address, mem.hide_email, mem.date_registered,
 			mem.openid_uri, mem.birthdate, mem.posts, mem.last_login, mem.karma_good,
 			mem.karma_bad, mem.member_ip, mem.member_ip2, mem.lngfile, mem.id_group, mem.id_theme, mem.buddy_list,
 			mem.pm_ignore_list, mem.pm_email_notify, mem.pm_receive_from, mem.time_offset' . (!empty($modSettings['titlesEnable']) ? ', mem.usertitle' : '') . ',
@@ -1199,10 +1199,6 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'gender' => array(
 			'name' => $gendertxt,
 			'image' => !empty($profile['gender']) ? '<img class="gender" src="' . $settings['images_url'] . '/' . ($profile['gender'] == 1 ? 'Male' : 'Female') . '.gif" alt="' . $gendertxt . '" />' : ''
-		),
-		'website' => array(
-			'title' => $profile['website_title'],
-			'url' => $profile['website_url'],
 		),
 		'birth_date' => empty($profile['birthdate']) || $profile['birthdate'] === '0001-01-01' ? '0000-00-00' : (substr($profile['birthdate'], 0, 4) === '0004' ? '0000' . substr($profile['birthdate'], 4) : $profile['birthdate']),
 		'signature' => $profile['signature'],
