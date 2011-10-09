@@ -114,8 +114,10 @@ loadSession();
 
 // todo: testing hooks...
 
-//add_integration_function('integrate_pre_include', $sourcedir . 'contrib/footnotes.php', TRUE);
-//add_integration_function('integrate_parse_bbc_after', 'fnotes/footnotes.php', 'fnotes_parse');
+//HookAPI::removeHook('integrate_parse_bbc_after', 'fnotes', 'footnotes.php', 'fnotesTest::dummy');
+//HookAPI::removeHook('integrate_bbc_codes', 'LegacyBBC', 'main.php', 'legacybbc_addtags');
+//HookAPI::removeHook('integrate_parse_bbc_after', 'fnotes', 'footnotes.php', 'fnotes_parse_dummy');
+//HookAPI::removeAll('LegacyBBC');
 
 // Determine if this is using WAP, WAP2, or imode.  Technically, we should check that wap comes before application/xhtml or text/html, but this doesn't work in practice as much as it should.
 if (isset($_REQUEST['wap']) || isset($_REQUEST['wap2']) || isset($_REQUEST['imode']))
@@ -366,5 +368,4 @@ function smf_main()
 	require_once($sourcedir . '/' . $actionArray[$_REQUEST['action']][0]);
 	return $actionArray[$_REQUEST['action']][1];
 }
-
 ?>

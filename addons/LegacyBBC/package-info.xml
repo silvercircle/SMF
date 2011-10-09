@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
+    <id>alexvie:legacybbc</id>
+    <name>Legacy BBC tags</name>
+    <version>1.0</version>
+    <type>addon</type>
+
+    <install for="1.0">
+        <readme parsebbc="true">readme.txt</readme>
+        <code>add_settings.php</code>
+        <create-dir name="LegacyBBC" destination="$addons">Directory to store extensions in</create-dir>
+        <require-file from="./Packages/temp/main.php" name="main.php" destination="$addons" product="LegacyBBC">Install the core SimpleSEF file</require-file>
+        <hook-add name="integrate_bbc_codes" product="LegacyBBC" file="main.php" fn="legacybbc_addtags"></hook-add>
+        <redirect type="inline" url="?action=admin;area=simplesef;sa=basic" timeout="7000">Thank you for installing SimpleSEF, you will now be redirected to the settings page.</redirect>
+    </install>
+
+    <uninstall for="1.0">
+        <code>remove_settings.php</code>
+        <remove-file name="$languagedir/SimpleSEF.english.php" />
+        <remove-file name="$themedir/SimpleSEF.template.php" />
+        <remove-file name="$themedir/scripts/SelectSwapper.js" />
+        <remove-file name="$sourcedir/SimpleSEF.php" />
+        <remove-dir name="$sourcedir/SimpleSEF-Db" />
+    </uninstall>
+</package-info>

@@ -287,20 +287,6 @@ function reloadSettings()
 		foreach ($integration_settings as $hook => $function)
 			add_integration_function($hook, $function, false);
 	}
-
-	// Any files to pre include?
-	/*
-	if (!empty($modSettings['integrate_pre_include']))
-	{
-		$pre_includes = explode(',', $modSettings['integrate_pre_include']);
-		foreach ($pre_includes as $include)
-		{
-			$include = strtr(trim($include), array('$boarddir' => $boarddir, '$sourcedir' => $sourcedir));
-			if (file_exists($include))
-				require_once($include);
-		}
-	}
-    */
 	// Call pre load integration functions.
 	HookAPI::callHook('integrate_pre_load');
 	SimpleSEF::convertQueryString();
@@ -2586,12 +2572,18 @@ function cache_put_data($key, $value, $ttl = 120)
 		$st = microtime();
 	}
 
-	//$key = md5($boardurl . filemtime($sourcedir . '/Load.php')) . '-SMF-' . strtr($key, ':', '-');
 	$key = $__basekey . strtr($key, ':', '-');
 	$value = $value === null ? null : serialize($value);
 
 	// The simple yet efficient memcached.
-	if (function_exists('memcache_set') && isset($modSettings['cache_memcached']) && trim($modSettings['cache_memcached']) != '')
+	if (class_exists('memcached', false) && !empty($modSettings['cache_memcached']))
+	{
+		$key = str_replace(' ', '_', $key);
+
+		$instance = CommonAPI::getMemcachedServer();
+		$instance->set($key, $value, $ttl);
+	}
+	elseif (function_exists('memcache_set') && !empty($modSettings['cache_memcached']))
 	{
 		// Not connected yet?
 		if (empty($memcached))
@@ -2665,11 +2657,17 @@ function cache_get_data($key, $ttl = 120)
 		$st = microtime();
 	}
 
-	//$key = md5($boardurl . filemtime($sourcedir . '/Load.php')) . '-SMF-' . strtr($key, ':', '-');
 	$key = $__basekey . strtr($key, ':', '-');
 
 	// Okay, let's go for it memcached!
-	if (function_exists('memcache_get') && isset($modSettings['cache_memcached']) && trim($modSettings['cache_memcached']) != '')
+	if (class_exists('memcached', false) && !empty($modSettings['cache_memcached']))
+	{
+		$key = str_replace(' ', '_', $key);
+
+		$instance = CommonAPI::getMemcachedServer();
+		$value = $instance->get($key);
+	}
+	elseif (function_exists('memcache_get') && !empty($modSettings['cache_memcached']))
 	{
 		// Not connected yet?
 		if (empty($memcached))
@@ -2730,5 +2728,4 @@ function get_memcached_server($level = 3)
 	if (!$memcached && $level > 0)
 		get_memcached_server($level - 1);
 }
-
 ?>

@@ -1107,28 +1107,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'test' => '(rtl|ltr)\]',
 				'block_level' => true,
 			),
-			/*
-			array(
-				'tag' => 'black',
-				'before' => '<span style="color: black;" class="bbc_color">',
-				'after' => '</span>',
-			),
-			array(
-				'tag' => 'blue',
-				'before' => '<span style="color: blue;" class="bbc_color">',
-				'after' => '</span>',
-			),
-			array(
-				'tag' => 'green',
-				'before' => '<span style="color: green;" class="bbc_color">',
-				'after' => '</span>',
-			),
-			array(
-				'tag' => 'red',
-				'before' => '<span style="color: red;" class="bbc_color">',
-				'after' => '</span>',
-			),
-			*/
 			array(
 				'tag' => 'br',
 				'type' => 'closed',
@@ -1234,36 +1212,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'before' => '<span style="font-family: $1;" class="bbc_font">',
 				'after' => '</span>',
 			),
-			/*
-			array(
-				'tag' => 'ftp',
-				'type' => 'unparsed_content',
-				'content' => '<a href="$1" class="bbc_ftp new_win" target="_blank">$1</a>',
-				'validate' => create_function('&$tag, &$data, $disabled', '
-					$data = strtr($data, array(\'<br />\' => \'\'));
-					if (strpos($data, \'ftp://\') !== 0 && strpos($data, \'ftps://\') !== 0)
-						$data = \'ftp://\' . $data;
-				'),
-			),
-			array(
-				'tag' => 'ftp',
-				'type' => 'unparsed_equals',
-				'before' => '<a href="$1" class="bbc_ftp new_win" target="_blank">',
-				'after' => '</a>',
-				'validate' => create_function('&$tag, &$data, $disabled', '
-					if (strpos($data, \'ftp://\') !== 0 && strpos($data, \'ftps://\') !== 0)
-						$data = \'ftp://\' . $data;
-				'),
-				'disallow_children' => array('email', 'ftp', 'url', 'iurl'),
-				'disabled_after' => ' ($1)',
-			),
-			/*array(
-				'tag' => 'glow',
-				'type' => 'unparsed_commas',
-				'test' => '[#0-9a-zA-Z\-]{3,12},([012]\d{1,2}|\d{1,2})(,[^]]+)?\]',
-				'before' => $context['browser']['is_ie'] ? '<table border="0" cellpadding="0" cellspacing="0" style="display: inline; vertical-align: middle; font: inherit;"><tr><td style="filter: Glow(color=$1, strength=$2); font: inherit;">' : '<span style="text-shadow: $1 1px 1px 1px">',
-				'after' => $context['browser']['is_ie'] ? '</td></tr></table> ' : '</span>',
-			),*/
 			array(
 				'tag' => 'html',
 				'type' => 'unparsed_content',
@@ -1403,13 +1351,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'disabled_before' => '/me ',
 				'disabled_after' => '<br />',
 			),
-			/*array(
-				'tag' => 'move',
-				'before' => '<marquee>',
-				'after' => '</marquee>',
-				'block_level' => true,
-				'disallow_children' => array('move'),
-			),*/
 			array(
 				'tag' => 'nobbc',
 				'type' => 'unparsed_content',
@@ -2451,7 +2392,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
  */
 function parse_bbc_stage2(&$message, $is_for_editor = false)
 {
-	global $context, $txt;
+	global $context, $txt, $modSettings;
 
 	if (stripos($message, '[hide lev')) {
 		$allowed_level[1] = isset($context['can_see_hidden_level1']) ? $context['can_see_hidden_level1'] : 0;
@@ -2473,6 +2414,8 @@ function parse_bbc_stage2(&$message, $is_for_editor = false)
 			}
 		}
 	}
+	//if(!empty($modSettings['enableAdvancedHooks']))
+	//	HookAPI::callHook('bbc_stage2', array(&$message));
 }
 
 // Parse smileys in the passed message.
@@ -4135,82 +4078,6 @@ function smf_seed_generator()
 	// Change the seed.
 	updateSettings(array('rand_seed' => mt_rand()));
 }
-
-// Process functions of an integration hook.
-function call_integration_hook($hook, $parameters = array())
-{
-}
-/*
-function call_integration_hook_old($hook, $parameters = array())
-{
-	global $modSettings;
-
-	$results = array();
-	if (empty($modSettings[$hook]))
-		return $results;
-
-	$functions = explode(',', $modSettings[$hook]);
-
-	// Loop through each function.
-	foreach ($functions as $function)
-	{
-		$function = trim($function);
-		$call = strpos($function, '::') !== false ? explode('::', $function) : $function;
-
-		// Is it valid?
-		if (is_callable($call))
-			$results[$function] = call_user_func_array($call, $parameters);
-	}
-
-	return $results;
-}
-*/
-// Add a function for integration hook.
-/*
-function add_integration_function_old($hook, $function, $permanent = true)
-{
-	global $smcFunc, $modSettings;
-
-	// Is it going to be permanent?
-	if ($permanent)
-	{
-		$request = smf_db_query( '
-			SELECT value
-			FROM {db_prefix}settings
-			WHERE variable = {string:variable}',
-			array(
-				'variable' => $hook,
-			)
-		);
-		list($current_functions) = mysql_fetch_row($request);
-		mysql_free_result($request);
-
-		if (!empty($current_functions))
-		{
-			$current_functions = explode(',', $current_functions);
-			if (in_array($function, $current_functions))
-				return;
-
-			$permanent_functions = array_merge($current_functions, array($function));
-		}
-		else
-			$permanent_functions = array($function);
-
-		updateSettings(array($hook => implode(',', $permanent_functions)));
-	}
-
-	// Make current function list usable.
-	$functions = empty($modSettings[$hook]) ? array() : explode(',', $modSettings[$hook]);
-
-	// Do nothing, if it's already there.
-	if (in_array($function, $functions))
-		return;
-
-	$functions[] = $function;
-	$modSettings[$hook] = implode(',', $functions);
-}
-*/
-// Remove an integration hook function.
 
 function normalizeCommaDelimitedList($b, $sep = ',', $join = ',')
 {
