@@ -206,7 +206,7 @@ if (!defined('SMF'))
 		- it may only remove the files of a certain type
 		(if the $type parameter is given)
 
-	array call_integration_hook(string hook, array parameters = array())
+	array HookAPI::callHook(string hook, array parameters = array())
 		- calls all functions of the given hook.
 		- supports static class method calls.
 		- returns the results of the functions as an array.
@@ -486,7 +486,7 @@ function updateMemberData($members, $data)
 
 			if (!empty($member_names))
 				foreach ($vars_to_integrate as $var)
-					call_integration_hook('integrate_change_member_data', array($member_names, $var, $data[$var]));
+					HookAPI::callHook('integrate_change_member_data', array($member_names, $var, $data[$var]));
 		}
 	}
 
@@ -1601,7 +1601,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 		);
 
 		// Let mods add new BBC without hassle.
-		call_integration_hook('integrate_bbc_codes', array(&$codes));
+		HookAPI::callHook('integrate_bbc_codes', array(&$codes));
 
 		// This is mainly for the bbc manager, so it's easy to add tags above.  Custom BBC should be added above this line.
 		if ($message === false)
@@ -2421,7 +2421,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	/*
 	 * experimental hook... this could be used to support mods like footnotes, for example
 	 */
-	call_integration_hook('integrate_parse_bbc_after', array(&$message, &$parse_tags, &$smileys));
+	HookAPI::callHook('integrate_parse_bbc_after', array(&$message, &$parse_tags, &$smileys));
 
 	// Cache the output if it took some time...
 	if (isset($cache_key, $cache_t) && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
@@ -2743,7 +2743,7 @@ function redirectexit($setLocation = '', $refresh = false)
 	}
 
 	// Maybe integrations want to change where we are heading?
-	call_integration_hook('integrate_redirect', array(&$setLocation, &$refresh));
+	HookAPI::callHook('integrate_redirect', array(&$setLocation, &$refresh));
 
 	if(!empty($modSettings['simplesef_enable']))
 		SimpleSEF::fixRedirectUrl($setLocation, $refresh);
@@ -2855,7 +2855,7 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 	$_SESSION['USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
 
 	// Hand off the output to the portal, etc. we're integrated with.
-	call_integration_hook('integrate_exit', array($do_footer && !WIRELESS));
+	HookAPI::callHook('integrate_exit', array($do_footer && !WIRELESS));
 
 	if(!empty($modSettings['simplesef_enable']))
 		SimpleSEF::fixXMLOutput($do_footer && !WIRELESS);
@@ -4045,7 +4045,7 @@ function setupMenuContext()
 		);
 
 		// Allow editing menu buttons easily.
-		call_integration_hook('integrate_menu_buttons', array(&$buttons));
+		HookAPI::callHook('integrate_menu_buttons', array(&$buttons));
 
 		SimpleSEF::menuButtons($buttons);
 		// Now we put the buttons in the context so the theme can use them.
@@ -4139,6 +4139,10 @@ function smf_seed_generator()
 // Process functions of an integration hook.
 function call_integration_hook($hook, $parameters = array())
 {
+}
+/*
+function call_integration_hook_old($hook, $parameters = array())
+{
 	global $modSettings;
 
 	$results = array();
@@ -4160,9 +4164,10 @@ function call_integration_hook($hook, $parameters = array())
 
 	return $results;
 }
-
+*/
 // Add a function for integration hook.
-function add_integration_function($hook, $function, $permanent = true)
+/*
+function add_integration_function_old($hook, $function, $permanent = true)
 {
 	global $smcFunc, $modSettings;
 
@@ -4204,42 +4209,8 @@ function add_integration_function($hook, $function, $permanent = true)
 	$functions[] = $function;
 	$modSettings[$hook] = implode(',', $functions);
 }
-
+*/
 // Remove an integration hook function.
-function remove_integration_function($hook, $function)
-{
-	global $smcFunc, $modSettings;
-
-	// Get the permanent functions.
-	$request = smf_db_query( '
-		SELECT value
-		FROM {db_prefix}settings
-		WHERE variable = {string:variable}',
-		array(
-			'variable' => $hook,
-		)
-	);
-	list($current_functions) = mysql_fetch_row($request);
-	mysql_free_result($request);
-
-	if (!empty($current_functions))
-	{
-		$current_functions = explode(',', $current_functions);
-
-		if (in_array($function, $current_functions))
-			updateSettings(array($hook => implode(',', array_diff($current_functions, array($function)))));
-	}
-
-	// Turn the function list into something usable.
-	$functions = empty($modSettings[$hook]) ? array() : explode(',', $modSettings[$hook]);
-
-	// You can only remove it if it's available.
-	if (!in_array($function, $functions))
-		return;
-
-	$functions = array_diff($functions, array($function));
-	$modSettings[$hook] = implode(',', $functions);
-}
 
 function normalizeCommaDelimitedList($b, $sep = ',', $join = ',')
 {
@@ -4303,7 +4274,8 @@ function registerFooterScriptFragment($key, $script)
 	if(isset($context['footer_script_fragments'][$key]))
 		return;
 
-	$context['footer_script_fragments'][$key] = $script;
+	if(!empty($key) && !empty($script))
+		$context['footer_script_fragments'][$key] = $script;
 }
 /**
  * @param int $board  board id or 0
@@ -4342,7 +4314,7 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 			$context['news_item_count']++;
 			$context['news_items'][] = array(
 				'id' => $row['id_news'],
-				'teaser' => parse_bbc($row['teaser']),
+				'teaser' => !empty($row['teaser']) ? parse_bbc($row['teaser']) : '',
 				'body' => parse_bbc($row['body']),
 			);
 		}

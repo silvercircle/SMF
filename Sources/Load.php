@@ -126,7 +126,9 @@ if (!defined('SMF'))
 // Load the $modSettings array.
 function reloadSettings()
 {
-	global $modSettings, $boarddir, $smcFunc, $db_character_set, $sourcedir;
+	global $modSettings, $boarddir, $smcFunc, $db_character_set, $sourcedir, $_hooks;
+
+	$no_hooks = ((isset($g_disable_all_hooks) && $g_disable_all_hooks === true) || isset($_REQUEST['nohooks']));
 
 	// Most database systems have not set UTF-8 as their default input charset.
 	if (!empty($db_character_set))
@@ -166,6 +168,8 @@ function reloadSettings()
 		if (!empty($modSettings['cache_enable']))
 			cache_put_data('modSettings', $modSettings, 360);
 	}
+	if(!empty($modSettings['integration_hooks']) && !$no_hooks)
+		HookAPI::setHooks($modSettings['integration_hooks']);
 
 	if(__APICOMPAT__) {
 		// Set a list of common functions.
@@ -285,6 +289,7 @@ function reloadSettings()
 	}
 
 	// Any files to pre include?
+	/*
 	if (!empty($modSettings['integrate_pre_include']))
 	{
 		$pre_includes = explode(',', $modSettings['integrate_pre_include']);
@@ -295,9 +300,9 @@ function reloadSettings()
 				require_once($include);
 		}
 	}
-
+    */
 	// Call pre load integration functions.
-	call_integration_hook('integrate_pre_load');
+	HookAPI::callHook('integrate_pre_load');
 	SimpleSEF::convertQueryString();
 }
 
@@ -308,7 +313,7 @@ function loadUserSettings()
 	global $cookiename, $user_info, $language, $context;
 
 	// Check first the integration, then the cookie, and last the session.
-	if (count($integration_ids = call_integration_hook('integrate_verify_user')) > 0)
+	if (count($integration_ids = HookAPI::callHook('integrate_verify_user')) > 0)
 	{
 		$id_member = 0;
 		foreach ($integration_ids as $integration_id)
@@ -1044,7 +1049,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 		trigger_error('loadMemberData(): Invalid member data set \'' . $set . '\'', E_USER_WARNING);
 
 	if(!empty($modSettings['enableAdvancedHooks']))
-		call_integration_hook('integrate_loadmemberdata', array(&$set, &$select_columns, &$select_tables));
+		HookAPI::callHook('integrate_loadmemberdata', array(&$set, &$select_columns, &$select_tables));
 
 	if (!empty($users))
 	{
@@ -1296,7 +1301,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 	}
 
 	if(!empty($modSettings['enableAdvancedHooks']))
-		call_integration_hook('integrate_loadmembercontext', array(&$memberContext[$user], &$profile));
+		HookAPI::callHook('integrate_loadmembercontext', array(&$memberContext[$user], &$profile));
 
 	return true;
 }
@@ -1788,7 +1793,7 @@ function loadTheme($id_theme = 0, $initialize = true)
 	$context['news_item_count'] = 0;
 
 	// Call load theme integration functions.
-	call_integration_hook('integrate_load_theme');
+	HookAPI::callHook('integrate_load_theme');
 
 	SimpleSEF::loadTheme();
 

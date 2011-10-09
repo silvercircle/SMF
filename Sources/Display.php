@@ -1066,7 +1066,7 @@ function Display()
 		);
 
 		if(!empty($modSettings['enableAdvancedHooks']))
-			call_integration_hook('integrate_messagerequest', array(&$sql_what, &$sql_from, &$sql_array));
+			HookAPI::callHook('integrate_messagerequest', array(&$sql_what, &$sql_from, &$sql_array));
 
 		$messages_request = smf_db_query('
 			SELECT ' . $sql_what . ' ' . $sql_from . '
@@ -1207,7 +1207,7 @@ function Display()
 		enqueueThemeScript('drafts', 'scripts/drafts.js', true);
 
     if(!empty($modSettings['enableAdvancedHooks']))
-        call_integration_hook('integrate_display', array());
+        HookAPI::callHook('integrate_display', array());
 }
 
 // Callback for the message display.
@@ -1346,7 +1346,7 @@ function prepareDisplayContext($reset = false)
 		$counter--;
 
     if(!empty($modSettings['enableAdvancedHooks']))
-        call_integration_hook('integrate_postbit', array(&$context, &$output));
+        HookAPI::callHook('integrate_postbit', array(&$context, &$output));
 
 	return $output;
 }

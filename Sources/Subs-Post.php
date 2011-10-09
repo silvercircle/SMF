@@ -725,7 +725,7 @@ function sendmail($to, $subject, $message, $from = null, $message_id = null, $se
 	if(!empty($modSettings['simplesef_enable']))
 		SimpleSEF::fixEmailOutput($subject, $message, $headers);
 	// Pass this to the integration before we start modifying the output -- it'll make it easier later.
-	if (in_array(false, call_integration_hook('integrate_outgoing_email', array(&$subject, &$message, &$headers)), true))
+	if (in_array(false, HookAPI::callHook('integrate_outgoing_email', array(&$subject, &$message, &$headers)), true))
 		return false;
 
 	// Save the original message...
@@ -945,7 +945,7 @@ function sendpm($recipients, $subject, $message, $store_outbox = false, $from = 
 	preparsecode($htmlmessage);
 
 	// Integrated PMs
-	call_integration_hook('integrate_personal_message', array($recipients, $from['username'], $subject, $message));
+	HookAPI::callHook('integrate_personal_message', array($recipients, $from['username'], $subject, $message));
 
 	// Get a list of usernames and convert them to IDs.
 	$usernames = array();
@@ -1928,7 +1928,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		}
 
 		// What if we want to export new topics out to a CMS?
-		call_integration_hook('integrate_create_topic', array($msgOptions, $topicOptions, $posterOptions));
+		HookAPI::callHook('integrate_create_topic', array($msgOptions, $topicOptions, $posterOptions));
 		// record the activity
 		if($context['astream_active'] && !$context['no_astream']) {
 			require_once($sourcedir . '/Subs-Activities.php');

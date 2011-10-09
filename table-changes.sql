@@ -204,7 +204,7 @@ ALTER TABLE {$db_prefix}topics ADD id_prefix smallint(5) unsigned NOT NULL defau
 ALTER TABLE {$db_prefix}topics ADD id_layout tinyint(3) NOT NULL default '0';
 
 # key for the topic prefix (needed for filtering and searching by prefix)
-ALTER TABLE {$db_prefix}topics ADD KEY id_prefix(id_prefix);
+ALTER TABLE {$db_prefix}topics ADD KEY prefix (id_topic, id_prefix),
 
 # description for categories
 ALTER TABLE {$db_prefix}categories ADD description varchar(300) NOT NULL default '' AFTER name;

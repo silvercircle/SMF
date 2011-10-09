@@ -613,7 +613,7 @@ function MessageIndex()
 
 	enqueueThemeScript('topic', 'scripts/topic.js', true);
 	if(!empty($modSettings['enableAdvancedHooks']))
-		call_integration_hook('integrate_messageindex', array());
+		HookAPI::callHook('integrate_messageindex', array());
 }
 
 // Allows for moderation from the message index.

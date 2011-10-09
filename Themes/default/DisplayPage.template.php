@@ -185,7 +185,7 @@ function template_main()
 	);
 
 	// Allow adding new buttons easily.
-	call_integration_hook('integrate_display_buttons', array(&$normal_buttons));
+	HookAPI::callHook('integrate_display_buttons', array(&$normal_buttons));
 	
 	echo '
 		<div id="forumposts"><form data-alt="',$scripturl,'?action=post;msg=%id_msg%;topic=',$context['current_topic'],'.',$context['start'], '" action="', $scripturl, '?action=quickmod2;topic=', $context['current_topic'], '.', $context['start'], '" method="post" accept-charset="', $context['character_set'], '" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave(\'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\') : false">';
@@ -365,7 +365,7 @@ function template_main()
 		$mod_buttons[] = array('text' => 'restore_topic', 'image' => '', 'lang' => true, 'url' => $scripturl . '?action=restoretopic;topics=' . $context['current_topic'] . ';' . $context['session_var'] . '=' . $context['session_id']);
 
 	// Allow adding new mod buttons easily.
-	call_integration_hook('integrate_mod_buttons', array(&$mod_buttons));
+	HookAPI::callHook('integrate_mod_buttons', array(&$mod_buttons));
 
 	echo '
 			<div id="moderationbuttons">', template_button_strip($mod_buttons, 'bottom', array('id' => 'moderationbuttons_strip')), '</div>';

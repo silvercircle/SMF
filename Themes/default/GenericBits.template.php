@@ -20,23 +20,12 @@ function template_boardbit(&$board)
 	echo '
 	<li id="board_', $board['id'], '" class="',$_c,'">';
 	if(!$board['is_page']) {
-	echo '
-		<div class="lastpost smalltext">';
-	if (!empty($board['last_post']['id']))
-		echo '
-		<img src="',$board['first_post']['icon_url'],'" alt="icon" />
-		',$txt['in'], ': ', $board['last_post']['prefix'],'&nbsp;',$board['last_post']['topiclink'], '<br />
-		<a class="lp_link" title="',$txt['last_post'],'" href="',$board['last_post']['href'],'">',$board['last_post']['time'], '</a>
-		<span style="padding-left:20px;">', $txt['by'], ': </span>', $board['last_post']['member']['link'];
-	else
-		echo $txt['not_applicable'];
-	echo '
-		</div>
+		echo'
+		<div class="info">
 		<div class="stats">
 		 ', comma_format($board['posts']), ' ', $board['is_redirect'] ? $txt['redirects'] : $txt['posts'], ' <br />
 		 ', $board['is_redirect'] ? '' : comma_format($board['topics']) . ' ' . $txt['board_topics'], '
 		</div>
-		<div class="info">
 		 <div class="icon floatleft">
 		  <a href="', ($board['is_redirect'] || $context['user']['is_guest'] ? $board['href'] : $scripturl . '?action=unread;board=' . $board['id'] . '.0;children'), '">
 		  <div class="csrcwrapper24px">';
@@ -73,7 +62,20 @@ function template_boardbit(&$board)
 		  <a href="', $scripturl, '?action=moderate;area=postmod;sa=', ($board['unapproved_topics'] > 0 ? 'topics' : 'posts'), ';brd=', $board['id'], ';', $context['session_var'], '=', $context['session_id'], '" title="', sprintf($txt['unapproved_posts'], $board['unapproved_topics'], $board['unapproved_posts']), '" class="moderation_link">(!)</a>';
 
 	echo '
-		  <div class="smalltext">', $board['description'] , '</div>';
+		 <div class="smalltext">', $board['description'] , '</div>
+		<div class="lastpost smalltext">';
+	if (!empty($board['last_post']['id']))
+			echo '
+		<img src="',$board['first_post']['icon_url'],'" alt="icon" />
+		',$txt['in'], ': ', $board['last_post']['prefix'],'&nbsp;',$board['last_post']['topiclink'], '<br />
+		<a class="lp_link" title="',$txt['last_post'],'" href="',$board['last_post']['href'],'">',$board['last_post']['time'], '</a>
+		<span style="padding-left:20px;">', $txt['by'], ': </span>', $board['last_post']['member']['link'];
+	else
+		echo $txt['not_applicable'];
+	echo '
+		</div>
+		</div>
+		</div>';
 	}
 	else {
 		echo '
@@ -83,7 +85,9 @@ function template_boardbit(&$board)
 	 	</div>
 		<div style="padding-left:32px;">
 		<h3><a href="',$scripturl,'?topic=',intval(substr($board['redirect'], 1)),'">',$board['name'],'</a></h3>
-	    <div class="smalltext">', $board['description'] , '</div>';
+	    <div class="smalltext">', $board['description'] , '</div>
+	    </div>
+	    </div>';
 	}
 	// Show the "Child Boards: ". (there's a link_children but we're going to bold the new ones...)
 	if (!empty($board['children']))
@@ -123,9 +127,11 @@ function template_boardbit(&$board)
 			</table>
 		</div>';
 	}
+	else
 		echo '
-	  </div>
-	 </div>
+		<div></div>';
+
+	echo '
 	 <div class="clear_left"></div>
 	</li>';
 }

@@ -262,7 +262,7 @@ function setPassword2()
 	// User validated.  Update the database!
 	updateMemberData($_POST['u'], array('validation_code' => '', 'passwd' => sha1(strtolower($username) . $_POST['passwrd1'])));
 
-	call_integration_hook('integrate_reset_pass', array($username, $username, $_POST['passwrd1']));
+	HookAPI::callHook('integrate_reset_pass', array($username, $username, $_POST['passwrd1']));
 
 	loadTemplate('Login');
 	$context += array(
@@ -381,7 +381,7 @@ function SecretAnswer2()
 	// Alright, so long as 'yer sure.
 	updateMemberData($row['id_member'], array('passwd' => sha1(strtolower($row['member_name']) . $_POST['passwrd1'])));
 
-	call_integration_hook('integrate_reset_pass', array($row['member_name'], $row['member_name'], $_POST['passwrd1']));
+	HookAPI::callHook('integrate_reset_pass', array($row['member_name'], $row['member_name'], $_POST['passwrd1']));
 
 	// Tell them it went fine.
 	loadTemplate('Login');

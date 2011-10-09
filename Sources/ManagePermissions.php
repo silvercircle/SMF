@@ -1589,7 +1589,7 @@ function loadAllPermissions($loadType = 'classic')
 	}
 
 	// Provide a practical way to modify permissions.
-	call_integration_hook('integrate_load_permissions', array(&$permissionGroups, &$permissionList, &$leftPermissionGroups, &$hiddenPermissions, &$relabelPermissions));
+	HookAPI::callHook('integrate_load_permissions', array(&$permissionGroups, &$permissionList, &$leftPermissionGroups, &$hiddenPermissions, &$relabelPermissions));
 
 	$context['permissions'] = array();
 	$context['hidden_permissions'] = array();

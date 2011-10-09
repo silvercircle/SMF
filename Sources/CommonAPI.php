@@ -124,4 +124,54 @@ class commonAPI {
 		}
 	}
 }
+class HookAPI {
+	private static $hooks = array();
+
+	public static function setHooks(&$the_hooks)
+	{
+		self::$hooks = unserialize($the_hooks);
+	}
+
+	public static function addHook($hook, $file, $function)
+	{
+		if(isset(self::$hooks[$hook]) && is_array(self::$hooks[$hook]) && in_array($file, self::$hooks[$hook]) && in_array($function, self::$hooks[$hook]))
+			return;
+
+		self::$hooks[$hook][] = array('file' => $file, 'fn' => $function);
+		$change_array = array('integration_hooks' => serialize(self::$hooks));
+		updateSettings($change_array, true);
+	}
+
+// Process functions of an integration hook.
+	public static function callHook($hook, $parameters = array())
+	{
+		global $boarddir;
+
+		$results = array();
+
+		if(isset(self::$hooks[$hook]) && is_array(self::$hooks[$hook])) {
+			foreach(self::$hooks[$hook] as $current_hook) {
+				@include_once($boarddir . '/addons/' . $current_hook['file']);
+				$function = trim($current_hook['fn']);
+				if(is_callable($function))
+					$results[$function] = call_user_func_array($function, $parameters);
+			}
+		}
+		return $results;
+	}
+
+	public static function removeHook($hook, $file, $function)
+	{
+		if(isset(self::$hooks[$hook]) && is_array(self::$hooks[$hook]) && in_array($file, self::$hooks[$hook]) && in_array($function, self::$hooks[$hook])) {
+			foreach(self::$hooks[$hook] as &$current_hook) {
+				if($current_hook['file'] == $file && $current_hook['fn'] == $function) {
+					unset($current_hook);
+					$change_array = array('integration_hooks' => serialize(self::$hooks));
+					updateSettings($change_array, true);
+					return;
+				}
+			}
+		}
+	}
+}
 ?>

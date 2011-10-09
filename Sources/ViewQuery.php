@@ -48,7 +48,7 @@ function ViewQuery()
 			redirectexit($_SESSION['old_url']);
 	}
 
-	call_integration_hook('integrate_egg_nog');
+	HookAPI::callHook('integrate_egg_nog');
 
 	$query_id = isset($_REQUEST['qq']) ? (int) $_REQUEST['qq'] - 1 : -1;
 

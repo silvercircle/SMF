@@ -69,7 +69,7 @@ function template_main()
 		unset($normal_buttons['markread']);
 
 	// Allow adding new buttons easily.
-	call_integration_hook('integrate_messageindex_buttons', array(&$normal_buttons));
+	HookAPI::callHook('integrate_messageindex_buttons', array(&$normal_buttons));
 
 	if (!$context['no_topic_listing'])
 	{

@@ -140,7 +140,7 @@ function template_postbit_normal(&$message, $ignoring)
 		</div>';
 					if($message['likes_count'] > 0 || !empty($message['likelink'])) 
 						echo '
-		<div class="likebar">
+		<div class="likebar blue_container norounded">
 		<div class="floatright">',$message['likelink'],'</div>
 		<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
 		<div class="clear"></div></div>';
@@ -158,7 +158,7 @@ function template_postbit_normal(&$message, $ignoring)
 		</span>
 		</div>
 		<div class="reportlinks">
-		<ul class="floatright reset quickbuttons_linkstyle" style="line-height:100%;">';
+		<ul class="floatright reset quickbuttons" style="line-height:100%;">';
 
 	// Maybe we can approve it, maybe we should?
 	if ($message['can_approve'])
@@ -347,7 +347,7 @@ function template_postbit_blog(&$message, $ignoring)
 	echo '
 		</div>';
 	if($message['likes_count'] > 0 || !empty($message['likelink'])) 
-		echo '<div class="likebar blue_container">
+		echo '<div class="likebar blue_container norounded">
 			<div class="floatright">',$message['likelink'],'</div>
 			<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
 			<div class="clear"></div></div>';

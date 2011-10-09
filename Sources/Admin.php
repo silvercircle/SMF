@@ -485,7 +485,7 @@ function AdminMain()
 	}
 
 	// Let them modify admin areas easily.
-	call_integration_hook('integrate_admin_areas', array(&$admin_areas));
+	HookAPI::callHook('integrate_admin_areas', array(&$admin_areas));
 
 	SimpleSEF::adminAreas($admin_areas);
 	// Make sure the administrator has a valid session...

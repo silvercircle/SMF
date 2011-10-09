@@ -161,7 +161,7 @@ function deleteMembers($users, $check_not_admin = false)
 	foreach ($user_log_details as $user)
 	{
 		// Integration rocks!
-		call_integration_hook('integrate_delete_member', array($user[0]));
+		HookAPI::callHook('integrate_delete_member', array($user[0]));
 
 		// Add it to the administration log for future reference.
 		$log_inserts[] = array(
@@ -739,7 +739,7 @@ function registerMember(&$regOptions, $return_errors = false)
 			$theme_vars[$var] = $value;
 
 	// Call an optional function to validate the users' input.
-	call_integration_hook('integrate_register', array(&$regOptions, &$theme_vars));
+	HookAPI::callHook('integrate_register', array(&$regOptions, &$theme_vars));
 
 	// Right, now let's prepare for insertion.
 	$knownInts = array(

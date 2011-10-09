@@ -149,7 +149,6 @@ function ManageMaintenance()
 			'template' => 'maintain_database',
 			'activities' => array(
 				'optimize' => 'OptimizeTables',
-				'backup' => 'MaintainDownloadBackup',
 				'convertentities' => 'ConvertEntities',
 				'convertutf8' => 'ConvertUtf8',
 			),
@@ -1519,15 +1518,6 @@ function MaintainReattributePosts()
 	reattributePosts($memID, $email, $membername, !empty($_POST['posts']));
 
 	$context['maintenance_finished'] = $txt['maintain_reattribute_posts'];
-}
-
-// Handling function for the backup stuff.
-function MaintainDownloadBackup()
-{
-	global $sourcedir;
-
-	require_once($sourcedir . '/DumpDatabase.php');
-	DumpDatabase2();
 }
 
 // Removing old members?

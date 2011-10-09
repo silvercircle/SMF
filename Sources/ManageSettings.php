@@ -179,7 +179,7 @@ function ModifyModSettings()
 	);
 
 	// Make it easier for mods to add new areas.
-	call_integration_hook('integrate_modify_modifications', array(&$subActions));
+	HookAPI::callHook('integrate_modify_modifications', array(&$subActions));
 
 	loadGeneralSettingParameters($subActions, 'general');
 
@@ -455,7 +455,7 @@ function ModifyCoreFeatures($return_config = false)
 	);
 
 	// Anyone who would like to add a core feature?
-	call_integration_hook('integrate_core_features', array(&$core_features));
+	HookAPI::callHook('integrate_core_features', array(&$core_features));
 
 	// Are we getting info for the help section.
 	if ($return_config)
@@ -2132,7 +2132,7 @@ function ModifyGeneralModSettings($return_config = false)
 	);
 
 	// Make it even easier to add new settings.
-	call_integration_hook('integrate_general_mod_settings', array(&$config_vars));
+	HookAPI::callHook('integrate_general_mod_settings', array(&$config_vars));
 
 	if ($return_config)
 		return $config_vars;

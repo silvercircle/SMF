@@ -117,7 +117,7 @@ function BoardIndex()
 	$context['page_title'] = sprintf($txt['forum_index'], $context['forum_name']);
 
 	if(!empty($modSettings['enableAdvancedHooks']))
-		call_integration_hook('integrate_boardindex', array());
+		HookAPI::callHook('integrate_boardindex', array());
 
 	fetchNewsItems(0, 0);
 }

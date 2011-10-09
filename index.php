@@ -74,11 +74,13 @@ $smcFunc = array();
 loadDatabase();
 
 // Load the settings from the settings table, and perform operations like optimizing.
+$_hooks = array();
 reloadSettings();
 // Clean the request variables, add slashes, etc.
 cleanRequest();
 $context = array();
-$context['jsver'] = '?v=1473';
+
+$context['jsver'] = '?v=1478';
 
 // Seed the random generator.
 if (empty($modSettings['rand_seed']) || mt_rand(1, 250) == 69)
@@ -113,7 +115,7 @@ loadSession();
 // todo: testing hooks...
 
 //add_integration_function('integrate_pre_include', $sourcedir . 'contrib/footnotes.php', TRUE);
-//add_integration_function('integrate_parse_bbc_after', 'fnotes_parse', TRUE);
+//add_integration_function('integrate_parse_bbc_after', 'fnotes/footnotes.php', 'fnotes_parse');
 
 // Determine if this is using WAP, WAP2, or imode.  Technically, we should check that wap comes before application/xhtml or text/html, but this doesn't work in practice as much as it should.
 if (isset($_REQUEST['wap']) || isset($_REQUEST['wap2']) || isset($_REQUEST['imode']))
@@ -344,7 +346,7 @@ function smf_main()
 	);
 
 	// Allow modifying $actionArray easily.
-	call_integration_hook('integrate_actions', array(&$actionArray));
+	HookAPI::callHook('integrate_actions', array(&$actionArray));
 
 	// Get the function and file to include - if it's not there, do the board index.
 	if (!isset($_REQUEST['action']) || !isset($actionArray[$_REQUEST['action']]))

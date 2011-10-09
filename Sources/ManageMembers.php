@@ -1115,7 +1115,7 @@ function AdminApprove()
 		if (!empty($modSettings['integrate_activate']))
 		{
 			foreach ($member_info as $member)
-				call_integration_hook('integrate_activate', array($member['username']));
+				HookAPI::callHook('integrate_activate', array($member['username']));
 		}
 
 		// Check for email.

@@ -501,7 +501,7 @@ function Register2($verifiedOpenID = false)
 	}
 	else
 	{
-		call_integration_hook('integrate_activate', array($row['member_name']));
+		HookAPI::callHook('integrate_activate', array($row['member_name']));
 
 		setLoginCookie(60 * $modSettings['cookieTime'], $memberID, sha1(sha1(strtolower($regOptions['username']) . $regOptions['password']) . $regOptions['register_vars']['password_salt']));
 
@@ -635,7 +635,7 @@ function Activate()
 	}
 
 	// Let the integration know that they've been activated!
-	call_integration_hook('integrate_activate', array($row['member_name']));
+	HookAPI::callHook('integrate_activate', array($row['member_name']));
 
 	// Validation complete - update the database!
 	updateMemberData($row['id_member'], array('is_activated' => 1, 'validation_code' => ''));

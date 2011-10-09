@@ -207,7 +207,7 @@ function Login2()
 	}
 
 	// Are we using any sort of integration to validate the login?
-	if (in_array('retry', call_integration_hook('integrate_validate_login', array($_POST['user'], isset($_POST['hash_passwrd']) && strlen($_POST['hash_passwrd']) == 40 ? $_POST['hash_passwrd'] : null, $modSettings['cookieTime'])), true))
+	if (in_array('retry', HookAPI::callHook('integrate_validate_login', array($_POST['user'], isset($_POST['hash_passwrd']) && strlen($_POST['hash_passwrd']) == 40 ? $_POST['hash_passwrd'] : null, $modSettings['cookieTime'])), true))
 	{
 		$context['login_errors'] = array($txt['login_hash_error']);
 		$context['disable_login_hashing'] = true;
@@ -471,7 +471,7 @@ function DoLogin()
 	require_once($sourcedir . '/Subs-Auth.php');
 
 	// Call login integration functions.
-	call_integration_hook('integrate_login', array($user_settings['member_name'], isset($_POST['hash_passwrd']) && strlen($_POST['hash_passwrd']) == 40 ? $_POST['hash_passwrd'] : null, $modSettings['cookieTime']));
+	HookAPI::callHook('integrate_login', array($user_settings['member_name'], isset($_POST['hash_passwrd']) && strlen($_POST['hash_passwrd']) == 40 ? $_POST['hash_passwrd'] : null, $modSettings['cookieTime']));
 
 	// Get ready to set the cookie...
 	$username = $user_settings['member_name'];
@@ -562,7 +562,7 @@ function Logout($internal = false, $redirect = true)
 	if (!$user_info['is_guest'])
 	{
 		// Pass the logout information to integrations.
-		call_integration_hook('integrate_logout', array($user_settings['member_name']));
+		HookAPI::callHook('integrate_logout', array($user_settings['member_name']));
 
 		// If you log out, you aren't online anymore :P.
 		smf_db_query( '

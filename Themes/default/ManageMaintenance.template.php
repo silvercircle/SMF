@@ -36,34 +36,6 @@ function template_maintain_database()
 				</form>
 			</div>
 		</div>
-		<br>
-
-		<div class="cat_bar">
-			<h3>
-			<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=maintenance_backup" onclick="return reqWin(this.href);" class="help"><img class="icon" src="', $settings['images_url'], '/helptopics.png" alt="', $txt['help'], '" /></a> ', $txt['maintain_backup'], '</span>
-			</h3>
-		</div>
-
-		<div class="blue_container cleantop">
-			<div class="content">
-				<form action="', $scripturl, '?action=admin;area=maintain;sa=database;activity=backup" method="post" accept-charset="', $context['character_set'], '">
-					<p>', $txt['maintain_backup_info'], '</p>';
-
-	if ($db_type == 'sqlite')
-		echo '
-					<p><input type="submit" value="', $txt['maintain_backup_save'], '" id="submitDump" class="button_submit" /></p>';
-	else
-		echo '
-					<p><label for="struct"><input type="checkbox" name="struct" id="struct" onclick="document.getElementById(\'submitDump\').disabled = !document.getElementById(\'struct\').checked &amp;&amp; !document.getElementById(\'data\').checked;" class="input_check" checked="checked" /> ', $txt['maintain_backup_struct'], '</label><br />
-					<label for="data"><input type="checkbox" name="data" id="data" onclick="document.getElementById(\'submitDump\').disabled = !document.getElementById(\'struct\').checked &amp;&amp; !document.getElementById(\'data\').checked;" checked="checked" class="input_check" /> ', $txt['maintain_backup_data'], '</label><br />
-					<label for="compress"><input type="checkbox" name="compress" id="compress" value="gzip" checked="checked" class="input_check" /> ', $txt['maintain_backup_gz'], '</label></p>
-					<p><input type="submit" value="', $txt['maintain_backup_save'], '" id="submitDump" onclick="return document.getElementById(\'struct\').checked || document.getElementById(\'data\').checked;" class="button_submit" /></p>';
-
-	echo '
-					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-				</form>
-			</div>
-		</div>
 		<br>';
 
 	// Show an option to convert to UTF-8 if we're not on UTF-8 yet.
