@@ -961,7 +961,7 @@ function ModifySpamSettings($return_config = false)
 		// Now save.
 		saveDBSettings($save_vars);
 
-		cache_put_data('verificationQuestionIds', null, 300);
+		CacheAPI::putCache('verificationQuestionIds', null, 300);
 
 		redirectexit('action=admin;area=securitysettings;sa=spam');
 	}

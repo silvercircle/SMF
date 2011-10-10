@@ -435,7 +435,7 @@ function smf_db_error($db_string, $connection = null)
 		$old_cache = @$modSettings['cache_enable'];
 		$modSettings['cache_enable'] = '1';
 
-		if (($temp = cache_get_data('db_last_error', 600)) !== null)
+		if (($temp = CacheAPI::getCache('db_last_error', 600)) !== null)
 			$db_last_error = max(@$db_last_error, $temp);
 
 		if (@$db_last_error < time() - 3600 * 24 * 3)
@@ -481,8 +481,8 @@ function smf_db_error($db_string, $connection = null)
 			require_once($sourcedir . '/Subs-Post.php');
 
 			// Make a note of the REPAIR...
-			cache_put_data('db_last_error', time(), 600);
-			if (($temp = cache_get_data('db_last_error', 600)) === null)
+			CacheAPI::putCache('db_last_error', time(), 600);
+			if (($temp = CacheAPI::getCache('db_last_error', 600)) === null)
 				updateSettingsFile(array('db_last_error' => time()));
 
 			// Attempt to find and repair the broken table.

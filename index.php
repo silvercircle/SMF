@@ -46,7 +46,8 @@ foreach (array('db_character_set', 'cachedir') as $variable)
 // Load the settings...
 require_once(dirname(__FILE__) . '/Settings.php');
 
-$__basekey = md5($boardurl . filemtime($sourcedir . '/Load.php')) . '-SMF-';
+if(!isset($db_cache_api))
+	$db_cache_api = 'file';
 
 if(!isset($db_no_admin_security))
 	$db_no_admin_security = 0;
@@ -74,7 +75,6 @@ $smcFunc = array();
 loadDatabase();
 
 // Load the settings from the settings table, and perform operations like optimizing.
-$_hooks = array();
 reloadSettings();
 // Clean the request variables, add slashes, etc.
 cleanRequest();
@@ -112,7 +112,7 @@ set_error_handler('error_handler');
 // Start the session. (assuming it hasn't already been.)
 loadSession();
 
-// todo: testing hooks...
+// todo: remove this, just testing hooks...
 
 //HookAPI::removeHook('integrate_parse_bbc_after', 'fnotes', 'footnotes.php', 'fnotesTest::dummy');
 //HookAPI::removeHook('integrate_bbc_codes', 'LegacyBBC', 'main.php', 'legacybbc_addtags');

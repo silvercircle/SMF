@@ -117,7 +117,6 @@ class SimpleSEF {
 
         self::loadBoardNames($force);
         self::loadExtensions($force);
-        self::fixHooks($force);
 
         self::log('Pre-fix GET:' . var_export($_GET, TRUE));
 
@@ -752,50 +751,6 @@ class SimpleSEF {
         return str_replace('index.php' . (!empty($url_parts['query']) ? '?' . $url_parts['query'] : ''), $sefstring, $url); //$boardurl . '/' . $sefstring . (!empty($url_parts['fragment']) ? '#' . $url_parts['fragment'] : '');
     }
 
-    public static function fixHooks($force = FALSE) {
-        global $smcFunc, $modSettings;
-
-        // We only do this once an hour, no need to overload things
-        if (!$force && cache_get_data('simplesef_fixhooks', 3600) !== NULL)
-            return;
-
-        $request = smf_db_query( '
-            SELECT variable, value
-            FROM {db_prefix}settings
-            WHERE variable LIKE {string:variable}', array(
-            'variable' => 'integrate_%',
-            )
-        );
-
-        $hooks = array();
-        while (($row = mysql_fetch_assoc($request)))
-            $hooks[$row['variable']] = $row['value'];
-        mysql_free_result($request);
-        self::$queryCount++;
-
-        $fixups = array();
-        if (!empty($hooks['integrate_pre_load']) && strpos($hooks['integrate_pre_load'], 'SimpleSEF') !== 0) {
-            $fixups['integrate_pre_load'] = 'SimpleSEF::convertQueryString,' . str_replace(',SimpleSEF::convertQueryString', '', $hooks['integrate_pre_load']);
-        }
-        if (!empty($hooks['integrate_buffer']) && strpos($hooks['integrate_buffer'], 'SimpleSEF') !== 0) {
-            $fixups['integrate_buffer'] = 'SimpleSEF::ob_simplesef,' . str_replace(',SimpleSEF::ob_simplesef', '', $hooks['integrate_buffer']);
-        }
-        if (!empty($hooks['integrate_exit']) && strpos($hooks['integrate_exit'], 'SimpleSEF') !== 0) {
-            $fixups['integrate_exit'] = 'SimpleSEF::fixXMLOutput,' . str_replace(',SimpleSEF::fixXMLOutput', '', $hooks['integrate_exit']);
-        }
-
-        if (!empty($fixups))
-            updateSettings($fixups);
-
-        // Update modSettings
-        foreach ($fixups as $hook => $functions)
-            $modSettings[$hook] = str_replace($hooks[$hook], $fixups[$hook], $modSettings[$hook]);
-
-        cache_put_data('simplesef_fixhooks', TRUE, 3600);
-
-        self::log('Fixed up integration hooks: ' . var_export($fixups, TRUE));
-    }
-
     /*     * ******************************************
      * 			Utility Functions				*
      * ****************************************** */
@@ -1021,7 +976,7 @@ class SimpleSEF {
     private static function loadExtensions($force = FALSE) {
         global $sourcedir;
 
-        if ($force || (self::$extensions = cache_get_data('simplsef_extensions', 3600)) === NULL) {
+        if ($force || (self::$extensions = CacheAPI::getCache('simplsef_extensions', 3600)) === NULL) {
             $ext_dir = $sourcedir . '/SimpleSEF-Ext';
             self::$extensions = array();
             if (is_readable($ext_dir)) {
@@ -1035,7 +990,7 @@ class SimpleSEF {
                 }
             }
 
-            cache_put_data('simplesef_extensions', self::$extensions, 3600);
+            CacheAPI::putCache('simplesef_extensions', self::$extensions, 3600);
             self::log('Cache hit failed, reloading extensions');
         }
     }
@@ -1051,7 +1006,7 @@ class SimpleSEF {
     private static function loadBoardNames($force = FALSE) {
         global $smcFunc, $language;
 
-        if ($force || (self::$boardNames = cache_get_data('simplesef_board_list', 3600)) == NULL) {
+        if ($force || (self::$boardNames = CacheAPI::getCache('simplesef_board_list', 3600)) == NULL) {
             loadLanguage('index', $language, false);
             $request = smf_db_query( '
 				SELECT id_board, name
@@ -1072,7 +1027,7 @@ class SimpleSEF {
 
             // Add one to the query cound and put the data into the cache
             self::$queryCount++;
-            cache_put_data('simplesef_board_list', self::$boardNames, 3600);
+            CacheAPI::putCache('simplesef_board_list', self::$boardNames, 3600);
             self::log('Cache hit failed, reloading board names');
         }
     }

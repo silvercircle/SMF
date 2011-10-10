@@ -396,7 +396,7 @@ function updateAdminPreferences()
 	);
 
 	// Make sure we invalidate any cache.
-	cache_put_data('theme_settings-' . $settings['theme_id'] . ':' . $user_info['id'], null, 0);
+	CacheAPI::putCache('theme_settings-' . $settings['theme_id'] . ':' . $user_info['id'], null, 0);
 }
 
 // Send all the administrators a lovely email.

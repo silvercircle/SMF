@@ -122,7 +122,7 @@ function MessageMain()
 	// Load up the members maximum message capacity.
 	if ($user_info['is_admin'])
 		$context['message_limit'] = 0;
-	elseif (($context['message_limit'] = cache_get_data('msgLimit:' . $user_info['id'], 360)) === null)
+	elseif (($context['message_limit'] = CacheAPI::getCache('msgLimit:' . $user_info['id'], 360)) === null)
 	{
 		// !!! Why do we do this?  It seems like if they have any limit we should use it.
 		$request = smf_db_query( '
@@ -139,7 +139,7 @@ function MessageMain()
 		$context['message_limit'] = $minMessage == 0 ? 0 : $maxMessage;
 
 		// Save us doing it again!
-		cache_put_data('msgLimit:' . $user_info['id'], $context['message_limit'], 360);
+		CacheAPI::putCache('msgLimit:' . $user_info['id'], $context['message_limit'], 360);
 	}
 
 	// Prepare the context for the capacity bar.
@@ -192,7 +192,7 @@ function MessageMain()
 	}
 
 	// Load the label data.
-	if ($user_settings['new_pm'] || ($context['labels'] = cache_get_data('labelCounts:' . $user_info['id'], 720)) === null)
+	if ($user_settings['new_pm'] || ($context['labels'] = CacheAPI::getCache('labelCounts:' . $user_info['id'], 720)) === null)
 	{
 		$context['labels'] = $user_settings['message_labels'] == '' ? array() : explode(',', $user_settings['message_labels']);
 		foreach ($context['labels'] as $id_label => $label_name)
@@ -234,7 +234,7 @@ function MessageMain()
 		mysql_free_result($result);
 
 		// Store it please!
-		cache_put_data('labelCounts:' . $user_info['id'], $context['labels'], 720);
+		CacheAPI::putCache('labelCounts:' . $user_info['id'], $context['labels'], 720);
 	}
 
 	// This determines if we have more labels than just the standard inbox.
@@ -1609,7 +1609,7 @@ function MessagePost()
 		censorText($row_quoted['body']);
 
 		// Add 'Re: ' to it....
-		if (!isset($context['response_prefix']) && !($context['response_prefix'] = cache_get_data('response_prefix')))
+		if (!isset($context['response_prefix']) && !($context['response_prefix'] = CacheAPI::getCache('response_prefix')))
 		{
 			if ($language === $user_info['language'])
 				$context['response_prefix'] = $txt['response_prefix'];
@@ -1619,7 +1619,7 @@ function MessagePost()
 				$context['response_prefix'] = $txt['response_prefix'];
 				loadLanguage('index');
 			}
-			cache_put_data('response_prefix', $context['response_prefix'], 600);
+			CacheAPI::putCache('response_prefix', $context['response_prefix'], 600);
 		}
 		$form_subject = $row_quoted['subject'];
 		if ($context['reply'] && trim($context['response_prefix']) != '' && commonAPI::strpos($form_subject, trim($context['response_prefix'])) !== 0)
@@ -2648,7 +2648,7 @@ function deleteMessages($personal_messages, $folder = null, $owner = null)
 	}
 
 	// Any cached numbers may be wrong now.
-	cache_put_data('labelCounts:' . $user_info['id'], null, 720);
+	CacheAPI::putCache('labelCounts:' . $user_info['id'], null, 720);
 }
 
 // Mark personal messages read.
@@ -2709,7 +2709,7 @@ function markMessages($personal_messages = null, $label = null, $owner = null)
 		mysql_free_result($result);
 
 		// Need to store all this.
-		cache_put_data('labelCounts:' . $owner, $context['labels'], 720);
+		CacheAPI::putCache('labelCounts:' . $owner, $context['labels'], 720);
 		updateMemberData($owner, array('unread_messages' => $total_unread));
 
 		// If it was for the current member, reflect this in the $user_info array too.
@@ -2919,7 +2919,7 @@ function ManageLabels()
 		}
 
 		// Make sure we're not caching this!
-		cache_put_data('labelCounts:' . $user_info['id'], null, 720);
+		CacheAPI::putCache('labelCounts:' . $user_info['id'], null, 720);
 
 		// To make the changes appear right away, redirect.
 		redirectexit('action=pm;sa=manlabels');

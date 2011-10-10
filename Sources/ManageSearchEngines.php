@@ -180,7 +180,7 @@ function ViewSpiders()
 			)
 		);
 
-		cache_put_data('spider_search', null, 300);
+		CacheAPI::putCache('spider_search', null, 300);
 		recacheSpiderNames();
 	}
 
@@ -392,7 +392,7 @@ function EditSpider()
 		// Order by user agent length.
 		sortSpiderTable();
 
-		cache_put_data('spider_search', null, 300);
+		CacheAPI::putCache('spider_search', null, 300);
 		recacheSpiderNames();
 
 		redirectexit('action=admin;area=sengines;sa=spiders');
@@ -441,7 +441,7 @@ function SpiderCheck()
 
 	// We cache the spider data for five minutes if we can.
 	if (!empty($modSettings['cache_enable']))
-		$spider_data = cache_get_data('spider_search', 300);
+		$spider_data = CacheAPI::getCache('spider_search', 300);
 
 	if (!isset($spider_data) || $spider_data === NULL)
 	{
@@ -457,7 +457,7 @@ function SpiderCheck()
 		mysql_free_result($request);
 
 		if (!empty($modSettings['cache_enable']))
-			cache_put_data('spider_search', $spider_data, 300);
+			CacheAPI::putCache('spider_search', $spider_data, 300);
 	}
 
 	if (empty($spider_data))

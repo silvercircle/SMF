@@ -250,7 +250,7 @@ function ModBlockWatchedUsers()
 {
 	global $context, $smcFunc, $scripturl, $modSettings;
 
-	if (($watched_users = cache_get_data('recent_user_watches', 240)) === null)
+	if (($watched_users = CacheAPI::getCache('recent_user_watches', 240)) === null)
 	{
 		$modSettings['warning_watch'] = empty($modSettings['warning_watch']) ? 1 : $modSettings['warning_watch'];
 		$request = smf_db_query( '
@@ -268,7 +268,7 @@ function ModBlockWatchedUsers()
 			$watched_users[] = $row;
 		mysql_free_result($request);
 
-		cache_put_data('recent_user_watches', $watched_users, 240);
+		CacheAPI::putCache('recent_user_watches', $watched_users, 240);
 	}
 
 	$context['watched_users'] = array();
@@ -314,8 +314,8 @@ function ModBlockNotes()
 			);
 
 			// Clear the cache.
-			cache_put_data('moderator_notes', null, 240);
-			cache_put_data('moderator_notes_total', null, 240);
+			CacheAPI::putCache('moderator_notes', null, 240);
+			CacheAPI::putCache('moderator_notes_total', null, 240);
 		}
 
 		// Redirect otherwise people can resubmit.
@@ -339,14 +339,14 @@ function ModBlockNotes()
 		);
 
 		// Clear the cache.
-		cache_put_data('moderator_notes', null, 240);
-		cache_put_data('moderator_notes_total', null, 240);
+		CacheAPI::putCache('moderator_notes', null, 240);
+		CacheAPI::putCache('moderator_notes_total', null, 240);
 
 		redirectexit('action=moderate');
 	}
 
 	// How many notes in total?
-	if (($moderator_notes_total = cache_get_data('moderator_notes_total', 240)) === null)
+	if (($moderator_notes_total = CacheAPI::getCache('moderator_notes_total', 240)) === null)
 	{
 		$request = smf_db_query( '
 			SELECT COUNT(*)
@@ -360,12 +360,12 @@ function ModBlockNotes()
 		list ($moderator_notes_total) = mysql_fetch_row($request);
 		mysql_free_result($request);
 
-		cache_put_data('moderator_notes_total', $moderator_notes_total, 240);
+		CacheAPI::putCache('moderator_notes_total', $moderator_notes_total, 240);
 	}
 
 	// Grab the current notes. We can only use the cache for the first page of notes.
 	$offset = isset($_GET['notes']) && isset($_GET['start']) ? $_GET['start'] : 0;
-	if ($offset != 0 || ($moderator_notes = cache_get_data('moderator_notes', 240)) === null)
+	if ($offset != 0 || ($moderator_notes = CacheAPI::getCache('moderator_notes', 240)) === null)
 	{
 		$request = smf_db_query( '
 			SELECT IFNULL(mem.id_member, 0) AS id_member, IFNULL(mem.real_name, lc.member_name) AS member_name,
@@ -386,7 +386,7 @@ function ModBlockNotes()
 		mysql_free_result($request);
 
 		if ($offset == 0)
-			cache_put_data('moderator_notes', $moderator_notes, 240);
+			CacheAPI::putCache('moderator_notes', $moderator_notes, 240);
 	}
 
 	// Lets construct a page index.
@@ -421,7 +421,7 @@ function ModBlockReportedPosts()
 	if ($user_info['mod_cache']['bq'] == '0=1')
 		return 'reported_posts_block';
 
-	if (($reported_posts = cache_get_data('reported_posts_' . $cachekey, 90)) === null)
+	if (($reported_posts = CacheAPI::getCache('reported_posts_' . $cachekey, 90)) === null)
 	{
 		// By George, that means we in a position to get the reports, jolly good.
 		$request = smf_db_query( '
@@ -446,7 +446,7 @@ function ModBlockReportedPosts()
 		mysql_free_result($request);
 
 		// Cache it.
-		cache_put_data('reported_posts_' . $cachekey, $reported_posts, 90);
+		CacheAPI::putCache('reported_posts_' . $cachekey, $reported_posts, 90);
 	}
 
 	$context['reported_posts'] = array();

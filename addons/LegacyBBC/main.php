@@ -11,7 +11,8 @@
  *
  * @version %%@productversion@%%
  *
- * integrate the legacy bbc tags that were removed from parse_bbc()
+ * integrate the legacy bbc tags that were removed from parse_bbc() as an
+ * optional add-on.
  */
 function legacybbc_addtags(&$codes)
 {

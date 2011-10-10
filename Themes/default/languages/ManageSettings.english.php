@@ -94,31 +94,34 @@ $txt['karmaLabel'] = 'Karma label';
 $txt['karmaApplaudLabel'] = 'Karma applaud label';
 $txt['karmaSmiteLabel'] = 'Karma smite label';
 
-$txt['caching_information'] = '<div class="aligncenter underline"><strong>Important! Read this first before enabling these features.</strong></div><br />
+$txt['caching_information'] = '<div class="smalltext"><div class="aligncenter underline"><strong>Important! Read this first before enabling these features.</strong></div><br />
 	SMF supports caching through the use of accelerators. The currently supported accelerators include:<br />
 	<ul class="normallist">
 		<li>APC</li>
 		<li>Memcached</li>
 		<li>Zend Platform/Performance Suite (Not Zend Optimizer)</li>
 		<li>XCache</li>
+		<li>PECL Memcached (new memcached extension)</li>
 	</ul>
 	Caching will work best if you have PHP compiled with one of the above optimizers, or have memcache
 	available. If you do not have any optimizer installed SMF will do file based caching.<br /><br />
 	SMF performs caching at a variety of levels. The higher the level of caching enabled the more CPU time will be spent
-	retrieving cached information. If caching is available on your machine it is recommended that you try caching at level 1 first.
+	retrieving cached information. If caching is available on your machine it is recommended that you try caching at level 1 or 2 first.
 	<br /><br />
 	Note that if you use memcached you need to provide the server details in the setting below. This should be entered as a comma separated list
 	as shown in the example below:<br />
 	&quot;server1,server2,server3:port,server4&quot;<br /><br />
 	Note that if no port is specified SMF will use port 11211. SMF will attempt to perform rough/random load balancing across the servers.
 	<br /><br />
-	%1$s';
+	%1$s
+	</div>';
 
 $txt['detected_no_caching'] = '<strong class="alert">SMF has not been able to detect a compatible accelerator on your server.</strong>';
-$txt['detected_APC'] = '<strong style="color: green">SMF has detected that your server has APC installed.</strong>';
-$txt['detected_Zend'] = '<strong style="color: green">SMF has detected that your server has Zend installed.</strong>';
-$txt['detected_Memcached'] = '<strong style="color: green">SMF has detected that your server has Memcached installed.</strong>';
-$txt['detected_XCache'] = '<strong style="color: green">SMF has detected that your server has XCache installed.</strong>';
+$txt['detected_APC'] = '<strong style="color: green">SMF has detected that your server has APC installed.</strong> (config value for Settings.php = "apc")';
+$txt['detected_Zend'] = '<strong style="color: green">SMF has detected that your server has Zend installed.</strong> (config value for Settings.php = "zend")';
+$txt['detected_Memcached'] = '<strong style="color: green">SMF has detected that your server has Memcached installed.</strong> (config value for Settings.php = "memcache")';
+$txt['detected_XCache'] = '<strong style="color: green">SMF has detected that your server has XCache installed.</strong> (config value for Settings.php = "xcache")';
+$txt['detected_new_pecl_memcached'] = '<strong style="color: green">SMF has detected that your server has the new PECL Memcached installed.</strong> (config value for Settings.php = "new_memcache")';
 
 $txt['cache_enable'] = 'Caching Level';
 $txt['cache_off'] = 'No caching';
@@ -126,6 +129,7 @@ $txt['cache_level1'] = 'Level 1 Caching (Recommended)';
 $txt['cache_level2'] = 'Level 2 Caching';
 $txt['cache_level3'] = 'Level 3 Caching (Not Recommended)';
 $txt['cache_memcached'] = 'Memcache settings';
+$txt['current_cache_engine'] = '<strong><span style="color:red;">Cache engine currently in use: %1$s</span></strong>';
 
 $txt['loadavg_warning'] = '<span class="error">Please note: the settings below are to be edited with care. Setting any of them too low may render your forum <strong>unusable</strong>! The current load average is <strong>%01.2f</strong></span>';
 $txt['loadavg_enable'] = 'Enable load balancing by load averages';

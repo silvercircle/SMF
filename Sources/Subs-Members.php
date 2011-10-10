@@ -171,7 +171,7 @@ function deleteMembers($users, $check_not_admin = false)
 
 		// Remove any cached data if enabled.
 		if (!empty($modSettings['cache_enable']) && $modSettings['cache_enable'] >= 2)
-			cache_put_data('user_settings-' . $user[0], null, 60);
+			CacheAPI::putCache('user_settings-' . $user[0], null, 60);
 	}
 
 	// Do the actual logging...

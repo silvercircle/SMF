@@ -577,7 +577,7 @@ function Display()
 	$context['canonical_url'] = $scripturl . '?topic=' . $topic . '.' . $context['start'];
 	$context['share_url'] = $scripturl . '?topic=' . $topic;
 	// For quick reply we need a response prefix in the default forum language.
-	if (!isset($context['response_prefix']) && !($context['response_prefix'] = cache_get_data('response_prefix', 600)))
+	if (!isset($context['response_prefix']) && !($context['response_prefix'] = CacheAPI::getCache('response_prefix', 600)))
 	{
 		if ($language === $user_info['language'])
 			$context['response_prefix'] = $txt['response_prefix'];
@@ -587,7 +587,7 @@ function Display()
 			$context['response_prefix'] = $txt['response_prefix'];
 			loadLanguage('index');
 		}
-		cache_put_data('response_prefix', $context['response_prefix'], 600);
+		CacheAPI::putCache('response_prefix', $context['response_prefix'], 600);
 	}
 
 	// If we want to show event information in the topic, prepare the data.

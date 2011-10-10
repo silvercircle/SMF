@@ -257,7 +257,7 @@ function RecentPosts()
 	);
 
 	$key = 'recent-' . $user_info['id'] . '-' . md5(serialize(array_diff_key($query_parameters, array('max_id_msg' => 0)))) . '-' . (int) $_REQUEST['start'];
-	if (empty($modSettings['cache_enable']) || ($messages = cache_get_data($key, 120)) == null)
+	if (empty($modSettings['cache_enable']) || ($messages = CacheAPI::getCache($key, 120)) == null)
 	{
 		$done = false;
 		while (!$done)
@@ -294,7 +294,7 @@ function RecentPosts()
 			$messages[] = $row['id_msg'];
 		mysql_free_result($request);
 		if (!empty($cache_results))
-			cache_put_data($key, $messages, 120);
+			CacheAPI::putCache($key, $messages, 120);
 	}
 
 	// Nothing here... Or at least, nothing you can see...

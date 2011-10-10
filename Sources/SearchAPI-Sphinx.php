@@ -114,7 +114,7 @@ class sphinx_search
 	public function searchQuery($search_params, $searchWords, $excludedIndexWords, &$participants, &$searchArray)
 	{
 		global $modSettings, $context, $sourcedir, $user_info, $scripturl;
-		if (($cached_results = cache_get_data('search_results_' . md5($user_info['query_see_board'] . '_' . $context['params']))) === null)	{
+		if (($cached_results = CacheAPI::getCache('search_results_' . md5($user_info['query_see_board'] . '_' . $context['params']))) === null)	{
 			require_once($sourcedir . '/contrib/sphinxapi.php');
 
 			$mySphinx = new SphinxClient();
@@ -170,7 +170,7 @@ class sphinx_search
 						$cached_results['matches'][$msgID]['num_matches'] = $match['attrs']['@count'];
 				}
 			}
-			cache_put_data('search_results_' . md5($user_info['query_see_board']) . '_' . $context['params'], $cached_results, 600);
+			CacheAPI::putCache('search_results_' . md5($user_info['query_see_board']) . '_' . $context['params'], $cached_results, 600);
 		}
 		foreach (array_slice(array_keys($cached_results['matches']), $_REQUEST['start'], $modSettings['search_results_per_page']) as $msgID) {
 			$context['topics'][$msgID] = $cached_results['matches'][$msgID];

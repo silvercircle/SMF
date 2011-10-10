@@ -970,7 +970,7 @@ function getMessageIcons($board_id)
 		$stable_icons[$k]['is_last'] = false;
 	}
 
-	if (($temp = cache_get_data('posting_icons-' . $board_id, 480)) == null)
+	if (($temp = CacheAPI::getCache('posting_icons-' . $board_id, 480)) == null)
 	{
 		$request = smf_db_query('
 			SELECT title, filename
@@ -985,7 +985,7 @@ function getMessageIcons($board_id)
 			$icon_data[] = $row;
 		mysql_free_result($request);
 
-		cache_put_data('posting_icons-' . $board_id, $icon_data, 480);
+		CacheAPI::putCache('posting_icons-' . $board_id, $icon_data, 480);
 	}
 	else
 		$icon_data = $temp;
@@ -1761,7 +1761,7 @@ function create_control_richedit($editorOptions)
 			);
 		elseif ($user_info['smiley_set'] != 'none')
 		{
-			if (($temp = cache_get_data('posting_smileys', 480)) == null)
+			if (($temp = CacheAPI::getCache('posting_smileys', 480)) == null)
 			{
 				$request = smf_db_query( '
 					SELECT code, filename, description, smiley_row, hidden
@@ -1789,7 +1789,7 @@ function create_control_richedit($editorOptions)
 						$context['smileys'][$section][count($smileyRows) - 1]['isLast'] = true;
 				}
 
-				cache_put_data('posting_smileys', $context['smileys'], 480);
+				CacheAPI::putCache('posting_smileys', $context['smileys'], 480);
 			}
 			else
 				$context['smileys'] = $temp;
@@ -1879,7 +1879,7 @@ function create_control_verification(&$verificationOptions, $do_test = false)
 	// If we want questions do we have a cache of all the IDs?
 	if (!empty($thisVerification['number_questions']) && empty($modSettings['question_id_cache']))
 	{
-		if (($modSettings['question_id_cache'] = cache_get_data('verificationQuestionIds', 300)) == null)
+		if (($modSettings['question_id_cache'] = CacheAPI::getCache('verificationQuestionIds', 300)) == null)
 		{
 			$request = smf_db_query( '
 				SELECT id_comment
@@ -1895,7 +1895,7 @@ function create_control_verification(&$verificationOptions, $do_test = false)
 			mysql_free_result($request);
 
 			if (!empty($modSettings['cache_enable']))
-				cache_put_data('verificationQuestionIds', $modSettings['question_id_cache'], 300);
+				CacheAPI::putCache('verificationQuestionIds', $modSettings['question_id_cache'], 300);
 		}
 	}
 

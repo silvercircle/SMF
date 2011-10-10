@@ -2939,9 +2939,9 @@ function template_showDrafts()
 	global $context, $settings, $options, $scripturl, $modSettings, $txt;
 
 	echo '
-		<div class="cat_bar">
+		<div class="cat_bar2">
 			<h3>
-				', $txt['showDrafts'], ' - ', $context['member']['name'], '
+				', $txt['my_drafts'], '
 			</h3>
 		</div>';
 		if(empty($options['use_drafts'])) {
@@ -2953,10 +2953,6 @@ function template_showDrafts()
 		echo '<div class="pagesection">
 			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
 		</div>';
-
-	// Button shortcuts
-	$edit_button = create_button('modify_inline.gif', 'edit_draft', 'edit_draft', 'align="middle"');
-	$remove_button = create_button('delete.gif', 'remove_draft', 'remove_draft', 'align="middle"');
 
 	// For every post to be displayed, give it its own subtable, and show the important details of the post.
 	foreach ($context['posts'] as $post)
@@ -2986,7 +2982,7 @@ function template_showDrafts()
 				<div class="floatright">
 					<ul class="reset smalltext quickbuttons">
 						<li class="reply_button"><a href="', $scripturl . '?action=post;', (!empty($post['message']['id']) ? 'msg='.$post['message']['id'].';' : ''), (empty($post['topic']['id']) ? 'board=' . $post['board']['id'] : 'topic=' . $post['topic']['id']), '.0;draft;draft_id=', $post['id'], '"><span>', $txt['edit_draft'], '</span></a></li>
-						<li class="remove_button"><a href="', $scripturl, '?action=profile;u=', $context['member']['id'], ';area=showposts;sa=drafts;delete=', $post['id'], ';topic=', $post['topic']['id'], ';',($post['message']['id'] ? 'msg='.$post['message']['id'] . ';' : ''), $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');"><span>', $txt['remove_draft'], '</span></a></li>
+						<li class="remove_button"><a href="', $scripturl, '?action=profile;u=', $context['member']['id'], ';area=drafts;delete=', $post['id'], ';topic=', $post['topic']['id'], ';',($post['message']['id'] ? 'msg='.$post['message']['id'] . ';' : ''), $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');"><span>', $txt['remove_draft'], '</span></a></li>
 					</ul>
 				</div>
 				<br class="clear" />

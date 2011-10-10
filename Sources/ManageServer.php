@@ -368,7 +368,7 @@ function ModifyCacheSettings($return_config = false)
 
 		// We have to manually force the clearing of the cache otherwise the changed settings might not get noticed.
 		$modSettings['cache_enable'] = 1;
-		cache_put_data('modSettings', null, 90);
+		CacheAPI::putCache('modSettings', null, 90);
 
 		redirectexit('action=admin;area=serversettings;sa=cache;' . $context['session_var'] . '=' . $context['session_id']);
 	}
@@ -377,19 +377,30 @@ function ModifyCacheSettings($return_config = false)
 	$context['settings_title'] = $txt['caching_settings'];
 	$context['settings_message'] = $txt['caching_information'];
 
+	$detected = array();
 	// Detect an optimizer?
 	if (function_exists('apc_store'))
-		$detected = 'APC';
-	elseif (function_exists('output_cache_put'))
-		$detected = 'Zend';
-	elseif (function_exists('memcache_set'))
-		$detected = 'Memcached';
-	elseif (function_exists('xcache_set'))
-		$detected = 'XCache';
-	else
-		$detected = 'no_caching';
+		$detected[] = 'APC';
+	if (function_exists('output_cache_put'))
+		$detected[] = 'Zend';
+	if (function_exists('memcache_set'))
+		$detected[] = 'Memcached';
+	if (class_exists('Memcached'))
+		$detected[] = 'new_pecl_memcached';
+	if (function_exists('xcache_set'))
+		$detected[] = 'XCache';
 
-	$context['settings_message'] = sprintf($context['settings_message'], $txt['detected_' . $detected]);
+	if(0 == count($detected))
+		$context['settings_message'] = sprintf($context['settings_message'], $txt['detected_no_caching']);
+	else {
+		$msg = '';
+		foreach($detected as $available)
+			$msg .= ($txt['detected_' . $available] . '<br>');
+		$context['settings_message'] = sprintf($context['settings_message'], $msg);
+	}
+
+	$engine = CacheAPI::getEngine();
+	$context['settings_message'] .= sprintf($txt['current_cache_engine'], $engine);
 
 	// Prepare the template.
 	prepareDBSettingContext($config_vars);
@@ -909,8 +920,8 @@ function DownloadLanguage()
 	// Kill the cache, as it is now invalid..
 	if (!empty($modSettings['cache_enable']))
 	{
-		cache_put_data('known_languages', null, !empty($modSettings['cache_enable']) && $modSettings['cache_enable'] < 1 ? 86400 : 3600);
-		cache_put_data('known_languages_all', null, !empty($modSettings['cache_enable']) && $modSettings['cache_enable'] < 1 ? 86400 : 3600);
+		CacheAPI::putCache('known_languages', null, !empty($modSettings['cache_enable']) && $modSettings['cache_enable'] < 1 ? 86400 : 3600);
+		CacheAPI::putCache('known_languages_all', null, !empty($modSettings['cache_enable']) && $modSettings['cache_enable'] < 1 ? 86400 : 3600);
 	}
 
 	require_once($sourcedir . '/Subs-List.php');
@@ -1308,8 +1319,8 @@ function ModifyLanguage()
 		// Fifth, update getLanguages() cache.
 		if (!empty($modSettings['cache_enable']))
 		{
-			cache_put_data('known_languages', null, !empty($modSettings['cache_enable']) && $modSettings['cache_enable'] < 1 ? 86400 : 3600);
-			cache_put_data('known_languages_all', null, !empty($modSettings['cache_enable']) && $modSettings['cache_enable'] < 1 ? 86400 : 3600);
+			CacheAPI::putCache('known_languages', null, !empty($modSettings['cache_enable']) && $modSettings['cache_enable'] < 1 ? 86400 : 3600);
+			CacheAPI::putCache('known_languages_all', null, !empty($modSettings['cache_enable']) && $modSettings['cache_enable'] < 1 ? 86400 : 3600);
 		}
 
 		// Sixth, if we deleted the default language, set us back to english?

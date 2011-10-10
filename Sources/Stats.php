@@ -158,7 +158,7 @@ function DisplayStats()
 	$context['latest_member'] = &$context['common_stats']['latest_member'];
 
 	// Male vs. female ratio - let's calculate this only every four minutes.
-	if (($context['gender'] = cache_get_data('stats_gender', 240)) == null)
+	if (($context['gender'] = CacheAPI::getCache('stats_gender', 240)) == null)
 	{
 		$result = smf_db_query( '
 			SELECT COUNT(*) AS total_members, gender
@@ -194,7 +194,7 @@ function DisplayStats()
 		elseif ($context['gender']['females'] > $context['gender']['males'])
 			$context['gender']['ratio'] = '1:' . round($context['gender']['females'] / $context['gender']['males'], 1);
 
-		cache_put_data('stats_gender', $context['gender'], 240);
+		CacheAPI::putCache('stats_gender', $context['gender'], 240);
 	}
 
 	$date = strftime('%Y-%m-%d', forum_time(false));
@@ -428,7 +428,7 @@ function DisplayStats()
 	}
 
 	// Try to cache this when possible, because it's a little unavoidably slow.
-	if (($members = cache_get_data('stats_top_starters', 360)) == null)
+	if (($members = CacheAPI::getCache('stats_top_starters', 360)) == null)
 	{
 		$request = smf_db_query( '
 			SELECT id_member_started, COUNT(*) AS hits
@@ -446,7 +446,7 @@ function DisplayStats()
 			$members[$row['id_member_started']] = $row['hits'];
 		mysql_free_result($request);
 
-		cache_put_data('stats_top_starters', $members, 360);
+		CacheAPI::putCache('stats_top_starters', $members, 360);
 	}
 
 	if (empty($members))
@@ -488,7 +488,7 @@ function DisplayStats()
 	}
 
 	// Time online top 10.
-	$temp = cache_get_data('stats_total_time_members', 600);
+	$temp = CacheAPI::getCache('stats_total_time_members', 600);
 	$members_result = smf_db_query( '
 		SELECT id_member, real_name, total_time_logged_in
 		FROM {db_prefix}members' . (!empty($temp) ? '
@@ -539,7 +539,7 @@ function DisplayStats()
 
 	// Cache the ones we found for a bit, just so we don't have to look again.
 	if ($temp !== $temp2)
-		cache_put_data('stats_total_time_members', $temp2, 480);
+		CacheAPI::putCache('stats_total_time_members', $temp2, 480);
 
 	// Activity by month.
 	$months_result = smf_db_query( '

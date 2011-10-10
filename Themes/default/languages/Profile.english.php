@@ -471,4 +471,5 @@ $txt['trackEdit_action_email_address'] = 'Email Address';
 $txt['trackEdit_action_id_group'] = 'Primary Membergroup';
 $txt['trackEdit_action_additional_groups'] = 'Additional Membergroups';
 $txt['drafts_are_disabled'] = 'Drafts are currently disabled for your profile. You can enable them on the <strong>Look and Layout</strong> settings page.';
+$txt['my_drafts'] = 'My drafts';
 ?>

@@ -373,7 +373,7 @@ function updateStats($type, $parameter1 = null, $parameter2 = null)
 		if ($parameter2 !== null && !in_array('posts', $parameter2))
 			return;
 
-		if (($postgroups = cache_get_data('updateStats:postgroups', 360)) == null)
+		if (($postgroups = CacheAPI::getCache('updateStats:postgroups', 360)) == null)
 		{
 			// Fetch the postgroups!
 			$request = smf_db_query( '
@@ -392,7 +392,7 @@ function updateStats($type, $parameter1 = null, $parameter2 = null)
 			// Sort them this way because if it's done with MySQL it causes a filesort :(.
 			arsort($postgroups);
 
-			cache_put_data('updateStats:postgroups', $postgroups, 360);
+			CacheAPI::putCache('updateStats:postgroups', $postgroups, 360);
 		}
 
 		// Oh great, they've screwed their post groups.
@@ -553,11 +553,11 @@ function updateMemberData($members, $data)
 		{
 			if ($modSettings['cache_enable'] >= 3)
 			{
-				cache_put_data('member_data-profile-' . $member, null, 120);
-				cache_put_data('member_data-normal-' . $member, null, 120);
-				cache_put_data('member_data-minimal-' . $member, null, 120);
+				CacheAPI::putCache('member_data-profile-' . $member, null, 120);
+				CacheAPI::putCache('member_data-normal-' . $member, null, 120);
+				CacheAPI::putCache('member_data-minimal-' . $member, null, 120);
 			}
-			cache_put_data('user_settings-' . $member, null, 60);
+			CacheAPI::putCache('user_settings-' . $member, null, 60);
 		}
 	}
 }
@@ -588,7 +588,7 @@ function updateSettings($changeArray, $update = false, $debug = false)
 		}
 
 		// Clean out the cache and make sure the cobwebs are gone too.
-		cache_put_data('modSettings', null, 90);
+		CacheAPI::putCache('modSettings', null, 90);
 
 		return;
 	}
@@ -619,7 +619,7 @@ function updateSettings($changeArray, $update = false, $debug = false)
 	);
 
 	// Kill the cache - it needs redoing now, but we won't bother ourselves with that here.
-	cache_put_data('modSettings', null, 90);
+	CacheAPI::putCache('modSettings', null, 90);
 }
 
 // Constructs a page list.
@@ -1592,7 +1592,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 		// It's likely this will change if the message is modified.
 		$cache_key = 'parse:' . $cache_id . '-' . md5(md5($message) . '-' . $smileys . (empty($disabled) ? '' : implode(',', array_keys($disabled))) . serialize($context['browser']) . $txt['lang_locale'] . $user_info['time_offset'] . $user_info['time_format']);
 
-		if (($temp = cache_get_data($cache_key, 240)) != null)
+		if (($temp = CacheAPI::getCache($cache_key, 240)) != null)
 			return $temp;
 
 		$cache_t = microtime();
@@ -2366,7 +2366,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 
 	// Cache the output if it took some time...
 	if (isset($cache_key, $cache_t) && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
-		cache_put_data($cache_key, $message, 240);
+		CacheAPI::putCache($cache_key, $message, 240);
 
 	// If this was a force parse revert if needed.
 	if (!empty($parse_tags))
@@ -2441,7 +2441,7 @@ function parsesmileys(&$message)
 		else
 		{
 			// Load the smileys in reverse order by length so they don't get parsed wrong.
-			if (($temp = cache_get_data('parsing_smileys', 480)) == null)
+			if (($temp = CacheAPI::getCache('parsing_smileys', 480)) == null)
 			{
 				$result = smf_db_query( '
 					SELECT code, filename, description
@@ -2460,7 +2460,7 @@ function parsesmileys(&$message)
 				}
 				mysql_free_result($result);
 
-				cache_put_data('parsing_smileys', array($smileysfrom, $smileysto, $smileysdescs), 480);
+				CacheAPI::putCache('parsing_smileys', array($smileysfrom, $smileysto, $smileysdescs), 480);
 			}
 			else
 				list ($smileysfrom, $smileysto, $smileysdescs) = $temp;
@@ -2557,7 +2557,7 @@ function writeLog($force = false)
 	$session_id = $user_info['is_guest'] ? 'ip' . $user_info['ip'] : session_id();
 
 	// Grab the last all-of-SMF-specific log_online deletion time.
-	$do_delete = cache_get_data('log_online-update', 30) < time() - 30;
+	$do_delete = CacheAPI::getCache('log_online-update', 30) < time() - 30;
 
 	// If the last click wasn't a long time ago, and there was a last click...
 	if (!empty($_SESSION['log_time']) && $_SESSION['log_time'] >= time() - $modSettings['lastActive'] * 20)
@@ -2575,7 +2575,7 @@ function writeLog($force = false)
 			);
 
 			// Cache when we did it last.
-			cache_put_data('log_online-update', time(), 30);
+			CacheAPI::putCache('log_online-update', time(), 30);
 		}
 
 		smf_db_query( '
@@ -2636,7 +2636,7 @@ function writeLog($force = false)
 		updateMemberData($user_info['id'], array('last_login' => time(), 'member_ip' => $user_info['ip'], 'member_ip2' => $_SERVER['BAN_CHECK_IP'], 'total_time_logged_in' => $user_settings['total_time_logged_in']));
 
 		if (!empty($modSettings['cache_enable']) && $modSettings['cache_enable'] >= 2)
-			cache_put_data('user_settings-' . $user_info['id'], $user_settings, 60);
+			CacheAPI::putCache('user_settings-' . $user_info['id'], $user_settings, 60);
 
 		$user_info['total_time_logged_in'] += time() - $_SESSION['timeOnlineUpdated'];
 		$_SESSION['timeOnlineUpdated'] = time();
@@ -3024,7 +3024,7 @@ function url_image_size($url)
 	$url = str_replace(' ', '%20', $url);
 
 	// Can we pull this from the cache... please please?
-	if (($temp = cache_get_data('url_image_size-' . md5($url), 240)) !== null)
+	if (($temp = CacheAPI::getCache('url_image_size-' . md5($url), 240)) !== null)
 		return $temp;
 	$t = microtime();
 
@@ -3084,7 +3084,7 @@ function url_image_size($url)
 
 	// If this took a long time, we may never have to do it again, but then again we might...
 	if (array_sum(explode(' ', microtime())) - array_sum(explode(' ', $t)) > 0.8)
-		cache_put_data('url_image_size-' . md5($url), $size, 240);
+		CacheAPI::putCache('url_image_size-' . md5($url), $size, 240);
 
 	// Didn't work.
 	return $size;
@@ -3634,7 +3634,7 @@ function host_from_ip($ip)
 {
 	global $modSettings;
 
-	if (($host = cache_get_data('hostlookup-' . $ip, 600)) !== null)
+	if (($host = CacheAPI::getCache('hostlookup-' . $ip, 600)) !== null)
 		return $host;
 	$t = microtime();
 
@@ -3673,7 +3673,7 @@ function host_from_ip($ip)
 
 	// It took a long time, so let's cache it!
 	if (array_sum(explode(' ', microtime())) - array_sum(explode(' ', $t)) > 0.5)
-		cache_put_data('hostlookup-' . $ip, $host, 600);
+		CacheAPI::putCache('hostlookup-' . $ip, $host, 600);
 
 	return $host;
 }
@@ -3786,7 +3786,7 @@ function setupMenuContext()
 	$cacheTime = $modSettings['lastActive'] * 60;
 
 	// All the buttons we can possible want and then some, try pulling the final list of buttons from cache first.
-	if (($menu_buttons = cache_get_data('menu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], $cacheTime)) === null || time() - $cacheTime <= $modSettings['settings_updated'])
+	if (($menu_buttons = CacheAPI::getCache('menu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], $cacheTime)) === null || time() - $cacheTime <= $modSettings['settings_updated'])
 	{
 		$buttons = array(
 			'home' => array(
@@ -4028,7 +4028,7 @@ function setupMenuContext()
 			}
 
 		if (!empty($modSettings['cache_enable']) && $modSettings['cache_enable'] >= 2)
-			cache_put_data('menu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], $menu_buttons, $cacheTime);
+			CacheAPI::putCache('menu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], $menu_buttons, $cacheTime);
 	}
 
 	$context['menu_buttons'] = $menu_buttons;
@@ -4163,7 +4163,7 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 	$context['news_item_count'] = 0;
 
 	$cache_key = 'news:board_'.trim($board).'_topic_'.trim($topic).'_groups_'.join(':',$user_info['groups']);
-	if (($cached_news = cache_get_data($cache_key, 360)) == null) {
+	if (($cached_news = CacheAPI::getCache($cache_key, 360)) == null) {
 		if(0 == $board && 0 == $topic)
 			$sel = ' on_index = 1 ';
 		elseif($board)
@@ -4187,9 +4187,9 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 		}
 		mysql_free_result($result);
 		if($context['news_item_count'])
-			cache_put_data($cache_key, $context['news_items'], 360);
+			CacheAPI::putCache($cache_key, $context['news_items'], 360);
 		else
-			cache_put_data($cache_key, 'none', 360);
+			CacheAPI::putCache($cache_key, 'none', 360);
 	}
 	else {
 		if($cached_news !== 'none') {

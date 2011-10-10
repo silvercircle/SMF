@@ -120,6 +120,15 @@ function ModifyProfile($post_errors = array())
 						'any' => 'profile_view_any',
 					),
 				),
+				'drafts' => array(
+					'label' => $txt['showDrafts'],
+					'file' => 'Profile-View.php',
+					'function' => 'displayDrafts',
+					'permission' => array(
+						'own' => 'profile_view_own',
+						'any' => 'profile_view_any',
+					),
+				),
 				'permissions' => array(
 					'label' => $txt['showPermissions'],
 					'file' => 'Profile-View.php',
@@ -329,15 +338,12 @@ function ModifyProfile($post_errors = array())
 		),
 	);
 
+	if(!$context['user']['is_owner'] || !in_array('dr', $context['admin_features']))
+		unset($profile_areas['info']['areas']['drafts']);
 	// Let them modify profile areas easily.
 	HookAPI::callHook('integrate_profile_areas', array(&$profile_areas));
 
 	// Do some cleaning ready for the menu function.
-	// Drafts?
-	if ($context['user']['is_owner'] && allowedTo('profile_view_own')) {
-		if (in_array('dr', $context['admin_features']))
-			$profile_areas['info']['areas']['showposts']['subsections']['drafts'] = array($txt['showDrafts'], 'profile_view_own');
-	}	
 	$context['password_areas'] = array();
 	$current_area = isset($_REQUEST['area']) ? $_REQUEST['area'] : '';
 
@@ -625,7 +631,7 @@ function ModifyProfile($post_errors = array())
 			$context['profile_updated'] = $context['user']['is_owner'] ? $txt['profile_updated_own'] : sprintf($txt['profile_updated_else'], $cur_profile['member_name']);
 
 			// Invalidate any cached data.
-			cache_put_data('member_data-profile-' . $memID, null, 0);
+			CacheAPI::putCache('member_data-profile-' . $memID, null, 0);
 		}
 	}
 

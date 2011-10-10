@@ -17,17 +17,12 @@
  * it also implements the Hook API.
  */
 if (!defined('SMF'))
-	die('Hacking attempt...');
-
-if (class_exists('memcached', false))
-	echo "FOOO";
+	die('No access');
 
 class commonAPI {
 
 	private static $ent_list = '&(#\d{1,7}|quot|amp|lt|gt|nbsp);';
 	private static $space_chars = '\x{A0}\x{AD}\x{2000}-\x{200F}\x{201F}\x{202F}\x{3000}\x{FEFF}';
-
-	private static $mcached_server;
 
 	private static function ent_check($string)
 	{
@@ -133,31 +128,6 @@ class commonAPI {
 			return false;
 		}
 	}
-
-	public static function getMemcachedServer()
-	{
-		global $modSettings;
-
-		if (is_a(self::$mcached_server, 'Memcached'))
-			return self::$mcached_server;
-
-		$servers = explode(',', $modSettings['cache_memcached']);
-
-		self::$mcached_server = new Memcached();
-		if (0 == count(self::$mcached_server->getServerList()) )
-		{
-			$h = array();
-			foreach($servers as $server) {
-				$server = explode( ':', trim($server));
-				$ip     = $server[0];
-				$port   = empty($server[1]) ? 11211 : $server[1];
-				$h[] = array($ip, $port);
-			}
-			self::$mcached_server->addServers($h);
-		}
-		return self::$mcached_server;
-	}
-
 }
 
 /**
@@ -250,6 +220,254 @@ class HookAPI {
 			$change_array = array('integration_hooks' => serialize(self::$hooks));
 			updateSettings($change_array, true);
 		}
+	}
+}
+
+class cacheAPI {
+
+	private static $API = -1;
+	private static $mcached_server;
+	private static $basekey = '';
+	private static $memcached = 0;
+
+	private static $cache_hits = 0;
+	private static $cache_count = 0;
+
+	/**
+	 * @static
+	 * support for PECL new memcached
+	 */
+	private static function getMemcachedServer()
+	{
+		global $modSettings;
+
+		if (is_a(self::$mcached_server, 'Memcached'))
+			return self::$mcached_server;
+
+		$servers = explode(',', $modSettings['cache_memcached']);
+
+		self::$mcached_server = new Memcached();
+		if (0 == count(self::$mcached_server->getServerList()) ) {
+			$h = array();
+			foreach($servers as $server) {
+				$server = explode( ':', trim($server));
+				$ip     = $server[0];
+				$port   = empty($server[1]) ? 11211 : $server[1];
+				$h[] = array($ip, $port);
+			}
+			self::$mcached_server->addServers($h);
+		}
+		return self::$mcached_server;
+	}
+
+	/**
+	 * @static
+	 * @param int $level	caching level
+	 *
+	 * get server for the OLD memcached implementation
+	 */
+	private static function getMemcacheServer($level = 3)
+	{
+		global $modSettings, $db_persist;
+
+		$servers = explode(',', $modSettings['cache_memcached']);
+		$server = explode(':', trim($servers[array_rand($servers)]));
+
+		// Don't try more times than we have servers!
+		$level = min(count($servers), $level);
+
+		// Don't wait too long: yes, we want the server, but we might be able to run the query faster!
+		if (empty($db_persist))
+			self::$memcached = memcache_connect($server[0], empty($server[1]) ? 11211 : $server[1]);
+		else
+			self::$memcached = memcache_pconnect($server[0], empty($server[1]) ? 11211 : $server[1]);
+
+		if (!self::$memcached && $level > 0)
+			self::getMemcacheServer($level - 1);
+	}
+
+	public static function cacheInit($desired, $basekey)
+	{
+		self::$basekey = $basekey;
+
+		if($desired == 'apc' && function_exists('apc_store'))
+		    self::$API = 1;
+		elseif($desired == 'xcache' && function_exists('xcache_get') && ini_get('xcache.var_size') > 0)
+			self::$API = 2;
+		elseif($desired == 'zend' && function_exists('output_cache_get'))
+			self::$API = 3;
+		elseif($desired == 'memcache' && function_exists('memcache_get'))
+			self::$API = 4;
+		elseif($desired == 'new_memcache' && class_exists('Memcached'))
+			self::$API = 5;
+		elseif($desired == 'file')
+			self::$API = 0;
+	}
+
+	public static function disable()
+	{
+		self::$API = -1;
+	}
+
+	public static function getEngine()
+	{
+		$engines = array('Filesystem cache', 'APC', 'Xcache', 'Zend', 'Memcached', 'New PECL Memcached');
+
+		if(-1 == self::$API)
+			return('Caching is disabled or not available');
+		else
+			return($engines[(int)self::$API]);
+	}
+
+	public static function getCache($key, $ttl = 120)
+	{
+		global $db_show_debug, $cachedir;
+
+		if(self::$API == -1)
+			return;
+
+		self::$cache_count++;
+		if (isset($db_show_debug) && $db_show_debug === true)
+		{
+			self::$cache_hits[self::$cache_count] = array('k' => $key, 'd' => 'get');
+			$st = microtime();
+		}
+
+		$key = self::$basekey . strtr($key, ':', '-');
+
+		switch(self::$API) {
+			case 5:
+				$key = str_replace(' ', '_', $key);
+
+				$instance = self::getMemcachedServer();
+				$value = $instance->get($key);
+				break;
+
+			case 4:
+				if (empty(self::$memcached))
+					self::getMemcacheServer();
+				if (!self::$memcached)
+					return;
+
+				$value = memcache_get(self::$memcached, $key);
+				break;
+
+			case 1:
+				$value = apc_fetch($key . 'smf');
+				break;
+
+			case 3:
+				$value = output_cache_get($key, $ttl);
+				break;
+
+			case 2:
+				$value = xcache_get($key);
+				break;
+
+			case 0:
+				if (file_exists($cachedir . '/data_' . $key . '.php') && filesize($cachedir . '/data_' . $key . '.php') > 10)
+				{
+					require($cachedir . '/data_' . $key . '.php');
+					if (!empty($expired) && isset($value))
+					{
+						@unlink($cachedir . '/data_' . $key . '.php');
+						unset($value);
+					}
+				}
+				break;
+		}
+
+		if (isset($db_show_debug) && $db_show_debug === true)
+		{
+			self::$cache_hits[self::$cache_count]['t'] = array_sum(explode(' ', microtime())) - array_sum(explode(' ', $st));
+			self::$cache_hits[self::$cache_count]['s'] = isset($value) ? strlen($value) : 0;
+		}
+
+		if (empty($value))
+			return null;
+		// If it's broke, it's broke... so give up on it.
+		else
+			return @unserialize($value);
+	}
+
+	public static function putCache($key, $value, $ttl = 120)
+	{
+		global $db_show_debug, $cachedir;
+
+		if(self::$API == -1)
+			return;
+
+		self::$cache_count++;
+		if (isset($db_show_debug) && $db_show_debug === true)
+		{
+			self::$cache_hits[self::$cache_count] = array('k' => $key, 'd' => 'put', 's' => $value === null ? 0 : strlen(serialize($value)));
+			$st = microtime();
+		}
+
+		$key = self::$basekey . strtr($key, ':', '-');
+		$value = $value === null ? null : serialize($value);
+
+		switch(self::$API) {
+			case 5:
+				$key = str_replace(' ', '_', $key);
+				$instance = self::getMemcachedServer();
+				$instance->set($key, $value, $ttl);
+				break;
+
+			case 4:
+				if (empty(self::$memcached))
+					self::getMemcacheServer();
+				if (!self::$memcached)
+					return;
+
+				memcache_set(self::$memcached, $key, $value, 0, $ttl);
+				break;
+
+			case 1:
+				// An extended key is needed to counteract a bug in APC.
+				if ($value === null)
+					apc_delete($key . 'smf');
+				else
+					apc_store($key . 'smf', $value, $ttl);
+				break;
+
+			case 3:
+				output_cache_put($key, $value);
+				break;
+
+			case 2:
+				if ($value === null)
+					xcache_unset($key);
+				else
+					xcache_set($key, $value, $ttl);
+				break;
+
+			case 0:
+				if ($value === null)
+					@unlink($cachedir . '/data_' . $key . '.php');
+				else
+				{
+					$cache_data = '<' . '?' . 'php if (!defined(\'SMF\')) die; if (' . (time() + $ttl) . ' < time()) $expired = true; else{$expired = false; $value = \'' . addcslashes($value, '\\\'') . '\';}' . '?' . '>';
+					$fh = @fopen($cachedir . '/data_' . $key . '.php', 'w');
+					if ($fh)
+					{
+						// Write the file.
+						set_file_buffer($fh, 0);
+						flock($fh, LOCK_EX);
+						$cache_bytes = fwrite($fh, $cache_data);
+						flock($fh, LOCK_UN);
+						fclose($fh);
+
+						// Check that the cache write was successful; all the data should be written
+						// If it fails due to low diskspace, remove the cache file
+						if ($cache_bytes != strlen($cache_data))
+							@unlink($cachedir . '/data_' . $key . '.php');
+					}
+				}
+				break;
+		}
+		if (isset($db_show_debug) && $db_show_debug === true)
+			self::$cache_hits[self::$cache_count]['t'] = array_sum(explode(' ', microtime())) - array_sum(explode(' ', $st));
 	}
 }
 ?>

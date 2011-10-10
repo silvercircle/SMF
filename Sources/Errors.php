@@ -353,7 +353,7 @@ function show_db_error($loadavg = false)
 		// For our purposes, we're gonna want this on if at all possible.
 		$modSettings['cache_enable'] = '1';
 
-		if (($temp = cache_get_data('db_last_error', 600)) !== null)
+		if (($temp = CacheAPI::getCache('db_last_error', 600)) !== null)
 			$db_last_error = max($db_last_error, $temp);
 
 		if ($db_last_error < time() - 3600 * 24 * 3 && empty($maintenance) && !empty($db_error_send))
@@ -361,8 +361,8 @@ function show_db_error($loadavg = false)
 			require_once($sourcedir . '/Subs-Admin.php');
 
 			// Avoid writing to the Settings.php file if at all possible; use shared memory instead.
-			cache_put_data('db_last_error', time(), 600);
-			if (($temp = cache_get_data('db_last_error', 600)) == null)
+			CacheAPI::putCache('db_last_error', time(), 600);
+			if (($temp = CacheAPI::getCache('db_last_error', 600)) == null)
 				updateLastDatabaseError();
 
 			// Language files aren't loaded yet :(.

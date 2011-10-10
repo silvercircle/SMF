@@ -292,7 +292,7 @@ function ThemeList()
 				$setValues[] = array($id, 0, 'base_images_url', $_POST['reset_url'] . '/' . basename($theme['base_theme_dir']) . '/' . basename($theme['base_images_url']));
 			}
 
-			cache_put_data('theme_settings-' . $id, null, 90);
+			CacheAPI::putCache('theme_settings-' . $id, null, 90);
 		}
 
 		if (!empty($setValues))
@@ -495,8 +495,8 @@ function SetThemeOptions()
 			);
 		}
 
-		cache_put_data('theme_settings-' . $_GET['th'], null, 90);
-		cache_put_data('theme_settings-1', null, 90);
+		CacheAPI::putCache('theme_settings-' . $_GET['th'], null, 90);
+		CacheAPI::putCache('theme_settings-1', null, 90);
 
 		redirectexit('action=admin;area=theme;' . $context['session_var'] . '=' . $context['session_id'] . ';sa=reset');
 	}
@@ -832,8 +832,8 @@ function SetThemeSettings()
 			);
 		}
 
-		cache_put_data('theme_settings-' . $_GET['th'], null, 90);
-		cache_put_data('theme_settings-1', null, 90);
+		CacheAPI::putCache('theme_settings-' . $_GET['th'], null, 90);
+		CacheAPI::putCache('theme_settings-1', null, 90);
 
 		// Invalidate the cache.
 		updateSettings(array('settings_updated' => time()));
@@ -1011,7 +1011,7 @@ function PickTheme()
 					array($_GET['th'], $user_info['id'], 'theme_variant', $_GET['vrt']),
 					array('id_theme', 'id_member', 'variable')
 				);
-				cache_put_data('theme_settings-' . $_GET['th'] . ':' . $user_info['id'], null, 90);
+				CacheAPI::putCache('theme_settings-' . $_GET['th'] . ':' . $user_info['id'], null, 90);
 
 				$_SESSION['id_variant'] = 0;
 			}
@@ -1030,7 +1030,7 @@ function PickTheme()
 			);
 
 			// Make it obvious that it's changed
-			cache_put_data('theme_settings-' . $_GET['th'], null, 90);
+			CacheAPI::putCache('theme_settings-' . $_GET['th'], null, 90);
 		}
 
 		// For everyone.
@@ -1074,7 +1074,7 @@ function PickTheme()
 					array($_GET['th'], (int) $_REQUEST['u'], 'theme_variant', $_GET['vrt']),
 					array('id_theme', 'id_member', 'variable')
 				);
-				cache_put_data('theme_settings-' . $_GET['th'] . ':' . (int) $_REQUEST['u'], null, 90);
+				CacheAPI::putCache('theme_settings-' . $_GET['th'] . ':' . (int) $_REQUEST['u'], null, 90);
 
 				if ($user_info['id'] == $_REQUEST['u'])
 					$_SESSION['id_variant'] = 0;
@@ -1648,7 +1648,7 @@ function SetJavaScript()
 	if (isset($_GET['th']) || isset($_GET['id']))
 	{
 		// Invalidate the current themes cache too.
-		cache_put_data('theme_settings-' . $settings['theme_id'] . ':' . $user_info['id'], null, 60);
+		CacheAPI::putCache('theme_settings-' . $settings['theme_id'] . ':' . $user_info['id'], null, 60);
 
 		$settings['theme_id'] = isset($_GET['th']) ? (int) $_GET['th'] : (int) $_GET['id'];
 	}
@@ -1673,7 +1673,7 @@ function SetJavaScript()
 		array('id_theme', 'id_member', 'variable')
 	);
 
-	cache_put_data('theme_settings-' . $settings['theme_id'] . ':' . $user_info['id'], null, 60);
+	CacheAPI::putCache('theme_settings-' . $settings['theme_id'] . ':' . $user_info['id'], null, 60);
 
 	// Don't output anything...
 	redirectexit($settings['images_url'] . '/blank.gif');

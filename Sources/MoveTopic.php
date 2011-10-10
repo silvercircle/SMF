@@ -244,7 +244,7 @@ function MoveTopic2()
 			if (isset($_POST['enforce_subject']))
 			{
 				// Get a response prefix, but in the forum's default language.
-				if (!isset($context['response_prefix']) && !($context['response_prefix'] = cache_get_data('response_prefix')))
+				if (!isset($context['response_prefix']) && !($context['response_prefix'] = CacheAPI::getCache('response_prefix')))
 				{
 					if ($language === $user_info['language'])
 						$context['response_prefix'] = $txt['response_prefix'];
@@ -254,7 +254,7 @@ function MoveTopic2()
 						$context['response_prefix'] = $txt['response_prefix'];
 						loadLanguage('index');
 					}
-					cache_put_data('response_prefix', $context['response_prefix'], 600);
+					CacheAPI::putCache('response_prefix', $context['response_prefix'], 600);
 				}
 
 				smf_db_query( '
@@ -681,7 +681,7 @@ function moveTopics($topics, $toBoard)
 	// Update the cache?
 	if (!empty($modSettings['cache_enable']) && $modSettings['cache_enable'] >= 3)
 		foreach ($topics as $topic_id)
-			cache_put_data('topic_board-' . $topic_id, null, 120);
+			CacheAPI::putCache('topic_board-' . $topic_id, null, 120);
 
 	require_once($sourcedir . '/Subs-Post.php');
 

@@ -138,9 +138,9 @@ function aStreamMarkNotificationRead()
 				';
 			else {
 		 		foreach($new_act_ids as $act)
-				     echo '
-				     <markedread name="markedread"><![CDATA[',$act,']]></markedread>
-				     ';
+					echo '
+					<markedread name="markedread"><![CDATA[',$act,']]></markedread>
+					';
 			}
 			echo '
 			</response>

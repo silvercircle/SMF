@@ -275,13 +275,6 @@ function showPosts($memID)
 	);
 
 	// Set the page title
-	// Drafts?
-	if (!empty($context[$context['profile_menu_name']]['sections']['info']['areas']['showposts']['subsections']['drafts']))	{
-		// Ensure the tab is present
-		$context[$context['profile_menu_name']]['tab_data']['tabs']['drafts'] = array();
-		if (isset($_REQUEST['sa']) && $_REQUEST['sa'] == 'drafts')
-			return displayDrafts($memID);
-	}	
 	$context['page_title'] = $txt['showPosts'] . ' - ' . $user_profile[$memID]['real_name'];
 
 	// Is the load average too high to allow searching just now?
@@ -2024,7 +2017,7 @@ function displayDrafts($memID)
 			)
 		);
 
-		redirectexit('action=profile;u=' . $memID . ';area=showposts;sa=drafts;start=' . $start);
+		redirectexit('action=profile;u=' . $memID . ';area=drafts;start=' . $start);
 	}
 
 	if (empty($_REQUEST['viewscount']) || !is_numeric($_REQUEST['viewscount']))

@@ -172,8 +172,8 @@ function EditSmileySettings($return_config = false)
 
 		saveDBSettings($config_vars);
 
-		cache_put_data('parsing_smileys', null, 480);
-		cache_put_data('posting_smileys', null, 480);
+		CacheAPI::putCache('parsing_smileys', null, 480);
+		CacheAPI::putCache('posting_smileys', null, 480);
 
 		redirectexit('action=admin;area=smileys;sa=settings');
 	}
@@ -209,8 +209,8 @@ function EditSmileySets()
 				'smiley_sets_default' => in_array($modSettings['smiley_sets_default'], $set_paths) ? $modSettings['smiley_sets_default'] : $set_paths[0],
 			));
 
-			cache_put_data('parsing_smileys', null, 480);
-			cache_put_data('posting_smileys', null, 480);
+			CacheAPI::putCache('parsing_smileys', null, 480);
+			CacheAPI::putCache('posting_smileys', null, 480);
 		}
 		// Add a new smiley set.
 		elseif (!empty($_POST['add']))
@@ -257,8 +257,8 @@ function EditSmileySets()
 			if (!empty($_POST['smiley_sets_import']))
 				ImportSmileys($_POST['smiley_sets_path']);
 
-			cache_put_data('parsing_smileys', null, 480);
-			cache_put_data('posting_smileys', null, 480);
+			CacheAPI::putCache('parsing_smileys', null, 480);
+			CacheAPI::putCache('posting_smileys', null, 480);
 		}
 	}
 
@@ -701,8 +701,8 @@ function AddSmiley()
 			array('id_smiley')
 		);
 
-		cache_put_data('parsing_smileys', null, 480);
-		cache_put_data('posting_smileys', null, 480);
+		CacheAPI::putCache('parsing_smileys', null, 480);
+		CacheAPI::putCache('posting_smileys', null, 480);
 
 		// No errors? Out of here!
 		redirectexit('action=admin;area=smileys;sa=editsmileys');
@@ -861,8 +861,8 @@ function EditSmileys()
 			sortSmileyTable();
 		}
 
-		cache_put_data('parsing_smileys', null, 480);
-		cache_put_data('posting_smileys', null, 480);
+		CacheAPI::putCache('parsing_smileys', null, 480);
+		CacheAPI::putCache('posting_smileys', null, 480);
 	}
 
 	// Load all known smiley sets.
@@ -1260,8 +1260,8 @@ function EditSmileyOrder()
 			)
 		);
 
-		cache_put_data('parsing_smileys', null, 480);
-		cache_put_data('posting_smileys', null, 480);
+		CacheAPI::putCache('parsing_smileys', null, 480);
+		CacheAPI::putCache('posting_smileys', null, 480);
 	}
 
 	$request = smf_db_query( '
@@ -1345,8 +1345,8 @@ function EditSmileyOrder()
 		}
 	}
 
-	cache_put_data('parsing_smileys', null, 480);
-	cache_put_data('posting_smileys', null, 480);
+	CacheAPI::putCache('parsing_smileys', null, 480);
+	CacheAPI::putCache('posting_smileys', null, 480);
 }
 
 function InstallSmileySet()
@@ -1380,8 +1380,8 @@ function InstallSmileySet()
 		'smiley_sets_names' => $modSettings['smiley_sets_names'] . "\n" . strtok(basename(isset($_FILES['set_gz']) ? $_FILES['set_gz']['name'] : $_REQUEST['set_gz']), '.'),
 	));
 
-	cache_put_data('parsing_smileys', null, 480);
-	cache_put_data('posting_smileys', null, 480);
+	CacheAPI::putCache('parsing_smileys', null, 480);
+	CacheAPI::putCache('posting_smileys', null, 480);
 
 	// !!! Add some confirmation?
 	redirectexit('action=admin;area=smileys');
@@ -1450,8 +1450,8 @@ function ImportSmileys($smileyPath)
 		// Make sure the smiley codes are still in the right order.
 		sortSmileyTable();
 
-		cache_put_data('parsing_smileys', null, 480);
-		cache_put_data('posting_smileys', null, 480);
+		CacheAPI::putCache('parsing_smileys', null, 480);
+		CacheAPI::putCache('posting_smileys', null, 480);
 	}
 }
 

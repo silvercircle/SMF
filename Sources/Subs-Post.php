@@ -1785,7 +1785,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	$automerge_posts = false;
 	$want_automerge = isset($_REQUEST['want_automerge']) && $_REQUEST['want_automerge'] > 0 ? true : false;
 	
-	if(!$new_topic && ($topicOptions['automerge'] > 0 || $want_automerge) && $topicOptions['id_member_updated'] == $posterOptions['id'] && empty($topicOptions['poll'])) {
+	if(!$new_topic && ($topicOptions['automerge'] > 0 && $want_automerge) && $topicOptions['id_member_updated'] == $posterOptions['id'] && empty($topicOptions['poll'])) {
 		$result = smf_db_query( '
 			SELECT poster_time, modified_time, body FROM {db_prefix}messages WHERE id_msg = {int:last_id}',
 			array('last_id' => $topicOptions['id_last_msg']));

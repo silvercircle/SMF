@@ -58,6 +58,7 @@ if (substr($sourcedir, 0, 1) == '.' && substr($sourcedir, 1, 1) != '.')
 	$sourcedir = dirname(__FILE__) . substr($sourcedir, 1);
 
 // Load the important includes.
+require_once($sourcedir . '/CommonAPI.php');
 require_once($sourcedir . '/QueryString.php');
 require_once($sourcedir . '/Subs.php');
 require_once($sourcedir . '/Errors.php');
@@ -244,12 +245,6 @@ function ssi_logout($redirect_to = '', $output_method = 'echo')
 		echo $link;
 	else
 		return $link;
-}
-
-function foo(&$bar)
-{
-    if($bar === 0)
-
 }
 // Recent post list:   [board] Subject by Poster	Date
 function ssi_recentPosts($num_recent = 8, $exclude_boards = null, $include_boards = null, $output_method = 'echo', $limit_body = true)

@@ -417,7 +417,7 @@ function Post()
 	}
 
 	// Get a response prefix (like 'Re:') in the default forum language.
-	if (!isset($context['response_prefix']) && !($context['response_prefix'] = cache_get_data('response_prefix')))
+	if (!isset($context['response_prefix']) && !($context['response_prefix'] = CacheAPI::getCache('response_prefix')))
 	{
 		if ($language === $user_info['language'])
 			$context['response_prefix'] = $txt['response_prefix'];
@@ -427,7 +427,7 @@ function Post()
 			$context['response_prefix'] = $txt['response_prefix'];
 			loadLanguage('index');
 		}
-		cache_put_data('response_prefix', $context['response_prefix'], 600);
+		CacheAPI::putCache('response_prefix', $context['response_prefix'], 600);
 	}
 
 	$context['can_merge_with_last'] = false;
@@ -2316,7 +2316,7 @@ function Post2()
 	}
 
 	if ($board_info['num_topics'] == 0)
-		cache_put_data('board-' . $board, null, 120);
+		CacheAPI::putCache('board-' . $board, null, 120);
 
 	if (!empty($_POST['announce_topic']))
 		redirectexit('action=announce;sa=selectgroup;topic=' . $topic . (!empty($_POST['move']) && allowedTo('move_any') ? ';move' : '') . (empty($_REQUEST['goback']) ? '' : ';goback'));
@@ -3057,7 +3057,7 @@ function JavaScriptModify()
 		if (isset($_POST['subject']) && isset($_REQUEST['change_all_subjects']) && $row['id_first_msg'] == $row['id_msg'] && !empty($row['num_replies']) && (allowedTo('modify_any') || ($row['id_member_started'] == $user_info['id'] && allowedTo('modify_replies'))))
 		{
 			// Get the proper (default language) response prefix first.
-			if (!isset($context['response_prefix']) && !($context['response_prefix'] = cache_get_data('response_prefix')))
+			if (!isset($context['response_prefix']) && !($context['response_prefix'] = CacheAPI::getCache('response_prefix')))
 			{
 				if ($language === $user_info['language'])
 					$context['response_prefix'] = $txt['response_prefix'];
@@ -3067,7 +3067,7 @@ function JavaScriptModify()
 					$context['response_prefix'] = $txt['response_prefix'];
 					loadLanguage('index');
 				}
-				cache_put_data('response_prefix', $context['response_prefix'], 600);
+				CacheAPI::putCache('response_prefix', $context['response_prefix'], 600);
 			}
 
 			smf_db_query( '
