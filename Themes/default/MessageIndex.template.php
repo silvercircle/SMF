@@ -20,7 +20,7 @@ function template_main()
 	if($context['news_item_count']) {
 		echo '
 	<div class="blue_container">
-	 <div class="content smallpadding">
+	 <div class="content smallpadding inset_shadow">
 	 <ol class="commonlist noshadow news">';
 	template_news_listitems();
 	 echo '
