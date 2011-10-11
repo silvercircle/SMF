@@ -250,7 +250,7 @@ function template_body_above()
 		//template_create_collapsible_container($collapser);
 		echo '
 		<div class="blue_container">
-		<div class="content smallpadding">
+		<div class="content smallpadding inset_shadow">
 		<ol class="commonlist noshadow news">';
 		template_news_listitems();
 		echo '
@@ -563,8 +563,10 @@ function socialbar_passive($l, $t)
 function template_sidebar_content()
 {
 	global $context, $txt, $modSettings, $scripturl, $settings, $user_info, $fbxml, $twitter_widgets, $plusone, $options, $boardurl;
-	
-	$collapser = array('id' => 'user_panel', 'title' => 'User panel');
+
+	$widgetstyle = 'blue_container cleantop inset_shadow smallpadding';
+
+	$collapser = array('id' => 'user_panel', 'title' => 'User panel', 'bodyclass' => $widgetstyle);
 	echo '<script>
 		   // <![CDATA[
 		   sidebar_content_loaded = 1;
@@ -648,7 +650,7 @@ function template_sidebar_content()
 	// Show statistical style information...
 	if ($settings['show_stats_index'] && isset($context['show_stats']))
 	{
-		$collapser = array('id'=> 'stats_panel','title' => '<a href="'. $scripturl. '?action=stats">'. $txt['forum_stats']. '</a>');
+		$collapser = array('bodyclass' => $widgetstyle, 'id'=> 'stats_panel','title' => '<a href="'. $scripturl. '?action=stats">'. $txt['forum_stats']. '</a>');
 		template_create_collapsible_container($collapser);
 		echo '<div class="smallpadding smalltext">
 				<dl class="common">
@@ -671,7 +673,7 @@ function template_sidebar_content()
 	
 	// social panel in the side bar
 	if(($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar']))) {
-		$collapser = array('id' => 'social_panel', 'title' => 'Socialize');
+		$collapser = array('id' => 'social_panel', 'title' => 'Socialize', 'bodyclass' => $widgetstyle);
 		template_create_collapsible_container($collapser);
 		$plusone++;
 		echo '
@@ -684,7 +686,7 @@ function template_sidebar_content()
 	// This is the "Recent Posts" bar.
 	if (!empty($settings['number_recent_posts']) && (!empty($context['latest_posts']) || !empty($context['latest_post'])))
 	{
-		$collapser = array('id' => 'recent_panel', 'title' => '<a href="'. $scripturl. '?action=recent">'. $txt['recent_posts']. '</a>');
+		$collapser = array('bodyclass' => $widgetstyle, 'id' => 'recent_panel', 'title' => '<a href="'. $scripturl. '?action=recent">'. $txt['recent_posts']. '</a>');
 		template_create_collapsible_container($collapser);
 		echo '
 			<div class="lefftext smalltext smallpadding" id="recent_posts_content" style="line-height:120%;">
@@ -724,7 +726,7 @@ function template_sidebar_content()
 	if ($context['show_calendar'])
 	{
 		$title = $context['calendar_only_today'] ? $txt['calendar_today'] : ($txt['calendar']. ' (Next '.$modSettings['cal_days_for_index'].' days)');
-		$collapser = array('id' => 'cal_panel', 'title' => '<a href="'. $scripturl. '?action=calendar' . '">'. $title . '</a>');
+		$collapser = array('bodyclass'=> $widgetstyle, 'id' => 'cal_panel', 'title' => '<a href="'. $scripturl. '?action=calendar' . '">'. $title . '</a>');
 		template_create_collapsible_container($collapser);
 		echo '
 			<div class="smalltext">';

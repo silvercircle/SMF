@@ -23,7 +23,7 @@ table {
 
 /* Set a fontsize that will look the same in all browsers. */
 body {
-	background: #333355;
+	background: #D0D1E6;
 	font-family: "Trebuchet MS", "Verdana", "Arial", helvetica, sans-serif;
 	font-size: 10pt;
 	margin: 0;
@@ -1390,7 +1390,7 @@ ol.commonlist {
 	list-style: none;
 	padding: 0;
 	margin: 0 0 10px 0;
-	box-shadow: 1px 1px 5px 0 #ddd;
+	/*box-shadow: 1px 1px 5px 0 #ddd;*/
 }
 
 ol.commonlist > li {
@@ -2486,6 +2486,7 @@ tr.titlebg td {
 	line-height:26px;
 	padding: 0 10px;
 	border-radius:2px 2px 0 0;
+	box-shadow: 0 0 4px #888 inset;
 }
 .cContainer_header h3, .cat_bar2 h3 {
 	color:white;
@@ -3446,15 +3447,15 @@ span.hidelink {
 	/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eff7f9', endColorstr='#827d73',GradientType=0 );*/
 	background: linear-gradient(top, #eff7f9 72%,#deebed 100%,#827d73 100%);
 }
-.blue_container div.content, .orange_container div.content, .yellow_container div.content {
+.blue_container div.content, .orange_container div.content, .yellow_container div.content, .cContainer_body div.content {
 	border: 3px solid white;
 	border-radius: 1px;
 	margin:-2px -4px;
+	padding:6px;
 }
 .cContainer_body {
 	border-top: 0;
 	border-radius: 0 0 3px 3px;
-	box-shadow: 1px 1px 5px 0 #ddd;
 }
 
 img.cContainer_c {
@@ -3489,6 +3490,12 @@ div.cContainer_end {
 	border: 1px solid #F2F2A5;
 	padding: 2px 4px;
 	border-radius: 3px;
+	background: -moz-linear-gradient(top, rgba(247,246,232,1) 0%, rgba(247,246,232,0.74) 37%, rgba(237,244,129,0.3) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(247,246,232,1)), color-stop(37%,rgba(247,246,232,0.74)), color-stop(100%,rgba(237,244,129,0.3)));
+	background: -webkit-linear-gradient(top, rgba(247,246,232,1) 0%,rgba(247,246,232,0.74) 37%,rgba(237,244,129,0.3) 100%);
+	background: -o-linear-gradient(top, rgba(247,246,232,1) 0%,rgba(247,246,232,0.74) 37%,rgba(237,244,129,0.3) 100%);
+	background: -ms-linear-gradient(top, rgba(247,246,232,1) 0%,rgba(247,246,232,0.74) 37%,rgba(237,244,129,0.3) 100%);
+	background: linear-gradient(top, rgba(247,246,232,1) 0%,rgba(247,246,232,0.74) 37%,rgba(237,244,129,0.3) 100%);
 }
 
 .red_container {
@@ -3754,7 +3761,10 @@ div#ajaxbusy {
 }
 
 .light_shadow {
-	box-shadow: 0 5px 12px 0 #bbb;
+	box-shadow: 0 0 12px 0 #bbb;
+}
+.inset_shadow {
+	box-shadow: 0 0 10px 1px #ccc inset;
 }
 
 .borderless {

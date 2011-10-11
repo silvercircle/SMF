@@ -670,7 +670,7 @@ function ManageSphinx()
 function CreateSphinxConfig()
 {
 	global $context, $db_server, $db_name, $db_user, $db_passwd, $db_prefix;
-	global $db_character_set, $modSettings;
+	global $modSettings;
 
 	$humungousTopicPosts = 200;
 
@@ -721,8 +721,8 @@ source smf_source
 	sql_user = ', $db_user, '
 	sql_pass = ', $db_passwd, '
 	sql_db = ', $db_name, '
-	sql_port = 3306', empty($db_character_set) ? '' : '
-	sql_query_pre = SET NAMES ' . $db_character_set, '
+	sql_port = 3306
+	sql_query_pre = SET NAMES utf8
 	sql_query_pre =	\
 		REPLACE INTO ', $db_prefix, 'settings (variable, value) \
 		SELECT \'sphinx_indexed_msg_until\', MAX(ID_MSG) \
@@ -759,7 +759,7 @@ source smf_source
 
 source smf_delta_source : smf_source
 {
-	sql_query_pre = ', isset($db_character_set) ? 'SET NAMES ' . $db_character_set : '', '
+	sql_query_pre = SET NAMES utf8
 	sql_query_range = \
 		SELECT s1.value, s2.value \
 		FROM ', $db_prefix, 'settings AS s1, ', $db_prefix, 'settings AS s2 \
@@ -774,7 +774,7 @@ index smf_base_index
 	stopwords = ' . $modSettings['sphinx_stopword_path'], '
 	html_strip = 1
 	min_word_len = 2
-	charset_type = ', isset($db_character_set) && $db_character_set === 'utf8' ? 'utf-8' : 'sbcs', '
+	charset_type = utf-8
 	charset_table = 0..9, A..Z->a..z, _, a..z
 }
 

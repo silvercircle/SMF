@@ -65,7 +65,7 @@ function template_postbit_normal(&$message, $ignoring)
 		</li>';
 
 		// Show their personal text?
-		if (!empty($settings['show_blurb']) && $message['member']['blurb'] != '')
+		if ($message['member']['blurb'] != '')
 			echo '
 		<li class="blurb">', $message['member']['blurb'], '</li>';
 
@@ -114,7 +114,8 @@ function template_postbit_normal(&$message, $ignoring)
 
 	// Done with the information about the poster... on to the post itself.
 	echo '
-		</ul>
+		</ul>';
+	echo $message['content_poster_details'],'
 		</div></div>
 		<div class="postarea">
 			<div class="keyinfo">
@@ -241,13 +242,13 @@ function template_postbit_normal(&$message, $ignoring)
 		</ul>
 		</div>';
 	}
-
+	echo $message['content_before_sig'];
 	// Show the member's signature?
 	if (!empty($message['member']['signature']) && empty($options['show_no_signatures']) && $context['signature_enabled'])
 		echo '
 		<div class="signature" id="msg_', $message['id'], '_signature">', $message['member']['signature'], '</div>';
 
-	echo '
+	echo $message['content_after_sig'], '
 		</div>';
 		if($message['likes_count'] > 0 || !empty($message['likelink']))
 			echo '
@@ -346,7 +347,9 @@ function template_postbit_normal(&$message, $ignoring)
 	//						<a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $txt['logged'], '</a>';
 	echo '
 		</div><div class="clear">
-		</div></div></div>';
+		</div></div>',
+		$message['content_post_bottom'],'
+		</div>';
 }
 
 function template_postbit_blog(&$message, $ignoring)

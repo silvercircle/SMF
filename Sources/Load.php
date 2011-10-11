@@ -126,19 +126,17 @@ if (!defined('SMF'))
 // Load the $modSettings array.
 function reloadSettings()
 {
-	global $modSettings, $smcFunc, $db_character_set, $sourcedir, $boardurl, $db_cache_api;
+	global $modSettings, $smcFunc, $sourcedir, $boardurl, $db_cache_api, $db_cache_memcached;
 
 	$no_hooks = ((isset($g_disable_all_hooks) && $g_disable_all_hooks === true) || isset($_REQUEST['nohooks']));
 
-	CacheAPI::cacheInit($db_cache_api, md5($boardurl . filemtime($sourcedir . '/Load.php')) . '-SMF-');
+	CacheAPI::cacheInit($db_cache_api, md5($boardurl . filemtime($sourcedir . '/Load.php')) . '-SMF-', $db_cache_memcached);
 
 	// Most database systems have not set UTF-8 as their default input charset.
-	if (!empty($db_character_set))
-		smf_db_query('
-			SET NAMES ' . $db_character_set,
-			array(
-			)
-		);
+	smf_db_query('
+		SET NAMES utf8',
+		array()
+	);
 
 	// Try to load it from the cache first; it'll never get cached if the setting is off.
 	if (($modSettings = CacheAPI::getCache('modSettings', 360)) == null)
@@ -287,11 +285,11 @@ function reloadSettings()
 	$modSettings['astream_active'] = isset($modSettings['admin_features']) ? in_array('as', explode(',', $modSettings['admin_features'])) : true;
 
 	// Integration is cool.
-	if (defined('SMF_INTEGRATION_SETTINGS'))
+	if (defined('INTEGRATION_SETTINGS'))
 	{
-		$integration_settings = unserialize(SMF_INTEGRATION_SETTINGS);
-		foreach ($integration_settings as $hook => $function)
-			add_integration_function($hook, $function, false);
+		$integration_settings = unserialize(INTEGRATION_SETTINGS);
+		foreach ($integration_settings as $hook)
+			HookAPI::addHook($hook['hook'], $hook['file'], $hook['function'], false);
 	}
 	// Call pre load integration functions.
 	HookAPI::callHook('integrate_pre_load');
@@ -351,7 +349,7 @@ function loadUserSettings()
 			$_reload = true;
 		}
 		// Is the member data cached?
-		if (empty($modSettings['cache_enable']) || $modSettings['cache_enable'] < 2 || ($user_settings = CacheAPI::getCache('user_settings-' . $id_member, 60)) == null || $_reload)
+		if ($modSettings['cache_enable'] < 2 || ($user_settings = CacheAPI::getCache('user_settings-' . $id_member, 180)) == null || $_reload)
 		{
 			$request = smf_db_query( '
 				SELECT mem.*, IFNULL(a.id_attach, 0) AS id_attach, a.filename, a.attachment_type, count(n.id_member) AS notify_count
@@ -367,8 +365,8 @@ function loadUserSettings()
 			$user_settings = mysql_fetch_assoc($request);
 			mysql_free_result($request);
 
-			if (!empty($modSettings['cache_enable']) && $modSettings['cache_enable'] >= 2)
-				CacheAPI::putCache('user_settings-' . $id_member, $user_settings, 60);
+			if ($modSettings['cache_enable'] >= 2)
+				CacheAPI::putCache('user_settings-' . $id_member, $user_settings, 180);
 		}
 
 		// Did we find 'im?  If not, junk it.
@@ -2383,18 +2381,6 @@ function loadSession()
 		}
 		elseif (@ini_get('session.gc_maxlifetime') <= 1440 && !empty($modSettings['databaseSession_lifetime']))
 			@ini_set('session.gc_maxlifetime', max($modSettings['databaseSession_lifetime'], 60));
-
-		// Use cache setting sessions?
-		
-		/* > obsolete, we don't support mmcache or eAccel any longer anyway
-		if (empty($modSettings['databaseSession_enable']) && !empty($modSettings['cache_enable']) && php_sapi_name() != 'cli')
-		{
-			if (function_exists('mmcache_set_session_handlers'))
-				mmcache_set_session_handlers();
-			elseif (function_exists('eaccelerator_set_session_handlers'))
-				eaccelerator_set_session_handlers();
-		}
-		*/
 
 		session_start();
 

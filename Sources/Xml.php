@@ -125,6 +125,8 @@ function GetMcard()
 	}
 	else
 		$context['member'] = null;
+
+	//header('Content-Type: text/xml; charset=' . (empty($context['character_set']) ? 'UTF-8' : $context['character_set']));
 }
 
 function HandleLikeRequest()

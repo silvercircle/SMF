@@ -1587,7 +1587,8 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	}
 
 	// Shall we take the time to cache this?
-	if ($cache_id != '' && !empty($modSettings['cache_enable']) && (($modSettings['cache_enable'] >= 2 && strlen($message) > 1000) || strlen($message) > 2400) && empty($parse_tags))
+	/*
+	if ($cache_id != '' && $modSettings['cache_enable'] >= 2 && strlen($message) > 1000)
 	{
 		// It's likely this will change if the message is modified.
 		$cache_key = 'parse:' . $cache_id . '-' . md5(md5($message) . '-' . $smileys . (empty($disabled) ? '' : implode(',', array_keys($disabled))) . serialize($context['browser']) . $txt['lang_locale'] . $user_info['time_offset'] . $user_info['time_format']);
@@ -1597,7 +1598,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 
 		$cache_t = microtime();
 	}
-
+    */
 	if ($smileys === 'print')
 	{
 		// [glow], [shadow], and [move] can't really be printed.
@@ -2365,8 +2366,8 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	HookAPI::callHook('integrate_parse_bbc_after', array(&$message, &$parse_tags, &$smileys));
 
 	// Cache the output if it took some time...
-	if (isset($cache_key, $cache_t) && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
-		CacheAPI::putCache($cache_key, $message, 240);
+	//if (isset($cache_key, $cache_t) && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
+	//	CacheAPI::putCache($cache_key, $message, 240);
 
 	// If this was a force parse revert if needed.
 	if (!empty($parse_tags))
@@ -3569,7 +3570,7 @@ function getAttachmentFilename($filename, $attachment_id, $dir = null, $new = fa
 // Older attachments may still use this function.
 function getLegacyAttachmentFilename($filename, $attachment_id, $dir = null, $new = false)
 {
-	global $modSettings, $db_character_set;
+	global $modSettings;
 
 	$clean_name = $filename;
 	// Remove international characters (windows-1252)
@@ -4103,7 +4104,7 @@ function getCachedPost(&$message)
 	global $modSettings;
 	
 	if(!empty($modSettings['use_post_cache']) && !empty($message['cached_body'])) {
-		$message['body'] = $message['cached_body'];
+		$message['body'] = &$message['cached_body'];
 		parse_bbc_stage2($message['body']);
     }
 	else {

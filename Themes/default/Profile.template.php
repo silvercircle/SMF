@@ -107,7 +107,7 @@ function template_summary()
 	</div>
 	<div id="detailedinfo"><br />
 		<div class="yellow_container">
-			<div class="content">
+			<div class="content inset_shadow">
 				<dl>';
 
 	if ($context['user']['is_owner'] || $context['user']['is_admin'])

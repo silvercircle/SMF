@@ -1434,7 +1434,7 @@ function getMcard(uid, el)
 {
 	// initiate a ajax request to open a member card
 	if(uid > 0)
-		sendRequest('action=xmlhttp;sa=mcard;u=' + parseInt(uid), el);
+		sendRequest('action=xmlhttp;sa=mcard;u=' + parseInt(uid), null);
 	return(false);
 }
 
@@ -1576,24 +1576,6 @@ function firePreview(topic_id, ele)
 	sendRequest('action=xmlhttp;sa=mpeek;t=' + topic_id, ele);
 };
 
-function timeOutError() 
-{
-	setBusy(0);
-	alert('Error: Connection has timed out.');
-};
-
-function setTimeOut(t) {
-	_timer = window.setTimeout(function(){ timeOutError(); },t);
-};
-	
-function clearTimeOut()
-{
-	if(_timer) {
-		clearTimeout(_timer);
-		_timer = null;
-	}
-};
-
 function sendRequest(request, anchor_element)
 {
 	if(_is_locked)
@@ -1602,7 +1584,10 @@ function sendRequest(request, anchor_element)
 	request = request + ';' + sSessionVar + '='	+ sSessionId + ';xml';
 	var sUrl = smf_prepareScriptUrl(smf_scripturl) + request;
 	setBusy(1);
-	sendXMLDocumentWithAnchor(sUrl, '', response, anchor_element);
+	if(anchor_element == null)
+		sendXMLDocument(sUrl, '', response_xml);
+	else
+		sendXMLDocumentWithAnchor(sUrl, '', response, anchor_element);
 };
 
 function openResult(html, width)
@@ -1614,21 +1599,41 @@ function openResult(html, width)
 	$('#mcard_inner').html(html);
 	if($('#mcard_content'))
 		$('#mcard_content').css({'max-height': windowheight * 0.8 + 'px', 'overflow': 'auto'});
-	el.css('width', width > 0 ? width + 'px' : 'auto');
-   	el.css("position",'fixed');
-	el.css("top", (($(window).height() - el.outerHeight()) / 2) + "px");
-	el.css("left", (($(window).width() - el.outerWidth()) / 2) + "px");
+
+	el.css({'width': width > 0 ? width + 'px' : 'auto', "position": 'fixed',
+		'top': (($(window).height() - el.outerHeight()) / 2) + 'px',
+		'left': (($(window).width() - el.outerWidth()) / 2) + 'px',
+		'z-index': '10000'});
 	el.show();
-	el.css('z-index', '10000');
 };
 
+/**
+ * generic handler for XML response from ajax requests.
+ * analyzes the <response> element to determine how to open the <content> part.
+ */
+function response_xml(responseXML)
+{
+	try {
+		setBusy(0);
+
+		var data = $(responseXML);
+		var _r = data.find('response');
+		if(_r) {
+			var width = _r.attr('width');
+			var content = data.find('content').text();
+			openResult(content, width);
+		}
+   		$('div#mcard_inner abbr.timeago').timeago();
+	} catch(e) {
+		setBusy(0);
+	}
+}
 /*
  * generic handler for XMLHttp response. Determines its origin by observing ele
  */
 function response(ele, responseText)
 {
 	try {
-		clearTimeOut();
 		setBusy(0);
 		if(ele.attr('id') == 'notification_anchor') {
 			var wrapper = $('<div id="notify_wrapper" class="popup_wrapper"></div>');
@@ -1683,17 +1688,14 @@ function response(ele, responseText)
 			return;
 		}
 		openResult(responseText, 500);
-   		$('div#mcard_inner abbr.timeago').timeago();
+		$('div#mcard_inner abbr.timeago').timeago();
 	} catch(e) {
-		clearTimeOut();
 		setBusy(0);
 	}
 };
 
 function openAdvSearch(e)
 {
-	//$('#adv_search').animate({height: 'auto'}, 50);
-	
 	$('#search_form').css('overflow', 'auto');
 	$('#search_form').css('height', 'auto');
 	$('#search_form').addClass('search_form_active');

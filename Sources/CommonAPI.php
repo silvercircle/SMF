@@ -230,22 +230,20 @@ class cacheAPI {
 	private static $basekey = '';
 	private static $memcached = 0;
 
-	private static $cache_hits = 0;
+	private static $cache_hits = array();
 	private static $cache_count = 0;
 
+	private static $memcached_hosts = '';
 	/**
 	 * @static
-	 * support for PECL new memcached
+	 * support for PECL new memcacheD
 	 */
 	private static function getMemcachedServer()
 	{
-		global $modSettings;
-
 		if (is_a(self::$mcached_server, 'Memcached'))
 			return self::$mcached_server;
 
-		$servers = explode(',', $modSettings['cache_memcached']);
-
+		$servers = explode(',', self::$memcached_hosts);
 		self::$mcached_server = new Memcached();
 		if (0 == count(self::$mcached_server->getServerList()) ) {
 			$h = array();
@@ -264,7 +262,7 @@ class cacheAPI {
 	 * @static
 	 * @param int $level	caching level
 	 *
-	 * get server for the OLD memcached implementation
+	 * get server for the OLD memcache implementation
 	 */
 	private static function getMemcacheServer($level = 3)
 	{
@@ -286,9 +284,10 @@ class cacheAPI {
 			self::getMemcacheServer($level - 1);
 	}
 
-	public static function cacheInit($desired, $basekey)
+	public static function cacheInit($desired, $basekey, $memcached_hosts)
 	{
 		self::$basekey = $basekey;
+		self::$memcached_hosts = $memcached_hosts;
 
 		if($desired == 'apc' && function_exists('apc_store'))
 		    self::$API = 1;
@@ -323,12 +322,11 @@ class cacheAPI {
 	{
 		global $db_show_debug, $cachedir;
 
-		if(self::$API == -1)
+		if(-1 == self::$API)
 			return;
 
 		self::$cache_count++;
-		if (isset($db_show_debug) && $db_show_debug === true)
-		{
+		if (isset($db_show_debug) && $db_show_debug === true) {
 			self::$cache_hits[self::$cache_count] = array('k' => $key, 'd' => 'get');
 			$st = microtime();
 		}
@@ -365,8 +363,7 @@ class cacheAPI {
 				break;
 
 			case 0:
-				if (file_exists($cachedir . '/data_' . $key . '.php') && filesize($cachedir . '/data_' . $key . '.php') > 10)
-				{
+				if (file_exists($cachedir . '/data_' . $key . '.php') && filesize($cachedir . '/data_' . $key . '.php') > 10) {
 					require($cachedir . '/data_' . $key . '.php');
 					if (!empty($expired) && isset($value))
 					{
@@ -377,15 +374,13 @@ class cacheAPI {
 				break;
 		}
 
-		if (isset($db_show_debug) && $db_show_debug === true)
-		{
+		if (isset($db_show_debug) && $db_show_debug === true) {
 			self::$cache_hits[self::$cache_count]['t'] = array_sum(explode(' ', microtime())) - array_sum(explode(' ', $st));
 			self::$cache_hits[self::$cache_count]['s'] = isset($value) ? strlen($value) : 0;
 		}
 
 		if (empty($value))
 			return null;
-		// If it's broke, it's broke... so give up on it.
 		else
 			return @unserialize($value);
 	}
@@ -394,12 +389,11 @@ class cacheAPI {
 	{
 		global $db_show_debug, $cachedir;
 
-		if(self::$API == -1)
+		if(-1 == self::$API)
 			return;
 
 		self::$cache_count++;
-		if (isset($db_show_debug) && $db_show_debug === true)
-		{
+		if (isset($db_show_debug) && $db_show_debug === true) {
 			self::$cache_hits[self::$cache_count] = array('k' => $key, 'd' => 'put', 's' => $value === null ? 0 : strlen(serialize($value)));
 			$st = microtime();
 		}
@@ -445,8 +439,7 @@ class cacheAPI {
 			case 0:
 				if ($value === null)
 					@unlink($cachedir . '/data_' . $key . '.php');
-				else
-				{
+				else {
 					$cache_data = '<' . '?' . 'php if (!defined(\'SMF\')) die; if (' . (time() + $ttl) . ' < time()) $expired = true; else{$expired = false; $value = \'' . addcslashes($value, '\\\'') . '\';}' . '?' . '>';
 					$fh = @fopen($cachedir . '/data_' . $key . '.php', 'w');
 					if ($fh)

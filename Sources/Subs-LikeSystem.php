@@ -270,10 +270,10 @@ function AddLikeBar(&$row, $can_give_like, $now)
 
 	if($can_give_like) {
 		if($have_liked_it)
-			$row['likelink'] = '<a rel="nofollow" class="givelike" data-fn="remove" href="#" data-id="'.$row['id_msg'].'">'.$txt['unlike_label'].'</a>';
+			$row['likelink'] = '<a rel="nofollow" class="givelike" data-fn="remove" href="#" data-id="'.$row['id'].'">'.$txt['unlike_label'].'</a>';
 		else if(!$user_info['is_guest']) {
 			if($row['id_member'] != $user_info['id'])
-				$row['likelink'] = '<a rel="nofollow" class="givelike" data-fn="give" href="#" data-id="'.$row['id_msg'].'">'.$txt['like_label'].'</a>';
+				$row['likelink'] = '<a rel="nofollow" class="givelike" data-fn="give" href="#" data-id="'.$row['id'].'">'.$txt['like_label'].'</a>';
 			else
 				$row['likelink'] = '&nbsp;';
 		}
@@ -283,15 +283,15 @@ function AddLikeBar(&$row, $can_give_like, $now)
 
 	// todo: admin gets a "repair likes" link (just a debugging tool, will probably go away...)
 	if($user_info['is_admin'])
-		$row['likelink'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$row['id_msg'].'">Repair Likes</a>';
+		$row['likelink'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$row['id'].'">Repair Likes</a>';
 		
 	if($row['likes_count'] > 0) {
 		if($now - $row['like_updated'] > 86400) {
-			$result = LikesUpdate($row['id_msg']);
-			LikesGenerateOutput($result['status'], $row['likers'], $result['count'], $row['id_msg'], $have_liked_it);
+			$result = LikesUpdate($row['id']);
+			LikesGenerateOutput($result['status'], $row['likers'], $result['count'], $row['id'], $have_liked_it);
 		}
 		else
-			LikesGenerateOutput($row['like_status'], $row['likers'], $row['likes_count'], $row['id_msg'], $have_liked_it);
+			LikesGenerateOutput($row['like_status'], $row['likers'], $row['likes_count'], $row['id'], $have_liked_it);
 	}
 }
 
