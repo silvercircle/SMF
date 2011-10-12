@@ -1,6 +1,6 @@
 <?php
 /**
- * %%@productname@%%
+ * @name      EosAlpha BBS
  * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
@@ -9,7 +9,7 @@
  * copyright:	2011 Simple Machines (http://www.simplemachines.org)
  * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @version %%@productversion@%%
+ * @version 1.0pre
  */
 function template_init()
 {
@@ -162,7 +162,7 @@ function template_body_above()
 	<header>
 	<div id="header">
 	<div id="upper_section" class="middletext">
-		<div class="floatleft" style="color:#ddd;text-shadow:black 2px 2px 10px;font-size:35px;font-family:Comic Sans MS;padding:20px 30px;"><strong><em>SMF pLayGround</em></strong><br /></div>
+		<div class="floatleft" style="margin-left:20px;overflow:hidden;max-height:87px;padding-top:2px;"><img src="',$settings['images_url'],'/logo.png" alt="logo" /></div>
 	<div class="clear"></div>';
 	echo '
 			<div class="news normaltext">';
@@ -521,19 +521,16 @@ function template_button_strip($button_strip, $direction = 'top', $strip_options
 }
 function my_theme_copyright($get_it = false)
 {
-	global $forum_copyright, $context, $boardurl, $forum_version, $txt, $modSettings;
+	global $forum_copyright, $forum_version;
 
-	// Don't display copyright for things like SSI.
 	if (!isset($forum_version))
 		return;
 
-	// Put in the version...
-	//$forum_copyright = sprintf($forum_copyright, $forum_version);
-	$forum_copyright = 'Forum software based on SMF 2.0, &copy;2011 by <a href="http://www.simplemachines.org">Simple Machines</a> and contributors. <a href="http://www.simplemachines.org/about/smf/license.php">License terms.</a>';
+	$forum_copyright = sprintf($forum_copyright, $forum_version);
+	//$forum_copyright = 'Forum software based on SMF 2.0, &copy;2011 by <a href="http://www.simplemachines.org">Simple Machines</a> and contributors. <a href="http://www.simplemachines.org/about/smf/license.php">License terms.</a>';
 
 	echo '
-			<span class="smalltext" style="display: inline; visibility: visible;">' . $forum_copyright . '
-			</span>';
+	<span class="smalltext" style="display: inline; visibility: visible;">' . $forum_copyright . '</span>';
 }
 
 function socialbar($l, $t)

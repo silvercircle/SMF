@@ -1,6 +1,6 @@
 <?php
 /**
- * %%@productname@%%
+ * @name      EosAlpha BBS
  * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
@@ -9,7 +9,7 @@
  * copyright:	2011 Simple Machines (http://www.simplemachines.org)
  * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @version %%@productversion@%%
+ * @version 1.0pre
  */
 /*	Gif Util copyright 2003 by Yamasoft (S/C). All rights reserved.
 	Do not remove this portion of the header, or use these functions except

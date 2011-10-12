@@ -1,6 +1,6 @@
 <?php
 /**
- * %%@productname@%%
+ * @name      EosAlpha BBS
  * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
@@ -9,7 +9,7 @@
  * copyright:	2011 Simple Machines (http://www.simplemachines.org)
  * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @version %%@productversion@%%
+ * @version 1.0pre
  */
 function template_main()
 {
@@ -129,15 +129,21 @@ function template_credits()
 	// The most important part - the credits :P.
 	echo '
 	<div class="main_section" id="credits">
-		<div class="cat_bar">
+		<div class="cat_bar2">
 			<h3 class="catbg">', $txt['credits'], '</h3>
+		</div>
+		<div class="blue_container cleantop">
+		 <div class="content">
+		  ',$context['credits_intro'],'
+		 </div>
 		</div>';
 
 	foreach ($context['credits'] as $section)
 	{
 		if (isset($section['pretext']))
 		echo '
-		<div class="windowbg">
+		<br>
+		<div class="blue_container">
 			<div class="content">
 				<p>', $section['pretext'], '</p>
 			</div>
@@ -145,12 +151,13 @@ function template_credits()
 
 		if (isset($section['title']))
 		echo '
+		<br>
 		<div class="cat_bar">
 			<h3 class="catbg">', $section['title'], '</h3>
 		</div>';
 
 		echo '
-		<div class="windowbg2">
+		<div class="blue_container cleantop">
 			<div class="content">
 				<dl>';
 
@@ -189,11 +196,11 @@ function template_credits()
 	}
 
 	echo '
-		<div class="cat_bar">
+		<br>
+		<div class="cat_bar2">
 			<h3 class="catbg">', $txt['credits_copyright'], '</h3>
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<div class="blue_container cleantop">
 			<div class="content">
 				<dl>
 					<dt><strong>', $txt['credits_forum'], '</strong></dt>', '

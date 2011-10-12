@@ -1,6 +1,6 @@
 <?php
 /**
- * %%@productname@%%
+ * @name      EosAlpha BBS
  * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
@@ -9,7 +9,7 @@
  * copyright:	2011 Simple Machines (http://www.simplemachines.org)
  * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @version %%@productversion@%%
+ * @version 1.0pre
  */
 // This is the administration center home.
 function template_admin()
@@ -193,12 +193,12 @@ function template_credits()
 	echo '
 
 	<div id="admincenter">
-		<div class="cat_bar">
+		<div class="cat_bar2">
 			<h3>
 				', $txt['support_title'], '
 			</h3>
 		</div>
-		<div class="blue_container">
+		<div class="blue_container cleantop">
 			<div class="content">
 				<strong>', $txt['support_versions'], ':</strong><br />
 					', $txt['support_versions_forum'], ':

@@ -1,6 +1,6 @@
 <?php
 /**
- * %%@productname@%%
+ * @name      EosAlpha BBS
  * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
@@ -9,7 +9,7 @@
  * copyright:	2011 Simple Machines (http://www.simplemachines.org)
  * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @version %%@productversion@%%
+ * @version 1.0pre
  */
 if (!defined('SMF'))
 	die('Hacking attempt...');
@@ -521,6 +521,12 @@ function Credits($in_admin = false)
 	// Don't blink. Don't even blink. Blink and you're dead.
 	loadLanguage('Who');
 
+	$context['credits_intro'] = '<strong><span style="color:blue;">EosAlpha BBS</span></strong> is a software product based on the popular and successful <a href="http://www.simplemachines.org">Simple Machines Forum</a>, also known as simply SMF.<br>
+	It started around mid-2011 as a fork of the then current code base of SMF 2.0 which had been released under a OSF compliant <a href="http://www.simplemachines.org/about/smf/license.php">BSD-style license</a> in June 2011.
+	<br>
+	<br>
+	<dl><dt><strong>Developers</strong></dt>
+	<dd>Alex "Silvercircle" Vie, Annika "Velvet" Ostrovsky</dd></dl>';
 	$context['credits'] = array(
 		array(
 			'pretext' => $txt['credits_intro'],
@@ -720,12 +726,6 @@ function Credits($in_admin = false)
 
 	$context['copyrights'] = array(
 		'smf' => sprintf($forum_copyright, $forum_version),
-
-		/* Modification Authors:  You may add a copyright statement to this array for your mods.
-			Copyright statements should be in the form of a value only without a array key.  I.E.:
-				'Some Mod by Thantos &copy; 2010',
-				$txt['some_mod_copyright'],
-		*/
 		'mods' => array(
 		),
 	);
