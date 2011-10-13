@@ -559,58 +559,12 @@ function template_main()
 			sCatPrefix: "",
 			sGoButtonLabel: "'.$txt['go'].'"
 		});
-
-		aIconLists[aIconLists.length] = new IconList({
-			sBackReference: "aIconLists[" + aIconLists.length + "]",
-			sIconIdPrefix: "msg_icon_",
-			sScriptUrl: smf_scripturl,
-			bShowModify: '.($settings['show_modify'] ? 'true' : 'false').',
-			iBoardId: '.$context['current_board'].',
-			iTopicId: '.$context['current_topic'].',
-			sSessionId: "'.$context['session_id'].'",
-			sSessionVar: "'.$context['session_var'].'",
-			sLabelIconList: "'.$txt['message_icon'].'",
-			sBoxBackground: "transparent",
-			sBoxBackgroundHover: "#ffffff",
-			iBoxBorderWidthHover: 1,
-			sBoxBorderColorHover: "#adadad" ,
-			sContainerBackground: "#ffffff",
-			sContainerBorder: "1px solid #adadad",
-			sItemBorder: "1px solid #ffffff",
-			sItemBorderHover: "1px dotted gray",
-			sItemBackground: "transparent",
-			sItemBackgroundHover: "#e0e0f0"
-		});
 	}
 	';
 
 	if (!empty($ignoredMsgs))
 	{
-		$context['inline_footer_script'] .= '
-	var aIgnoreToggles = new Array();
-	';
-		foreach ($ignoredMsgs as $msgid) {
-			$context['inline_footer_script'] .= '
-	aIgnoreToggles['. $msgid. '] = new smc_Toggle({
-		bToggleEnabled: true,
-		bCurrentlyCollapsed: true,
-		aSwappableContainers: [
-		\'msg_'.$msgid.'_extra_info\',
-		\'msg_'.$msgid.'\',
-		\'msg_'.$msgid.'_footer\',
-		\'msg_'.$msgid.'_quick_mod\',
-		\'modify_button_'.$msgid.'\',
-		\'msg_'.$msgid.'_signature\'
-		],
-		aSwapLinks: [
-		{
-			sId: \'msg_'.$msgid.'_ignored_link\',
-			msgExpanded: \'\',
-			msgCollapsed: '.JavaScriptEscape($txt['show_ignore_user_post']).'
-		}
-		]
-	});';
-		}
+		$context['inline_footer_script'] .= '';
 	}
 
 	if ($context['can_reply'])
@@ -649,6 +603,7 @@ function template_main()
         	$("#interpostlink_helper").hide();
     	}
 	});
+	var topic_id = '.$context['current_topic'].';
 	';
 }
 

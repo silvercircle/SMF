@@ -132,7 +132,7 @@ function template_postbit_normal(&$message, $ignoring)
 		<div class="postarea">
 			<div class="keyinfo">
 			<div class="messageicon">
-			<img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' id="msg_icon_' . $message['id'] . '"' : '', ' />
+			<img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' class="iconrequest" id="micon_' . $message['id'] . '"' : '', ' />
 			</div>
 			<h5 style="display:inline;" id="subject_', $message['id'], '">
 			', $message['subject'], '
@@ -315,7 +315,7 @@ function template_postbit_normal(&$message, $ignoring)
 	// How about... even... remove it entirely?!
 	if ($message['can_remove'])
 		echo '
-			<li class="remove_button"><a href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');">', $txt['remove'], '</a></li>';
+			<li class="remove_button"><a href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm_(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
 
 	// What about splitting it off the rest of the topic?
 	if ($context['can_split'] && !empty($context['real_num_replies']))

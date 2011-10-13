@@ -726,61 +726,11 @@ function template_main()
 				var numIgnoredReplies = ignored_replies.length;
 				if (numIgnoredReplies != 0)
 				{
-					for (var i = 0; i < numIgnoredReplies; i++)
-					{
-						aIgnoreToggles[ignored_replies[i]] = new smc_Toggle({
-							bToggleEnabled: true,
-							bCurrentlyCollapsed: true,
-							aSwappableContainers: [
-								\'msg_\' + ignored_replies[i] + \'_body\',
-								\'msg_\' + ignored_replies[i] + \'_quote\',
-							],
-							aSwapLinks: [
-								{
-									sId: \'msg_\' + ignored_replies[i] + \'_ignored_link\',
-									msgExpanded: \'\',
-									msgCollapsed: ', JavaScriptEscape($txt['show_ignore_user_post']), '
-								}
-							]
-						});
-					}
 				}
 
 				if (typeof(smf_codeFix) != \'undefined\')
 					smf_codeFix();
 			}';
-
-	// Code for showing and hiding additional options.
-	if (!empty($settings['additional_options_collapsable']))
-		echo '
-			var oSwapAdditionalOptions = new smc_Toggle({
-				bToggleEnabled: true,
-				bCurrentlyCollapsed: ', $context['show_additional_options'] ? 'false' : 'true', ',
-				funcOnBeforeCollapse: function () {
-					document.getElementById(\'additional_options\').value = \'0\';
-				},
-				funcOnBeforeExpand: function () {
-					document.getElementById(\'additional_options\').value = \'1\';
-				},
-				aSwappableContainers: [
-				],
-				aSwapImages: [
-					{
-						sId: \'postMoreExpand\',
-						srcExpanded: smf_images_url + \'/collapse.gif\',
-						altExpanded: \'-\',
-						srcCollapsed: smf_images_url + \'/expand.gif\',
-						altCollapsed: \'+\'
-					}
-				],
-				aSwapLinks: [
-					{
-						sId: \'postMoreExpandLink\',
-						msgExpanded: ', JavaScriptEscape($txt['post_additionalopt']), ',
-						msgCollapsed: ', JavaScriptEscape($txt['post_additionalopt']), '
-					}
-				]
-			});';
 
 	echo '
 		// ]]></script>';
@@ -843,22 +793,7 @@ function template_main()
 
 		foreach ($ignored_posts as $post_id)
 		{
-			echo '
-			aIgnoreToggles[', $post_id, '] = new smc_Toggle({
-				bToggleEnabled: true,
-				bCurrentlyCollapsed: true,
-				aSwappableContainers: [
-					\'msg_', $post_id, '_body\',
-					\'msg_', $post_id, '_quote\',
-				],
-				aSwapLinks: [
-					{
-						sId: \'msg_', $post_id, '_ignored_link\',
-						msgExpanded: \'\',
-						msgCollapsed: ', JavaScriptEscape($txt['show_ignore_user_post']), '
-					}
-				]
-			});';
+			echo '';
 		}
 
 		echo '

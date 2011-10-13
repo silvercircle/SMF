@@ -522,7 +522,8 @@ function Credits($in_admin = false)
 	loadLanguage('Who');
 
 	$context['credits_intro'] = '<strong><span style="color:blue;">EosAlpha BBS</span></strong> is a software product based on the popular and successful <a href="http://www.simplemachines.org">Simple Machines Forum</a>, also known as simply SMF.<br>
-	It started around mid-2011 as a fork of the then current code base of SMF 2.0 which had been released under a OSF compliant <a href="http://www.simplemachines.org/about/smf/license.php">BSD-style license</a> in June 2011.
+	It started around mid-2011 as a fork of the then current code base of SMF 2.0 which had been released under a OSF compliant <a href="http://www.simplemachines.org/about/smf/license.php">BSD-style license</a> in June 2011. The goal is to
+	create a new forum software with a fresh, modern and social touch.
 	<br>
 	<br>
 	<dl><dt><strong>Developers</strong></dt>

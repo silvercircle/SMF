@@ -174,7 +174,7 @@ function getBoardIndex($boardIndexOptions)
 				'id' => $row_board['id_board'],
 				'name' => $row_board['board_name'],
 				'description' => $row_board['description'],
-				'short_description' => $modSettings['child_board_desc_shortened'] ? commonAPI::substr($row_board['description'], 0, $modSettings['child_board_desc_shortened']) . '...' : $row_board['description'],
+				'short_description' => !empty($row_board['description']) ? ($modSettings['child_board_desc_shortened'] ? '('.commonAPI::substr($row_board['description'], 0, $modSettings['child_board_desc_shortened']) . '...)' : '('.$row_board['description'].')') : '',
 				'new' => empty($row_board['is_read']) && $row_board['poster_name'] != '',
 				'topics' => $row_board['num_topics'],
 				'posts' => $row_board['num_posts'],

@@ -1181,3 +1181,26 @@ div.ppt {
 .social_share_privacy_area li.settings_info .settings_info_menu form fieldset label.checked {
 	color: #090;
 }
+/* jqModal base Styling courtesy of;
+	Brice Burgess <bhb@iceburg.net> */
+
+.jqmWindow {
+    display: none;
+
+    position: fixed;
+
+    background-color: #EEE;
+    color: #333;
+	border:2px solid #ccc;
+}
+
+.jqmOverlay { background-color: #000; }
+
+* iframe.jqm {position:absolute;top:0;left:0;z-index:-1;
+	width: expression(this.parentNode.offsetWidth+'px');
+	height: expression(this.parentNode.offsetHeight+'px');
+}
+* html .jqmWindow {
+     position: absolute;
+     top: expression((document.documentElement.scrollTop || document.body.scrollTop) + Math.round(17 * (document.documentElement.offsetHeight || document.body.clientHeight) / 100) + 'px');
+}

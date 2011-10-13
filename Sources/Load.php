@@ -344,6 +344,7 @@ function loadUserSettings()
 		$_reload = false;
 		// do we have a notification to dismiss (mark as seen) with this request? (we can only mark one per request, but that should be sufficient)
 		if(isset($_REQUEST['nmdismiss']) && (int)$_REQUEST['nmdismiss'] > 0) {
+			echo 'nmdismiss';
 			smf_db_query('UPDATE {db_prefix}log_notifications SET unread = 0 WHERE id_member = {int:id_user} AND id_act = {int:idact}',
 				array('id_user' => $id_member, 'idact' => (int)$_REQUEST['nmdismiss']));
 			$_reload = true;
@@ -1785,7 +1786,7 @@ function loadTheme($id_theme = 0, $initialize = true)
 	// Call load theme integration functions.
 	HookAPI::callHook('integrate_load_theme');
 
-	SimpleSEF::loadTheme();
+	//SimpleSEF::loadTheme();
 
 	// We are ready to go.
 	$context['theme_loaded'] = true;

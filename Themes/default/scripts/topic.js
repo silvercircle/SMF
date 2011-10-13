@@ -562,14 +562,12 @@ $(document).ready(function() {
 		var state = $(cbox).is(':checked');
 		hltColumn($(this), state);
 	});
-	
 	$('input.cb_invertall').change(function() {
 		var state = $(this).is(':checked');
 		$('input.cb_inline').each(function() {
 			hltColumn($(this), state);
 		});
 	});
-	
 	$('input.it_check').change(function() {
 		var cbox = this;
 		var id = $(this).val();
@@ -580,6 +578,15 @@ $(document).ready(function() {
 				else
 					$(this).removeClass('inline_highlight');
 			}
+		});
+	});
+	$('.iconrequest').click(function() {
+		setBusy(1);
+		var m = $(this).attr('id').substr(6);
+		sendXMLDocument(smf_prepareScriptUrl(smf_scripturl) + 'action=xmlhttp;sa=messageicons;t='+topic_id+';m=' + m +';xml', '', function(responseXML) {
+			setBusy(0);
+			var content = $(responseXML).find('content').text();
+			$(content).insertBefore($('#wrap'));
 		});
 	});
 });

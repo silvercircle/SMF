@@ -3116,6 +3116,7 @@ function JavaScriptModify()
 			$context['sub_template'] = 'modifytopicdone';
 			$context['message'] = array(
 				'id' => $row['id_msg'],
+				'icon' => isset($_REQUEST['icon']) ? $_REQUEST['icon'] : '',
 				'modified' => array(
 					'time' => isset($msgOptions['modify_time']) ? timeformat($msgOptions['modify_time']) : '',
 					'timestamp' => isset($msgOptions['modify_time']) ? forum_time(true, $msgOptions['modify_time']) : 0,

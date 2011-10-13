@@ -1,5 +1,4 @@
 <?php
-
 /* * **** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1
  *
@@ -22,8 +21,10 @@
  *
  * Contributor(s):
  *
+ * modified for EosAlpha BBS by Alex Vie (http://forum.miranda.or.at)
+ * (C) 2011
+ *
  * ***** END LICENSE BLOCK ***** */
-
 // No Direct Access!
 if (!defined('SMF'))
     die('Hacking attempt...');
@@ -118,12 +119,12 @@ class SimpleSEF {
         self::loadBoardNames($force);
         self::loadExtensions($force);
 
-        self::log('Pre-fix GET:' . var_export($_GET, TRUE));
+        //self::log('Pre-fix GET:' . var_export($_GET, TRUE));
 
         // We need to fix our GET array too...
         parse_str(preg_replace('~&(\w+)(?=&|$)~', '&$1=', strtr($_SERVER['QUERY_STRING'], array(';?' => '&', ';' => '&', '%00' => '', "\0" => ''))), $_GET);
 
-        self::log('Post-fix GET:' . var_export($_GET, TRUE), 'Init Complete (forced: ' . ($force ? 'true' : 'false') . ')');
+        //self::log('Post-fix GET:' . var_export($_GET, TRUE), 'Init Complete (forced: ' . ($force ? 'true' : 'false') . ')');
     }
 
     /**
@@ -167,7 +168,7 @@ class SimpleSEF {
 
         // if the URL contains index.php but not our ignored actions, rewrite the URL
         if (strpos($_SERVER['REQUEST_URL'], 'index.php') !== false && !(isset($_GET['xml']) || (!empty($_GET['action']) && in_array($_GET['action'], self::$ignoreactions)))) {
-            self::log('Rewriting and redirecting permanently: ' . $_SERVER['REQUEST_URL']);
+            //self::log('Rewriting and redirecting permanently: ' . $_SERVER['REQUEST_URL']);
             header('HTTP/1.1 301 Moved Permanently');
             header('Location: ' . self::create_sef_url($_SERVER['REQUEST_URL']));
             exit();
@@ -182,7 +183,7 @@ class SimpleSEF {
         // Need to grab any extra query parts from the original url and tack it on here
         $_SERVER['QUERY_STRING'] = http_build_query($_GET, '', ';');
 
-        self::log('Post-convert GET:' . var_export($_GET, true));
+        //self::log('Post-convert GET:' . var_export($_GET, true));
     }
 
     /**
@@ -263,10 +264,11 @@ class SimpleSEF {
 
         self::benchmark('buffer');
 
-        if (!empty($context['show_load_time']))
-            $buffer = preg_replace('~(' . preg_quote($txt['page_created']) . '.*?' . preg_quote($txt['queries']) . ')~', '$1<br />' . sprintf($txt['simplesef_adds'], $count) . ' ' . round(self::$benchMark['total'], 3) . $txt['seconds_with'] . self::$queryCount . $txt['queries'], $buffer);
+        //if (!empty($context['show_load_time']))
+        //    $buffer = preg_replace('~(.*[s]\sCPU,\s.*queries\.)~', '$1' . sprintf($txt['simplesef_adds'], $count) . ' ' . round(self::$benchMark['total'], 3) . $txt['seconds_with'] . self::$queryCount . $txt['queries'], $buffer);
+			//$buffer = preg_replace('~(.*[s]\sCPU,\s.*queries\.)~', 'foo', $buffer);
 
-        self::log('SimpleSEF rewrote ' . $count . ' urls in ' . self::$benchMark['total'] . ' seconds');
+        //self::log('SimpleSEF rewrote ' . $count . ' urls in ' . self::$benchMark['total'] . ' seconds');
 
         // I think we're done
         return $buffer;
@@ -291,7 +293,7 @@ class SimpleSEF {
             return;
 
         self::$redirect = true;
-        self::log('Fixing redirect location: ' . $setLocation);
+        //self::log('Fixing redirect location: ' . $setLocation);
 
         // Only do this if it's an URL for this board
         if (strpos($setLocation, $scripturl) !== false)
@@ -324,7 +326,7 @@ class SimpleSEF {
 
             echo $temp;
 
-            self::log('Rewriting XML Output');
+            //self::log('Rewriting XML Output');
         }
     }
 
@@ -348,7 +350,7 @@ class SimpleSEF {
         $subject = self::ob_simplesef($subject);
         $message = self::ob_simplesef($message);
 
-        self::log('Rewriting email output');
+        //self::log('Rewriting email output');
 
         // We must return true, otherwise we fail!
         return TRUE;
@@ -367,7 +369,7 @@ class SimpleSEF {
      */
     public static function http404NotFound() {
         header('HTTP/1.0 404 Not Found');
-        self::log('404 Not Found: ' . $_SERVER['REQUEST_URL']);
+        //self::log('404 Not Found: ' . $_SERVER['REQUEST_URL']);
         fatal_lang_error('simplesef_404', FALSE);
     }
 
@@ -488,7 +490,7 @@ class SimpleSEF {
 
         $config_vars = array(
             array('check', 'simplesef_enable', 'subtext' => $txt['simplesef_enable_desc']),
-            array('check', 'simplesef_simple', 'subtext' => $txt['simplesef_simple_desc']),
+			array('check', 'simplesef_no_boardname', 'subtext' => $txt['simplesef_no_boardname_desc']),
             array('text', 'simplesef_space', 'size' => 6, 'subtext' => $txt['simplesef_space_desc']),
             array('text', 'simplesef_suffix', 'subtext' => $txt['simplesef_suffix_desc']),
             array('check', 'simplesef_advanced', 'subtext' => $txt['simplesef_advanced_desc']),
@@ -685,7 +687,7 @@ class SimpleSEF {
         if (!empty($params['action'])) {
             // If we're ignoring this action, just return the original URL
             if (in_array($params['action'], self::$ignoreactions)) {
-                self::log('create_sef_url: Ignoring ' . $params['action']);
+                //self::log('create_sef_url: Ignoring ' . $params['action']);
                 return $url;
             }
 
@@ -794,20 +796,16 @@ class SimpleSEF {
     private static function getBoardName($id) {
         global $modSettings;
 
-        if (!empty($modSettings['simplesef_simple']))
-            $boardName = 'board' . $modSettings['simplesef_space'] . $id;
-        else {
-            if (stripos($id, '.') !== false) {
-                $page = substr($id, stripos($id, '.') + 1);
-                $id = substr($id, 0, stripos($id, '.'));
-            }
+		if (stripos($id, '.') !== false) {
+			$page = substr($id, stripos($id, '.') + 1);
+			$id = substr($id, 0, stripos($id, '.'));
+		}
 
-            if (empty(self::$boardNames[$id]))
-                self::loadBoardNames(TRUE);
-            $boardName = !empty(self::$boardNames[$id]) ? self::$boardNames[$id] : 'board';
-            if (isset($page) && ($page > 0))
-                $boardName = $boardName . $modSettings['simplesef_space'] . $page;
-        }
+		if (empty(self::$boardNames[$id]))
+			self::loadBoardNames(TRUE);
+		$boardName = !empty(self::$boardNames[$id]) ? self::$boardNames[$id] : 'board';
+		if (isset($page) && ($page > 0))
+			$boardName = $boardName . $modSettings['simplesef_space'] . $page;
         return $boardName;
     }
 
@@ -827,7 +825,7 @@ class SimpleSEF {
         @list($value, $start) = explode('.', $id);
         if (!isset($start))
             $start = '0';
-        if (!empty($modSettings['simplesef_simple']) || !is_numeric($value))
+        if (!is_numeric($value))
             return 'topic' . $modSettings['simplesef_space'] . $id . '.' . $modSettings['simplesef_suffix'];
 
         // If the topic id isn't here (probably from a redirect) we need a query to get it
@@ -844,7 +842,8 @@ class SimpleSEF {
         }
 
         // Put it all together
-        return $boardName . '/' . $topicName . $modSettings['simplesef_space'] . $value . '.' . $start . '.' . $modSettings['simplesef_suffix'];
+        return (empty($modSettings['simplesef_no_boardname']) ? $boardName . '/' : '') . $topicName . $modSettings['simplesef_space'] . $value . '.' . $start . '.' . $modSettings['simplesef_suffix'];
+		//return $topicName . $modSettings['simplesef_space'] . $value . '.' . $start . '.' . $modSettings['simplesef_suffix'];
     }
 
     /**
@@ -859,7 +858,7 @@ class SimpleSEF {
     private static function getUserName($id) {
         global $modSettings, $smcFunc;
 
-        if (!empty($modSettings['simplesef_simple']) || !is_numeric($id))
+        if (!is_numeric($id))
             return 'user' . $modSettings['simplesef_space'] . $id;
 
         if (empty(self::$userNames[$id]))
@@ -914,7 +913,7 @@ class SimpleSEF {
                 $class = ucwords($querystring['action']);
                 $extension = new $class();
                 $querystring += $extension->route($url_parts);
-                self::log('Rerouted "' . $querystring['action'] . '" action with extension');
+                //self::log('Rerouted "' . $querystring['action'] . '" action with extension');
 
                 // Empty it out so it's not handled by this code
                 $url_parts = array();
@@ -930,7 +929,7 @@ class SimpleSEF {
                 $querystring['topic'] = $topic;
 
                 // remove the board name too
-                if (empty($modSettings['simplesef_simple']))
+                if (empty($modSettings['simplesef_no_boardname']))
                     array_pop($url_parts);
             }
             else {
@@ -963,7 +962,7 @@ class SimpleSEF {
             }
         }
 
-        self::log('Rerouted "' . $query . '" to ' . var_export($querystring, TRUE));
+        //self::log('Rerouted "' . $query . '" to ' . var_export($querystring, TRUE));
 
         return $querystring;
     }
@@ -991,7 +990,7 @@ class SimpleSEF {
             }
 
             CacheAPI::putCache('simplesef_extensions', self::$extensions, 3600);
-            self::log('Cache hit failed, reloading extensions');
+            //self::log('Cache hit failed, reloading extensions');
         }
     }
 
@@ -1028,7 +1027,7 @@ class SimpleSEF {
             // Add one to the query cound and put the data into the cache
             self::$queryCount++;
             CacheAPI::putCache('simplesef_board_list', self::$boardNames, 3600);
-            self::log('Cache hit failed, reloading board names');
+            //self::log('Cache hit failed, reloading board names');
         }
     }
 

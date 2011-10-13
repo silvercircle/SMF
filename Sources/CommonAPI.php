@@ -139,6 +139,12 @@ class commonAPI {
 class HookAPI {
 	private static $hooks = array();
 
+	/**
+	 * @param $the_hooks	string - serialized array of hooks
+	 *
+	 * initialize the hooks
+	 * this must be called immediately after loading modSettings[] from the database
+	 */
 	public static function setHooks(&$the_hooks)
 	{
 		self::$hooks = @unserialize($the_hooks);

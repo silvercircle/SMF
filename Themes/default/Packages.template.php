@@ -312,39 +312,6 @@ function template_view_package()
 	</div>
 	<br class="clear" />';
 
-	// Toggle options.
-	echo '
-	<script type="text/javascript"><!-- // --><![CDATA[
-		var aOperationElements = new Array();';
-
-		// Operations.
-		if (!empty($js_operations))
-		{
-			foreach ($js_operations as $key => $operation)
-			{
-				echo '
-			aOperationElements[', $key, '] = new smc_Toggle({
-				bToggleEnabled: true,
-				bCurrentlyCollapsed: ', $operation ? 'false' : 'true', ',
-				aSwappableContainers: [
-					\'operation_', $key, '\'
-				],
-				aSwapImages: [
-					{
-						sId: \'operation_img_', $key, '\',
-						srcExpanded: smf_images_url + \'/sort_down.gif\',
-						altExpanded: \'*\',
-						srcCollapsed: smf_images_url + \'/selected.gif\',
-						altCollapsed: \'*\'
-					}
-				]
-			});';
-			}
-		}
-
-	echo '
-	// ]]></script>';
-
 	// And a bit more for database changes.
 	if (!empty($context['database_changes']))
 		echo '
@@ -1193,44 +1160,12 @@ function template_package_list()
 			<script type="text/javascript"><!-- // --><![CDATA[';
 			foreach ($context['package_list'] as $section => $ps)
 			{
-				echo '
-				var oPackageServerToggle_', $section, ' = new smc_Toggle({
-					bToggleEnabled: true,
-					bCurrentlyCollapsed: ', count($ps['items']) == 1 || $section_count == 1 ? 'false' : 'true', ',
-					aSwappableContainers: [
-						\'package_section_', $section, '\'
-					],
-					aSwapImages: [
-						{
-							sId: \'ps_img_', $section, '\',
-							srcExpanded: smf_images_url + \'/upshrink.png\',
-							altExpanded: \'*\',
-							srcCollapsed: smf_images_url + \'/upshrink2.png\',
-							altCollapsed: \'*\'
-						}
-					]
-				});';
+				echo '';
 
 				foreach ($ps['items'] as $id => $package)
 				{
 					if (!$package['is_text'] && !$package['is_line'] && !$package['is_remote'])
-						echo '
-				var oPackageToggle_', $section, '_pkg_', $id, ' = new smc_Toggle({
-					bToggleEnabled: true,
-					bCurrentlyCollapsed: true,
-					aSwappableContainers: [
-						\'package_section_', $section, '_pkg_', $id, '\'
-					],
-					aSwapImages: [
-						{
-							sId: \'ps_img_', $section, '_pkg_', $id, '\',
-							srcExpanded: smf_images_url + \'/upshrink.png\',
-							altExpanded: \'*\',
-							srcCollapsed: smf_images_url + \'/upshrink2.png\',
-							altCollapsed: \'*\'
-						}
-					]
-				});';
+						echo '';
 				}
 			}
 			echo '

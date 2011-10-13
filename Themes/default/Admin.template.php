@@ -1678,40 +1678,6 @@ function template_download_language()
 		</form>
 	</div>
 	<br class="clear" />';
-
-	// The javascript for expand and collapse of sections.
-	echo '
-	<script type="text/javascript"><!-- // --><![CDATA[';
-
-	// Each theme gets its own handler.
-	foreach ($context['files']['images'] as $theme => $group)
-	{
-		$count = 0;
-		echo '
-			var oTogglePanel_', $theme, ' = new smc_Toggle({
-				bToggleEnabled: true,
-				bCurrentlyCollapsed: true,
-				aSwappableContainers: [';
-		foreach ($group as $file)
-			echo '
-					', JavaScriptEscape($theme . '-' . $count++), ',';
-		echo '
-					null
-				],
-				aSwapImages: [
-					{
-						sId: \'toggle_image_', $theme, '\',
-						srcExpanded: smf_images_url + \'/sort_down.gif\',
-						altExpanded: \'*\',
-						srcCollapsed: smf_images_url + \'/selected.gif\',
-						altCollapsed: \'*\'
-					}
-				]
-			});';
-	}
-
-	echo '
-	// ]]></script>';
 }
 
 // Edit some language entries?

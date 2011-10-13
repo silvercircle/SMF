@@ -57,7 +57,6 @@ img.icon {
 	box-shadow:0 2px 6px 1px #aaa;
 	background: white;
 	background: -moz-linear-gradient(top, #a9d4f9 1%, #f9fdff 51%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#a9d4f9), color-stop(51%,#f9fdff));
 	background: -webkit-linear-gradient(top, #a9d4f9 1%,#f9fdff 51%);
 	background: -o-linear-gradient(top, #a9d4f9 1%,#f9fdff 51%);
 	background: -ms-linear-gradient(top, #a9d4f9 1%,#f9fdff 51%);
@@ -103,26 +102,8 @@ input, select, textarea {
 select {
 	padding: 2px;
 }
-input[type=button], .button_submit, .button_reset {
-	font-size: 10px !important;
-	font-family: Verdana, arial, sans-serif;
-	font-weight: bold;
-	text-shadow: white 1px 1px 8px;
-	line-height: 20px !important;
-	text-decoration: none;
-	padding: 0 4px;
-	color: #555;
-	background: #d8dfea;
-	border: 1px solid #9bb1db;
-	border-radius: 2px;
-	cursor: pointer;
-	height:20px !important;
-}
 input:focus, textarea:focus, select:focus {
 	border: 1px solid orange;
-}
-.button_submit:hover, .button_reset:hover, button:hover, input[type=button]:hover {
-	background-color: #eee;
 }
 select option {
 	padding: 0;
@@ -174,9 +155,11 @@ em {
 .floatright {
 	float: right !important;
 }
-
 .floatleft {
 	float: left !important;
+}
+.nofloat {
+	float:none !important;
 }
 .flow_auto {
 	overflow: auto;
@@ -517,12 +500,13 @@ ol.tiles li img.avatar {
 
 /* All the signatures used in the forum.  If your forum users use Mozilla, Opera, or Safari, you might add max-height here ;). */
 .signature, .attachments {
-	width: 98%;
+	width:98%;
 	overflow: auto;
 	clear: right;
-	padding: 1em 0 3px 0;
+	margin: 0.5em 1.5em 0 1.5em;
 	line-height: 1.4em;
 	font-size: 0.85em;
+	padding-top:4px;
 }
 
 .custom_fields_above_signature {
@@ -792,10 +776,9 @@ div.dropselect_content.right {
 #main_menu {
 	padding: 0 0.5em;
 	background: #ddd url(../images/theme/sprite.png) 0 -839px repeat-x;
-	font-size: 10px;
-	font-family: Verdana, Arial, helvetica, sans-serif;
+	font-size: 11px;
 	text-shadow: 2px 2px 4px black;
-	font-weight: bold;
+	box-shadow: 0 0 10px 0 #ccc inset;
 }
 
 .dropmenu, .dropmenu ul {
@@ -821,19 +804,12 @@ div.dropselect_content.right {
 
 .dropmenu a span {
 	display: block;
-	padding: 0 0 0 5px;
+	padding: 0 6px;
 }
-
-/* the background's first level only */
 .dropmenu li a.firstlevel {
-	margin-right: 4px;
-}
-
-.dropmenu li a.firstlevel span.firstlevel {
-	height: 20px;
-	line-height: 20px;
-	white-space: pre;
-	padding: 2px 5px 2px 5px;
+	padding: 0 5px;
+	height:26px;
+	line-height:26px;
 }
 
 .dropmenu > li {
@@ -872,13 +848,11 @@ div.dropselect_content.right {
 .dropmenu li ul ul {
 	margin: -1.8em 0 0 13em;
 }
-
-/* the active button */
 .dropmenu li.active, .dropmenu li.active span.m_downarrow {
 	background-color: #D0D1E6;
 	border-top: 2px solid #FFC6C6;
-	margin-top: -2px;
-	margin-bottom:-1px;
+	border-radius:4px 4px 0 0;
+	margin-top:-2px;
 }
 .dropmenu li.active a {
 	color: black;
@@ -890,8 +864,6 @@ div.dropselect_content.right {
 	cursor: pointer;
 	text-decoration: none;
 }
-
-/* the hover effects on level2 and 3 */
 .dropmenu li li a:hover, .dropmenu li li:hover>a {
 	background: #d4dbe4;
 	color: #000;
@@ -918,9 +890,9 @@ div.dropselect_content.right {
 span.m_downarrow, span.inlineprefix {
 	padding: 2px 4px 2px 0;
 	width: 14px;
-	margin-left: -6px;
-	height: 20px;
-	background: transparent url(../images/theme/sprite.png) 0 7px no-repeat;
+	margin-left: -8px;
+	height: 22px;
+	background: transparent url(../images/theme/sprite.png) 0 9px no-repeat;
 }
 
 span.inlineprefix {
@@ -1102,7 +1074,6 @@ h3, h4 {
 	padding-bottom: 3px;
 }
 .bbc_head {
-	display:block;
 	padding: 0;
 	margin:2px 20px;
 	border:none;
@@ -1122,26 +1093,24 @@ h3, h4 {
 	font-size:0.9em;
 }
 #upper_section {
-	background: #1c4885;
 	height: 65px;
 	max-height: 65px;
 	min-height: 65px;
 	font-size: 12px;
+	background: rgba(12,60,100,1) url(../images/upper.png) 0 0 repeat-x;;
 }
 .notibar {
 	/*background: #1c4885;*/
-	background: rgb(240,194,15);
-	background: -moz-linear-gradient(top, rgba(240,194,15,1) 87%, rgba(179,148,24,1) 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(87%,rgba(240,194,15,1)), color-stop(100%,rgba(179,148,24,1)));
-	background: -webkit-linear-gradient(top, rgba(240,194,15,1) 87%,rgba(179,148,24,1) 100%);
-	background: -o-linear-gradient(top, rgba(240,194,15,1) 87%,rgba(179,148,24,1) 100%);
-	background: -ms-linear-gradient(top, rgba(240,194,15,1) 87%,rgba(179,148,24,1) 100%);
-	background: linear-gradient(top, rgba(240,194,15,1) 87%,rgba(179,148,24,1) 100%);
-	height: 23px;
-	line-height: 23px;
+	background: rgb(6,57,102);
+	background: -moz-linear-gradient(top, rgba(6,57,102,1) 0%, rgba(240,194,15,1) 87%, rgba(179,148,24,1) 100%);
+	background: -webkit-linear-gradient(top, rgba(6,57,102,1) 0%,rgba(240,194,15,1) 87%,rgba(179,148,24,1) 100%);
+	background: -o-linear-gradient(top, rgba(6,57,102,1) 0%,rgba(240,194,15,1) 87%,rgba(179,148,24,1) 100%);
+	background: -ms-linear-gradient(top, rgba(6,57,102,1) 0%,rgba(240,194,15,1) 87%,rgba(179,148,24,1) 100%);
+	background: linear-gradient(top, rgba(6,57,102,1) 0%,rgba(240,194,15,1) 87%,rgba(179,148,24,1) 100%);
+	height: 24px;
+	line-height: 24px;
 	font-size: 10px;
 	font-family: Verdana;
-	border-top: 1px solid #4588E3;
 }
 .notibar.right {
 	float: right;
@@ -1370,29 +1339,6 @@ ol.category > li > div.info h3 {
 	float:right;
 	margin-right:20px;
 }
-/*
-ol.commonlist li.windowbg {
-	background: #ffffff;
-	background: -moz-linear-gradient(top, #ffffff 0%, #ededed 85%, #ededed 100%, #ffffff 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(85%,#ededed), color-stop(100%,#ededed), color-stop(100%,#ffffff));
-	background: -webkit-linear-gradient(top, #ffffff 0%,#ededed 85%,#ededed 100%,#ffffff 100%);
-	background: -o-linear-gradient(top, #ffffff 0%,#ededed 85%,#ededed 100%,#ffffff 100%);
-	background: -ms-linear-gradient(top, #ffffff 0%,#ededed 85%,#ededed 100%,#ffffff 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff',GradientType=0 );
-	background: linear-gradient(top, #ffffff 0%,#ededed 85%,#ededed 100%,#ffffff 100%);
-}
-ol.commonlist li.windowbg2 {
-	background: #ffffff;
-	background: -moz-linear-gradient(top, #ffffff 1%, #ededed 54%, #ededed 100%, #ffffff 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#ffffff), color-stop(54%,#ededed), color-stop(100%,#ededed), color-stop(100%,#ffffff));
-	background: -webkit-linear-gradient(top, #ffffff 1%,#ededed 54%,#ededed 100%,#ffffff 100%);
-	background: -o-linear-gradient(top, #ffffff 1%,#ededed 54%,#ededed 100%,#ffffff 100%);
-	background: -ms-linear-gradient(top, #ffffff 1%,#ededed 54%,#ededed 100%,#ffffff 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff',GradientType=0 );
-	background: linear-gradient(top, #ffffff 1%,#ededed 54%,#ededed 100%,#ffffff 100%);
-}
-*/
-/* the posting icons */
 #posting_icons {
 	padding: 0 1em 0.5em 1em;
 	margin: 0 0 1em 0;
@@ -1431,14 +1377,9 @@ ol.commonlist li.windowbg2 {
 img.new_posts {
 	padding: 0 0.1em;
 }
-
-/* Styles for the message (topic) index.
----------------------------------------------------- */
 div.table_frame .table_list {
-	/*border-collapse: collapse;*/
 	margin: 0;
 }
-
 #messageindex, #mlist, .mlist {
 	clear: both;
 	border: 1px solid #D0D1E6;
@@ -1448,41 +1389,30 @@ div.table_frame .table_list {
 #moderationbuttons {
 	overflow: hidden;
 }
-
-/* Events */
 .edit_event {
 	margin: 0 1em;
 	vertical-align: middle;
 }
-
-/* Poll question */
 #poll {
 	overflow: hidden;
 }
-
 #poll .content {
 	padding: 0 1em;
 }
-
 h4#pollquestion {
 	padding: 0 0 0.5em 2em;
 }
-
-/* Poll vote options */
 #poll_options ul.options {
 	border-top: 1px solid #9999aa;
 	padding: 1em 2.5em 0 2em;
 	margin: 0 0 1em 0;
 }
-
 #poll_options div.submitbutton {
 	border-bottom: 1px solid #9999aa;
 	clear: both;
 	padding: 0 0 1em 2em;
 	margin: 0 0 1em 0;
 }
-
-/* Poll results */
 #poll_options dl.options {
 	border: solid #9999aa;
 	border-width: 1px 0;
@@ -1490,7 +1420,6 @@ h4#pollquestion {
 	margin: 0 1em 1em 0;
 	line-height: 1.1em !important;
 }
-
 #poll_options dl.options dt {
 	padding: 0.3em 0;
 	width: 30%;
@@ -1498,11 +1427,9 @@ h4#pollquestion {
 	margin: 0;
 	clear: left;
 }
-
 #poll_options dl.options .voted {
 	font-weight: bold;
 }
-
 #poll_options dl.options dd {
 	margin: 0 0 0 2em;
 	padding: 0.1em 0 0 0;
@@ -1510,36 +1437,27 @@ h4#pollquestion {
 	max-width: 450px;
 	float: left;
 }
-
 #poll_options dl.options .percentage {
 	display: block;
 	float: right;
 	padding: 0.2em 0 0.3em 0;
 }
-
-/* Poll notices */
 #poll_options p {
 	margin: 0 1.5em 0.2em 1.5em;
 	padding: 0 0.5em 0.5em 0.5em;
 }
-
 div#pollmoderation {
 	margin: 0;
 	padding: 0;
 	overflow: auto;
 }
-
-/* onto the posts */
 #forumposts {
 	clear: both;
 }
-
 p#whoisviewing {
 	margin: 0;
 	padding: 5px 0.5em;
 }
-
-/* poster and postarea + moderation area underneath */
 .post_wrapper {
 	width: auto;
 	border: 1px solid #ddd;
@@ -1715,12 +1633,13 @@ ul.quickbuttons li, .buttonlist ul li {
 	cursor: pointer;
 }
 
-ul.quickbuttons li a, .buttonlist ul li a, span.button {
+ul.quickbuttons li a, .buttonlist ul li a, span.button, input[type=button], .button_submit, .button_reset {
 	font-size: 10px !important;
 	font-family: Verdana, arial, sans-serif;
 	text-shadow: 1px 1px 1px #fff;
 	float: left;
 	line-height: 18px !important;
+	height:18px;
 	text-decoration: none;
 	padding: 0 4px;
 	color: #777;
@@ -1730,7 +1649,13 @@ ul.quickbuttons li a, .buttonlist ul li a, span.button {
 	cursor: pointer;
 	background: #E2E2E2 url(../images/theme/sprite.png) 0 -118px repeat-x;
 }
-
+input[type=button], .button_submit, .button_reset {
+	float:none;
+	line-height: 20px !important;
+	height:20px;
+	padding: 0 6px;
+	margin:0 5px;
+}
 span.button {
 	margin: 0 0.3em;
 }
@@ -1808,11 +1733,6 @@ img.smiley {
 	font-size: 11px;
 	line-height: 20px;
 }
-
-#forumposts .signature, .post .signature {
-	margin: 1em 0 0 0;
-}
-
 .attachments hr {
 	clear: both;
 	margin: 1em 0 1em 0;
@@ -1822,25 +1742,15 @@ img.smiley {
 	overflow: hidden !important;
 	padding-left: 10px;
 }
-
-/* Styles for the quick reply area.
----------------------------------------------------- */
-
-/* The jump to box */
 #display_jump_to {
 	clear: both;
 	padding: 5px;
 	margin-top: 6px;
 	text-align: right;
 }
-
-/* Separator of posts. More useful in the print stylesheet. */
 #forumposts .post_separator {
 	display: none;
 }
-
-/* Styles for edit post section
----------------------------------------------------- */
 form#postmodify .roundframe {
 	padding: 0 12%;
 }
@@ -3331,11 +3241,9 @@ span.hidelink {
 	padding: 2px 4px;
 	border-radius: 3px;
 	background: -moz-linear-gradient(top, #eff7f9 72%, #deebed 100%, #827d73 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(72%,#eff7f9), color-stop(100%,#deebed), color-stop(100%,#827d73));
 	background: -webkit-linear-gradient(top, #eff7f9 72%,#deebed 100%,#827d73 100%);
 	background: -o-linear-gradient(top, #eff7f9 72%,#deebed 100%,#827d73 100%);
 	background: -ms-linear-gradient(top, #eff7f9 72%,#deebed 100%,#827d73 100%);
-	/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eff7f9', endColorstr='#827d73',GradientType=0 );*/
 	background: linear-gradient(top, #eff7f9 72%,#deebed 100%,#827d73 100%);
 }
 .blue_container div.content, .orange_container div.content, .yellow_container div.content, .cContainer_body div.content {
@@ -3382,7 +3290,6 @@ div.cContainer_end {
 	padding: 2px 4px;
 	border-radius: 3px;
 	background: -moz-linear-gradient(top, rgba(247,246,232,1) 0%, rgba(247,246,232,0.74) 37%, rgba(237,244,129,0.3) 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(247,246,232,1)), color-stop(37%,rgba(247,246,232,0.74)), color-stop(100%,rgba(237,244,129,0.3)));
 	background: -webkit-linear-gradient(top, rgba(247,246,232,1) 0%,rgba(247,246,232,0.74) 37%,rgba(237,244,129,0.3) 100%);
 	background: -o-linear-gradient(top, rgba(247,246,232,1) 0%,rgba(247,246,232,0.74) 37%,rgba(237,244,129,0.3) 100%);
 	background: -ms-linear-gradient(top, rgba(247,246,232,1) 0%,rgba(247,246,232,0.74) 37%,rgba(237,244,129,0.3) 100%);

@@ -79,6 +79,9 @@ function template_modifytopicdone()
 		if (!empty($context['message']['subject']))
 			echo '
 		<subject><![CDATA[', cleanXml($context['message']['subject']), ']]></subject>';
+		if (!empty($context['message']['icon']))
+			echo '
+		<icon><![CDATA[', cleanXml($context['message']['icon']), ']]></icon>';
 	}
 	else
 		echo '
@@ -275,17 +278,62 @@ function template_jump_to()
 </smf>';
 }
 
+/*
+ * create the dialog for selecting a new message icon in topic display.
+ * send back the list of icons + supporting scripts..
+ */
 function template_message_icons()
 {
-	global $context, $settings, $options;
+	global $context, $txt;
 
 	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>
-<smf>';
+<content>
+	<![CDATA[
+	<style>
+	#iconlist {
+		position:fixed;
+		width:200px;
+	}
+	</style>
+	<div class="blue_container smalltext" id="iconlist">
+	<input id="_iconlist_id" type="hidden" value="',$context['id_msg'],'" />
+	<div class="content inset_shadow smallpadding">
+	<ol class="commonlist notifications">';
 	foreach ($context['icons'] as $icon)
 		echo '
-	<icon value="', $icon['value'], '" url="', $icon['url'], '"><![CDATA[', cleanXml($icon['name']), ']]></icon>';
+		<li data-id="',$icon['value'],'">
+		  <img class="icon" src="',$icon['url'],'" />',cleanXml($icon['name']), '
+		</li>';
 	echo '
-</smf>';
+	</ol>
+	<div class="centertext smallpadding">
+	  <input type="submit" class="button_submit" value="',$txt['modify_cancel'],'" onclick="$(\'#iconlist\').jqmHide();$(\'#iconlist\').remove();return(false);" />
+	</div>
+	</div>
+	</div>';
+	echo <<< EOT
+	<script>
+		$(document).ready(function() {
+			$('#iconlist').jqm({overlay: true, modal: true, trigger: false, center:true});
+			centerElement($('#iconlist'), 0);
+			$('#iconlist').jqmShow();
+
+			$('#iconlist li').click(function() {
+				sendXMLDocument(smf_prepareScriptUrl(smf_scripturl) + 'action=jsmodify;topic=' + topic_id + ';msg=' + $('#_iconlist_id').val() + ';' + sSessionVar + '=' + sSessionId + ';icon=' + $(this).attr('data-id') + ';xml', '', function(responseXML) {
+					var m = '#micon_' + $('#_iconlist_id').val();
+					var new_icon = $(responseXML).find('icon').text();
+					$(m).attr('src', $('#iconlist li[data-id='+new_icon+'] img').attr('src'));
+					$('#iconlist').jqmHide();
+					$('#iconlist').remove();
+				});
+			});
+		});
+	</script>
+EOT;
+
+	echo '
+	]]>
+</content>';
 }
 
 function template_check_username()

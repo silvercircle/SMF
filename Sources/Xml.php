@@ -76,7 +76,10 @@ function ListMessageIcons()
 
 	require_once($sourcedir . '/Subs-Editor.php');
 	$context['icons'] = getMessageIcons($board);
-
+	$context['id_msg'] = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
+	$context['id_topic'] = isset($_REQUEST['t']) ? (int)$_REQUEST['t'] : 0;
+	if($context['id_msg'] <= 0 || $context['id_topic'] <= 0)
+		obExit(false);
 	$context['sub_template'] = 'message_icons';
 }
 

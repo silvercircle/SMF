@@ -1409,6 +1409,7 @@ jQuery(document).ready(function() {
 		if($(this).html().match(/<img .*>/))
 			$(this).css('border', 'none');
 	});
+	$('#jsconfirm').jqm({overlay: true, modal: true, trigger: false, center:true});
 });
 
 /*
@@ -1573,7 +1574,7 @@ function submitTagForm(ele)
 // submit ajax request for a topic preview
 function firePreview(topic_id, ele)
 {
-	sendRequest('action=xmlhttp;sa=mpeek;t=' + topic_id, ele);
+	sendRequest('action=xmlhttp;sa=mpeek;t=' + topic_id);
 };
 
 function sendRequest(request, anchor_element)

@@ -187,33 +187,6 @@ function template_permission_index()
 		// Javascript for the advanced stuff.
 		echo '
 	<script type="text/javascript"><!-- // --><![CDATA[
-		var oPermissionsPanelToggle = new smc_Toggle({
-			bToggleEnabled: true,
-			bCurrentlyCollapsed: ', empty($context['show_advanced_options']) ? 'true' : 'false', ',
-			aSwappableContainers: [
-				\'permissions_panel_advanced\'
-			],
-			aSwapImages: [
-				{
-					sId: \'permissions_panel_toggle\',
-					srcExpanded: smf_images_url + \'/sort_down.gif\',
-					altExpanded: ', JavaScriptEscape($txt['upshrink_description']), ',
-					srcCollapsed: smf_images_url + \'/selected.gif\',
-					altCollapsed: ', JavaScriptEscape($txt['upshrink_description']), '
-				}
-			],
-			oThemeOptions: {
-				bUseThemeSettings: ', $context['user']['is_guest'] ? 'false' : 'true', ',
-				sOptionName: \'admin_preferences\',
-				sSessionVar: ', JavaScriptEscape($context['session_var']), ',
-				sSessionId: ', JavaScriptEscape($context['session_id']), ',
-				sThemeId: \'1\',
-				sAdditionalVars: \';admin_key=app\'
-			}
-		});';
-
-		echo '
-
 		function checkSubmit()
 		{
 			if ((document.forms.permissionForm.predefined.value != "" && (document.forms.permissionForm.copy_from.value != "empty" || document.forms.permissionForm.permissions.value != "")) || (document.forms.permissionForm.copy_from.value != "empty" && document.forms.permissionForm.permissions.value != ""))

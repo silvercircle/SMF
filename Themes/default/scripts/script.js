@@ -26,18 +26,6 @@ var is_ie8up = is_ie8 && !is_ie7down;
 var is_iphone = ua.indexOf('iphone') != -1 || ua.indexOf('ipod') != -1;
 var is_android = ua.indexOf('android') != -1;
 
-// Define document.getElementById for Internet Explorer 4.
-if (!('getElementById' in document) && 'all' in document)
-	document.getElementById = function (sId) {
-		return document.all[sId];
-	};
-
-// Define XMLHttpRequest for IE 5 and above. (don't bother for IE 4 :/.... works in Opera 7.6 and Safari 1.2!)
-else if (!('XMLHttpRequest' in window) && 'ActiveXObject' in window)
-	window.XMLHttpRequest = function () {
-		return new ActiveXObject('MSXML2.XMLHTTP');
-	};
-
 // Ensure the getElementsByTagName exists.
 if (!'getElementsByTagName' in document && 'all' in document)
 	document.getElementsByTagName = function (sName) {
@@ -51,40 +39,15 @@ if (!('forms' in document))
 // Load an XML document using XMLHttpRequest.
 function getXMLDocument(sUrl, funcCallback)
 {
-	if (!window.XMLHttpRequest)
-		return null;
-
-	var oMyDoc = new XMLHttpRequest();
-	var bAsync = typeof(funcCallback) != 'undefined';
-	var oCaller = this;
-	if (bAsync)
-	{
-		oMyDoc.onreadystatechange = function () {
-			if (oMyDoc.readyState != 4)
-				return;
-
-			if (oMyDoc.responseXML != null && oMyDoc.status == 200)
-			{
-				if (funcCallback.call)
-				{
-					funcCallback.call(oCaller, oMyDoc.responseXML);
-				}
-				// A primitive substitute for the call method to support IE 5.0.
-				else
-				{
-					oCaller.tmpMethod = funcCallback;
-					oCaller.tmpMethod(oMyDoc.responseXML);
-					delete oCaller.tmpMethod;
-				}
-			}
-		};
-	}
-	oMyDoc.open('GET', sUrl, bAsync);
-	oMyDoc.send(null);
-
-	return oMyDoc;
+	return(sendXMLDocument(sUrl, '', funcCallback));
 };
 
+function centerElement(el, yOff)
+{
+	el.css({'top': (($(window).height() - el.outerHeight()) / 2) + yOff + 'px',
+			'left': (($(window).width() - el.outerWidth()) / 2) + 'px'});
+
+}
 // Send a post form to the server using XMLHttpRequest.
 function sendXMLDocumentWithAnchor(sUrl, sContent, funcCallback, ele)
 {
@@ -147,122 +110,18 @@ String.prototype.oCharsetConversion = {
 // Convert a string to an 8 bit representation (like in PHP).
 String.prototype.php_to8bit = function ()
 {
-	if (smf_charset == 'UTF-8')
-	{
-		var n, sReturn = '';
+	var n, sReturn = '';
 
-		for (var i = 0, iTextLen = this.length; i < iTextLen; i++)
-		{
-			n = this.charCodeAt(i);
-			if (n < 128)
-				sReturn += String.fromCharCode(n);
-			else if (n < 2048)
-				sReturn += String.fromCharCode(192 | n >> 6) + String.fromCharCode(128 | n & 63);
-			else if (n < 65536)
-				sReturn += String.fromCharCode(224 | n >> 12) + String.fromCharCode(128 | n >> 6 & 63) + String.fromCharCode(128 | n & 63);
-			else
-				sReturn += String.fromCharCode(240 | n >> 18) + String.fromCharCode(128 | n >> 12 & 63) + String.fromCharCode(128 | n >> 6 & 63) + String.fromCharCode(128 | n & 63);
-		}
-
-		return sReturn;
-	}
-
-	else if (this.oCharsetConversion.from.length == 0)
-	{
-		switch (smf_charset)
-		{
-			case 'ISO-8859-1':
-				this.oCharsetConversion = {
-					from: '\xa0-\xff',
-					to: '\xa0-\xff'
-				};
-			break;
-
-			case 'ISO-8859-2':
-				this.oCharsetConversion = {
-					from: '\xa0\u0104\u02d8\u0141\xa4\u013d\u015a\xa7\xa8\u0160\u015e\u0164\u0179\xad\u017d\u017b\xb0\u0105\u02db\u0142\xb4\u013e\u015b\u02c7\xb8\u0161\u015f\u0165\u017a\u02dd\u017e\u017c\u0154\xc1\xc2\u0102\xc4\u0139\u0106\xc7\u010c\xc9\u0118\xcb\u011a\xcd\xce\u010e\u0110\u0143\u0147\xd3\xd4\u0150\xd6\xd7\u0158\u016e\xda\u0170\xdc\xdd\u0162\xdf\u0155\xe1\xe2\u0103\xe4\u013a\u0107\xe7\u010d\xe9\u0119\xeb\u011b\xed\xee\u010f\u0111\u0144\u0148\xf3\xf4\u0151\xf6\xf7\u0159\u016f\xfa\u0171\xfc\xfd\u0163\u02d9',
-					to: '\xa0-\xff'
-				};
-			break;
-
-			case 'ISO-8859-5':
-				this.oCharsetConversion = {
-					from: '\xa0\u0401-\u040c\xad\u040e-\u044f\u2116\u0451-\u045c\xa7\u045e\u045f',
-					to: '\xa0-\xff'
-				};
-			break;
-
-			case 'ISO-8859-9':
-				this.oCharsetConversion = {
-					from: '\xa0-\xcf\u011e\xd1-\xdc\u0130\u015e\xdf-\xef\u011f\xf1-\xfc\u0131\u015f\xff',
-					to: '\xa0-\xff'
-				};
-			break;
-
-			case 'ISO-8859-15':
-				this.oCharsetConversion = {
-					from: '\xa0-\xa3\u20ac\xa5\u0160\xa7\u0161\xa9-\xb3\u017d\xb5-\xb7\u017e\xb9-\xbb\u0152\u0153\u0178\xbf-\xff',
-					to: '\xa0-\xff'
-				};
-			break;
-
-			case 'tis-620':
-				this.oCharsetConversion = {
-					from: '\u20ac\u2026\u2018\u2019\u201c\u201d\u2022\u2013\u2014\xa0\u0e01-\u0e3a\u0e3f-\u0e5b',
-					to: '\x80\x85\x91-\x97\xa0-\xda\xdf-\xfb'
-				};
-			break;
-
-			case 'windows-1251':
-				this.oCharsetConversion = {
-					from: '\u0402\u0403\u201a\u0453\u201e\u2026\u2020\u2021\u20ac\u2030\u0409\u2039\u040a\u040c\u040b\u040f\u0452\u2018\u2019\u201c\u201d\u2022\u2013\u2014\u2122\u0459\u203a\u045a\u045c\u045b\u045f\xa0\u040e\u045e\u0408\xa4\u0490\xa6\xa7\u0401\xa9\u0404\xab-\xae\u0407\xb0\xb1\u0406\u0456\u0491\xb5-\xb7\u0451\u2116\u0454\xbb\u0458\u0405\u0455\u0457\u0410-\u044f',
-					to: '\x80-\x97\x99-\xff'
-				};
-			break;
-
-			case 'windows-1253':
-				this.oCharsetConversion = {
-					from: '\u20ac\u201a\u0192\u201e\u2026\u2020\u2021\u2030\u2039\u2018\u2019\u201c\u201d\u2022\u2013\u2014\u2122\u203a\xa0\u0385\u0386\xa3-\xa9\xab-\xae\u2015\xb0-\xb3\u0384\xb5-\xb7\u0388-\u038a\xbb\u038c\xbd\u038e-\u03a1\u03a3-\u03ce',
-					to: '\x80\x82-\x87\x89\x8b\x91-\x97\x99\x9b\xa0-\xa9\xab-\xd1\xd3-\xfe'
-				};
-			break;
-
-			case 'windows-1255':
-				this.oCharsetConversion = {
-					from: '\u20ac\u201a\u0192\u201e\u2026\u2020\u2021\u02c6\u2030\u2039\u2018\u2019\u201c\u201d\u2022\u2013\u2014\u02dc\u2122\u203a\xa0-\xa3\u20aa\xa5-\xa9\xd7\xab-\xb9\xf7\xbb-\xbf\u05b0-\u05b9\u05bb-\u05c3\u05f0-\u05f4\u05d0-\u05ea\u200e\u200f',
-					to: '\x80\x82-\x89\x8b\x91-\x99\x9b\xa0-\xc9\xcb-\xd8\xe0-\xfa\xfd\xfe'
-				};
-			break;
-
-			case 'windows-1256':
-				this.oCharsetConversion = {
-					from: '\u20ac\u067e\u201a\u0192\u201e\u2026\u2020\u2021\u02c6\u2030\u0679\u2039\u0152\u0686\u0698\u0688\u06af\u2018\u2019\u201c\u201d\u2022\u2013\u2014\u06a9\u2122\u0691\u203a\u0153\u200c\u200d\u06ba\xa0\u060c\xa2-\xa9\u06be\xab-\xb9\u061b\xbb-\xbe\u061f\u06c1\u0621-\u0636\xd7\u0637-\u063a\u0640-\u0643\xe0\u0644\xe2\u0645-\u0648\xe7-\xeb\u0649\u064a\xee\xef\u064b-\u064e\xf4\u064f\u0650\xf7\u0651\xf9\u0652\xfb\xfc\u200e\u200f\u06d2',
-					to: '\x80-\xff'
-				};
-			break;
-
-			default:
-				this.oCharsetConversion = {
-					from: '',
-					to: ''
-				};
-			break;
-		}
-		var funcExpandString = function (sSearch) {
-			var sInsert = '';
-			for (var i = sSearch.charCodeAt(0), n = sSearch.charCodeAt(2); i <= n; i++)
-				sInsert += String.fromCharCode(i);
-			return sInsert;
-		};
-		this.oCharsetConversion.from = this.oCharsetConversion.from.replace(/.\-./g, funcExpandString);
-		this.oCharsetConversion.to = this.oCharsetConversion.to.replace(/.\-./g, funcExpandString);
-	}
-
-	var sReturn = '', iOffsetFrom = 0;
-	for (var i = 0, n = this.length; i < n; i++)
-	{
-		iOffsetFrom = this.oCharsetConversion.from.indexOf(this.charAt(i));
-		sReturn += iOffsetFrom > -1 ? this.oCharsetConversion.to.charAt(iOffsetFrom) : (this.charCodeAt(i) > 127 ? '&#' + this.charCodeAt(i) + ';' : this.charAt(i));
+	for (var i = 0, iTextLen = this.length; i < iTextLen; i++) {
+		n = this.charCodeAt(i);
+		if (n < 128)
+			sReturn += String.fromCharCode(n);
+		else if (n < 2048)
+			sReturn += String.fromCharCode(192 | n >> 6) + String.fromCharCode(128 | n & 63);
+		else if (n < 65536)
+			sReturn += String.fromCharCode(224 | n >> 12) + String.fromCharCode(128 | n >> 6 & 63) + String.fromCharCode(128 | n & 63);
+		else
+			sReturn += String.fromCharCode(240 | n >> 18) + String.fromCharCode(128 | n >> 12 & 63) + String.fromCharCode(128 | n >> 6 & 63) + String.fromCharCode(128 | n & 63);
 	}
 
 	return sReturn;
@@ -711,165 +570,6 @@ smc_Cookie.prototype.set = function(sKey, sValue)
 	document.cookie = sKey + '=' + encodeURIComponent(sValue);
 };
 
-
-// *** smc_Toggle class.
-function smc_Toggle(oOptions)
-{
-	this.opt = oOptions;
-	this.bCollapsed = false;
-	this.oCookie = null;
-	this.init();
-};
-
-smc_Toggle.prototype.init = function ()
-{
-	// The master switch can disable this toggle fully.
-	if ('bToggleEnabled' in this.opt && !this.opt.bToggleEnabled)
-		return;
-
-	// If cookies are enabled and they were set, override the initial state.
-	if ('oCookieOptions' in this.opt && this.opt.oCookieOptions.bUseCookie)
-	{
-		// Initialize the cookie handler.
-		this.oCookie = new smc_Cookie({});
-
-		// Check if the cookie is set.
-		var cookieValue = this.oCookie.get(this.opt.oCookieOptions.sCookieName);
-		if (cookieValue != null)
-			this.opt.bCurrentlyCollapsed = cookieValue == '1';
-	}
-
-	// If the init state is set to be collapsed, collapse it.
-	if (this.opt.bCurrentlyCollapsed)
-		this.changeState(true, true);
-
-	// Initialize the images to be clickable.
-	if ('aSwapImages' in this.opt)
-	{
-		for (var i = 0, n = this.opt.aSwapImages.length; i < n; i++)
-		{
-			var oImage = document.getElementById(this.opt.aSwapImages[i].sId);
-			if (typeof(oImage) == 'object' && oImage != null)
-			{
-				// Display the image in case it was hidden.
-				if (oImage.style.display == 'none')
-					oImage.style.display = '';
-
-				oImage.instanceRef = this;
-				oImage.onclick = function () {
-					this.instanceRef.toggle();
-					this.blur();
-				};
-				oImage.style.cursor = 'pointer';
-
-				// Preload the collapsed image.
-				smc_preCacheImage(this.opt.aSwapImages[i].srcCollapsed);
-			}
-		}
-	}
-
-	// Initialize links.
-	if ('aSwapLinks' in this.opt)
-	{
-		for (var i = 0, n = this.opt.aSwapLinks.length; i < n; i++)
-		{
-			var oLink = document.getElementById(this.opt.aSwapLinks[i].sId);
-			if (typeof(oLink) == 'object' && oLink != null)
-			{
-				// Display the link in case it was hidden.
-				if (oLink.style.display == 'none')
-					oLink.style.display = '';
-
-				oLink.instanceRef = this;
-				oLink.onclick = function () {
-					this.instanceRef.toggle();
-					this.blur();
-					return false;
-				};
-			}
-		}
-	}
-};
-
-// Collapse or expand the section.
-smc_Toggle.prototype.changeState = function(bCollapse, bInit)
-{
-	// Default bInit to false.
-	bInit = typeof(bInit) == 'undefined' ? false : true;
-
-	// Handle custom function hook before collapse.
-	if (!bInit && bCollapse && 'funcOnBeforeCollapse' in this.opt)
-	{
-		this.tmpMethod = this.opt.funcOnBeforeCollapse;
-		this.tmpMethod();
-		delete this.tmpMethod;
-	}
-
-	// Handle custom function hook before expand.
-	else if (!bInit && !bCollapse && 'funcOnBeforeExpand' in this.opt)
-	{
-		this.tmpMethod = this.opt.funcOnBeforeExpand;
-		this.tmpMethod();
-		delete this.tmpMethod;
-	}
-
-	// Loop through all the images that need to be toggled.
-	if ('aSwapImages' in this.opt)
-	{
-		for (var i = 0, n = this.opt.aSwapImages.length; i < n; i++)
-		{
-			var oImage = document.getElementById(this.opt.aSwapImages[i].sId);
-			if (typeof(oImage) == 'object' && oImage != null)
-			{
-				// Only (re)load the image if it's changed.
-				var sTargetSource = bCollapse ? this.opt.aSwapImages[i].srcCollapsed : this.opt.aSwapImages[i].srcExpanded;
-				if (oImage.src != sTargetSource)
-					oImage.src = sTargetSource;
-
-				oImage.alt = oImage.title = bCollapse ? this.opt.aSwapImages[i].altCollapsed : this.opt.aSwapImages[i].altExpanded;
-			}
-		}
-	}
-
-	// Loop through all the links that need to be toggled.
-	if ('aSwapLinks' in this.opt)
-	{
-		for (var i = 0, n = this.opt.aSwapLinks.length; i < n; i++)
-		{
-			var oLink = document.getElementById(this.opt.aSwapLinks[i].sId);
-			if (typeof(oLink) == 'object' && oLink != null)
-				setInnerHTML(oLink, bCollapse ? this.opt.aSwapLinks[i].msgCollapsed : this.opt.aSwapLinks[i].msgExpanded);
-		}
-	}
-
-	// Now go through all the sections to be collapsed.
-	for (var i = 0, n = this.opt.aSwappableContainers.length; i < n; i++)
-	{
-		if (this.opt.aSwappableContainers[i] == null)
-			continue;
-
-		var oContainer = document.getElementById(this.opt.aSwappableContainers[i]);
-		if (typeof(oContainer) == 'object' && oContainer != null)
-			oContainer.style.display = bCollapse ? 'none' : '';
-	}
-
-	// Update the new state.
-	this.bCollapsed = bCollapse;
-
-	// Update the cookie, if desired.
-	if ('oCookieOptions' in this.opt && this.opt.oCookieOptions.bUseCookie)
-		this.oCookie.set(this.opt.oCookieOptions.sCookieName, this.bCollapsed ? '1' : '0');
-
-	if ('oThemeOptions' in this.opt && this.opt.oThemeOptions.bUseThemeSettings)
-		smf_setThemeOption(this.opt.oThemeOptions.sOptionName, this.bCollapsed ? '1' : '0', 'sThemeId' in this.opt.oThemeOptions ? this.opt.oThemeOptions.sThemeId : null, this.opt.oThemeOptions.sSessionId, this.opt.oThemeOptions.sSessionVar, 'sAdditionalVars' in this.opt.oThemeOptions ? this.opt.oThemeOptions.sAdditionalVars : null);
-};
-
-smc_Toggle.prototype.toggle = function()
-{
-	// Change the state by reversing the current state.
-	this.changeState(!this.bCollapsed);
-};
-
 function createEventListener(oTarget)
 {
 	if (!('addEventListener' in oTarget))
@@ -898,14 +598,16 @@ function createEventListener(oTarget)
 // This function will retrieve the contents needed for the jump to boxes.
 function grabJumpToContent()
 {
-	var oXMLDoc = getXMLDocument(smf_prepareScriptUrl(smf_scripturl) + 'action=xmlhttp;sa=jumpto;xml');
+	var oXMLDoc = getXMLDocument(smf_prepareScriptUrl(smf_scripturl) + 'action=xmlhttp;sa=jumpto;xml', grabJumpResponse);
+};
+
+function grabJumpResponse(responseXML)
+{
 	var aBoardsAndCategories = new Array();
+	setBusy(false);
 
-	setBusy(true);
-
-	if (oXMLDoc.responseXML)
-	{
-		var items = oXMLDoc.responseXML.getElementsByTagName('smf')[0].getElementsByTagName('item');
+	if (responseXML) {
+		var items = responseXML.getElementsByTagName('smf')[0].getElementsByTagName('item');
 		for (var i = 0, n = items.length; i < n; i++)
 		{
 			aBoardsAndCategories[aBoardsAndCategories.length] = {
@@ -917,13 +619,9 @@ function grabJumpToContent()
 			};
 		}
 	}
-
-	setBusy(false);
-
 	for (var i = 0, n = aJumpTo.length; i < n; i++)
 		aJumpTo[i].fillSelect(aBoardsAndCategories);
-};
-
+}
 // This'll contain all JumpTo objects on the page.
 var aJumpTo = new Array();
 
@@ -1020,161 +718,6 @@ JumpTo.prototype.fillSelect = function (aBoardsAndCategories)
 			window.location.href = smf_scripturl + this.options[this.selectedIndex].value.substr(smf_scripturl.indexOf('?') == -1 || this.options[this.selectedIndex].value.substr(0, 1) != '?' ? 0 : 1);
 	};
 };
-
-// A global array containing all IconList objects.
-var aIconLists = new Array();
-
-// *** IconList object.
-function IconList(oOptions)
-{
-	if (!window.XMLHttpRequest)
-		return;
-
-	this.opt = oOptions;
-	this.bListLoaded = false;
-	this.oContainerDiv = null;
-	this.funcMousedownHandler = null;
-	this.funcParent = this;
-	this.iCurMessageId = 0;
-	this.iCurTimeout = 0;
-
-	// Add backwards compatibility with old themes.
-	if (!('sSessionVar' in this.opt))
-		this.opt.sSessionVar = 'sesc';
-
-	this.initIcons();
-};
-
-// Replace all message icons by icons with hoverable and clickable div's.
-IconList.prototype.initIcons = function ()
-{
-	for (var i = document.images.length - 1, iPrefixLength = this.opt.sIconIdPrefix.length; i >= 0; i--)
-		if (document.images[i].id.substr(0, iPrefixLength) == this.opt.sIconIdPrefix)
-			setOuterHTML(document.images[i], '<div title="' + this.opt.sLabelIconList + '" onclick="' + this.opt.sBackReference + '.openPopup(this, ' + document.images[i].id.substr(iPrefixLength) + ')" onmouseover="' + this.opt.sBackReference + '.onBoxHover(this, true)" onmouseout="' + this.opt.sBackReference + '.onBoxHover(this, false)" style="background: ' + this.opt.sBoxBackground + '; cursor: ' + (is_ie ? 'hand' : 'pointer') + '; padding: 0px; text-align: center;"><img src="' + document.images[i].src + '" alt="' + document.images[i].alt + '" id="' + document.images[i].id + '" style="margin:0; padding: 0;" /></div>');
-};
-
-// Event for the mouse hovering over the original icon.
-IconList.prototype.onBoxHover = function (oDiv, bMouseOver)
-{
-	oDiv.style.border = bMouseOver ? this.opt.iBoxBorderWidthHover + 'px solid ' + this.opt.sBoxBorderColorHover : '';
-	oDiv.style.background = bMouseOver ? this.opt.sBoxBackgroundHover : this.opt.sBoxBackground;
-	oDiv.style.padding = bMouseOver ? (3 - this.opt.iBoxBorderWidthHover) + 'px' : '3px';
-};
-
-// Show the list of icons after the user clicked the original icon.
-IconList.prototype.openPopup = function (oDiv, iMessageId)
-{
-	this.iCurMessageId = iMessageId;
-
-	if (!this.bListLoaded && this.oContainerDiv == null)
-	{
-		// Create a container div.
-		this.oContainerDiv = document.createElement('div');
-		this.oContainerDiv.id = 'iconList';
-		this.oContainerDiv.style.display = 'none';
-		this.oContainerDiv.style.cursor = is_ie ? 'hand' : 'pointer';
-		this.oContainerDiv.style.position = 'absolute';
-		this.oContainerDiv.style.width = oDiv.offsetWidth + 'px';
-		this.oContainerDiv.style.background = this.opt.sContainerBackground;
-		this.oContainerDiv.style.border = this.opt.sContainerBorder;
-		this.oContainerDiv.style.padding = '0px';
-		this.oContainerDiv.style.textAlign = 'center';
-		document.body.appendChild(this.oContainerDiv);
-
-		// Start to fetch its contents.
-		setBusy(true);
-		this.tmpMethod = getXMLDocument;
-		this.tmpMethod(smf_prepareScriptUrl(this.opt.sScriptUrl) + 'action=xmlhttp;sa=messageicons;board=' + this.opt.iBoardId + ';xml', this.onIconsReceived);
-		delete this.tmpMethod;
-
-		createEventListener(document.body);
-	}
-
-	// Set the position of the container.
-	var aPos = smf_itemPos(oDiv);
-	this.oContainerDiv.style.top = (aPos[1] + oDiv.offsetHeight) + 'px';
-	this.oContainerDiv.style.left = (aPos[0] - 1) + 'px';
-	this.oClickedIcon = oDiv;
-
-	if (this.bListLoaded)
-		this.oContainerDiv.style.display = 'block';
-
-	document.body.addEventListener('mousedown', this.onWindowMouseDown, false);
-};
-
-// Setup the list of icons once it is received through xmlHTTP.
-IconList.prototype.onIconsReceived = function (oXMLDoc)
-{
-	var icons = oXMLDoc.getElementsByTagName('smf')[0].getElementsByTagName('icon');
-	var sItems = '';
-
-	for (var i = 0, n = icons.length; i < n; i++)
-		sItems += '<div onmouseover="' + this.opt.sBackReference + '.onItemHover(this, true)" onmouseout="' + this.opt.sBackReference + '.onItemHover(this, false);" onmousedown="' + this.opt.sBackReference + '.onItemMouseDown(this, \'' + icons[i].getAttribute('value') + '\');" style="padding: 3px 0px 3px 0px; margin-left: auto; margin-right: auto; border: ' + this.opt.sItemBorder + '; background: ' + this.opt.sItemBackground + '"><img src="' + icons[i].getAttribute('url') + '" alt="' + icons[i].getAttribute('name') + '" title="' + icons[i].firstChild.nodeValue + '" /></div>';
-
-	setInnerHTML(this.oContainerDiv, sItems);
-	this.oContainerDiv.style.display = 'block';
-	this.bListLoaded = true;
-
-	if (is_ie)
-		this.oContainerDiv.style.width = this.oContainerDiv.clientWidth + 'px';
-
-	setBusy(false);
-};
-
-// Event handler for hovering over the icons.
-IconList.prototype.onItemHover = function (oDiv, bMouseOver)
-{
-	oDiv.style.background = bMouseOver ? this.opt.sItemBackgroundHover : this.opt.sItemBackground;
-	oDiv.style.border = bMouseOver ? this.opt.sItemBorderHover : this.opt.sItemBorder;
-	if (this.iCurTimeout != 0)
-		window.clearTimeout(this.iCurTimeout);
-	if (bMouseOver)
-		this.onBoxHover(this.oClickedIcon, true);
-	else
-		this.iCurTimeout = window.setTimeout(this.opt.sBackReference + '.collapseList();', 500);
-};
-
-// Event handler for clicking on one of the icons.
-IconList.prototype.onItemMouseDown = function (oDiv, sNewIcon)
-{
-	if (this.iCurMessageId != 0)
-	{
-		setBusy(true);
-		this.tmpMethod = getXMLDocument;
-		var oXMLDoc = this.tmpMethod(smf_prepareScriptUrl(this.opt.sScriptUrl) + 'action=jsmodify;topic=' + this.opt.iTopicId + ';msg=' + this.iCurMessageId + ';' + this.opt.sSessionVar + '=' + this.opt.sSessionId + ';icon=' + sNewIcon + ';xml');
-		delete this.tmpMethod;
-		setBusy(false);
-
-		var oMessage = oXMLDoc.responseXML.getElementsByTagName('smf')[0].getElementsByTagName('message')[0];
-		if (oMessage.getElementsByTagName('error').length == 0)
-		{
-			if (this.opt.bShowModify && oMessage.getElementsByTagName('modified').length != 0)
-				setInnerHTML(document.getElementById('modified_' + this.iCurMessageId), oMessage.getElementsByTagName('modified')[0].childNodes[0].nodeValue);
-			this.oClickedIcon.getElementsByTagName('img')[0].src = oDiv.getElementsByTagName('img')[0].src;
-		}
-	}
-};
-
-// Event handler for clicking outside the list (will make the list disappear).
-IconList.prototype.onWindowMouseDown = function ()
-{
-	for (var i = aIconLists.length - 1; i >= 0; i--)
-	{
-		aIconLists[i].funcParent.tmpMethod = aIconLists[i].collapseList;
-		aIconLists[i].funcParent.tmpMethod();
-		delete aIconLists[i].funcParent.tmpMethod;
-	}
-};
-
-// Collapse the list of icons.
-IconList.prototype.collapseList = function()
-{
-	this.onBoxHover(this.oClickedIcon, false);
-	this.oContainerDiv.style.display = 'none';
-	this.iCurMessageId = 0;
-	document.body.removeEventListener('mousedown', this.onWindowMouseDown, false);
-};
-
 // Handy shortcuts for getting the mouse position on the screen - only used for IE at the moment.
 function smf_mousePose(oEvent)
 {
@@ -1614,3 +1157,138 @@ function setTextSize(_s)
     return s;
   }
 }(jQuery));
+
+/*
+ * jqModal - Minimalist Modaling with jQuery
+ *   (http://dev.iceburg.net/jquery/jqModal/)
+ *
+ * Copyright (c) 2007,2008 Brice Burgess <bhb@iceburg.net>
+ * Dual licensed under the MIT and GPL licenses:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *   http://www.gnu.org/licenses/gpl.html
+ *
+ * $Version: 03/01/2009 +r14
+ */
+(function($) {
+$.fn.jqm=function(o){
+var p={
+overlay: 50,
+overlayClass: 'jqmOverlay',
+closeClass: 'jqmClose',
+trigger: '.jqModal',
+ajax: F,
+ajaxText: '',
+target: F,
+modal: F,
+toTop: F,
+onShow: F,
+onHide: F,
+center: F,
+onLoad: F
+};
+return this.each(function(){if(this._jqm)return H[this._jqm].c=$.extend({},H[this._jqm].c,o);s++;this._jqm=s;
+H[s]={c:$.extend(p,$.jqm.params,o),a:F,w:$(this).addClass('jqmID'+s),s:s};
+if(p.trigger)$(this).jqmAddTrigger(p.trigger);
+});};
+
+$.fn.jqmAddClose=function(e){return hs(this,e,'jqmHide');};
+$.fn.jqmAddTrigger=function(e){return hs(this,e,'jqmShow');};
+$.fn.jqmShow=function(t){return this.each(function(){t=t||window.event;$.jqm.open(this._jqm,t);});};
+$.fn.jqmHide=function(t){return this.each(function(){t=t||window.event;$.jqm.close(this._jqm,t)});};
+
+$.jqm = {
+hash:{},
+open:function(s,t){var h=H[s],c=h.c,cc='.'+c.closeClass,z=(parseInt(h.w.css('z-index'))),z=(z>0)?z:3000,o=$('<div></div>').css({height:'100%',width:'100%',position:'fixed',left:0,top:0,'z-index':z-1,opacity:c.overlay/100});if(h.a)return F;h.t=t;h.a=true;h.w.css('z-index',z);
+ if(c.modal) {if(!A[0])L('bind');A.push(s);}
+ else if(c.overlay > 0)h.w.jqmAddClose(o);
+ else o=F;
+
+ h.o=(o)?o.addClass(c.overlayClass).prependTo('body'):F;
+ if(ie6){$('html,body').css({height:'100%',width:'100%'});if(o){o=o.css({position:'absolute'})[0];for(var y in {Top:1,Left:1})o.style.setExpression(y.toLowerCase(),"(_=(document.documentElement.scroll"+y+" || document.body.scroll"+y+"))+'px'");}}
+
+ if(c.ajax) {var r=c.target||h.w,u=c.ajax,r=(typeof r == 'string')?$(r,h.w):$(r),u=(u.substr(0,1) == '@')?$(t).attr(u.substring(1)):u;
+  r.html(c.ajaxText).load(u,function(){if(c.onLoad)c.onLoad.call(this,h);if(cc)h.w.jqmAddClose($(cc,h.w));e(h);});}
+ else if(cc)h.w.jqmAddClose($(cc,h.w));
+
+ if(c.toTop&&h.o)h.w.before('<span id="jqmP'+h.w[0]._jqm+'"></span>').insertAfter(h.o);
+ (c.onShow)?c.onShow(h):h.w.show();e(h);return F;
+},
+close:function(s){var h=H[s];if(!h.a)return F;h.a=F;
+ if(A[0]){A.pop();if(!A[0])L('unbind');}
+ if(h.c.toTop&&h.o)$('#jqmP'+h.w[0]._jqm).after(h.w).remove();
+ if(h.c.onHide)h.c.onHide(h);else{h.w.hide();if(h.o)h.o.remove();} return F;
+},
+params:{}};
+var s=0,H=$.jqm.hash,A=[],ie6=$.browser.msie&&($.browser.version == "6.0"),F=false,
+i=$('<iframe src="javascript:false;document.write(\'\');" class="jqm"></iframe>').css({opacity:0}),
+e=function(h){if(ie6)if(h.o)h.o.html('<p style="width:100%;height:100%"/>').prepend(i);else if(!$('iframe.jqm',h.w)[0])h.w.prepend(i); f(h);},
+f=function(h){try{$(':input:visible',h.w)[0].focus();}catch(_){}},
+L=function(t){$()[t]("keypress",m)[t]("keydown",m)[t]("mousedown",m);},
+m=function(e){var h=H[A[A.length-1]],r=(!$(e.target).parents('.jqmID'+h.s)[0]);if(r)f(h);return !r;},
+hs=function(w,t,c){return w.each(function(){var s=this._jqm;$(t).each(function() {
+ if(!this[c]){this[c]=[];$(this).click(function(){for(var i in {jqmShow:1,jqmHide:1})for(var s in this[i])if(H[this[i][s]])H[this[i][s]].w[i](this);return F;});}this[c].push(s);});});};
+})(jQuery);
+
+/*
+ * jqDnR - Minimalistic Drag'n'Resize for jQuery.
+ *
+ * Copyright (c) 2007 Brice Burgess <bhb@iceburg.net>, http://www.iceburg.net
+ * Licensed under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * $Version: 2007.08.19 +r2
+ */
+
+(function($){
+$.fn.jqDrag=function(h){return i(this,h,'d');};
+$.fn.jqResize=function(h){return i(this,h,'r');};
+$.jqDnR={dnr:{},e:0,
+drag:function(v){
+ if(M.k == 'd')E.css({left:M.X+v.pageX-M.pX,top:M.Y+v.pageY-M.pY});
+ else E.css({width:Math.max(v.pageX-M.pX+M.W,0),height:Math.max(v.pageY-M.pY+M.H,0)});
+  return false;},
+stop:function(){E.css('opacity',M.o);$().unbind('mousemove',J.drag).unbind('mouseup',J.stop);}
+};
+var J=$.jqDnR,M=J.dnr,E=J.e,
+i=function(e,h,k){return e.each(function(){h=(h)?$(h,e):e;
+ h.bind('mousedown',{e:e,k:k},function(v){var d=v.data,p={};E=d.e;
+ // attempt utilization of dimensions plugin to fix IE issues
+ if(E.css('position') != 'relative'){try{E.position(p);}catch(e){}}
+ M={X:p.left||f('left')||0,Y:p.top||f('top')||0,W:f('width')||E[0].scrollWidth||0,H:f('height')||E[0].scrollHeight||0,pX:v.pageX,pY:v.pageY,k:d.k,o:E.css('opacity')};
+ E.css({opacity:0.8});$().mousemove($.jqDnR.drag).mouseup($.jqDnR.stop);
+ return false;
+ });
+});},
+f=function(k){return parseInt(E.css(k))||false;};
+})(jQuery);
+
+function alert_(msg)
+{
+	$('#jsconfirm #c_yes').hide();
+	$('#jsconfirm #c_no').hide();
+	$('#jsconfirm #c_ok').show();
+	$('#jsconfirm').jqmShow().find('div.jsconfirm.content').html(msg);
+}
+
+/**
+ * modal confirmation dialog. callback is either a URL to redirect to or a
+ * valid JS function to execute when the user clicks Yes.
+ * same dialog is also used for simple modal alerts (see above).
+ */
+function confirm_(title, msg, callback)
+{
+	var el = $('#jsconfirm');
+	$('#jsconfirm #c_yes').show();
+	$('#jsconfirm #c_no').show();
+	$('#jsconfirm #c_ok').hide();
+	$('#jsconfirm').jqmShow().find('div.jsconfirm.content').html(msg);
+	centerElement(el, -200);
+	$('#jsconfirm .jsconfirm.title').html(title != '' ? title : 'JavaScript confirm');
+	$('#jsconfirm #c_yes').click(function() {
+		typeof callback == 'string' ? window.location.href = callback : callback();
+	});
+	$('#jsconfirm #c_no').click(function() {
+		$('#jsconfirm').jqmHide();
+	});
+	return(false);
+}
