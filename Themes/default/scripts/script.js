@@ -37,9 +37,41 @@ if (!('forms' in document))
 	document.forms = document.getElementsByTagName('form');
 
 // Load an XML document using XMLHttpRequest.
+// Load an XML document using XMLHttpRequest.
 function getXMLDocument(sUrl, funcCallback)
 {
-	return(sendXMLDocument(sUrl, '', funcCallback));
+	if (!window.XMLHttpRequest)
+		return null;
+
+	var oMyDoc = new XMLHttpRequest();
+	var bAsync = typeof(funcCallback) != 'undefined';
+	var oCaller = this;
+	if (bAsync)
+	{
+		oMyDoc.onreadystatechange = function () {
+			if (oMyDoc.readyState != 4)
+				return;
+
+			if (oMyDoc.responseXML != null && oMyDoc.status == 200)
+			{
+				if (funcCallback.call)
+				{
+					funcCallback.call(oCaller, oMyDoc.responseXML);
+				}
+				// A primitive substitute for the call method to support IE 5.0.
+				else
+				{
+					oCaller.tmpMethod = funcCallback;
+					oCaller.tmpMethod(oMyDoc.responseXML);
+					delete oCaller.tmpMethod;
+				}
+			}
+		};
+	}
+	oMyDoc.open('GET', sUrl, bAsync);
+	oMyDoc.send(null);
+
+	return oMyDoc;
 };
 
 function centerElement(el, yOff)

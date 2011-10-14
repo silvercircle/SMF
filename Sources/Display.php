@@ -82,10 +82,6 @@ function Display()
 	// Load the proper template and/or sub template.
 	if (WIRELESS)
 		$context['sub_template'] = WIRELESS_PROTOCOL . '_display';
-	else {
-		loadTemplate($board_info['is_pageboard'] ? 'DisplayPage' : 'Display');
-		loadTemplate($board_info['is_pageboard'] ? 'PostbitPage' : 'Postbit');
-	}
 
 	// Not only does a prefetch make things slower for the server, but it makes it impossible to know if they read it.
 	if (isset($_SERVER['HTTP_X_MOZ']) && $_SERVER['HTTP_X_MOZ'] == 'prefetch')
@@ -992,16 +988,31 @@ function Display()
 	// deal with possible sticky posts and different postbit layouts for
 	// the first post
 	$context['id_layout'] = 0;
+	$layout = (int)($topicinfo['id_layout'] & 0x7f);
+
+	// set defaults...
+	$context['postbit_callbacks'] = array(
+		'firstpost' => 'template_postbit_normal',
+		'post' => 'template_postbit_normal'
+	);
 	if($topicinfo['id_layout']) {
+		$this_start = (int)$_REQUEST['start'];
 		if(((int)$topicinfo['id_layout'] & 0x80)) {
-			if($_REQUEST['start'] > 0)
+			if($this_start > 0)
 				array_unshift($messages, intval($topicinfo['id_first_msg']));
-			$context['id_layout'] = (int)$topicinfo['id_layout'] & 0x7f ? 1 : 0;
+			$context['postbit_callbacks']['firstpost'] = ($layout == 0 ? 'template_postbit_normal' : ($layout == 2 ? 'template_postbit_clean' : 'template_postbit_lean'));
+			$context['postbit_callbacks']['post'] = ($layout == 2 ? 'template_postbit_comment' : 'template_postbit_normal');
 		}
-		else if((int)$topicinfo['id_layout'] & 0x7f)
-			$context['id_layout'] = $_REQUEST['start'] ? 0 : 1;
+		else if($layout) {
+			$context['postbit_callbacks']['firstpost'] = ($layout == 0 || $this_start != 0 ? 'template_postbit_normal' : ($layout == 2 ? 'template_postbit_clean' : 'template_postbit_lean'));
+			$context['postbit_callbacks']['post'] = ($layout == 2 ? 'template_postbit_comment' : 'template_postbit_normal');
+		}
 	}
-		
+	// now we know which template we need
+	if(!WIRELESS)
+		loadTemplate($layout > 1 ? 'DisplayPage' : 'Display');
+	loadTemplate('Postbit');
+
 	// If there _are_ messages here... (probably an error otherwise :!)
 	if (!empty($messages))
 	{

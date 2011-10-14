@@ -1,0 +1,17 @@
+Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
+
+[list]
+[li]Changed how posts from ignored members appear in the topic view and cleaned up the JS that handles ignored posts.[/li]
+[li]New BBCode for column layout. [nobbc][columns=N]Your text[/columns][/nobbc] can be used to format the text with N columns
+using CSS3 column-count property. A css class "bbc_columns" can be customized to tweak the column layout (except the
+number of columns which is applied via an inline style and depends on the parameter passed to the tag). Note that this
+needs a modern browser to show up properly and if a browser does not support the column-count property, the paragraph(s)
+will appear just like any normal text.[/li]
+[li]The [nobbc][justify][/nobbc] tag can be used to format a paragraph with CSS justify:all property.[/li]
+[li]The [nobbc][class=foo]Text[/class][/nobbc] tag can be used to format text with the given CSS class. The text
+will be wrapped in a <div> using the parameter as its CSS class.[/li]
+[li]Simplified postbit_normal and postbit_blog a bit.[/li]
+[li]Scrapped the concept of page boards. The topic layout can now be set on a per-topic base when posting a new topic
+or modifying the first message of any topic (a permission to post with non-standard layout will probably be needed).[/li]
+[li]Some reorganization of postbit templates (again...)[/li]
+[/list]

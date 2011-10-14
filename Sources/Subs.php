@@ -1143,6 +1143,22 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'after' => '</span>',
 			),
 			array(
+				'tag' => 'columns',
+				'type' => 'unparsed_equals',
+				'test' => '([1-9])\]',
+				'before' => '<div class="bbc_columns" style="column-count: $1;">',
+				'block_level' => true,
+				'after' => '</div>',
+			),
+			array(
+				'tag' => 'css',
+				'type' => 'unparsed_equals',
+				'test' => '([a-zA-Z1-9_-\s]+?)\]',
+				'before' => '<div class="$1">',
+				'block_level' => true,
+				'after' => '</div>',
+			),
+			array(
 				'tag' => 'yt',
 				'type' => 'unparsed_content',
 				'validate' => create_function('&$tag, &$data, $disabled', '

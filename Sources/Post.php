@@ -2019,7 +2019,7 @@ function Post2()
 		'sticky_mode' => isset($_POST['sticky']) && !empty($modSettings['enableStickyTopics']) ? (int) $_POST['sticky'] : null,
 		'mark_as_read' => true,
 		'topic_prefix' => isset($_REQUEST['topic_prefix']) ? intval($_REQUEST['topic_prefix']) : null,
-		'topic_layout' => (isset($_REQUEST['stickfirst']) && $_REQUEST['stickfirst'] ? 0x80 : 0) | (isset($_REQUEST['firstlayout']) && $_REQUEST['firstlayout'] ? 0x01 : 0),
+		'topic_layout' => (isset($_REQUEST['stickfirst']) && $_REQUEST['stickfirst'] ? 0x80 : 0) | (isset($_REQUEST['firstlayout']) && $_REQUEST['firstlayout'] ? $_REQUEST['firstlayout'] : 0),
 		'automerge' => !empty($topic) ? $topic_info['automerge'] : 0,
 		'id_first_msg' => !empty($topic) ? $topic_info['id_first_msg'] : 0,
 		'id_last_msg' => !empty($topic) ? $topic_info['id_last_msg'] : 0,

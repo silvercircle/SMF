@@ -320,13 +320,6 @@ function template_modify_board()
 						</dt>
 						<dd>
 							<input type="checkbox" name="act_as_cat" ', $context['board']['allow_topics'] ? '' : ' checked="checked"', ' class="input_check" />
-						</dd>
-						<dt>
-							<strong>', $txt['board_is_pageboard'], ':</strong><br />
-							<span class="smalltext">', $txt['board_is_pageboard_desc'], '</span>
-						</dt>
-						<dd>
-							<input type="checkbox" name="is_pageboard" ', !$context['board']['is_pageboard'] ? '' : ' checked="checked"', ' class="input_check" />
 						</dd>';
 	// Options for board name and description.
 	echo '

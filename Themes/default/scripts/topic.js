@@ -221,10 +221,6 @@ QuickModify.prototype.modifyMsg = function (iMessageId)
 	if (!this.bXmlHttpCapable)
 		return;
 
-	// Add backwards compatibility with old themes.
-	if (typeof(sSessionVar) == 'undefined')
-		sSessionVar = 'sesc';
-
 	// First cancel if there's another message still being edited.
 	if (this.bInEditMode)
 		this.modifyCancel();

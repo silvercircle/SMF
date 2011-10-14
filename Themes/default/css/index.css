@@ -299,6 +299,13 @@ a.bbc_link {
 	border-top: 2px solid #ccc;
 	margin-top: 15px;
 }
+div.bbc_dropcaps:first-letter {
+	font-size:200%;
+	float:left;
+	position:relative;
+	margin:0.13em 0.1em 0 0;
+	line-height:0.7;
+}
 .meaction {
 	color: red;
 }
@@ -446,10 +453,12 @@ span.xtag:hover {
 
 /* Posts and personal messages displayed throughout the forum. */
 .post, .personalmessage {
-	line-height: 1.4em;
-	padding: 0.1em 1.0em;
+	line-height: 1.55em;
+	padding: 0.4em 1.0em;
 }
-
+.post p {
+	margin:0;
+}
 ol.post_attachments, ol.tiles {
 	list-style: none;
 	padding: 0;
@@ -503,10 +512,10 @@ ol.tiles li img.avatar {
 	width:98%;
 	overflow: auto;
 	clear: right;
-	margin: 0.5em 1.5em 0 1.5em;
+	margin: 0 1.5em;
 	line-height: 1.4em;
 	font-size: 0.85em;
-	padding-top:4px;
+	padding-top:0 5px;
 }
 
 .custom_fields_above_signature {
@@ -887,22 +896,16 @@ div.dropselect_content.right {
 	background-color: #98AABA;
 }
 
-span.m_downarrow, span.inlineprefix {
+span.m_downarrow {
 	padding: 2px 4px 2px 0;
 	width: 14px;
 	margin-left: -8px;
 	height: 22px;
 	background: transparent url(../images/theme/sprite.png) 0 9px no-repeat;
 }
-
-span.inlineprefix {
-	background-position: 0 16px;
-	cursor: pointer;
-	margin-left:0;
-	display:inline-block;
-}
 a.prefix {
 	font-size:11px;
+	line-height:1.8em;
 	padding:1px 5px;
 	border:1px solid #ccc;
 	background-color:#eee;
@@ -1097,7 +1100,11 @@ h3, h4 {
 	max-height: 65px;
 	min-height: 65px;
 	font-size: 12px;
-	background: rgba(12,60,100,1) url(../images/upper.png) 0 0 repeat-x;;
+	/*background-color: #D0D1E6;*/
+	background-color: #3D668F;
+	border-bottom:2px solid #4588E5;
+	box-shadow: 0 0 5px #888 inset;
+	/*background: rgba(12,60,100,1) url(../images/upper.png) 0 0 repeat-x;;*/
 }
 .notibar {
 	/*background: #1c4885;*/
@@ -1463,11 +1470,18 @@ p#whoisviewing {
 	border: 1px solid #ddd;
 	border-radius:2px;
 	margin-bottom: 10px;
-	background-color: #f5f5f5;
+	background-color: #eaeaea;
 }
 #forumposts .post_wrapper {
-	border-top-color: #7090D9;
 	border-radius:0;
+}
+div.ignoringpost {
+	cursor:pointer;
+	text-align:center;
+	font-weight:bold;
+}
+.post_wrapper.ignored {
+	display:none;
 }
 .post_bottom {
 	padding: 2px 10px 1px 10px;
@@ -1475,7 +1489,7 @@ p#whoisviewing {
 	clear: both;
 	font-size: 11px;
 	line-height: 20px;
-	margin:2px;
+	border:2px solid #f6f6f6;
 }
 .poster {
 	float: left;
@@ -1483,14 +1497,8 @@ p#whoisviewing {
 	max-width: 200px;
 	min-width: 200px;
 	text-align: center;
-}
-.poster_details {
-	text-align: center;
-	width: 180px;
-	max-width: 180px;
-	min-width: 180px;
-	margin: 10px 10px 5px 5px !important;
-	padding: 2px 2px 5px 2px !important;
+	margin:0 5px 10px 5px;
+	padding:10px;
 }
 div.userbit_compact {
 	font-size: 11px;
@@ -1505,17 +1513,24 @@ div.userbit_compact h2 {
 div.userbit_compact_textpart {
 	margin-left: 62px;
 }
-.postarea, .moderatorbar {
-	margin: 0 0 5px 205px;
+.post_content {
+	margin-left: 220px;
+	background-color:#f5f5f5;
 }
-.postarea div.flow_hidden {
+.post_content.lean {
+	margin-left: 0 !important;
+}
+.post_content div.flow_hidden {
 	margin-right: 10px;
 }
 .moderatorbar {
 	font-size: 12px;
 	clear: right;
+	padding:10px;
 }
-
+.post_wrapper .post {
+	font-family: "Georgia", sans-serif;
+}
 /* poster details and list of items */
 .poster h4, .poster ul {
 	padding: 0;
@@ -1526,9 +1541,8 @@ div.userbit_compact_textpart {
 	padding: 1px 3px;
 }
 
-.poster h4, .poster h4 a {
-	color: #eee;
-	text-shadow: 1px 1px 3px black;
+.poster h4 a {
+	text-shadow: 1px 1px 3px white;
 }
 
 .poster ul ul {
@@ -1574,14 +1588,13 @@ div.userbit_compact_textpart {
 
 .keyinfo {
 	font-size: 12px;
-	margin-left: -206px;
-	margin-right: -1px;
-	padding: 0 10px 0 205px;
+	padding: 0 10px 0 10px;
 	min-height: 26px;
 	max-height: 26px;
 	line-height: 26px;
 	background: #f2f2f2 url(../images/theme/sprite.png) 0 -920px repeat-x;
 	box-shadow: 0 0 4px #888 inset;
+	margin:0 -1px;
 }
 .keyinfo.clean {
 	background:transparent;
@@ -1601,12 +1614,13 @@ div.userbit_compact_textpart {
 }
 .keyinfo .messageicon {
 	float: left;
-	margin:3px 0.5em 0 0;
+	margin:0 0.5em 0 0;
 }
 .keyinfo .messageicon img {
 	padding: 0;
 	width: 16px;
 	height: 16px;
+	vertical-align:middle;
 }
 .horizontal_userblock {
 	padding: 3px 10px;
@@ -1703,12 +1717,6 @@ ul.quickbuttons li a:hover, span.button:hover, .buttonlist ul li a:hover {
 ul.quickbuttons li.inline_mod_check {
 	margin: 0 0 0 5px;
 }
-
-.post {
-	margin-top: 0.5em;
-	clear: right;
-}
-
 .inner {
 	padding: 1px 10px 2px 0;
 	margin: 0;
@@ -2295,7 +2303,7 @@ tr.titlebg td {
 }
 .cContainer_header a, .cat_bar2 a {
 	color: #ddddfa;
-	text-shadow: 1px 1px 2px black;
+	text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
 }
 .cContainer_header img {
 	margin-top:4px;
@@ -3537,9 +3545,8 @@ div.likebar {
 	min-height: 18px;
 	line-height: 18px;
 	clear: both;
-	margin:2px;
+	margin:0;
 }
-
 div#ajaxbusy {
 	border: 2px solid white;
 	border-top: 0;

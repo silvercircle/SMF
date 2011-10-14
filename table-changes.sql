@@ -192,9 +192,6 @@ ALTER TABLE {$db_prefix}boards ADD allow_topics tinyint(4) unsigned NOT NULL def
 # merged (if time cutoff limit allows it)
 ALTER TABLE {$db_prefix}boards ADD automerge tinyint(4) unsigned NOT NULL default '0';
 
-# board serves for pages
-ALTER TABLE {$db_prefix}boards ADD is_pageboard tinyint(4) NOT NULL default '0' AFTER allow_topics;
-
 # prefix id for this topic
 ALTER TABLE {$db_prefix}topics ADD id_prefix smallint(5) unsigned NOT NULL default '0';
 

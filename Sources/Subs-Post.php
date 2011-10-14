@@ -2531,6 +2531,10 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		smf_db_query( 'DELETE FROM {db_prefix}messages_cache WHERE id_msg = {int:id_msg}',
 			array('id_msg' => $msgOptions['id']));
 	}
+	else
+		$context['no_astream'] = true;
+
+	$context['no_astream'] = isset($context['no_astream']) ? $context['no_astream'] : 0;
 
 	// Lock and or sticky the post.
 	if ($topicOptions['sticky_mode'] !== null || $topicOptions['lock_mode'] !== null || $topicOptions['poll'] !== null)

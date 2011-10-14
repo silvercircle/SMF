@@ -709,7 +709,7 @@ $txt['send_email_disclosed'] = 'Note this will be visible to the recipient.';
 $txt['send_email_subject'] = 'Email Subject';
 
 $txt['ignoring_user'] = 'You are ignoring this user.';
-$txt['show_ignore_user_post'] = 'Show me the post.';
+$txt['show_ignore_user_post'] = 'Click the bar to show.';
 
 $txt['spider'] = 'Spider';
 $txt['spiders'] = 'Spiders';

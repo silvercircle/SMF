@@ -248,7 +248,6 @@ function template_main()
 	echo '
 				<div class="clear"></div><form data-alt="',$scripturl,'?action=post;msg=%id_msg%;topic=',$context['current_topic'],'.',$context['start'], '" action="', $scripturl, '?action=quickmod2;topic=', $context['current_topic'], '.', $context['start'], '" method="post" accept-charset="', $context['character_set'], '" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave(\'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\') : false">';
 
-	$ignoredMsgs = array();
 	$removableMessageIDs = array();
 
 	// Get all the messages...
@@ -258,17 +257,10 @@ function template_main()
 		if ($message['can_remove'])
 			$removableMessageIDs[] = $message['id'];
 
-		// Are we ignoring this message?
-		if (!empty($message['is_ignored']))
-		{
-			$ignoring = true;
-			$ignoredMsgs[] = $message['id'];
-		}
-
-		if ($message['id'] == $context['first_message'] && $context['id_layout'] != 0)
-			template_postbit_blog($message, $ignoring);
+		if ($message['id'] == $context['first_message'])
+			$context['postbit_callbacks']['firstpost']($message);
 		else
-			template_postbit_normal($message, $ignoring);
+			$context['postbit_callbacks']['post']($message);
 	}
 	echo '
 				<input type="hidden" name="goadvanced" value="1" />
