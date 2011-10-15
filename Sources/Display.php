@@ -987,7 +987,8 @@ function Display()
 
 	// deal with possible sticky posts and different postbit layouts for
 	// the first post
-	$context['id_layout'] = 0;
+	// topic.id_layout meanings: bit 0-6 > layout id, bit 7 > first post sticky on every page.
+	// don't blame me for using bit magic here. I'm a C guy and a 8bits can store more than just one bool :P
 	$layout = (int)($topicinfo['id_layout'] & 0x7f);
 
 	// set defaults...
@@ -1003,12 +1004,12 @@ function Display()
 			$context['postbit_callbacks']['firstpost'] = ($layout == 0 ? 'template_postbit_normal' : ($layout == 2 ? 'template_postbit_clean' : 'template_postbit_lean'));
 			$context['postbit_callbacks']['post'] = ($layout == 2 ? 'template_postbit_comment' : 'template_postbit_normal');
 		}
-		else if($layout) {
+		elseif($layout) {
 			$context['postbit_callbacks']['firstpost'] = ($layout == 0 || $this_start != 0 ? 'template_postbit_normal' : ($layout == 2 ? 'template_postbit_clean' : 'template_postbit_lean'));
 			$context['postbit_callbacks']['post'] = ($layout == 2 ? 'template_postbit_comment' : 'template_postbit_normal');
 		}
 	}
-	// now we know which template we need
+	// now we know which display template we need
 	if(!WIRELESS)
 		loadTemplate($layout > 1 ? 'DisplayPage' : 'Display');
 	loadTemplate('Postbit');

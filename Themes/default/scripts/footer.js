@@ -1697,8 +1697,7 @@ function response(ele, responseText)
 
 function openAdvSearch(e)
 {
-	$('#search_form').css('overflow', 'auto');
-	$('#search_form').css('height', 'auto');
+	$('#search_form').css({overflow: 'auto', height: 'auto', 'padding-bottom': '10px'});
 	$('#search_form').addClass('search_form_active');
 };
 
@@ -1717,8 +1716,7 @@ function submitSearchBox()
 };
 
 $('#adv_search').live('mouseleave',function(event) {
-	$('#search_form').css('height', '26px');
-	$('#search_form').css('overflow', 'hidden');
+	$('#search_form').css({overflow: 'hidden', height: '26px', 'padding-bottom': '0'});
 	$('#search_form').removeClass('search_form_active');
 });
 $('.brd_moderators_chld, #share_bar').live('mouseleave',function(event) {

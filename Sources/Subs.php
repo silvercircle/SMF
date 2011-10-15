@@ -1146,7 +1146,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'tag' => 'columns',
 				'type' => 'unparsed_equals',
 				'test' => '([1-9])\]',
-				'before' => '<div class="bbc_columns" style="column-count: $1;">',
+				'before' => '<div class="bbc_columns" style="column-count:$1;-webkit-column-count:$1;">',
 				'block_level' => true,
 				'after' => '</div>',
 			),

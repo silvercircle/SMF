@@ -209,7 +209,7 @@ function template_admin_login()
 	echo '
 			<strong>', $txt['password'], ':</strong>
 			<input type="password" name="admin_pass" size="24" class="input_password" />
-			<a href="', $scripturl, '?action=helpadmin;help=securityDisable_why" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" alt="', $txt['help'], '" /></a><br />
+			<a href="', $scripturl, '?action=helpadmin;help=securityDisable_why" onclick="return reqWin(this.href);" class="help"><strong>[',$txt['help'],']&nbsp;&nbsp;</strong></a><br />
 			<input type="submit" style="margin-top: 1em;" value="', $txt['login'], '" class="button_submit" />';
 
 	// Make sure to output all the old post data.

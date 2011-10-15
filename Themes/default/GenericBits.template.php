@@ -14,7 +14,7 @@
 // todo: use this for subscribed boards as well
 function template_boardbit(&$board)
 {
-	global $context, $txt, $scripturl, $modSettings, $settings;
+	global $context, $txt, $scripturl, $modSettings, $options, $settings;
 	
 	$_c = ($context['alternate'] = !$context['alternate']) ? 'windowbg' : 'windowbg2';
 	echo '
@@ -65,11 +65,11 @@ function template_boardbit(&$board)
 		 <div class="smalltext">', $board['description'] , '</div>
 		<div class="lastpost smalltext">';
 	if (!empty($board['last_post']['id']))
-			echo '
-		<img src="',$board['first_post']['icon_url'],'" alt="icon" />
+			echo (!empty($options['post_icons_index']) ? '' : '
+		<img src="'.$board['first_post']['icon_url'].'" alt="icon" />'), '
 		',$txt['in'], ': ', $board['last_post']['prefix'],'&nbsp;',$board['last_post']['topiclink'], '<br />
 		<a class="lp_link" title="',$txt['last_post'],'" href="',$board['last_post']['href'],'">',$board['last_post']['time'], '</a>
-		<span style="padding-left:20px;">', $txt['by'], ': </span>', $board['last_post']['member']['link'];
+		<span ',(!empty($options['post_icons_index']) ? '' : 'style="padding-left:20px;"'),'>', $txt['by'], ': </span>', $board['last_post']['member']['link'];
 	else
 		echo $txt['not_applicable'];
 	echo '

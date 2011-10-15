@@ -57,7 +57,7 @@ function template_latest_news()
 	echo '
 		<div class="cat_bar">
 			<h3>
-				<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=live_news" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" alt="', $txt['help'], '" class="icon" /></a> ', $txt['mc_latest_news'], '</span>
+				<span class="ie6_header floatleft"><a href="', $scripturl, '?action=helpadmin;help=live_news" onclick="return reqWin(this.href);" class="help"><strong>[',$txt['help'],']&nbsp;&nbsp;</strong></a> ', $txt['mc_latest_news'], '</span>
 			</h3>
 		</div>
 		<div class="blue_container cleantop">

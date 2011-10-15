@@ -272,6 +272,7 @@ $txt['poster'] = 'Poster';
 
 $txt['board_desc_inside'] = 'Show board descriptions inside boards.';
 $txt['use_drafts'] = 'Use the drafts feature to save unfinished posts';
+$txt['post_icons_index'] = 'Do not show message icons on in the last post column';
 $txt['show_children'] = 'Show child boards on every page inside boards, not just the first.';
 $txt['use_sidebar_menu'] = 'Use sidebar menus instead of dropdown menus when possible.';
 $txt['show_no_avatars'] = 'Don\'t show users\' avatars.';

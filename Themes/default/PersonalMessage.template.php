@@ -166,14 +166,38 @@ function template_folder()
 
 		while ($message = $context['get_pmessage']('message'))
 		{
-			$window_class = $message['alternate'] == 0 ? 'windowbg' : 'windowbg2';
+			echo '
+			<div class="post_wrapper">
+			<div class="keyinfo">
+				<h5 style="display:inline;" id="subject_', $message['id'], '">
+					', $message['subject'], '
+				</h5>';
+
+			// Show who the message was sent to.
+			echo '
+					<span class="smalltext">&#171; <strong> ', $txt['sent_to'], ':</strong> ';
+
+			// People it was sent directly to....
+			if (!empty($message['recipients']['to']))
+				echo implode(', ', $message['recipients']['to']);
+			// Otherwise, we're just going to say "some people"...
+			elseif ($context['folder'] != 'sent')
+				echo '(', $txt['pm_undisclosed_recipients'], ')';
 
 			echo '
-				<div class="post_wrapper light_shadow ',$window_class,'">
-						<div class="poster">
-							<h4>', $message['member']['link'], '</h4>
-						<div class="orange_container poster_details" style="margin-top:5px;">
-							<ul class="reset smalltext" id="msg_', $message['id'], '_extra_info">';
+						<strong> ', $txt['on'], ':</strong> ', $message['time'], ' &#187;
+					</span>';
+
+			// If we're in the sent items, show who it was sent to besides the "To:" people.
+			if (!empty($message['recipients']['bcc']))
+				echo '
+					<br /><span class="smalltext">&#171; <strong> ', $txt['pm_bcc'], ':</strong> ', implode(', ', $message['recipients']['bcc']), ' &#187;</span>';
+
+			echo '
+				</div>
+						<div class="poster blue_container cleantop">
+						<h4>', $message['member']['link'], '</h4>
+						<ul class="reset smalltext" id="msg_', $message['id'], '_extra_info">';
 
 		// Show the member's custom title, if they have one.
 		if (!empty($message['member']['title']))
@@ -274,42 +298,14 @@ function template_folder()
 		// Done with the information about the poster... on to the post itself.
 		echo '
 							</ul>
-						</div></div>
-		<div class="postarea">
-			<div class="keyinfo">
-				<h5 style="display:inline;" id="subject_', $message['id'], '">
-					', $message['subject'], '
-				</h5>';
-
-			// Show who the message was sent to.
-			echo '
-					<span class="smalltext">&#171; <strong> ', $txt['sent_to'], ':</strong> ';
-
-			// People it was sent directly to....
-			if (!empty($message['recipients']['to']))
-				echo implode(', ', $message['recipients']['to']);
-			// Otherwise, we're just going to say "some people"...
-			elseif ($context['folder'] != 'sent')
-				echo '(', $txt['pm_undisclosed_recipients'], ')';
-
-			echo '
-						<strong> ', $txt['on'], ':</strong> ', $message['time'], ' &#187;
-					</span>';
-
-			// If we're in the sent items, show who it was sent to besides the "To:" people.
-			if (!empty($message['recipients']['bcc']))
-				echo '
-					<br /><span class="smalltext">&#171; <strong> ', $txt['pm_bcc'], ':</strong> ', implode(', ', $message['recipients']['bcc']), ' &#187;</span>';
-
-			echo '
-				</div>';
-				
+						</div>
+		<div class="post_content">';
 			if (!empty($message['is_replied_to']))
 				echo '
 					<div style="margin:3px;" class="orange_container smalltext">&#171; ', $txt['pm_is_replied_to'], ' &#187;</div>';
 
-			echo '</div>
-			<div class="post" style="margin-left:205px;">
+			echo '
+			<div class="post">
 				<div class="inner" id="msg_', $message['id'], '"', '>', $message['body'], '</div>
 				<div class="smalltext reportlinks">
 					', (!empty($modSettings['enableReportPM']) && $context['folder'] != 'sent' ? '<div class="righttext"><a href="' . $scripturl . '?action=pm;sa=report;l=' . $context['current_label_id'] . ';pmsg=' . $message['id'] . '">' . $txt['pm_report_to_admin'] . '</a></div>' : '');
@@ -391,6 +387,7 @@ function template_folder()
 			echo '
 			<br class="clear" />
 		</div>
+		</div>
 		<div class="post_bottom">';
 			echo '<ul class="reset smalltext quickbuttons">';
 
@@ -415,7 +412,7 @@ function template_folder()
 					<li class="forward_button"><a href="', $scripturl, '?action=pm;sa=send;f=', $context['folder'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pmsg=', $message['id'], ';quote">', $txt['reply_quote'], '</a></li>';
 			}
 			echo '
-					<li class="remove_button"><a href="', $scripturl, '?action=pm;sa=pmactions;pm_actions[', $message['id'], ']=delete;f=', $context['folder'], ';start=', $context['start'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', addslashes($txt['remove_message']), '?\');">', $txt['delete'], '</a></li>';
+					<li class="remove_button"><a href="', $scripturl, '?action=pm;sa=pmactions;pm_actions[', $message['id'], ']=delete;f=', $context['folder'], ';start=', $context['start'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm_(\'\', \'', addslashes($txt['remove_message']), '?\');">', $txt['delete'], '</a></li>';
 
 			if (empty($context['display_mode']))
 				echo '

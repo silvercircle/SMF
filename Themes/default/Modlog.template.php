@@ -14,7 +14,7 @@ function template_main()
 				<table border="0" cellspacing="1" cellpadding="4" width="100%">
 					<tr class="titlebg">
 						<td>
-							<div style="float: left;"><a href="', $scripturl, '?action=helpadmin;help=15" onclick="return reqWin(this.href);" class="help"><img src="' . $settings['images_url'] . '/helptopics.png" alt="' . $txt['help'] . '" border="0" align="top" /></a> ', $txt['modlog_moderation_log'], '</div>
+							<div style="float: left;"><a href="', $scripturl, '?action=helpadmin;help=15" onclick="return reqWin(this.href);" class="help"><strong>[',$txt['help'],']&nbsp;&nbsp;</strong></a> ', $txt['modlog_moderation_log'], '</div>
 							<div align="right">', $context['entrynum'], '</div>
 						</td>
 					</tr>

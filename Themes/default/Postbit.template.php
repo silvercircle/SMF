@@ -44,7 +44,7 @@ function template_postbit_normal(&$message)
 
 	// Show information about the poster of this message.
 	echo '
-	<div itemscope="itemscope" itemtype="http://data-vocabulary.org/Person" class="poster blue_container cleantop">
+	<div itemscope="itemscope" itemtype="http://data-vocabulary.org/Person" class="poster">
 	<h4>', $message['member']['link'], '</h4>
 	<ul class="reset smalltext" id="msg_', $message['id'], '_extra_info">';
 
@@ -254,16 +254,17 @@ function template_postbit_normal(&$message)
 		echo '
 		<div class="signature" id="msg_', $message['id'], '_signature">', $message['member']['signature'], '</div>';
 
-	echo $message['content_after_sig'], '
+	echo $message['content_after_sig'];
+	if($message['likes_count'] > 0 || !empty($message['likelink']))
+		echo '
+	<div class="likebar">
+	 <div class="floatright">',$message['likelink'],'</div>
+	 <span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
+	 <div class="clear_right"></div>
+	</div>';
+	echo '
 		</div>
 		<div class="clear_left"></div>
-		</div>';
-		if($message['likes_count'] > 0 || !empty($message['likelink']))
-			echo '
-		<div class="likebar norounded">
-		<div class="floatright">',$message['likelink'],'</div>
-		<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
-		<div class="clear"></div>
 		</div>';
 	echo '
 		<div class="post_bottom">
@@ -544,15 +545,15 @@ function template_postbit_lean(&$message)
 		echo '
 						<div class="signature" id="msg_', $message['id'], '_signature">', $message['member']['signature'], '</div>';
 
-	echo '
-		</div>
-		</div>';
-	if($message['likes_count'] > 0 || !empty($message['likelink'])) 
-		echo '<div class="likebar blue_container norounded">
+	if($message['likes_count'] > 0 || !empty($message['likelink']))
+		echo '<div class="likebar">
 			<div class="floatright">',$message['likelink'],'</div>
 			<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
 			<div class="clear"></div></div>';
-					
+
+	echo '
+		</div>
+		</div>';
 	echo '<div class="post_bottom">
 			<div style="display:inline;">';
 			// Show online and offline buttons?
@@ -685,7 +686,7 @@ function template_postbit_comment(&$message)
 
 		</ul>
 		</div>
-		<div class="postarea" style="margin-left:60px;">
+		<div class="post_content" style="margin-left:60px;">
 			<div>
 			<div class="keyinfo" style="margin-left:-61px;border:0;padding-left:60px;">
 			<h5 style="display:inline;" id="subject_', $message['id'], '">
@@ -775,19 +776,18 @@ function template_postbit_comment(&$message)
 	}
 
 	echo '
-		</div>
 		<div class="moderatorbar">';
 
-	echo '
-		</div>';
-					if($message['likes_count'] > 0 || !empty($message['likelink']))
+		if($message['likes_count'] > 0 || !empty($message['likelink']))
 						echo '
-		<div class="likebar blue_container norounded">
+		<div class="likebar">
 		<div class="floatright">',$message['likelink'],'</div>
 		<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
-		<div class="clear"></div></div>';
-
-					echo '
+		<div class="clear">
+		</div>
+		</div>
+		</div>
+		</div>
 		<div class="post_bottom">
 		<div style="display:inline;">';
 						echo '
@@ -986,7 +986,7 @@ function template_postbit_clean(&$message)
 	echo '
 		</div>';
 	if($message['likes_count'] > 0 || !empty($message['likelink']))
-		echo '<div class="likebar blue_container norounded">
+		echo '<div class="likebar">
 			<div class="floatright">',$message['likelink'],'</div>
 			<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
 			<div class="clear"></div></div>';

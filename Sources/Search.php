@@ -304,7 +304,7 @@ function PlushSearch2()
 	loadLanguage('Search');
 	if (!isset($_REQUEST['xml'])) {
 		loadTemplate('Search');
-		loadTemplate('Postbit');
+		loadTemplate('PostbitExtra');
 	}
 	//If we're doing XML we need to use the results template regardless really.
 	else

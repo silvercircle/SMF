@@ -567,12 +567,14 @@ $(document).ready(function() {
 	$('input.it_check').change(function() {
 		var cbox = this;
 		var id = $(this).val();
-		$('div.post_wrapper').each(function() {
-			if($(this).attr('data-mid') == id) {
-				if($(cbox).is(':checked'))
-					$(this).addClass('inline_highlight');
-				else
-					$(this).removeClass('inline_highlight');
+		$('div.post_wrapper[data-mid=' + id + ']').each(function() {
+			if($(cbox).is(':checked')) {
+				$(this).addClass('inline_highlight');
+				$(this).find('div.post_content:first').addClass('inline_highlight');
+			}
+			else {
+				$(this).removeClass('inline_highlight');
+				$(this).find('div.post_content:first').removeClass('inline_highlight');
 			}
 		});
 	});

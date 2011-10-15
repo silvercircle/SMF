@@ -270,7 +270,7 @@ function template_maintain_members()
 		<div class="cat_bar">
 			<h3>
 				<span class="ie6_header floatleft">
-					<a href="', $scripturl, '?action=helpadmin;help=maintenance_members" onclick="return reqWin(this.href);" class="help"><img class="icon" src="', $settings['images_url'], '/helptopics.png" alt="', $txt['help'], '" /></a> ', $txt['maintain_members'], '
+					<a href="', $scripturl, '?action=helpadmin;help=maintenance_members" onclick="return reqWin(this.href);" class="help"><strong>[',$txt['help'],']&nbsp;&nbsp;</strong></a> ', $txt['maintain_members'], '
 				</span>
 			</h3>
 		</div>

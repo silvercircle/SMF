@@ -1418,6 +1418,10 @@ function template_profile_theme_settings()
 								<label for="show_children"><input type="checkbox" name="default_options[show_children]" id="show_children" value="1"', !empty($context['member']['options']['show_children']) ? ' checked="checked"' : '', ' class="input_check" /> ', $txt['show_children'], '</label>
 							</li>
 							<li>
+								<input type="hidden" name="default_options[post_icons_index]" value="0" />
+								<label for="post_icons_index"><input type="checkbox" name="default_options[post_icons_index]" id="post_icons_index" value="1"', !empty($context['member']['options']['post_icons_index']) ? ' checked="checked"' : '', ' class="input_check" /> ', $txt['post_icons_index'], '</label>
+							</li>
+							<li>
 								<input type="hidden" name="default_options[show_no_avatars]" value="0" />
 								<label for="show_no_avatars"><input type="checkbox" name="default_options[show_no_avatars]" id="show_no_avatars" value="1"', !empty($context['member']['options']['show_no_avatars']) ? ' checked="checked"' : '', ' class="input_check" /> ', $txt['show_no_avatars'], '</label>
 							</li>
@@ -2737,7 +2741,7 @@ function template_profile_timeformat_modify()
 	echo '
 							<dt>
 								<strong>', $txt['time_format'], ':</strong><br />
-								<a href="', $scripturl, '?action=helpadmin;help=time_format" onclick="return reqWin(this.href);" class="help"><img src="', $settings['images_url'], '/helptopics.png" alt="', $txt['help'], '" class="floatleft" /></a>
+								<a href="', $scripturl, '?action=helpadmin;help=time_format" onclick="return reqWin(this.href);" class="help"><strong>[',$txt['help'],']&nbsp;&nbsp;</strong></a>
 								<span class="smalltext">&nbsp;', $txt['date_format'], '</span>
 							</dt>
 							<dd>
