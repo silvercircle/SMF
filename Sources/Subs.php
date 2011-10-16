@@ -1609,7 +1609,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 		// It's likely this will change if the message is modified.
 		$cache_key = 'parse:' . $cache_id . '-' . md5(md5($message) . '-' . $smileys . (empty($disabled) ? '' : implode(',', array_keys($disabled))) . serialize($context['browser']) . $txt['lang_locale'] . $user_info['time_offset'] . $user_info['time_format']);
 
-		if (($temp = CacheAPI::getCache($cache_key, 240)) != null)
+		if (($temp = CacheAPI::getCache($cache_key, 600)) != null)
 			return $temp;
 
 		$cache_t = microtime();
@@ -2383,7 +2383,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 
 	// Cache the output if it took some time...
 	//if (isset($cache_key, $cache_t) && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
-	//	CacheAPI::putCache($cache_key, $message, 240);
+	//	CacheAPI::putCache($cache_key, $message, 600);
 
 	// If this was a force parse revert if needed.
 	if (!empty($parse_tags))
@@ -2755,29 +2755,18 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 		// Start up the session URL fixer.
 		ob_start('ob_sessrewrite');
 
+		/*
 		if (!empty($settings['output_buffers']) && is_string($settings['output_buffers']))
 			$buffers = explode(',', $settings['output_buffers']);
 		elseif (!empty($settings['output_buffers']))
 			$buffers = $settings['output_buffers'];
 		else
 			$buffers = array();
+        */
+		HookAPI::integrateOB();
 
-		if (isset($modSettings['integrate_buffer']))
-			$buffers = array_merge(explode(',', $modSettings['integrate_buffer']), $buffers);
-
-		if (!empty($buffers))
-			foreach ($buffers as $function)
-			{
-				$function = trim($function);
-				$call = strpos($function, '::') !== false ? explode('::', $function) : $function;
-
-				// Is it valid?
-				if (is_callable($call))
-					ob_start($call);
-			}
-
-		if(!empty($modSettings['simplesef_enable']))
-			ob_start('SimpleSEF::ob_simplesef');
+		//if(!empty($modSettings['simplesef_enable']))
+		//	ob_start('SimpleSEF::ob_simplesef');
 
 		// Display the screen in the logical order.
 		template_header();
@@ -4235,5 +4224,9 @@ function getPostIcon($the_icon)
 	}
 	else
 		return($context['posticons'][$the_icon]);
+}
+function HDC($a, $b, $c)
+{
+	return($a ? $b : $c);
 }
 ?>

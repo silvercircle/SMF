@@ -3,7 +3,7 @@
 
 function template_main()
 {
-	global $context, $settings, $options, $scripturl, $txt, $modSettings;
+	global $context, $settings, $options, $scripturl, $txt, $modSettings, $txt;
 
 	echo '
 		<form action="', $scripturl, '?action=modlog2" method="post">
@@ -14,7 +14,7 @@ function template_main()
 				<table border="0" cellspacing="1" cellpadding="4" width="100%">
 					<tr class="titlebg">
 						<td>
-							<div style="float: left;"><a href="', $scripturl, '?action=helpadmin;help=15" onclick="return reqWin(this.href);" class="help"><strong>[',$txt['help'],']&nbsp;&nbsp;</strong></a> ', $txt['modlog_moderation_log'], '</div>
+							<div style="float: left;"><a href="', $scripturl, '?action=helpadmin;help=15" onclick="return reqWin(this.href);" class="help"><strong>[Help]&nbsp;&nbsp;</strong></a> ', $txt['modlog_moderation_log'], '</div>
 							<div align="right">', $context['entrynum'], '</div>
 						</td>
 					</tr>

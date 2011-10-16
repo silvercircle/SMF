@@ -195,28 +195,20 @@ function EditNewsItem()
 // Let the administrator(s) edit the news.
 function EditNews()
 {
-	global $txt, $modSettings, $context, $sourcedir, $user_info;
-	global $smcFunc;
+	global $txt, $context, $sourcedir;
 
 	require_once($sourcedir . '/Subs-Post.php');
 
-	// The 'remove selected' button was pressed.
-	if (!empty($_POST['delete_selection']) && !empty($_POST['remove']))
+	if (!empty($_REQUEST['removeitem']) && (int)$_REQUEST['removeitem'] > 0)
 	{
-		checkSession();
+		checkSession('get');
 
-		// Store the news temporarily in this array.
-		$temp_news = explode("\n", $modSettings['news']);
-
-		// Remove the items that were selected.
-		foreach ($temp_news as $i => $news)
-			if (in_array($i, $_POST['remove']))
-				unset($temp_news[$i]);
-
-		// Update the database.
-		updateSettings(array('news' => implode("\n", $temp_news)));
+		smf_db_query('DELETE FROM {db_prefix}news where id_news = {int:id_item}',
+			array('id_item' => (int)$_REQUEST['removeitem']));
 
 		logAction('news');
+		if(isset($_REQUEST['xml']))
+			obExit(false);
 	}
 	$context['news_item_count'] = 0;
 	$result = smf_db_query('

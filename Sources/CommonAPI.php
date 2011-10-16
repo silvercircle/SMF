@@ -183,6 +183,20 @@ class HookAPI {
 		return $results;
 	}
 
+	public static function integrateOB()
+	{
+		global $boarddir;
+
+		if(isset(self::$hooks['integrate_buffer'])) {
+			foreach(self::$hooks['integrate_buffer'] as $current_hook) {
+				@include_once($boarddir . '/addons/' . $current_hook['p'] . '/' . $current_hook['f']);
+				$function = trim($current_hook['c']);
+				if(is_callable($function))
+					ob_start($function);
+			}
+		}
+	}
+
 	public static function removeHook($hook, $product, $file, $function)
 	{
 		$ref = array('p' => $product, 'f' => $file, 'c' => $function);
@@ -241,7 +255,6 @@ class cacheAPI {
 
 	private static $memcached_hosts = '';
 	/**
-	 * @static
 	 * support for PECL new memcacheD
 	 */
 	private static function getMemcachedServer()
@@ -265,7 +278,6 @@ class cacheAPI {
 	}
 
 	/**
-	 * @static
 	 * @param int $level	caching level
 	 *
 	 * get server for the OLD memcache implementation
@@ -307,6 +319,10 @@ class cacheAPI {
 			self::$API = 5;
 		elseif($desired == 'file')
 			self::$API = 0;
+
+		// check for possible cache configuration errors
+		//if(((self::$API == 4 || self::$API == 5) && empty(self::$memcached_hosts)) || self::$API == -1)
+		//	log_error(sprintf('cacheInit: desired caching system unsupported or not available (desired = %s, memcached hosts = %s', $desired, self::$memcached_hosts));
 	}
 
 	public static function disable()
@@ -329,7 +345,7 @@ class cacheAPI {
 		global $db_show_debug, $cachedir;
 
 		if(-1 == self::$API)
-			return;
+			return(null);
 
 		self::$cache_count++;
 		if (isset($db_show_debug) && $db_show_debug === true) {

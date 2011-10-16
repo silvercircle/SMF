@@ -167,6 +167,7 @@ class SimpleSEF {
             return;
 
         // if the URL contains index.php but not our ignored actions, rewrite the URL
+
         if (strpos($_SERVER['REQUEST_URL'], 'index.php') !== false && !(isset($_GET['xml']) || (!empty($_GET['action']) && in_array($_GET['action'], self::$ignoreactions)))) {
             //self::log('Rewriting and redirecting permanently: ' . $_SERVER['REQUEST_URL']);
             header('HTTP/1.1 301 Moved Permanently');
@@ -178,6 +179,7 @@ class SimpleSEF {
         if (!empty($_GET['q'])) {
             $querystring = self::route($_GET['q']);
             $_GET = $querystring + $_GET;
+			unset($_GET['q']);
         }
 
         // Need to grab any extra query parts from the original url and tack it on here
@@ -207,7 +209,6 @@ class SimpleSEF {
             return $buffer;
 
         self::benchmark('buffer');
-
         // Bump up our memory limit a bit
         if (@ini_get('memory_limit') < 128)
             @ini_set('memory_limit', '128M');
@@ -264,9 +265,9 @@ class SimpleSEF {
 
         self::benchmark('buffer');
 
-        //if (!empty($context['show_load_time']))
-        //    $buffer = preg_replace('~(.*[s]\sCPU,\s.*queries\.)~', '$1' . sprintf($txt['simplesef_adds'], $count) . ' ' . round(self::$benchMark['total'], 3) . $txt['seconds_with'] . self::$queryCount . $txt['queries'], $buffer);
-			//$buffer = preg_replace('~(.*[s]\sCPU,\s.*queries\.)~', 'foo', $buffer);
+        if (!empty($context['show_load_time']))
+            //$buffer = preg_replace('~(.*[s]\sCPU,\s.*queries\.)~', '$1' . sprintf('SimpleSEF: %d replacements', $count) . ' ' . round(self::$benchMark['total'], 3) . $txt['seconds_with'] . self::$queryCount . $txt['queries'], $buffer);
+			//$buffer = preg_replace('~(.*[s]\sCPU,\s.*queries\.)~', '$1 foo', $buffer);
 
         //self::log('SimpleSEF rewrote ' . $count . ' urls in ' . self::$benchMark['total'] . ' seconds');
 
@@ -1100,7 +1101,7 @@ class SimpleSEF {
      * @param string $string String to encode
      * @return string Returns an encoded string
      */
-    private static function encode($string) {
+    public static function encode($string) {
         global $modSettings, $sourcedir, $txt;
         static $utf8_db = array();
 

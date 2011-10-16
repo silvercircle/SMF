@@ -17,7 +17,6 @@ body {
 	padding: 0;
 }
 #wrap {
-	/*background: #f0f0f0 url(../images/bodybg-blue2.png) left -45px repeat-x;*/
 	background-color: #D0D1E6;
 	margin: 0 auto;
 }
@@ -1345,7 +1344,7 @@ ol.category > li > div.info {
 
 ol.category > li > div.info h3 {
 	display: inline;
-	font-size: 110%;
+	font-size: 105%;
 }
 
 .unreadlink {
@@ -1609,10 +1608,10 @@ div.userbit_compact_textpart {
 	color:#888;
 }
 .keyinfo h5 {
-	color:#eee;
+	color:white;
 	font-size:1.1em;
 	text-shadow: 1px 1px 1px black;
-
+	font-weight:normal;
 }
 .keyinfo .timeago {
 	color:white;
@@ -2302,20 +2301,15 @@ tr.titlebg td {
 	border-radius:2px 2px 0 0;
 	box-shadow: 0 0 4px #888 inset;
 }
-.cContainer_header h3, .cat_bar2 h3 {
-	color:white;
-	text-shadow: 1px 1px 2px black;
-}
-.cContainer_header a, .cat_bar2 a {
-	color: #ddddfa;
-	text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+.cContainer_header a, .cat_bar2 a, .cContainer_header h3, .cat_bar2 h3 {
+	color: white;
+	text-shadow:1px 1px 1px black;
+	font-weight:normal;
 }
 .cContainer_header img {
 	margin-top:4px;
 }
 .cat_bar2 h3 {
-	color:white;
-	text-shadow: black 2px 2px 3px;
 	height:24px;
 }
 li.cat_desc {

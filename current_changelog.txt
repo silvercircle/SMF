@@ -1,9 +1,6 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]applied new postbit style to personal message display[/li]
-[li]changed style for modal JS dialogs for more contrast vs. the general theme (they should stick out to grab attention).[/li]
-[li]more postbit template(s) cleanup[/li]
-[li]the help window is now using the custom modal JS dialog[/li]
-[li]New theme option to control the appearance of message icons in the last post column (declutter UI)[/li]
+[li]Fixed a serious issue with SEF URLs leading to noindex tags on topic and message index pages.[/li]
+[li]Improved UI for editing board news items.[/li]
 [/list]

@@ -14,90 +14,87 @@
 function template_edit_news_item()
 {
 	global $context, $txt;
+	$h = 'HDC';
 
-	echo '
+	echo <<< EOT
 	<div id="admincenter">
 	<div class="cat_bar">
 	 <h3>Edit news item</h3>
 	</div>
 	<div class="blue_container cleantop">
 	 <div class="content">
-	 <form action="',$context['submit_url'],'" method="post" accept-charset="', $context['character_set'], '" name="editnewsitem" id="editnewsitem">
-	 <input type="hidden" name="id" value="',$context['news_item']['id'],'" />
-	 <textarea style="width:99%;height:20ex;" name="body">',$context['news_item']['body'],'</textarea>
+	 <form action="{$context['submit_url']}" method="post" accept-charset="{$context['character_set']}" name="editnewsitem" id="editnewsitem">
+	 <input type="hidden" name="id" value="{$context['news_item']['id']}" />
+	 <textarea style="width:99%;height:20ex;" name="body">{$context['news_item']['body']}</textarea>
 	 <br>
 	 <br>
-	 <h1 class="bigheader secondary">',$txt['newsitem_display_options'],'</h1>
+	 <h1 class="bigheader secondary">{$txt['newsitem_display_options']}</h1>
 	 <dl class="settings mediumpadding">
-	 <dt>',$txt['newsitem_show_boardindex'],'</dt>
-	 <dd><input type="checkbox" name="showindex" value="1" class="input_check" ',$context['news_item']['on_index'] ? 'checked="checked"' : '', ' /></dd>
-	 <dt>',$txt['newsitem_show_boards'],'</dt>
-	 <dd><input type="text" size="40" name="showboards" value="',$context['news_item']['boards'],'" /></dd>
-	 <dt>',$txt['newsitem_show_topics'],'</dt>
-	 <dd><input type="text" size="40" name="showtopics" value="',$context['news_item']['topics'],'" /></dd>
-	 <dt>',$txt['newsitem_show_groups'],'</dt>
-	 <dd><input type="text" size="40" name="showgroups" value="',$context['news_item']['groups'],'" /></dd>
+	 <dt>{$txt['newsitem_show_boardindex']}</dt>
+	 <dd><input type="checkbox" name="showindex" value="1" class="input_check"{$h($context['news_item']['on_index'], 'checked="checked"', '')} /></dd>
+	 <dt>{$txt['newsitem_show_boards']}</dt>
+	 <dd><input type="text" size="40" name="showboards" value="{$context['news_item']['boards']}" /></dd>
+	 <dt>{$txt['newsitem_show_topics']}</dt>
+	 <dd><input type="text" size="40" name="showtopics" value="{$context['news_item']['topics']}" /></dd>
+	 <dt>{$txt['newsitem_show_groups']}</dt>
+	 <dd><input type="text" size="40" name="showgroups" value="{$context['news_item']['groups']}" /></dd>
 	 </dl>
 	 <div class="floatright">
-	 <input type="submit" name="submit" class="button_submit" value="',$txt['save'],'" />
+	 <input type="submit" name="submit" class="button_submit" value="{$txt['save']}" />
 	 </div>
 	 <div class="clear"></div>
-	 <input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
+	 <input type="hidden" name="{$context['session_var']}" value="{$context['session_id']}" />
 	 </form>
 	 </div>
 	</div>
-	</div>';
+	</div>
+EOT;
 }
 // Form for editing current news on the site.
 function template_edit_news()
 {
 	global $context, $settings, $options, $scripturl, $txt;
 
-	echo '
+	echo <<<EOT
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=news;sa=editnews" method="post" accept-charset="', $context['character_set'], '" name="postmodify" id="postmodify">
-			<table class="table_grid" width="100%">
-				<thead>
-					<tr>
-						<th class="glass lefttext" style="width:100%;">', $txt['preview'], '</th>
-						<th class="glass centertext"><input type="checkbox" class="input_check" onclick="invertAll(this, this.form);" /></th>
-					</tr>
-				</thead>
-				<tbody>';
-
+		<form action="{$scripturl}?action=admin;area=news;sa=editnews" method="get" accept-charset="{$context['character_set']}" name="postmodify" id="postmodify">
+		 <ol class="commonlist">
+		  <li class="glass lefttext">{$txt['preview']}</li>
+EOT;
 	// Loop through all the current news items so you can edit/remove them.
 	foreach ($context['news_items'] as $news)
-		echo '
-					<tr class="windowbg2">
-						<td align="left" valign="top">
-							<div style="overflow: auto; width: 100%;">', $news['body'], '</div>
-							<div class="floatright"><a href="',$scripturl,'?action=admin;area=news;sa=editnewsitem;itemid=',$news['id'],'">Edit</a></div>
-						</td><td align="center">
-							<input type="checkbox" name="remove[]" value="', $news['id'], '" class="input_check" />
-						</td>
-					</tr>';
-
-	// This provides an empty text box to add a news item to the site.
-	echo '
-					<tr id="moreNews" class="windowbg2" style="display: none;">
-						<td align="center">
-							<div id="moreNewsItems"></div>
-						</td>
-						<td align="center">
-						</td>
-						<td align="center">
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<br>
-			<div class="floatright smalltext">
-				<div id="moreNewsItems_link"><a href="',$scripturl,'?action=admin;area=news;sa=editnewsitem;itemid=0">', $txt['editnews_clickadd'], '</a></div>
-			</div>
-			<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
+		echo <<<EOT
+		  <li data-id="{$news['id']}">
+		  <div class="blue_container smallpadding" style="overflow: auto;">{$news['body']}
+		  <div class="floatright">
+		   <a href="{$scripturl}?action=admin;area=news;sa=editnewsitem;itemid={$news['id']}">Edit | </a>
+		   <a class="newsitemremove" data-id="{$news['id']}" href="{$scripturl}?action=admin;area=news;sa=editnews;removeitem={$news['id']};{$context['session_var']}={$context['session_id']}">Delete</a>
+		  </div>
+		  </div>
+		  <div class="clear"></div>
+		  </li>
+EOT;
+	echo <<<EOT
+		 </ol>
+		 <div class="floatright smalltext">
+		  <div id="moreNewsItems_link"><a href="{$scripturl}?action=admin;area=news;sa=editnewsitem;itemid=0">{$txt['editnews_clickadd']}</a></div>
+		 </div>
+		 <input type="hidden" name="{$context['session_var']}" value="{$context['session_id']}" />
 		</form>
 	</div>
-	<br class="clear" />';
+	<br class="clear" />
+	<script>
+	// <![CDATA[
+		$(document).ready(function() {
+			$('.newsitemremove').click(function() {
+				alert('foo');
+				sendXMLDocument(smf_prepareScriptUrl(smf_scripturl) + "action=admin;area=news;sa=editnews;removeitem= + $(this).attr('data-id') + ";" + sSessionVar + "=" + sSessionId + ";xml", '', function() {alert('foo');});
+				return(false);
+			});
+		});
+	// ]]>
+	</script>
+EOT;
 }
 
 function template_email_members()

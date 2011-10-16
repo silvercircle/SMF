@@ -80,7 +80,7 @@ reloadSettings();
 cleanRequest();
 $context = array();
 
-$context['jsver'] = '?v=1481';
+$context['jsver'] = '?v=1483';
 
 // Seed the random generator.
 if (empty($modSettings['rand_seed']) || mt_rand(1, 250) == 69)
@@ -138,7 +138,7 @@ elseif (!isset($_SESSION['nowap']))
 }
 
 if (!defined('WIRELESS'))
-	define('WIRELESS', isset($_REQUEST['wap']) || isset($_REQUEST['wap2']) || isset($_REQUEST['imode']));
+	define('WIRELESS', isset($_REQUEST['wap2']));
 
 // Some settings and headers are different for wireless protocols.
 if (WIRELESS)
@@ -172,7 +172,7 @@ obExit(null, null, true);
 // The main controlling function.
 function smf_main()
 {
-	global $modSettings, $settings, $user_info, $board, $topic, $board_info, $maintenance, $sourcedir;
+	global $modSettings, $settings, $user_info, $board, $topic, $board_info, $maintenance, $sourcedir, $scripturl, $boardurl;
 
 	// Special case: session keep-alive, output a transparent pixel.
 	if (isset($_GET['action']) && $_GET['action'] == 'keepalive')
@@ -196,6 +196,9 @@ function smf_main()
 	// Load the current theme.  (note that ?theme=1 will also work, may be used for guest theming.)
 	else
 		loadTheme();
+
+	require_once($sourcedir . '/URLFactory.php');
+	URL::init($boardurl, $scripturl);
 
 	// Check if the user should be disallowed access.
 	is_not_banned();

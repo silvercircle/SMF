@@ -146,7 +146,7 @@ function template_postbit_normal(&$message)
 	// Done with the information about the poster... on to the post itself.
 	echo '
 		</ul>';
-	echo $message['content_poster_details'],'
+	echo $message['hook_poster_details'],'
 		</div>
 		<div class="post_content">
 		<div class="post" id="msg_', $message['id'], '">';
@@ -248,13 +248,13 @@ function template_postbit_normal(&$message)
 		</ul>
 		</div>';
 	}
-	echo $message['content_before_sig'];
+	echo $message['hook_before_sig'];
 	// Show the member's signature?
 	if (!empty($message['member']['signature']) && empty($options['show_no_signatures']) && $context['signature_enabled'])
 		echo '
 		<div class="signature" id="msg_', $message['id'], '_signature">', $message['member']['signature'], '</div>';
 
-	echo $message['content_after_sig'];
+	echo $message['hook_after_sig'];
 	if($message['likes_count'] > 0 || !empty($message['likelink']))
 		echo '
 	<div class="likebar">
@@ -357,7 +357,7 @@ function template_postbit_normal(&$message)
 	echo '
 		</div><div class="clear">
 		</div></div>',
-		$message['content_post_bottom'],'
+		$message['hook_post_bottom'],'
 		</div>';
 }
 

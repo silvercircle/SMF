@@ -95,13 +95,14 @@ function Display()
 	$context['messages_per_page'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) && !WIRELESS ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
 
 	// Let's do some work on what to search index.
-	if (count($_GET) > 2)
+
+	if (count($_GET) > 2) {
 		foreach ($_GET as $k => $v)
 		{
 			if (!in_array($k, array('topic', 'board', 'start', session_name())))
 				$context['robot_no_index'] = true;
 		}
-
+	}
 	if (!empty($_REQUEST['start']) && (!is_numeric($_REQUEST['start']) || $_REQUEST['start'] % $context['messages_per_page'] != 0))
 		$context['robot_no_index'] = true;
 
@@ -266,7 +267,7 @@ function Display()
 		$context['total_visible_posts'] = $context['num_replies'] + $topicinfo['unapproved_posts'] + ($topicinfo['approved'] ? 1 : 0);
 
 	// When was the last time this topic was replied to?  Should we warn them about it?
-	/*
+	/* redundant query? last_post_time is already in $topicinfo[]
 	$request = smf_db_query( '
 		SELECT poster_time
 		FROM {db_prefix}messages
@@ -280,7 +281,7 @@ function Display()
 	list ($lastPostTime) = mysql_fetch_row($request);
 	mysql_free_result($request);
 	*/
-	list ($lastPostTime) = $topicinfo['last_post_time'];
+	$lastPostTime = $topicinfo['last_post_time'];
 
 	$context['oldTopicError'] = !empty($modSettings['oldTopicDays']) && $lastPostTime + $modSettings['oldTopicDays'] * 86400 < time() && empty($sticky);
 
@@ -1358,7 +1359,7 @@ function prepareDisplayContext($reset = false)
 		$counter--;
 
 	// hooks can populate these fields with additional content
-	$output['content_poster_details'] = $output['content_before_sig'] = $output['content_after_sig'] = $output['content_post_bottom'] = '';
+	$output['hook_poster_details'] = $output['hook_before_sig'] = $output['hook_after_sig'] = $output['hook_post_bottom'] = '';
     if(!empty($modSettings['enableAdvancedHooks']))
         HookAPI::callHook('integrate_postbit', array(&$context, &$output));
 

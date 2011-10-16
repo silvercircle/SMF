@@ -313,7 +313,6 @@ function template_message_icons()
 	</div>';
 	echo <<< EOT
 	<script>
-		// <![CDATA[
 		$(document).ready(function() {
 			$('#iconlist').jqm({overlay: true, modal: true, trigger: false, center:true});
 			centerElement($('#iconlist'), 0);
@@ -329,7 +328,6 @@ function template_message_icons()
 				});
 			});
 		});
-		// ]]>
 	</script>
 EOT;
 	echo '

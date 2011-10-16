@@ -472,7 +472,6 @@ function loadUserSettings()
 		// Do we perhaps think this is a search robot? Check every five minutes just in case...
 		if ((!empty($modSettings['spider_mode']) || !empty($modSettings['spider_group'])) && (!isset($_SESSION['robot_check']) || $_SESSION['robot_check'] < time() - 300))
 		{
-			require_once($sourcedir . '/ManageSearchEngines.php');
 			$user_info['possibly_robot'] = SpiderCheck();
 		}
 		elseif (!empty($modSettings['spider_mode']))
@@ -1445,7 +1444,6 @@ function loadTheme($id_theme = 0, $initialize = true)
 		elseif (!isset($temp))
 			CacheAPI::putCache('theme_settings-' . $id_theme, array(-1 => $themeData[-1], 0 => $themeData[0]), 90);
 	}
-
 	$settings = $themeData[0];
 	$options = $themeData[$member];
 
@@ -2058,7 +2056,11 @@ function getLanguages($use_cache = true, $favor_utf8 = true)
 		// If we don't have our theme information yet, lets get it.
 		if (empty($settings['default_theme_dir']))
 			loadTheme(0, false);
-
+		else {
+			$settings['actual_theme_url'] = $settings['theme_url'];
+			$settings['actual_images_url'] = $settings['images_url'];
+			$settings['actual_theme_dir'] = $settings['theme_dir'];
+		}
 		// Default language directories to try.
 		$language_directories = array(
 			$settings['default_theme_dir'] . '/languages',
@@ -2549,6 +2551,140 @@ function cache_quick_get($key, $file, $function, $params, $level = 1)
 	return $cache_block['data'];
 }
 
+//!!! Should this not be... you know... in a different file?
+// Do we think the current user is a spider?
+function SpiderCheck()
+{
+	global $modSettings, $smcFunc;
+
+	if (isset($_SESSION['id_robot']))
+		unset($_SESSION['id_robot']);
+	$_SESSION['robot_check'] = time();
+
+	// We cache the spider data for five minutes if we can.
+	if (!empty($modSettings['cache_enable']))
+		$spider_data = CacheAPI::getCache('spider_search', 1200);
+
+	if (!isset($spider_data) || $spider_data === NULL)
+	{
+		$request = smf_db_query('
+			SELECT id_spider, user_agent, ip_info
+			FROM {db_prefix}spiders',
+			array(
+			)
+		);
+		$spider_data = array();
+		while ($row = mysql_fetch_assoc($request))
+			$spider_data[] = $row;
+		mysql_free_result($request);
+
+		if (!empty($modSettings['cache_enable']))
+			CacheAPI::putCache('spider_search', $spider_data, 1200);
+	}
+
+	if (empty($spider_data))
+		return false;
+
+	// Only do these bits once.
+	$ci_user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+	preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/', $_SERVER['REMOTE_ADDR'], $ip_parts);
+
+	foreach ($spider_data as $spider)
+	{
+		// User agent is easy.
+		if (!empty($spider['user_agent']) && strpos($ci_user_agent, strtolower($spider['user_agent'])) !== false)
+			$_SESSION['id_robot'] = $spider['id_spider'];
+		// IP stuff is harder.
+		elseif (!empty($ip_parts))
+		{
+			$ips = explode(',', $spider['ip_info']);
+			foreach ($ips as $ip)
+			{
+				$ip = ip2range($ip);
+				if (!empty($ip))
+				{
+					foreach ($ip as $key => $value)
+					{
+						if ($value['low'] > $ip_parts[$key + 1] || $value['high'] < $ip_parts[$key + 1])
+							break;
+						elseif ($key == 3)
+							$_SESSION['id_robot'] = $spider['id_spider'];
+					}
+				}
+			}
+		}
+
+		if (isset($_SESSION['id_robot']))
+			break;
+	}
+
+	// If this is low server tracking then log the spider here as oppossed to the main logging function.
+	if (!empty($modSettings['spider_mode']) && $modSettings['spider_mode'] == 1 && !empty($_SESSION['id_robot']))
+		logSpider();
+
+	return !empty($_SESSION['id_robot']) ? $_SESSION['id_robot'] : 0;
+}
+
+// Log the spider presence online.
+//!!! Different file?
+function logSpider()
+{
+	global $smcFunc, $modSettings, $context;
+
+	if (empty($modSettings['spider_mode']) || empty($_SESSION['id_robot']))
+		return;
+
+	// Attempt to update today's entry.
+	if ($modSettings['spider_mode'] == 1)
+	{
+		$date = strftime('%Y-%m-%d', forum_time(false));
+		smf_db_query( '
+			UPDATE {db_prefix}log_spider_stats
+			SET last_seen = {int:current_time}, page_hits = page_hits + 1
+			WHERE id_spider = {int:current_spider}
+				AND stat_date = {date:current_date}',
+			array(
+				'current_date' => $date,
+				'current_time' => time(),
+				'current_spider' => $_SESSION['id_robot'],
+			)
+		);
+
+		// Nothing updated?
+		if (smf_db_affected_rows() == 0)
+		{
+			smf_db_insert('ignore',
+				'{db_prefix}log_spider_stats',
+				array(
+					'id_spider' => 'int', 'last_seen' => 'int', 'stat_date' => 'date', 'page_hits' => 'int',
+				),
+				array(
+					$_SESSION['id_robot'], time(), $date, 1,
+				),
+				array('id_spider', 'stat_date')
+			);
+		}
+	}
+	// If we're tracking better stats than track, better stats - we sort out the today thing later.
+	else
+	{
+		if ($modSettings['spider_mode'] > 2)
+		{
+			$url = $_GET + array('USER_AGENT' => $_SERVER['HTTP_USER_AGENT']);
+			unset($url['sesc'], $url[$context['session_var']]);
+			$url = serialize($url);
+		}
+		else
+			$url = '';
+
+		smf_db_insert('insert',
+			'{db_prefix}log_spider_hits',
+			array('id_spider' => 'int', 'log_time' => 'int', 'url' => 'string'),
+			array($_SESSION['id_robot'], time(), $url),
+			array()
+		);
+	}
+}
 /*
  * left here for compatibility...
  */

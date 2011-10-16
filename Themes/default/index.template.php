@@ -30,6 +30,7 @@ function template_html_above()
 {
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
 
+	$h = 'HDC';
 	// Show right to left and the character set for ease of translating.
 	echo '
 <!DOCTYPE html ', $context['right_to_left'] ? ' dir="rtl"' : '', '>
@@ -37,13 +38,7 @@ function template_html_above()
 <head>';
 	echo '
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css',$context['jsver'],'" />
-    <link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/secondary', $context['theme_variant'], '.css" />';
-
-	// Some browsers need an extra stylesheet due to bugs/compatibility issues.
-	//foreach (array('ie7', 'ie6', 'webkit') as $cssfix)
-	//	if ($context['browser']['is_' . $cssfix])
-	//		echo '
-	//<link rel="stylesheet" type="text/css" href="', $settings['default_theme_url'], '/css/', $cssfix, '.css" />';
+	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/secondary', $context['theme_variant'], '.css" />';
 
 	// RTL languages require an additional stylesheet.
 	if ($context['right_to_left'])
@@ -58,46 +53,47 @@ function template_html_above()
 		foreach($context['theme_scripts'] as $type => $script) {
 			if(!$script['footer'])
 				echo '
-	<script type="text/javascript" src="',($script['default'] ? $settings['default_theme_url'] : $settings['theme_url']) . '/' . $script['name'] . $context['jsver'], '"></script>';
+	<script type="text/javascript" src="',($script['default'] ? $settings['default_theme_url'] : $settings['theme_url']) . '/' . $script['name'] . $context['jsver'], '"></script>
+	';
 		}
 	}
-	echo '
+	echo <<<EOT
+
 	<script type="text/javascript">
 	// <![CDATA[
-	var smf_theme_url = "', $settings['theme_url'], '";
-	var smf_default_theme_url = "', $settings['default_theme_url'], '";
-	var smf_images_url = "', $settings['images_url'], '";
-	var smf_scripturl = "', $scripturl, '";
-	var smf_iso_case_folding = ', $context['server']['iso_case_folding'] ? 'true' : 'false', ';
-	var smf_charset = "', $context['character_set'], '";
-	var sSessionId = \'', $context['session_id'], '\';
-	var sSessionVar = \'', $context['session_var'], '\';
-	var disableDynamicTime = ',empty($options['disable_dynatime']) ? 0 : 1,';
-	var textSizeUnit = \'pt\';
+	var smf_theme_url = '{$settings['theme_url']}';
+	var smf_default_theme_url = '{$settings['default_theme_url']}';
+	var smf_images_url = '{$settings['images_url']}';
+	var smf_scripturl = '{$scripturl}';
+	var smf_iso_case_folding = {$h($context['server']['iso_case_folding'], 'true', 'false')};
+	var smf_charset = '{$context['character_set']}';
+	var sSessionId = '{$context['session_id']}';
+	var sSessionVar = '{$context['session_var']}';
+	var disableDynamicTime = {$h(empty($options['disable_dynatime']), 0, 1)};
+	var textSizeUnit = 'pt';
 	var textSizeStep = 1;
 	var textSizeMax = 16;
 	var textSizeMin = 8;
 	var textSizeDefault = 10;
 	var sideBarWidth = 250;
 	var sidebar_content_loaded = 0;
-	var cookie = readCookie(\'SMF_textsize\');
-	var fb_appid = "',$modSettings['fb_appid'],'";
-	var ssp_imgpath = "',$settings['images_url'],'/share";
+	var cookie = readCookie('SMF_textsize');
+	var fb_appid = '{$modSettings['fb_appid']}';
+	var ssp_imgpath = '{$settings['images_url']}/share';
 	var textsize = cookie ? parseInt(cookie) : textSizeDefault;
-	var anchor = document.getElementsByTagName(\'SCRIPT\')[0];
-	var t2 = document.createElement(\'SCRIPT\');
+	var anchor = document.getElementsByTagName('SCRIPT')[0];
+	var t2 = document.createElement('SCRIPT');
 	t2.type = "text/javascript";
 	t2.async = true;
-	t2.src = "',$settings['theme_url'],'/scripts/footer.js',$context['jsver'],'";
+	t2.src = '{$settings['theme_url']}/scripts/footer.js{$context['jsver']}';
 	anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
-	</script>';
-	echo '
-	<meta http-equiv="Content-Type" content="text/html; charset=', $context['character_set'], '" />
-	<meta name="description" content="', $context['page_title_html_safe'], '" />', !empty($context['meta_keywords']) ? '
-	<meta name="keywords" content="' . $context['meta_keywords'] . '" />' : '', '
-	<title>', $context['page_title_html_safe'], '</title>';
-
+	</script>
+	<meta http-equiv="Content-Type" content="text/html; charset={$context['character_set']}" />
+	<meta name="description" content="{$context['page_title_html_safe']}" />
+	{$h(!empty($context['meta_keywords']), '<meta name="keywords" content="' . $context['meta_keywords'] . '" />', '')}
+	<title>{$context['page_title_html_safe']}</title>
+EOT;
 	// Please don't index these Mr Robot.
 	if (!empty($context['robot_no_index']))
 		echo '
@@ -110,9 +106,7 @@ function template_html_above()
 
 	// Show all the relative links, such as help, search, contents, and the like.
 	echo '
-	<link rel="help" href="', $scripturl, '?action=help" />
-	<link rel="search" href="', $scripturl, '?action=search" />
-	<link rel="contents" href="', $scripturl, '" />';
+	<link rel="search" href="', $scripturl, '?action=search" />';
 
 	// If RSS feeds are enabled, advertise the presence of one.
 	if (!empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']))
@@ -126,8 +120,9 @@ function template_html_above()
 	<link rel="next" href="', $scripturl, '?topic=', $context['current_topic'], '.0;prev_next=next" />';
 
 	// If we're in a board, or a topic for that matter, the index will be the board's index.
-	//if (!empty($context['current_board']))
-		//echo '<link rel="index" href="', $scripturl, '?board=', $context['current_board'], '.0" />';
+	if (!empty($context['current_board']))
+		echo '
+	<link rel="index" href="', $scripturl, '?board=', $context['current_board'], '.0" />';
 
 	// Output any remaining HTML headers. (from mods, maybe?)
 	echo $context['html_headers'];
@@ -528,8 +523,6 @@ function my_theme_copyright($get_it = false)
 		return;
 
 	$forum_copyright = sprintf($forum_copyright, $forum_version);
-	//$forum_copyright = 'Forum software based on SMF 2.0, &copy;2011 by <a href="http://www.simplemachines.org">Simple Machines</a> and contributors. <a href="http://www.simplemachines.org/about/smf/license.php">License terms.</a>';
-
 	echo '
 	<span class="smalltext" style="display: inline; visibility: visible;">' . $forum_copyright . '</span>';
 }

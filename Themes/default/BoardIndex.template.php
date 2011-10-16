@@ -41,9 +41,9 @@ function template_main()
 					<a class="unreadlink" href="', $scripturl, '?action=unread;c=', $category['id'], '">', $txt['view_unread_category'], '</a>';
 
 		echo '
-				<h2>
+				<h3>
 				', $category['link'], '
-			  	</h2>
+			  	</h3>
 		      </div>
 			</div>';
 		// Assuming the category hasn't been collapsed...

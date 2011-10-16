@@ -131,6 +131,7 @@ function getBoardIndex($boardIndexOptions)
 				// Not a child.
 				$isChild = false;
 
+				$href = URL::board($row_board['id_board'], $row_board['board_name'], 0, false);
 				$this_category[$row_board['id_board']] = array(
 					'new' => empty($row_board['is_read']),
 					'id' => $row_board['id_board'],
@@ -149,8 +150,8 @@ function getBoardIndex($boardIndexOptions)
 					'unapproved_topics' => $row_board['unapproved_topics'],
 					'unapproved_posts' => $row_board['unapproved_posts'] - $row_board['unapproved_topics'],
 					'can_approve_posts' => !empty($user_info['mod_cache']['ap']) && ($user_info['mod_cache']['ap'] == array(0) || in_array($row_board['id_board'], $user_info['mod_cache']['ap'])),
-					'href' => $scripturl . '?board=' . $row_board['id_board'] . '.0',
-					'link' => '<a href="' . $scripturl . '?board=' . $row_board['id_board'] . '.0">' . $row_board['board_name'] . '</a>'
+					'href' => $href,
+					'link' => '<a href="' . $href . '">' . $row_board['board_name'] . '</a>'
 				);
 			}
 			if (!empty($row_board['id_moderator']))
@@ -237,6 +238,8 @@ function getBoardIndex($boardIndexOptions)
 
 		// Prepare the subject, and make sure it's not too long.
 		censorText($row_board['subject']);
+		$mhref = $row_board['poster_name'] != '' && !empty($row_board['id_member']) ? URL::user($row_board['id_member'], $row_board['real_name']) : '';
+
 		$this_last_post = array(
 			'id' => $row_board['id_msg'],
 			'time' => $row_board['poster_time'] > 0 ? timeformat($row_board['poster_time']) : $txt['not_applicable'],
@@ -245,8 +248,8 @@ function getBoardIndex($boardIndexOptions)
 				'id' => $row_board['id_member'],
 				'username' => $row_board['poster_name'] != '' ? $row_board['poster_name'] : $txt['not_applicable'],
 				'name' => $row_board['real_name'],
-				'href' => $row_board['poster_name'] != '' && !empty($row_board['id_member']) ? $scripturl . '?action=profile;u=' . $row_board['id_member'] : '',
-				'link' => $row_board['poster_name'] != '' ? (!empty($row_board['id_member']) ? '<a onclick="getMcard('.$row_board['id_member'].', $(this));return(false);" href="' . $scripturl . '?action=profile;u=' . $row_board['id_member'] . '">' . $row_board['real_name'] . '</a>' : $row_board['real_name']) : $txt['not_applicable'],
+				'href' => $mhref,
+				'link' => $row_board['poster_name'] != '' ? (!empty($row_board['id_member']) ? '<a onclick="getMcard('.$row_board['id_member'].', $(this));return(false);" href="'.$mhref.'">' . $row_board['real_name'] . '</a>' : $row_board['real_name']) : $txt['not_applicable'],
 			),
 			'start' => 'msg' . $row_board['new_from'],
 			'topic' => $row_board['id_topic'],
