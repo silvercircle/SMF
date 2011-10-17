@@ -494,7 +494,7 @@ function Display()
 
 	// Construct the page index, allowing for the .START method...
 	if(!isset($_REQUEST['perma']))
-		$context['page_index'] = constructPageIndex($scripturl . '?topic=' . $topic . '.%1$d', $_REQUEST['start'], $context['total_visible_posts'], $context['messages_per_page'], true);
+		$context['page_index'] = constructPageIndex(URL::topic($topic, $topicinfo['subject'], '%1$d', $board_info['name'], $board_info['id']), $_REQUEST['start'], $context['total_visible_posts'], $context['messages_per_page'], true);
 	$context['start'] = $_REQUEST['start'];
 
 	// This is information about which page is current, and which page we're on - in case you don't like the constructed page index. (again, wireles..)
@@ -571,7 +571,7 @@ function Display()
 	$context['mark_unread_time'] = $topicinfo['new_from'];
 
 	// Set a canonical URL for this page.
-	$context['canonical_url'] = $scripturl . '?topic=' . $topic . '.' . $context['start'];
+	$context['canonical_url'] = URL::topic($topic, $topicinfo['subject'], $context['start'], $board_info['name'], $board_info['id']);
 	$context['share_url'] = $scripturl . '?topic=' . $topic;
 	// For quick reply we need a response prefix in the default forum language.
 	if (!isset($context['response_prefix']) && !($context['response_prefix'] = CacheAPI::getCache('response_prefix', 600)))
@@ -1227,7 +1227,7 @@ function Display()
 function prepareDisplayContext($reset = false)
 {
 	global $settings, $txt, $modSettings, $scripturl, $options, $user_info;
-	global $memberContext, $context, $messages_request, $topic;
+	global $memberContext, $context, $messages_request, $topic, $board_info;
 
 	static $counter = null;
 
@@ -1308,6 +1308,7 @@ function prepareDisplayContext($reset = false)
 	censorText($message['body']);
 
 	// Compose the memory eat- I mean message array.
+	$t_href = URL::topic($topic, $message['subject'], 0, $board_info['name'], $board_info['id'], false, '.msg' . $message['id_msg'] . '#msg'.$message['id_msg']);
 	$output = array(
 		'attachment' => loadAttachmentContext($message['id_msg']),
 		'alternate' => $counter % 2,

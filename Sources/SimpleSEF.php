@@ -168,12 +168,14 @@ class SimpleSEF {
 
         // if the URL contains index.php but not our ignored actions, rewrite the URL
 
-        if (strpos($_SERVER['REQUEST_URL'], 'index.php') !== false && !(isset($_GET['xml']) || (!empty($_GET['action']) && in_array($_GET['action'], self::$ignoreactions)))) {
+
+		// todo
+		/*if (strpos($_SERVER['REQUEST_URL'], 'index.php') !== false && !(isset($_GET['xml']) || (!empty($_GET['action']) && in_array($_GET['action'], self::$ignoreactions)))) {
             //self::log('Rewriting and redirecting permanently: ' . $_SERVER['REQUEST_URL']);
             header('HTTP/1.1 301 Moved Permanently');
             header('Location: ' . self::create_sef_url($_SERVER['REQUEST_URL']));
             exit();
-        }
+        }*/
 
         // Parse the url
         if (!empty($_GET['q'])) {
@@ -184,10 +186,54 @@ class SimpleSEF {
 
         // Need to grab any extra query parts from the original url and tack it on here
         $_SERVER['QUERY_STRING'] = http_build_query($_GET, '', ';');
-
+		//echo $_SERVER['QUERY_STRING'];
         //self::log('Post-convert GET:' . var_export($_GET, true));
     }
 
+	/**
+	 * @static
+	 * @param $buffer		string: output buffer
+	 * @return mixed		string: the rewritten buffer
+	 *
+	 * lightweight buffer rewrite. Only looks at topic URLs that couldn't be
+	 * created dynamically (e.g. quotes, other BBCodes).
+	 * Most other URLs are dynamically created through URL:: methods now
+	 */
+	public static function ob_simplesef_light($buffer)
+	{
+		global $scripturl, $txt, $context;
+
+		self::benchmark('buffer');
+
+		$matches = array();
+  		$count = 0;
+		preg_match_all('~\b' . preg_quote($scripturl) . '.*?topic=([0-9]+)\b~', $buffer, $matches);
+		if (!empty($matches[1])) {
+    		self::loadTopicNames(array_unique($matches[1]));
+			$matches = array();
+			//preg_match_all('~\b(' . preg_quote($scripturl) . '\?topic=[0-9]+)([a-zA-Z0-9+&@#/%=\~_|]+)\b~', $buffer, $matches);
+			preg_match_all('~\b(' . preg_quote($scripturl) . '\?topic=[-a-zA-Z0-9+&@#/%?=\~_|!:,.;\[\]]*[-a-zA-Z0-9+&@#/%=\~_|\[\]]?)([^-a-zA-Z0-9+&@#/%=\~_|])~', $buffer, $matches);
+			if (!empty($matches[0])) {
+				$replacements = array();
+				foreach (array_unique($matches[1]) as $i => $url) {
+					$replacement = self::create_sef_url($url);
+					if ($url != $replacement)
+						$replacements[$matches[0][$i]] = $replacement . $matches[2][$i];
+				}
+				$buffer = str_replace(array_keys($replacements), array_values($replacements), $buffer);
+				$count = count($replacements);
+			}
+		}
+
+		self::benchmark('buffer');
+
+  		if (!empty($context['show_load_time']))
+      		$buffer = preg_replace('~(.*[s]\sCPU,\s.*queries\.)~', '$1' . sprintf(' OB_Rewrite: %d replacements', $count) . ' ' . round(self::$benchMark['total'], 3) . $txt['seconds_with'] . self::$queryCount . $txt['queries'], $buffer);
+
+  		//self::log('SimpleSEF rewrote ' . $count . ' urls in ' . self::$benchMark['total'] . ' seconds');
+
+  		return $buffer;
+	}
     /**
      * Implements integrate_buffer
      * This is the core of the mod.  Rewrites the output buffer to create SEF
@@ -203,7 +249,7 @@ class SimpleSEF {
      * @return string Returns the altered buffer (or unaltered if the mod is disabled)
      */
     public static function ob_simplesef($buffer) {
-        global $scripturl, $smcFunc, $boardurl, $txt, $modSettings, $context;
+        global $scripturl, $boardurl, $txt, $modSettings, $context;
 
         if (empty($modSettings['simplesef_enable']))
             return $buffer;
@@ -266,7 +312,7 @@ class SimpleSEF {
         self::benchmark('buffer');
 
         if (!empty($context['show_load_time']))
-            //$buffer = preg_replace('~(.*[s]\sCPU,\s.*queries\.)~', '$1' . sprintf('SimpleSEF: %d replacements', $count) . ' ' . round(self::$benchMark['total'], 3) . $txt['seconds_with'] . self::$queryCount . $txt['queries'], $buffer);
+            $buffer = preg_replace('~(.*[s]\sCPU,\s.*queries\.)~', '$1' . sprintf('SimpleSEF: %d replacements', $count) . ' ' . round(self::$benchMark['total'], 3) . $txt['seconds_with'] . self::$queryCount . $txt['queries'], $buffer);
 			//$buffer = preg_replace('~(.*[s]\sCPU,\s.*queries\.)~', '$1 foo', $buffer);
 
         //self::log('SimpleSEF rewrote ' . $count . ' urls in ' . self::$benchMark['total'] . ' seconds');
@@ -1004,9 +1050,9 @@ class SimpleSEF {
      * @param boolean $force Forces a reload of board names
      */
     private static function loadBoardNames($force = FALSE) {
-        global $smcFunc, $language;
+        global $language;
 
-        if ($force || (self::$boardNames = CacheAPI::getCache('simplesef_board_list', 3600)) == NULL) {
+		if ($force || (self::$boardNames = CacheAPI::getCache('simplesef_board_list', 3600)) == NULL) {
             loadLanguage('index', $language, false);
             $request = smf_db_query( '
 				SELECT id_board, name
@@ -1019,7 +1065,8 @@ class SimpleSEF {
                 $i = 0;
                 while (!empty($boards[$temp_name . (!empty($i) ? $i + 1 : '')]))
                     $i++;
-                $boards[$temp_name . (!empty($i) ? $i + 1 : '')] = $row['id_board'];
+                //$boards[$temp_name . (!empty($i) ? $i + 1 : '')] = $row['id_board'];
+				$boards[$temp_name . '.'.trim($row['id_board'])] = $row['id_board'];
             }
             mysql_free_result($request);
 
@@ -1120,7 +1167,8 @@ class SimpleSEF {
                 $string = unicode_decode($string, $char_set);
         }
         */
-       	setlocale(LC_CTYPE, 'en_US.utf8');
+
+		setlocale(LC_CTYPE, 'en_US.utf8');
    		$string = iconv('UTF-8', "UTF-8//TRANSLIT", $string); // TRANSLIT does the whole job
        	$string = implode(' ', array_diff(explode(' ', $string), self::$stripWords));
        	$string = str_replace(self::$stripChars, '', $string);
@@ -1131,7 +1179,7 @@ class SimpleSEF {
 
         // A way to track/store the current character
         
-        /*
+		/*
         $character = 0;
         // Gotta return something...
         $result = '';
@@ -1195,7 +1243,7 @@ class SimpleSEF {
 
         // Update the string with our new string
         $string = (string)$result;
-        */
+
         $string = implode(' ', array_diff(explode(' ', $string), self::$stripWords));
         $string = str_replace(self::$stripChars, '', $string);
         $string = trim($string, " $modSettings[simplesef_space]\t\n\r");
@@ -1205,7 +1253,7 @@ class SimpleSEF {
         $string = preg_replace('~(\+)+~', $modSettings['simplesef_space'], $string);
         if (!empty($modSettings['simplesef_lowercase']))
             $string = strtolower($string);
-
+        */
         return $string;
     }
 

@@ -1417,6 +1417,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 					'date' => array('match' => '(\d+)', 'validate' => 'timeformat'),
 				),
 				'before' => '<div class="quoteheader"><a href="' . $scripturl . '?{link}">' . $txt['quote_from'] . ': {author} ' . $txt['search_on'] . ' {date}</a></div><blockquote>',
+				//'before' => '<div class="quoteheader"><a href="/{__SCRIPT_URL__}?{link}">' . $txt['quote_from'] . ': {author} ' . $txt['search_on'] . ' {date}</a></div><blockquote>',
 				'after' => '</blockquote><div class="quotefooter"></div>',
 				'block_level' => true,
 			),

@@ -798,7 +798,8 @@ function loadBoard()
 			)),
 			array_reverse($board_info['parent_boards']),
 			array(array(
-				'url' => $scripturl . '?board=' . $board . ($stored_topicstart > 0 ? '.'. $stored_topicstart : '.0'),
+				//'url' => $scripturl . '?board=' . $board . ($stored_topicstart > 0 ? '.'. $stored_topicstart : '.0'),
+				'url' => URL::board($board, $board_info['name'], ($stored_topicstart > 0 ? $stored_topicstart : 0), false),
 				'name' => $board_info['name'] . ($stored_topicstart > 0 ? ' ['. ($stored_topicstart / $topics_per_page + 1) . ']' : ''),
 			))
 		);
@@ -822,7 +823,8 @@ function loadBoard()
 		// The linktree should not give the game away mate!
 		$context['linktree'] = array(
 			array(
-				'url' => $scripturl,
+				//'url' => $scripturl,
+				'url' => URL::home(),
 				'name' => $context['forum_name_html_safe']
 			)
 		);
@@ -1174,6 +1176,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 		$avatar_height = '';
 	}
 
+	$m_href = URL::user($profile['id_member'], $profile['real_name']);
 	// What a monstrous array...
 	$memberContext[$user] = array(
 		'username' => $profile['member_name'],
@@ -1183,8 +1186,8 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'is_reverse_buddy' => in_array($user_info['id'], $buddy_list),
 		'buddies' => $buddy_list,
 		'title' => !empty($modSettings['titlesEnable']) ? $profile['usertitle'] : '',
-		'href' => $scripturl . '?action=profile;u=' . $profile['id_member'],
-		'link' => '<a onclick="getMcard('.$profile['id_member'].', $(this));return(false);" href="' . $scripturl . '?action=profile;u=' . $profile['id_member'] . '" title="' . $txt['profile_of'] . ' ' . $profile['real_name'] . '">' . $profile['real_name'] . '</a>',
+		'href' => $m_href,
+		'link' => '<a onclick="getMcard('.$profile['id_member'].', $(this));return(false);" href="' . $m_href . '" title="' . $txt['profile_of'] . ' ' . $profile['real_name'] . '">' . $profile['real_name'] . '</a>',
 		'email' => $profile['email_address'],
 		'show_email' => showEmailAddress(!empty($profile['hide_email']), $profile['id_member']),
 		'registered' => empty($profile['date_registered']) ? $txt['not_applicable'] : timeformat($profile['date_registered']),
@@ -1615,7 +1618,7 @@ function loadTheme($id_theme = 0, $initialize = true)
 
 	// Set the top level linktree up.
 	array_unshift($context['linktree'], array(
-		'url' => $scripturl,
+		'url' => URL::home(),		//$scripturl
 		'name' => $context['forum_name_html_safe']
 	));
 

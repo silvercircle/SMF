@@ -226,7 +226,7 @@ function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_l
 					$results[0] = $txt['you_liker'];
 					continue;
 				}
-				$results[$n++] = '<a rel="nofollow" onclick="getMcard('.$liker_components[0].', $(this));return(false);" class="mcard" href="'.$scripturl.'?action=profile;u='.$liker_components[0].'">'.$liker_components[1].'</a>';
+				$results[$n++] = '<a rel="nofollow" onclick="getMcard('.$liker_components[0].', $(this));return(false);" class="mcard" href="'.URL::user($liker_components[0], $liker_components[1]) .'">'.$liker_components[1].'</a>';
 			}
 		}
 	}

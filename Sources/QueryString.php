@@ -473,8 +473,8 @@ function ob_sessrewrite($buffer)
 			$buffer = preg_replace('/"' . preg_quote($scripturl, '/') . '\?((?:board|topic)=[^#"]+?)(#[^"]*?)?"/e', "'\"' . \$scripturl . '/' . strtr('\$1', '&;=', '//,') . '.html\$2\"'", $buffer);
 	}
 
-	if(!empty($modSettings['simplesef_enable']) && $user_info['id'] != 1)
-		$buffer = SimpleSEF::ob_simplesef($buffer);
+	if(!empty($modSettings['simplesef_enable']))
+		$buffer = SimpleSEF::ob_simplesef_light($buffer);
 	// Return the changed buffer.
 	return $buffer;
 }

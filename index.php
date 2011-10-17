@@ -184,6 +184,9 @@ function smf_main()
 	// Load the user's cookie (or set as guest) and load their settings.
 	loadUserSettings();
 
+	require_once($sourcedir . '/URLFactory.php');
+	URL::init($boardurl, $scripturl);
+
 	// Load the current board's information.
 	loadBoard();
 
@@ -196,9 +199,6 @@ function smf_main()
 	// Load the current theme.  (note that ?theme=1 will also work, may be used for guest theming.)
 	else
 		loadTheme();
-
-	require_once($sourcedir . '/URLFactory.php');
-	URL::init($boardurl, $scripturl);
 
 	// Check if the user should be disallowed access.
 	is_not_banned();

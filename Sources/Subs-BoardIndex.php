@@ -47,7 +47,7 @@ function getBoardIndex($boardIndexOptions)
 			CASE WHEN b.redirect != {string:blank_string} THEN 1 ELSE 0 END AS is_redirect,
 			b.num_posts, b.num_topics, b.unapproved_posts, b.unapproved_topics, b.id_parent,
 			IFNULL(m.poster_time, 0) AS poster_time, IFNULL(mem.member_name, m.poster_name) AS poster_name,
-			m.subject, m.id_topic, t.id_first_msg AS id_first_msg, t.id_prefix, m1.icon AS icon, IFNULL(mem.real_name, m.poster_name) AS real_name, p.name as topic_prefix,
+			m.subject, m1.subject AS first_subject, m.id_topic, t.id_first_msg AS id_first_msg, t.id_prefix, m1.icon AS icon, IFNULL(mem.real_name, m.poster_name) AS real_name, p.name as topic_prefix,
 			' . ($user_info['is_guest'] ? ' 1 AS is_read, 0 AS new_from,' : '
 			(IFNULL(lb.id_msg, 0) >= b.id_msg_updated) AS is_read, IFNULL(lb.id_msg, -1) + 1 AS new_from,' . ($boardIndexOptions['include_categories'] ? '
 			c.can_collapse, IFNULL(cc.id_member, 0) AS is_collapsed,' : '')) . '
@@ -171,6 +171,7 @@ function getBoardIndex($boardIndexOptions)
 			// A valid child!
 			$isChild = true;
 
+			$href = URL::board($row_board['id_board'], $row_board['board_name'], 0, false);
 			$this_category[$row_board['id_parent']]['children'][$row_board['id_board']] = array(
 				'id' => $row_board['id_board'],
 				'name' => $row_board['board_name'],
@@ -185,8 +186,8 @@ function getBoardIndex($boardIndexOptions)
 				'unapproved_topics' => $row_board['unapproved_topics'],
 				'unapproved_posts' => $row_board['unapproved_posts'] - $row_board['unapproved_topics'],
 				'can_approve_posts' => !empty($user_info['mod_cache']['ap']) && ($user_info['mod_cache']['ap'] == array(0) || in_array($row_board['id_board'], $user_info['mod_cache']['ap'])),
-				'href' => $scripturl . '?board=' . $row_board['id_board'] . '.0',
-				'link' => '<a href="' . $scripturl . '?board=' . $row_board['id_board'] . '.0">' . $row_board['board_name'] . '</a>'
+				'href' => $href,
+				'link' => '<a href="' . $href . '">' . $row_board['board_name'] . '</a>'
 			);
 
 			// Counting child board posts is... slow :/.
@@ -255,7 +256,6 @@ function getBoardIndex($boardIndexOptions)
 			'topic' => $row_board['id_topic'],
 			'prefix' => html_entity_decode($row_board['topic_prefix'])
 		);
-		// shorten subject for last post column, take prefix length into account
 		$row_board['short_subject'] = shorten_subject($row_board['subject'], 50);
 		$this_last_post['subject'] = $row_board['short_subject'];
 
@@ -270,7 +270,7 @@ function getBoardIndex($boardIndexOptions)
 		{
 			$this_last_post['href'] = $scripturl . '?topic=' . $row_board['id_topic'] . '.msg' . ($user_info['is_guest'] ? $row_board['id_msg'] : $row_board['new_from']) . (empty($row_board['is_read']) ? ';boardseen' : '') . '#new';
 			$this_last_post['link'] = '<a href="' . $this_last_post['href'] . '" title="' . $row_board['subject'] . '">' . $row_board['short_subject'] . '</a>';
-			$this_last_post['topichref'] = $scripturl . '?topic=' . $row_board['id_topic'];
+			$this_last_post['topichref'] = URL::topic($row_board['id_topic'], $row_board['first_subject'], 0, $row_board['board_name'], $row_board['id_board']);// $scripturl . '?topic=' . $row_board['id_topic'];
 			$this_last_post['topiclink'] = '<a href="' . $this_last_post['topichref'] . '" title="' . $row_board['subject'] . '">' . $row_board['short_subject'] . '</a>';
 		}
 		else

@@ -84,7 +84,7 @@ function template_boardbit(&$board)
 	  	<div class="csrcwrapper24px"><img class="clipsrc _page" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="*" title="*" /></div>
 	 	</div>
 		<div style="padding-left:32px;">
-		<h3><a href="',$scripturl,'?topic=',intval(substr($board['redirect'], 1)),'">',$board['name'],'</a></h3>
+		<h3><a href="',URL::topic(intval(substr($board['redirect'], 1)), 'redirecttopic', 0, $board['name']),'">',$board['name'],'</a></h3>
 	    <div class="smalltext">', $board['description'] , '</div>
 	    </div>
 	    </div>';

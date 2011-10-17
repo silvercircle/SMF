@@ -90,14 +90,15 @@ function MessageIndex()
 
 	// Make sure the starting place makes sense and construct the page index.
 	if (isset($_REQUEST['sort']))
-		$context['page_index'] = constructPageIndex($scripturl . '?board=' . $board . '.%1$d;sort=' . $_REQUEST['sort'] . (isset($_REQUEST['desc']) ? ';desc' : ''), $_REQUEST['start'], $board_info['total_topics'], $maxindex, true);
+		$context['page_index'] = constructPageIndex(URL::board($board_info['id'], $board_info['name'], '%1$d;sort=' . $_REQUEST['sort'] . (isset($_REQUEST['desc']) ? ';desc' : ''), true), $_REQUEST['start'], $board_info['total_topics'], $maxindex, true);
 	else
-		$context['page_index'] = constructPageIndex($scripturl . '?board=' . $board . '.%1$d', $_REQUEST['start'], $board_info['total_topics'], $maxindex, true);
+		//$context['page_index'] = constructPageIndex($scripturl . '?board=' . $board . '.%1$d', $_REQUEST['start'], $board_info['total_topics'], $maxindex, true);
+		$context['page_index'] = constructPageIndex(URL::board($board_info['id'], $board_info['name'], '%1$d', true), $_REQUEST['start'], $board_info['total_topics'], $maxindex, true);
 	$context['start'] = &$_REQUEST['start'];
 	setcookie('smf_topicstart', intval($board) . '_'. $context['start'], time() + 86400, '/');
 
 	// Set a canonical URL for this page.
-	$context['canonical_url'] = $scripturl . '?board=' . $board . '.' . $context['start'];
+	$context['canonical_url'] = URL::board($board, $board_info['name'], $context['start'], true);
 
 	$context['links'] = array(
 		'first' => $_REQUEST['start'] >= $context['topics_per_page'] ? $scripturl . '?board=' . $board . '.0' : '',
@@ -422,6 +423,7 @@ function MessageIndex()
 			else
 				censorText($row['last_subject']);
 
+
 			// Decide how many pages the topic should have.
 			if ($row['num_replies'] + 1 > $context['messages_per_page'])
 			{
@@ -429,11 +431,11 @@ function MessageIndex()
 
 				// We can't pass start by reference.
 				$start = -1;
-				$pages .= constructPageIndex($scripturl . '?topic=' . $row['id_topic'] . '.%1$d', $start, $row['num_replies'] + 1, $context['messages_per_page'], true);
+				$pages .= constructPageIndex(URL::topic($row['id_topic'], $row['first_subject'], '%1$d', $board_info['name'], $board_info['id']), $start, $row['num_replies'] + 1, $context['messages_per_page'], true);
 
 				// If we can use all, show all.
 				if (!empty($modSettings['enableAllMessages']) && $row['num_replies'] + 1 < $modSettings['enableAllMessages'])
-					$pages .= '<a class="navPages" href="' . $scripturl . '?topic=' . $row['id_topic'] . '.0;all">' . $txt['show_all'] . '</a>';
+					$pages .= '<a class="navPages" href="' . URL::topic($row['id_topic'], $row['first_subject'], 0, $board_info['name'], $board_info['id']) .';all">' . $txt['show_all'] . '</a>';
 				$pages .= ' ';
 			}
 			else
@@ -441,6 +443,11 @@ function MessageIndex()
 
             $first_posters[$row['id_topic']] = $row['first_id_member'];
 			// 'Print' the topic info.
+			$t_href = URL::topic($row['id_topic'], $row['first_subject'], 0, $board_info['name'], $board_info['id']);
+			$f_post_mem_href = !empty($row['first_id_member']) ? URL::user($row['first_id_member'], $row['first_display_name']) : '';
+			$t_href = URL::topic($row['id_topic'], $row['first_subject'], 0, $board_info['name'], $board_info['id']);
+			$l_post_mem_href = !empty($row['last_id_member']) ? URL::user($row['last_id_member'], $row['last_display_name'] ) : '';
+			$l_post_msg_href = URL::topic($row['id_topic'], $row['last_subject'], $user_info['is_guest'] ? (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) : 0, $board_info['name'], $board_info['id'], $user_info['is_guest'] ? true : false, $user_info['is_guest'] ? '' : ('.msg' . $row['id_last_msg']), $user_info['is_guest'] ? ('#msg' . $row['id_last_msg']) : '#new');
 			$context['topics'][$row['id_topic']] = array(
 				'id' => $row['id_topic'],
 				'first_post' => array(
@@ -449,8 +456,8 @@ function MessageIndex()
 						'username' => $row['first_member_name'],
 						'name' => $row['first_display_name'],
 						'id' => $row['first_id_member'],
-						'href' => !empty($row['first_id_member']) ? $scripturl . '?action=profile;u=' . $row['first_id_member'] : '',
-						'link' => !empty($row['first_id_member']) ? '<a onclick="getMcard('.$row['first_id_member'].', $(this));return(false);" href="' . $scripturl . '?action=profile;u=' . $row['first_id_member'] . '" title="' . $txt['profile_of'] . ' ' . $row['first_display_name'] . '">' . $row['first_display_name'] . '</a>' : $row['first_display_name'],
+						'href' => $f_post_mem_href,
+						'link' => !empty($row['first_id_member']) ? '<a onclick="getMcard('.$row['first_id_member'].', $(this));return(false);" href="' . $f_post_mem_href . '" title="' . $txt['profile_of'] . ' ' . $row['first_display_name'] . '">' . $row['first_display_name'] . '</a>' : $row['first_display_name'],
 					),
 					'time' => timeformat($row['first_poster_time']),
 					'timestamp' => forum_time(true, $row['first_poster_time']),
@@ -458,8 +465,8 @@ function MessageIndex()
 					'preview' => $row['first_body'],
 					'icon' => $row['first_icon'],
 					'icon_url' => getPostIcon($row['first_icon']),
-					'href' => $scripturl . '?topic=' . $row['id_topic'] . '.0',
-					'link' => '<a href="' . $scripturl . '?topic=' . $row['id_topic'] . '.0">' . $row['first_subject'] . '</a>'
+					'href' => $t_href,
+					'link' => '<a href="' . $t_href .'">' . $row['first_subject'] . '</a>'
 				),
 				'last_post' => array(
 					'id' => $row['id_last_msg'],
@@ -467,8 +474,8 @@ function MessageIndex()
 						'username' => $row['last_member_name'],
 						'name' => $row['last_display_name'],
 						'id' => $row['last_id_member'],
-						'href' => !empty($row['last_id_member']) ? $scripturl . '?action=profile;u=' . $row['last_id_member'] : '',
-						'link' => !empty($row['last_id_member']) ? '<a onclick="getMcard('.$row['last_id_member'].', $(this));return(false);" href="' . $scripturl . '?action=profile;u=' . $row['last_id_member'] . '">' . $row['last_display_name'] . '</a>' : $row['last_display_name']
+						'href' => $l_post_mem_href,
+						'link' => !empty($row['last_id_member']) ? '<a onclick="getMcard('.$row['last_id_member'].', $(this));return(false);" href="' . $l_post_mem_href . '">' . $row['last_display_name'] . '</a>' : $row['last_display_name']
 					),
 					'time' => timeformat($row['last_poster_time']),
 					'timestamp' => forum_time(true, $row['last_poster_time']),
@@ -476,8 +483,9 @@ function MessageIndex()
 					'preview' => $row['last_body'],
 					'icon' => $row['last_icon'],
 					'icon_url' => getPostIcon($row['last_icon']),
-					'href' => $scripturl . '?topic=' . $row['id_topic'] . ($user_info['is_guest'] ? ('.' . (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) . '#msg' . $row['id_last_msg']) : (($row['num_replies'] == 0 ? '.0' : '.msg' . $row['id_last_msg']) . '#new')),
-					'link' => '<a href="' . $scripturl . '?topic=' . $row['id_topic'] . ($user_info['is_guest'] ? ('.' . (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) . '#msg' . $row['id_last_msg']) : (($row['num_replies'] == 0 ? '.0' : '.msg' . $row['id_last_msg']) . '#new')) . '" ' . ($row['num_replies'] == 0 ? '' : 'rel="nofollow"') . '>' . $row['last_subject'] . '</a>'
+					//'href' => $scripturl . '?topic=' . $row['id_topic'] . ($user_info['is_guest'] ? ('.' . (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) . '#msg' . $row['id_last_msg']) : (($row['num_replies'] == 0 ? '.0' : '.msg' . $row['id_last_msg']) . '#new')),
+					'href' => $l_post_msg_href,
+					'link' => '<a href="' . $l_post_msg_href . ($row['num_replies'] == 0 ? '' : ' rel="nofollow"') . '>' . $row['last_subject'] . '</a>'
 				),
 				'prefix' => $row['prefix_name'] ? '<a href="' . $scripturl . '?board=' . $board . ';prefix=' . $row['id_prefix'] . '" class="prefix">'.(html_entity_decode($row['prefix_name']) . '</a>') : '',
 				'is_sticky' => !empty($modSettings['enableStickyTopics']) && !empty($row['is_sticky']),
