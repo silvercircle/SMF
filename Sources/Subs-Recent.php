@@ -59,20 +59,22 @@ function getLastPosts($latestPostOptions)
 		if (commonAPI::strlen($row['body']) > 128)
 			$row['body'] = commonAPI::substr($row['body'], 0, 128) . '...';
 
+		$href = URL::board($row['id_board'], $row['board_name'], 0, true);
+		$mhref = URL::user($row['id_member'], $row['poster_name']);
 		// Build the array.
 		$posts[] = array(
 			'board' => array(
 				'id' => $row['id_board'],
 				'name' => $row['board_name'],
-				'href' => $scripturl . '?board=' . $row['id_board'] . '.0',
-				'link' => '<a href="' . $scripturl . '?board=' . $row['id_board'] . '.0">' . $row['board_name'] . '</a>'
+				'href' => $href,
+				'link' => '<a href="' . $href . '">' . $row['board_name'] . '</a>'
 			),
 			'topic' => $row['id_topic'],
 			'poster' => array(
 				'id' => $row['id_member'],
 				'name' => $row['poster_name'],
-				'href' => empty($row['id_member']) ? '' : $scripturl . '?action=profile;u=' . $row['id_member'],
-				'link' => empty($row['id_member']) ? $row['poster_name'] : '<a href="' . $scripturl . '?action=profile;u=' . $row['id_member'] . '">' . $row['poster_name'] . '</a>'
+				'href' => empty($row['id_member']) ? '' : $mhref,
+				'link' => empty($row['id_member']) ? $row['poster_name'] : '<a href="' . $mhref . '">' . $row['poster_name'] . '</a>'
 			),
 			'subject' => $row['subject'],
 			'short_subject' => shorten_subject($row['subject'], 35),

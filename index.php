@@ -28,7 +28,6 @@ $forum_version = 'EosAlpha 1.0pre';
 // Get everything started up...
 define('SMF', 1);
 define('__APICOMPAT__', 0);			// if set to 1, smcFunc[] will be populated like in SMF 2
-									// todo: make this a admin-only setting (maybe in Settings.php)
 
 if (function_exists('set_magic_quotes_runtime'))
 	@set_magic_quotes_runtime(0);
@@ -62,8 +61,8 @@ require_once($sourcedir . '/Subs.php');
 require_once($sourcedir . '/Errors.php');
 require_once($sourcedir . '/Load.php');
 require_once($sourcedir . '/Security.php');
-require_once($sourcedir . '/SimpleSEF.php');
-
+//require_once($sourcedir . '/contrib/PiwikTracker.php');
+//PiwikTracker::$URL = 'http://piwik.miranda.or.at/';
 // If $maintenance is set specifically to 2, then we're upgrading or something.
 if (!empty($maintenance) && $maintenance == 2)
 	db_fatal_error();
@@ -80,7 +79,7 @@ reloadSettings();
 cleanRequest();
 $context = array();
 
-$context['jsver'] = '?v=1483';
+$context['jsver'] = '?v=1486';
 
 // Seed the random generator.
 if (empty($modSettings['rand_seed']) || mt_rand(1, 250) == 69)
@@ -111,13 +110,6 @@ set_error_handler('error_handler');
 
 // Start the session. (assuming it hasn't already been.)
 loadSession();
-
-// todo: remove this, just testing hooks...
-
-//HookAPI::removeHook('integrate_parse_bbc_after', 'fnotes', 'footnotes.php', 'fnotesTest::dummy');
-//HookAPI::removeHook('integrate_bbc_codes', 'LegacyBBC', 'main.php', 'legacybbc_addtags');
-//HookAPI::removeHook('integrate_parse_bbc_after', 'fnotes', 'footnotes.php', 'fnotes_parse_dummy');
-//HookAPI::removeAll('LegacyBBC');
 
 // Determine if this is using WAP, WAP2, or imode.  Technically, we should check that wap comes before application/xhtml or text/html, but this doesn't work in practice as much as it should.
 if (isset($_REQUEST['wap']) || isset($_REQUEST['wap2']) || isset($_REQUEST['imode']))
@@ -183,9 +175,6 @@ function smf_main()
 
 	// Load the user's cookie (or set as guest) and load their settings.
 	loadUserSettings();
-
-	require_once($sourcedir . '/URLFactory.php');
-	URL::init($boardurl, $scripturl);
 
 	// Load the current board's information.
 	loadBoard();
@@ -349,7 +338,6 @@ function smf_main()
 		'tags' => array('Tagging.php', 'TagsMain'),
 		'astream' => array('Activities.php', 'aStreamDispatch'),
 	);
-
 	// Allow modifying $actionArray easily.
 	HookAPI::callHook('integrate_actions', array(&$actionArray));
 

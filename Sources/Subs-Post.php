@@ -1708,6 +1708,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	$msgOptions['smileys_enabled'] = !empty($msgOptions['smileys_enabled']);
 	$msgOptions['attachments'] = empty($msgOptions['attachments']) ? array() : $msgOptions['attachments'];
 	$msgOptions['approved'] = isset($msgOptions['approved']) ? (int) $msgOptions['approved'] : 1;
+	$msgOptions['locked'] = 0;
 	$topicOptions['id'] = empty($topicOptions['id']) ? 0 : (int) $topicOptions['id'];
 	$topicOptions['poll'] = isset($topicOptions['poll']) ? (int) $topicOptions['poll'] : null;
 	$topicOptions['lock_mode'] = isset($topicOptions['lock_mode']) ? $topicOptions['lock_mode'] : null;
@@ -1715,8 +1716,6 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	$posterOptions['id'] = empty($posterOptions['id']) ? 0 : (int) $posterOptions['id'];
 	$posterOptions['ip'] = empty($posterOptions['ip']) ? $user_info['ip'] : $posterOptions['ip'];
 
-	$msgOptions['has_img'] = preg_match('/\[\/img\]/i', $msgOptions['body']);
-	
 	// We need to know if the topic is approved. If we're told that's great - if not find out.
 	if (!$modSettings['postmod_active'])
 		$topicOptions['is_approved'] = true;
@@ -1806,12 +1805,12 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			array(
 				'id_board' => 'int', 'id_topic' => 'int', 'id_member' => 'int', 'subject' => 'string-255', 'body' => (!empty($modSettings['max_messageLength']) && $modSettings['max_messageLength'] > 65534 ? 'string-' . $modSettings['max_messageLength'] : 'string'),
 				'poster_name' => 'string-255', 'poster_email' => 'string-255', 'poster_time' => 'int', 'poster_ip' => 'string-255',
-				'smileys_enabled' => 'int', 'modified_name' => 'string', 'icon' => 'string-16', 'approved' => 'int', 'has_img' => 'int',
+				'smileys_enabled' => 'int', 'modified_name' => 'string', 'icon' => 'string-16', 'approved' => 'int', 'locked' => 'int',
 			),
 			array(
 				$topicOptions['board'], $topicOptions['id'], $posterOptions['id'], $msgOptions['subject'], $msgOptions['body'],
 				$posterOptions['name'], $posterOptions['email'], time(), $posterOptions['ip'],
-				$msgOptions['smileys_enabled'] ? 1 : 0, '', $msgOptions['icon'], $msgOptions['approved'], $msgOptions['has_img'],
+				$msgOptions['smileys_enabled'] ? 1 : 0, '', $msgOptions['icon'], $msgOptions['approved'], $msgOptions['locked'],
 			),
 			array('id_msg')
 		);
@@ -1837,7 +1836,6 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	else {
 		if($msg_to_update) {
 			$newbody = $oldbody . "\n[hr][size=11px][color=red][b]      Posted: [time]".time()."[/time][/b][/color][/size]\n".$msgOptions['body'];	// todo: make the separator customizable
-			//todo: don't forget has_img here for marking message as uncacheable
 			//todo: it should be possible to customize the separator
 			smf_db_query( '
 				UPDATE {db_prefix}messages SET body = {string:newbody}, modified_time = {int:now},
@@ -2484,6 +2482,9 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			mysql_free_result($request);
 		}
 	}
+	if(isset($msgOptions['locked']))
+		$messages_columns['locked'] = $msgOptions['locked'];
+
 	if (!empty($msgOptions['modify_time']))
 	{
 		$messages_columns['modified_time'] = $msgOptions['modify_time'];
@@ -2503,9 +2504,6 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		'id_msg' => $msgOptions['id'],
 	);
 
-	$messages_columns['has_img'] = preg_match('/\[\/img\]/i', $msgOptions['body']);
-	$has_img = $messages_columns['has_img'];
-	
 	foreach ($messages_columns as $var => $val)
 	{
 		$messages_columns[$var] = $var . ' = {' . (in_array($var, $messageInts) ? 'int' : 'string') . ':var_' . $var . '}';

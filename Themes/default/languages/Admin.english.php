@@ -670,8 +670,10 @@ function showSimpleSEFHelp()
 // ]]' . '></script>';
 $txt['simplesef_basic'] = 'Basic Options';
 $txt['simplesef_enable'] = 'Enable SimpleSEF';
-$txt['simplesef_no_boardname'] = 'Do not include board name in topic URLs';
-$txt['simplesef_no_boardname_desc'] = 'When checked, the board name will <strong>not</strong> be part of a topic URL.';
+$txt['simplesef_topicsbase'] = 'Base component for topic URLs';
+$txt['simplesef_topicsbase_desc'] = 'The rewrite base for all topics. Example: topics/';
+$txt['simplesef_redirect'] = 'Rewrite and redirect requests with SEF URLs';
+$txt['simplesef_redirect_desc'] = 'Note that this can cause additional requests and can therefore lead to increased server load.<br>However, ignored actions (see advanced tab) will never cause redirects.';
 $txt['simplesef_enable_desc'] = 'Requires mod_rewrite support or Url Rewrite/web.config (IIS7) support.';
 $txt['simplesef_simple'] = 'Create Simple URLs';
 $txt['simplesef_simple_desc'] = 'Urls will look like /forum/board-1/, or /forum/topic-3.html instead of content filled.';

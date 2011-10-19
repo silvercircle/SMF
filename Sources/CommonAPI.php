@@ -29,7 +29,7 @@ class commonAPI {
 		return(preg_replace('~(&#(\d{1,7}|x[0-9a-fA-F]{1,6});)~e', self::entity_fix($string), $string));
 	}
 
-	private static function entity_fix($string)
+	public static function entity_fix($string)
 	{
 		$num = substr($string, 0, 1) === 'x' ? hexdec(substr($string, 1)) : (int) $string;
 		return $num < 0x20 || $num > 0x10FFFF || ($num >= 0xD800 && $num <= 0xDFFF) || $num === 0x202E || $num === 0x202D ? '' : '&#' . $num . ';';

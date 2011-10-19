@@ -45,25 +45,8 @@ if (!defined('SMF'))
 // Add the file functions to the $smcFunc array.
 function db_packages_init()
 {
-	global $smcFunc, $reservedTables, $db_package_log, $db_prefix;
-
-	if (!isset($smcFunc['db_create_table']) || $smcFunc['db_create_table'] != 'smf_db_create_table')
-	{
-		$smcFunc += array(
-			'db_add_column' => 'smf_db_add_column',
-			'db_add_index' => 'smf_db_add_index',
-			'db_calculate_type' => 'smf_db_calculate_type',
-			'db_change_column' => 'smf_db_change_column',
-			'db_create_table' => 'smf_db_create_table',
-			'db_drop_table' => 'smf_db_drop_table',
-			'db_table_structure' => 'smf_db_table_structure',
-			'db_list_columns' => 'smf_db_list_columns',
-			'db_list_indexes' => 'smf_db_list_indexes',
-			'db_remove_column' => 'smf_db_remove_column',
-			'db_remove_index' => 'smf_db_remove_index',
-		);
-		$db_package_log = array();
-	}
+	global $reservedTables, $db_package_log, $db_prefix;
+	$db_package_log = array();
 
 	// We setup an array of SMF tables we can't do auto-remove on - in case a mod writer cocks it up!
 	$reservedTables = array('admin_info_files', 'approval_queue', 'attachments', 'ban_groups', 'ban_items',
@@ -86,7 +69,7 @@ function db_packages_init()
 // Create a table.
 function smf_db_create_table($table_name, $columns, $indexes = array(), $parameters = array(), $if_exists = 'ignore', $error = 'fatal')
 {
-	global $reservedTables, $smcFunc, $db_package_log, $db_prefix;
+	global $reservedTables, $db_package_log, $db_prefix;
 
 	// Strip out the table name, we might not need it in some cases
 	$real_prefix = preg_match('~^(`?)(.+?)\\1\\.(.*?)$~', $db_prefix, $match) === 1 ? $match[3] : $db_prefix;
@@ -175,7 +158,7 @@ function smf_db_create_table($table_name, $columns, $indexes = array(), $paramet
 // Drop a table.
 function smf_db_drop_table($table_name, $parameters = array(), $error = 'fatal')
 {
-	global $reservedTables, $smcFunc, $db_prefix;
+	global $reservedTables, $db_prefix;
 
 	// After stripping away the database name, this is what's left.
 	$real_prefix = preg_match('~^(`?)(.+?)\\1\\.(.*?)$~', $db_prefix, $match) === 1 ? $match[3] : $db_prefix;
@@ -209,7 +192,7 @@ function smf_db_drop_table($table_name, $parameters = array(), $error = 'fatal')
 // Add a column.
 function smf_db_add_column($table_name, $column_info, $parameters = array(), $if_exists = 'update', $error = 'fatal')
 {
-	global $smcFunc, $db_package_log, $txt, $db_prefix;
+	global $db_package_log, $txt, $db_prefix;
 
 	$table_name = str_replace('{db_prefix}', $db_prefix, $table_name);
 
@@ -256,7 +239,7 @@ function smf_db_add_column($table_name, $column_info, $parameters = array(), $if
 // Remove a column.
 function smf_db_remove_column($table_name, $column_name, $parameters = array(), $error = 'fatal')
 {
-	global $smcFunc, $db_prefix;
+	global $db_prefix;
 
 	$table_name = str_replace('{db_prefix}', $db_prefix, $table_name);
 
@@ -283,7 +266,7 @@ function smf_db_remove_column($table_name, $column_name, $parameters = array(), 
 // Change a column.
 function smf_db_change_column($table_name, $old_column, $column_info, $parameters = array(), $error = 'fatal')
 {
-	global $smcFunc, $db_prefix;
+	global $db_prefix;
 
 	$table_name = str_replace('{db_prefix}', $db_prefix, $table_name);
 
@@ -336,7 +319,7 @@ function smf_db_change_column($table_name, $old_column, $column_info, $parameter
 // Add an index.
 function smf_db_add_index($table_name, $index_info, $parameters = array(), $if_exists = 'update', $error = 'fatal')
 {
-	global $smcFunc, $db_package_log, $db_prefix;
+	global $db_package_log, $db_prefix;
 
 	$table_name = str_replace('{db_prefix}', $db_prefix, $table_name);
 
@@ -401,7 +384,7 @@ function smf_db_add_index($table_name, $index_info, $parameters = array(), $if_e
 // Remove an index.
 function smf_db_remove_index($table_name, $index_name, $parameters = array(), $error = 'fatal')
 {
-	global $smcFunc, $db_prefix;
+	global $db_prefix;
 
 	$table_name = str_replace('{db_prefix}', $db_prefix, $table_name);
 
@@ -453,7 +436,7 @@ function smf_db_calculate_type($type_name, $type_size = null, $reverse = false)
 // Get table structure.
 function smf_db_table_structure($table_name, $parameters = array())
 {
-	global $smcFunc, $db_prefix;
+	global $db_prefix;
 
 	$table_name = str_replace('{db_prefix}', $db_prefix, $table_name);
 
@@ -467,7 +450,7 @@ function smf_db_table_structure($table_name, $parameters = array())
 // Return column information for a table.
 function smf_db_list_columns($table_name, $detail = false, $parameters = array())
 {
-	global $smcFunc, $db_prefix;
+	global $db_prefix;
 
 	$table_name = str_replace('{db_prefix}', $db_prefix, $table_name);
 
@@ -528,7 +511,7 @@ function smf_db_list_columns($table_name, $detail = false, $parameters = array()
 // What about some index information?
 function smf_db_list_indexes($table_name, $detail = false, $parameters = array())
 {
-	global $smcFunc, $db_prefix;
+	global $db_prefix;
 
 	$table_name = str_replace('{db_prefix}', $db_prefix, $table_name);
 

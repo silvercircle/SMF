@@ -182,6 +182,9 @@ em {
 .smalltext {
 	font-size: 0.9em;
 }
+.smallertext {
+	font-size: 0.85em;
+}
 .middletext {
 	font-size: 0.95em;
 	line-height: 1em;
@@ -550,6 +553,7 @@ span.brd_moderators_chld {
 	background-color: white;
 	font-size: 12px;
 	position: absolute;
+	z-index:1000;
 }
 
 /* Sometimes there will be an error when you post */
@@ -868,7 +872,7 @@ div.dropselect_content.right {
 	border-radius:4px 4px 0 0;
 	margin-top:-2px;
 }
-.dropmenu li.active a {
+.dropmenu li.active > a {
 	color: black;
 	font-weight: bold;
 	text-shadow: 2px 2px 4px white;
@@ -1108,7 +1112,6 @@ h3, h4 {
 	/*background-color: #D0D1E6;*/
 	background-color: #3D668F;
 	border-bottom:2px solid #4588E5;
-	box-shadow: 0 0 5px #888 inset;
 	/*background: rgba(12,60,100,1) url(../images/upper.png) 0 0 repeat-x;;*/
 }
 .notibar {
@@ -3352,10 +3355,9 @@ a.navPages, .pagelinks span.current {
 	margin:0;
 	white-space:nowrap;
 	padding:0 4px;
-	font-size: 10px;
-	font-family: Verdana, arial, sans-serif;
-	text-shadow: 1px 1px 1px #fff;
-	font-weight:bold;
+	font-size: 11px;
+	/*text-shadow: 1px 1px 1px #fff;
+	font-weight:bold;*/
 	color: #777;
 }
 a.navPages:hover {

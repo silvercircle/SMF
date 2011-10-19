@@ -1689,7 +1689,7 @@ function prepareSearchContext($reset = false)
 				$force_partial_word = false;
 				foreach ($context['key_words'] as $keyword)
 				{
-					$keyword = preg_replace('~&amp;#(\d{1,7}|x[0-9a-fA-F]{1,6});~e', '$GLOBALS[\'smcFunc\'][\'entity_fix\'](\'\\1\')', strtr($keyword, array('\\\'' => '\'', '&' => '&amp;')));
+					$keyword = preg_replace('~&amp;#(\d{1,7}|x[0-9a-fA-F]{1,6});~e', 'commonAPI::entity_fix(\'\\1\')', strtr($keyword, array('\\\'' => '\'', '&' => '&amp;')));
 
 					if (preg_match('~[\'\.,/@%&;:(){}\[\]_\-+\\\\]$~', $keyword) != 0 || preg_match('~^[\'\.,/@%&;:(){}\[\]_\-+\\\\]~', $keyword) != 0)
 						$force_partial_word = true;
@@ -1713,7 +1713,7 @@ function prepareSearchContext($reset = false)
 			}
 
 			// Re-fix the international characters.
-			$message['body'] = preg_replace('~&amp;#(\d{1,7}|x[0-9a-fA-F]{1,6});~e', '$GLOBALS[\'smcFunc\'][\'entity_fix\'](\'\\1\')', $message['body']);
+			$message['body'] = preg_replace('~&amp;#(\d{1,7}|x[0-9a-fA-F]{1,6});~e', 'commonAPI::entity_fix(\'\\1\')', $message['body']);
 		}
 	}
 	else
@@ -1727,6 +1727,12 @@ function prepareSearchContext($reset = false)
 
 	// Do we have quote tag enabled?
 	$quote_enabled = empty($modSettings['disabledBBC']) || !in_array('quote', explode(',', $modSettings['disabledBBC']));
+
+	$href = URL::topic($message['id_topic'], $message['first_subject'], 0);
+	$mhref = URL::user($message['first_member_id'], $message['first_member_name']);
+	$lhref = URL::topic($message['id_topic'], $message['last_subject'], 0, $message['num_replies'] == 0 ? true : false, $message['num_replies'] == 0 ? '' : ('.msg' . $message['last_msg']), $message['num_replies'] == 0 ? '' : ('#msg' . $message['last_msg']));
+	$lmhref = URL::user($message['last_member_id'], $message['last_member_name']);
+	$bhref = URL::board($message['id_board'], $message['board_name'], 0, true);
 
 	$output = array_merge($context['topics'][$message['id_msg']], array(
 		'id' => $message['id_topic'],
@@ -1746,15 +1752,15 @@ function prepareSearchContext($reset = false)
 			'time' => timeformat($message['first_poster_time']),
 			'timestamp' => forum_time(true, $message['first_poster_time']),
 			'subject' => $message['first_subject'],
-			'href' => $scripturl . '?topic=' . $message['id_topic'] . '.0',
-			'link' => '<a href="' . $scripturl . '?topic=' . $message['id_topic'] . '.0">' . $message['first_subject'] . '</a>',
+			'href' => $href,
+			'link' => '<a href="' . $href . '">' . $message['first_subject'] . '</a>',
 			'icon' => $message['first_icon'],
 			'icon_url' => getPostIcon($message['first_icon']),
 			'member' => array(
 				'id' => $message['first_member_id'],
 				'name' => $message['first_member_name'],
-				'href' => !empty($message['first_member_id']) ? $scripturl . '?action=profile;u=' . $message['first_member_id'] : '',
-				'link' => !empty($message['first_member_id']) ? '<a href="' . $scripturl . '?action=profile;u=' . $message['first_member_id'] . '" title="' . $txt['profile_of'] . ' ' . $message['first_member_name'] . '">' . $message['first_member_name'] . '</a>' : $message['first_member_name']
+				'href' => !empty($message['first_member_id']) ? $mhref : '',
+				'link' => !empty($message['first_member_id']) ? '<a href="' . $mhref . '" title="' . $txt['profile_of'] . ' ' . $message['first_member_name'] . '">' . $message['first_member_name'] . '</a>' : $message['first_member_name']
 			)
 		),
 		'last_post' => array(
@@ -1762,22 +1768,22 @@ function prepareSearchContext($reset = false)
 			'time' => timeformat($message['last_poster_time']),
 			'timestamp' => forum_time(true, $message['last_poster_time']),
 			'subject' => $message['last_subject'],
-			'href' => $scripturl . '?topic=' . $message['id_topic'] . ($message['num_replies'] == 0 ? '.0' : '.msg' . $message['last_msg']) . '#msg' . $message['last_msg'],
-			'link' => '<a href="' . $scripturl . '?topic=' . $message['id_topic'] . ($message['num_replies'] == 0 ? '.0' : '.msg' . $message['last_msg']) . '#msg' . $message['last_msg'] . '">' . $message['last_subject'] . '</a>',
+			'href' => $lhref,
+			'link' => '<a href="' . $lhref . '">' . $message['last_subject'] . '</a>',
 			'icon' => $message['last_icon'],
 			'icon_url' => getPostIcon($message['last_icon']),
 			'member' => array(
 				'id' => $message['last_member_id'],
 				'name' => $message['last_member_name'],
-				'href' => !empty($message['last_member_id']) ? $scripturl . '?action=profile;u=' . $message['last_member_id'] : '',
-				'link' => !empty($message['last_member_id']) ? '<a href="' . $scripturl . '?action=profile;u=' . $message['last_member_id'] . '" title="' . $txt['profile_of'] . ' ' . $message['last_member_name'] . '">' . $message['last_member_name'] . '</a>' : $message['last_member_name']
+				'href' => !empty($message['last_member_id']) ? $lmhref : '',
+				'link' => !empty($message['last_member_id']) ? '<a href="' . $lmhref . '" title="' . $txt['profile_of'] . ' ' . $message['last_member_name'] . '">' . $message['last_member_name'] . '</a>' : $message['last_member_name']
 			)
 		),
 		'board' => array(
 			'id' => $message['id_board'],
 			'name' => $message['board_name'],
-			'href' => $scripturl . '?board=' . $message['id_board'] . '.0',
-			'link' => '<a href="' . $scripturl . '?board=' . $message['id_board'] . '.0">' . $message['board_name'] . '</a>'
+			'href' => $bhref,
+			'link' => '<a href="' . $bhref . '">' . $message['board_name'] . '</a>'
 		),
 		'category' => array(
 			'id' => $message['id_cat'],

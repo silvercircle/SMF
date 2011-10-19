@@ -73,7 +73,7 @@ function MessageIndex()
 		$session_name = session_name();
 		foreach ($_GET as $k => $v)
 		{
-			if (!in_array($k, array('board', 'start', $session_name)))
+			if (!in_array($k, array('q', 'board', 'start', $session_name)))
 				$context['robot_no_index'] = true;
 		}
 	}
@@ -431,11 +431,11 @@ function MessageIndex()
 
 				// We can't pass start by reference.
 				$start = -1;
-				$pages .= constructPageIndex(URL::topic($row['id_topic'], $row['first_subject'], '%1$d', $board_info['name'], $board_info['id']), $start, $row['num_replies'] + 1, $context['messages_per_page'], true);
+				$pages .= constructPageIndex(URL::topic($row['id_topic'], $row['first_subject'], '%1$d'), $start, $row['num_replies'] + 1, $context['messages_per_page'], true);
 
 				// If we can use all, show all.
 				if (!empty($modSettings['enableAllMessages']) && $row['num_replies'] + 1 < $modSettings['enableAllMessages'])
-					$pages .= '<a class="navPages" href="' . URL::topic($row['id_topic'], $row['first_subject'], 0, $board_info['name'], $board_info['id']) .';all">' . $txt['show_all'] . '</a>';
+					$pages .= '<a class="navPages" href="' . URL::topic($row['id_topic'], $row['first_subject'], 0) .';all">' . $txt['show_all'] . '</a>';
 				$pages .= ' ';
 			}
 			else
@@ -443,11 +443,11 @@ function MessageIndex()
 
             $first_posters[$row['id_topic']] = $row['first_id_member'];
 			// 'Print' the topic info.
-			$t_href = URL::topic($row['id_topic'], $row['first_subject'], 0, $board_info['name'], $board_info['id']);
+			$t_href = URL::topic($row['id_topic'], $row['first_subject'], 0);
 			$f_post_mem_href = !empty($row['first_id_member']) ? URL::user($row['first_id_member'], $row['first_display_name']) : '';
-			$t_href = URL::topic($row['id_topic'], $row['first_subject'], 0, $board_info['name'], $board_info['id']);
+			$t_href = URL::topic($row['id_topic'], $row['first_subject'], 0);
 			$l_post_mem_href = !empty($row['last_id_member']) ? URL::user($row['last_id_member'], $row['last_display_name'] ) : '';
-			$l_post_msg_href = URL::topic($row['id_topic'], $row['last_subject'], $user_info['is_guest'] ? (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) : 0, $board_info['name'], $board_info['id'], $user_info['is_guest'] ? true : false, $user_info['is_guest'] ? '' : ('.msg' . $row['id_last_msg']), $user_info['is_guest'] ? ('#msg' . $row['id_last_msg']) : '#new');
+			$l_post_msg_href = URL::topic($row['id_topic'], $row['last_subject'], $user_info['is_guest'] ? (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) : 0, $user_info['is_guest'] ? true : false, $user_info['is_guest'] ? '' : ('.msg' . $row['id_last_msg']), $user_info['is_guest'] ? ('#msg' . $row['id_last_msg']) : '#new');
 			$context['topics'][$row['id_topic']] = array(
 				'id' => $row['id_topic'],
 				'first_post' => array(

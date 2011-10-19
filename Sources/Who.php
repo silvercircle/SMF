@@ -59,6 +59,8 @@ function Who()
 	// Permissions, permissions, permissions.
 	isAllowedTo('who_view');
 
+	$context['sef_full_rewrite'] = true;
+
 	// You can't do anything if this is off.
 	if (empty($modSettings['who_enabled']))
 		fatal_lang_error('who_off', false);
@@ -239,7 +241,7 @@ function Who()
 	// Setup the linktree and page title (do it down here because the language files are now loaded..)
 	$context['page_title'] = $txt['who_title'];
 	$context['linktree'][] = array(
-		'url' => $scripturl . '?action=who',
+		'url' => URL::action($scripturl . '?action=who'),
 		'name' => $txt['who_title']
 	);
 

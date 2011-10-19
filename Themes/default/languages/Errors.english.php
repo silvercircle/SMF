@@ -149,6 +149,7 @@ $txt['incorrect_answer'] = 'Sorry, but you did not answer your question correctl
 $txt['no_mods'] = 'No moderators found!';
 $txt['parent_not_found'] = 'Board structure corrupt: unable to find parent board';
 $txt['modify_post_time_passed'] = 'You may not modify this post as the time limit for edits has passed.';
+$txt['modify_message_locked'] = 'You can not modify this message any longer';
 
 $txt['calendar_off'] = 'You cannot access the calendar right now because it is disabled.';
 $txt['invalid_month'] = 'Invalid month value.';

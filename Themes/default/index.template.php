@@ -429,7 +429,7 @@ function template_menu()
 			$button['active_button'] = false;
 		echo '
 				<li class="', $button['active_button'] ? 'active' : '', '" id="button_', $act, '">
-					<a class="firstlevel" href="', $button['href'], '"', isset($button['target']) ? ' target="' . $button['target'] . '"' : '', '>
+					<a class="firstlevel" href="', URL::action($button['href']), '"', isset($button['target']) ? ' target="' . $button['target'] . '"' : '', '>
 						<span class="', isset($button['is_last']) ? 'last ' : '', 'firstlevel">', $button['title'];
 					echo '</span>';
 					echo '</a>';
@@ -444,7 +444,7 @@ function template_menu()
 			{
 				echo '
 						<li>
-							<a href="', $childbutton['href'], '"', isset($childbutton['target']) ? ' target="' . $childbutton['target'] . '"' : '', '>
+							<a href="', URL::action($childbutton['href']), '"', isset($childbutton['target']) ? ' target="' . $childbutton['target'] . '"' : '', '>
 								<span', isset($childbutton['is_last']) ? ' class="last"' : '', '>', $childbutton['title'], !empty($childbutton['sub_buttons']) ? '...' : '', '</span>
 							</a>';
 				// 3rd level menus :)
@@ -641,7 +641,7 @@ function template_sidebar_content()
 	// Show statistical style information...
 	if ($settings['show_stats_index'] && isset($context['show_stats']))
 	{
-		$collapser = array('bodyclass' => $widgetstyle, 'id'=> 'stats_panel','title' => '<a href="'. $scripturl. '?action=stats">'. $txt['forum_stats']. '</a>');
+		$collapser = array('bodyclass' => $widgetstyle, 'id'=> 'stats_panel','title' => $txt['forum_stats']);
 		template_create_collapsible_container($collapser);
 		echo '<div class="smallpadding smalltext">
 				<dl class="common">
@@ -653,9 +653,9 @@ function template_sidebar_content()
 				 echo '</dl>';
 				echo '
 				<div>
-				  <div class="floatright righttext"><a href="', $scripturl, '?action=recent">', $txt['recent_view'], '</a>', $context['show_stats'] ? '
+				  <div class="floatright righttext"><a href="', URL::action($scripturl, '?action=recent') . '">', $txt['recent_view'], '</a>', $context['show_stats'] ? '
 				  </div>
-				 <a href="' . $scripturl . '?action=stats">' . $txt['more_stats'] . '</a>' : '', '
+				 <a href="' . URL::action($scripturl . '?action=stats') .'">' . $txt['more_stats'] . '</a>' : '', '
 				</div>
 			</div>
 			</div>
@@ -680,7 +680,7 @@ function template_sidebar_content()
 		$collapser = array('bodyclass' => $widgetstyle, 'id' => 'recent_panel', 'title' => '<a href="'. $scripturl. '?action=recent">'. $txt['recent_posts']. '</a>');
 		template_create_collapsible_container($collapser);
 		echo '
-			<div class="lefftext smalltext smallpadding" id="recent_posts_content" style="line-height:120%;">
+			<div class="smalltext" id="recent_posts_content" style="line-height:120%;">
 				<div class="entry-title" style="display: none;">', $context['forum_name_html_safe'], ' - ', $txt['recent_posts'], '</div>
 				<div class="entry-content" style="display: none;">
 					<a rel="alternate" type="application/rss+xml" href="', $scripturl, '?action=.xml;type=webslice">', $txt['subscribe_webslice'], '</a>
@@ -699,12 +699,18 @@ function template_sidebar_content()
 		// Show lots of posts.
 		elseif (!empty($context['latest_posts']))
 		{
+			echo '
+			   	<ol class="commonlist smalltext" style="padding:0;margin:0;">';
 			/* Each post in latest_posts has:
 					board (with an id, name, and link.), topic (the topic's id.), poster (with id, name, and link.),
 					subject, short_subject (shortened with...), time, link, and href. */
 			foreach ($context['latest_posts'] as $post)
-				echo '<a href="',$post['href'],'" title="',$post['subject'],'">',$post['short_subject'],'</a><br>', $txt['by'], ' ', $post['poster']['link'], '
-					<span class="nowrap floatright">', $post['time'], '</span><hr class="clear" style="margin-top:2px;">';
+				echo '
+				<li class="smallpadding">
+					<span class="nowrap floatright">', $post['time'], '</span><strong>', $post['poster']['link'],'<br>',
+					$txt['in'], ':</strong>&nbsp;<a href="',$post['href'],'" title="',$post['subject'],'">',$post['short_subject'],'</a>';
+			echo '
+				</ol>';
 		}
 		echo '
 			</div>
@@ -720,7 +726,7 @@ function template_sidebar_content()
 		$collapser = array('bodyclass'=> $widgetstyle, 'id' => 'cal_panel', 'title' => '<a href="'. $scripturl. '?action=calendar' . '">'. $title . '</a>');
 		template_create_collapsible_container($collapser);
 		echo '
-			<div class="smalltext">';
+			<div class="smallertext">';
 
 		// Holidays like "Christmas", "Chanukah", and "We Love [Unknown] Day" :P.
 		if (!empty($context['calendar_holidays']))
@@ -735,7 +741,7 @@ function template_sidebar_content()
 				id, name (person), age (if they have one set?), is_last. (last in list?), and is_today (birthday is today?) */
 		foreach ($context['calendar_birthdays'] as $member)
 				echo '
-				<a href="', $scripturl, '?action=profile;u=', $member['id'], '">', $member['is_today'] ? '<strong>' : '', $member['name'], $member['is_today'] ? '</strong>' : '', isset($member['age']) ? ' (' . $member['age'] . ')' : '', '</a>', $member['is_last'] ? '<br />' : ', ';
+				<a href="', URL::user($member['id'], $member['name']), '">', $member['is_today'] ? '<strong>' : '', $member['name'], $member['is_today'] ? '</strong>' : '', isset($member['age']) ? ' (' . $member['age'] . ')' : '', '</a>', $member['is_last'] ? '<br />' : ', ';
 		}
 		// Events like community get-togethers.
 		if (!empty($context['calendar_events']))

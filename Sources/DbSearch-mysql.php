@@ -30,15 +30,6 @@ if (!defined('SMF'))
 // Add the file functions to the $smcFunc array.
 function db_search_init()
 {
-	global $smcFunc;
-
-	if (__APICOMPAT__ && (!isset($smcFunc['db_search_query']) || $smcFunc['db_search_query'] != 'smf_db_query'))
-		$smcFunc += array(
-			'db_search_query' => 'smf_db_query',
-			'db_search_support' => 'smf_db_search_support',
-			'db_create_word_search' => 'smf_db_create_word_search',
-			'db_support_ignore' => true,
-		);
 }
 
 // Does this database type support this search type?
@@ -52,8 +43,6 @@ function smf_db_search_support($search_type)
 // Highly specific - create the custom word index table!
 function smf_db_create_word_search($size)
 {
-	global $smcFunc;
-
 	if ($size == 'small')
 		$size = 'smallint(5)';
 	elseif ($size == 'medium')

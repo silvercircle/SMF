@@ -20,35 +20,7 @@ if (!defined('SMF'))
 // Create a menu...
 function createMenu($menuData, $menuOptions = array())
 {
-	global $context, $settings, $options, $txt, $modSettings, $scripturl, $smcFunc, $user_info, $sourcedir, $options;
-
-	// First are we toggling use of the side bar generally?
-	if (isset($_GET['togglebar']) && !$user_info['is_guest'])
-	{
-		// Save the new dropdown menu state.
-		smf_db_insert('replace',
-			'{db_prefix}themes',
-			array('id_member' => 'int', 'id_theme' => 'int', 'variable' => 'string-255', 'value' => 'string-65534'),
-			array(
-				array(
-					$user_info['id'],
-					$settings['theme_id'],
-					'use_sidebar_menu',
-					empty($options['use_sidebar_menu']) ? '1' : '0',
-				),
-			),
-			array('id_member', 'id_theme', 'variable')
-		);
-
-		// Clear the theme settings cache for this user.
-		$themes = explode(',', $modSettings['knownThemes']);
-		foreach ($themes as $theme)
-			CacheAPI::putCache('theme_settings-' . $theme . ':' . $user_info['id'], null, 60);
-
-		// Redirect as this seems to work best.
-		$redirect_url = isset($menuOptions['toggle_redirect_url']) ? $menuOptions['toggle_redirect_url'] : 'action=' . (isset($_GET['action']) ? $_GET['action'] : 'admin') . ';area=' . (isset($_GET['area']) ? $_GET['area'] : 'index') . ';sa=' . (isset($_GET['sa']) ? $_GET['sa'] : 'settings') . (isset($_GET['u']) ? ';u=' . $_GET['u'] : '') . ';' . $context['session_var'] . '=' . $context['session_id'];
-		redirectexit($redirect_url);
-	}
+	global $context, $settings, $options, $txt, $modSettings, $scripturl, $smcFunc, $user_info, $sourcedir, $options, $boardurl;
 
 	// Work out where we should get our images from.
 	$context['menu_image_path'] = file_exists($settings['theme_dir'] . '/images/admin/change_menu.png') ? $settings['images_url'] . '/admin' : $settings['default_images_url'] . '/admin';
@@ -230,6 +202,7 @@ function createMenu($menuData, $menuOptions = array())
 
 	// Should we use a custom base url, or use the default?
 	$menu_context['base_url'] = isset($menuOptions['base_url']) ? $menuOptions['base_url'] : $scripturl . '?action=' . $menu_context['current_action'];
+	//$menu_context['base_url'] = isset($menuOptions['base_url']) ? $menuOptions['base_url'] : $boardurl . '/' . $menu_context['current_action'];
 
 	// What about the toggle url?
 	$menu_context['toggle_url'] = isset($menuOptions['toggle_url']) ? $menuOptions['toggle_url'] : $menu_context['base_url'] . (!empty($menu_context['current_area']) ? ';area=' . $menu_context['current_area'] : '') . (!empty($menu_context['current_subsection']) ? ';sa=' . $menu_context['current_subsection'] : '') . $menu_context['extra_parameters'] . ';togglebar';

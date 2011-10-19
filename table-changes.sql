@@ -177,7 +177,7 @@ CREATE TABLE {$db_prefix}news (
 # now the changes to stock smf 2 tables
 
 # this can be used to prevent a post from being cached (unimplemented as of now)
-ALTER TABLE {$db_prefix}messages ADD has_img tinyint(2) NOT NULL default '0';
+ALTER TABLE {$db_prefix}messages ADD locked tinyint(2) NOT NULL default '0';
 
 # like stats for members
 ALTER TABLE {$db_prefix}members ADD likes_received int(4) unsigned NOT NULL default '0';

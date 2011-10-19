@@ -24,28 +24,7 @@ if (!defined('SMF'))
 // Initialize the database settings
 function smf_db_initiate($db_server, $db_name, $db_user, $db_passwd, $db_prefix, $db_options = array())
 {
-	global $smcFunc, $mysql_set_mode;
-
-	// Map some database specific functions, only do this once.
-	if (__APICOMPAT__ && (!isset($smcFunc['db_fetch_assoc']) || $smcFunc['db_fetch_assoc'] != 'mysql_fetch_assoc'))
-		$smcFunc += array(
-			'db_query' => 'smf_db_query_compat',
-			'db_quote' => 'smf_db_quote',
-			'db_fetch_assoc' => 'mysql_fetch_assoc',
-			'db_fetch_row' => 'mysql_fetch_row',
-			'db_free_result' => 'mysql_free_result',
-			'db_insert' => 'smf_db_insert',
-			'db_insert_id' => 'smf_db_insert_id',
-			'db_num_rows' => 'mysql_num_rows',
-			'db_data_seek' => 'mysql_data_seek',
-			'db_num_fields' => 'mysql_num_fields',
-			'db_server_info' => 'mysql_get_server_info',
-			'db_affected_rows' => 'smf_db_affected_rows',
-			'db_transaction' => 'smf_db_transaction',
-			'db_select_db' => 'mysql_select_db',
-			'db_title' => 'MySQL',
-			'db_case_sensitive' => false,
-		);
+	global $mysql_set_mode;
 
 	if (!empty($db_options['persist']))
 		$connection = @mysql_pconnect($db_server, $db_user, $db_passwd);
@@ -402,7 +381,6 @@ function smf_db_error($db_string, $connection = null)
 	global $txt, $context, $sourcedir, $webmaster_email, $modSettings;
 	global $forum_version, $db_connection, $db_last_error, $db_persist;
 	global $db_server, $db_user, $db_passwd, $db_name, $db_show_debug, $ssi_db_user, $ssi_db_passwd;
-	global $smcFunc;
 
 	// Get the file and line numbers.
 	list ($file, $line) = smf_db_error_backtrace('', '', 'return', __FILE__, __LINE__);
@@ -588,7 +566,7 @@ function smf_db_error($db_string, $connection = null)
 // Insert some data...
 function smf_db_insert($method = 'replace', $table, $columns, $data, $keys, $disable_trans = false, $connection = null)
 {
-	global $smcFunc, $db_connection, $db_prefix;
+	global $db_connection, $db_prefix;
 
 	$connection = $connection === null ? $db_connection : $connection;
 

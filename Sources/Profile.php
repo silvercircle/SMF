@@ -37,6 +37,8 @@ function ModifyProfile($post_errors = array())
 		loadLanguage('Profile');
 	loadTemplate('Profile');
 
+	$context['sef_full_rewrite'] = true;
+
 	require_once($sourcedir . '/Subs-Menu.php');
 
 	// Did we get the user by name...

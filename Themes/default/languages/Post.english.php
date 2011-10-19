@@ -84,6 +84,7 @@ $txt['notifyUnsubscribe'] = 'Unsubscribe to this topic by clicking here';
 $txt['lock_after_post'] = 'Lock after Post';
 $txt['notify_replies'] = 'Notify me of replies.';
 $txt['lock_topic'] = 'Lock this topic.';
+$txt['lock_message'] = 'Lock this message';
 $txt['shortcuts'] = 'shortcuts: hit alt+s to submit/post or alt+p to preview';
 $txt['shortcuts_firefox'] = 'shortcuts: hit shift+alt+s to submit/post or shift+alt+p to preview';
 $txt['option'] = 'Option';

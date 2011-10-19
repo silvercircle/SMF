@@ -103,11 +103,12 @@ function getMembersOnlineStats($membersOnlineOptions)
 			continue;
 		}
 
+		$href = URL::user($row['id_member'], $row['real_name']);
 		// Some basic color coding...
 		if (!empty($row['online_color']))
-			$link = '<a href="' . $scripturl . '?action=profile;u=' . $row['id_member'] . '" style="color: ' . $row['online_color'] . ';">' . $row['real_name'] . '</a>';
+			$link = '<a href="' . $href . '" style="color: ' . $row['online_color'] . ';">' . $row['real_name'] . '</a>';
 		else
-			$link = '<a href="' . $scripturl . '?action=profile;u=' . $row['id_member'] . '">' . $row['real_name'] . '</a>';
+			$link = '<a href="' . $href . '">' . $row['real_name'] . '</a>';
 
 		// Buddies get counted and highlighted.
 		$is_buddy = in_array($row['id_member'], $user_info['buddies']);
@@ -123,7 +124,7 @@ function getMembersOnlineStats($membersOnlineOptions)
 			'username' => $row['member_name'],
 			'name' => $row['real_name'],
 			'group' => $row['id_group'],
-			'href' => $scripturl . '?action=profile;u=' . $row['id_member'],
+			'href' => $href,
 			'link' => $link,
 			'is_buddy' => $is_buddy,
 			'hidden' => empty($row['show_online']),

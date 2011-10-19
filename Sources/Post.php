@@ -631,7 +631,7 @@ function Post()
 			$request = smf_db_query( '
 				SELECT
 					m.id_member, m.modified_time, m.smileys_enabled, m.body,
-					m.poster_name, m.poster_email, m.subject, m.icon, m.approved,
+					m.poster_name, m.poster_email, m.subject, m.icon, m.approved, m.locked,
 					IFNULL(a.size, -1) AS filesize, a.filename, a.id_attach,
 					a.approved AS attachment_approved, t.id_member_started AS id_member_poster, t.id_layout, t.id_prefix,
 					m.poster_time
@@ -655,11 +655,16 @@ function Post()
 			$context['id_prefix'] = $row['id_prefix'];
 			$context['first_is_sticky'] = ((int)$row['id_layout'] & 0x80);
 			$context['first_has_layout'] = ((int)$row['id_layout'] & 0x7f);
-			
+			$context['message_locked'] = (int)$row['locked'];
+			$context['can_lock_message'] = allowedTo('moderate_board') || allowedTo('moderate_forum');
+
 			$attachment_stuff = array($row);
 			while ($row2 = mysql_fetch_assoc($request))
 				$attachment_stuff[] = $row2;
 			mysql_free_result($request);
+
+			if($row['locked'] && !(allowedTo('moderate_board') || allowedTo('moderate_forum')))
+				fatal_lang_error('modify_message_locked', false);
 
 			if ($row['id_member'] == $user_info['id'] && !allowedTo('modify_any'))
 			{
@@ -737,7 +742,7 @@ function Post()
 		$request = smf_db_query( '
 			SELECT
 				m.id_member, m.modified_time, m.smileys_enabled, m.body,
-				m.poster_name, m.poster_email, m.subject, m.icon, m.approved,
+				m.poster_name, m.poster_email, m.subject, m.icon, m.approved, m.locked,
 				IFNULL(a.size, -1) AS filesize, a.filename, a.id_attach,
 				a.approved AS attachment_approved, t.id_member_started AS id_member_poster, t.id_prefix, t.id_layout,
 				m.poster_time
@@ -762,6 +767,9 @@ function Post()
 		while ($row2 = mysql_fetch_assoc($request))
 			$attachment_stuff[] = $row2;
 		mysql_free_result($request);
+
+		if($row['locked'] && !(allowedTo('moderate_board') || allowedTo('moderate_forum')))
+			fatal_lang_error('modify_message_locked', false);
 
 		if ($row['id_member'] == $user_info['id'] && !allowedTo('modify_any'))
 		{
@@ -820,6 +828,8 @@ function Post()
 		$context['id_prefix'] = $row['id_prefix'];
 		$context['first_is_sticky'] = ((int)$row['id_layout'] & 0x80);
 		$context['first_has_layout'] = ((int)$row['id_layout'] & 0x7f);
+		$context['message_locked'] = (int)$row['locked'];
+		$context['can_lock_message'] = allowedTo('moderate_board') || allowedTo('moderate_forum');
 	}
 	// Posting...
 	else
@@ -1515,7 +1525,7 @@ function Post2()
 		$_REQUEST['msg'] = (int) $_REQUEST['msg'];
 
 		$request = smf_db_query( '
-			SELECT id_member, poster_name, poster_email, poster_time, approved
+			SELECT id_member, poster_name, poster_email, poster_time, approved, locked
 			FROM {db_prefix}messages
 			WHERE id_msg = {int:id_msg}
 			LIMIT 1',
@@ -1558,6 +1568,9 @@ function Post2()
 		// Change the sticky status of this topic?
 		if (isset($_POST['sticky']) && (!allowedTo('make_sticky') || $_POST['sticky'] == $topic_info['is_sticky']))
 			unset($_POST['sticky']);
+
+		if($row['locked'] && !(allowedTo('moderate_board') || allowedTo('moderate_forum')))
+			fatal_lang_error('modify_message_locked', false);
 
 		if ($row['id_member'] == $user_info['id'] && !allowedTo('modify_any'))
 		{
@@ -2010,6 +2023,7 @@ function Post2()
 		'attachments' => empty($attachIDs) ? array() : $attachIDs,
 		'approved' => $becomesApproved,
 		'id_owner' => isset($msg_owner) ? $msg_owner : 0,
+		'locked' => (!empty($_POST['lock_message']) && (allowedTo('moderate_board') || allowedTo('moderate_forum')))
 	);
 	$topicOptions = array(
 		'id' => empty($topic) ? 0 : $topic,

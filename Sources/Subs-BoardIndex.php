@@ -268,9 +268,10 @@ function getBoardIndex($boardIndexOptions)
 		// Provide the href and link.
 		if ($row_board['subject'] != '')
 		{
-			$this_last_post['href'] = $scripturl . '?topic=' . $row_board['id_topic'] . '.msg' . ($user_info['is_guest'] ? $row_board['id_msg'] : $row_board['new_from']) . (empty($row_board['is_read']) ? ';boardseen' : '') . '#new';
+			$this_last_post['href'] = URL::topic($row_board['id_topic'], $row_board['first_subject'], 0, false, '.msg' . ($user_info['is_guest'] ? $row_board['id_msg'] : $row_board['new_from']) . (empty($row_board['is_read']) ? ';boardseen' : ''), '#new');
+			//$this_last_post['href'] = $scripturl . '?topic=' . $row_board['id_topic'] . '.msg' . ($user_info['is_guest'] ? $row_board['id_msg'] : $row_board['new_from']) . (empty($row_board['is_read']) ? ';boardseen' : '') . '#new';
 			$this_last_post['link'] = '<a href="' . $this_last_post['href'] . '" title="' . $row_board['subject'] . '">' . $row_board['short_subject'] . '</a>';
-			$this_last_post['topichref'] = URL::topic($row_board['id_topic'], $row_board['first_subject'], 0, $row_board['board_name'], $row_board['id_board']);// $scripturl . '?topic=' . $row_board['id_topic'];
+			$this_last_post['topichref'] = URL::topic($row_board['id_topic'], $row_board['first_subject'], 0);// $scripturl . '?topic=' . $row_board['id_topic'];
 			$this_last_post['topiclink'] = '<a href="' . $this_last_post['topichref'] . '" title="' . $row_board['subject'] . '">' . $row_board['short_subject'] . '</a>';
 		}
 		else

@@ -474,7 +474,7 @@ function ob_sessrewrite($buffer)
 	}
 
 	if(!empty($modSettings['simplesef_enable']))
-		$buffer = SimpleSEF::ob_simplesef_light($buffer);
+		$buffer = isset($context['sef_full_rewrite']) ? SimpleSEF::ob_simplesef($buffer) : SimpleSEF::ob_simplesef_light($buffer);
 	// Return the changed buffer.
 	return $buffer;
 }

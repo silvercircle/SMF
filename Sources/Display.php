@@ -99,7 +99,7 @@ function Display()
 	if (count($_GET) > 2) {
 		foreach ($_GET as $k => $v)
 		{
-			if (!in_array($k, array('topic', 'board', 'start', session_name())))
+			if (!in_array($k, array('q', 'topic', 'board', 'start', session_name())))
 				$context['robot_no_index'] = true;
 		}
 	}
@@ -494,7 +494,7 @@ function Display()
 
 	// Construct the page index, allowing for the .START method...
 	if(!isset($_REQUEST['perma']))
-		$context['page_index'] = constructPageIndex(URL::topic($topic, $topicinfo['subject'], '%1$d', $board_info['name'], $board_info['id']), $_REQUEST['start'], $context['total_visible_posts'], $context['messages_per_page'], true);
+		$context['page_index'] = constructPageIndex(URL::topic($topic, $topicinfo['subject'], '%1$d'), $_REQUEST['start'], $context['total_visible_posts'], $context['messages_per_page'], true);
 	$context['start'] = $_REQUEST['start'];
 
 	// This is information about which page is current, and which page we're on - in case you don't like the constructed page index. (again, wireles..)
@@ -530,7 +530,7 @@ function Display()
 
 	// Build the link tree.
 	$context['linktree'][] = array(
-		'url' => $scripturl . '?topic=' . $topic . '.0',
+		'url' => URL::topic($topic, $topicinfo['subject'], 0),
 		'name' => $topicinfo['subject'],
 		'extra_before' => $settings['linktree_inline'] ? $txt['topic'] . ': ' : ''
 	);
@@ -571,7 +571,7 @@ function Display()
 	$context['mark_unread_time'] = $topicinfo['new_from'];
 
 	// Set a canonical URL for this page.
-	$context['canonical_url'] = URL::topic($topic, $topicinfo['subject'], $context['start'], $board_info['name'], $board_info['id']);
+	$context['canonical_url'] = URL::topic($topic, $topicinfo['subject'], $context['start']);
 	$context['share_url'] = $scripturl . '?topic=' . $topic;
 	// For quick reply we need a response prefix in the default forum language.
 	if (!isset($context['response_prefix']) && !($context['response_prefix'] = CacheAPI::getCache('response_prefix', 600)))
@@ -1062,7 +1062,7 @@ function Display()
 
 		$sql_what = '
 			m.id_msg, m.icon, m.subject, m.poster_time, m.poster_ip, m.id_member, m.modified_time, m.modified_name, m.body, mc.body AS cached_body,
-			m.smileys_enabled, m.poster_name, m.poster_email, m.approved, c.likes_count, c.like_status, c.updated AS like_updated, l.id_user AS liked,
+			m.smileys_enabled, m.poster_name, m.poster_email, m.approved, m.locked, c.likes_count, c.like_status, c.updated AS like_updated, l.id_user AS liked,
 			m.id_msg_modified < {int:new_from} AS is_read';
 
 		$sql_from = '
@@ -1308,7 +1308,7 @@ function prepareDisplayContext($reset = false)
 	censorText($message['body']);
 
 	// Compose the memory eat- I mean message array.
-	$t_href = URL::topic($topic, $message['subject'], 0, $board_info['name'], $board_info['id'], false, '.msg' . $message['id_msg'] . '#msg'.$message['id_msg']);
+	$t_href = URL::topic($topic, $message['subject'], 0, false, '.msg' . $message['id_msg'] . '#msg'.$message['id_msg']);
 	$output = array(
 		'attachment' => loadAttachmentContext($message['id_msg']),
 		'alternate' => $counter % 2,
@@ -1337,8 +1337,8 @@ function prepareDisplayContext($reset = false)
 		'is_ignored' => !empty($modSettings['enable_buddylist']) && !empty($options['posts_apply_ignore_list']) && in_array($message['id_member'], $context['user']['ignoreusers']),
 		'can_approve' => !$message['approved'] && $context['can_approve'],
 		'can_unapprove' => $message['approved'] && $context['can_approve'],
-		'can_modify' => (!$context['is_locked'] || $context['can_moderate_board']) && ($context['can_modify_any'] || ($context['can_modify_replies'] && $context['user']['started']) || ($context['can_modify_own'] && $message['id_member'] == $user_info['id'] && (empty($modSettings['edit_disable_time']) || !$message['approved'] || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 > time()))),
-		'can_remove' => $context['can_delete_any'] || ($context['can_delete_replies'] && $context['user']['started']) || ($context['can_delete_own'] && $message['id_member'] == $user_info['id'] && (empty($modSettings['edit_disable_time']) || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 > time())),
+		'can_modify' => (!$message['locked'] || $context['can_moderate_board']) && ((!$context['is_locked'] || $context['can_moderate_board']) && ($context['can_modify_any'] || ($context['can_modify_replies'] && $context['user']['started']) || ($context['can_modify_own'] && $message['id_member'] == $user_info['id'] && (empty($modSettings['edit_disable_time']) || !$message['approved'] || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 > time())))),
+		'can_remove' => (!$message['locked'] || $context['can_moderate_board']) && ($context['can_delete_any'] || ($context['can_delete_replies'] && $context['user']['started']) || ($context['can_delete_own'] && $message['id_member'] == $user_info['id'] && (empty($modSettings['edit_disable_time']) || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 > time()))),
 		'can_see_ip' => $context['can_moderate_forum'] || ($message['id_member'] == $user_info['id'] && !empty($user_info['id'])),
 		'likes_count' => $message['likes_count'],
 		'like_status' => $message['like_status'],

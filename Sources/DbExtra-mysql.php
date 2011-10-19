@@ -51,17 +51,6 @@ if (!defined('SMF'))
 // Add the file functions to the $smcFunc array.
 function db_extra_init()
 {
-	global $smcFunc;
-
-	if (__APICOMPAT__ && (!isset($smcFunc['db_backup_table']) || $smcFunc['db_backup_table'] != 'smf_db_backup_table'))
-		$smcFunc += array(
-			'db_backup_table' => 'smf_db_backup_table',
-			'db_optimize_table' => 'smf_db_optimize_table',
-			'db_insert_sql' => 'smf_db_insert_sql',
-			'db_table_sql' => 'smf_db_table_sql',
-			'db_list_tables' => 'smf_db_list_tables',
-			'db_get_version' => 'smf_db_get_version',
-		);
 }
 
 // Backup $table to $backup_table.
@@ -195,7 +184,7 @@ function smf_db_backup_table($table, $backup_table)
 // Optimize a table - return data freed!
 function smf_db_optimize_table($table)
 {
-	global $smcFunc, $db_name, $db_prefix;
+	global $db_name, $db_prefix;
 
 	$table = str_replace('{db_prefix}', $db_prefix, $table);
 
@@ -237,7 +226,7 @@ function smf_db_optimize_table($table)
 // List all the tables in the database.
 function smf_db_list_tables($db = false, $filter = false)
 {
-	global $db_name, $smcFunc;
+	global $db_name;
 
 	$db = $db == false ? $db_name : $db;
 	$db = trim($db);
@@ -263,7 +252,7 @@ function smf_db_list_tables($db = false, $filter = false)
 // Get the content (INSERTs) for a table.
 function smf_db_insert_sql($tableName)
 {
-	global $smcFunc, $db_prefix;
+	global $db_prefix;
 
 	$tableName = str_replace('{db_prefix}', $db_prefix, $tableName);
 
@@ -332,7 +321,7 @@ function smf_db_insert_sql($tableName)
 // Get the schema (CREATE) for a table.
 function smf_db_table_sql($tableName)
 {
-	global $smcFunc, $db_prefix;
+	global $db_prefix;
 
 	$tableName = str_replace('{db_prefix}', $db_prefix, $tableName);
 
@@ -438,8 +427,6 @@ function smf_db_table_sql($tableName)
 // Get the version number.
 function smf_db_get_version()
 {
-	global $smcFunc;
-
 	$request = smf_db_query( '
 		SELECT VERSION()',
 		array(

@@ -175,86 +175,9 @@ function reloadSettings()
 	if(!empty($modSettings['integration_hooks']) && !$no_hooks)
 		HookAPI::setHooks($modSettings['integration_hooks']);
 
-	if(__APICOMPAT__) {
-		// Set a list of common functions.
-		$ent_list = empty($modSettings['disableEntityCheck']) ? '&(#\d{1,7}|quot|amp|lt|gt|nbsp);' : '&(#021|quot|amp|lt|gt|nbsp);';
-		$ent_check = empty($modSettings['disableEntityCheck']) ? array('preg_replace(\'~(&#(\d{1,7}|x[0-9a-fA-F]{1,6});)~e\', \'$smcFunc[\\\'entity_fix\\\'](\\\'\\2\\\')\', ', ')') : array('', '');
+	if(__APICOMPAT__)
+		require_once($sourcedir . '/Compat.php');
 
-		// Preg_replace can handle complex characters only for higher PHP versions.
-		//$space_chars = $utf8 ? (@version_compare(PHP_VERSION, '4.3.3') != -1 ? '\x{A0}\x{AD}\x{2000}-\x{200F}\x{201F}\x{202F}\x{3000}\x{FEFF}' : "\xC2\xA0\xC2\xAD\xE2\x80\x80-\xE2\x80\x8F\xE2\x80\x9F\xE2\x80\xAF\xE2\x80\x9F\xE3\x80\x80\xEF\xBB\xBF") : '\x00-\x08\x0B\x0C\x0E-\x19\xA0';
-		$space_chars = '\x{A0}\x{AD}\x{2000}-\x{200F}\x{201F}\x{202F}\x{3000}\x{FEFF}';
-
-		$smcFunc += array(
-			'entity_fix' => create_function('$string', '
-				$num = substr($string, 0, 1) === \'x\' ? hexdec(substr($string, 1)) : (int) $string;
-				return $num < 0x20 || $num > 0x10FFFF || ($num >= 0xD800 && $num <= 0xDFFF) || $num === 0x202E || $num === 0x202D ? \'\' : \'&#\' . $num . \';\';'),
-			'htmlspecialchars' => create_function('$string, $quote_style = ENT_COMPAT, $charset = \'ISO-8859-1\'', '
-				global $smcFunc;
-				return ' . strtr($ent_check[0], array('&' => '&amp;')) . 'htmlspecialchars($string, $quote_style, ' . '\'UTF-8\'' . ')' . $ent_check[1] . ';'),
-			'htmltrim' => create_function('$string', '
-				global $smcFunc;
-				return preg_replace(\'~^(?:[ \t\n\r\x0B\x00' . $space_chars . ']|&nbsp;)+|(?:[ \t\n\r\x0B\x00' . $space_chars . ']|&nbsp;)+$~' . 'u' . '\', \'\', ' . implode('$string', $ent_check) . ');'),
-			'strlen' => create_function('$string', '
-				global $smcFunc;
-				return strlen(preg_replace(\'~' . $ent_list . '|.~u' . '\', \'_\', ' . implode('$string', $ent_check) . '));'),
-			'strpos' => create_function('$haystack, $needle, $offset = 0', '
-				global $smcFunc;
-				$haystack_arr = preg_split(\'~(&#' . (empty($modSettings['disableEntityCheck']) ? '\d{1,7}' : '021') . ';|&quot;|&amp;|&lt;|&gt;|&nbsp;|.)~' . 'u' . '\', ' . implode('$haystack', $ent_check) . ', -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
-				$haystack_size = count($haystack_arr);
-				if (strlen($needle) === 1)
-				{
-					$result = array_search($needle, array_slice($haystack_arr, $offset));
-					return is_int($result) ? $result + $offset : false;
-				}
-				else
-				{
-					$needle_arr = preg_split(\'~(&#' . (empty($modSettings['disableEntityCheck']) ? '\d{1,7}' : '021') . ';|&quot;|&amp;|&lt;|&gt;|&nbsp;|.)~' . 'u' . '\',  ' . implode('$needle', $ent_check) . ', -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
-					$needle_size = count($needle_arr);
-
-					$result = array_search($needle_arr[0], array_slice($haystack_arr, $offset));
-					while (is_int($result))
-					{
-						$offset += $result;
-						if (array_slice($haystack_arr, $offset, $needle_size) === $needle_arr)
-							return $offset;
-						$result = array_search($needle_arr[0], array_slice($haystack_arr, ++$offset));
-					}
-					return false;
-				}'),
-			'substr' => create_function('$string, $start, $length = null', '
-				global $smcFunc;
-				$ent_arr = preg_split(\'~(&#' . (empty($modSettings['disableEntityCheck']) ? '\d{1,7}' : '021') . ';|&quot;|&amp;|&lt;|&gt;|&nbsp;|.)~' . 'u' . '\', ' . implode('$string', $ent_check) . ', -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
-				var_dump($ent_arr);
-				return $length === null ? implode(\'\', array_slice($ent_arr, $start)) : implode(\'\', array_slice($ent_arr, $start, $length));'),
-			'strtolower' => (function_exists('mb_strtolower') ? create_function('$string', '
-				return mb_strtolower($string, \'UTF-8\');') : create_function('$string', '
-				global $sourcedir;
-				require_once($sourcedir . \'/Subs-Charset.php\');
-				return utf8_strtolower($string);')),
-			'strtoupper' => (function_exists('mb_strtoupper') ? create_function('$string', '
-				return mb_strtoupper($string, \'UTF-8\');') : create_function('$string', '
-				global $sourcedir;
-				require_once($sourcedir . \'/Subs-Charset.php\');
-				return utf8_strtoupper($string);')),
-			'truncate' => create_function('$string, $length', (empty($modSettings['disableEntityCheck']) ? '
-				global $smcFunc;
-				$string = ' . implode('$string', $ent_check) . ';' : '') . '
-				preg_match(\'~^(' . $ent_list . '|.){\' . $smcFunc[\'strlen\'](substr($string, 0, $length)) . \'}~'.  'u' . '\', $string, $matches);
-				$string = $matches[0];
-				while (strlen($string) > $length)
-					$string = preg_replace(\'~(?:' . $ent_list . '|.)$~'.  'u' . '\', \'\', $string);
-				return $string;'),
-			'ucfirst' => create_function('$string', '
-				global $smcFunc;
-				return $smcFunc[\'strtoupper\']($smcFunc[\'substr\']($string, 0, 1)) . $smcFunc[\'substr\']($string, 1);'),
-			'ucwords' => create_function('$string', '
-				global $smcFunc;
-				$words = preg_split(\'~([\s\r\n\t]+)~\', $string, -1, PREG_SPLIT_DELIM_CAPTURE);
-				for ($i = 0, $n = count($words); $i < $n; $i += 2)
-					$words[$i] = $smcFunc[\'ucfirst\']($words[$i]);
-				return implode(\'\', $words);'),
-		);
-	}
 	// Setting the timezone is a requirement for some functions in PHP >= 5.1.
 	if (isset($modSettings['default_timezone']) && function_exists('date_default_timezone_set'))
 		date_default_timezone_set($modSettings['default_timezone']);
@@ -283,6 +206,10 @@ function reloadSettings()
 	// Is post moderation alive and well?
 	$modSettings['postmod_active'] = isset($modSettings['admin_features']) ? in_array('pm', explode(',', $modSettings['admin_features'])) : true;
 	$modSettings['astream_active'] = isset($modSettings['admin_features']) ? in_array('as', explode(',', $modSettings['admin_features'])) : true;
+
+	require_once($sourcedir . '/SimpleSEF.php');
+	//require_once($sourcedir . '/URLFactory.php');
+	URL::init($boardurl);
 
 	// Integration is cool.
 	if (defined('INTEGRATION_SETTINGS'))
@@ -344,7 +271,6 @@ function loadUserSettings()
 		$_reload = false;
 		// do we have a notification to dismiss (mark as seen) with this request? (we can only mark one per request, but that should be sufficient)
 		if(isset($_REQUEST['nmdismiss']) && (int)$_REQUEST['nmdismiss'] > 0) {
-			echo 'nmdismiss';
 			smf_db_query('UPDATE {db_prefix}log_notifications SET unread = 0 WHERE id_member = {int:id_user} AND id_act = {int:idact}',
 				array('id_user' => $id_member, 'idact' => (int)$_REQUEST['nmdismiss']));
 			$_reload = true;
@@ -2021,7 +1947,7 @@ function getBoardParents($id_parent)
 				{
 					$id_parent = $row['id_parent'];
 					$boards[$row['id_board']] = array(
-						'url' => $scripturl . '?board=' . $row['id_board'] . '.0',
+						'url' => URL::board($row['id_board'], $row['name'], 0),
 						'name' => $row['name'],
 						'level' => $row['child_level'],
 						'moderators' => array()
@@ -2031,11 +1957,12 @@ function getBoardParents($id_parent)
 				if (!empty($row['id_moderator']))
 					foreach ($boards as $id => $dummy)
 					{
+						$mhref = URL::user($row['id_moderator'], $row['real_name']);
 						$boards[$id]['moderators'][$row['id_moderator']] = array(
 							'id' => $row['id_moderator'],
 							'name' => $row['real_name'],
-							'href' => $scripturl . '?action=profile;u=' . $row['id_moderator'],
-							'link' => '<a href="' . $scripturl . '?action=profile;u=' . $row['id_moderator'] . '">' . $row['real_name'] . '</a>'
+							'href' => $mhref,
+							'link' => '<a href="' . $mhref . '">' . $row['real_name'] . '</a>'
 						);
 					}
 			}

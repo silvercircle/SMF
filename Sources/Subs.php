@@ -2756,14 +2756,6 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 		// Start up the session URL fixer.
 		ob_start('ob_sessrewrite');
 
-		/*
-		if (!empty($settings['output_buffers']) && is_string($settings['output_buffers']))
-			$buffers = explode(',', $settings['output_buffers']);
-		elseif (!empty($settings['output_buffers']))
-			$buffers = $settings['output_buffers'];
-		else
-			$buffers = array();
-        */
 		HookAPI::integrateOB();
 
 		//if(!empty($modSettings['simplesef_enable']))

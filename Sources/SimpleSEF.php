@@ -1,4 +1,20 @@
 <?php
+/**
+ * @name      EosAlpha BBS
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
+ * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
+ *
+ * @version 1.0pre
+ *
+ * This specific module is based on SimpleSEF for SMF 2.0, (C) by Matt Zuba.
+ * See license note below.
+ */
+
 /* * **** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1
  *
@@ -21,13 +37,117 @@
  *
  * Contributor(s):
  *
- * modified for EosAlpha BBS by Alex Vie (http://forum.miranda.or.at)
- * (C) 2011
- *
  * ***** END LICENSE BLOCK ***** */
 // No Direct Access!
 if (!defined('SMF'))
-    die('Hacking attempt...');
+    die('No access');
+
+global $modSettings;
+
+/**
+ * common URL generator functions
+ */
+if(!empty($modSettings['simplesef_enable'])) {
+	class URL {
+
+
+		private static $boardurl = '';
+		private static $scripturl = '';
+		private static $sep = '-';
+
+		private static $boardnames = array();
+		private static $topicnames = array();
+		private static $usernames = array();
+		private static $topics_base;
+		private static $suffix;
+
+		public static function init($b)
+		{
+			global $modSettings;
+			self::$boardurl = trim($b, '/');
+			self::$scripturl = 	self::$boardurl . '/index.php';
+
+			self::$suffix = '.' . (!empty($modSettings['simplesef_suffix']) ? $modSettings['simplesef_suffix'] : 'html');
+			self::$topics_base = !empty($modSettings['simplesef_topicsbase']) ? '/'.$modSettings['simplesef_topicsbase'] : '/topics/';
+		}
+
+		public static function topic($topicid, $topicname, $start = 0, $force_start = true, $msgfragment = '', $a = '')
+		{
+			$_id = (int)$topicid;
+			if(!isset(self::$topicnames[$_id]))
+				self::$topicnames[$_id] = SimpleSEF::encode($topicname);		// cache encoded topic names (encode() is quite heavy stuff).
+
+			//return(self::$boardurl . '/' . self::$boardnames[$boardid] . '.'.$boardid.'/' . self::$topicnames[$_id] . self::$sep . $_id . ($start > 0 || $force_start ? ('.' . $start) : '') . $msgfragment . '.html' . $a);
+			return(self::$boardurl . self::$topics_base . self::$topicnames[$_id] . self::$sep . $_id . ($start > 0 || $force_start ? ('.' . $start) : '') . $msgfragment . self::$suffix . $a);
+		}
+
+		public static function user($id, $name)
+		{
+			$_id = (int)$id;
+			if(!isset(self::$usernames[$_id]))
+				self::$usernames[$_id] = SimpleSEF::encode($name);
+			return(self::$boardurl . '/profile/' . self::$usernames[$_id] . self::$sep . $_id);
+		}
+
+		public static function board($id, $boardname, $start = 0, $force_start = false)
+		{
+			$_id = (int)$id;
+			if(!isset(self::$boardnames[$_id]))
+				self::$boardnames[$_id] = SimpleSEF::encode($boardname);
+			return(self::$boardurl . '/' . self::$boardnames[$_id] . '.' . trim($id) . ($start > 0 || $force_start ? ('-' . $start) : ''));
+		}
+
+		public static function home()
+		{
+			return(self::$boardurl . '/');
+		}
+
+		public static function action($a)
+		{
+			if(stripos($a, '=admin') !== false)
+				return($a);
+			return(preg_replace('~\b' . preg_quote(self::$scripturl) . '\?action=([a-zA-Z0-9]+)(.*)~', self::$boardurl . '/$1$2', $a));
+		}
+	}
+}
+else {
+	class URL {
+
+		private static $boardurl = '';
+		private static $scripturl = '';
+
+		public static function init($b, $s)
+		{
+			self::$boardurl = $b;
+			self::$scripturl = $s;
+		}
+
+		public static function topic($topicid, $topicname, $start = 0, $boardname = '', $boardid = 0, $force_start = true, $msgfragment = '', $a = '')
+		{
+			return(self::$scripturl . '?topic=' . (int)$topicid . ($start > 0 || $force_start ? ('.' . $start) : '') . $msgfragment . $a);
+		}
+
+		public static function user($id, $name)
+		{
+			return(self::$scripturl . '?action=profile;u=' . (int)$id);
+		}
+
+		public static function board($id, $name, $start = 0, $force_start = false)
+		{
+			return(self::$scripturl . '?board=' . (int)$id . '.' . (int)$start);
+		}
+
+		public static function home()
+		{
+			return(self::$scripturl);
+		}
+
+		public static function action($a)
+		{
+			return($a);
+		}
+	}
+}
 
 class SimpleSEF {
 
@@ -85,6 +205,8 @@ class SimpleSEF {
      */
     private static $redirect = FALSE;
 
+	private static $topics_base = '';
+
     /**
      * Initialize the mod and it's settings.  We can't use a constructor
      * might change this in the future (either singleton or two classes,
@@ -109,6 +231,7 @@ class SimpleSEF {
         self::$useractions = !empty($modSettings['simplesef_useractions']) ? explode(',', $modSettings['simplesef_useractions']) : array();
         self::$stripWords = !empty($modSettings['simplesef_strip_words']) ? self::explode_csv($modSettings['simplesef_strip_words']) : array();
         self::$stripChars = !empty($modSettings['simplesef_strip_chars']) ? self::explode_csv($modSettings['simplesef_strip_chars']) : array();
+		self::$topics_base = !empty($modSettings['simplesef_topicsbase']) ? $modSettings['simplesef_topicsbase'] : 'topics/';
 
         // Do a bit of post processing on the arrays above
         self::$stripWords = array_filter(self::$stripWords, create_function('$value', 'return !empty($value);'));
@@ -168,25 +291,23 @@ class SimpleSEF {
 
         // if the URL contains index.php but not our ignored actions, rewrite the URL
 
-
 		// todo
-		/*if (strpos($_SERVER['REQUEST_URL'], 'index.php') !== false && !(isset($_GET['xml']) || (!empty($_GET['action']) && in_array($_GET['action'], self::$ignoreactions)))) {
+		if (!empty($modSettings['simplesef_redirect']) && strpos($_SERVER['REQUEST_URL'], 'index.php') !== false && !(isset($_GET['xml']) || (!empty($_GET['action']) && in_array($_GET['action'], self::$ignoreactions)))) {
             //self::log('Rewriting and redirecting permanently: ' . $_SERVER['REQUEST_URL']);
             header('HTTP/1.1 301 Moved Permanently');
             header('Location: ' . self::create_sef_url($_SERVER['REQUEST_URL']));
             exit();
-        }*/
+        }
 
         // Parse the url
         if (!empty($_GET['q'])) {
             $querystring = self::route($_GET['q']);
             $_GET = $querystring + $_GET;
-			unset($_GET['q']);
+			//unset($_GET['q']);
         }
 
         // Need to grab any extra query parts from the original url and tack it on here
         $_SERVER['QUERY_STRING'] = http_build_query($_GET, '', ';');
-		//echo $_SERVER['QUERY_STRING'];
         //self::log('Post-convert GET:' . var_export($_GET, true));
     }
 
@@ -211,7 +332,6 @@ class SimpleSEF {
 		if (!empty($matches[1])) {
     		self::loadTopicNames(array_unique($matches[1]));
 			$matches = array();
-			//preg_match_all('~\b(' . preg_quote($scripturl) . '\?topic=[0-9]+)([a-zA-Z0-9+&@#/%=\~_|]+)\b~', $buffer, $matches);
 			preg_match_all('~\b(' . preg_quote($scripturl) . '\?topic=[-a-zA-Z0-9+&@#/%?=\~_|!:,.;\[\]]*[-a-zA-Z0-9+&@#/%=\~_|\[\]]?)([^-a-zA-Z0-9+&@#/%=\~_|])~', $buffer, $matches);
 			if (!empty($matches[0])) {
 				$replacements = array();
@@ -537,7 +657,8 @@ class SimpleSEF {
 
         $config_vars = array(
             array('check', 'simplesef_enable', 'subtext' => $txt['simplesef_enable_desc']),
-			array('check', 'simplesef_no_boardname', 'subtext' => $txt['simplesef_no_boardname_desc']),
+			array('text', 'simplesef_topicsbase', 'size' => 20, 'subtext' => $txt['simplesef_topicsbase_desc']),
+			array('check', 'simplesef_redirect', 'subtext' => $txt['simplesef_redirect_desc']),
             array('text', 'simplesef_space', 'size' => 6, 'subtext' => $txt['simplesef_space_desc']),
             array('text', 'simplesef_suffix', 'subtext' => $txt['simplesef_suffix_desc']),
             array('check', 'simplesef_advanced', 'subtext' => $txt['simplesef_advanced_desc']),
@@ -554,6 +675,10 @@ class SimpleSEF {
 
             $_POST['simplesef_suffix'] = trim($_POST['simplesef_suffix'], '.');
 
+			if (trim($_POST['simplesef_topicsbase']) == '')
+				$_POST['simplesef_topicsbase'] = 'topics/';
+
+			$_POST['simplesef_topicsbase'] = preg_replace('~[^A-Za-z0-9]~', "", $_POST['simplesef_topicsbase']) . '/';
             $save_vars = $config_vars;
 
             // We don't want to break boards, so we'll make sure some stuff exists before actually enabling
@@ -758,7 +883,7 @@ class SimpleSEF {
             $sefstring2 = $extension->create($params);
         } else {
             if (!empty($params['board'])) {
-                $query_parts['board'] = self::getBoardName($params['board']);
+                $query_parts['board'] = empty($params['topic']) ? self::getBoardName($params['board']) : 'topics';
                 unset($params['board']);
             }
             if (!empty($params['topic'])) {
@@ -882,15 +1007,12 @@ class SimpleSEF {
         // and if it still doesn't exist
         if (empty(self::$topicNames[$value])) {
             $topicName = 'topic';
-            $boardName = 'board';
+            //$boardName = 'board';
         } else {
             $topicName = self::$topicNames[$value]['subject'];
-            $boardName = self::getBoardName(self::$topicNames[$value]['board_id']);
+            //$boardName = self::getBoardName(self::$topicNames[$value]['board_id']);
         }
-
-        // Put it all together
-        return (empty($modSettings['simplesef_no_boardname']) ? $boardName . '/' : '') . $topicName . $modSettings['simplesef_space'] . $value . '.' . $start . '.' . $modSettings['simplesef_suffix'];
-		//return $topicName . $modSettings['simplesef_space'] . $value . '.' . $start . '.' . $modSettings['simplesef_suffix'];
+		return self::$topics_base . $topicName . $modSettings['simplesef_space'] . $value . '.' . $start . '.' . $modSettings['simplesef_suffix'];
     }
 
     /**
@@ -973,11 +1095,8 @@ class SimpleSEF {
                 // remove the suffix and get the topic id
                 $topic = str_replace($modSettings['simplesef_suffix'], '', $current_value);
                 $topic = substr($topic, strrpos($topic, $modSettings['simplesef_space']) + 1);
-                $querystring['topic'] = $topic;
-
-                // remove the board name too
-                if (empty($modSettings['simplesef_no_boardname']))
-                    array_pop($url_parts);
+				$querystring['topic'] = $topic;
+				array_pop($url_parts);
             }
             else {
                 //check to see if the last one in the url array is a board
@@ -1155,19 +1274,6 @@ class SimpleSEF {
         if (empty($string))
             return '';
 
-        // We need to make sure all strings are either ISO-8859-1 or UTF-8 and if not, convert to UTF-8 (if the host has stuff installed right)
-        /*
-        $char_set = empty($modSettings['global_character_set']) ? $txt['lang_character_set'] : $modSettings['global_character_set'];
-        if ($char_set != 'ISO-8859-1' && $char_set != 'UTF-8') {
-            if (function_exists('iconv'))
-                $string = iconv($char_set, 'UTF-8//IGNORE', $string);
-            elseif (function_exists('mb_convert_encoding'))
-                $string = mb_convert_encoding($string, 'UTF8', $char_set);
-            elseif (function_exists('unicode_decode'))
-                $string = unicode_decode($string, $char_set);
-        }
-        */
-
 		setlocale(LC_CTYPE, 'en_US.utf8');
    		$string = iconv('UTF-8', "UTF-8//TRANSLIT", $string); // TRANSLIT does the whole job
        	$string = implode(' ', array_diff(explode(' ', $string), self::$stripWords));
@@ -1175,7 +1281,8 @@ class SimpleSEF {
    		$string = preg_replace('~[^\\pL0-9_]+~u', $modSettings['simplesef_space'], $string); // substitutes anything but letters, numbers and '_' with separator
        	if (!empty($modSettings['simplesef_lowercase']))
            	$string = strtolower($string);
-   		return($string);
+
+		return($string);
 
         // A way to track/store the current character
         

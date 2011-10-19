@@ -434,7 +434,8 @@ function template_main()
 						<ul class="post_options">
 							', $context['can_notify'] ? '<li><input type="hidden" name="notify" value="0" /><label for="check_notify"><input type="checkbox" name="notify" id="check_notify"' . ($context['notify'] || !empty($options['auto_notify']) ? ' checked="checked"' : '') . ' value="1" class="input_check" /> ' . $txt['notify_replies'] . '</label></li>' : '', '
 							', $context['can_lock'] ? '<li><input type="hidden" name="lock" value="0" /><label for="check_lock"><input type="checkbox" name="lock" id="check_lock"' . ($context['locked'] ? ' checked="checked"' : '') . ' value="1" class="input_check" /> ' . $txt['lock_topic'] . '</label></li>' : '', '
-							<li><label for="check_back"><input type="checkbox" name="goback" id="check_back"' . ($context['back_to_topic'] || !empty($options['return_to_post']) ? ' checked="checked"' : '') . ' value="1" class="input_check" /> ' . $txt['back_to_topic'] . '</label></li>
+							', isset($context['can_lock_message']) ? '<li><label for="lock_message"><input type="checkbox" name="lock_message" class="input_check" value="1"'.($context['message_locked'] ? ' checked="checked"' : ''). ' />'. $txt['lock_message'].'</label></li>' : '', '
+							 <li><label for="check_back"><input type="checkbox" name="goback" id="check_back"' . ($context['back_to_topic'] || !empty($options['return_to_post']) ? ' checked="checked"' : '') . ' value="1" class="input_check" /> ' . $txt['back_to_topic'] . '</label></li>
 							', $context['can_sticky'] ? '<li><input type="hidden" name="sticky" value="0" /><label for="check_sticky"><input type="checkbox" name="sticky" id="check_sticky"' . ($context['sticky'] ? ' checked="checked"' : '') . ' value="1" class="input_check" /> ' . $txt['sticky_after'] . '</label></li>' : '', '
 							<li><label for="check_smileys"><input type="checkbox" name="ns" id="check_smileys"', $context['use_smileys'] ? '' : ' checked="checked"', ' value="NS" class="input_check" /> ', $txt['dont_use_smileys'], '</label></li>', '
 							', $context['can_move'] ? '<li><input type="hidden" name="move" value="0" /><label for="check_move"><input type="checkbox" name="move" id="check_move" value="1" class="input_check" ' . (!empty($context['move']) ? 'checked="checked" ' : '') . '/> ' . $txt['move_after2'] . '</label></li>' : '', '
@@ -448,9 +449,9 @@ function template_main()
 		echo '
 						<hr>
 						<select name="firstlayout">
-							<option value="0">Standard layout</option>
-							<option value="1">Standard layout, first post with blog-style</option>
-							<option value="2">Blog-like display with simplified comments</option>
+							<option value="0"',($context['first_has_layout'] == 0 ? ' selected="selected"' : ''), '>Standard layout</option>
+							<option value="1"',($context['first_has_layout'] == 1 ? ' selected="selected"' : ''), '>Standard layout, first post with blog-style</option>
+							<option value="2"',($context['first_has_layout'] == 2 ? ' selected="selected"' : ''), '>Blog-like display with simplified comments</option>
 						</select>';
 	echo '
 						</div>';

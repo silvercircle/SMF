@@ -1,6 +1,10 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]Fixed a serious issue with SEF URLs leading to noindex tags on topic and message index pages.[/li]
-[li]Improved UI for editing board news items.[/li]
+[li]The base URI component for topics can now be customized.[/li]
+[li]Moved URLFactory code to SimpleSEF.php (they are related)[/li]
+[li]URL methods now use SimpleSEF settings[/li]
+[li]Moved smcFunc compatibility stuff to its own file[/li]
+[li]more modules are using the new URL creation method for SEF URLs[/li]
+[li]allow moderators to lock a message to avoid moderator edits being reverted by users. Locked messages can no longer be edited except by moderators or admins.[/li]
 [/list]
