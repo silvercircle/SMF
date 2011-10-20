@@ -309,7 +309,7 @@ function RecentPosts()
 		SELECT
 			m.id_msg, m.subject, m.smileys_enabled, m.poster_time, m.body, m.id_topic, t.id_board, b.id_cat, mc.body AS cached_body,
 			b.name AS bname, c.name AS cname, t.num_replies, m.id_member, m2.id_member AS id_first_member, lc.likes_count, lc.like_status, lc.updated AS like_updated, l.id_user AS liked,
-			IFNULL(mem2.real_name, m2.poster_name) AS first_poster_name, t.id_first_msg,
+			IFNULL(mem2.real_name, m2.poster_name) AS first_poster_name, t.id_first_msg, m2.subject AS first_subject,
 			IFNULL(mem.real_name, m.poster_name) AS poster_name, t.id_last_msg
 		FROM {db_prefix}messages AS m
 			INNER JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic)
@@ -351,6 +351,7 @@ function RecentPosts()
 
 		getCachedPost($row);    	// this will also care about bbc parsing...
 		// And build the array.
+		$thref = URL::topic($row['id_topic'], $row['first_subject'], 0, false, '.msg' . $row['id_msg'], '#'.$row['id_msg']);
 		$context['posts'][$row['id_msg']] = array(
 			'id' => $row['id_msg'],
 			'id_msg' => $row['id_msg'],
@@ -369,8 +370,9 @@ function RecentPosts()
 				'link' => '<a href="' . $scripturl . '?board=' . $row['id_board'] . '.0">' . $row['bname'] . '</a>'
 			),
 			'topic' => $row['id_topic'],
-			'href' => $scripturl . '?topic=' . $row['id_topic'] . '.msg' . $row['id_msg'] . '#msg' . $row['id_msg'],
-			'link' => '<a href="' . $scripturl . '?topic=' . $row['id_topic'] . '.msg' . $row['id_msg'] . '#msg' . $row['id_msg'] . '" rel="nofollow">' . $row['subject'] . '</a>',
+			//'href' => $scripturl . '?topic=' . $row['id_topic'] . '.msg' . $row['id_msg'] . '#msg' . $row['id_msg'],
+			'href' => $thref,
+			'link' => '<a href="' . $thref . '" rel="nofollow">' . $row['subject'] . '</a>',
 			'start' => $row['num_replies'],
 			'subject' => $row['subject'],
 			'time' => timeformat($row['poster_time']),

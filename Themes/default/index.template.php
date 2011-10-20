@@ -39,7 +39,6 @@ function template_html_above()
 	echo '
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css',$context['jsver'],'" />
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/secondary', $context['theme_variant'], '.css" />';
-
 	// RTL languages require an additional stylesheet.
 	if ($context['right_to_left'])
 		echo '
@@ -232,7 +231,7 @@ function template_body_above()
 						<input type="hidden" id="s_board" name="brd[', $context['current_board'], ']" value="', $context['current_board'], '" /></div>';
 				}
 				echo '<input style="width:100%;margin:10px 0;" type="submit" name="submit" value="', 'Search now', '" class="button_submit" />
-			 	  <div class="centertext"><a href="',$scripturl,'?action=search" >',$txt['search_advanced'],'</a></div>';
+			 	  <div class="centertext"><a href="',url::action($scripturl.'?action=search'),'" >',$txt['search_advanced'],'</a></div>';
 				echo '</div>
 				<noscript>
 				<input style="margin:0;" type="submit" name="submit" value="', $txt['go'], '" class="button_submit" />
@@ -653,7 +652,7 @@ function template_sidebar_content()
 				 echo '</dl>';
 				echo '
 				<div>
-				  <div class="floatright righttext"><a href="', URL::action($scripturl, '?action=recent') . '">', $txt['recent_view'], '</a>', $context['show_stats'] ? '
+				  <div class="floatright righttext"><a href="', URL::action($scripturl . '?action=recent') . '">', $txt['recent_view'], '</a>', $context['show_stats'] ? '
 				  </div>
 				 <a href="' . URL::action($scripturl . '?action=stats') .'">' . $txt['more_stats'] . '</a>' : '', '
 				</div>
@@ -723,7 +722,7 @@ function template_sidebar_content()
 	if ($context['show_calendar'])
 	{
 		$title = $context['calendar_only_today'] ? $txt['calendar_today'] : ($txt['calendar']. ' (Next '.$modSettings['cal_days_for_index'].' days)');
-		$collapser = array('bodyclass'=> $widgetstyle, 'id' => 'cal_panel', 'title' => '<a href="'. $scripturl. '?action=calendar' . '">'. $title . '</a>');
+		$collapser = array('bodyclass'=> $widgetstyle, 'id' => 'cal_panel', 'title' => '<a href="'. URL::action($scripturl . '?action=calendar') . '">'. $title . '</a>');
 		template_create_collapsible_container($collapser);
 		echo '
 			<div class="smallertext">';

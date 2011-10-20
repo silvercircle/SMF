@@ -73,7 +73,7 @@ function MessageIndex()
 		$session_name = session_name();
 		foreach ($_GET as $k => $v)
 		{
-			if (!in_array($k, array('q', 'board', 'start', $session_name)))
+			if (!in_array($k, array('board', 'start', $session_name)))
 				$context['robot_no_index'] = true;
 		}
 	}
@@ -443,7 +443,6 @@ function MessageIndex()
 
             $first_posters[$row['id_topic']] = $row['first_id_member'];
 			// 'Print' the topic info.
-			$t_href = URL::topic($row['id_topic'], $row['first_subject'], 0);
 			$f_post_mem_href = !empty($row['first_id_member']) ? URL::user($row['first_id_member'], $row['first_display_name']) : '';
 			$t_href = URL::topic($row['id_topic'], $row['first_subject'], 0);
 			$l_post_mem_href = !empty($row['last_id_member']) ? URL::user($row['last_id_member'], $row['last_display_name'] ) : '';
@@ -483,7 +482,6 @@ function MessageIndex()
 					'preview' => $row['last_body'],
 					'icon' => $row['last_icon'],
 					'icon_url' => getPostIcon($row['last_icon']),
-					//'href' => $scripturl . '?topic=' . $row['id_topic'] . ($user_info['is_guest'] ? ('.' . (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) . '#msg' . $row['id_last_msg']) : (($row['num_replies'] == 0 ? '.0' : '.msg' . $row['id_last_msg']) . '#new')),
 					'href' => $l_post_msg_href,
 					'link' => '<a href="' . $l_post_msg_href . ($row['num_replies'] == 0 ? '' : ' rel="nofollow"') . '>' . $row['last_subject'] . '</a>'
 				),
@@ -500,14 +498,13 @@ function MessageIndex()
 				'new' => $row['new_from'] <= $row['id_msg_modified'],
 				'new_from' => $row['new_from'],
 				'newtime' => $row['new_from'],
-				'new_href' => $scripturl . '?topic=' . $row['id_topic'] . '.msg' . $row['new_from'] . '#new',
+				'new_href' => URL::topic($row['id_topic'], $row['first_subject'], 0, false, '.msg' . $row['new_from'], '#new'),
 				'pages' => $pages,
 				'replies' => comma_format($row['num_replies']),
 				'views' => comma_format($row['num_views']),
 				'approved' => $row['approved'],
 				'unapproved_posts' => $row['unapproved_posts'],
 			);
-
 			determineTopicClass($context['topics'][$row['id_topic']]);
 			
 			if(!empty($context['topics'][$row['id_topic']]['prefix']))

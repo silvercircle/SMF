@@ -49,7 +49,9 @@ global $modSettings;
  */
 if(!empty($modSettings['simplesef_enable'])) {
 	class URL {
-
+		/**
+		 * generate SEF URLs for topics, users and boards.
+		 */
 
 		private static $boardurl = '';
 		private static $scripturl = '';
@@ -64,23 +66,38 @@ if(!empty($modSettings['simplesef_enable'])) {
 		public static function init($b)
 		{
 			global $modSettings;
-			self::$boardurl = trim($b, '/');
+			self::$boardurl = rtrim($b, '/');
 			self::$scripturl = 	self::$boardurl . '/index.php';
 
 			self::$suffix = '.' . (!empty($modSettings['simplesef_suffix']) ? $modSettings['simplesef_suffix'] : 'html');
 			self::$topics_base = !empty($modSettings['simplesef_topicsbase']) ? '/'.$modSettings['simplesef_topicsbase'] : '/topics/';
 		}
 
+		/**
+		 * @static
+		 * @param $topicid				our topic id
+		 * @param $topicname			topic name (usually subject of the first post)
+		 * @param int $start			topic start
+		 * @param bool $force_start		if true, always ouput the .start even when it is 0
+		 * @param string $msgfragment	what comes after the topic id (e.g. .msg2187).
+		 * @param string $a				the target anchor id (e.g. #msg2187)
+		 * @return string				a SEF URL for the topic.
+		 */
 		public static function topic($topicid, $topicname, $start = 0, $force_start = true, $msgfragment = '', $a = '')
 		{
 			$_id = (int)$topicid;
 			if(!isset(self::$topicnames[$_id]))
 				self::$topicnames[$_id] = SimpleSEF::encode($topicname);		// cache encoded topic names (encode() is quite heavy stuff).
 
-			//return(self::$boardurl . '/' . self::$boardnames[$boardid] . '.'.$boardid.'/' . self::$topicnames[$_id] . self::$sep . $_id . ($start > 0 || $force_start ? ('.' . $start) : '') . $msgfragment . '.html' . $a);
-			return(self::$boardurl . self::$topics_base . self::$topicnames[$_id] . self::$sep . $_id . ($start > 0 || $force_start ? ('.' . $start) : '') . $msgfragment . self::$suffix . $a);
+			return(self::$boardurl . self::$topics_base . self::$topicnames[$_id] . self::$sep . $_id . ((int)$start > 0 || $force_start ? ('.' . $start) : '') . $msgfragment . self::$suffix . $a);
 		}
 
+		/**
+		 * @static
+		 * @param $id			user id
+		 * @param $name			user's name as it should appear in the URL
+		 * @return string		a SEF URL for the user's profile
+		 */
 		public static function user($id, $name)
 		{
 			$_id = (int)$id;
@@ -303,9 +320,8 @@ class SimpleSEF {
         if (!empty($_GET['q'])) {
             $querystring = self::route($_GET['q']);
             $_GET = $querystring + $_GET;
-			//unset($_GET['q']);
+			unset($_GET['q']);
         }
-
         // Need to grab any extra query parts from the original url and tack it on here
         $_SERVER['QUERY_STRING'] = http_build_query($_GET, '', ';');
         //self::log('Post-convert GET:' . var_export($_GET, true));

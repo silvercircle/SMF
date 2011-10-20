@@ -11,8 +11,8 @@ table {
 }
 body {
 	background: #D0D1E6;
-	font-family: Tahoma, "Trebuchet MS", "Verdana", "Arial", helvetica, sans-serif;
-	font-size: 10pt;
+	font-family: "Tahoma", "Arial", sans-serif;
+	font-size: 1.0em;
 	margin: 0;
 	padding: 0;
 }
@@ -2302,7 +2302,7 @@ tr.titlebg td {
 	line-height:26px;
 	padding: 0 10px;
 	border-radius:2px 2px 0 0;
-	box-shadow: 0 0 4px #888 inset;
+	/*box-shadow: 0 0 4px #888 inset;*/
 }
 .cContainer_header a, .cat_bar2 a, .cContainer_header h3, .cat_bar2 h3 {
 	color: white;

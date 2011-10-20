@@ -217,7 +217,7 @@ function aStreamGet($b = 0, $xml = false, $global = false)
 		$result = smf_db_query('
 			SELECT a.*, t.*, b.name AS board_name FROM {db_prefix}log_activities AS a
 			LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
-			INNER JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
+			LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
 			WHERE a.id_board = {int:id_board} AND {query_see_board}'.$pquery.' ORDER BY a.id_act DESC LIMIT {int:start}, 20',
 			array('id_board' => $board, 'start' => $start, 'id_user' => $user_info['id'], 'filter' => $filterby));
 

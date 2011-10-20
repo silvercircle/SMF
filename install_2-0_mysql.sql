@@ -1443,7 +1443,6 @@ CREATE TABLE {$db_prefix}log_activities (
 	KEY (id_type),
 	KEY (updated),
 	KEY (id_topic),
-	KEY (id_board),
 	KEY (id_content)
 ) Engine=MyISAM;
 

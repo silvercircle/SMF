@@ -27,12 +27,13 @@ function getLastPosts($latestPostOptions)
 	// !!!SLOW This query is now slow, NEEDS to be fixed.  Maybe break into two?
 	$request = smf_db_query('
 		SELECT
-			m.poster_time, m.subject, m.id_topic, m.id_member, m.id_msg,
+			m.poster_time, m.subject, m.id_topic, m.id_member, m.id_msg, b.name, m1.subject AS first_subject,
 			IFNULL(mem.real_name, m.poster_name) AS poster_name, t.id_board, b.name AS board_name,
 			SUBSTRING(m.body, 1, 385) AS body, m.smileys_enabled
 		FROM {db_prefix}messages AS m
 			INNER JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic)
 			INNER JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
+			INNER JOIN {db_prefix}messages AS m1 ON (m1.id_msg = t.id_first_msg)
 			LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = m.id_member)
 		WHERE m.id_msg >= {int:likely_max_msg}' .
 			(!empty($modSettings['recycle_enable']) && $modSettings['recycle_board'] > 0 ? '
@@ -59,15 +60,16 @@ function getLastPosts($latestPostOptions)
 		if (commonAPI::strlen($row['body']) > 128)
 			$row['body'] = commonAPI::substr($row['body'], 0, 128) . '...';
 
-		$href = URL::board($row['id_board'], $row['board_name'], 0, true);
+		$bhref = URL::board($row['id_board'], $row['board_name'], 0, true);
 		$mhref = URL::user($row['id_member'], $row['poster_name']);
+		$thref = URL::topic($row['id_topic'], $row['first_subject'], 0, false, '.msg'.$row['id_msg'], ';topicseen#msg'.$row['id_msg']);
 		// Build the array.
 		$posts[] = array(
 			'board' => array(
 				'id' => $row['id_board'],
 				'name' => $row['board_name'],
-				'href' => $href,
-				'link' => '<a href="' . $href . '">' . $row['board_name'] . '</a>'
+				'href' => $bhref,
+				'link' => '<a href="' . $bhref . '">' . $row['board_name'] . '</a>'
 			),
 			'topic' => $row['id_topic'],
 			'poster' => array(
@@ -82,8 +84,9 @@ function getLastPosts($latestPostOptions)
 			'time' => timeformat($row['poster_time']),
 			'timestamp' => forum_time(true, $row['poster_time']),
 			'raw_timestamp' => $row['poster_time'],
-			'href' => $scripturl . '?topic=' . $row['id_topic'] . '.msg' . $row['id_msg'] . ';topicseen#msg' . $row['id_msg'],
-			'link' => '<a href="' . $scripturl . '?topic=' . $row['id_topic'] . '.msg' . $row['id_msg'] . ';topicseen#msg' . $row['id_msg'] . '" rel="nofollow">' . $row['subject'] . '</a>'
+			//'href' => $scripturl . '?topic=' . $row['id_topic'] . '.msg' . $row['id_msg'] . ';topicseen#msg' . $row['id_msg'],
+			'href' => $thref,
+			'link' => '<a href="' . $thref . '" rel="nofollow">' . $row['subject'] . '</a>'
 		);
 	}
 	mysql_free_result($request);
@@ -96,7 +99,7 @@ function cache_getLastPosts($latestPostOptions)
 {
 	return array(
 		'data' => getLastPosts($latestPostOptions),
-		'expires' => time() + 60,
+		'expires' => time() + 300,
 		'post_retri_eval' => '
 			foreach ($cache_block[\'data\'] as $k => $post)
 			{

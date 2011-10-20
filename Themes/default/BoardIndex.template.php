@@ -127,7 +127,7 @@ function template_info_center()
 		echo '
 				<div class="cat_bar2">
 					<h3 class="lefttext">
-						', $context['show_who'] ? '<a href="' . $scripturl . '?action=who' . '">' : '', $txt['online_users'], $context['show_who'] ? '</a>' : '', '
+						', $context['show_who'] ? '<a href="' . URL::action($scripturl . '?action=who') . '">' : '', $txt['online_users'], $context['show_who'] ? '</a>' : '', '
 					</h3>
 				</div>
 				<div class="blue_container smallpadding smalltext cleantop">',
@@ -145,7 +145,7 @@ function template_info_center()
 		if (!empty($bracketList))
 			echo ' (' . implode(', ', $bracketList) . ')';
 
-		echo ($context['show_who'] ? '<br>'.$txt['who_showby'].'<a href="'.$scripturl.'?action=who;show=all;sort=user">'.$txt['username'].'</a> | <a href="'.$scripturl.'?action=who;show=all;sort=time">'.$txt['who_lastact'].'</a>' : '');
+		echo ($context['show_who'] ? '<br>'.$txt['who_showby'].'<a href="'.URL::action($scripturl.'?action=who;show=all;sort=user').'">'.$txt['username'].'</a> | <a href="'.URL::action($scripturl.'?action=who;show=all;sort=time').'">'.$txt['who_lastact'].'</a>' : '');
 		echo '
 			<p class="inline smalltext">';
 

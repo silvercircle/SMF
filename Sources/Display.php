@@ -99,7 +99,7 @@ function Display()
 	if (count($_GET) > 2) {
 		foreach ($_GET as $k => $v)
 		{
-			if (!in_array($k, array('q', 'topic', 'board', 'start', session_name())))
+			if (!in_array($k, array('topic', 'board', 'start', session_name())))
 				$context['robot_no_index'] = true;
 		}
 	}

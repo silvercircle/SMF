@@ -79,7 +79,7 @@ reloadSettings();
 cleanRequest();
 $context = array();
 
-$context['jsver'] = '?v=1486';
+$context['jsver'] = '?v=1488';
 
 // Seed the random generator.
 if (empty($modSettings['rand_seed']) || mt_rand(1, 250) == 69)
