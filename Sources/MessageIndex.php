@@ -377,8 +377,8 @@ function MessageIndex()
 				IFNULL(meml.real_name, ml.poster_name) AS last_display_name, t.id_first_msg,
 				mf.poster_time AS first_poster_time, mf.subject AS first_subject, mf.icon AS first_icon,
 				mf.poster_name AS first_member_name, mf.id_member AS first_id_member,
-				IFNULL(memf.real_name, mf.poster_name) AS first_display_name, SUBSTRING(ml.body, 1, 385) AS last_body,
-				SUBSTRING(mf.body, 1, 385) AS first_body, ml.smileys_enabled AS last_smileys, mf.smileys_enabled AS first_smileys,
+				IFNULL(memf.real_name, mf.poster_name) AS first_display_name,
+				ml.smileys_enabled AS last_smileys, mf.smileys_enabled AS first_smileys,
 				p.name AS prefix_name
 			FROM {db_prefix}topics AS t	
 				INNER JOIN {db_prefix}messages AS ml ON (ml.id_msg = t.id_last_msg)
@@ -461,7 +461,6 @@ function MessageIndex()
 					'time' => timeformat($row['first_poster_time']),
 					'timestamp' => forum_time(true, $row['first_poster_time']),
 					'subject' => $row['first_subject'],
-					'preview' => $row['first_body'],
 					'icon' => $row['first_icon'],
 					'icon_url' => getPostIcon($row['first_icon']),
 					'href' => $t_href,
@@ -479,7 +478,6 @@ function MessageIndex()
 					'time' => timeformat($row['last_poster_time']),
 					'timestamp' => forum_time(true, $row['last_poster_time']),
 					'subject' => $row['last_subject'],
-					'preview' => $row['last_body'],
 					'icon' => $row['last_icon'],
 					'icon_url' => getPostIcon($row['last_icon']),
 					'href' => $l_post_msg_href,

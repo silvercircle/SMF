@@ -248,13 +248,15 @@ function summary($memID)
 function showPosts($memID)
 {
 	global $txt, $user_info, $scripturl, $modSettings;
-	global $context, $user_profile, $sourcedir, $smcFunc, $board;
+	global $context, $user_profile, $sourcedir, $board, $memberContext;
 
 	$boards_hidden_1  = boardsAllowedTo('see_hidden1');
 	$boards_hidden_2  = boardsAllowedTo('see_hidden2');
 	$boards_hidden_3  = boardsAllowedTo('see_hidden3');
 	$boards_like_see  = boardsAllowedTo('like_see');
 	$boards_like_give = boardsAllowedTo('like_give');
+
+	$context['need_synhlt'] = true;
 
 	// Some initial context.
 	$context['start'] = (int) $_REQUEST['start'];
@@ -403,75 +405,93 @@ function showPosts($memID)
 	}
 
 	// Find this user's posts.  The left join on categories somehow makes this faster, weird as it looks.
-	$looped = false;
-	while (true)
+	$topicids = array();
+	if ($context['is_topics'])
 	{
-		if ($context['is_topics'])
-		{
-			$request = smf_db_query( '
-				SELECT
-					b.id_board, b.name AS bname, c.id_cat, c.name AS cname, t.id_member_started, t.id_first_msg, t.id_last_msg,
-					t.approved, m.body, m.smileys_enabled, m.id_member, m.subject, m.poster_time, m.id_topic, m.id_msg,
-					mc.body AS cached_body, c1.likes_count, c1.like_status, c1.updated AS like_updated, l.id_user AS liked
-				FROM {db_prefix}topics AS t
-					INNER JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
-					LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)					
-					INNER JOIN {db_prefix}messages AS m ON (m.id_msg = t.id_first_msg)
-					LEFT JOIN {db_prefix}likes AS l ON l.id_msg = m.id_msg AND l.id_user = '.$user_info['id'].'
-					LEFT JOIN {db_prefix}like_cache AS c1 ON c1.id_msg = m.id_msg
-					LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang}
-				WHERE t.id_member_started = {int:current_member}' . (!empty($board) ? '
-					AND t.id_board = {int:board}' : '') . (empty($range_limit) ? '' : '
-					AND ' . $range_limit) . '
-					AND {query_see_board}' . (!$modSettings['postmod_active'] || $context['user']['is_owner'] ? '' : '
-					AND t.approved = {int:is_approved} AND m.approved = {int:is_approved}') . '
-				ORDER BY t.id_first_msg ' . ($reverse ? 'ASC' : 'DESC') . '
-				LIMIT ' . $start . ', ' . $maxIndex,
-				array(
-					'current_member' => $memID,
-					'is_approved' => 1,
-					'board' => $board,
-					'style' => $user_info['smiley_set_id'],
-					'lang' => $user_info['language_id'],
-				)
-			);
-		}
-		else
-		{
-			$request = smf_db_query( '
-				SELECT
-					b.id_board, b.name AS bname, c.id_cat, c.name AS cname, m.id_topic, m.id_msg,
-					t.id_member_started, t.id_first_msg, t.id_last_msg, m.body, m.smileys_enabled, m.id_member,
-					m.subject, m.poster_time, m.approved, mc.body AS cached_body, c1.likes_count, c1.like_status, c1.updated AS like_updated, l.id_user AS liked
-				FROM {db_prefix}messages AS m
-					INNER JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic)
-					INNER JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
-					LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)
-					LEFT JOIN {db_prefix}likes AS l ON (l.id_msg = m.id_msg AND l.ctype = 1 AND l.id_user = '.$user_info['id'].')
-					LEFT JOIN {db_prefix}like_cache AS c1 ON (c1.id_msg = m.id_msg AND c1.ctype = 1)
-					LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang}
-				WHERE m.id_member = {int:current_member}' . (!empty($board) ? '
-					AND b.id_board = {int:board}' : '') . (empty($range_limit) ? '' : '
-					AND ' . $range_limit) . '
-					AND {query_see_board}' . (!$modSettings['postmod_active'] || $context['user']['is_owner'] ? '' : '
-					AND t.approved = {int:is_approved} AND m.approved = {int:is_approved}') . '
-				ORDER BY m.id_msg ' . ($reverse ? 'ASC' : 'DESC') . '
-				LIMIT ' . $start . ', ' . $maxIndex,
-				array(
-					'current_member' => $memID,
-					'is_approved' => 1,
-					'board' => $board,
-					'style' => $user_info['smiley_set_id'],
-					'lang' => $user_info['language_id'],
-				)
-			);
-		}
+		$context['postbit_callback'] = 'template_topicbit_generic';
+		$prereq = smf_db_query('
+			SELECT t.id_topic FROM {db_prefix}topics AS t
+			LEFT JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
+			LEFT JOIN {db_prefix}messages AS m ON (m.id_msg = t.id_first_msg)
+			LEFT JOIN {db_prefix}messages AS m2 ON (m2.id_msg = t.id_last_msg)
+			WHERE m.id_member = {int:current_member}' . (!empty($board) ? '
+				AND t.id_board = {int:board}' : '') . (empty($range_limit) ? '' : '
+				AND ' . $range_limit) . '
+				AND {query_see_board}' . (!$modSettings['postmod_active'] || $context['user']['is_owner'] ? '' : '
+				AND t.approved = {int:is_approved}') . '
+			ORDER BY t.id_topic ' . ($reverse ? 'ASC' : 'DESC') . '
+			LIMIT ' . $start . ', ' . $maxIndex,
+			array(
+				'current_member' => $memID,
+				'is_approved' => 1,
+				'board' => $board
+			)
+		);
+		while ($row = mysql_fetch_row($prereq))
+			$topicids[] = $row[0];
 
-		// Make sure we quit this loop.
-		if (mysql_num_rows($request) === $maxIndex || $looped)
-			break;
-		$looped = true;
-		$range_limit = '';
+		if($reverse)
+			$topicids = array_reverse($topicids);
+
+		mysql_free_result($prereq);
+
+		if(count($topicids))
+			$request = smf_db_query( '
+				SELECT
+					b.id_board, b.name AS bname, t.id_member_started, t.id_first_msg, t.id_last_msg, t.id_prefix, t.is_sticky, t.locked, t.num_views, t.num_replies, t.id_poll,
+					t.approved, m.id_member, m.subject AS first_subject, m.poster_time, m.id_topic, m.id_msg, m.icon,
+					m2.poster_name AS last_member_name, m2.id_member AS last_id_member, m2.poster_time AS last_poster_time,
+					IFNULL(meml.real_name, m2.poster_name) AS last_display_name, m2.subject AS last_subject, m2.icon AS last_icon,
+					p.name AS prefix_name
+				FROM {db_prefix}topics AS t
+					LEFT JOIN {db_prefix}messages AS m ON (m.id_msg = t.id_first_msg)
+					LEFT JOIN {db_prefix}members AS meml ON (meml.id_member = t.id_member_updated)
+					LEFT JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
+					LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)
+					LEFT JOIN {db_prefix}messages AS m2 ON (m2.id_msg = t.id_last_msg)
+					LEFT JOIN {db_prefix}prefixes AS p ON (p.id_prefix = t.id_prefix)
+				WHERE t.id_topic IN({array_int:topicids})
+				ORDER BY t.id_topic DESC',
+				array(
+					'topicids' => $topicids
+				)
+			);
+	}
+	else
+	{
+		$context['postbit_callback'] = 'template_postbit_compact';
+		$request = smf_db_query( '
+			SELECT
+				b.id_board, b.name AS bname, c.id_cat, c.name AS cname, m.id_topic, m.id_msg,
+				t.id_member_started, t.id_first_msg, t.id_last_msg, m.body, m.smileys_enabled, m.id_member, m.icon,
+				m.subject, m.poster_time, m.approved, mc.body AS cached_body, c1.likes_count, c1.like_status, c1.updated AS like_updated, l.id_user AS liked,
+				m2.id_member AS id_first_member, m2.subject AS first_subject, m2.poster_time AS time_started,
+				IFNULL(mem2.real_name, m2.poster_name) AS first_poster_name
+			FROM {db_prefix}messages AS m
+				INNER JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic)
+				INNER JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
+				INNER JOIN {db_prefix}messages AS m2 ON (m2.id_msg = t.id_first_msg)
+				LEFT JOIN {db_prefix}members AS mem2 ON (mem2.id_member = m2.id_member)
+				LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)
+				LEFT JOIN {db_prefix}likes AS l ON (l.id_msg = m.id_msg AND l.ctype = 1 AND l.id_user = {int:id_user})
+				LEFT JOIN {db_prefix}like_cache AS c1 ON (c1.id_msg = m.id_msg AND c1.ctype = 1)
+				LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang}
+			WHERE m.id_member = {int:current_member}' . (!empty($board) ? '
+				AND b.id_board = {int:board}' : '') . (empty($range_limit) ? '' : '
+				AND ' . $range_limit) . '
+				AND {query_see_board}' . (!$modSettings['postmod_active'] || $context['user']['is_owner'] ? '' : '
+				AND t.approved = {int:is_approved} AND m.approved = {int:is_approved}') . '
+			ORDER BY m.id_msg ' . ($reverse ? 'ASC' : 'DESC') . '
+			LIMIT ' . $start . ', ' . $maxIndex,
+			array(
+				'current_member' => $memID,
+				'is_approved' => 1,
+				'board' => $board,
+				'style' => $user_info['smiley_set_id'],
+				'lang' => $user_info['language_id'],
+				'id_user' => $user_info['id']
+			)
+		);
 	}
 
 	// Start counting at the number of the first message displayed.
@@ -482,60 +502,168 @@ function showPosts($memID)
 	require_once($sourcedir . '/Subs-LikeSystem.php');
 
 	$time_now = time();
-	while ($row = mysql_fetch_assoc($request))
-	{
-		$check_boards = array(0, $row['id_board']);		// 0 is for admin
+	if($context['is_topics']) {
+		loadTemplate('GenericBits');
+		$context['topics_per_page'] = empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) && !WIRELESS ? $options['topics_per_page'] : $modSettings['defaultMaxTopics'];
+		$context['messages_per_page'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) && !WIRELESS ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
+		if(count($topicids)) {
+			loadMemberContext($memID, true);
+			while ($row = mysql_fetch_assoc($request)) {
 
-		$context['can_see_hidden_level1'] = count(array_intersect($check_boards, $boards_hidden_1)) > 0;
-		$context['can_see_hidden_level2'] = count(array_intersect($check_boards, $boards_hidden_2)) > 0;
-		$context['can_see_hidden_level3'] = count(array_intersect($check_boards, $boards_hidden_3)) > 0;
+				if ($row['num_replies'] + 1 > $context['messages_per_page'])
+				{
+					$pages = '&nbsp;&nbsp;';
 
-		$context['can_see_like'] = count(array_intersect($check_boards, $boards_like_see)) > 0;
-		$context['can_give_like'] = count(array_intersect($check_boards, $boards_like_give)) > 0;
+					// We can't pass start by reference.
+					$start = -1;
+					$pages .= constructPageIndex(URL::topic($row['id_topic'], $row['first_subject'], '%1$d'), $start, $row['num_replies'] + 1, $context['messages_per_page'], true);
 
-		// Censor....
-		censorText($row['body']);
-		censorText($row['subject']);
+					// If we can use all, show all.
+					if (!empty($modSettings['enableAllMessages']) && $row['num_replies'] + 1 < $modSettings['enableAllMessages'])
+						$pages .= '<a class="navPages" href="' . URL::topic($row['id_topic'], $row['first_subject'], 0) .';all">' . $txt['show_all'] . '</a>';
+					$pages .= ' ';
+				}
+				else
+					$pages = '';
 
-		getCachedPost($row);
-		// And the array...
-		$i = $counter += $reverse ? -1 : 1;
-		$context['posts'][$i] = array(
-			'body' => $row['body'],
-			'counter' => $counter,
-			'alternate' => $counter % 2,
-			'category' => array(
-				'name' => $row['cname'],
-				'id' => $row['id_cat']
-			),
-			'board' => array(
-				'name' => $row['bname'],
-				'id' => $row['id_board']
-			),
-			'topic' => $row['id_topic'],
-			'subject' => $row['subject'],
-			'start' => 'msg' . $row['id_msg'],
-			'time' => timeformat($row['poster_time']),
-			'timestamp' => forum_time(true, $row['poster_time']),
-			'id' => $row['id_msg'],
-			'id_msg' => $row['id_msg'],
-			'id_member' => $memID,
-			'can_reply' => false,
-			'can_mark_notify' => false,
-			'can_delete' => false,
-			'delete_possible' => ($row['id_first_msg'] != $row['id_msg'] || $row['id_last_msg'] == $row['id_msg']) && (empty($modSettings['edit_disable_time']) || $row['poster_time'] + $modSettings['edit_disable_time'] * 60 >= time()),
-			'approved' => $row['approved'],
-			'likes_count' => $row['likes_count'],
-			'like_status' => $row['like_status'],
-			'liked' => $row['liked'],
-			'like_updated' => $row['like_updated'],
-		);
-		if($context['can_see_like'])
-			AddLikeBar($context['posts'][$i], $context['can_give_like'], $time_now);
+				$f_post_mem_href = !empty($row['id_member_started']) ? URL::user($row['id_member_started'], $memberContext[$memID]['name']) : '';
+				$t_href = URL::topic($row['id_topic'], $row['first_subject'], 0);
+				$l_post_mem_href = !empty($row['last_id_member']) ? URL::user($row['last_id_member'], $row['last_display_name'] ) : '';
+				$l_post_msg_href = URL::topic($row['id_topic'], $row['last_subject'], $user_info['is_guest'] ? (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) : 0, $user_info['is_guest'] ? true : false, $user_info['is_guest'] ? '' : ('.msg' . $row['id_last_msg']), $user_info['is_guest'] ? ('#msg' . $row['id_last_msg']) : '#new');
+				$context['topics'][$row['id_topic']] = array(
+					'id' => $row['id_topic'],
+					'first_post' => array(
+						'member' => array(
+							'username' => $memberContext[$memID]['username'],
+							'name' => $memberContext[$memID]['name'],
+							'id' => $memID,
+							'href' => $f_post_mem_href,
+							'link' => !empty($row['first_id_member']) ? '<a onclick="getMcard('.$row['id_member_started'].', $(this));return(false);" href="' . $f_post_mem_href . '" title="' . $txt['profile_of'] . ' ' . $row['first_display_name'] . '">' . $row['first_display_name'] . '</a>' : $memberContext[$memID]['name'],
+							'avatar' => &$memberContext[$memID]['avatar']['image'],
+						),
+						'icon_url' => getPostIcon($row['icon']),
+						'time' => timeformat($row['poster_time']),
+						'href' => $t_href,
+						'link' => '<a href="' . $t_href .'">' . $row['first_subject'] . '</a>',
+						'id' => $row['id_first_msg'],
+					),
+					'last_post' => array(
+						'id' => $row['id_last_msg'],
+						'member' => array(
+							'username' => $row['last_member_name'],
+							'name' => $row['last_display_name'],
+							'id' => $row['last_id_member'],
+							'href' => $l_post_mem_href,
+							'link' => !empty($row['last_id_member']) ? '<a onclick="getMcard('.$row['last_id_member'].', $(this));return(false);" href="' . $l_post_mem_href . '">' . $row['last_display_name'] . '</a>' : $row['last_display_name']
+						),
+						'time' => timeformat($row['last_poster_time']),
+						'timestamp' => forum_time(true, $row['last_poster_time']),
+						'subject' => $row['last_subject'],
+						'icon' => $row['last_icon'],
+						'icon_url' => getPostIcon($row['last_icon']),
+						'href' => $l_post_msg_href,
+						'link' => '<a href="' . $l_post_msg_href . ($row['num_replies'] == 0 ? '' : ' rel="nofollow"') . '>' . $row['last_subject'] . '</a>'
+					),
+					'is_posted_in' => false,
+					'new' => false,
+					'is_sticky' => $row['is_sticky'],
+					'is_locked' => $row['locked'],
+					'is_poll' => $modSettings['pollMode'] == '1' && $row['id_poll'] > 0,
+					'is_hot' => $row['num_replies'] >= $modSettings['hotTopicPosts'],
+					'is_very_hot' => $row['num_replies'] >= $modSettings['hotTopicVeryPosts'],
+					'views' => $row['num_views'],
+					'replies' => $row['num_replies'],
+					'prefix' => $row['prefix_name'] ? '<a href="' . $scripturl . '?board=' . $board . ';prefix=' . $row['id_prefix'] . '" class="prefix">'.(html_entity_decode($row['prefix_name']) . '</a>') : '',
+					'pages' => $pages,
+				);
+				determineTopicClass($context['topics'][$row['id_topic']]);
+			}
+		}
+	}
+	else {
+		loadTemplate('PostbitExtra');
+		loadMemberContext($memID);
+		while ($row = mysql_fetch_assoc($request))
+		{
+			$check_boards = array(0, $row['id_board']);		// 0 is for admin
 
-		if ($user_info['id'] == $row['id_member_started'])
-			$board_ids['own'][$row['id_board']][] = $counter;
-		$board_ids['any'][$row['id_board']][] = $counter;
+			$context['can_see_hidden_level1'] = count(array_intersect($check_boards, $boards_hidden_1)) > 0;
+			$context['can_see_hidden_level2'] = count(array_intersect($check_boards, $boards_hidden_2)) > 0;
+			$context['can_see_hidden_level3'] = count(array_intersect($check_boards, $boards_hidden_3)) > 0;
+
+			$context['can_see_like'] = count(array_intersect($check_boards, $boards_like_see)) > 0;
+			$context['can_give_like'] = count(array_intersect($check_boards, $boards_like_give)) > 0;
+
+			// Censor....
+			censorText($row['body']);
+			censorText($row['subject']);
+
+			getCachedPost($row);
+			// And the array...
+			$i = $counter += $reverse ? -1 : 1;
+			$thref = URL::topic($row['id_topic'], $row['first_subject'], 0, false, '.msg' . $row['id_msg'], '#'.$row['id_msg']);
+			$topichref = URL::topic($row['id_topic'], $row['first_subject'], 0);
+			$bhref = URL::board($row['id_board'], $row['bname'], 0, false);
+			$fhref = empty($row['id_first_member']) ? '' : URL::user($row['id_first_member'], $row['first_poster_name']);
+			$context['posts'][$i] = array(
+				'body' => $row['body'],
+				'counter' => $counter,
+				'icon' => $row['icon'],
+				'icon_url' => getPostIcon($row['icon']),
+				'category' => array(
+					'id' => $row['id_cat'],
+					'name' => $row['cname'],
+					'href' => $scripturl . '#c' . $row['id_cat'],
+					'link' => '<a href="' . $scripturl . '#c' . $row['id_cat'] . '">' . $row['cname'] . '</a>'
+				),
+				'board' => array(
+					'id' => $row['id_board'],
+					'name' => $row['bname'],
+					'href' => $bhref,
+					'link' => '<a href="' . $bhref . '">' . $row['bname'] . '</a>'
+				),
+				'member' => &$memberContext[$memID],
+				'href' => $thref,
+				'link' => '<a href="' . $thref . '" rel="nofollow">' . $row['subject'] . '</a>',
+				'subject' => $row['subject'],
+				'time' => timeformat($row['poster_time']),
+				'timestamp' => forum_time(true, $row['poster_time']),
+				'first_poster' => array(
+					'id' => $row['id_first_member'],
+					'name' => $row['first_poster_name'],
+					'href' => $fhref,
+					'link' => empty($row['id_first_member']) ? $row['first_poster_name'] : '<a href="' . $fhref . '">' . $row['first_poster_name'] . '</a>',
+					'time' => timeformat($row['time_started']),
+
+				),
+				'topic' => array(
+					'id' => $row['id_topic'],
+					'href' => $topichref,
+					'link' => '<a href="' . $topichref . '" rel="nofollow">' . $row['first_subject'] . '</a>',
+				),
+				'permahref' => $scripturl . '?msg=' . $row['id_msg'],
+				'permalink' => $txt['view_in_thread'],
+				'id' => $row['id_msg'],
+				'id_member' => $memID,
+				'can_reply' => false,
+				'can_mark_notify' => false,
+				'can_delete' => false,
+				'delete_possible' => ($row['id_first_msg'] != $row['id_msg'] || $row['id_last_msg'] == $row['id_msg']) && (empty($modSettings['edit_disable_time']) || $row['poster_time'] + $modSettings['edit_disable_time'] * 60 >= time()),
+				'approved' => $row['approved'],
+				'likes_count' => $row['likes_count'],
+				'like_status' => $row['like_status'],
+				'liked' => $row['liked'],
+				'like_updated' => $row['like_updated'],
+				'likers' => '',
+				'likelink' => ''
+			);
+			if($context['can_see_like'])
+				AddLikeBar($context['posts'][$i], $context['can_give_like'], $time_now);
+
+			if ($user_info['id'] == $row['id_member_started'])
+				$board_ids['own'][$row['id_board']][] = $counter;
+			$board_ids['any'][$row['id_board']][] = $counter;
+		}
 	}
 	mysql_free_result($request);
 

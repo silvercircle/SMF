@@ -13,74 +13,22 @@
  */
 function template_main()
 {
-	global $context, $settings, $options, $txt, $scripturl;
+	global $context, $txt;
 
 	echo '
 	<div id="recent" class="main_section">
-			<h1 class="bigheader">'
+		<h1 class="bigheader">'
 				,$txt['recent_posts'],'
-			</h1>
-		<div class="pagesection">
+		</h1>
+		<div class="pagelinks">
 			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
 		</div>';
 
-	foreach ($context['posts'] as $post)
-	{
-		echo '
-			<div class="post_wrapper mediumpadding"', ' core_posts">
-				<div class="content">
-					<div class="counter">', $post['counter'], '</div>
-					<div class="topic_details">
-						<h5>', $post['board']['link'], ' / ', $post['link'], '</h5>
-						<span class="smalltext">&#171;&nbsp;', $txt['last_post'], ' ', $txt['by'], ' <strong>', $post['poster']['link'], ' </strong> ', $txt['on'], '<em> ', $post['time'], '</em>&nbsp;&#187;</span>
-					</div>
-					<div class="list_posts">', $post['message'], '</div>
-				</div>';
-
-		if ($post['can_reply'] || $post['can_mark_notify'] || $post['can_delete'])
-			echo '
-				<div class="quickbuttons_wrap">
-					<ul class="reset smalltext quickbuttons">';
-
-		// If they *can* reply?
-		if ($post['can_reply'])
-			echo '
-						<li class="reply_button"><a href="', $scripturl, '?action=post;topic=', $post['topic'], '.', $post['start'], '"><span>', $txt['reply'], '</span></a></li>';
-
-		// If they *can* quote?
-		if ($post['can_quote'])
-			echo '
-						<li class="quote_button"><a href="', $scripturl, '?action=post;topic=', $post['topic'], '.', $post['start'], ';quote=', $post['id'], '"><span>', $txt['quote'], '</span></a></li>';
-
-		// Can we request notification of topics?
-		if ($post['can_mark_notify'])
-			echo '
-						<li class="notify_button"><a href="', $scripturl, '?action=notify;topic=', $post['topic'], '.', $post['start'], '"><span>', $txt['notify'], '</span></a></li>';
-
-		// How about... even... remove it entirely?!
-		if ($post['can_delete'])
-			echo '
-						<li class="remove_button"><a href="', $scripturl, '?action=deletemsg;msg=', $post['id'], ';topic=', $post['topic'], ';recent;', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm_(\'\',\'', $txt['remove_message'], '?\',$(this).attr(\'href\'));"><span>', $txt['remove'], '</span></a></li>';
-
-		if ($post['can_reply'] || $post['can_mark_notify'] || $post['can_delete'])
-			echo '
-					</ul>
-				</div>';
-
-		if($post['likes_count'] > 0 || !empty($post['likelink']))
-			echo '<div class="clear"><br></div>
-		<div class="likebar">
-		<div class="floatright">',$post['likelink'],'</div>
-		<span id="likers_msg_',$post['id'],'">',$post['likers'],'</span>
-		<div class="clear"></div>
-		</div>';
-		echo '<div class="clear"></div>
-			</div>';
-
-	}
+	foreach ($context['posts'] as &$post)
+		template_postbit_compact($post);
 
 	echo '
-		<div class="pagesection">
+		<div class="pagelinks">
 			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
 		</div>
 	</div>';

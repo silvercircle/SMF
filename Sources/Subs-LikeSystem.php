@@ -46,7 +46,7 @@ function GiveLike($mid)
 		/* check for dupes */
 		$request = smf_db_query( '
 			SELECT COUNT(id_msg) as count, id_user 
-				FROM {db_prefix}likes AS l WHERE l.id_msg = {int:id_message} AND l.id_user = {int:id_user} AND l.ctype = {int:ctype}',
+				FROM {db_prefix}likes AS l WHERE l.id_msg = {int:id_message} AND l.id_user = {int:id_user} AND l.ctype = {int:ctype} LIMIT 1',
 				array('id_message' => $mid, 'id_user' => $uid, 'ctype' => $content_type));
 				
 		$count = mysql_fetch_row($request);
@@ -81,7 +81,8 @@ function GiveLike($mid)
 		 */		
 		
 		$request = smf_db_query('
-			SELECT id_member, id_board, id_topic, subject FROM {db_prefix}messages AS m WHERE m.id_msg = '.$mid);
+			SELECT id_member, id_board, id_topic, subject FROM {db_prefix}messages AS m WHERE m.id_msg = {int:idmsg} LIMIT 1',
+			array('idmsg' => $mid));
 
 		$m = mysql_fetch_row($request);
 		mysql_free_result($request);
@@ -156,7 +157,6 @@ function GiveLike($mid)
 
 function LikesUpdate($mid)
 {
-	$first = true;
 	$like_string = '';
 	$count = 0;
 	$likers = array();

@@ -87,7 +87,7 @@ function getLastPost()
 // Find the ten most recent posts.
 function RecentPosts()
 {
-	global $sourcedir, $txt, $scripturl, $user_info, $context, $modSettings, $board;
+	global $sourcedir, $txt, $scripturl, $user_info, $context, $modSettings, $board, $memberContext;
 
 	require_once($sourcedir . '/Subs-LikeSystem.php');
 	$context['time_now'] = time();
@@ -95,6 +95,7 @@ function RecentPosts()
 	$context['need_synhlt'] = true;
 	//$context['hide_all_hidden'] = true;
     loadTemplate('Recent');
+	loadTemplate('PostbitExtra');
 	$context['page_title'] = $txt['recent_posts'];
 
 	$boards_hidden_1  = boardsAllowedTo('see_hidden1');
@@ -256,6 +257,7 @@ function RecentPosts()
 		'name' => $context['page_title']
 	);
 
+	$context['start'] = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
 	$key = 'recent-' . $user_info['id'] . '-' . md5(serialize(array_diff_key($query_parameters, array('max_id_msg' => 0)))) . '-' . (int) $_REQUEST['start'];
 	if (empty($modSettings['cache_enable']) || ($messages = CacheAPI::getCache($key, 120)) == null)
 	{
@@ -307,9 +309,9 @@ function RecentPosts()
 	// Get all the most recent posts.
 	$request = smf_db_query( '
 		SELECT
-			m.id_msg, m.subject, m.smileys_enabled, m.poster_time, m.body, m.id_topic, t.id_board, b.id_cat, mc.body AS cached_body,
+			m.id_msg, m.subject, m.smileys_enabled, m.poster_time, m.body, m.icon, m.id_topic, t.id_board, b.id_cat, mc.body AS cached_body,
 			b.name AS bname, c.name AS cname, t.num_replies, m.id_member, m2.id_member AS id_first_member, lc.likes_count, lc.like_status, lc.updated AS like_updated, l.id_user AS liked,
-			IFNULL(mem2.real_name, m2.poster_name) AS first_poster_name, t.id_first_msg, m2.subject AS first_subject,
+			IFNULL(mem2.real_name, m2.poster_name) AS first_poster_name, t.id_first_msg, m2.subject AS first_subject, m2.poster_time AS time_started,
 			IFNULL(mem.real_name, m.poster_name) AS poster_name, t.id_last_msg
 		FROM {db_prefix}messages AS m
 			INNER JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic)
@@ -318,7 +320,7 @@ function RecentPosts()
 			INNER JOIN {db_prefix}messages AS m2 ON (m2.id_msg = t.id_first_msg)
 			LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = m.id_member)
 			LEFT JOIN {db_prefix}members AS mem2 ON (mem2.id_member = m2.id_member)
-			LEFT JOIN {db_prefix}likes AS l ON (l.id_msg = m.id_msg AND l.ctype = 1 AND l.id_user = '.$user_info['id'].')
+			LEFT JOIN {db_prefix}likes AS l ON (l.id_msg = m.id_msg AND l.ctype = 1 AND l.id_user = {int:id_user})
 			LEFT JOIN {db_prefix}like_cache AS lc ON (lc.id_msg = m.id_msg AND lc.ctype = 1)
 			LEFT JOIN {db_prefix}messages_cache AS mc ON (mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang})
 		WHERE m.id_msg IN ({array_int:message_list})
@@ -328,12 +330,13 @@ function RecentPosts()
 			'message_list' => $messages,
 			'style' => $user_info['smiley_set_id'],
 			'lang' => $user_info['language_id'],
+			'id_user' => $user_info['id']
 		)
 	);
 	$counter = $_REQUEST['start'] + 1;
 	$context['posts'] = array();
 	$board_ids = array('own' => array(), 'any' => array());
-
+	$userids = array();
 	while ($row = mysql_fetch_assoc($request))
 	{
 		$check_boards = array(0, $row['id_board']);		// 0 is for admin
@@ -352,11 +355,15 @@ function RecentPosts()
 		getCachedPost($row);    	// this will also care about bbc parsing...
 		// And build the array.
 		$thref = URL::topic($row['id_topic'], $row['first_subject'], 0, false, '.msg' . $row['id_msg'], '#'.$row['id_msg']);
+		$topichref = URL::topic($row['id_topic'], $row['first_subject'], 0);
+		$bhref = URL::board($row['id_board'], $row['bname'], 0, false);
+		$fhref = empty($row['id_first_member']) ? '' : URL::user($row['id_first_member'], $row['first_poster_name']);
+		$userids[$row['id_msg']] = $row['id_member'];
 		$context['posts'][$row['id_msg']] = array(
 			'id' => $row['id_msg'],
-			'id_msg' => $row['id_msg'],
 			'counter' => $counter++,
-			'alternate' => $counter % 2,
+			'icon' => $row['icon'],
+			'icon_url' => getPostIcon($row['icon']),
 			'category' => array(
 				'id' => $row['id_cat'],
 				'name' => $row['cname'],
@@ -366,11 +373,9 @@ function RecentPosts()
 			'board' => array(
 				'id' => $row['id_board'],
 				'name' => $row['bname'],
-				'href' => $scripturl . '?board=' . $row['id_board'] . '.0',
-				'link' => '<a href="' . $scripturl . '?board=' . $row['id_board'] . '.0">' . $row['bname'] . '</a>'
+				'href' => $bhref,
+				'link' => '<a href="' . $bhref . '">' . $row['bname'] . '</a>'
 			),
-			'topic' => $row['id_topic'],
-			//'href' => $scripturl . '?topic=' . $row['id_topic'] . '.msg' . $row['id_msg'] . '#msg' . $row['id_msg'],
 			'href' => $thref,
 			'link' => '<a href="' . $thref . '" rel="nofollow">' . $row['subject'] . '</a>',
 			'start' => $row['num_replies'],
@@ -380,17 +385,20 @@ function RecentPosts()
 			'first_poster' => array(
 				'id' => $row['id_first_member'],
 				'name' => $row['first_poster_name'],
-				'href' => empty($row['id_first_member']) ? '' : $scripturl . '?action=profile;u=' . $row['id_first_member'],
-				'link' => empty($row['id_first_member']) ? $row['first_poster_name'] : '<a href="' . $scripturl . '?action=profile;u=' . $row['id_first_member'] . '">' . $row['first_poster_name'] . '</a>'
+				'href' => $fhref,
+				'link' => empty($row['id_first_member']) ? $row['first_poster_name'] : '<a href="' . $fhref . '">' . $row['first_poster_name'] . '</a>',
+				'time' => timeformat($row['time_started']),
+
 			),
-			'poster' => array(
-				'id' => $row['id_member'],
-				'name' => $row['poster_name'],
-				'href' => empty($row['id_member']) ? '' : $scripturl . '?action=profile;u=' . $row['id_member'],
-				'link' => empty($row['id_member']) ? $row['poster_name'] : '<a href="' . $scripturl . '?action=profile;u=' . $row['id_member'] . '">' . $row['poster_name'] . '</a>'
+			'topic' => array(
+				'id' => $row['id_topic'],
+				'href' => $topichref,
+				'link' => '<a href="' . $topichref . '" rel="nofollow">' . $row['first_subject'] . '</a>',
 			),
+			'permahref' => $scripturl . '?msg=' . $row['id_msg'],
+			'permalink' => $txt['view_in_thread'],
 			'id_member' => $row['id_member'],
-			'message' => $row['body'],
+			'body' => $row['body'],
 			'can_reply' => false,
 			'can_mark_notify' => false,
 			'can_delete' => false,
@@ -399,6 +407,8 @@ function RecentPosts()
 			'like_status' => $row['like_status'],
 			'liked' => $row['liked'],
 			'like_updated' => $row['like_updated'],
+			'likers' => '',
+			'likelink' => ''
 		);
 		if($context['can_see_like'])
 			AddLikeBar($context['posts'][$row['id_msg']], $context['can_give_like'], $context['time_now']);
@@ -406,8 +416,10 @@ function RecentPosts()
 		if ($user_info['id'] == $row['id_first_member'])
 			$board_ids['own'][$row['id_board']][] = $row['id_msg'];
 		$board_ids['any'][$row['id_board']][] = $row['id_msg'];
+
 	}
 	mysql_free_result($request);
+	loadMemberData(array_unique($userids));
 
 	// There might be - and are - different permissions between any and own.
 	$permissions = array(
@@ -443,15 +455,17 @@ function RecentPosts()
 
 				// Okay, looks like they can do it for these posts.
 				foreach ($board_ids[$type][$board_id] as $counter)
-					if ($type == 'any' || $context['posts'][$counter]['poster']['id'] == $user_info['id'])
+					if ($type == 'any' || $context['posts'][$counter]['id_member'] == $user_info['id'])
 						$context['posts'][$counter][$allowed] = true;
 			}
 		}
 	}
 
 	$quote_enabled = empty($modSettings['disabledBBC']) || !in_array('quote', explode(',', $modSettings['disabledBBC']));
-	foreach ($context['posts'] as $counter => $dummy)
+	foreach ($context['posts'] as $counter => &$post)
 	{
+		loadMemberContext($post['id_member']);
+		$post['member'] = &$memberContext[$post['id_member']];
 		// Some posts - the first posts - can't just be deleted.
 		$context['posts'][$counter]['can_delete'] &= $context['posts'][$counter]['delete_possible'];
 
@@ -1333,5 +1347,4 @@ function UnreadTopics()
 	$context['querystring_board_limits'] = sprintf($context['querystring_board_limits'], $_REQUEST['start']);
 	$context['topics_to_mark'] = implode('-', $topic_ids);
 }
-
 ?>

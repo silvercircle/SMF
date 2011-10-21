@@ -780,6 +780,7 @@ $txt['remove_draft'] = 'Remove draft';
 $txt['last_saved_on'] = 'Last saved on';
 
 $txt['permalink'] = 'Permalink';
+$txt['view_in_thread'] = 'View in topic context';
 $txt['who_summary'] = 'A total of %d guest(s) and %d registered user(s) were online in the last %d minutes.';
 $txt['who_showby'] = 'Show online users sorted by: ';
 $txt['who_lastact'] = 'Last activity';

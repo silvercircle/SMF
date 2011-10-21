@@ -1067,7 +1067,7 @@ function Display()
 
 		$sql_from = '
 			FROM {db_prefix}messages AS m
-			LEFT JOIN {db_prefix}likes AS l ON (l.id_msg = m.id_msg AND l.ctype = 1 AND l.id_user = '.$user_info['id'].')
+			LEFT JOIN {db_prefix}likes AS l ON (l.id_msg = m.id_msg AND l.ctype = 1 AND l.id_user = {int:id_user})
 			LEFT JOIN {db_prefix}like_cache AS c ON (c.id_msg = m.id_msg AND c.ctype = 1)
 			LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang}';
 
@@ -1076,6 +1076,7 @@ function Display()
 			'new_from' => $topicinfo['new_from'],
 			'style' => $user_info['smiley_set_id'],
 			'lang' => $user_info['language_id'],
+			'id_user' => $user_info['id']
 		);
 
 		if(!empty($modSettings['enableAdvancedHooks']))
@@ -1360,7 +1361,12 @@ function prepareDisplayContext($reset = false)
 		$counter--;
 
 	// hooks can populate these fields with additional content
-	$output['hook_poster_details'] = $output['hook_before_sig'] = $output['hook_after_sig'] = $output['hook_post_bottom'] = '';
+	$output['template_hook'] = array(
+		'before_sig' => '',
+		'after_sig' => '',
+		'post_bottom' => '',
+		'poster_details' => ''
+	);
     if(!empty($modSettings['enableAdvancedHooks']))
         HookAPI::callHook('integrate_postbit', array(&$context, &$output));
 

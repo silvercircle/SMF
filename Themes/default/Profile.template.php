@@ -325,83 +325,49 @@ function template_showPosts()
 				', (!isset($context['attachments']) && empty($context['is_topics']) ? $txt['showMessages'] : (!empty($context['is_topics']) ? $txt['showTopics'] : $txt['showAttachments'])), ' - ', $context['member']['name'], '
 			</h3>
 		</div>
-		<div class="pagesection">
+		<div class="pagelinks">
 			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
 		</div>';
-
-	// Button shortcuts
-	$quote_button = create_button('quote.gif', 'reply_quote', 'quote', 'align="middle"');
-	$reply_button = create_button('reply_sm.gif', 'reply', 'reply', 'align="middle"');
-	$remove_button = create_button('delete.gif', 'remove_message', 'remove', 'align="middle"');
-	$notify_button = create_button('notify_sm.gif', 'notify_replies', 'notify', 'align="middle"');
 
 	// Are we displaying posts or attachments?
 	if (!isset($context['attachments']))
 	{
 		// For every post to be displayed, give it its own div, and show the important details of the post.
-		foreach ($context['posts'] as $post)
-		{
+		if($context['is_topics']) {
 			echo '
-		<div class="topic">
-			<div class="post_wrapper core_posts">
-				<div class="content">
-					<div class="counter">', $post['counter'], '</div>
-					<div class="topic_details">
-						<h5><strong><a href="', $scripturl, '?board=', $post['board']['id'], '.0">', $post['board']['name'], '</a> / <a href="', $scripturl, '?topic=', $post['topic'], '.', $post['start'], '#msg', $post['id'], '">', $post['subject'], '</a></strong></h5>
-						<span class="smalltext">', $post['time'], '</span>
-					</div>
-					<div class="list_posts">';
-
-			if (!$post['approved'])
+		<table class="topic_table">';
+			if (!empty($context['topics']))
+			{
 				echo '
-					<div class="approve_post">
-						<em>', $txt['post_awaiting_approval'], '</em>
-					</div>';
+				<thead>
+				<tr class="mediumpadding" style="margin:2px;">
+				<th scope="col" class="glass first_th" style="width:8%;" colspan="2">&nbsp;</th>
+				<th scope="col" class="glass lefttext">', $txt['subject'],'</th>
+				<th scope="col" class="glass nowrap">', $txt['replies'],'</th>
+				<th scope="col" class="glass centertext nowrap">',$txt['last_post'],'</th>';
+
+			}
+			else
+				echo '
+				<thead>
+				<tr>
+				<th scope="col" class="first_th" style="width:8%;">&nbsp;</th>
+				<th colspan="3"><strong>', $txt['msg_alert_none'], '</strong></th>
+				<th scope="col" class="last_th" style="width:8%;">&nbsp;</th>';
 
 			echo '
-					', $post['body'], '
-					</div>
-				</div>';
+				</tr>
+				</thead>
+				<tbody>';
+			foreach ($context['topics'] as &$topic)
+				$context['postbit_callback']($topic);
 
-			if ($post['can_reply'] || $post['can_mark_notify'] || $post['can_delete'])
-				echo '
-				<div class="floatright mediumpadding">
-					<ul class="reset smalltext quickbuttons">';
-
-			// If they *can* reply?
-			if ($post['can_reply'])
-				echo '
-						<li class="reply_button"><a href="', $scripturl, '?action=post;topic=', $post['topic'], '.', $post['start'], '"><span>', $txt['reply'], '</span></a></li>';
-
-			// If they *can* quote?
-			if ($post['can_quote'])
-				echo '
-						<li class="quote_button"><a href="', $scripturl . '?action=post;topic=', $post['topic'], '.', $post['start'], ';quote=', $post['id'], '"><span>', $txt['quote'], '</span></a></li>';
-
-			// Can we request notification of topics?
-			if ($post['can_mark_notify'])
-				echo '
-						<li class="notify_button"><a href="', $scripturl, '?action=notify;topic=', $post['topic'], '.', $post['start'], '"><span>', $txt['notify'], '</span></a></li>';
-
-			// How about... even... remove it entirely?!
-			if ($post['can_delete'])
-				echo '
-						<li class="remove_button"><a href="', $scripturl, '?action=deletemsg;msg=', $post['id'], ';topic=', $post['topic'], ';profile;u=', $context['member']['id'], ';start=', $context['start'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');"><span>', $txt['remove'], '</span></a></li>';
-
-			if ($post['can_reply'] || $post['can_mark_notify'] || $post['can_delete'])
-				echo '
-					</ul>
-				</div>';
 			echo '
-				<br class="clear" />';
-				
-			if($post['likes_count'] > 0 || !empty($post['likelink'])) 
-				echo '<div class="likebar">
-				<div class="floatright">',$post['likelink'],'</div>
-				<span id="likers_msg_',$post['id'],'">',$post['likers'],'</span>
-				<div class="clear"></div></div>';
-			echo '</div>
-		</div>';
+				</table>';
+		}
+		else {
+			foreach ($context['posts'] as &$post)
+				$context['postbit_callback']($post);
 		}
 	}
 	else
@@ -467,7 +433,7 @@ function template_showPosts()
 	}
 	// Show more page numbers.
 	echo '
-		<div class="pagesection" style="margin-bottom: 0;">
+		<div class="pagelinks" style="margin-bottom: 0;">
 			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
 		</div>';
 }

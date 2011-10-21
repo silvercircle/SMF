@@ -84,7 +84,6 @@ function getLastPosts($latestPostOptions)
 			'time' => timeformat($row['poster_time']),
 			'timestamp' => forum_time(true, $row['poster_time']),
 			'raw_timestamp' => $row['poster_time'],
-			//'href' => $scripturl . '?topic=' . $row['id_topic'] . '.msg' . $row['id_msg'] . ';topicseen#msg' . $row['id_msg'],
 			'href' => $thref,
 			'link' => '<a href="' . $thref . '" rel="nofollow">' . $row['subject'] . '</a>'
 		);

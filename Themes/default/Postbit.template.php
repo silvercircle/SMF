@@ -36,7 +36,7 @@ function template_postbit_normal(&$message)
 	 <h5 style="display:inline;" id="subject_', $message['id'], '">
 	  ', $message['subject'], '
 	 </h5>
-	 <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['permahref'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span onclick="sharePost($(this));"><a href="#!">Share</a></span>' : ''),'</span>
+	 <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['permahref'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span style="cursor:pointer" onclick="sharePost($(this));">Share</span>' : ''),'</span>
 	 <span class="smalltext">&nbsp;',$message['time'], '</span>
 	 <div id="msg_', $message['id'], '_quick_mod"></div>
     </div>
@@ -146,7 +146,7 @@ function template_postbit_normal(&$message)
 	// Done with the information about the poster... on to the post itself.
 	echo '
 		</ul>';
-	echo $message['hook_poster_details'],'
+	echo $message['template_hook']['poster_details'],'
 		</div>
 		<div class="post_content">
 		<div class="post" id="msg_', $message['id'], '">';
@@ -248,13 +248,13 @@ function template_postbit_normal(&$message)
 		</ul>
 		</div>';
 	}
-	echo $message['hook_before_sig'];
+	echo $message['template_hook']['before_sig'];
 	// Show the member's signature?
 	if (!empty($message['member']['signature']) && empty($options['show_no_signatures']) && $context['signature_enabled'])
 		echo '
 		<div class="signature" id="msg_', $message['id'], '_signature">', $message['member']['signature'], '</div>';
 
-	echo $message['hook_after_sig'];
+	echo $message['template_hook']['after_sig'];
 	if($message['likes_count'] > 0 || !empty($message['likelink']))
 		echo '
 	<div class="likebar">
@@ -288,41 +288,41 @@ function template_postbit_normal(&$message)
 	// Maybe we can approve it, maybe we should?
 	if ($message['can_approve'])
 		echo '
-			<li class="approve_button"><a href="', $scripturl, '?action=moderate;area=postmod;sa=approve;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['approve'], '</a></li>';
+			<li><a href="', $scripturl, '?action=moderate;area=postmod;sa=approve;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['approve'], '</a></li>';
 
 	// Can they reply? Have they turned on quick reply?
 	if ($context['can_quote'] && !empty($options['display_quick_reply']))
 		echo '
-			<li class="quote_button"><a href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '" onclick="return oQuickReply.quote(', $message['id'], ');">', $txt['quote'], '</a></li>
-			<li class="quote_button" id="mquote_' . $message['id'] . '"><a href="#!" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
-			<li class="quote_button" style="display:none;" id="mquote_remove_' . $message['id'] . '"><a href="#!" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
+			<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '" onclick="return oQuickReply.quote(', $message['id'], ');">', $txt['quote'], '</a></li>
+			<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
+			<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
 
 	// So... quick reply is off, but they *can* reply?
 	elseif ($context['can_quote'])
 		echo '
-			<li class="quote_button"><a href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '">', $txt['quote'], '</a></li>
-			<li class="quote_button" id="mquote_' . $message['id'] . '"><a href="#!" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
-			<li class="quote_button" style="display:none;" id="mquote_remove_' . $message['id'] . '"><a href="#!" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
+			<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '">', $txt['quote'], '</a></li>
+			<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
+			<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
 
 	// Can the user modify the contents of this post?
 	if ($message['can_modify'])
 		echo '
-			<li class="modify_button"><a onclick="oQuickModify.modifyMsg(\'', $message['id'], '\');return(false);" href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
+			<li><a rel="nofollow" onclick="oQuickModify.modifyMsg(\'', $message['id'], '\');return(false);" href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
 
 	// How about... even... remove it entirely?!
 	if ($message['can_remove'])
 		echo '
-			<li class="remove_button"><a href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm_(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
+			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm_(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
 
 	// What about splitting it off the rest of the topic?
 	if ($context['can_split'] && !empty($context['real_num_replies']))
 		echo '
-			<li class="split_button"><a href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '">', $txt['split'], '</a></li>';
+			<li><a href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '">', $txt['split'], '</a></li>';
 
 	// Can we restore topics?
 	if ($context['can_restore_msg'])
 		echo '
-			<li class="restore_button"><a href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['restore_message'], '</a></li>';
+			<li><a href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['restore_message'], '</a></li>';
 
 	// Show a checkbox for quick moderation?
 	if (!empty($options['display_quick_mod']) && $message['can_remove'])
@@ -357,7 +357,7 @@ function template_postbit_normal(&$message)
 	echo '
 		</div><div class="clear">
 		</div></div>',
-		$message['hook_post_bottom'],'
+	     $message['template_hook']['post_bottom'],'
 		</div>';
 }
 
@@ -389,7 +389,7 @@ function template_postbit_lean(&$message)
 					  ',$message['subject'],'
 					  </h5>	  
 					  <span class="smalltext">&nbsp;',$message['time'], '</span>						  
-					  <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['permahref'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span onclick="sharePost($(this));"><a href="#!">Share</a></span>' : ''),'</span>
+					  <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['permahref'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span style="cursor:pointer;" onclick="sharePost($(this));">Share</span>' : ''),'</span>
 					  </div>
 					  <div id="msg_', $message['id'], '_quick_mod"></div>';
 
@@ -580,36 +580,36 @@ function template_postbit_lean(&$message)
 	// Can they reply? Have they turned on quick reply?
 	if ($context['can_quote'] && !empty($options['display_quick_reply']))
 		echo '
-								<li class="quote_button"><a href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '" onclick="return oQuickReply.quote(', $message['id'], ');">', $txt['quote'], '</a></li>
-								<li class="quote_button" id="mquote_' . $message['id'] . '"><a href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
-								<li class="quote_button" style="display:none;" id="mquote_remove_' . $message['id'] . '"><a href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
+								<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '" onclick="return oQuickReply.quote(', $message['id'], ');">', $txt['quote'], '</a></li>
+								<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
+								<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
 
 	// So... quick reply is off, but they *can* reply?
 	elseif ($context['can_quote'])
 		echo '
-								<li class="quote_button"><a href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '">', $txt['quote'], '</a></li>
-								<li class="quote_button" id="mquote_' . $message['id'] . '"><a href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
-								<li class="quote_button" style="display:none;" id="mquote_remove_' . $message['id'] . '"><a href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
+								<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '">', $txt['quote'], '</a></li>
+								<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
+								<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
 
 	// Can the user modify the contents of this post?
 	if ($message['can_modify'])
 		echo '
-			<li class="modify_button"><a onclick="oQuickModify.modifyMsg(\'', $message['id'], '\');return(false);" href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
+			<li><a rel="nofollow" onclick="oQuickModify.modifyMsg(\'', $message['id'], '\');return(false);" href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
 
 	// How about... even... remove it entirely?!
 	if ($message['can_remove'])
 		echo '
-								<li class="remove_button"><a href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');">', $txt['remove'], '</a></li>';
+								<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');">', $txt['remove'], '</a></li>';
 
 	// What about splitting it off the rest of the topic?
 	if ($context['can_split'] && !empty($context['real_num_replies']))
 		echo '
-								<li class="split_button"><a href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '">', $txt['split'], '</a></li>';
+								<li><a rel="nofollow" href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '">', $txt['split'], '</a></li>';
 
 	// Can we restore topics?
 	if ($context['can_restore_msg'])
 		echo '
-								<li class="restore_button"><a href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['restore_message'], '</a></li>';
+								<li><a rel="nofollow" href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['restore_message'], '</a></li>';
 
 	// Show a checkbox for quick moderation?
 	if (!empty($options['display_quick_mod']) && $message['can_remove'])
@@ -693,7 +693,7 @@ function template_postbit_comment(&$message)
 			', $message['subject'], '
 			</h5>',
 			$txt['by'], ' ', $message['member']['link'],'
-			<span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['href'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span onclick="sharePost($(this));"><a href="#!">Share</a></span>' : ''),'</span>
+			<span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['href'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span style="cursor:pointer;" onclick="sharePost($(this));">Share</span>' : ''),'</span>
 			<span class="smalltext">&nbsp;',$message['time'], '</span>
 			<div id="msg_', $message['id'], '_quick_mod"></div>';
 
@@ -810,36 +810,36 @@ function template_postbit_comment(&$message)
 	// Can they reply? Have they turned on quick reply?
 	if ($context['can_quote'] && !empty($options['display_quick_reply']))
 		echo '
-			<li class="quote_button"><a href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '" onclick="return oQuickReply.quote(', $message['id'], ');">', $txt['quote'], '</a></li>
-			<li class="quote_button" id="mquote_' . $message['id'] . '"><a href="#!" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
-			<li class="quote_button" style="display:none;" id="mquote_remove_' . $message['id'] . '"><a href="#!" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
+			<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '" onclick="return oQuickReply.quote(', $message['id'], ');">', $txt['quote'], '</a></li>
+			<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
+			<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
 
 	// So... quick reply is off, but they *can* reply?
 	elseif ($context['can_quote'])
 		echo '
-			<li class="quote_button"><a href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '">', $txt['quote'], '</a></li>
-			<li class="quote_button" id="mquote_' . $message['id'] . '"><a href="#!" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
-			<li class="quote_button" style="display:none;" id="mquote_remove_' . $message['id'] . '"><a href="#!" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
+			<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '">', $txt['quote'], '</a></li>
+			<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
+			<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
 
 	// Can the user modify the contents of this post?
 	if ($message['can_modify'])
 		echo '
-			<li class="modify_button"><a onclick="oQuickModify.modifyMsg(\'', $message['id'], '\');return(false);" href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
+			<li><a rel="nofollow" onclick="oQuickModify.modifyMsg(\'', $message['id'], '\');return(false);" href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
 
 	// How about... even... remove it entirely?!
 	if ($message['can_remove'])
 		echo '
-			<li class="remove_button"><a href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');">', $txt['remove'], '</a></li>';
+			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');">', $txt['remove'], '</a></li>';
 
 	// What about splitting it off the rest of the topic?
 	if ($context['can_split'] && !empty($context['real_num_replies']))
 		echo '
-			<li class="split_button"><a href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '">', $txt['split'], '</a></li>';
+			<li><a rel="nofollow" href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '">', $txt['split'], '</a></li>';
 
 	// Can we restore topics?
 	if ($context['can_restore_msg'])
 		echo '
-			<li class="restore_button"><a href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['restore_message'], '</a></li>';
+			<li><a rel="nofollow" href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['restore_message'], '</a></li>';
 
 	// Show a checkbox for quick moderation?
 	if (!empty($options['display_quick_mod']) && $message['can_remove'])
@@ -899,7 +899,7 @@ function template_postbit_clean(&$message)
 	echo '
 		<div class="keyinfo clean">
 		  <div>
-		  <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['href'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span onclick="sharePost($(this));"><a href="#!">Share</a></span>' : ''),'</span>
+		  <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['href'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span style="cursor:pointer;" onclick="sharePost($(this));">Share</span>' : ''),'</span>
 		  Posted by: ',$message['member']['link'],',&nbsp;
 		  <span class="smalltext">',$message['time'], '</span>
 		  </div>
@@ -1010,27 +1010,27 @@ function template_postbit_clean(&$message)
 	// Maybe we can approve it, maybe we should?
 	if ($message['can_approve'])
 		echo '
-								<li class="approve_button"><a href="', $scripturl, '?action=moderate;area=postmod;sa=approve;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['approve'], '</a></li>';
+								<li><a rel="nofollow" href="', $scripturl, '?action=moderate;area=postmod;sa=approve;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['approve'], '</a></li>';
 
 	// Can the user modify the contents of this post?
 	if ($message['can_modify'])
 		echo '
-			<li class="modify_button"><a onclick="oQuickModify.modifyMsg(\'', $message['id'], '\');return(false);" href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
+			<li><a rel="nofollow" onclick="oQuickModify.modifyMsg(\'', $message['id'], '\');return(false);" href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
 
 	// How about... even... remove it entirely?!
 	if ($message['can_remove'])
 		echo '
-								<li class="remove_button"><a href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');">', $txt['remove'], '</a></li>';
+								<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');">', $txt['remove'], '</a></li>';
 
 	// What about splitting it off the rest of the topic?
 	if ($context['can_split'] && !empty($context['real_num_replies']))
 		echo '
-								<li class="split_button"><a href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '">', $txt['split'], '</a></li>';
+								<li><a rel="nofollow" href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '">', $txt['split'], '</a></li>';
 
 	// Can we restore topics?
 	if ($context['can_restore_msg'])
 		echo '
-								<li class="restore_button"><a href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['restore_message'], '</a></li>';
+								<li><a rel="nofollow" href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['restore_message'], '</a></li>';
 
 	// Show a checkbox for quick moderation?
 	if (!empty($options['display_quick_mod']) && $message['can_remove'])
