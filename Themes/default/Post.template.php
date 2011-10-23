@@ -117,11 +117,9 @@ function template_main()
 						<span id="preview_subject">', empty($context['preview_subject']) ? '' : $context['preview_subject'], '</span>
 					</h3>
 				</div>
-				<div class="blue_container cleantop">
-					<div class="content">
-						<div id="preview_body">
-							', empty($context['preview_message']) ? '<br />' : $context['preview_message'], '
-						</div>
+				<div class="post_wrapper blue_container cleantop">
+					<div id="preview_body" class="post">
+						', empty($context['preview_message']) ? '<br />' : $context['preview_message'], '
 					</div>
 				</div>
 			</div><br />';

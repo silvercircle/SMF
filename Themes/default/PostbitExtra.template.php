@@ -19,6 +19,15 @@ function template_postbit_compact(&$message)
 	echo '
 	<div class="post_wrapper" data-mid="',$message['id'], '">';
 
+	if(isset($context['is_display_std'])) {
+		$message['can_quote'] = $context['can_quote'];
+		$message['can_reply'] = $context['can_reply'];
+		$message['can_delete'] = $message['can_remove'];
+		$message['can_mark_notify'] = $context['can_mark_notify'];
+		$message['topic']['id'] = $context['current_topic'];
+		$message['board']['link'] = '';
+	}
+
 	if (isset($context['first_message']) && $message['id'] != $context['first_message'])
 		echo '
 	<a id="msg', $message['id'], '"></a>', $message['first_new'] ? '<a id="new"></a>' : '';
@@ -61,7 +70,10 @@ function template_postbit_compact(&$message)
 		</span>';
 		}
 		echo
-		 '&nbsp;',$txt['posted_by'], '&nbsp;<strong>',$message['member']['link'], '</strong>&nbsp;',$txt['in'],'&nbsp;',$message['topic']['link'],'&nbsp;(',$txt['started_by'],'&nbsp;<strong>',$message['first_poster']['link'],'</strong>,&nbsp;',$message['first_poster']['time'],')<br>
+		 '&nbsp;',$txt['posted_by'], '&nbsp;<strong>',$message['member']['link'], '</strong>';
+		if(!isset($context['is_display_std']))
+			echo '
+		 &nbsp;',$txt['in'],'&nbsp;',$message['topic']['link'],'&nbsp;(',$txt['started_by'],'&nbsp;<strong>',$message['first_poster']['link'],'</strong>,&nbsp;',$message['first_poster']['time'],')<br>
 		 &nbsp;',$txt['board'], ':&nbsp;<strong>',$message['board']['link'],'</strong><br>';
 		echo '
 		<div class="clear"></div>
@@ -84,7 +96,7 @@ function template_postbit_compact(&$message)
 		</article>
 		</div>
 		<div class="moderatorbar">';
-	if(isset($message['likes_count']) && ($message['likes_count'] > 0 || !empty($message['likelink'])))
+	if((isset($message['likes_count']) && $message['likes_count'] > 0) || !empty($message['likelink']))
 		echo '
 		<div class="likebar">
 		 <div class="floatright">',$message['likelink'],'</div>
@@ -107,7 +119,7 @@ function template_postbit_compact(&$message)
 			<li><a rel="nofollow" role="button" href="', $scripturl, '?action=notify;topic=', $message['topic']['id'], '.', $context['start'], '">', $txt['notify'], '</a></li>';
 		if($message['can_delete'])
 			echo '
-			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $message['topic']['id'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm_(\'\', \'', $txt['remove_message'], '?\');">', $txt['remove'], '</a></li>';
+			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $message['topic']['id'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm_(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
 		echo '
 		</ul>';
 			echo '

@@ -14,12 +14,17 @@
 function template_getlikes()
 {
 	global $context, $txt;
-
+	header('Content-Type: text/xml; charset=' . (empty($context['character_set']) ? 'ISO-8859-1' : $context['character_set']));
+	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '" ?', '>';
 	echo '
+<document>
+ <response open="default" width="400">
+  <content>
+  <![CDATA[
 	<div class="title_bar">
 		<h1>',$txt['members_who_liked'],'</h1>
 	</div>
-	<div class="mediummargin">
+	<div class="mediummargin content">
 	<ol class="commonlist">';
 
 	foreach($context['likes'] as $like) {
@@ -33,6 +38,10 @@ function template_getlikes()
 	}
 	echo '
 	</ol>
-	</div>';
+	</div>
+  ]]>
+  </content>
+ </response>
+</document>';
 }
 ?>

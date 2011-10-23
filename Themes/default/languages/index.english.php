@@ -437,7 +437,7 @@ $txt['status'] = 'Status';
 $txt['go_up'] = 'Go Up';
 $txt['go_down'] = 'Go Down';
 
-$forum_copyright = '<a href="' . $scripturl . '?action=credits" title="EosAlpha BBS" target="_blank" class="new_win">%1$s</a>';
+$forum_copyright = '<a href="' . $scripturl . '?action=credits" title="EosAlpha BBS" target="_blank" class="new_win">%1$s</a>, based on <a href="http://www.simplemachines.org">SMF 2.0</a>';
 
 $txt['birthdays'] = 'Birthdays:';
 $txt['events'] = 'Events:';

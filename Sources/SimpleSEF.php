@@ -125,6 +125,46 @@ if(!empty($modSettings['simplesef_enable'])) {
 				return($a);
 			return(preg_replace('~\b' . preg_quote(self::$scripturl) . '\?action=([a-zA-Z0-9]+)(.*)~', self::$boardurl . '/$1$2', $a));
 		}
+
+		public static function addParam($url, $params)
+		{
+			$newparam = '';
+			$_p = explode(';', trim($params, ';'));
+			foreach($_p as $p) {
+				$_c = explode('=', $p);
+				$newparam .= ('/' . $_c[0] . '.' . (isset($_c[1]) && !empty($_c[1]) ? $_c[1] : ''));
+			}
+			if(!empty($newparam))
+				return str_replace(self::$boardurl, self::$boardurl . $newparam, $url);
+
+			return($url);
+		}
+
+		/**
+		 * @static
+		 * @param $url			a conventional querystring (i.e. ?action=mlist;sa=search) or URL
+		 * 						including $scripturl.
+		 * @return string		a prettyfied URL
+		 *
+		 * create a SEF URL for all instances for which we don't have a faster URL crafting method.
+		 */
+		public static function parse($_r)
+		{
+			$matches = array();
+			$url = stripos($_r, self::$scripturl) === false ? (self::$scripturl . $_r . ' ') : ($_r . ' ');
+
+			preg_match_all('~(' . preg_quote(self::$scripturl) . '[-a-zA-Z0-9+&@#/%?=\~_|!:,.;\[\]]*[-a-zA-Z0-9+&@#/%=\~_|\[\]]?)([^-a-zA-Z0-9+&@#/%=\~_|])~', $url, $matches);
+			if (!empty($matches[0])) {
+				$replacements = array();
+				foreach (array_unique($matches[1]) as $i => $_url) {
+					$replacement = SimpleSEF::create_sef_url($_url);
+					if ($_url != $replacement)
+						$replacements[$matches[0][$i]] = $replacement . $matches[2][$i];
+				}
+				$url = str_replace(array_keys($replacements), array_values($replacements), $url);
+			}
+			return(trim($url));
+		}
 	}
 }
 else {
@@ -133,13 +173,13 @@ else {
 		private static $boardurl = '';
 		private static $scripturl = '';
 
-		public static function init($b, $s)
+		public static function init($b)
 		{
-			self::$boardurl = $b;
-			self::$scripturl = $s;
+			self::$boardurl = rtrim($b, '/');
+			self::$scripturl = 	self::$boardurl . '/index.php';
 		}
 
-		public static function topic($topicid, $topicname, $start = 0, $boardname = '', $boardid = 0, $force_start = true, $msgfragment = '', $a = '')
+		public static function topic($topicid, $topicname, $start = 0, $force_start = true, $msgfragment = '', $a = '')
 		{
 			return(self::$scripturl . '?topic=' . (int)$topicid . ($start > 0 || $force_start ? ('.' . $start) : '') . $msgfragment . $a);
 		}
@@ -162,6 +202,20 @@ else {
 		public static function action($a)
 		{
 			return($a);
+		}
+
+		public static function addParam($url, $params)
+		{
+			list($base, $fragment) = explode('#', $url);
+			$newparam = ';' . ltrim($params, ';');
+			if(!empty($newparam))
+				return $base . $newparam . (!empty($fragment) ? ('#' . $fragment) : '');
+			return($url);
+		}
+
+		public static function parse($_r)
+		{
+			return(stripos($_r, self::$scripturl) === false ? (self::$scripturl . $_r) : $_r);
 		}
 	}
 }
@@ -554,41 +608,6 @@ class SimpleSEF {
         header('HTTP/1.0 404 Not Found');
         //self::log('404 Not Found: ' . $_SERVER['REQUEST_URL']);
         fatal_lang_error('simplesef_404', FALSE);
-    }
-
-    /**
-     * Implements integrate_menu_buttons
-     * Adds some SimpleSEF settings to the main menu under the admin menu
-     *
-     * @global string $scripturl
-     * @global array $txt
-     * @global array $modSettings
-     * @param array $menu_buttons Array of menu buttons, post processed
-     * @return void
-     */
-    public static function menuButtons(&$menu_buttons) {
-        global $scripturl, $txt, $modSettings;
-
-        // If there's no admin menu, don't add our button
-        if (empty($txt['simplesef']) || !allowedTo('admin_forum') || isset($menu_buttons['admin']['sub_buttons']['simplesef']))
-            return;
-
-        $counter = array_search('featuresettings', array_keys($menu_buttons['admin']['sub_buttons'])) + 1;
-
-        $menu_buttons['admin']['sub_buttons'] = array_merge(
-            array_slice($menu_buttons['admin']['sub_buttons'], 0, $counter, TRUE), array('simplesef' => array(
-                'title' => $txt['simplesef'],
-                'href' => $scripturl . '?action=admin;area=simplesef',
-                'sub_buttons' => array(
-                    'basic' => array('title' => $txt['simplesef_basic'], 'href' => $scripturl . '?action=admin;area=simplesef;sa=basic'),
-                ),
-            )), array_slice($menu_buttons['admin']['sub_buttons'], $counter, count($menu_buttons['admin']['sub_buttons']), TRUE)
-        );
-
-        if (!empty($modSettings['simplesef_advanced'])) {
-            $menu_buttons['admin']['sub_buttons']['simplesef']['sub_buttons']['advanced'] = array('title' => $txt['simplesef_advanced'], 'href' => $scripturl . '?action=admin;area=simplesef;sa=advanced');
-            $menu_buttons['admin']['sub_buttons']['simplesef']['sub_buttons']['alias'] = array('title' => $txt['simplesef_alias'], 'href' => $scripturl . '?action=admin;area=simplesef;sa=alias');
-        }
     }
 
     /**
@@ -1284,13 +1303,12 @@ class SimpleSEF {
      * @return string Returns an encoded string
      */
     public static function encode($string) {
-        global $modSettings, $sourcedir, $txt;
-        static $utf8_db = array();
+        global $modSettings;
 
         if (empty($string))
             return '';
 
-		setlocale(LC_CTYPE, 'en_US.utf8');
+		setlocale(LC_CTYPE, 'en_US.UTF8');
    		$string = iconv('UTF-8', "UTF-8//TRANSLIT", $string); // TRANSLIT does the whole job
        	$string = implode(' ', array_diff(explode(' ', $string), self::$stripWords));
        	$string = str_replace(self::$stripChars, '', $string);
@@ -1299,10 +1317,14 @@ class SimpleSEF {
            	$string = strtolower($string);
 
 		return($string);
+    }
 
-        // A way to track/store the current character
-        
-		/*
+	public static function encodeTest($string)
+	{
+		global $modSettings, $sourcedir, $txt;
+  		global $utf8_db;
+		$utf8_db = array();
+
         $character = 0;
         // Gotta return something...
         $result = '';
@@ -1311,17 +1333,16 @@ class SimpleSEF {
         $i = 0;
 
         while ($i < $length) {
-            $charInt = ord($string{$i++});
-	    
-	    $character = $charInt;
-            // We have a normal Ascii character
+            $charInt = ord($string[$i++]);
+	    	$character = $charInt;
 
             if (($charInt & 0x80) == 0) {
                 $character = $charInt;
             }
+			/*
             // Two byte unicode character
             elseif (($charInt & 0xE0) == 0xC0) {
-                $temp1 = ord($string{$i++});
+                $temp1 = ord($string[$i++]);
                 if (($temp1 & 0xC0) != 0x80)
                     $character = 63;
                 else
@@ -1329,8 +1350,8 @@ class SimpleSEF {
             }
             // Three byte unicode character
             elseif (($charInt & 0xF0) == 0xE0) {
-                $temp1 = ord($string{$i++});
-                $temp2 = ord($string{$i++});
+                $temp1 = ord($string[$i++]);
+                $temp2 = ord($string[$i++]);
                 if (($temp1 & 0xC0) != 0x80 || ($temp2 & 0xC0) != 0x80)
                     $character = 63;
                 else
@@ -1338,9 +1359,9 @@ class SimpleSEF {
             }
             // Four byte unicode character
             elseif (($charInt & 0xF8) == 0xF0) {
-                $temp1 = ord($string{$i++});
-                $temp2 = ord($string{$i++});
-                $temp3 = ord($string{$i++});
+                $temp1 = ord($string[$i++]);
+                $temp2 = ord($string[$i++]);
+                $temp3 = ord($string[$i++]);
                 if (($temp1 & 0xC0) != 0x80 || ($temp2 & 0xC0) != 0x80 || ($temp3 & 0xC0) != 0x80)
                     $character = 63;
                 else
@@ -1349,21 +1370,21 @@ class SimpleSEF {
             // More than four bytes... ? mark
             else
                 $character = 63;
-
+            */
             // Need to get the bank this character is in.
-            
-	    $charBank = $character >> 8;
+
+	    	$charBank = $character >> 8;
             if (!isset($utf8_db[$charBank])) {
                 // Load up the bank if it's not already in memory
                 $dbFile = $sourcedir . 'SimpleSEF-Db/x' . sprintf('%02x', $charBank) . '.php';
-                if (!is_readable($dbFile) || !@include_once($dbFile))
-                    $utf8_db[$charBank] = array();
+				@include_once($dbFile);
+                //if (!is_readable($dbFile) || !@include_once($dbFile))
+                //    $utf8_db[$charBank] = array();
             }
-
             $finalChar = $character & 255;
             $result .= isset($utf8_db[$charBank][$finalChar]) ? $utf8_db[$charBank][$finalChar] : '?';
         }
-
+		return;
         // Update the string with our new string
         $string = (string)$result;
 
@@ -1376,9 +1397,8 @@ class SimpleSEF {
         $string = preg_replace('~(\+)+~', $modSettings['simplesef_space'], $string);
         if (!empty($modSettings['simplesef_lowercase']))
             $string = strtolower($string);
-        */
         return $string;
-    }
+	}
 
     /**
      * Helper function to properly explode a CSV list (Accounts for quotes)

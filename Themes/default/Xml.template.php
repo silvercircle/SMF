@@ -438,11 +438,22 @@ function template_webslice_recent_posts()
 function template_ajax_error()
 {
 	global $context;
-	echo '<div id="ajax_error_container" class="floatleft red_container mediumpadding centertext">',$context['ajax_error_message'],'
-	<br />
-	<div class="floatright"><a href="#!" onclick="$(\'#',$context['error_container_id'],'\').remove();return(false);">Dismiss</a>
-	<div class="clear"></div>
-	</div>';
+	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '" ?', '>
+<document>
+ <response>
+		<error code="0">
+			<title>
+			 <![CDATA[',
+			  $context['ajax_error_title'],'
+			 ]]>
+			</title>
+			<message>
+			<![CDATA[',
+			  $context['ajax_error_msg'],'
+			]]>
+			</message>
+		</error>
+	</response>
+</document>';
 }
-
 ?>

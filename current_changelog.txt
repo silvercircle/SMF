@@ -1,10 +1,9 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]Continueing using URLFactory to create topic, member and board URLs.[/li]
-[li]Optimized a few queries for the activity stream.[/li]
-[li]Implemented a generic and more compact postbit template for recent/profile/search message display.[/li]
-[li]Converted recent post display to the generic postbit template. Other post display areas (profile, search results) will follow.[/li]
-[li]Profile -> Show Posts -> Topics now really shows the topics in a message-index style.[/li]
-[li]Profile -> Show Posts -> Posts now using the generic postbit.[/li]
+[li]A couple of styling changes / corrections for the new profile "show posts" area layout.[/li]
+[li]parse error messages in ajax response documents and display them with a modal JS dialog.[/li]
+[li]Implement JavaScript alert_() with custom modal dialog.[/li]
+[li]sa=getlikes converted to xml output.[/li]
+[li]generic helper to parse conventional URLs into SEF URLs for all cases for which we don't have the fast URL crafting methods[/li]
 [/list]

@@ -3790,7 +3790,7 @@ function setupMenuContext()
 		$buttons = array(
 			'home' => array(
 				'title' => $txt['home'],
-				'href' => $scripturl,
+				'href' => URL::home(),
 				'show' => true,
 				'sub_buttons' => array(
 				),
@@ -3798,14 +3798,14 @@ function setupMenuContext()
 			),
 			'help' => array(
 				'title' => $txt['help'],
-				'href' => $scripturl . '?action=help',
+				'href' => URL::parse('?action=help'),
 				'show' => true,
 				'sub_buttons' => array(
 				),
 			),
 			'search' => array(
 				'title' => $txt['search'],
-				'href' => $scripturl . '?action=search',
+				'href' => URL::parse('?action=search'),
 				'show' => $context['allow_search'],
 				'sub_buttons' => array(
 				),
@@ -3875,22 +3875,22 @@ function setupMenuContext()
 			),
 			'profile' => array(
 				'title' => $txt['profile'],
-				'href' => $scripturl . '?action=profile',
+				'href' => URL::parse('?action=profile'),
 				'show' => $context['allow_edit_profile'],
 				'sub_buttons' => array(
 					'summary' => array(
 						'title' => $txt['summary'],
-						'href' => $scripturl . '?action=profile',
+						'href' => URL::parse('?action=profile'),
 						'show' => true,
 					),
 					'account' => array(
 						'title' => $txt['account'],
-						'href' => $scripturl . '?action=profile;area=account',
+						'href' => URL::parse('?action=profile;area=account'),
 						'show' => allowedTo(array('profile_identity_any', 'profile_identity_own', 'manage_membergroups')),
 					),
 					'profile' => array(
 						'title' => $txt['forumprofile'],
-						'href' => $scripturl . '?action=profile;area=forumprofile',
+						'href' => URL::parse('?action=profile;area=forumprofile'),
 						'show' => allowedTo(array('profile_extra_any', 'profile_extra_own')),
 						'is_last' => true,
 					),
@@ -3898,17 +3898,17 @@ function setupMenuContext()
 			),
 			'pm' => array(
 				'title' => $txt['pm_short'],
-				'href' => $scripturl . '?action=pm',
+				'href' => URL::parse('?action=pm'),
 				'show' => $context['allow_pm'],
 				'sub_buttons' => array(
 					'pm_read' => array(
 						'title' => $txt['pm_menu_read'],
-						'href' => $scripturl . '?action=pm',
+						'href' => URL::parse('?action=pm'),
 						'show' => allowedTo('pm_read'),
 					),
 					'pm_send' => array(
 						'title' => $txt['pm_menu_send'],
-						'href' => $scripturl . '?action=pm;sa=send',
+						'href' => URL::parse('?action=pm;sa=send'),
 						'show' => allowedTo('pm_send'),
 						'is_last' => true,
 					),
@@ -3917,7 +3917,7 @@ function setupMenuContext()
 			
 			'tags' => array(
 				'title' => $txt['smftags_menu'],
-				'href' => $scripturl . '?action=tags',
+				'href' => URL::parse('?action=tags'),
 				'show' => true,
 				'sub_buttons' => array(
 				),
@@ -3925,17 +3925,17 @@ function setupMenuContext()
 	'calendar' => array(
 
 				'title' => $txt['calendar'],
-				'href' => $scripturl . '?action=calendar',
+				'href' => URL::parse('?action=calendar'),
 				'show' => $context['allow_calendar'],
 				'sub_buttons' => array(
 					'view' => array(
 						'title' => $txt['calendar_menu'],
-						'href' => $scripturl . '?action=calendar',
+						'href' => URL::parse('?action=calendar'),
 						'show' => allowedTo('calendar_post'),
 					),
 					'post' => array(
 						'title' => $txt['calendar_post_event'],
-						'href' => $scripturl . '?action=calendar;sa=post',
+						'href' => URL::parse('?action=calendar;sa=post'),
 						'show' => allowedTo('calendar_post'),
 						'is_last' => true,
 					),
@@ -3943,17 +3943,17 @@ function setupMenuContext()
 			),
 			'mlist' => array(
 				'title' => $txt['members_title'],
-				'href' => $scripturl . '?action=mlist',
+				'href' => URL::parse('?action=mlist'),
 				'show' => $context['allow_memberlist'],
 				'sub_buttons' => array(
 					'mlist_view' => array(
 						'title' => $txt['mlist_menu_view'],
-						'href' => $scripturl . '?action=mlist',
+						'href' => URL::parse('?action=mlist'),
 						'show' => true,
 					),
 					'mlist_search' => array(
 						'title' => $txt['mlist_search'],
-						'href' => $scripturl . '?action=mlist;sa=search',
+						'href' => URL::parse('?action=mlist;sa=search'),
 						'show' => true,
 						'is_last' => true,
 					),
@@ -3989,7 +3989,6 @@ function setupMenuContext()
 		// Allow editing menu buttons easily.
 		HookAPI::callHook('integrate_menu_buttons', array(&$buttons));
 
-		SimpleSEF::menuButtons($buttons);
 		// Now we put the buttons in the context so the theme can use them.
 		$menu_buttons = array();
 		foreach ($buttons as $act => $button)
@@ -4221,5 +4220,34 @@ function getPostIcon($the_icon)
 function HDC($a, $b, $c)
 {
 	return($a ? $b : $c);
+}
+
+/**
+ * @param $title	the title for the message window
+ * @param $msg		the message text
+ *
+ * output a simple error message for xmlhttp requests. The message will
+ * be displayed via the custom modal javascript dialog (confirm_() or alert_() ).
+ */
+function AjaxErrorMsg($msg, $title = 'Error', $code = 1)
+{
+	global $context;
+	header('Content-Type: text/xml; charset=' . $context['character_set']);
+	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '" ?', '>
+<document>
+ <response error="',$code,'">
+	<title>
+	 <![CDATA[',
+	  $title,'
+	 ]]>
+	</title>
+	<message>
+	 <![CDATA[',
+	  $msg,'
+	 ]]>
+	</message>
+ </response>
+</document>';
+	obExit(false);
 }
 ?>

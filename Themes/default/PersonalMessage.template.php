@@ -195,7 +195,7 @@ function template_folder()
 
 			echo '
 				</div>
-						<div class="poster blue_container cleantop">
+						<div class="poster">
 						<h4>', $message['member']['link'], '</h4>
 						<ul class="reset smalltext" id="msg_', $message['id'], '_extra_info">';
 
@@ -850,7 +850,7 @@ function template_send()
 	echo '
 		<div class="cat_bar2">
 			<h3 class="catbg">
-					<span class="ie6_header floatleft">', $txt['new_message'], '
+					', $txt['new_message'], '
 			</h3>
 		</div>';
 

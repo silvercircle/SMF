@@ -1441,7 +1441,7 @@ function getMcard(uid, el)
 
 function getLikes(mid, el)
 {
-	sendRequest('action=like;sa=getlikes;m=' + mid, el);
+	sendXMLDocument(smf_prepareScriptUrl(smf_scripturl) + 'action=like;sa=getlikes;m=' + mid + ';xml', '', response_xml);
 }
 
 function brdModeratorsPopup(el)
@@ -1574,7 +1574,7 @@ function submitTagForm(ele)
 // submit ajax request for a topic preview
 function firePreview(topic_id, ele)
 {
-	sendRequest('action=xmlhttp;sa=mpeek;t=' + topic_id);
+	sendRequest('action=xmlhttp;sa=mpeek;t=' + topic_id, null);
 };
 
 function sendRequest(request, anchor_element)
@@ -1601,10 +1601,8 @@ function openResult(html, width)
 	if($('#mcard_content'))
 		$('#mcard_content').css({'max-height': windowheight * 0.8 + 'px', 'overflow': 'auto'});
 
-	el.css({'width': width > 0 ? width + 'px' : 'auto', "position": 'fixed',
-		'top': (($(window).height() - el.outerHeight()) / 2) + 'px',
-		'left': (($(window).width() - el.outerWidth()) / 2) + 'px',
-		'z-index': '10000'});
+	el.css({'width': width > 0 ? width + 'px' : 'auto', "position": 'fixed', 'z-index': '10000'});
+	centerElement(el, 0);
 	el.show();
 };
 
@@ -1620,13 +1618,20 @@ function response_xml(responseXML)
 		var data = $(responseXML);
 		var _r = data.find('response');
 		if(_r) {
+			var _error = _r.attr('error') || 0;
+			if(_error) {
+				var title = _r.find('title').text();
+				var msg = _r.find('message').text();
+				alert_(title, msg);
+				return(false);
+			}
 			var width = _r.attr('width');
 			var content = data.find('content').text();
 			openResult(content, width);
 		}
    		$('div#mcard_inner abbr.timeago').timeago();
 	} catch(e) {
-		setBusy(0);
+		alert_('XmlHTTP Request', 'Unknown or unspecified error in response document.');
 	}
 }
 /*
@@ -1681,11 +1686,6 @@ function response(ele, responseText)
 		if(ele.attr('id') == 'sidebar') {
 			ele.html(responseText);
 			sidebar_content_loaded = true;
-			return;
-		}
-		if(ele.attr('class') == 'likedpost') {
-			openResult(responseText, 450);
-			$('div#mcard_inner abbr.timeago').timeago();
 			return;
 		}
 		openResult(responseText, 500);

@@ -428,7 +428,7 @@ function template_menu()
 			$button['active_button'] = false;
 		echo '
 				<li class="', $button['active_button'] ? 'active' : '', '" id="button_', $act, '">
-					<a class="firstlevel" href="', URL::action($button['href']), '"', isset($button['target']) ? ' target="' . $button['target'] . '"' : '', '>
+					<a class="firstlevel" href="', $button['href'], '"', isset($button['target']) ? ' target="' . $button['target'] . '"' : '', '>
 						<span class="', isset($button['is_last']) ? 'last ' : '', 'firstlevel">', $button['title'];
 					echo '</span>';
 					echo '</a>';
@@ -443,7 +443,7 @@ function template_menu()
 			{
 				echo '
 						<li>
-							<a href="', URL::action($childbutton['href']), '"', isset($childbutton['target']) ? ' target="' . $childbutton['target'] . '"' : '', '>
+							<a href="', $childbutton['href'], '"', isset($childbutton['target']) ? ' target="' . $childbutton['target'] . '"' : '', '>
 								<span', isset($childbutton['is_last']) ? ' class="last"' : '', '>', $childbutton['title'], !empty($childbutton['sub_buttons']) ? '...' : '', '</span>
 							</a>';
 				// 3rd level menus :)

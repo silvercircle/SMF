@@ -278,6 +278,7 @@ function showPosts($memID)
 
 	// Set the page title
 	$context['page_title'] = $txt['showPosts'] . ' - ' . $user_profile[$memID]['real_name'];
+	$context['pageindex_multiplier'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) && !WIRELESS ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
 
 	// Is the load average too high to allow searching just now?
 	if (!empty($context['load_average']) && !empty($modSettings['loadavg_show_posts']) && $context['load_average'] >= $modSettings['loadavg_show_posts'])
@@ -405,6 +406,7 @@ function showPosts($memID)
 	}
 
 	// Find this user's posts.  The left join on categories somehow makes this faster, weird as it looks.
+	$context['results_counter'] = 0;
 	$topicids = array();
 	if ($context['is_topics'])
 	{
@@ -415,11 +417,10 @@ function showPosts($memID)
 			LEFT JOIN {db_prefix}messages AS m ON (m.id_msg = t.id_first_msg)
 			LEFT JOIN {db_prefix}messages AS m2 ON (m2.id_msg = t.id_last_msg)
 			WHERE m.id_member = {int:current_member}' . (!empty($board) ? '
-				AND t.id_board = {int:board}' : '') . (empty($range_limit) ? '' : '
-				AND ' . $range_limit) . '
+				AND t.id_board = {int:board}' : '') . '
 				AND {query_see_board}' . (!$modSettings['postmod_active'] || $context['user']['is_owner'] ? '' : '
 				AND t.approved = {int:is_approved}') . '
-			ORDER BY t.id_topic ' . ($reverse ? 'ASC' : 'DESC') . '
+			ORDER BY t.id_topic DESC
 			LIMIT ' . $start . ', ' . $maxIndex,
 			array(
 				'current_member' => $memID,
@@ -429,9 +430,6 @@ function showPosts($memID)
 		);
 		while ($row = mysql_fetch_row($prereq))
 			$topicids[] = $row[0];
-
-		if($reverse)
-			$topicids = array_reverse($topicids);
 
 		mysql_free_result($prereq);
 
@@ -509,7 +507,7 @@ function showPosts($memID)
 		if(count($topicids)) {
 			loadMemberContext($memID, true);
 			while ($row = mysql_fetch_assoc($request)) {
-
+				$context['results_counter']++;
 				if ($row['num_replies'] + 1 > $context['messages_per_page'])
 				{
 					$pages = '&nbsp;&nbsp;';
@@ -578,6 +576,7 @@ function showPosts($memID)
 				);
 				determineTopicClass($context['topics'][$row['id_topic']]);
 			}
+			mysql_free_result($request);
 		}
 	}
 	else {
@@ -585,6 +584,7 @@ function showPosts($memID)
 		loadMemberContext($memID);
 		while ($row = mysql_fetch_assoc($request))
 		{
+			$context['results_counter']++;
 			$check_boards = array(0, $row['id_board']);		// 0 is for admin
 
 			$context['can_see_hidden_level1'] = count(array_intersect($check_boards, $boards_hidden_1)) > 0;
@@ -664,8 +664,8 @@ function showPosts($memID)
 				$board_ids['own'][$row['id_board']][] = $counter;
 			$board_ids['any'][$row['id_board']][] = $counter;
 		}
+		mysql_free_result($request);
 	}
-	mysql_free_result($request);
 
 	// All posts were retrieved in reverse order, get them right again.
 	if ($reverse)
@@ -736,6 +736,7 @@ function showAttachments($memID)
 	global $txt, $user_info, $scripturl, $modSettings, $board;
 	global $context, $user_profile, $sourcedir, $smcFunc;
 
+	$context['results_counter'] = 0;
 	// OBEY permissions!
 	$boardsAllowed = boardsAllowedTo('view_attachments');
 	// Make sure we can't actually see anything...
@@ -814,6 +815,7 @@ function showAttachments($memID)
 	while ($row = mysql_fetch_assoc($request))
 	{
 		$row['subject'] = censorText($row['subject']);
+		$context['results_counter']++;
 
 		$context['attachments'][] = array(
 			'id' => $row['id_attach'],

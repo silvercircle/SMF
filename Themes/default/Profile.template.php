@@ -320,11 +320,12 @@ function template_showPosts()
 	global $context, $settings, $options, $scripturl, $modSettings, $txt;
 
 	echo '
-		<div class="cat_bar">
-			<h3>
-				', (!isset($context['attachments']) && empty($context['is_topics']) ? $txt['showMessages'] : (!empty($context['is_topics']) ? $txt['showTopics'] : $txt['showAttachments'])), ' - ', $context['member']['name'], '
-			</h3>
-		</div>
+		<h1 class="bigheader secondary"><strong>
+			', (!isset($context['attachments']) && empty($context['is_topics']) ? $txt['showMessages'] : (!empty($context['is_topics']) ? $txt['showTopics'] : $txt['showAttachments'])), $context['member']['name'], '
+		</strong></h1>
+		<br>';
+	if($context['results_counter'])
+		echo '
 		<div class="pagelinks">
 			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
 		</div>';
@@ -335,35 +336,30 @@ function template_showPosts()
 		// For every post to be displayed, give it its own div, and show the important details of the post.
 		if($context['is_topics']) {
 			echo '
-		<table class="topic_table">';
-			if (!empty($context['topics']))
-			{
-				echo '
-				<thead>
-				<tr class="mediumpadding" style="margin:2px;">
-				<th scope="col" class="glass first_th" style="width:8%;" colspan="2">&nbsp;</th>
-				<th scope="col" class="glass lefttext">', $txt['subject'],'</th>
-				<th scope="col" class="glass nowrap">', $txt['replies'],'</th>
-				<th scope="col" class="glass centertext nowrap">',$txt['last_post'],'</th>';
+		<table class="topic_table mlist" style="width:100%;">';
+			echo '
+			<thead>
+			<tr class="mediumpadding" style="margin:2px;">
+			<th scope="col" class="glass first_th" style="width:8%;" colspan="2">&nbsp;</th>
+			<th scope="col" class="glass lefttext">', $txt['subject'],'</th>
+			<th scope="col" class="glass nowrap">', $txt['replies'],'</th>
+			<th scope="col" class="glass centertext nowrap">',$txt['last_post'],'</th>';
 
+			echo '
+			</tr>
+			</thead>
+			<tbody>';
+			if(!empty($context['topics'])) {
+				foreach ($context['topics'] as &$topic)
+					$context['postbit_callback']($topic);
 			}
 			else
 				echo '
-				<thead>
-				<tr>
-				<th scope="col" class="first_th" style="width:8%;">&nbsp;</th>
-				<th colspan="3"><strong>', $txt['msg_alert_none'], '</strong></th>
-				<th scope="col" class="last_th" style="width:8%;">&nbsp;</th>';
-
+			<tr>
+			<td colspan="5" class="windowbg centertext">',$txt['member_has_no_topics'],'</td>
+			</tr>';
 			echo '
-				</tr>
-				</thead>
-				<tbody>';
-			foreach ($context['topics'] as &$topic)
-				$context['postbit_callback']($topic);
-
-			echo '
-				</table>';
+			</table>';
 		}
 		else {
 			foreach ($context['posts'] as &$post)
@@ -432,7 +428,8 @@ function template_showPosts()
 		</table>';
 	}
 	// Show more page numbers.
-	echo '
+	if($context['results_counter'])
+		echo '
 		<div class="pagelinks" style="margin-bottom: 0;">
 			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
 		</div>';

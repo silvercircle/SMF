@@ -82,22 +82,6 @@ function ListMessageIcons()
 		obExit(false);
 	$context['sub_template'] = 'message_icons';
 }
-
-function AjaxErrorMsg($msg, $xml)
-{
-	global $context;
-	
-	if($xml) {
-		$context['ajax_error_message'] = $msg;
-		$context['error_container_id'] = 'ajax_error_container';
-		$context['sub_template'] = 'ajax_error';
-		$context['template_layers'] = array();		// ouput "plain", no header etc.
-		obExit(true, true, false);
-	}
-	else
-		fatal_error($msg, '');
-}
-
 /*
  * output the member card
  * todo: better error response
@@ -111,15 +95,15 @@ function GetMcard()
 	$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
 	
 	if(!$is_xmlreq)
-		redirectexit();
+		redirectexit();		// this isn't supposed to be called normally
 		
 	if(!isset($_REQUEST['u']))
-		die;
+		AjaxErrorMsg($txt['no_access'], $txt['error_occured']);
 		
 	$uid = intval($_REQUEST['u']);
-	
-	loadTemplate('MemberCard');
+
 	if(allowedTo('profile_view_any') && $uid) {
+		loadTemplate('MemberCard');
 		loadMemberData($uid, false, 'profile');
 		loadMemberContext($uid);
 		loadLanguage('Profile');
@@ -127,9 +111,7 @@ function GetMcard()
 		$context['member'] = $memberContext[$uid];
 	}
 	else
-		$context['member'] = null;
-
-	//header('Content-Type: text/xml; charset=' . (empty($context['character_set']) ? 'UTF-8' : $context['character_set']));
+		AjaxErrorMsg($txt['no_access'], $txt['error_occured']);
 }
 
 function HandleLikeRequest()
@@ -146,7 +128,7 @@ function HandleLikeRequest()
 function TopicPeek()
 {
 	global $context;
-	global $user_info, $board, $memberContext, $scripturl;
+	global $user_info, $board, $memberContext, $txt;
 	
 	$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
 	
@@ -162,6 +144,7 @@ function TopicPeek()
 		global $memberContext;
 		loadTemplate('TopicPreview');
 		loadLanguage('index');
+		loadLanguage('Errors');
 		$result = smf_db_query( '
 			SELECT b.*, t.id_topic, t.id_board, t.id_first_msg, t.id_last_msg, m.id_member AS member_started, m1.id_member AS member_lastpost, m.subject AS first_subject, m.poster_name AS starter_name, m1.subject AS last_subject,
 			m1.poster_name AS last_name, m.body as first_body, m1.body AS last_body, 
@@ -171,13 +154,14 @@ function TopicPeek()
 			LEFT JOIN {db_prefix}log_mark_read AS lmr ON (lmr.id_board = t.id_board AND lmr.id_member = {int:current_member})
 			LEFT JOIN {db_prefix}boards AS b ON b.id_board = t.id_board
 			LEFT JOIN {db_prefix}messages AS m ON m.id_msg = t.id_first_msg 
-			LEFT JOIN {db_prefix}messages AS m1 ON m1.id_msg = t.id_last_msg WHERE t.id_topic = {int:topic_id} AND {query_see_board}',
+			LEFT JOIN {db_prefix}messages AS m1 ON m1.id_msg = t.id_last_msg WHERE t.id_topic = {int:topic_id} AND {query_see_board} LIMIT 1',
 			array('topic_id' => $tid, 'current_member' => $user_info['id'], 'current_board' => $board));
 			
 		$row = mysql_fetch_assoc($result);
-		
+		mysql_free_result($result);
+
 		if(!$row)
-			$context['preview'] = null;			// no access or other error
+			AjaxErrorMsg($txt['topic_gone'], $txt['error_occured']);
 		else {
 			$m = array();
 			$m[0] = $row['member_started'];
@@ -211,7 +195,6 @@ function TopicPeek()
 				$context['preview']['last_time'] = timeformat($row['last_time']);
 			}
 		}
-		mysql_free_result($result);
 	}
 }
 

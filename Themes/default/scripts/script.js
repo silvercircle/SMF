@@ -1311,12 +1311,17 @@ i=function(e,h,k){return e.each(function(){h=(h)?$(h,e):e;
 f=function(k){return parseInt(E.css(k))||false;};
 })(jQuery);
 
-function alert_(msg)
+function alert_(title, msg)
 {
+	$('#jsconfirm .jsconfirm.title').html(title != '' ? title : 'JavaScript alert');
 	$('#jsconfirm #c_yes').hide();
 	$('#jsconfirm #c_no').hide();
 	$('#jsconfirm #c_ok').show();
 	$('#jsconfirm').jqmShow().find('div.jsconfirm.content').html(msg);
+	centerElement($('#jsconfirm'), -200);
+	$('#jsconfirm #c_ok').click(function() {
+		$('#jsconfirm').jqmHide();
+	});
 }
 
 /**

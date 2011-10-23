@@ -11,8 +11,7 @@
  *
  * @version 1.0pre
  *
- * implements activity stream helper functions. Activity stream is an (optional) core
- * feature.
+ * implements UI features for the content - liking system.
  */
 function LikeDispatch()
 {
@@ -35,12 +34,10 @@ function LikeDispatch()
 			mysql_free_result($request);
 			$board = $row ? $row['id_board'] : 0;
 		}
-		$allowed = isset($board) && $board && allowedTo('see_like', $board);
-		if(!$allowed) {		// something is wrong...
-			require_once($sourcedir . '/Xml.php');
-			loadTemplate('Xml');
-			AjaxErrorMsg($txt['no_access'], $xml);
-		}
+		$allowed = isset($board) && $board && allowedTo('like_see', $board);
+		if(!$allowed)
+			AjaxErrorMsg($txt['no_access'], 'Permission error');
+
 		$start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
 		$users = array();
 		if($action === 'getlikes') {
@@ -70,4 +67,3 @@ function LikeDispatch()
 	}
 }
 ?>
-

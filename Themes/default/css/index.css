@@ -225,7 +225,7 @@ ul.reset, ul.reset li {
 	list-style: none;
 }
 blockquote.bbc_standard_quote, blockquote.bbc_alternate_quote {
-	font-size: 95%;
+	font-size: 8pt;
 	font-style: italic;
 	color: #000;
 	line-height: 1.4em;
@@ -1009,7 +1009,7 @@ ul#navigation li {
 /* the content section, wrapper for everything between header and footer */
 
 #content_section {
-	padding: 10px 20px 5px 20px;
+	padding: 10px 40px 5px 40px;
 }
 
 /* inner content section, defines the width for the forum itself (but not the header or footer)*/
@@ -1091,6 +1091,7 @@ h3, h4 {
 	border:none;
 	font-weight:bold;
 	color: #88c;
+	display:inline;
 }
 .bbc_head.l1 {
 	font-size:1.30em;
@@ -1180,7 +1181,7 @@ div.navigate_section {
 	border: 1px solid #BEBFDC;
 	border-radius: 3px;
 	font-size: 14px;
-	text-shadow: 1px 1px 1px white;
+	text-shadow: 1px 1px 1px #fff;
 }
 
 .navigate_section ul {
@@ -1200,7 +1201,6 @@ div.navigate_section {
 .navigate_section ul li a {
 	white-space: pre;
 	color:black;
-	font-weight:bold;
 }
 .navigate_section ul li a:hover {
 	text-decoration:underline;
@@ -1476,13 +1476,13 @@ p#whoisviewing {
 .post_wrapper {
 	width: auto;
 	border: 1px solid #ddd;
-	border-top:none;
-	border-radius:2px;
+	border-radius:4px;
 	margin-bottom: 10px;
 	background-color: #eaeaea;
+	padding:0 1px 1px 1px;
 }
 #forumposts .post_wrapper {
-	border-radius:0;
+	/*border-radius:0;*/
 }
 div.ignoringpost {
 	cursor:pointer;
@@ -1600,24 +1600,34 @@ div.userbit_compact_textpart {
 	min-height: 26px;
 	max-height: 26px;
 	line-height: 26px;
-	background: #f2f2f2 url(../images/theme/sprite.png) 0 -920px repeat-x;
-	margin:0 -1px;
+	/*background: #f2f2f2 url(../images/theme/sprite.png) 0 -920px repeat-x;*/
+	background: rgb(255,255,255);
+	background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(241,241,241,1) 33%, rgba(225,225,225,1) 61%, rgba(246,246,246,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(33%,rgba(241,241,241,1)), color-stop(61%,rgba(225,225,225,1)), color-stop(100%,rgba(246,246,246,1)));
+	background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 33%,rgba(225,225,225,1) 61%,rgba(246,246,246,1) 100%);
+	background: -o-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 33%,rgba(225,225,225,1) 61%,rgba(246,246,246,1) 100%);
+	background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 33%,rgba(225,225,225,1) 61%,rgba(246,246,246,1) 100%);
+	background: linear-gradient(top, rgba(255,255,255,1) 0%,rgba(241,241,241,1) 33%,rgba(225,225,225,1) 61%,rgba(246,246,246,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 );
+	border-bottom:2px solid #f0dca3;
+	/*margin:0 -1px;*/
 }
 .keyinfo.clean {
 	background:transparent;
 	box-shadow: none;
+	border:none;
 }
 .keyinfo.clean .timeago {
 	color:#888;
 }
 .keyinfo h5 {
-	color:white;
+	color:#666;
+	font-weight:bold;
 	font-size:1.1em;
-	text-shadow: 1px 1px 1px black;
-	font-weight:normal;
+	text-shadow: 1px 1px 1px white;
 }
 .keyinfo .timeago {
-	color:white;
+	color: #d69538;
 }
 .keyinfo .messageicon {
 	float: left;

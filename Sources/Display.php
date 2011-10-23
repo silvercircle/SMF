@@ -69,6 +69,7 @@ function Display()
 	global $attachments, $messages_request, $topicinfo, $language;
 
 	$context['need_synhlt'] = true;
+	$context['is_display_std'] = true;
 
 	$context['pcache_update_counter'] = !empty($modSettings['use_post_cache']) ? 0 : PCACHE_UPDATE_PER_VIEW + 1;
 	$context['time_cutoff_ref'] = time();
@@ -998,7 +999,7 @@ function Display()
 		'post' => 'template_postbit_normal'
 	);
 	if($topicinfo['id_layout']) {
-		$this_start = (int)$_REQUEST['start'];
+		$this_start = isset($_REQUEST['perma']) ? 0 : (int)$_REQUEST['start'];
 		if(((int)$topicinfo['id_layout'] & 0x80)) {
 			if($this_start > 0)
 				array_unshift($messages, intval($topicinfo['id_first_msg']));
@@ -1011,7 +1012,7 @@ function Display()
 		}
 	}
 	// now we know which display template we need
-	if(!WIRELESS)
+	if(!WIRELESS && !isset($_REQUEST['perma']))
 		loadTemplate($layout > 1 ? 'DisplayPage' : 'Display');
 	loadTemplate('Postbit');
 

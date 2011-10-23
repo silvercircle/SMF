@@ -220,21 +220,9 @@ function template_single_post()
 	// Get all the messages...
   	while ($message = $context['get_message']())
 	{
-		$ignoring = false;
 		if ($message['can_remove'])
 			$removableMessageIDs[] = $message['id'];
-
-		// Are we ignoring this message?
-		if (!empty($message['is_ignored']))
-		{
-			$ignoring = true;
-			$ignoredMsgs[] = $message['id'];
-		}
-
-		if ($message['id'] == $context['first_message'] && $context['id_layout'] != 0)
-			template_postbit_blog($message, $ignoring);
-		else
-			template_postbit_normal($message, $ignoring);
+		$context['postbit_callbacks']['firstpost']($message);
 	}
 	echo '
 				<input type="hidden" name="goadvanced" value="1" />
