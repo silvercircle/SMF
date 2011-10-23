@@ -33,6 +33,7 @@ function PostModerationMain()
 	// Allowed sub-actions, you know the drill by now!
 	$subactions = array(
 		'approve' => 'ApproveMessage',
+		'unapprove' => 'ApproveMessage',
 		'attachments' => 'UnapprovedAttachments',
 		'replies' => 'UnapprovedPosts',
 		'topics' => 'UnapprovedPosts',

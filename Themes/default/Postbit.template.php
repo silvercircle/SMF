@@ -151,11 +151,6 @@ function template_postbit_normal(&$message)
 		<div class="post_content">
 		<div class="post" id="msg_', $message['id'], '">';
 
-	if (!$message['approved'] && $message['member']['id'] != 0 && $message['member']['id'] == $context['user']['id'])
-		echo '
-		<div class="approve_post">
-			', $txt['post_awaiting_approval'], '
-		</div>';
 	echo '
 		<article>
 			', $message['body'],'
@@ -285,12 +280,6 @@ function template_postbit_normal(&$message)
 		<div class="reportlinks">
 		<ul class="floatright reset quickbuttons" style="line-height:100%;">';
 
-	// Maybe we can approve it, maybe we should?
-	if ($message['can_approve'])
-		echo '
-			<li><a href="', $scripturl, '?action=moderate;area=postmod;sa=approve;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['approve'], '</a></li>';
-
-	// Can they reply? Have they turned on quick reply?
 	if ($context['can_quote'] && !empty($options['display_quick_reply']))
 		echo '
 			<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '" onclick="return oQuickReply.quote(', $message['id'], ');">', $txt['quote'], '</a></li>
@@ -313,8 +302,9 @@ function template_postbit_normal(&$message)
 	if ($message['can_remove'])
 		echo '
 			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm_(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
-
-	// What about splitting it off the rest of the topic?
+	if ($message['can_unapprove'])
+		echo '
+			<li class="approve_button"><a href="', $scripturl, '?action=moderate;area=postmod;sa=unapprove;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['unapprove'], '</a></li>';
 	if ($context['can_split'] && !empty($context['real_num_replies']))
 		echo '
 			<li><a href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '">', $txt['split'], '</a></li>';
@@ -446,16 +436,11 @@ function template_postbit_lean(&$message)
 	echo '
 		<div class="post clear_left" style="padding:10px 20px;" id="msg_', $message['id'], '">';
 
-	if (!$message['approved'] && $message['member']['id'] != 0 && $message['member']['id'] == $context['user']['id'])
-		echo '
-							<div class="approve_post">
-								', $txt['post_awaiting_approval'], '
-							</div>';
 	echo '
-							<article>
-							', $message['body'], '
-							</article>
-						</div>';
+		<article>
+		', $message['body'], '
+		</article>
+		</div>';
 
 	// Assuming there are attachments...
 	if (!empty($message['attachment']))
@@ -572,11 +557,6 @@ function template_postbit_lean(&$message)
 				<div class="reportlinks">
 				<ul class="floatright reset smalltext quickbuttons">';
 
-	// Maybe we can approve it, maybe we should?
-	if ($message['can_approve'])
-		echo '
-								<li class="approve_button"><a href="', $scripturl, '?action=moderate;area=postmod;sa=approve;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['approve'], '</a></li>';
-
 	// Can they reply? Have they turned on quick reply?
 	if ($context['can_quote'] && !empty($options['display_quick_reply']))
 		echo '
@@ -599,8 +579,11 @@ function template_postbit_lean(&$message)
 	// How about... even... remove it entirely?!
 	if ($message['can_remove'])
 		echo '
-								<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');">', $txt['remove'], '</a></li>';
+			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');">', $txt['remove'], '</a></li>';
 
+	if ($message['can_unapprove'])
+		echo '
+			<li class="approve_button"><a href="', $scripturl, '?action=moderate;area=postmod;sa=unapprove;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['unapprove'], '</a></li>';
 	// What about splitting it off the rest of the topic?
 	if ($context['can_split'] && !empty($context['real_num_replies']))
 		echo '
@@ -657,7 +640,7 @@ function template_postbit_comment(&$message)
 		</div>';
 
 	echo '
-	<div id="msg',$message['id'], '" class="post_wrapper',($message['is_ignored'] ? ' ignored' : ''),'" data-mid="',$message['id'], '">';
+	<div id="msg',$message['id'], '" class="post_wrapper',(!$message['approved'] ? ' approval' : ''),($message['is_ignored'] ? ' ignored' : ''),'" data-mid="',$message['id'], '">';
 
 	if ($message['id'] != $context['first_message'])
 		echo
@@ -701,14 +684,14 @@ function template_postbit_comment(&$message)
 		</div><div class="clear_right"></div></div>';
 
 	// Show the post itself, finally!
-	echo '
-		<div class="post" id="msg_', $message['id'], '">';
-
 	if (!$message['approved'] && $message['member']['id'] != 0 && $message['member']['id'] == $context['user']['id'])
 		echo '
-		<div class="approve_post">
-			', $txt['post_awaiting_approval'], '
+		<div class="red_container mediumpadding mediummargin">
+			', $txt['post_awaiting_approval'], '&nbsp;&nbsp;<a onclick="$(\'#msg_',$message['id'],'\').show();return(false);" href="#!">Show me the message</a>
 		</div>';
+	echo '
+		<div class="post" id="msg_', $message['id'], '"', ($message['approved'] ? '' : ' style="display:none;"'), '>';
+
 	echo '
 		<article>
 			', $message['body'],'
@@ -806,8 +789,6 @@ function template_postbit_comment(&$message)
 	if ($message['can_approve'])
 		echo '
 			<li class="approve_button"><a href="', $scripturl, '?action=moderate;area=postmod;sa=approve;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['approve'], '</a></li>';
-
-	// Can they reply? Have they turned on quick reply?
 	if ($context['can_quote'] && !empty($options['display_quick_reply']))
 		echo '
 			<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '" onclick="return oQuickReply.quote(', $message['id'], ');">', $txt['quote'], '</a></li>
@@ -830,8 +811,9 @@ function template_postbit_comment(&$message)
 	if ($message['can_remove'])
 		echo '
 			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');">', $txt['remove'], '</a></li>';
-
-	// What about splitting it off the rest of the topic?
+	if ($message['can_unapprove'])
+		echo '
+			<li class="approve_button"><a href="', $scripturl, '?action=moderate;area=postmod;sa=unapprove;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['unapprove'], '</a></li>';
 	if ($context['can_split'] && !empty($context['real_num_replies']))
 		echo '
 			<li><a rel="nofollow" href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '">', $txt['split'], '</a></li>';

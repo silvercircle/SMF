@@ -1315,7 +1315,6 @@ function prepareDisplayContext($reset = false)
 		'attachment' => loadAttachmentContext($message['id_msg']),
 		'alternate' => $counter % 2,
 		'id' => $message['id_msg'],
-		//'id_msg' => $message['id_msg'],
 		'href' => $scripturl . '?topic=' . $topic . '.msg' . $message['id_msg'] . '#msg' . $message['id_msg'],
 		'permahref' => $scripturl . '?msg=' . $message['id_msg'],
 		'link' => '<a href="' . $scripturl . '?topic=' . $topic . '.msg' . $message['id_msg'] . '#msg' . $message['id_msg'] . '" rel="nofollow">' . $message['subject'] . '</a>',
@@ -1324,12 +1323,10 @@ function prepareDisplayContext($reset = false)
 		'icon_url' => getPostIcon($message['icon']),
 		'subject' => $message['subject'],
 		'time' => timeformat($message['poster_time']),
-		//'timestamp' => forum_time(true, $message['poster_time']),
 		'counter' => $counter,
 		'permalink' => ($counter ? ($txt['reply_noun'].' #'.$counter) : $txt['permalink']),
 		'modified' => array(
 			'time' => timeformat($message['modified_time']),
-			//'timestamp' => forum_time(true, $message['modified_time']),
 			'name' => $message['modified_name']
 		),
 		'body' => &$message['body'],
@@ -1346,7 +1343,8 @@ function prepareDisplayContext($reset = false)
 		'like_status' => $message['like_status'],
 		'liked' => $message['liked'],
 		'like_updated' => $message['like_updated'],
-		'id_member' => $message['id_member']
+		'id_member' => $message['id_member'],
+		'postbit_callback' => $message['approved'] ? ($message['id_msg'] == $context['first_message'] ? $context['postbit_callbacks']['firstpost'] : $context['postbit_callbacks']['post']) : 'template_postbit_comment'
 	);
 
 	if($context['can_see_like'])

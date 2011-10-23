@@ -197,12 +197,8 @@ function template_main()
 	{
 		if ($message['can_remove'])
 			$removableMessageIDs[] = $message['id'];
+		$message['postbit_callback']($message);
 
-		if ($message['id'] == $context['first_message'])
-			$context['postbit_callbacks']['firstpost']($message);
-		else
-			$context['postbit_callbacks']['post']($message);
-			
 		if($message['id'] == $context['first_message']) {
 			if($context['use_share'] && ($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar'])))
 				socialbar($scripturl . '?topic=' . $topic, urlencode($context['subject']));

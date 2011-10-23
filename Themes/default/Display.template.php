@@ -256,11 +256,7 @@ function template_main()
 		$ignoring = false;
 		if ($message['can_remove'])
 			$removableMessageIDs[] = $message['id'];
-
-		if ($message['id'] == $context['first_message'])
-			$context['postbit_callbacks']['firstpost']($message);
-		else
-			$context['postbit_callbacks']['post']($message);
+		$message['postbit_callback']($message);
 	}
 	echo '
 				<input type="hidden" name="goadvanced" value="1" />

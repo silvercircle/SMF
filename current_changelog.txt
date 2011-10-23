@@ -6,4 +6,6 @@ Note: this is just a memo pad to record changes and prepare the posts for the de
 [li]Implement JavaScript alert_() with custom modal dialog.[/li]
 [li]sa=getlikes converted to xml output.[/li]
 [li]generic helper to parse conventional URLs into SEF URLs for all cases for which we don't have the fast URL crafting methods[/li]
+[li]message rendering now depends on the postbit callback defined by prepareDisplayContext(). This allows for even more flexibility in the topic layout.[/li]
+[li]allow unapproving of messages - this can be used to simulate the soft-delete feature like it is offered by other forum products.[/li]
 [/list]
