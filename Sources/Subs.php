@@ -1088,6 +1088,14 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'disabled_after' => ' ($1)',
 			),
 			array(
+				'tag' => 'align',
+				'type' => 'unparsed_equals',
+				'before' => '<div style="text-align:$1;">',
+				'after' => '</div>',
+				'test' => '(left|right|center|justify)\]',
+				'block_level' => true,
+			),
+			array(
 				'tag' => 'anchor',
 				'type' => 'unparsed_equals',
 				'test' => '[#]?([A-Za-z][A-Za-z0-9_\-]*)\]',
@@ -1111,18 +1119,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'tag' => 'br',
 				'type' => 'closed',
 				'content' => '<br />',
-			),
-			array(
-				'tag' => 'justify',
-				'before' => '<div style="text-align:justify;">',
-				'after' => '</div>',
-				'block_level' => true,
-			),
-			array(
-				'tag' => 'center',
-				'before' => '<div style="text-align:center;">',
-				'after' => '</div>',
-				'block_level' => true,
 			),
 			array(
 				'tag' => 'code',
@@ -1308,12 +1304,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'disabled_after' => ' ($1)',
 			),
 			array(
-				'tag' => 'left',
-				'before' => '<div style="text-align: left;">',
-				'after' => '</div>',
-				'block_level' => true,
-			),
-			array(
 				'tag' => 'li',
 				'before' => '<li>',
 				'after' => '</li>',
@@ -1431,12 +1421,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'block_level' => true,
 			),
 			array(
-				'tag' => 'right',
-				'before' => '<div style="text-align: right;">',
-				'after' => '</div>',
-				'block_level' => true,
-			),
-			array(
 				'tag' => 'rtl',
 				'before' => '<div dir="rtl">',
 				'after' => '</div>',
@@ -1550,11 +1534,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'),
 				'disallow_children' => array('email', 'ftp', 'url', 'iurl'),
 				'disabled_after' => ' ($1)',
-			),
-			array(
-				'tag' => 'white',
-				'before' => '<span style="color: white;" class="bbc_color">',
-				'after' => '</span>',
 			),
 		);
 
@@ -4227,7 +4206,7 @@ function HDC($a, $b, $c)
  * @param $msg		the message text
  *
  * output a simple error message for xmlhttp requests. The message will
- * be displayed via the custom modal javascript dialog (confirm_() or alert_() ).
+ * be displayed via the custom modal javascript dialog (Eos_Confirm() or Eos_Alert() ).
  */
 function AjaxErrorMsg($msg, $title = 'Error', $code = 1)
 {

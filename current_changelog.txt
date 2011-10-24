@@ -1,11 +1,10 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]A couple of styling changes / corrections for the new profile "show posts" area layout.[/li]
-[li]parse error messages in ajax response documents and display them with a modal JS dialog.[/li]
-[li]Implement JavaScript alert_() with custom modal dialog.[/li]
-[li]sa=getlikes converted to xml output.[/li]
-[li]generic helper to parse conventional URLs into SEF URLs for all cases for which we don't have the fast URL crafting methods[/li]
-[li]message rendering now depends on the postbit callback defined by prepareDisplayContext(). This allows for even more flexibility in the topic layout.[/li]
-[li]allow unapproving of messages - this can be used to simulate the soft-delete feature like it is offered by other forum products.[/li]
+[li]added like display to the user's profile (Show content -> Likes received).[/li]
+[li]Renamed confirm_() and alert_() to Eos_Confirm() and Eos_Alert() respectively. Urgent need for more JS refactorings...[/li]
+[li]New BBCode [align=left|center|right|justify] - replaces the old left/center/right/justify tags which were consequently moved to the BBC compatibility addon. Reducing the number of bb codes helps a bit with the performance of parse_bbc().[/li]
+[li]Boards can now have a custom icon frome {themedir}images/boards.[/li]
+[li]Added option in BBCode configuration to load the LegacyBBC addon. This core addon can be used to re-add all SMF 2 compatible BBCodes that were removed from EOSAlpha.[/li]
+[li]Some styling fixes to help with laggy scrolling (dynamically set overlays to position:fixed only when needed and revert to position:static after hiding them).[/li]
 [/list]

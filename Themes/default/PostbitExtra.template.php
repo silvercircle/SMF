@@ -119,7 +119,7 @@ function template_postbit_compact(&$message)
 			<li><a rel="nofollow" role="button" href="', $scripturl, '?action=notify;topic=', $message['topic']['id'], '.', $context['start'], '">', $txt['notify'], '</a></li>';
 		if($message['can_delete'])
 			echo '
-			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $message['topic']['id'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm_(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
+			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $message['topic']['id'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
 		echo '
 		</ul>';
 			echo '

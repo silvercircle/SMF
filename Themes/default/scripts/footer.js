@@ -1264,16 +1264,6 @@ String.prototype.trim = function() {
 	return this.replace(/^\s+|\s+$/g,"");
 };
 
-function stopEventPropagation(_e)
-{
-   if (_e.stopPropagation) {
-       _e.stopPropagation();
-   }
-   else if(window.event){
-      window.event.cancelBubble = true;
-   }
-}
-
 function setBusy(mode)
 {
 	var el = $('#ajaxbusy');
@@ -1283,12 +1273,13 @@ function setBusy(mode)
     	el.css('position','fixed');
     	el.css('z-index', '10000');
 		el.css('top', '0');
-		el.css('right', '0px');
+		el.css('right', '0');
 		el.show();
 	}
 	else {
 		_is_locked = false;
 		el.hide();
+		el.css('position','static');
 	}
 }
 
@@ -1466,6 +1457,7 @@ function sharePost(el)
 function mcardClose()
 {
 	$('#mcard').hide();
+	$('#mcard').css('position', 'static');
 	$('#mcard_inner').html('');
 	$('#wrap').css('opacity', '1.0');
 	return(false);
@@ -1620,19 +1612,22 @@ function response_xml(responseXML)
 		if(_r) {
 			var _error = _r.attr('error') || 0;
 			if(_error) {
-				var title = _r.find('title').text();
-				var msg = _r.find('message').text();
-				alert_(title, msg);
+				var title = _r.find('title').text() || 'XML response error';
+				var msg = _r.find('message').text() || 'Unknown or unspecified error.';
+				Eos_Alert(title, msg);
 				return(false);
 			}
 			var width = _r.attr('width');
 			var content = data.find('content').text();
 			openResult(content, width);
+			return(false);
 		}
    		$('div#mcard_inner abbr.timeago').timeago();
 	} catch(e) {
-		alert_('XmlHTTP Request', 'Unknown or unspecified error in response document.');
+		Eos_Alert('XmlHTTP Request', 'Unknown or unspecified error in response document.');
+		return(false);
 	}
+	return(false);
 }
 /*
  * generic handler for XMLHttp response. Determines its origin by observing ele

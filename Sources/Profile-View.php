@@ -250,12 +250,6 @@ function showPosts($memID)
 	global $txt, $user_info, $scripturl, $modSettings;
 	global $context, $user_profile, $sourcedir, $board, $memberContext;
 
-	$boards_hidden_1  = boardsAllowedTo('see_hidden1');
-	$boards_hidden_2  = boardsAllowedTo('see_hidden2');
-	$boards_hidden_3  = boardsAllowedTo('see_hidden3');
-	$boards_like_see  = boardsAllowedTo('like_see');
-	$boards_like_give = boardsAllowedTo('like_give');
-
 	$context['need_synhlt'] = true;
 
 	// Some initial context.
@@ -273,6 +267,8 @@ function showPosts($memID)
 			),
 			'attach' => array(
 			),
+			'likes' => array(
+			)
 		),
 	);
 
@@ -283,6 +279,17 @@ function showPosts($memID)
 	// Is the load average too high to allow searching just now?
 	if (!empty($context['load_average']) && !empty($modSettings['loadavg_show_posts']) && $context['load_average'] >= $modSettings['loadavg_show_posts'])
 		fatal_lang_error('loadavg_show_posts_disabled', false);
+
+	if (isset($_GET['sa']) && $_GET['sa'] == 'likes') {
+		require_once($sourcedir . '/LikeSystem.php');
+		return(LikesByUser($memID));
+	}
+
+	$boards_hidden_1  = boardsAllowedTo('see_hidden1');
+	$boards_hidden_2  = boardsAllowedTo('see_hidden2');
+	$boards_hidden_3  = boardsAllowedTo('see_hidden3');
+	$boards_like_see  = boardsAllowedTo('like_see');
+	$boards_like_give = boardsAllowedTo('like_give');
 
 	// If we're specifically dealing with attachments use that function!
 	if (isset($_GET['sa']) && $_GET['sa'] == 'attach')

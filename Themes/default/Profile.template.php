@@ -314,6 +314,51 @@ function template_summary()
 </div>';
 }
 
+function template_showlikes()
+{
+	global $context, $settings, $txt;
+
+	if($context['results_count']) {
+		if(!empty($context['pages']))
+			echo '
+	<div class="pagelinks smallpadding">'
+		,$txt['pages'],':&nbsp;&nbsp;',$context['pages'],'
+	</div>';
+		echo '
+	<ol class="commonlist notifications mlist smallpadding">
+	<li class="glass centertext"></li>';
+	foreach($context['likes'] as &$like)
+		if(isset($like['member'])) {		// if we have member data available, show the avatar, otherwise just the activity
+			echo '
+		<li>
+		  <div class="floatleft" style="margin-right:10px;">
+		   <span class="small_avatar">';
+		if(!empty($like['member']['avatar']['image'])) {
+			echo '
+		    <img class="twentyfour" src="', $like['member']['avatar']['href'], '" alt="avatar" />';
+		}
+		else {
+			echo '
+		    <img class="twentyfour" src="',$settings['images_url'],'/unknown.png" alt="avatar" />';
+		}
+		echo '
+		   </span>
+		  </div>
+		  <span class="floatright">',$like['time'],'</span>
+		  ',$like['text'],'<br>
+		  <em>',$like['teaser'],'</em>
+		  <div class="clear"></div>
+		</li>';
+		}
+	echo '
+	</ol>';
+	if(!empty($context['pages']))
+		echo '
+	<div class="pagelinks smallpadding">'
+		,$txt['pages'],':&nbsp;&nbsp;',$context['pages'],'
+	</div>';
+	}
+}
 // Template for showing all the posts of the user, in chronological order.
 function template_showPosts()
 {
@@ -321,7 +366,7 @@ function template_showPosts()
 
 	echo '
 		<h1 class="bigheader secondary"><strong>
-			', (!isset($context['attachments']) && empty($context['is_topics']) ? $txt['showMessages'] : (!empty($context['is_topics']) ? $txt['showTopics'] : $txt['showAttachments'])), $context['member']['name'], '
+			', (!isset($context['attachments']) && empty($context['is_topics']) ? $txt['showMessages'] : (!empty($context['is_topics']) ? $txt['showTopics'] : $txt['showAttachments'])),' ',$txt['by'], ' ',$context['member']['name'], '
 		</strong></h1>
 		<br>';
 	if($context['results_counter'])

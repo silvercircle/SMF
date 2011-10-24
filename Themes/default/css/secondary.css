@@ -1186,9 +1186,6 @@ div.ppt {
 
 .jqmWindow {
     display: none;
-
-    position: fixed;
-
     background-color: #EEE;
     color: #333;
 	border:2px solid #444;

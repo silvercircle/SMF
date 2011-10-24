@@ -301,7 +301,7 @@ function template_postbit_normal(&$message)
 	// How about... even... remove it entirely?!
 	if ($message['can_remove'])
 		echo '
-			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm_(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
+			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
 	if ($message['can_unapprove'])
 		echo '
 			<li class="approve_button"><a href="', $scripturl, '?action=moderate;area=postmod;sa=unapprove;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['unapprove'], '</a></li>';
@@ -346,9 +346,9 @@ function template_postbit_normal(&$message)
 	//						<a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $txt['logged'], '</a>';
 	echo '
 		</div><div class="clear">
-		</div></div>',
-	     $message['template_hook']['post_bottom'],'
-		</div>';
+		</div></div>
+		</div>
+		',$message['template_hook']['postbit_below'];
 }
 
 function template_postbit_lean(&$message)
@@ -676,7 +676,7 @@ function template_postbit_comment(&$message)
 			', $message['subject'], '
 			</h5>',
 			$txt['by'], ' ', $message['member']['link'],'
-			<span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['href'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span style="cursor:pointer;" onclick="sharePost($(this));">Share</span>' : ''),'</span>
+	 		<span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['permahref'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span style="cursor:pointer" onclick="sharePost($(this));">Share</span>' : ''),'</span>
 			<span class="smalltext">&nbsp;',$message['time'], '</span>
 			<div id="msg_', $message['id'], '_quick_mod"></div>';
 
@@ -684,7 +684,7 @@ function template_postbit_comment(&$message)
 		</div><div class="clear_right"></div></div>';
 
 	// Show the post itself, finally!
-	if (!$message['approved'] && $message['member']['id'] != 0 && $message['member']['id'] == $context['user']['id'])
+	if (!$message['approved'] && $message['member']['id'] != 0)
 		echo '
 		<div class="red_container mediumpadding mediummargin">
 			', $txt['post_awaiting_approval'], '&nbsp;&nbsp;<a onclick="$(\'#msg_',$message['id'],'\').show();return(false);" href="#!">Show me the message</a>
@@ -881,7 +881,7 @@ function template_postbit_clean(&$message)
 	echo '
 		<div class="keyinfo clean">
 		  <div>
-		  <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['href'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span style="cursor:pointer;" onclick="sharePost($(this));">Share</span>' : ''),'</span>
+	 	  <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['permahref'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span style="cursor:pointer" onclick="sharePost($(this));">Share</span>' : ''),'</span>
 		  Posted by: ',$message['member']['link'],',&nbsp;
 		  <span class="smalltext">',$message['time'], '</span>
 		  </div>

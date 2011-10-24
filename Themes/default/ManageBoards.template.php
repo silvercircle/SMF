@@ -385,6 +385,13 @@ function template_modify_board()
 							<input type="text" name="moderators" id="moderators" value="', $context['board']['moderator_list'], '" size="30" class="input_text" />
 							<div id="moderator_container"></div>
 						</dd>
+						<dt>
+							<strong>', $txt['mboards_icon'], ':</strong><br />
+							<span class="smalltext">', $txt['mboards_icon_desc'], '</span><br />
+						</dt>
+						<dd>
+							<input type="text" name="boardicon" id="boardicon" value="', $context['board']['boardicon'], '" size="30" class="input_text" />
+						</dd>
 					</dl>
 					<hr class="hrcolor" />';
 

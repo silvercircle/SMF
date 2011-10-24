@@ -94,7 +94,8 @@ $txt['allow_ignore_boards'] = 'Allow boards to be ignored';
 $txt['mboards_select_destination'] = 'Select destination for board \'<strong>%1$s</strong>\'';
 $txt['mboards_cancel_moving'] = 'Cancel moving';
 $txt['mboards_move'] = 'move';
-
+$txt['mboards_icon'] = 'Board icon';
+$txt['mboards_icon_desc'] = 'Use a custom icon for this board. Icons must exist in the {theme}/images/boards directory and must be PNG images. Name must be given <strong>without</strong> extension and you must provide two variants. For example, if you enter <em>foo</em> here, you must provide two icons, one foo.png and one foo_new.png for boards with unread topics.';
 $txt['mboards_no_cats'] = 'There are currently no categories or boards configured.';
 $txt['board_act_as_cat'] = 'Act as a category';
 $txt['board_act_as_cat_desc'] = 'If this is checked, the board will act as a sub-category. Such a board can not have its own topics, but can hold any number of child boards.';

@@ -13,12 +13,15 @@
  *
  * integrate the legacy bbc tags that were removed from parse_bbc() as an
  * optional add-on.
+ *
+ * This is a core addon and there is no need to install it. It can be enabled/disabled
+ * on the BBCode configuration page.
  */
 function legacybbc_addtags(&$codes)
 {
 	global $context;
 
-	$codes += array(
+	$codes = array_merge($codes, array(
 		array(
 			'tag' => 'black',
 			'before' => '<span style="color: black;" class="bbc_color">',
@@ -71,10 +74,39 @@ function legacybbc_addtags(&$codes)
 			'disallow_children' => array('move'),
 		),
 		array(
+			'tag' => 'justify',
+			'before' => '<div style="text-align:justify;">',
+			'after' => '</div>',
+			'block_level' => true,
+		),
+		array(
+			'tag' => 'center',
+			'before' => '<div style="text-align:center;">',
+			'after' => '</div>',
+			'block_level' => true,
+		),
+		array(
+			'tag' => 'left',
+			'before' => '<div style="text-align: left;">',
+			'after' => '</div>',
+			'block_level' => true,
+		),
+		array(
+			'tag' => 'right',
+			'before' => '<div style="text-align: right;">',
+			'after' => '</div>',
+			'block_level' => true,
+		),
+		array(
 			'tag' => 'red',
 			'before' => '<span style="color: red;" class="bbc_color">',
 			'after' => '</span>',
-		)
-	);
+		),
+		array(
+			'tag' => 'white',
+			'before' => '<span style="color: white;" class="bbc_color">',
+			'after' => '</span>',
+		),
+	));
 }
 ?>

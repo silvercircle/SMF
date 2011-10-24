@@ -91,7 +91,6 @@ function Display()
 		header('HTTP/1.1 403 Prefetch Forbidden');
 		die;
 	}
-
 	// How much are we sticking on each page?
 	$context['messages_per_page'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) && !WIRELESS ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
 
@@ -1315,9 +1314,9 @@ function prepareDisplayContext($reset = false)
 		'attachment' => loadAttachmentContext($message['id_msg']),
 		'alternate' => $counter % 2,
 		'id' => $message['id_msg'],
-		'href' => $scripturl . '?topic=' . $topic . '.msg' . $message['id_msg'] . '#msg' . $message['id_msg'],
-		'permahref' => $scripturl . '?msg=' . $message['id_msg'],
-		'link' => '<a href="' . $scripturl . '?topic=' . $topic . '.msg' . $message['id_msg'] . '#msg' . $message['id_msg'] . '" rel="nofollow">' . $message['subject'] . '</a>',
+		//'href' => $scripturl . '?topic=' . $topic . '.msg' . $message['id_msg'] . '#msg' . $message['id_msg'],
+		'permahref' => URL::parse('?msg=' . $message['id_msg']),
+		//'link' => '<a href="' . $scripturl . '?topic=' . $topic . '.msg' . $message['id_msg'] . '#msg' . $message['id_msg'] . '" rel="nofollow">' . $message['subject'] . '</a>',
 		'member' => &$memberContext[$message['id_member']],
 		'icon' => $message['icon'],
 		'icon_url' => getPostIcon($message['icon']),
@@ -1353,21 +1352,16 @@ function prepareDisplayContext($reset = false)
 		$output['likes_count'] = 0;
 	// Is this user the message author?
 	$output['is_message_author'] = $message['id_member'] == $user_info['id'];
-
-	if (empty($options['view_newest_first']))
-		$counter++;
-	else
-		$counter--;
-
+	$counter = (empty($options['view_newest_first']) ? $counter++ : $counter--);
 	// hooks can populate these fields with additional content
 	$output['template_hook'] = array(
 		'before_sig' => '',
 		'after_sig' => '',
-		'post_bottom' => '',
+		'postbit_below' => '',
 		'poster_details' => ''
 	);
     if(!empty($modSettings['enableAdvancedHooks']))
-        HookAPI::callHook('integrate_postbit', array(&$context, &$output));
+        HookAPI::callHook('integrate_postbit', array(&$output));
 
 	return $output;
 }

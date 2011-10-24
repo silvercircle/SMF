@@ -287,6 +287,7 @@ function ModifyBBCSettings($return_config = false)
 			array('check', 'enableBBC'),
 			array('check', 'enablePostHTML'),
 			array('check', 'autoLinkUrls'),
+			array('check', 'legacyBBC'),
 		'',
 			array('bbc', 'disabledBBC'),
 	);
@@ -318,6 +319,11 @@ function ModifyBBCSettings($return_config = false)
 			$_POST['disabledBBC_enabledTags'] = array($_POST['disabledBBC_enabledTags']);
 		// Work out what is actually disabled!
 		$_POST['disabledBBC'] = implode(',', array_diff($bbcTags, $_POST['disabledBBC_enabledTags']));
+
+		if(isset($_POST['legacyBBC']) && !empty($_POST['legacyBBC']))
+			HookAPI::addHook('integrate_bbc_codes', 'LegacyBBC', 'main.php', 'legacybbc_addtags');
+		else
+			HookAPI::removeAll('LegacyBBC');
 
 		saveDBSettings($config_vars);
 		redirectexit('action=admin;area=postsettings;sa=bbc');

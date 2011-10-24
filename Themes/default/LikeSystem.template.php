@@ -11,7 +11,7 @@
  *
  * @version 1.0pre
  */
-function template_getlikes()
+function template_getlikes_xml()
 {
 	global $context, $txt;
 	header('Content-Type: text/xml; charset=' . (empty($context['character_set']) ? 'ISO-8859-1' : $context['character_set']));
@@ -43,5 +43,28 @@ function template_getlikes()
   </content>
  </response>
 </document>';
+}
+function template_getlikes()
+{
+	global $context, $txt;
+	echo '
+	<div class="title_bar">
+		<h1>',$txt['members_who_liked'],'</h1>
+	</div>
+	<div class="mediummargin content">
+	<ol class="commonlist">';
+
+	foreach($context['likes'] as $like) {
+		echo '
+		<li>
+		<div class="floatright smalltext">', $like['dateline'], '</div>';
+		template_userbit_compact($like['member']);
+		echo '
+		<div class="clear"></div>
+		</li>';
+	}
+	echo '
+	</ol>
+	</div>';
 }
 ?>

@@ -45,7 +45,7 @@ function GiveLike($mid)
 
 		/* check for dupes */
 		$request = smf_db_query( '
-			SELECT COUNT(id_msg) as count, id_user 
+			SELECT COUNT(id_msg) as count, id_user
 				FROM {db_prefix}likes AS l WHERE l.id_msg = {int:id_message} AND l.id_user = {int:id_user} AND l.ctype = {int:ctype} LIMIT 1',
 				array('id_message' => $mid, 'id_user' => $uid, 'ctype' => $content_type));
 				
@@ -285,14 +285,8 @@ function AddLikeBar(&$row, $can_give_like, $now)
 	if($user_info['is_admin'])
 		$row['likelink'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$row['id'].'">Repair Likes</a>';
 		
-	if($row['likes_count'] > 0) {
-		if($now - $row['like_updated'] > 86400) {
-			$result = LikesUpdate($row['id']);
-			LikesGenerateOutput($result['status'], $row['likers'], $result['count'], $row['id'], $have_liked_it);
-		}
-		else
-			LikesGenerateOutput($row['like_status'], $row['likers'], $row['likes_count'], $row['id'], $have_liked_it);
-	}
+	if($row['likes_count'] > 0)
+		LikesGenerateOutput($row['like_status'], $row['likers'], $row['likes_count'], $row['id'], $have_liked_it);
 }
 
 /**

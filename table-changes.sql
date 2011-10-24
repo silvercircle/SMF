@@ -27,17 +27,16 @@ CREATE TABLE {$db_prefix}messages_cache (
 # id_receiver - member who receives it (= owner of the content)
 #
 
-CREATE TABLE {$db_prefix}likes (
-	id_msg int(10) unsigned NOT NULL default '0',
-  	id_user mediumint(8) unsigned NOT NULL default '0',
-  	id_receiver mediumint(8) unsigned NOT NULL default '0',
-  	updated int(4) unsigned NOT NULL default '0',
-  	ctype tinyint(2) unsigned NOT NULL default '0',
-  	PRIMARY KEY (id_msg, id_user, ctype),
-  	KEY id_msg (id_msg),
-  	KEY id_user (id_user),
-  	KEY id_receiver (id_receiver),
-  	KEY ordering (id_msg, updated)
+CREATE TABLE {$db_prefix}smf_likes (
+  id_like int(10) NOT NULL auto_increment,
+  id_msg int(10) unsigned NOT NULL default '0',
+  id_user mediumint(8) unsigned NOT NULL default '0',
+  id_receiver mediumint(8) NOT NULL default '0',
+  updated int(4) unsigned NOT NULL default '0',
+  ctype tinyint(2) NOT NULL default '0',
+  PRIMARY KEY  (id_like),
+  UNIQUE KEY id (id_msg,id_user,ctype),
+  KEY ordering (id_msg,updated)
 ) ENGINE=MyISAM;
 
 #
@@ -111,23 +110,20 @@ CREATE TABLE {$db_prefix}activity_types (
 # log activities
 #
 CREATE TABLE {$db_prefix}log_activities (
-	id_act int(10) unsigned NOT NULL auto_increment,
-	id_member int(10) unsigned NOT NULL default '0',
-	updated   int(10) NOT NULL default '0',
-	id_type tinyint(3) NOT NULL default '0',
-	params varchar(300) NOT NULL default '',
-	is_private tinyint(2) NOT NULL default '0',
-	id_board smallint(5) NOT NULL default '0',
-	id_topic int(10) UNSIGNED NOT NULL default '0',
-	id_content int(10) UNSIGNED NOT NULL default '0',
-	id_owner int(10) UNSIGNED NOT NULL default '0',
-	PRIMARY KEY (id_act),
-	KEY (id_member),
-	KEY (id_type),
-	KEY (updated),
-	KEY (id_topic),
-	KEY (id_content)
-) Engine=MyISAM;
+  id_act int(10) unsigned NOT NULL auto_increment,
+  id_member int(10) unsigned NOT NULL default '0',
+  updated int(10) NOT NULL default '0',
+  id_type tinyint(3) NOT NULL default '0',
+  params varchar(600) NOT NULL default '',
+  is_private tinyint(2) NOT NULL default '0',
+  id_board smallint(5) NOT NULL default '0',
+  id_topic int(10) unsigned NOT NULL default '0',
+  id_content int(10) unsigned NOT NULL default '0',
+  id_owner int(10) NOT NULL default '0',
+  PRIMARY KEY  (id_act,id_type),
+  KEY updated (updated),
+  KEY id_member (id_member)
+) ENGINE=MyISAM;
 
 CREATE TABLE {$db_prefix}log_notifications (
 	id_member int(10) unsigned NOT NULL default '0',
@@ -186,6 +182,7 @@ ALTER TABLE {$db_prefix}members DROP website_url;
 
 # allow topics = 0 - board acts as a pure sub-category and cannot have own topics
 ALTER TABLE {$db_prefix}boards ADD allow_topics tinyint(4) unsigned NOT NULL default '1';
+ALTER TABLE {$db_prefix}boards ADD icon varchar(20) NOT NULL DEFAULT '';
 
 # automerge = 1 - multiple posts by the same user at the end of a thread will be automatically
 # merged (if time cutoff limit allows it)

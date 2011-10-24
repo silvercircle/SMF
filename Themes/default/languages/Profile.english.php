@@ -147,11 +147,12 @@ $txt['deleteAccount_approval'] = 'Please note that the forum moderators will hav
 
 $txt['profile_of_username'] = 'Profile of %1$s';
 $txt['profileInfo'] = 'Profile Info';
-$txt['showPosts'] = 'Show Posts';
-$txt['showPosts_help'] = 'This section allows you to view all posts made by this member. Note that you can only see posts made in areas you currently have access to.';
-$txt['showMessages'] = 'Messages posted by ';
-$txt['showTopics'] = 'Topics started by ';
-$txt['showAttachments'] = 'Attachments posted by ';
+$txt['showPosts'] = 'Show content';
+$txt['showPosts_help'] = 'This section allows you to browse the content for this member. Note that you can only see content for which you have sufficient viewing permissions.';
+$txt['showMessages'] = 'Messages';
+$txt['showTopics'] = 'Topics started';
+$txt['showAttachments'] = 'Attachments';
+$txt['showLikes'] = 'Likes received';
 $txt['statPanel'] = 'Show Stats';
 $txt['editBuddyIgnoreLists'] = 'Buddies/Ignore List';
 $txt['editBuddies'] = 'Edit Buddies';
@@ -272,7 +273,7 @@ $txt['poster'] = 'Poster';
 
 $txt['board_desc_inside'] = 'Show board descriptions inside boards.';
 $txt['use_drafts'] = 'Use the drafts feature to save unfinished posts';
-$txt['post_icons_index'] = 'Do not show message icons on in the last post column';
+$txt['post_icons_index'] = 'Show message icons in the last post column on the board listing.';
 $txt['show_children'] = 'Show child boards on every page inside boards, not just the first.';
 $txt['use_sidebar_menu'] = 'Use sidebar menus instead of dropdown menus when possible.';
 $txt['show_no_avatars'] = 'Don\'t show users\' avatars.';

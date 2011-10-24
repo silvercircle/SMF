@@ -43,7 +43,7 @@ function getBoardIndex($boardIndexOptions)
 	$result_boards = smf_db_query('
 		SELECT' . ($boardIndexOptions['include_categories'] ? '
 			c.id_cat, c.name AS cat_name, c.description AS cat_desc,' : '') . '
-			b.id_board, b.name AS board_name, b.description, b.redirect,
+			b.id_board, b.name AS board_name, b.description, b.redirect, b.icon AS boardicon,
 			CASE WHEN b.redirect != {string:blank_string} THEN 1 ELSE 0 END AS is_redirect,
 			b.num_posts, b.num_topics, b.unapproved_posts, b.unapproved_topics, b.id_parent,
 			IFNULL(m.poster_time, 0) AS poster_time, IFNULL(mem.member_name, m.poster_name) AS poster_name,
@@ -147,6 +147,7 @@ function getBoardIndex($boardIndexOptions)
 					'is_redirect' => $row_board['is_redirect'],
 					'is_page' => !empty($row_board['redirect']) && $row_board['redirect'][0] === '%' && intval(substr($row_board['redirect'], 1)) > 0,
 					'redirect' => $row_board['redirect'],
+					'boardicon' => $row_board['boardicon'],
 					'unapproved_topics' => $row_board['unapproved_topics'],
 					'unapproved_posts' => $row_board['unapproved_posts'] - $row_board['unapproved_topics'],
 					'can_approve_posts' => !empty($user_info['mod_cache']['ap']) && ($user_info['mod_cache']['ap'] == array(0) || in_array($row_board['id_board'], $user_info['mod_cache']['ap'])),
@@ -183,6 +184,7 @@ function getBoardIndex($boardIndexOptions)
 				'is_redirect' => $row_board['is_redirect'],
 				'is_page' => !empty($row_board['redirect']) && $row_board['redirect'][0] === '%' && intval(substr($row_board['redirect'], 1)) > 0,
 				'redirect' => $row_board['redirect'],
+				'boardicon' => $row_board['boardicon'],
 				'unapproved_topics' => $row_board['unapproved_topics'],
 				'unapproved_posts' => $row_board['unapproved_posts'] - $row_board['unapproved_topics'],
 				'can_approve_posts' => !empty($user_info['mod_cache']['ap']) && ($user_info['mod_cache']['ap'] == array(0) || in_array($row_board['id_board'], $user_info['mod_cache']['ap'])),

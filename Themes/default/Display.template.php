@@ -16,7 +16,7 @@ function template_main()
 	global $context, $settings, $options, $txt, $scripturl, $modSettings, $topic;
 
 	echo '
-		<div class="inlinePopup centertext dark" style="display:none;position:fixed;" id="interpostlink_helper">
+		<div class="inlinePopup centertext dark" style="display:none;" id="interpostlink_helper">
 		<div class="cat_bar2 norounded">
 		<h3>Quick post link</h3>
 		</div>
@@ -31,7 +31,7 @@ function template_main()
 		<dt><strong>Full link:</strong></dt><dd><input size="80" type="text" id="interpostlink_helper_content_full" value="foo" /></dd>
 		</dl>
 		</div>
-		<div class="centertext smalltext"><a onclick="$(\'#interpostlink_helper\').hide();" href="#!">Click to dismiss (or press ESC)</a></div>
+		<div class="centertext smalltext"><a onclick="$(\'#interpostlink_helper\').css(\'position\',\'static\');$(\'#interpostlink_helper\').hide();" href="#">Click to dismiss (or press ESC)</a></div>
 		</div>
 		<div id="share_bar" style="display:none;position:absolute;right:0;white-space:nowrap;width:auto;">
 		<div class="bmbar">
@@ -576,11 +576,11 @@ function template_main()
 		var tid = '.$context['current_topic'].';
 		var _sid = "#subject_" + mid;
 		var el = $("#interpostlink_helper");
+		el.css("position", "fixed");
 		var _content = "[ilink topic=" + tid + " post=" + mid + "]" + $(_sid).html().trim() + "[/ilink]";
 		$("#interpostlink_helper_content").val(_content);
 		$("#interpostlink_helper_content_full").val(e.attr("href"));
-		el.css("top", (($(window).height() - el.outerHeight()) / 2) - 200 + "px");
-		el.css("left", (($(window).width() - el.outerWidth()) / 2) + "px");
+		centerElement(el, -200);
 		el.css("z-index", 9999);
 		el.show();
 		$("#interpostlink_helper_content").focus();
@@ -588,6 +588,7 @@ function template_main()
 	}
 	$(document).keydown(function(e) {
 		if(e.keyCode == 27 && $("#interpostlink_helper").css("display") != "none") {
+        	$("#interpostlink_helper").css("position", "static");
         	$("#interpostlink_helper").hide();
     	}
 	});

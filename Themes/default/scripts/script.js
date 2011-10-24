@@ -1311,16 +1311,17 @@ i=function(e,h,k){return e.each(function(){h=(h)?$(h,e):e;
 f=function(k){return parseInt(E.css(k))||false;};
 })(jQuery);
 
-function alert_(title, msg)
+function Eos_Alert(title, msg)
 {
 	$('#jsconfirm .jsconfirm.title').html(title != '' ? title : 'JavaScript alert');
-	$('#jsconfirm #c_yes').hide();
-	$('#jsconfirm #c_no').hide();
+	$('#jsconfirm #c_yes, #jsconfirm #c_no').hide();
+	$('#jsconfirm').css('position', 'fixed');
 	$('#jsconfirm #c_ok').show();
 	$('#jsconfirm').jqmShow().find('div.jsconfirm.content').html(msg);
 	centerElement($('#jsconfirm'), -200);
 	$('#jsconfirm #c_ok').click(function() {
 		$('#jsconfirm').jqmHide();
+		$('#jsconfirm').css('position', 'static');
 	});
 }
 
@@ -1329,12 +1330,12 @@ function alert_(title, msg)
  * valid JS function to execute when the user clicks Yes.
  * same dialog is also used for simple modal alerts (see above).
  */
-function confirm_(title, msg, callback)
+function Eos_Confirm(title, msg, callback)
 {
 	var el = $('#jsconfirm');
-	$('#jsconfirm #c_yes').show();
-	$('#jsconfirm #c_no').show();
+	$('#jsconfirm #c_yes, #jsconfirm #c_no').show();
 	$('#jsconfirm #c_ok').hide();
+	el.css('position', 'fixed');
 	$('#jsconfirm').jqmShow().find('div.jsconfirm.content').html(msg);
 	centerElement(el, -200);
 	$('#jsconfirm .jsconfirm.title').html(title != '' ? title : 'JavaScript confirm');
@@ -1343,6 +1344,7 @@ function confirm_(title, msg, callback)
 	});
 	$('#jsconfirm #c_no').click(function() {
 		$('#jsconfirm').jqmHide();
+		$('#jsconfirm').css('position', 'static');
 	});
 	return(false);
 }

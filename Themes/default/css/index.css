@@ -1177,11 +1177,11 @@ div.user .avatar img {
 div.navigate_section {
 	padding: 0 0 0 10px;
 	margin-top: 10px;
-	background-color: #D0D1E6;
+	background-color: #e0e1f6;
 	border: 1px solid #BEBFDC;
 	border-radius: 3px;
-	font-size: 14px;
 	text-shadow: 1px 1px 1px #fff;
+	font-size:1.0em;
 }
 
 .navigate_section ul {
@@ -1196,7 +1196,7 @@ div.navigate_section {
 .navigate_section ul li {
 	float: left;
 	padding: 0 0.5em 0 0;
-	font-size: 11px;
+	line-height:16px;
 }
 .navigate_section ul li a {
 	white-space: pre;
@@ -1628,9 +1628,9 @@ div.userbit_compact_textpart {
 }
 .keyinfo h5 {
 	color:#666;
-	font-weight:bold;
 	font-size:1.1em;
 	text-shadow: 1px 1px 1px white;
+	font-weight:normal;
 }
 .keyinfo .timeago {
 	color: #d69538;
@@ -3504,7 +3504,6 @@ div.td_children a.new_posts, .permalink_new {
 /* member card */
 div#mcard, .tcard {
 	padding: 0;
-	position: absolute;
 	font-size: 12px;
 	color: #225;
 	text-align: left;

@@ -15,7 +15,6 @@
 function template_boardbit(&$board)
 {
 	global $context, $txt, $scripturl, $modSettings, $options, $settings;
-	
 	$_c = ($context['alternate'] = !$context['alternate']) ? 'windowbg' : 'windowbg2';
 	echo '
 	<li id="board_', $board['id'], '" class="',$_c,'">';
@@ -30,6 +29,11 @@ function template_boardbit(&$board)
 		  <a href="', ($board['is_redirect'] || $context['user']['is_guest'] ? $board['href'] : $scripturl . '?action=unread;board=' . $board['id'] . '.0;children'), '">
 		  <div class="csrcwrapper24px">';
 
+		if(!empty($board['boardicon'])) {
+			echo '
+		  <img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'boards/',$board['boardicon'],($board['new'] || $board['children_new'] ? '_new' : ''),'.png" alt="', $txt['new_posts'], '" title="', $txt['new_posts'], '" />';
+		}
+		else {
 		// If the board or children is new, show an indicator.
 		if ($board['new'] || $board['children_new'])
 			echo '
@@ -42,7 +46,7 @@ function template_boardbit(&$board)
 		else
 			echo '
 		  <img class="clipsrc _off" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="', $txt['old_posts'], '" title="', $txt['old_posts'], '" />';
-
+		}
 	echo '</div>
 		  </a>
 		</div>
@@ -65,11 +69,11 @@ function template_boardbit(&$board)
 		 <div class="smalltext">', $board['description'] , '</div>
 		<div class="lastpost smalltext">';
 	if (!empty($board['last_post']['id']))
-			echo (!empty($options['post_icons_index']) ? '' : '
+			echo (empty($options['post_icons_index']) ? '' : '
 		<img src="'.$board['first_post']['icon_url'].'" alt="icon" />'), '
 		',$txt['in'], ': ', $board['last_post']['prefix'],'&nbsp;',$board['last_post']['topiclink'], '<br />
 		<a class="lp_link" title="',$txt['last_post'],'" href="',$board['last_post']['href'],'">',$board['last_post']['time'], '</a>
-		<span ',(!empty($options['post_icons_index']) ? '' : 'style="padding-left:20px;"'),'>', $txt['by'], ': </span>', $board['last_post']['member']['link'];
+		<span ',(empty($options['post_icons_index']) ? '' : 'style="padding-left:20px;"'),'>', $txt['by'], ': </span>', $board['last_post']['member']['link'];
 	else
 		echo $txt['not_applicable'];
 	echo '
