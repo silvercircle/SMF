@@ -1921,6 +1921,7 @@ INSERT INTO {$db_prefix}settings
 VALUES ('use_post_cache', '0'),
 	('post_cache_cutoff', '30'),
 	('enableAdvancedHooks', '0'),
+	('legacyBBC', '0'),
 	('integration_hooks'), ''),
 	('fb_appid', ''),
 	('GA_tracker_id', ''),

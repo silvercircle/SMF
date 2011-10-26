@@ -493,10 +493,10 @@ function template_editBuddies()
 		</div>
 		<table style="width:100%;" class="table_grid" align="center">
 			<tr>
-				<th class="red_container first_th lefttext" scope="col" width="20%">', $txt['name'], '</th>
-				<th class="red_container" scope="col">', $txt['status'], '</th>
-				<th class="red_container" scope="col">', $txt['email'], '</th>
-				<th class="red_container last_th" scope="col"></th>
+				<th class="glass first_th lefttext" scope="col" width="20%">', $txt['name'], '</th>
+				<th class="glass" scope="col">', $txt['status'], '</th>
+				<th class="glass" scope="col">', $txt['email'], '</th>
+				<th class="glass last_th" scope="col"></th>
 			</tr>';
 
 	// If they don't have any buddies don't list them!
@@ -532,12 +532,14 @@ function template_editBuddies()
 			<div class="cat_bar">
 				<h3>', $txt['buddy_add'], '</h3>
 			</div>
-			<div class="blue_container">
+			<div class="blue_container cleantop">
+				<div class="content">
 					<label for="new_buddy">
 						<strong>', $txt['who_member'], ':</strong>
 					</label>
-					<input type="text" name="new_buddy" id="new_buddy" size="25" class="input_text" />
+					<input type="text" name="new_buddy" id="new_buddy" size="40" class="input_text" />
 					<input type="submit" value="', $txt['buddy_add_button'], '" class="button_submit" />
+				</div>
 			</div>
 		</div>
 	</form>
@@ -569,10 +571,10 @@ function template_editIgnoreList()
 		</div>
 		<table class="table_grid" style="width:100%;">
 			<tr>
-				<th class="red_container first_th" scope="col" width="20%">', $txt['name'], '</th>
-				<th class="red_container" scope="col">', $txt['status'], '</th>
-				<th class="red_container" scope="col">', $txt['email'], '</th>
-				<th class="red_container last_th" scope="col"></th>
+				<th class="glass first_th" scope="col" width="20%">', $txt['name'], '</th>
+				<th class="glass" scope="col">', $txt['status'], '</th>
+				<th class="glass" scope="col">', $txt['email'], '</th>
+				<th class="glass last_th" scope="col"></th>
 			</tr>';
 
 	// If they don't have anyone on their ignore list, don't list it!
@@ -608,12 +610,14 @@ function template_editIgnoreList()
 			<div class="cat_bar">
 				<h3>', $txt['ignore_add'], '</h3>
 			</div>
-			<div class="blue_container">
+			<div class="blue_container cleantop">
+				<div class="content">
 					<label for="new_buddy">
 						<strong>', $txt['who_member'], ':</strong>
 					</label>
-					<input type="text" name="new_ignore" id="new_ignore" size="25" class="input_text" />
+					<input type="text" name="new_ignore" id="new_ignore" size="40" class="input_text" />
 					<input type="submit" value="', $txt['ignore_add_button'], '" class="button_submit" />
+				</div>
 			</div>
 		</div>
 	</form>
@@ -1798,9 +1802,9 @@ function template_ignoreboards()
 				<span class="ie6_header floatleft">', $txt['profile'], '</span>
 			</h3>
 		</div>
-		<p class="description">', $txt['ignoreboards_info'], '</p>
-		<div class="windowbg2">
-			<span class="topslice"><span></span></span>
+		<div class="orange_container cleantop">', $txt['ignoreboards_info'], '</div>
+		<br>
+		<div class="blue_container">
 			<div class="content flow_hidden">
 				<ul class="ignoreboards floatleft">';
 
@@ -1855,7 +1859,6 @@ function template_ignoreboards()
 
 	echo '
 			</div>
-			<span class="botslice"><span></span></span>
 		</div>
 	</form>
 	<br />';
@@ -2994,7 +2997,7 @@ function template_showDrafts()
 				<div class="floatright">
 					<ul class="reset smalltext quickbuttons">
 						<li class="reply_button"><a href="', $scripturl . '?action=post;', (!empty($post['message']['id']) ? 'msg='.$post['message']['id'].';' : ''), (empty($post['topic']['id']) ? 'board=' . $post['board']['id'] : 'topic=' . $post['topic']['id']), '.0;draft;draft_id=', $post['id'], '"><span>', $txt['edit_draft'], '</span></a></li>
-						<li class="remove_button"><a href="', $scripturl, '?action=profile;u=', $context['member']['id'], ';area=drafts;delete=', $post['id'], ';topic=', $post['topic']['id'], ';',($post['message']['id'] ? 'msg='.$post['message']['id'] . ';' : ''), $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');"><span>', $txt['remove_draft'], '</span></a></li>
+						<li class="remove_button"><a href="', $scripturl, '?action=profile;u=', $context['member']['id'], ';area=drafts;delete=', $post['id'], ';topic=', $post['topic']['id'], ';',($post['message']['id'] ? 'msg='.$post['message']['id'] . ';' : ''), $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\',\'', $txt['remove_message'], '?\',$(this).attr(\'href\'));"><span>', $txt['remove_draft'], '</span></a></li>
 					</ul>
 				</div>
 				<br class="clear" />

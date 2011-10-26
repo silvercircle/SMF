@@ -1583,7 +1583,7 @@ function sendRequest(request, anchor_element)
 		sendXMLDocumentWithAnchor(sUrl, '', response, anchor_element);
 };
 
-function openResult(html, width)
+function openResult(html, width, offset)
 {
 	var el = $('#mcard');
 
@@ -1594,7 +1594,7 @@ function openResult(html, width)
 		$('#mcard_content').css({'max-height': windowheight * 0.8 + 'px', 'overflow': 'auto'});
 
 	el.css({'width': width > 0 ? width + 'px' : 'auto', "position": 'fixed', 'z-index': '10000'});
-	centerElement(el, 0);
+	centerElement(el, offset);
 	el.show();
 };
 
@@ -1617,9 +1617,10 @@ function response_xml(responseXML)
 				Eos_Alert(title, msg);
 				return(false);
 			}
-			var width = _r.attr('width');
+			var width = _r.attr('width') || 300;
+			var offset = parseInt(_r.attr('offset')) || 0;
 			var content = data.find('content').text();
-			openResult(content, width);
+			openResult(content, width, offset);
 			return(false);
 		}
    		$('div#mcard_inner abbr.timeago').timeago();
@@ -1647,11 +1648,11 @@ function response(ele, responseText)
 			return;
 		}
 		if(ele.attr('class') == 'whoposted') {
-			openResult(responseText, 0);
+			openResult(responseText, 0, 0);
 			return;
 		}
 		if(ele.attr('class') == 'tpeek') {
-			openResult(responseText, 710);
+			openResult(responseText, 710, 0);
     		$('div#mcard_inner abbr.timeago').timeago();
 			return;
 		}
@@ -1683,7 +1684,7 @@ function response(ele, responseText)
 			sidebar_content_loaded = true;
 			return;
 		}
-		openResult(responseText, 500);
+		openResult(responseText, 500, 0);
 		$('div#mcard_inner abbr.timeago').timeago();
 	} catch(e) {
 		setBusy(0);

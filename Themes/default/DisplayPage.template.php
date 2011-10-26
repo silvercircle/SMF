@@ -40,7 +40,7 @@ function template_main()
 		<dt><strong>Full link:</strong></dt><dd><input size="80" type="text" id="interpostlink_helper_content_full" value="foo" /></dd>
 		</dl>
 		</div>
-		<div class="centertext smalltext"><a onclick="$(\'#interpostlink_helper\').css(\'position\',\'static\');$(\'#interpostlink_helper\').hide();" href="#">Click to dismiss (or press ESC)</a></div>
+		<div class="centertext smalltext smallpadding"><input type="button" class="input_button" onclick="$(\'#interpostlink_helper\').css(\'position\',\'static\');$(\'#interpostlink_helper\').hide();" value="Click to dismiss (or press ESC)" /></div>
 		</div>
 		<div id="share_bar" style="display:none;position:absolute;right:0;white-space:nowrap;width:auto;">
 		<div class="bmbar">

@@ -142,11 +142,13 @@ if(!empty($modSettings['simplesef_enable'])) {
 
 		/**
 		 * @static
-		 * @param $url			a conventional querystring (i.e. ?action=mlist;sa=search) or URL
+		 * @param $_r			a conventional querystring (i.e. ?action=mlist;sa=search) or URL
 		 * 						including $scripturl.
 		 * @return string		a prettyfied URL
 		 *
 		 * create a SEF URL for all instances for which we don't have a faster URL crafting method.
+		 * this is inherently slower than topic() or user(), so don't use this if you can generate
+		 * the URL with one of the more specific and faster methods.
 		 */
 		public static function parse($_r)
 		{

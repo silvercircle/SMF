@@ -17,7 +17,7 @@ function template_main()
 
 	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '" ?', '>
 <document>
- <response open="default_overlay" width="500" />
+ <response open="default_overlay" width="500" offset="-150" />
  <content>
  <![CDATA[
 ';
@@ -40,7 +40,7 @@ function template_main()
 	<table style="border:0;width:100%;">
 		<tr>
 			<td style="vertical-align:top;text-align:center;">
-				<div style="position:relative;top:-26px;">';
+				<div style="position:relative;top:-26px;margin-bottom:-26px;">';
 		if(!empty($member['avatar']['image']))
 			echo $member['avatar']['image'];
 		else
@@ -48,15 +48,16 @@ function template_main()
 				<img class="avatar" src="',$settings['images_url'], '/unknown.png" alt="avatar" />';
 
 		echo '
-				</div>
+				</div>',
+				$member['group_stars'],'
 				<br />
 				<br />Karma: ', $member['karma']['good'];
 		echo '
-				<br />Posts: ', $member['posts'];
+				<br />Posts: <a class="important" href="',URL::parse('?action=profile;area=showposts;u='.$member['id']),'">', $member['posts'];
 		echo '
 			</td>';
 		echo '
-			<td style="width:100%;padding:2px 5px;vertical-align:top;">
+			<td style="width:100%;vertical-align:top;" class="smallpadding">
 			<h1 style="position:relative;top:-28px;margin-bottom:-16px;">'
 			  ,$member['name'],'
 			</h1>
@@ -65,7 +66,7 @@ function template_main()
 			echo '
 			<div class="orange_container" style="padding:3px;margin-bottom:3px;"><strong>',$member['blurb'],'</strong></div>';
 		echo '
-			<div class="blue_container" style="padding:3px;margin-bottom:5px;">';
+			<div class="blue_container inset_shadow smallpadding" style="margin-bottom:5px;">';
 		if(!empty($member['group']))
 			echo '
 			',$txt['primary_membergroup'], ': <strong>', $member['group'], '</strong><br />';
@@ -108,7 +109,7 @@ function template_main()
 	</table>';
 		echo '
 	<div class="cat_bar">
-		<div style="position:absolute;bottom:3px;right:8px;"><a href="',$scripturl,'?action=profile;u=',$member['id'],'">View full profile</a>
+		<div style="position:absolute;bottom:3px;right:8px;"><a href="',URL::parse('?action=profile;u='.$member['id']),'">View full profile</a>
 	</div>
 	<div class="clear">	</div>
 	</div>';

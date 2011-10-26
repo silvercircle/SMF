@@ -52,7 +52,7 @@ function template_postbit_compact(&$message)
 	if(isset($message['member'])) {
 		echo '
 		<div class="blue_container cleantop cleanvert">
-		<div class="content inset_shadow" style="line-height:19px;">';
+		<div class="content inset_shadow smalltext" style="line-height:19px;">';
 		if (!empty($settings['show_user_images']) && empty($options['show_no_avatars'])) {
 			if(!empty($message['member']['avatar']['image']))
 				echo '

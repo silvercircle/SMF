@@ -157,7 +157,7 @@ function template_body_above()
 	<header>
 	<div id="header">
 	<div id="upper_section" class="middletext">
-		<div class="floatleft" style="margin-left:20px;overflow:hidden;max-height:87px;padding-top:2px;"><img src="',$settings['images_url'],'/logo.png" alt="logo" /></div>
+		<div class="floatleft" style="overflow:hidden;max-height:87px;"><img src="',$settings['images_url'],'/logo.png" alt="logo" /></div>
 	<div class="clear"></div>';
 	echo '
 			<div class="news normaltext">';

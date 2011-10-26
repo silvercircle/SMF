@@ -392,7 +392,7 @@ function showPosts($memID)
 	// Reverse the query if we're past 50% of the pages for better performance.
 	$start = $context['start'];
 	$reverse = $_REQUEST['start'] > $msgCount / 2;
-	if ($reverse)
+	if ($reverse && !$context['is_topics'])
 	{
 		$maxIndex = $msgCount < $context['start'] + $modSettings['defaultMaxMessages'] + 1 && $msgCount > $context['start'] ? $msgCount - $context['start'] : (int) $modSettings['defaultMaxMessages'];
 		$start = $msgCount < $context['start'] + $modSettings['defaultMaxMessages'] + 1 || $msgCount < $context['start'] + $modSettings['defaultMaxMessages'] ? 0 : $msgCount - $context['start'] - $modSettings['defaultMaxMessages'];
@@ -421,14 +421,12 @@ function showPosts($memID)
 		$prereq = smf_db_query('
 			SELECT t.id_topic FROM {db_prefix}topics AS t
 			LEFT JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
-			LEFT JOIN {db_prefix}messages AS m ON (m.id_msg = t.id_first_msg)
-			LEFT JOIN {db_prefix}messages AS m2 ON (m2.id_msg = t.id_last_msg)
-			WHERE m.id_member = {int:current_member}' . (!empty($board) ? '
+			WHERE t.id_member_started = {int:current_member}' . (!empty($board) ? '
 				AND t.id_board = {int:board}' : '') . '
 				AND {query_see_board}' . (!$modSettings['postmod_active'] || $context['user']['is_owner'] ? '' : '
 				AND t.approved = {int:is_approved}') . '
 			ORDER BY t.id_topic DESC
-			LIMIT ' . $start . ', ' . $maxIndex,
+			LIMIT ' . $start . ', ' . $modSettings['defaultMaxMessages'],
 			array(
 				'current_member' => $memID,
 				'is_approved' => 1,
