@@ -18,6 +18,7 @@ body {
 	font-size: 1.0em;
 	margin: 0;
 	padding: 0;
+	box-shadow: 
 }
 #wrap {
 	background-color: #D0D1E6;
@@ -1334,7 +1335,6 @@ ol.category > li > div.info {
 	position:relative;
 	min-height:30px;
 }
-
 ol.category > li > div.info h3 {
 	display: inline;
 	font-size: 105%;
@@ -3735,3 +3735,4 @@ a.fnote_ref {
 		border: none;
 	}
 }
+

@@ -108,7 +108,7 @@ if (!defined('SMF'))
 		- puts value in the cache under key for ttl seconds.
 		- may "miss" so shouldn't be depended on, and may go to any of many
 		  various caching servers.
-		- supports eAccelerator, Turck MMCache, ZPS, and memcached.
+		- supports ZPS, and memcached.
 
 	mixed CacheAPI::getCache(string key, int ttl = 120)
 		- gets the value from the cache specified by key, so long as it is not

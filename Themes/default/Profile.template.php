@@ -3018,5 +3018,4 @@ function template_showDrafts()
 			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
 		</div>';
 }
-
 ?>
