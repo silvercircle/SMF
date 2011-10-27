@@ -31,14 +31,14 @@ $mmessage = 'Offline for a short maintainance period.';		# Description of why th
 $mbname = 'TabSRMM';		# The name of your forum.
 $language = 'english';		# The default language file set for the forum.
 $boardurl = 'http://forum.miranda.or.at';		# URL to your forum's folder. (without the trailing /!)
-$webmaster_email = 'noreply@forum.miranda.or.at';		# Email address to send emails from. (like noreply@yourdomain.com.)
+$webmaster_email = '';		# Email address to send emails from. (like noreply@yourdomain.com.)
 $cookiename = 'SMFCookie20';		# Name of the cookie to set for authentication.
 
 ########## Database Info ##########
 $db_server = 'localhost';
-$db_name = 'smf';
-$db_user = 'w3svc';
-$db_passwd = 'w3server_realm';
+$db_name = '';
+$db_user = '';
+$db_passwd = '';
 $db_prefix = 'smf_';
 $db_persist = 0;
 $db_error_send = 0;
@@ -50,16 +50,15 @@ $sourcedir = '/home/alex/www/forum/Sources/';		# Path to the Sources directory.
 
 ########## Error-Catching ##########
 # Note: You shouldn't touch these settings.
-$db_last_error = 1140873382;
 
 # Make sure the paths are correct... at least try to fix them.
 if (!file_exists($boarddir) && file_exists(dirname(__FILE__) . '/agreement.txt'))
-$boarddir = '/home/alex/www/forum';
+$boarddir = '';
 if (!file_exists($sourcedir) && file_exists($boarddir . '/Sources'))
-$sourcedir = '/home/alex/www/forum/Sources';
+$sourcedir = '';
 
 $ssi_db_user = '';
-$cachedir = '/home/alex/www/forum/cache';
+$cachedir = '';
 $db_character_set = 'utf8';
 $db_show_debug = false;
 $g_disable_all_hooks = false;
