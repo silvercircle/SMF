@@ -72,7 +72,7 @@ function getXMLDocument(sUrl, funcCallback)
 	oMyDoc.send(null);
 
 	return oMyDoc;
-};
+}
 
 function centerElement(el, yOff)
 {
@@ -104,7 +104,7 @@ function sendXMLDocumentWithAnchor(sUrl, sContent, funcCallback, ele)
 	oSendDoc.send(sContent);
 
 	return true;
-};
+}
 
 // Send a post form to the server using XMLHttpRequest.
 function sendXMLDocument(sUrl, sContent, funcCallback)
@@ -131,7 +131,7 @@ function sendXMLDocument(sUrl, sContent, funcCallback)
 	oSendDoc.send(sContent);
 
 	return true;
-};
+}
 
 // A property we'll be needing for php_to8bit.
 String.prototype.oCharsetConversion = {
@@ -245,7 +245,7 @@ function storeCaret(oTextHandle)
 	// Only bother if it will be useful.
 	if ('createTextRange' in oTextHandle)
 		oTextHandle.caretPos = document.selection.createRange().duplicate();
-};
+}
 
 // Replaces the currently selected text with the passed text.
 function replaceText(text, oTextHandle)
@@ -282,7 +282,7 @@ function replaceText(text, oTextHandle)
 		oTextHandle.value += text;
 		oTextHandle.focus(oTextHandle.value.length - 1);
 	}
-};
+}
 
 // Surrounds the selected text with text1 and text2.
 function surroundText(text1, text2, oTextHandle)
@@ -332,7 +332,7 @@ function surroundText(text1, text2, oTextHandle)
 		oTextHandle.value += text1 + text2;
 		oTextHandle.focus(oTextHandle.value.length - 1);
 	}
-};
+}
 
 // Checks if the passed input's value is nothing.
 function isEmptyText(theField)
@@ -351,7 +351,7 @@ function isEmptyText(theField)
 		return true;
 	else
 		return false;
-};
+}
 
 // Only allow form submission ONCE.
 function submitonce(theform)
@@ -361,7 +361,7 @@ function submitonce(theform)
 	// If there are any editors warn them submit is coming!
 	for (var i = 0; i < smf_editorArray.length; i++)
 		smf_editorArray[i].doSubmit();
-};
+}
 function submitThisOnce(oControl)
 {
 	// Hateful, hateful fix for Safari 1.3 beta.
@@ -376,18 +376,18 @@ function submitThisOnce(oControl)
 		aTextareas[i].readOnly = true;
 
 	return !smf_formSubmitted;
-};
+}
 
 // Deprecated, as innerHTML is supported everywhere.
 function setInnerHTML(oElement, sToValue)
 {
 	oElement.innerHTML = sToValue;
-};
+}
 
 function getInnerHTML(oElement)
 {
 	return oElement.innerHTML;
-};
+}
 
 // Set the "outer" HTML of an element.
 function setOuterHTML(oElement, sToValue)
@@ -400,7 +400,7 @@ function setOuterHTML(oElement, sToValue)
 		range.setStartBefore(oElement);
 		oElement.parentNode.replaceChild(range.createContextualFragment(sToValue), oElement);
 	}
-};
+}
 
 // Checks for variable in theArray.
 function in_array(variable, theArray)
@@ -410,7 +410,7 @@ function in_array(variable, theArray)
 			return true;
 
 	return false;
-};
+}
 
 // Checks for variable in theArray.
 function array_search(variable, theArray)
@@ -420,7 +420,7 @@ function array_search(variable, theArray)
 			return i;
 
 	return null;
-};
+}
 
 // Find a specific radio button in its group and select it.
 function selectRadioByName(oRadioGroup, sName)
@@ -433,7 +433,7 @@ function selectRadioByName(oRadioGroup, sName)
 			return oRadioGroup[i].checked = true;
 
 	return false;
-};
+}
 
 // Keep the session alive - always!
 var lastKeepAliveCheck = new Date().getTime();
@@ -450,7 +450,7 @@ function smf_sessionKeepAlive()
 	}
 
 	window.setTimeout('smf_sessionKeepAlive();', 1200000);
-};
+}
 window.setTimeout('smf_sessionKeepAlive();', 1200000);
 
 // Set a theme option through javascript.
@@ -467,7 +467,7 @@ function smf_setThemeOption(option, value, theme, cur_session_id, cur_session_va
 
 	var tempImage = new Image();
 	tempImage.src = smf_prepareScriptUrl(smf_scripturl) + 'action=jsoption;var=' + option + ';val=' + value + ';' + cur_session_var + '=' + cur_session_id + additional_vars + (theme == null ? '' : '&th=' + theme) + ';time=' + (new Date().getTime());
-};
+}
 
 function smf_avatarResize()
 {
@@ -507,7 +507,7 @@ function smf_avatarResize()
 		window_oldAvatarOnload();
 		window_oldAvatarOnload = null;
 	}
-};
+}
 
 
 function hashLoginPassword(doForm, cur_session_id)
@@ -533,7 +533,7 @@ function hashLoginPassword(doForm, cur_session_id)
 		doForm.passwrd.value = '';
 	else
 		doForm.passwrd.value = doForm.passwrd.value.replace(/./g, '*');
-};
+}
 
 function hashAdminPassword(doForm, username, cur_session_id)
 {
@@ -546,7 +546,7 @@ function hashAdminPassword(doForm, username, cur_session_id)
 
 	doForm.admin_hash_pass.value = hex_sha1(hex_sha1(username.php_to8bit().php_strtolower() + doForm.admin_pass.value.php_to8bit()) + cur_session_id);
 	doForm.admin_pass.value = doForm.admin_pass.value.replace(/./g, '*');
-};
+}
 
 // Shows the page numbers by clicking the dots (in compact view).
 function expandPages(spanNode, baseURL, firstPage, lastPage, perPage)
@@ -574,7 +574,7 @@ function expandPages(spanNode, baseURL, firstPage, lastPage, perPage)
 
 	// Replace the dots by the new page links.
 	setInnerHTML(spanNode, replacement);
-};
+}
 
 function smc_preCacheImage(sSrc)
 {
@@ -586,7 +586,7 @@ function smc_preCacheImage(sSrc)
 		var oImage = new Image();
 		oImage.src = sSrc;
 	}
-};
+}
 
 
 // *** smc_Cookie class.
@@ -595,7 +595,7 @@ function smc_Cookie(oOptions)
 	this.opt = oOptions;
 	this.oCookies = {};
 	this.init();
-};
+}
 
 smc_Cookie.prototype.init = function()
 {
@@ -608,17 +608,17 @@ smc_Cookie.prototype.init = function()
 			this.oCookies[aNameValuePair[0].replace(/^\s+|\s+$/g, '')] = decodeURIComponent(aNameValuePair[1]);
 		}
 	}
-};
+}
 
 smc_Cookie.prototype.get = function(sKey)
 {
 	return sKey in this.oCookies ? this.oCookies[sKey] : null;
-};
+}
 
 smc_Cookie.prototype.set = function(sKey, sValue)
 {
 	document.cookie = sKey + '=' + encodeURIComponent(sValue);
-};
+}
 
 function createEventListener(oTarget)
 {
@@ -643,13 +643,13 @@ function createEventListener(oTarget)
 			};
 		}
 	}
-};
+}
 
 // This function will retrieve the contents needed for the jump to boxes.
 function grabJumpToContent()
 {
 	var oXMLDoc = getXMLDocument(smf_prepareScriptUrl(smf_scripturl) + 'action=xmlhttp;sa=jumpto;xml', grabJumpResponse);
-};
+}
 
 function grabJumpResponse(responseXML)
 {
@@ -681,7 +681,7 @@ function JumpTo(oJumpToOptions)
 	this.opt = oJumpToOptions;
 	this.dropdownList = null;
 	this.showSelect();
-};
+}
 
 // Show the initial select box (onload). Method of the JumpTo class.
 JumpTo.prototype.showSelect = function ()
@@ -691,7 +691,7 @@ JumpTo.prototype.showSelect = function ()
 		sChildLevelPrefix += this.opt.sBoardChildLevelIndicator;
 	setInnerHTML(document.getElementById(this.opt.sContainerId), this.opt.sJumpToTemplate.replace(/%select_id%/, this.opt.sContainerId + '_select').replace(/%dropdown_list%/, '<select name="' + this.opt.sContainerId + '_select" id="' + this.opt.sContainerId + '_select" ' + ('implementation' in document ? '' : 'onmouseover="grabJumpToContent();" ') + ('onbeforeactivate' in document ? 'onbeforeactivate' : 'onfocus') + '="grabJumpToContent();"><option value="?board=' + this.opt.iCurBoardId + '.0">' + sChildLevelPrefix + this.opt.sBoardPrefix + this.opt.sCurBoardName.removeEntities() + '</option></select>&nbsp;<input type="button" value="' + this.opt.sGoButtonLabel + '" onclick="window.location.href = \'' + smf_prepareScriptUrl(smf_scripturl) + 'board=' + this.opt.iCurBoardId + '.0\';" />'));
 	this.dropdownList = document.getElementById(this.opt.sContainerId + '_select');
-};
+}
 
 // Fill the jump to box with entries. Method of the JumpTo class.
 JumpTo.prototype.fillSelect = function (aBoardsAndCategories)
@@ -767,7 +767,7 @@ JumpTo.prototype.fillSelect = function (aBoardsAndCategories)
 		if (this.selectedIndex > 0 && this.options[this.selectedIndex].value)
 			window.location.href = smf_scripturl + this.options[this.selectedIndex].value.substr(smf_scripturl.indexOf('?') == -1 || this.options[this.selectedIndex].value.substr(0, 1) != '?' ? 0 : 1);
 	};
-};
+}
 // Handy shortcuts for getting the mouse position on the screen - only used for IE at the moment.
 function smf_mousePose(oEvent)
 {
@@ -786,7 +786,7 @@ function smf_mousePose(oEvent)
 	}
 
 	return [x, y];
-};
+}
 
 // Short function for finding the actual position of an item.
 function smf_itemPos(itemHandle)
@@ -812,13 +812,13 @@ function smf_itemPos(itemHandle)
 	}
 
 	return [itemX, itemY];
-};
+}
 
 // This function takes the script URL and prepares it to allow the query string to be appended to it.
 function smf_prepareScriptUrl(sUrl)
 {
 	return sUrl.indexOf('?') == -1 ? sUrl + '?' : sUrl + (sUrl.charAt(sUrl.length - 1) == '?' || sUrl.charAt(sUrl.length - 1) == '&' || sUrl.charAt(sUrl.length - 1) == ';' ? '' : ';');
-};
+}
 
 var aOnloadEvents = new Array();
 function addLoadEvent(fNewOnload)
@@ -846,12 +846,12 @@ function addLoadEvent(fNewOnload)
 	// This isn't the first event function, add it to the list.
 	else
 		aOnloadEvents[aOnloadEvents.length] = fNewOnload;
-};
+}
 
 function smfFooterHighlight(element, value)
 {
 	element.src = smf_images_url + '/' + (value ? 'h_' : '') + element.id + '.gif';
-};
+}
 
 // Get the text in a code tag.
 function smfSelectText(oCurElement, bActOnElement)
@@ -893,7 +893,7 @@ function smfSelectText(oCurElement, bActOnElement)
 	}
 
 	return false;
-};
+}
 
 // A function needed to discern HTML entities from non-western characters.
 function smc_saveEntities(sFormName, aElementNames, sMask)
@@ -910,7 +910,7 @@ function smc_saveEntities(sFormName, aElementNames, sMask)
 		if (aElementNames[i] in document.forms[sFormName])
 			document.forms[sFormName][aElementNames[i]].value = document.forms[sFormName][aElementNames[i]].value.replace(/&#/g, '&#38;#');
 	}
-};
+}
 
 // A function used to clean the attachments on post page
 function cleanFileInput(idElement)
@@ -926,7 +926,7 @@ function cleanFileInput(idElement)
 		document.getElementById(idElement).type = 'input';
 		document.getElementById(idElement).type = 'file';
 	}
-};
+}
 
 // The purpose of this code is to fix the height of overflow: auto blocks, because some browsers can't figure it out for themselves.
 function smf_codeBoxFix()
@@ -943,7 +943,7 @@ function smf_codeBoxFix()
 		else if ('currentStyle' in codeFix[i] && codeFix[i].currentStyle.overflow == 'auto' && (codeFix[i].currentStyle.height == '' || codeFix[i].currentStyle.height == 'auto') && (codeFix[i].scrollWidth > codeFix[i].clientWidth || codeFix[i].clientWidth == 0) && (codeFix[i].offsetHeight != 0))
 			codeFix[i].style.height = (codeFix[i].offsetHeight + 24) + 'px';
 	}
-};
+}
 
 // Add a fix for code stuff?
 if (is_ie || is_webkit || is_ff)
@@ -964,7 +964,7 @@ function smc_toggleImageDimensions()
 			this.style.width = this.style.height = this.style.width == 'auto' ? null : 'auto';
 		};
 	}
-};
+}
 
 // Add a load event for the function above.
 //addLoadEvent(smc_toggleImageDimensions);
@@ -988,7 +988,7 @@ function smf_addButton(sButtonStripId, bUseImage, oOptions)
 	setInnerHTML(oNewButton, '<a href="' + oOptions.sUrl + '" ' + ('sCustom' in oOptions ? oOptions.sCustom : '') + '><span class="last"' + ('sId' in oOptions ? ' id="' + oOptions.sId + '"': '') + '>' + oOptions.sText + '</span></a>');
 
 	oButtonStripList.appendChild(oNewButton);
-};
+}
 
 // Adds hover events to list items. Used for a versions of IE that don't support this by default.
 var smf_addListItemHoverEvents = function()
@@ -1019,7 +1019,7 @@ var smf_addListItemHoverEvents = function()
 			this.className = this.className.replace(new RegExp(' iehover\\b'), '');
 		};
 	}
-};
+}
 
 function readCookie(name) {
   var nameEQ = name + "=";
@@ -1033,13 +1033,15 @@ function readCookie(name) {
 }
 
 function createCookie(name,value,days) {
-  if (days) {
-    var date = new Date();
-    date.setTime(date.getTime()+(days*24*60*60*1000));
-    var expires = "; expires="+date.toGMTString();
-  }
-  else var expires = "";
-  document.cookie = name+"="+value+expires+"; path=/";
+	var expires = '';
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		expires = "; expires="+date.toGMTString();
+	}
+	else 
+	  expires = "";
+	document.cookie = name+"="+value+expires+"; path=/";
 }
 
 function setTextSize(_s)
@@ -1107,7 +1109,7 @@ function setTextSize(_s)
         var string = $.isFunction(stringOrFunction) ? stringOrFunction(number, distanceMillis) : stringOrFunction;
         var value = ($l.numbers && $l.numbers[number]) || number;
         return string.replace(/%d/i, value);
-      };
+      }
 
       var words = seconds < 45 && substitute($l.seconds, Math.round(seconds)) ||
         seconds < 90 && substitute($l.minute, 1) ||
@@ -1155,7 +1157,7 @@ function setTextSize(_s)
       $(this).text(inWords(data.datetime));
     }
     return this;
-  };
+  }
 
   function prepareData(element) {
     element = $(element);
@@ -1167,7 +1169,7 @@ function setTextSize(_s)
       }
     }
     return element.data("timeago");
-  };
+  }
 
   function inWords(date) {
     var now = new Date();
@@ -1193,12 +1195,12 @@ function setTextSize(_s)
 	// todo: needs fixing / better solution
 	$t.settings.allowFuture = (dist < 0 && Math.abs(dist) < onehour ? false : true);
     return($t.inWords(dist));
-  };
+  }
 
   function distance(date) {
   	  var d = new Date();
       return (d.getTime() - (date.getTime() + (d.getTimezoneOffset() * 60 * 1000) ));
-  };
+  }
   
   function pad(n) {
     var s = n+"";
