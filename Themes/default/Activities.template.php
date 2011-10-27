@@ -89,6 +89,26 @@ function template_showactivity_xml()
 	</div>';
 }
 
+function template_showactivity_profile()
+{
+	global $context, $txt;
+
+	if($context['act_results']) {
+	echo '
+	<ol class="commonlist">
+	<li class="glass centertext">',$context['titletext'],'</li>';
+	foreach($context['activities'] as $activity)
+		template_activitybit($activity);
+	echo '
+	</ol>';
+	}
+	else
+		echo '
+	<div class="red_container">
+	',$txt['act_no_results'],'
+	</div>';
+}
+
 /**
  * output the js code for dealing with the inline list of notifications
  * this contains code for marking notifications as read among a few other things

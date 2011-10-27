@@ -116,7 +116,22 @@ function ModifyProfile($post_errors = array())
 						'messages' => array($txt['showMessages'], array('profile_view_own', 'profile_view_any')),
 						'topics' => array($txt['showTopics'], array('profile_view_own', 'profile_view_any')),
 						'attach' => array($txt['showAttachments'], array('profile_view_own', 'profile_view_any')),
-						'likes' => array($txt['showLikes'], array('profile_view_own', 'profile_view_any'))
+						'likes' => array($txt['showLikes'], array('profile_view_own', 'profile_view_any')),
+						'likesout' => array($txt['showLikesGiven'], array('profile_view_own', 'profile_view_any'))
+					),
+					'permission' => array(
+						'own' => 'profile_view_own',
+						'any' => 'profile_view_any',
+					),
+				),
+				'activities' => array(
+					'label' => $txt['showActivitiesMenu'],
+					'file' => 'Activities.php',
+					'function' => 'showActivitiesProfile',
+					'subsections' => array(
+						'activities' => array($txt['showActivities'], array('profile_view_own', 'profile_view_any')),
+						'notifications' => array($txt['showNotifications'], array('profile_view_own', 'profile_view_any')),
+						'settings' => array($txt['astreamSettings'], array('profile_view_own', 'profile_view_any')),
 					),
 					'permission' => array(
 						'own' => 'profile_view_own',
@@ -343,6 +358,15 @@ function ModifyProfile($post_errors = array())
 
 	if(!$context['user']['is_owner'] || !in_array('dr', $context['admin_features']))
 		unset($profile_areas['info']['areas']['drafts']);
+
+	if(!in_array('as', $context['admin_features']))
+		unset($profile_areas['info']['areas']['activities']);
+
+	if(!$user_info['is_admin'] && !$context['user']['is_owner'] && isset($profile_areas['info']['areas']['activities'])) {
+		unset($profile_areas['info']['areas']['activities']['subsections']['notifications']);
+		unset($profile_areas['info']['areas']['activities']['subsections']['settings']);
+	}
+
 	// Let them modify profile areas easily.
 	HookAPI::callHook('integrate_profile_areas', array(&$profile_areas));
 

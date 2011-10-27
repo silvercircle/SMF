@@ -92,7 +92,7 @@ function template_main()
 		echo '
 			Member since: ', $member['registered'],'<br />';
 		echo '
-			<br>',sprintf($txt['like_profile_report'], $member['name'], $member['likesgiven'], $member['liked'], $member['posts']), '
+			<br>',sprintf($txt['like_profile_report'], $member['name'], URL::parse('?action=profile;area=showposts;sa=likesout;u=' . $member['id']), $member['likesgiven'], URL::parse('?action=profile;area=showposts;sa=likes;u=' . $member['id']), $member['liked'], $member['posts']), '
 			<br>
 			<br>';
 		

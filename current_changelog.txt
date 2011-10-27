@@ -1,10 +1,12 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]added like display to the user's profile (Show content -> Likes received).[/li]
-[li]Renamed confirm_() and alert_() to Eos_Confirm() and Eos_Alert() respectively. Urgent need for more JS refactorings...[/li]
-[li]New BBCode [align=left|center|right|justify] - replaces the old left/center/right/justify tags which were consequently moved to the BBC compatibility addon. Reducing the number of bb codes helps a bit with the performance of parse_bbc().[/li]
-[li]Boards can now have a custom icon frome {themedir}images/boards.[/li]
-[li]Added option in BBCode configuration to load the LegacyBBC addon. This core addon can be used to re-add all SMF 2 compatible BBCodes that were removed from EOSAlpha.[/li]
-[li]Some styling fixes to help with laggy scrolling (dynamically set overlays to position:fixed only when needed and revert to position:static after hiding them).[/li]
+[li]styling and logo changes.[/li]
+[li]implemented opt-out member fields for activities and notifications[/li]
+[li]Started adding a new profile area - activities, notifications and corresponding settings[/li]
+[li]Revoking a like will now delete the activity from the stream.[/li]
+[li]removed a bit of obsolete code in loadMemberContext().[/li]
+[li]some optimizations in formatting activity entries.[/li]
+[li]aStreamAddNotification() now looks at the opt-out config to determine whether the user want to see a particular notification.[/li]
+[li]Added display for outgoing (given) likes in show content profile area.[/li]
 [/list]

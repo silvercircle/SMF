@@ -655,7 +655,7 @@ function Activate()
 						array('member_name' => $row['member_name']),
 						0, 0, 0, $row['id_member']);
 		}
-		adminNotify('activation', $row['id_member'], $row['member_name'], $actid);
+		adminNotify('activation', $row['id_member'], $row['member_name'], $actid, ACT_NEWMEMBER);
 	}
 
 	$context += array(

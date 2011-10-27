@@ -44,26 +44,26 @@ $txt['activity_missing_callback'] = 'Invalid or missing formatter callback for a
  * also, @SCRIPTURL@ is always replaced by $scripturl to construct valid links.
  */
 
-$txt['acfmt_like_given_1'] = '<a href="@SCRIPTURL@?action=profile;u=%id_member$s">%member_name$s</a> liked <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
+$txt['acfmt_like_given_1'] = '<a href="@URL_MEMBER@">%member_name$s</a> liked <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
 $txt['acfmt_like_given_2'] = 'You liked <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
-$txt['acfmt_like_given_3'] = '<a href="@SCRIPTURL@?action=profile;u=%id_member$s">%member_name$s</a> liked <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s@NM@#msg%id_content$s">your post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
+$txt['acfmt_like_given_3'] = '<a href="@URL_MEMBER@">%member_name$s</a> liked <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s@NM@#msg%id_content$s">your post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
 
-$txt['acfmt_new_topic_4'] = '<a href="@SCRIPTURL@?action=profile;u=%id_member$s">%member_name$s</a> posted a <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s">new topic</a> in <a href="@SCRIPTURL@?board=%id_board$s">%board_name$s</a>';
+$txt['acfmt_new_topic_4'] = '<a href="@URL_MEMBER@">%member_name$s</a> posted a <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s">new topic</a> in <a href="@SCRIPTURL@?board=%id_board$s">%board_name$s</a>';
 $txt['acfmt_new_topic_5'] = 'You posted a <a href="@SCRIPTURL@?topic=%id_topic$s">new topic</a> in <a href="@SCRIPTURL@?board=%id_board$s">%board_name$s</a>';
 
-$txt['acfmt_new_reply_6'] = '<a href="@SCRIPTURL@?action=profile;u=%id_member$s">%member_name$s</a> <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s@NM@#msg%id_content$s">replied</a> to <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a> in <a href="@SCRIPTURL@?board=%id_board$s">%board_name$s</a>';
+$txt['acfmt_new_reply_6'] = '<a href="@URL_MEMBER@">%member_name$s</a> <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s@NM@#msg%id_content$s">replied</a> to <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a> in <a href="@SCRIPTURL@?board=%id_board$s">%board_name$s</a>';
 $txt['acfmt_new_reply_7'] = 'You <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s@NM@#msg%id_content$s">replied</a> to <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a> in <a href="@SCRIPTURL@?board=%id_board$s">%board_name$s</a>';
-$txt['acfmt_new_reply_8'] = '<a href="@SCRIPTURL@?action=profile;u=%id_member$s">%member_name$s</a> <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s@NM@#msg%id_content$s">replied</a> to <a href="@SCRIPTURL@?topic=%id_topic$s">your topic</a> in <a href="@SCRIPTURL@?board=%id_board$s">%board_name$s</a>';
+$txt['acfmt_new_reply_8'] = '<a href="@URL_MEMBER@">%member_name$s</a> <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s@NM@#msg%id_content$s">replied</a> to <a href="@SCRIPTURL@?topic=%id_topic$s">your topic</a> in <a href="@SCRIPTURL@?board=%id_board$s">%board_name$s</a>';
 $txt['acfmt_new_reply_9'] = 'You <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s@NM@#msg%id_content$s">replied</a> to <a href="@SCRIPTURL@?topic=%id_topic$s">your topic</a> in <a href="@SCRIPTURL@?board=%id_board$s">%board_name$s</a>';
 
-$txt['acfmt_modify_post_1'] = '<a href="@SCRIPTURL@?action=profile;u=%id_member$s">%member_name$s</a> modified <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
+$txt['acfmt_modify_post_1'] = '<a href="@URL_MEMBER@">%member_name$s</a> modified <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
 $txt['acfmt_modify_post_2'] = 'You modified <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
-$txt['acfmt_modify_post_3'] = '<a href="@SCRIPTURL@?action=profile;u=%id_member$s">%member_name$s</a> modified <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">your post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
+$txt['acfmt_modify_post_3'] = '<a href="@URL_MEMBER@">%member_name$s</a> modified <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">your post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
 $txt['acfmt_modify_post_4'] = 'You modified <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">your post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
 
-$txt['acfmt_signed_up_10'] = '<a class="_m" href="@SCRIPTURL@?action=profile;u=%id_member$s&@NM@">%member_name$s</a> signed up as a new member';
+$txt['acfmt_signed_up_10'] = '<a class="_m" href="@URL_MEMBER@@NM@">%member_name$s</a> signed up as a new member';
 
-$txt['acfmt_pm_sent_1'] = '<a href="@SCRIPTURL@?action=profile;u=%id_member$s">%member_name$s</a> has sent a new <a class="_m" href="@SCRIPTURL@?action=pm;pmid=%id_content$s;kstart;f=inbox;start=0@NM@#msg%id_content$s">private message</a>';
+$txt['acfmt_pm_sent_1'] = '<a href="@URL_MEMBER@">%member_name$s</a> has sent a new <a class="_m" href="@SCRIPTURL@?action=pm;pmid=%id_content$s;kstart;f=inbox;start=0@NM@#msg%id_content$s">private message</a>';
 $txt['acfmt_pm_sent_2'] = 'You have sent a new <a href="@SCRIPTURL@?action=pm;pmid=%id_content$s;kstart;f=sent;start=0@NM@#msg%id_content$s">private message</a>';
 $txt['acfmt_pm_sent_3'] = '';
 $txt['acfmt_pm_sent_4'] = '';

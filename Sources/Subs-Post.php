@@ -1188,7 +1188,7 @@ function sendpm($recipients, $subject, $message, $store_outbox = false, $from = 
 		$id_act = aStreamAdd($from['id'], ACT_PM,
 					   array('member_name' => $from['username']),
 					   0, 0, $id_pm, $from['id'], ACT_PLEVEL_PRIVATE);
-		aStreamAddNotification($as_notifications, $id_act);
+		aStreamAddNotification($as_notifications, $id_act, ACT_PM);
 	}
 	// Add the recipients.
 	if (!empty($id_pm))
@@ -3194,7 +3194,7 @@ function updateLastMessages($setboards, $id_msg = 0)
 }
 
 // This simple function gets a list of all administrators and sends them an email to let them know a new member has joined.
-function adminNotify($type, $memberID, $member_name = null, $actid = 0)
+function adminNotify($type, $memberID, $member_name = null, $actid = 0, $atype = 0)
 {
 	global $txt, $modSettings, $language, $scripturl, $user_info, $context, $sourcedir;
 
@@ -3278,9 +3278,9 @@ function adminNotify($type, $memberID, $member_name = null, $actid = 0)
 		$notify_users[] = $row['id_member'];
 	}
 	mysql_free_result($request);
-	if($actid && $modSettings['astream_active'] && count($notify_users)) {
+	if($actid && $atype && $modSettings['astream_active'] && count($notify_users)) {
 		require_once($sourcedir . '/Subs-Activities.php');
-		aStreamAddNotification($notify_users, $actid);
+		aStreamAddNotification($notify_users, $actid, $atype);
 	}
 
 	if (isset($current_language) && $current_language != $user_info['language'])

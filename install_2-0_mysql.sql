@@ -1233,6 +1233,8 @@ CREATE TABLE {$db_prefix}members (
   notify_regularity tinyint(4) NOT NULL default '1',
   notify_send_body tinyint(4) NOT NULL default '0',
   notify_types tinyint(4) NOT NULL default '2',
+  notify_optout varchar(30) NOT NULL default '3',
+  act_optout varchar(30) NOT NULL default '',
   member_ip varchar(255) NOT NULL default '',
   member_ip2 varchar(255) NOT NULL default '',
   secret_question varchar(255) NOT NULL default '',

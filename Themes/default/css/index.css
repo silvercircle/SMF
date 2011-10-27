@@ -784,28 +784,21 @@ div.dropselect_content.left {
 div.dropselect_content.right {
 	right:0;
 }
-
-/* Styles for the standard dropdown menus.
-------------------------------------------------------- */
 #main_menu, #mcard .title_bar {
 	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;
 }
 #main_menu {
 	padding: 0 0.5em;
-/*	background: #ddd url(../images/theme/sprite.png) 0 -839px repeat-x;*/
 	font-size: 11px;
 	text-shadow: 2px 2px 4px black;
-	/*box-shadow: 0 0 10px 0 #ccc inset;*/
 }
-
 .dropmenu, .dropmenu ul {
 	list-style: none;
 	line-height: 1em;
 	padding: 0;
 	margin: 0;
-	background-color: #333355;
+	background-color: #404040;
 }
-
 .dropmenu {
 	padding: 0 0.5em;
 }
@@ -841,7 +834,7 @@ div.dropselect_content.right {
 	display: none;
 	position: absolute;
 	top: 24px;
-	background-color: #3679D7;
+	background-color: #404040;
 	padding: 0;
 	width: 20em;
 	box-shadow: 1px 3px 10px 1px #888;
@@ -1397,6 +1390,7 @@ div.table_frame .table_list {
 	border: 1px solid #D0D1E6;
 	border-radius: 5px;
 	padding: 3px;
+	box-shadow:0 0 10px #ccc inset;
 }
 #moderationbuttons {
 	overflow: hidden;
@@ -1870,8 +1864,6 @@ ul.post_options li {
 #bbcBox_message select {
 	margin: 0 2px;
 }
-
-/* The smiley strip */
 #smileyBox_message {
 	margin: 0.5em;
 	max-width:200px;
@@ -1886,18 +1878,6 @@ div.smiley_wrapper {
 	width:24px;
 	height:24px;
 }
-
-/* Styles for edit event section
----------------------------------------------------- */
-#post_event .roundframe {
-	padding: 0 12%;
-}
-
-#post_event fieldset {
-	padding: 0.5em;
-	clear: both;
-}
-
 #post_event #event_main input {
 	margin: 0 0 1em 0;
 	float: left;
@@ -2376,7 +2356,7 @@ table.topic_table {
 
 table.topic_table td {
 	padding: 2px 5px;
-	border-bottom: 1px solid #d5ecfa;
+	border-bottom: 1px solid #ddd;
 }
 
 .topic_table .icon1, .topic_table .icon2, .topic_table .stats {

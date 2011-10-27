@@ -177,6 +177,8 @@ ALTER TABLE {$db_prefix}messages ADD locked tinyint(2) NOT NULL default '0';
 # like stats for members
 ALTER TABLE {$db_prefix}members ADD likes_received int(4) unsigned NOT NULL default '0';
 ALTER TABLE {$db_prefix}members ADD likes_given int(4) unsigned NOT NULL default '0';
+ALTER TABLE {$db_prefix}members ADD notify_optout varchar(30) NOT NULL default '3';
+ALTER TABLE {$db_prefix}members ADD act_optout varchar(30) NOT NULL default '';
 ALTER TABLE {$db_prefix}members DROP website_title;
 ALTER TABLE {$db_prefix}members DROP website_url;
 

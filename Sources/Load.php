@@ -445,6 +445,7 @@ function loadUserSettings()
 		'likesreceived' => isset($user_settings['likes_received']) ? $user_settings['likes_received'] : 0,
 		'notify_count' => isset($user_settings['notify_count']) ? $user_settings['notify_count'] : 0,
 		'permissions' => array(),
+		'act_optout' => isset($user_settings['act_optout']) ? $user_settings['act_optout'] : '',
 	);
 	
 	$user_info['groups'] = array_unique($user_info['groups']);
@@ -891,7 +892,7 @@ function loadPermissions()
 // Loads an array of users' data by ID or member_name.
 function loadMemberData($users, $is_name = false, $set = 'normal')
 {
-	global $user_profile, $modSettings, $board_info, $smcFunc;
+	global $user_profile, $modSettings, $board_info;
 
 	// Can't just look for no users :P.
 	if (empty($users))
@@ -959,7 +960,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 	{
 		$select_columns = '
 			mem.id_member, mem.member_name, mem.real_name, mem.email_address, mem.hide_email, mem.date_registered,
-			mem.posts, mem.last_login, mem.member_ip, mem.member_ip2, mem.lngfile, mem.id_group';
+			mem.posts, mem.last_login, mem.member_ip, mem.member_ip2, mem.lngfile, mem.id_group, mem.notify_optout';
 		$select_tables = '';
 	}
 	else
@@ -1117,7 +1118,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'email' => $profile['email_address'],
 		'show_email' => showEmailAddress(!empty($profile['hide_email']), $profile['id_member']),
 		'registered' => empty($profile['date_registered']) ? $txt['not_applicable'] : timeformat($profile['date_registered']),
-		'registered_timestamp' => empty($profile['date_registered']) ? 0 : forum_time(true, $profile['date_registered']),
+		//'registered_timestamp' => empty($profile['date_registered']) ? 0 : forum_time(true, $profile['date_registered']),
 		'blurb' => $profile['personal_text'],
 		'gender' => array(
 			'name' => $gendertxt,
@@ -1135,7 +1136,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 			'url' => $profile['avatar'] == '' ? '' : (stristr($profile['avatar'], 'http://') ? $profile['avatar'] : $modSettings['avatar_url'] . '/' . $profile['avatar'])
 		),
 		'last_login' => empty($profile['last_login']) ? $txt['never'] : !empty($profile['show_online']) || allowedTo('moderate_forum') ? timeformat($profile['last_login']) : $txt['hidden'],
-		'last_login_timestamp' => empty($profile['last_login']) ? 0 : forum_time(0, $profile['last_login']),
+		//'last_login_timestamp' => empty($profile['last_login']) ? 0 : forum_time(0, $profile['last_login']),
 		'karma' => array(
 			'good' => $profile['karma_good'],
 			'bad' => $profile['karma_bad'],
@@ -1168,6 +1169,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'local_time' => timeformat_static(time() + ($profile['time_offset'] - $user_info['time_offset']) * 3600, false),
 		'liked' => isset($profile['liked']) ? $profile['liked'] : 0,
 		'likesgiven' => isset($profile['likesgiven']) ? $profile['likesgiven'] : 0,
+		'notify_optout' => isset($profile['notify_optout']) ? $profile['notify_optout'] : '',
 	);
 	
 	if($memberContext[$user]['avatar']['name'] == 'gravatar') {

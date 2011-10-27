@@ -13,6 +13,8 @@
  *
  * activity stream main module
  */
+if (!defined('SMF'))
+	die('No access');
 
 function aStreamDispatch()
 {
@@ -257,7 +259,7 @@ function aStreamOutput($result, $is_notification = false)
 			$context['activities'][$n++]['member'] = &$memberContext[$user];
 		}
 	}
-	if(!isset($context['get_notifications']))
+	if(!isset($context['titletext']) && !isset($context['get_notifications']))
 		$context['titletext'] = $context['act_results'] ? ($context['act_global'] ? $txt['act_recent_global'] : sprintf($txt['act_recent_board'], $context['board_name'])) : $txt['act_no_results_title'];
 }
 
@@ -276,5 +278,59 @@ function aStreamGetForTopic($t = 0, $xml = false)
 		array('id_topic' => $t, 'start' => $start));
 
 	aStreamOutput($result);
+}
+
+/**
+ * @param $memID		int member id
+ *
+ * show activities, notifications and settings on the profile page. The latter two
+ * are only handled when viewing your own profile.
+ *
+ * This is here because Profile-View.php is already big enough :)
+ */
+function showActivitiesProfile($memID)
+{
+  	global $context, $user_info, $sourcedir, $user_profile, $txt, $modSettings, $options;
+
+	$context['user']['is_owner'] = $memID == $user_info['id'];
+	require_once($sourcedir . '/Subs-Activities.php');
+	loadTemplate('Activities');
+	loadLanguage('Activities');
+
+	$context['page_title'] = $txt['showActivities'] . ' - ' . $user_profile[$memID]['real_name'];
+	$context['pageindex_multiplier'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) && !WIRELESS ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
+	$context['act_results'] = 0;
+	$context['rich_output'] = true;
+
+	$context[$context['profile_menu_name']]['tab_data'] = array(
+		'title' => $txt['showActivities'],
+		'description' => $txt['showActivitiesMenu'],
+		'tabs' => array(
+		),
+	);
+
+	$sa = isset($_GET['sa']) ? $_GET['sa'] : 'activities';
+	$start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
+
+	// these areas cannot be visited if it's not our own profile unless you are the mighty one
+	if(($sa == 'notifications' || $sa == 'settings') && !$context['user']['is_owner'] && !$user_info['is_admin'])
+		fatal_lang_error('no_access');
+
+	$result = smf_db_query('
+		SELECT a.*, t.*, b.name AS board_name FROM {db_prefix}log_activities AS a
+		LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
+		LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
+		WHERE ({query_see_board} OR a.id_board = 0) AND (a.id_member = {int:id_user} OR a.id_owner = {int:id_user}) ORDER BY a.id_act DESC LIMIT {int:start}, 20',
+		array('start' => $start, 'id_user' => $memID));
+
+		$context['act_global'] = true;
+
+
+	if($sa == 'activities' || $sa == 'notifications')
+		$context['sub_template'] = 'showactivity_profile';
+	else
+		$context['sub_template'] = 'showactivity_settings';
+	aStreamOutput($result);
+	$context['titletext'] = $context['page_title'];
 }
 ?>

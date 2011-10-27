@@ -95,32 +95,45 @@ function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $
 	// if this activity triggers a notification for the id_owner, use the $id_act to link it
 	// to the notifications table.
 	if($id_owner && in_array($atype, $act_must_notify) && !$dont_notify)
-		aStreamAddNotification($id_owner, $id_act);
+		aStreamAddNotification($id_owner, $id_act, $atype);
 	return($id_act);
 }
 
 /**
  * @param $users    array member_id or array of member_ids
  * @param $id_act   int id of the activity to send as notification
+ * @param $id_type  int (type of notification)
  *
  * this takes a single id_member or an array of such ids plus an activity id
  * and sends out notifications to the members.
+ * respects members.notify_optout to skip members who do not want to see notifications of $id_type
  */
-function aStreamAddNotification(&$users, $id_act)
+function aStreamAddNotification(&$users, $id_act, $id_type)
 {
-	$users = !is_array($users) ? array($users) : array_unique($users);
+	global $memberContext;
 
-	$values = array();
-	foreach($users as $user) {
-		if((int)$user)
-			$values[] = '('.(int)$user.', '.(int)$id_act.')';
-	}
-	if(count($values)) {
-		$q = 'INSERT INTO {db_prefix}log_notifications (id_member, id_act) VALUES ' . join(',', $values);
-		smf_db_query($q);
+	if((int)$id_act && (int)$id_type) {
+		$my_users = !is_array($users) ? array($users) : array_unique($users);
 
-		foreach($users as $user)
-			updateMemberData($user, array('last_login' => time()));
+		loadMemberData($my_users, 'minimal');
+		$members_to_update = array();
+		$values = array();
+		foreach($my_users as $user) {
+			if((int)$user) {
+				loadMemberContext($user);
+				$optout = (isset($memberContext[$user]) && !empty($memberContext[$user]['notify_optout'])) ? explode(',', $memberContext[$user]['notify_optout']) : array(0);
+				if(isset($memberContext[$user]) && false === in_array((int)$id_type, $optout)) {
+					$values[] = '('.(int)$user.', '.(int)$id_act.')';
+					$members_to_update[] = $user;
+				}
+			}
+		}
+		if(count($values)) {
+			$q = 'INSERT INTO {db_prefix}log_notifications (id_member, id_act) VALUES ' . implode(',', $values);
+			smf_db_query($q);
+
+			updateMemberData($members_to_update, array('last_login' => time()));
+		}
 	}
 }
 
@@ -175,8 +188,7 @@ function aStreamFormatActivity(&$row, $is_notification = false)
 	$callback = $row['formatter'];
 	if(function_exists($callback)) {
 		$out = call_user_func_array($callback, array(&$params));
-		$out = preg_replace('/@SCRIPTURL@/', $scripturl, $out);
-		$row['formatted_result'] = preg_replace('/@NM@/', $is_notification ? ';nmdismiss=' . $row['id_act'] : '', $out);
+		$row['formatted_result'] = str_replace(array('@SCRIPTURL@', '@URL_MEMBER@', '@NM@'), array($scripturl, URL::user($params['id_member'], $params['member_name']), $is_notification ? ';nmdismiss=' . $row['id_act'] : ''), $out);
 	}
 	else {
 		$_s = sprintf($txt['activity_missing_callback'], $params['id_type']);

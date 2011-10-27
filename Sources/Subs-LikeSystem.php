@@ -111,6 +111,11 @@ function GiveLike($mid)
 				smf_db_query( '
 					UPDATE {db_prefix}members SET likes_given = likes_given - 1 WHERE id_member = {int:id_member}',
 					array('id_member' => $uid));
+
+				smf_db_query( 'DELETE a.*, n.* FROM {db_prefix}log_activities AS a LEFT JOIN {db_prefix}log_notifications AS n ON(n.id_act = a.id_act)
+					WHERE a.id_member = {int:id_member} AND a.id_type = 1 AND a.id_content = {int:id_content}',
+					array('id_member' => $uid, 'id_content' => $mid));
+
 			}
 		}
 		else {

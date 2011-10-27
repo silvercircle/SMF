@@ -280,7 +280,7 @@ function showPosts($memID)
 	if (!empty($context['load_average']) && !empty($modSettings['loadavg_show_posts']) && $context['load_average'] >= $modSettings['loadavg_show_posts'])
 		fatal_lang_error('loadavg_show_posts_disabled', false);
 
-	if (isset($_GET['sa']) && $_GET['sa'] == 'likes') {
+	if (isset($_GET['sa']) && ($_GET['sa'] == 'likes' || $_GET['sa'] == 'likesout')) {
 		require_once($sourcedir . '/LikeSystem.php');
 		return(LikesByUser($memID));
 	}
@@ -2254,5 +2254,4 @@ function displayDrafts($memID)
 
 	$context['sub_template'] = 'showDrafts';
 }
-
 ?>
