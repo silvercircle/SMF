@@ -325,7 +325,6 @@ function showActivitiesProfile($memID)
 
 		$context['act_global'] = true;
 
-
 	if($sa == 'activities' || $sa == 'notifications')
 		$context['sub_template'] = 'showactivity_profile';
 	else

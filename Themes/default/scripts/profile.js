@@ -25,7 +25,6 @@ function disableAutoComplete()
 	if (is_chrome && document.addEventListener)
 		document.addEventListener("DOMContentLoaded", disableAutoCompleteNow, false);
 }
-
 // Once DOMContentLoaded is triggered, call the function
 function disableAutoCompleteNow()
 {

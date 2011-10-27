@@ -2,8 +2,6 @@
 // Version: 2.0; ManageCalendar
 
 $txt['calendar_desc'] = 'From here you can modify all aspects of the calendar.';
-
-// Calendar Settings
 $txt['calendar_settings_desc'] = 'Here you can enable the calendar, and determine the settings that it should use.';
 $txt['save_settings'] = 'Save Settings';
 $txt['groups_calendar_view'] = 'Membergroups allowed to view the calendar';
@@ -41,5 +39,4 @@ $txt['holidays_button_edit'] = 'Edit';
 $txt['holidays_button_remove'] = 'Remove';
 $txt['holidays_no_entries'] = 'There are currently no holidays configured.';
 $txt['every_year'] = 'Every Year';
-
 ?>

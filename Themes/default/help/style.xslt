@@ -203,5 +203,4 @@
 	<xsl:template match="html-i">
 		<i><xsl:apply-templates /></i>
 	</xsl:template>
-
 </xsl:stylesheet>

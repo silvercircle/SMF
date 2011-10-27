@@ -381,5 +381,4 @@ $txt['permissiongroup_simple_hide'] = 'See hidden content';
 $txt['permissionname_see_hidden1'] = "Can see level 1 hidden content";
 $txt['permissionname_see_hidden2'] = "Can see level 2 hidden content";
 $txt['permissionname_see_hidden3'] = "Can see level 3 hidden content";
-
 ?>

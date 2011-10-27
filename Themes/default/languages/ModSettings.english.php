@@ -169,5 +169,4 @@ $txt['cal_eventcolor'] = 'Event color';
 $txt['cal_holidaycolor'] = 'Holiday color';
 $txt['cal_allowspan'] = 'Allow events to span multiple days';
 $txt['cal_maxspan'] = 'Max number of days an event can span';
-
 ?>

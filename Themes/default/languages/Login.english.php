@@ -1,8 +1,6 @@
 <?php
 // Version: 2.0; Login
-
 global $context;
-
 // Registration agreement page.
 $txt['registration_agreement'] = 'Registration Agreement';
 $txt['agreement_agree'] = 'I accept the terms of the agreement.';

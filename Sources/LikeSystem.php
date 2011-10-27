@@ -75,10 +75,13 @@ function LikeDispatch()
  */
 function LikesByUser($memID)
 {
-	global $context, $user_info, $scripturl, $memberContext, $txt;
-	$perpage = 20;
-	$out = $_GET['sa'] === 'likesout';
-
+	global $context, $user_info, $scripturl, $memberContext, $txt, $modSettings, $options;
+	
+	// let's use the same value as for topics per page here.
+	$perpage = empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) && !WIRELESS ? $options['topics_per_page'] : $modSettings['defaultMaxTopics'];	
+	$out = $_GET['sa'] === 'likesout';			// display likes *given* instead of received ones
+	$is_owner = $user_info['id'] == $memID;		// we are owner of this profile, this is important for proper formatting (you/yours etc.)
+	
 	loadLanguage('Like');
 	$boards_like_see  = boardsAllowedTo('like_see');
 	$start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
@@ -139,8 +142,8 @@ function LikesByUser($memID)
 	foreach($context['likes'] as &$like) {
 		loadMemberContext($like['id_user']);
 		$like['member'] = &$memberContext[$like['id_user']];
-		$like['text'] = $out ? ($user_info['id'] == $memID ? sprintf($txt['liked_a_post'], $user_info['id'] == $memID ? $txt['you_liker'] : $memberContext[$memID]['name'], $memberContext[$like['id_user']]['link'], $like['post']['href'], $like['topic']['link']) : sprintf($txt['liked_a_post'], $user_info['id'] == $memID ? $txt['you_liker'] : $memberContext[$memID]['name'], $memberContext[$like['id_user']]['link'], $like['post']['href'], $like['topic']['link'])) :
-				($user_info['id'] == $memID ? sprintf($txt['liked_your_post'], $like['id_user'] == $user_info['id'] ? $txt['you_liker'] : $like['member']['link'], $like['post']['href'], $like['topic']['link']) :
+		$like['text'] = $out ? ($is_owner ? sprintf($txt['liked_a_post'], $is_owner ? $txt['you_liker'] : $memberContext[$memID]['name'], $memberContext[$like['id_user']]['link'], $like['post']['href'], $like['topic']['link']) : sprintf($txt['liked_a_post'], $is_owner ? $txt['you_liker'] : $memberContext[$memID]['name'], $memberContext[$like['id_user']]['link'], $like['post']['href'], $like['topic']['link'])) :
+				($is_owner ? sprintf($txt['liked_your_post'], $like['id_user'] == $user_info['id'] ? $txt['you_liker'] : $like['member']['link'], $like['post']['href'], $like['topic']['link']) :
 				sprintf($txt['liked_a_post'], $like['id_user'] == $user_info['id'] ? $txt['you_liker'] : $like['member']['link'], $memberContext[$memID]['name'], $like['post']['href'], $like['topic']['link']));
 	}
 	mysql_free_result($request);

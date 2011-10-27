@@ -202,4 +202,3 @@ function binb2b64(binarray)
 	}
 	return str;
 }
-

@@ -21,18 +21,14 @@
 	font-size: x-small;
 	border: none;
 }
-
 .rich_editor p
 {
 	margin: 0;
 }
-
 .rich_editor a img
 {
 	border: 0;
 }
-
-/* The resize handle. */
 .richedit_resize
 {
 	height: 5px;

@@ -1614,7 +1614,7 @@ function MaintainRemoveOldPosts()
 
 function MaintainMassMoveTopics()
 {
-	global $smcFunc, $sourcedir, $context, $txt;
+	global $sourcedir, $context, $txt;
 
 	// Only admins.
 	isAllowedTo('admin_forum');
@@ -1714,4 +1714,29 @@ function MaintainMassMoveTopics()
 	redirectexit('action=admin;area=maintain;sa=topics;done=massmove');
 }
 
+/*
+ * todo: this is incomplete
+ */
+function MaintainLikes()
+{
+	global $context;
+	
+	/* find and delete orphan likes (not attached to any content type). That should
+	 * not happen, but who knows...
+	 */
+	
+	smf_db_query('DELETE l.* FROM {db_prefix}likes AS l LEFT JOIN {db_prefix}messages AS m 
+		ON (m.id_msg = l.id_msg and l.ctype = 1) WHERE m.id_msg IS NULL');
+	
+	/*
+	 * find and delete likes from or for non-existing members.
+	 * shouldn't happen either, because when removing a member, all likes he gave
+	 * are deleted.
+	 */
+	
+	smf_db_query('SELECT l.*, m.id_member, m1.id_member FROM {db_prefix}likes AS l 
+			LEFT JOIN smf_members AS m ON (m.id_member = l.id_user) 
+			LEFT JOIN {db_prefix}members AS m1 ON (m1.id_member = l.id_receiver) 
+			WHERE m.id_member IS NULL or m1.id_member IS NULL');	
+}
 ?>

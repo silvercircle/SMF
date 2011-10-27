@@ -210,5 +210,4 @@ $txt['reattribute_confirm'] = 'Are you sure you want to attribute all guest post
 $txt['reattribute_confirm_username'] = 'a username';
 $txt['reattribute_confirm_email'] = 'an email address';
 $txt['reattribute_cannot_find_member'] = 'Could not find member to attribute posts to.';
-
 ?>

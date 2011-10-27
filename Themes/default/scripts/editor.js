@@ -1214,13 +1214,12 @@ smc_Editor.prototype.registerShortcut = function(sLetter, sModifiers, sCodeName)
 
 	this.aKeyboardShortcuts[this.aKeyboardShortcuts.length] = oNewShortcut;
 }
-
 // Check whether the key has triggered a shortcut?
 smc_Editor.prototype.checkShortcut = function(oEvent)
 {
 	// To be a shortcut it needs to be one of these, duh!
 	if (!oEvent.altKey && !oEvent.ctrlKey)
-		return false;
+		return(false);
 
 	var sReturnCode = false;
 

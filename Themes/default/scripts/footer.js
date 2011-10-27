@@ -1562,12 +1562,12 @@ function submitTagForm(ele)
 {
 	sendRequest('action=xmlhttp;sa=tags;submittag=1;topic=' + $('#tagtopic').val() + ';tag=' + encodeURIComponent($('#newtags').val()), ele);
 	$('#tagform').remove();
-};
+}
 // submit ajax request for a topic preview
 function firePreview(topic_id, ele)
 {
 	sendRequest('action=xmlhttp;sa=mpeek;t=' + topic_id, null);
-};
+}
 
 function sendRequest(request, anchor_element)
 {
@@ -1581,7 +1581,7 @@ function sendRequest(request, anchor_element)
 		sendXMLDocument(sUrl, '', response_xml);
 	else
 		sendXMLDocumentWithAnchor(sUrl, '', response, anchor_element);
-};
+}
 
 function openResult(html, width, offset)
 {
@@ -1596,7 +1596,7 @@ function openResult(html, width, offset)
 	el.css({'width': width > 0 ? width + 'px' : 'auto', "position": 'fixed', 'z-index': '10000'});
 	centerElement(el, offset);
 	el.show();
-};
+}
 
 /**
  * generic handler for XML response from ajax requests.
@@ -1624,6 +1624,7 @@ function response_xml(responseXML)
 			return(false);
 		}
    		$('div#mcard_inner abbr.timeago').timeago();
+		return(false);
 	} catch(e) {
 		Eos_Alert('XmlHTTP Request', 'Unknown or unspecified error in response document.');
 		return(false);
@@ -1689,13 +1690,13 @@ function response(ele, responseText)
 	} catch(e) {
 		setBusy(0);
 	}
-};
+}
 
 function openAdvSearch(e)
 {
 	$('#search_form').css({overflow: 'auto', height: 'auto', 'padding-bottom': '10px'});
 	$('#search_form').addClass('search_form_active');
-};
+}
 
 function submitSearchBox()
 {
@@ -1709,7 +1710,7 @@ function submitSearchBox()
 		$('#search_form #s_board').remove();
 		$('#search_form #s_topic').remove();
 	}
-};
+}
 
 $('#adv_search').live('mouseleave',function(event) {
 	$('#search_form').css({overflow: 'hidden', height: '26px', 'padding-bottom': '0'});

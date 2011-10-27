@@ -1,8 +1,4 @@
 <?php
-// Version: 1.0; InstantMessage
-
-// Important! Before editing these language files please read the text at the top of index.english.php.
-
 $txt[143] = 'Personal Messages Index';
 $txt[148] = 'Send message';
 $txt[150] = 'To';
@@ -36,5 +32,4 @@ $txt['pm_undisclosed_recipients'] = 'Undisclosed recipients';
 
 $txt['pm_prune_desc1'] = 'Delete all personal messages older than';
 $txt['pm_prune_desc2'] = 'days.';
-
 ?>
