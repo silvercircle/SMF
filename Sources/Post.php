@@ -595,6 +595,7 @@ function Post()
 			preparsecode($form_message, true);
 			preparsecode($context['preview_message']);
 
+			handleUserTags($context['preview_message']);
 			// Do all bulletin board code tags, with or without smileys.
 			$context['preview_message'] = parse_bbc($context['preview_message'], isset($_REQUEST['ns']) ? 0 : 1);
 			parse_bbc_stage2($context['preview_message']);
@@ -2068,6 +2069,7 @@ function Post2()
 	// This is a new topic or an already existing one. Save it.
 	else
 	{
+		//handleUserTags($msgOptions['body']);
 		createPost($msgOptions, $topicOptions, $posterOptions);
 
 		if (isset($topicOptions['id']))

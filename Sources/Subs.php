@@ -1407,7 +1407,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 					'date' => array('match' => '(\d+)', 'validate' => 'timeformat'),
 				),
 				'before' => '<div class="quoteheader"><a href="' . $scripturl . '?{link}">' . $txt['quote_from'] . ': {author} ' . $txt['search_on'] . ' {date}</a></div><blockquote>',
-				//'before' => '<div class="quoteheader"><a href="/{__SCRIPT_URL__}?{link}">' . $txt['quote_from'] . ': {author} ' . $txt['search_on'] . ' {date}</a></div><blockquote>',
 				'after' => '</blockquote><div class="quotefooter"></div>',
 				'block_level' => true,
 			),
@@ -1512,6 +1511,15 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'tag' => 'u',
 				'before' => '<span class="bbc_u">',
 				'after' => '</span>',
+			),
+			array(
+				'tag' => 'user',
+				'type' => 'unparsed_content',
+				'parameters' => array(
+					'id' => array('match' => '(\d+)', 'value' => '$1'),
+					//'name' => array('match' => '([\w\s\d]+)', 'validate' => 'urlencode'),
+				),
+				'content' => '<a onclick="getMcard({id},$(this));" href="' . $scripturl . '?action=profile;u={id}">$1</a>',
 			),
 			array(
 				'tag' => 'url',

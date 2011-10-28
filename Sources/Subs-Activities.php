@@ -28,6 +28,9 @@ define('ACT_REPLIED', 3);
 define('ACT_MODIFY_POST', 4);
 define('ACT_NEWMEMBER', 5);
 define('ACT_PM', 6);
+define('ACT_QUOTED', 7);
+define('ACT_USERTAGGED', 8);
+
 // privacy levels (note that admin can always see all activity, that's why they are admins)
 define('ACT_PLEVEL_PUBLIC', 0);		// everyone can see this
 define('ACT_PLEVEL_USER', 1);		// user can see his own activities, other users cannot see this
@@ -115,7 +118,7 @@ function aStreamAddNotification(&$users, $id_act, $id_type)
 	if((int)$id_act && (int)$id_type) {
 		$my_users = !is_array($users) ? array($users) : array_unique($users);
 
-		loadMemberData($my_users, 'minimal');
+		loadMemberData($my_users, false, 'minimal');
 		$members_to_update = array();
 		$values = array();
 		foreach($my_users as $user) {

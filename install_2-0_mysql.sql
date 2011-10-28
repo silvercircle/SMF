@@ -1953,7 +1953,9 @@ VALUES
 	(3, 'new_reply', 'actfmt_default', 6, 7, 8, 9),
 	(4, 'modify_post', 'actfmt_default', 1, 2, 3, 4),
 	(5, 'signed_up', 'actfmt_default', 10, 10, 10, 10),
-	(6, 'pm_sent', 'actfmt_default', 1, 2, 1, 1);
+	(6, 'pm_sent', 'actfmt_default', 1, 2, 1, 1),
+	(7, 'post_quoted', 'actfmt_default', 1, 2, 3, 3),
+	(8, 'user_tagged', 'actfmt_default', 1, 1, 1, 1);
 
 # --------------------------------------------------------
 

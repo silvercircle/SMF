@@ -15,7 +15,7 @@
  */
 function LikeDispatch()
 {
-	global $context, $board, $memberContext, $sourcedir, $txt;
+	global $context, $board, $memberContext, $txt;
 
 	$xml = isset($_REQUEST['xml']) ? true : false;
 	$action = isset($_REQUEST['sa']) ? $_REQUEST['sa'] : '';

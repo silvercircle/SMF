@@ -1,12 +1,7 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]styling and logo changes.[/li]
-[li]implemented opt-out member fields for activities and notifications[/li]
-[li]Started adding a new profile area - activities, notifications and corresponding settings[/li]
-[li]Revoking a like will now delete the activity from the stream.[/li]
-[li]removed a bit of obsolete code in loadMemberContext().[/li]
-[li]some optimizations in formatting activity entries.[/li]
-[li]aStreamAddNotification() now looks at the opt-out config to determine whether the user want to see a particular notification.[/li]
-[li]Added display for outgoing (given) likes in show content profile area.[/li]
+[li]unified all line endings among the entire project[/li]
+[li]experimental user tagging in posts (@username, username: )[/li]
+[li]refactored the URLFactory code a bit[/li]
 [/list]

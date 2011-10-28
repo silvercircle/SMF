@@ -18,7 +18,7 @@ if (!defined('SMF'))
 
 function aStreamDispatch()
 {
-	global $context, $sourcedir, $modSettings;
+	global $sourcedir, $modSettings;
 
 	$xml = isset($_REQUEST['xml']) ? true : false;
 	if(!$modSettings['astream_active']) {

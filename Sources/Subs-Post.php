@@ -3358,4 +3358,39 @@ function user_info_callback($matches)
 	return $use_ref ? $ref : $matches[0];
 }
 
+function handleUserTags(&$message)
+{
+	global $user_info;
+	
+	$matches = array();
+	$users_found = array();
+	
+	if(preg_match_all('~@([\s\w,;-_\\\/\+\.]+):~', $message, $matches, PREG_SET_ORDER)) {
+		foreach($matches as $match) {
+			$bbc_result = '';
+			$bbc_results = array();
+			$newnames = array();
+			$names = explode(',', trim($match[1]));
+			foreach($names as $name)
+				$newnames[] = CommonAPI::strtolower(trim($name));
+			
+			$result = smf_db_query('SELECT id_member, real_name FROM {db_prefix}members
+				WHERE LOWER(real_name) IN({array_string:names})',
+					array('names' => $newnames));
+
+			while($row = mysql_fetch_assoc($result)) {
+				if(in_array(CommonAPI::strtolower($row['real_name']), $newnames)) {
+					$bbc_results[] = ('[user id=' . $row['id_member'] . ']' . $row['real_name'] . '[/user]');
+					if($row['id_member'] != $user_info['id'])
+						$users_found[] = $row['id_member'];
+				}
+			}
+			mysql_free_result($result);
+			if(count($bbc_results))
+				$bbc_result = '@' . implode(', ', $bbc_results);
+			$message = str_replace($match[0], $bbc_result, $message);
+		}
+	}
+	return($users_found);
+}
 ?>

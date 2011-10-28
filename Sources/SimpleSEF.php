@@ -14,7 +14,6 @@
  * This specific module is based on SimpleSEF for SMF 2.0, (C) by Matt Zuba.
  * See license note below.
  */
-
 /* * **** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1
  *
@@ -42,186 +41,222 @@
 if (!defined('SMF'))
     die('No access');
 
-global $modSettings;
-
 /**
- * common URL generator functions
+ * generate "pretty" (or so-called SEO-friendly) URLs for topics, boards and other things
+ * only active when SimpleSEF is enabled.
  */
-if(!empty($modSettings['simplesef_enable'])) {
-	class URL {
-		/**
-		 * generate SEF URLs for topics, users and boards.
-		 */
 
-		private static $boardurl = '';
-		private static $scripturl = '';
-		private static $sep = '-';
+class URLFactory {
+	private $boardurl = '';
+	private $scripturl = '';
+	private $sep = '-';
+	private $boardnames = array();
+	private $topicnames = array();
+	private $usernames = array();
+	private $topics_fragment;
+	private $suffix;
+	private $topics_base;
+	private $profile_base;
 
-		private static $boardnames = array();
-		private static $topicnames = array();
-		private static $usernames = array();
-		private static $topics_base;
-		private static $suffix;
+	public function __construct($b)
+	{
+		global $modSettings;
 
-		public static function init($b)
-		{
-			global $modSettings;
-			self::$boardurl = rtrim($b, '/');
-			self::$scripturl = 	self::$boardurl . '/index.php';
+		$this->boardurl = rtrim($b, '/');
+		$this->scripturl = 	$this->boardurl . '/index.php';
 
-			self::$suffix = '.' . (!empty($modSettings['simplesef_suffix']) ? $modSettings['simplesef_suffix'] : 'html');
-			self::$topics_base = !empty($modSettings['simplesef_topicsbase']) ? '/'.$modSettings['simplesef_topicsbase'] : '/topics/';
-		}
-
-		/**
-		 * @static
-		 * @param $topicid				our topic id
-		 * @param $topicname			topic name (usually subject of the first post)
-		 * @param int $start			topic start
-		 * @param bool $force_start		if true, always ouput the .start even when it is 0
-		 * @param string $msgfragment	what comes after the topic id (e.g. .msg2187).
-		 * @param string $a				the target anchor id (e.g. #msg2187)
-		 * @return string				a SEF URL for the topic.
-		 */
-		public static function topic($topicid, $topicname, $start = 0, $force_start = true, $msgfragment = '', $a = '')
-		{
-			$_id = (int)$topicid;
-			if(!isset(self::$topicnames[$_id]))
-				self::$topicnames[$_id] = SimpleSEF::encode($topicname);		// cache encoded topic names (encode() is quite heavy stuff).
-
-			return(self::$boardurl . self::$topics_base . self::$topicnames[$_id] . self::$sep . $_id . ((int)$start > 0 || $force_start ? ('.' . $start) : '') . $msgfragment . self::$suffix . $a);
-		}
-
-		/**
-		 * @static
-		 * @param $id			user id
-		 * @param $name			user's name as it should appear in the URL
-		 * @return string		a SEF URL for the user's profile
-		 */
-		public static function user($id, $name)
-		{
-			$_id = (int)$id;
-			if(!isset(self::$usernames[$_id]))
-				self::$usernames[$_id] = SimpleSEF::encode($name);
-			return(self::$boardurl . '/profile/' . self::$usernames[$_id] . self::$sep . $_id);
-		}
-
-		public static function board($id, $boardname, $start = 0, $force_start = false)
-		{
-			$_id = (int)$id;
-			if(!isset(self::$boardnames[$_id]))
-				self::$boardnames[$_id] = SimpleSEF::encode($boardname);
-			return(self::$boardurl . '/' . self::$boardnames[$_id] . '.' . trim($id) . ($start > 0 || $force_start ? ('-' . $start) : ''));
-		}
-
-		public static function home()
-		{
-			return(self::$boardurl . '/');
-		}
-
-		public static function action($a)
-		{
-			if(stripos($a, '=admin') !== false)
-				return($a);
-			return(preg_replace('~\b' . preg_quote(self::$scripturl) . '\?action=([a-zA-Z0-9]+)(.*)~', self::$boardurl . '/$1$2', $a));
-		}
-
-		public static function addParam($url, $params)
-		{
-			$newparam = '';
-			$_p = explode(';', trim($params, ';'));
-			foreach($_p as $p) {
-				$_c = explode('=', $p);
-				$newparam .= ('/' . $_c[0] . '.' . (isset($_c[1]) && !empty($_c[1]) ? $_c[1] : ''));
-			}
-			if(!empty($newparam))
-				return str_replace(self::$boardurl, self::$boardurl . $newparam, $url);
-
-			return($url);
-		}
-
-		/**
-		 * @static
-		 * @param $_r			a conventional querystring (i.e. ?action=mlist;sa=search) or URL
-		 * 						including $scripturl.
-		 * @return string		a prettyfied URL
-		 *
-		 * create a SEF URL for all instances for which we don't have a faster URL crafting method.
-		 * this is inherently slower than topic() or user(), so don't use this if you can generate
-		 * the URL with one of the more specific and faster methods.
-		 */
-		public static function parse($_r)
-		{
-			$matches = array();
-			$url = stripos($_r, self::$scripturl) === false ? (self::$scripturl . $_r . ' ') : ($_r . ' ');
-
-			preg_match_all('~(' . preg_quote(self::$scripturl) . '[-a-zA-Z0-9+&@#/%?=\~_|!:,.;\[\]]*[-a-zA-Z0-9+&@#/%=\~_|\[\]]?)([^-a-zA-Z0-9+&@#/%=\~_|])~', $url, $matches);
-			if (!empty($matches[0])) {
-				$replacements = array();
-				foreach (array_unique($matches[1]) as $i => $_url) {
-					$replacement = SimpleSEF::create_sef_url($_url);
-					if ($_url != $replacement)
-						$replacements[$matches[0][$i]] = $replacement . $matches[2][$i];
-				}
-				$url = str_replace(array_keys($replacements), array_values($replacements), $url);
-			}
-			return(trim($url));
-		}
+		$this->suffix = '.' . (!empty($modSettings['simplesef_suffix']) ? $modSettings['simplesef_suffix'] : 'html');
+		$this->topics_fragment = !empty($modSettings['simplesef_topicsbase']) ? '/'.$modSettings['simplesef_topicsbase'] : '/topics/';
+		$this->topics_base = $this->boardurl . $this->topics_fragment;
+		$this->profile_base = $this->boardurl . '/profile/';
 	}
-}
-else {
-	class URL {
 
-		private static $boardurl = '';
-		private static $scripturl = '';
+	/**
+	 * @static
+	 * @param $topicid				our topic id
+	 * @param $topicname			topic name (usually subject of the first post)
+	 * @param int $start			topic start
+	 * @param bool $force_start		if true, always ouput the .start even when it is 0
+	 * @param string $msgfragment	what comes after the topic id (e.g. .msg2187).
+	 * @param string $a				the target anchor id (e.g. #msg2187)
+	 * @return string				a SEF URL for the topic.
+	 */
+	public function topic($topicid, $topicname, $start = 0, $force_start = true, $msgfragment = '', $a = '')
+	{
+		$_id = (int)$topicid;
+		if(!isset($this->topicnames[$_id]))
+			$this->topicnames[$_id] = SimpleSEF::encode($topicname);		// cache encoded topic names (encode() is quite heavy stuff).
 
-		public static function init($b)
-		{
-			self::$boardurl = rtrim($b, '/');
-			self::$scripturl = 	self::$boardurl . '/index.php';
-		}
+		return($this->topics_base . $this->topicnames[$_id] . $this->sep . $_id . ((int)$start > 0 || $force_start ? ('.' . $start) : '') . $msgfragment . $this->suffix . $a);
+	}
 
-		public static function topic($topicid, $topicname, $start = 0, $force_start = true, $msgfragment = '', $a = '')
-		{
-			return(self::$scripturl . '?topic=' . (int)$topicid . ($start > 0 || $force_start ? ('.' . $start) : '') . $msgfragment . $a);
-		}
+	/**
+	 * @static
+	 * @param $id			user id
+	 * @param $name			user's name as it should appear in the URL
+	 * @return string		a SEF URL for the user's profile
+	 */
+	public function user($id, $name)
+	{
+		$_id = (int)$id;
+		if(!isset($this->usernames[$_id]))
+			$this->usernames[$_id] = SimpleSEF::encode($name);
+		return($this->profile_base . $this->usernames[$_id] . $this->sep . $_id);
+	}
 
-		public static function user($id, $name)
-		{
-			return(self::$scripturl . '?action=profile;u=' . (int)$id);
-		}
+	/**
+	 * @param type $id				int: board id
+	 * @param type $boardname		string: boardname
+	 * @param type $start			start with (page nr.)
+	 * @param type $force_start		force the start value in the url, even if it is 0
+	 * @return type 
+	 */
+	public function board($id, $boardname, $start = 0, $force_start = false)
+	{
+		$_id = (int)$id;
+		if(!isset($this->boardnames[$_id]))
+			$this->boardnames[$_id] = SimpleSEF::encode($boardname);
+		return($this->boardurl . '/' . $this->boardnames[$_id] . '.' . trim($id) . ($start > 0 || $force_start ? ('-' . $start) : ''));
+	}
 
-		public static function board($id, $name, $start = 0, $force_start = false)
-		{
-			return(self::$scripturl . '?board=' . (int)$id . '.' . (int)$start);
-		}
+	public function home()
+	{
+		return($this->boardurl . '/');
+	}
 
-		public static function home()
-		{
-			return(self::$scripturl);
-		}
-
-		public static function action($a)
-		{
+	public function action($a)
+	{
+		if(stripos($a, '=admin') !== false)
 			return($a);
-		}
+		return(preg_replace('~\b' . preg_quote($this->scripturl) . '\?action=([a-zA-Z0-9]+)(.*)~', $this->boardurl . '/$1$2', $a));
+	}
 
-		public static function addParam($url, $params)
-		{
-			list($base, $fragment) = explode('#', $url);
-			$newparam = ';' . ltrim($params, ';');
-			if(!empty($newparam))
-				return $base . $newparam . (!empty($fragment) ? ('#' . $fragment) : '');
-			return($url);
+	public function addParam($url, $params)
+	{
+		$newparam = '';
+		$_p = explode(';', trim($params, ';'));
+		foreach($_p as $p) {
+			$_c = explode('=', $p);
+			$newparam .= ('/' . $_c[0] . '.' . (isset($_c[1]) && !empty($_c[1]) ? $_c[1] : ''));
 		}
+		if(!empty($newparam))
+			return str_replace($this->boardurl, $this->boardurl . $newparam, $url);
 
-		public static function parse($_r)
-		{
-			return(stripos($_r, self::$scripturl) === false ? (self::$scripturl . $_r) : $_r);
+		return($url);
+	}
+
+	/**
+	 * @static
+	 * @param $_r			a conventional querystring (i.e. ?action=mlist;sa=search) or URL
+	 * 						including $scripturl.
+	 * @return string		a prettyfied URL
+	 *
+	 * create a SEF URL for all instances for which we don't have a faster URL crafting method.
+	 * this is inherently slower than topic() or user(), so don't use this if you can generate
+	 * the URL with one of the more specific and faster methods.
+	 */
+	public function parse($_r)
+	{
+		$matches = array();
+		$url = stripos($_r, $this->scripturl) === false ? ($this->scripturl . $_r . ' ') : ($_r . ' ');
+
+		preg_match_all('~(' . preg_quote($this->scripturl) . '[-a-zA-Z0-9+&@#/%?=\~_|!:,.;\[\]]*[-a-zA-Z0-9+&@#/%=\~_|\[\]]?)([^-a-zA-Z0-9+&@#/%=\~_|])~', $url, $matches);
+		if (!empty($matches[0])) {
+			$replacements = array();
+			foreach (array_unique($matches[1]) as $i => $_url) {
+				$replacement = SimpleSEF::create_sef_url($_url);
+				if ($_url != $replacement)
+					$replacements[$matches[0][$i]] = $replacement . $matches[2][$i];
+			}
+			$url = str_replace(array_keys($replacements), array_values($replacements), $url);
 		}
+		return(trim($url));
 	}
 }
 
+class URL {
+	
+	private static $impl = 0;
+	private static $is_sef = false;
+	private static $boardurl = '';
+	private static $scripturl = '';
+	
+	public static function init($b)
+	{
+		global $modSettings;
+		
+		if(!empty($modSettings['simplesef_enable'])) {
+			self::$impl = new URLFactory($b);
+			self::$is_sef = true;
+		}
+		else
+			self::$is_sef = false;
+
+		self::$boardurl = rtrim($b, '/');
+		self::$scripturl = 	self::$boardurl . '/index.php';
+	}
+	
+	public static function topic($topicid, $topicname, $start = 0, $force_start = true, $msgfragment = '', $a = '')
+	{
+		if(self::$is_sef)
+			return(self::$impl->topic($topicid, $topicname, $start, $force_start, $msgfragment = '', $a = ''));
+		
+		return(self::$scripturl . '?topic=' . (int)$topicid . ($start > 0 || $force_start ? ('.' . $start) : '') . $msgfragment . $a);
+	}
+	
+	public static function user($id, $name)
+	{
+		if(self::$is_sef)
+			return(self::$impl->user($id, $name));
+		
+		return(self::$scripturl . '?action=profile;u=' . (int)$id);
+	}
+	
+	public static function board($id, $boardname, $start = 0, $force_start = false)
+	{
+		if(self::$is_sef)
+			return(self::$impl->board($id, $boardname, $start, $force_start));
+		
+		return(self::$scripturl . '?board=' . (int)$id . '.' . (int)$start);
+	}
+	
+	public static function home()
+	{
+		if(self::$is_sef)
+			return(self::$impl->home());
+		
+		return(self::$scripturl);
+	}
+
+	public static function action($a)
+	{
+		if(self::$is_sef)
+			return(self::$impl->action($a));
+		
+		return($a);
+	}
+
+	public static function addParam($url, $params)
+	{
+		if(self::$is_sef)
+			return(self::$impl->addParam($url, $params));
+		
+		list($base, $fragment) = explode('#', $url);
+		$newparam = ';' . ltrim($params, ';');
+		if(!empty($newparam))
+			return $base . $newparam . (!empty($fragment) ? ('#' . $fragment) : '');
+		return($url);
+	}
+	
+	public static function parse($_r)
+	{
+		if(self::$is_sef)
+			return(self::$impl->parse($_r));
+		
+		return(stripos($_r, self::$scripturl) === false ? (self::$scripturl . $_r) : $_r);
+	}
+
+}
 class SimpleSEF {
 
     /**
