@@ -68,10 +68,10 @@ $txt['acfmt_pm_sent_2'] = 'You have sent a new <a href="@SCRIPTURL@?action=pm;pm
 $txt['acfmt_pm_sent_3'] = '';
 $txt['acfmt_pm_sent_4'] = '';
 
-$txt['actfmt_post_quoted_1'] = '<a href="@URL_MEMBER@">%member_name$s</a> quoted <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> by <a href="@URL_OWNER@">%owner_name$s</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
-$txt['actfmt_post_quoted_2'] = 'You quoted <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> by <a href="@URL_OWNER@">%owner_name$s</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
-$txt['actfmt_post_quoted_3'] = '<a href="@URL_MEMBER@">%member_name$s</a> quoted <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">your post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
+$txt['acfmt_post_quoted_1'] = '<a href="@URL_MEMBER@">%member_name$s</a> quoted <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> by <a href="@URL_OWNER@">%owner_name$s</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
+$txt['acfmt_post_quoted_2'] = 'You quoted <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> by <a href="@URL_OWNER@">%owner_name$s</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
+$txt['acfmt_post_quoted_3'] = '<a href="@URL_MEMBER@">%member_name$s</a> quoted <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">your post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
 
-$txt['actfmt_user_tagged_1'] = 'You were mentioned by <a href="@URL_MEMBER@">%member_name$s</a> in <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a>';
+$txt['acfmt_user_tagged_1'] = 'You were mentioned in <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a message</a> posted by <a href="@URL_MEMBER@">%member_name$s</a>.';
 
 ?>

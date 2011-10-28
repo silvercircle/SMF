@@ -94,6 +94,7 @@ function Post()
 	$context['can_see_hidden_level1'] = allowedTo('see_hidden1');
 	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
 	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
+	$context['can_tag_users'] = allowedTo('tag_users');
 
 	if(in_array('dr', $context['admin_features'])) {
 		require_once($sourcedir . '/Subs-Drafts.php');
@@ -595,7 +596,12 @@ function Post()
 			preparsecode($form_message, true);
 			preparsecode($context['preview_message']);
 
-			handleUserTags($context['preview_message']);
+			/*
+			 * tagging for formatting the preview, we don't do anything with the result...yet
+			 */
+			if($context['can_tag_users'] && !(isset($_REQUEST['allowtags']) && $_REQUEST['allowtags']))
+				handleUserTags($context['preview_message']);
+			
 			// Do all bulletin board code tags, with or without smileys.
 			$context['preview_message'] = parse_bbc($context['preview_message'], isset($_REQUEST['ns']) ? 0 : 1);
 			parse_bbc_stage2($context['preview_message']);
@@ -1262,7 +1268,7 @@ function Post()
 	$context['is_new_post'] = !isset($_REQUEST['msg']);
 	$context['is_first_post'] = $context['is_new_topic'] || (isset($_REQUEST['msg']) && $_REQUEST['msg'] == $id_first_msg);
 	$context['can_stick_firstpost'] = $context['is_first_post'] && allowedTo('post_sticky');
-
+	
 	if($context['is_first_post'])
 		getPrefixSelector($board, !empty($context['id_prefix']) ? $context['id_prefix'] : 0);
 
@@ -1313,6 +1319,7 @@ function Post2()
 
 	$context['need_synhlt'] = true;
 	$context['no_astream'] = (isset($_REQUEST['noactivity']) && (int)$_REQUEST['noactivity'] == 1);
+	$context['can_tag_users'] = allowedTo('tag_users');
 
 	// Sneaking off, are we?
 	if (empty($_POST) && empty($topic))

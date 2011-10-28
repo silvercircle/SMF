@@ -1716,6 +1716,8 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	$posterOptions['id'] = empty($posterOptions['id']) ? 0 : (int) $posterOptions['id'];
 	$posterOptions['ip'] = empty($posterOptions['ip']) ? $user_info['ip'] : $posterOptions['ip'];
 
+	$tagged_users = handleUserTags($msgOptions['body']);
+	
 	// We need to know if the topic is approved. If we're told that's great - if not find out.
 	if (!$modSettings['postmod_active'])
 		$topicOptions['is_approved'] = true;
@@ -1816,6 +1818,9 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		);
 		$msgOptions['id'] = smf_db_insert_id('{db_prefix}messages', 'id_msg');
 
+		if(count($tagged_users) > 0)
+			notifyTaggedUsers($tagged_users, array('id_topic' => $topicOptions['id'], 'id_message' => $msgOptions['id']));
+		
 		// Something went wrong creating the message...
 		if (empty($msgOptions['id']))
 			return false;
@@ -1845,6 +1850,9 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 				
 			smf_db_query( 'DELETE FROM {db_prefix}messages_cache WHERE id_msg = {int:id_msg}',
 				array('id_msg' => $msg_to_update));
+
+			if(count($tagged_users) > 0)
+				notifyTaggedUsers($tagged_users, array('id_topic' => $topicOptions['id'], 'id_message' => $msgOptions['id']));
 			
 			if(empty($msgOptions['attachments']))
 				$attachments[0] = -1;
@@ -2454,6 +2462,10 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	$topicOptions['lock_mode'] = isset($topicOptions['lock_mode']) ? $topicOptions['lock_mode'] : null;
 	$topicOptions['sticky_mode'] = isset($topicOptions['sticky_mode']) ? $topicOptions['sticky_mode'] : null;
 
+	$tagged_users = array();
+	if(isset($msgOptions['body']))
+		$tagged_users = handleUserTags($msgOptions['body']);
+	
 	// This is longer than it has to be, but makes it so we only set/change what we have to.
 	$messages_columns = array();
 	if (isset($posterOptions['name']))
@@ -2609,6 +2621,9 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		}
 	}
 
+	if(count($tagged_users) > 0)
+		notifyTaggedUsers($tagged_users, array('id_topic' => $topicOptions['id'], 'id_message' => $msgOptions['id']));
+	
 	// If there's a custom search index, it needs to be modified...
 	if (isset($msgOptions['body']) && !empty($modSettings['search_custom_index_config']))
 	{
@@ -3358,39 +3373,90 @@ function user_info_callback($matches)
 	return $use_ref ? $ref : $matches[0];
 }
 
+/**
+ * @param type $message the message: this must run before bb codes are parsed,
+ *						because user tags are translated to bb codes.
+ * @return type int -	an array of member ids that were tagged in the message.
+ *						the array contains unique ids only.
+ */
 function handleUserTags(&$message)
 {
-	global $user_info;
-	
-	$matches = array();
+	global $user_info, $modSettings, $context;
+
 	$users_found = array();
 	
-	if(preg_match_all('~@([\s\w,;-_\\\/\+\.]+):~', $message, $matches, PREG_SET_ORDER)) {
+	if(!$context['can_tag_users'] || (isset($_REQUEST['allowtags']) && $_REQUEST['allowtags']) || empty($modSettings['enableUserTagging']) || 0 == $modSettings['maxTagsPerPost'])
+		return($users_found);
+
+	$pat = '~@@([\s\w,;-_\[\]\{\}\\\/\+\.\~\$\!]+):~u';
+	$matches = array();
+	$querynames = array();
+	$searchnames = array();
+	$displaynames = array();
+
+	/*
+	 * maximum number of unique tagged users a single message can have. defaults to 10, but never more than
+	 * 20 which should be waaaaaay enough anyway and we don't want to abuse this feature.
+	 */
+	$max_unique_tags = empty($modSettings['maxTagsPerPost']) ? 10 : min(array(20, $modSettings['maxTagsPerPost']));
+	
+	/*
+	 * collect all @mentions and build an array of unique, lowercased
+	 * names to use in the db query.
+	 */
+	if(preg_match_all($pat, $message, $matches, PREG_SET_ORDER)) {
 		foreach($matches as $match) {
-			$bbc_result = '';
-			$bbc_results = array();
-			$newnames = array();
 			$names = explode(',', trim($match[1]));
 			foreach($names as $name)
-				$newnames[] = CommonAPI::strtolower(trim($name));
-			
-			$result = smf_db_query('SELECT id_member, real_name FROM {db_prefix}members
-				WHERE LOWER(real_name) IN({array_string:names})',
-					array('names' => $newnames));
-
-			while($row = mysql_fetch_assoc($result)) {
-				if(in_array(CommonAPI::strtolower($row['real_name']), $newnames)) {
-					$bbc_results[] = ('[user id=' . $row['id_member'] . ']' . $row['real_name'] . '[/user]');
-					if($row['id_member'] != $user_info['id'])
-						$users_found[] = $row['id_member'];
-				}
-			}
-			mysql_free_result($result);
-			if(count($bbc_results))
-				$bbc_result = '@' . implode(', ', $bbc_results);
-			$message = str_replace($match[0], $bbc_result, $message);
+				$querynames[] = CommonAPI::strtolower(trim($name));
 		}
 	}
-	return($users_found);
+	else
+		return($users_found);		// nothing to see here, sir...
+	
+	$querynames = array_slice(array_unique($querynames), 0, $max_unique_tags);
+	$result = smf_db_query('SELECT id_member, real_name FROM {db_prefix}members
+		WHERE LOWER(real_name) IN({array_string:names})',
+			array('names' => array_unique($querynames)));
+
+	while($row = mysql_fetch_assoc($result)) {
+		$searchnames[$row['id_member']] = CommonAPI::strtolower($row['real_name']);		// this is for the lookup
+		$displaynames[$row['id_member']] = $row['real_name'];							// ... and this for pretty-formatting the output
+	}
+	mysql_free_result($result);
+	
+	reset($matches);
+	/*
+	 * look at our matches again and build the formatted result(s). Filter out any names
+	 * that couldn't be found in the db query (mis-spelled, non-existing or whatever... simply ignore them).
+	 */
+	foreach($matches as $match) {
+		$bbc_results = array();
+		$names = explode(',', trim($match[1]));
+		foreach($names as $name) {
+			$id = array_search(CommonAPI::strtolower(trim($name)), $searchnames);
+			if((int)$id > 0 && $id != $user_info['id']) {	// trying to be funny and mention yourself? troll alert... :)
+				$bbc_results[] = ('[user id=' . $id . ']' . $displaynames[$id] . '[/user]');
+				$users_found[] = $id;
+			}
+		}
+		$bbc_result = count($bbc_results) ? ('@' . implode(', ', $bbc_results) . ':') : '';
+		$message = str_replace($match[0], $bbc_result, $message);
+	}
+	return(array_unique($users_found));
+}
+
+function notifyTaggedUsers(&$members, $postOptions)
+{
+	global $user_info, $modSettings, $sourcedir;
+	
+	$to_notify = !is_array($members) ? array($members) : $members;
+	if($modSettings['astream_active'] && count($to_notify) > 0 && isset($postOptions['id_topic']) && isset($postOptions['id_message']) && $postOptions['id_topic'] && $postOptions['id_message']) {
+		require_once($sourcedir . '/Subs-Activities.php');
+		$id_act = aStreamAdd($user_info['id'], ACT_USERTAGGED,
+				array('member_name' => $user_info['name']),
+				0, $postOptions['id_topic'], $postOptions['id_message'], $user_info['id'], ACT_PLEVEL_PRIVATE);
+		aStreamAddNotification($to_notify, $id_act, ACT_USERTAGGED);
+	}
 }
 ?>

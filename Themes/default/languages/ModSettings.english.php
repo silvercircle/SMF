@@ -22,7 +22,6 @@ $txt['titlesEnable'] = 'Enable custom titles';
 $txt['default_personalText'] = 'Default personal text';
 $txt['max_signatureLength'] = 'Maximum allowed characters in signatures<div class="smalltext">(0 for no max.)</div>';
 $txt['removeNestedQuotes'] = 'Remove nested quotes when posting';
-$txt['enableEmbeddedFlash'] = 'Embed flash into posts<div class="smalltext"><b>(may be a security risk!)</b></div>';
 $txt['enablePostHTML'] = 'Enable <i>basic</i> HTML in posts';
 $txt['disabledBBC'] = 'Disabled BBC Code (comma separated)';
 $txt['enableBBC'] = 'Enable bulletin board code (BBC)';

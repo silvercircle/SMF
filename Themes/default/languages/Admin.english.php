@@ -493,8 +493,8 @@ $txt['prefix_boards'] = 'Allowed in boards';
 $txt['prefix_groups'] = 'Allowed for these groups';
 
 $txt['removeNestedQuotes'] = 'Remove nested quotes when quoting';
-$txt['enableEmbeddedFlash'] = 'Embed flash into posts';
-$txt['enableEmbeddedFlash_warning'] = 'may be a security risk!';
+$txt['enableUserTagging'] = 'Enable tagging of member names in posts';
+$txt['maxTagsPerPost'] = 'Maximum number of unique members that can be tagged (@mentioned) in a message. For performance reasons, this should not be set too high and there is a hard limit of 20.';
 $txt['enableSpellChecking'] = 'Enable spell checking';
 $txt['enableSpellChecking_warning'] = 'this does not work on all servers!';
 $txt['disable_wysiwyg'] = 'Disable WYSIWYG editor';

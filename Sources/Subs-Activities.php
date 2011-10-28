@@ -113,7 +113,7 @@ function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $
  */
 function aStreamAddNotification(&$users, $id_act, $id_type)
 {
-	global $memberContext;
+	global $user_profile;
 
 	if((int)$id_act && (int)$id_type) {
 		$my_users = !is_array($users) ? array($users) : array_unique($users);
@@ -123,9 +123,8 @@ function aStreamAddNotification(&$users, $id_act, $id_type)
 		$values = array();
 		foreach($my_users as $user) {
 			if((int)$user) {
-				loadMemberContext($user);
-				$optout = (isset($memberContext[$user]) && !empty($memberContext[$user]['notify_optout'])) ? explode(',', $memberContext[$user]['notify_optout']) : array(0);
-				if(isset($memberContext[$user]) && false === in_array((int)$id_type, $optout)) {
+				$optout = (isset($user_profile[$user]) && !empty($user_profile[$user]['notify_optout'])) ? explode(',', $user_profile[$user]['notify_optout']) : array(0);
+				if(isset($user_profile[$user]) && false === in_array((int)$id_type, $optout)) {
 					$values[] = '('.(int)$user.', '.(int)$id_act.')';
 					$members_to_update[] = $user;
 				}

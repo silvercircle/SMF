@@ -192,8 +192,9 @@ function ModifyPostSettings($return_config = false)
 	// All the settings...
 	$config_vars = array(
 			// Simple post options...
+			array('check', 'enableUserTagging'),
+			array('int', 'maxTagsPerPost'),
 			array('check', 'removeNestedQuotes'),
-			array('check', 'enableEmbeddedFlash', 'subtext' => $txt['enableEmbeddedFlash_warning']),
 			array('check', 'disable_wysiwyg'),
 			array('check', 'use_post_cache'),
 			array('int', 'post_cache_cutoff'),
@@ -214,7 +215,10 @@ function ModifyPostSettings($return_config = false)
 	
 	if($modSettings['post_cache_cutoff'] > 9999)
 		$modSettings['post_cache_cutoff'] = 9999;
-		
+
+	if(empty($modSettings['maxTagsPerPost']) || $modSettings['maxTagsPerPost'] > 20)
+		$modSettings['maxTagsPerPost'] = 10;
+	
 	if ($return_config)
 		return $config_vars;
 

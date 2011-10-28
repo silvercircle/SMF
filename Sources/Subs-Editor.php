@@ -1024,8 +1024,7 @@ function legalise_bbc($text)
 	$disabled = empty($modSettings['disabledBBC']) ? array() : array_flip(explode(',', strtolower($modSettings['disabledBBC'])));
 
 	// Add flash if it's disabled as embedded tag.
-	if (empty($modSettings['enableEmbeddedFlash']))
-		$disabled['flash'] = true;
+	$disabled['flash'] = true;
 
 	// Get a list of all the tags that are not disabled.
 	$all_tags = parse_bbc(false);
@@ -1803,8 +1802,7 @@ function create_control_richedit($editorOptions)
 	$disabled_tags = array();
 	if (!empty($modSettings['disabledBBC']))
 		$disabled_tags = explode(',', $modSettings['disabledBBC']);
-	if (empty($modSettings['enableEmbeddedFlash']))
-		$disabled_tags[] = 'flash';
+	$disabled_tags[] = 'flash';
 
 	foreach ($disabled_tags as $tag)
 	{

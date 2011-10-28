@@ -442,6 +442,7 @@ function template_main()
 							', $context['can_stick_firstpost'] ? '<li><label for="stickfirst"><input type="checkbox" name="stickfirst" id="stickfirst" value="1" class="input_check" '.($context['first_is_sticky'] ? 'checked="checked"' : '') . ' />' . $txt['first_post_sticky'] . '</label></li>' : '', '
 							', $context['can_merge_with_last'] ? '<li><label for="want_automerge"><input type="checkbox" name="want_automerge" id="want_automerge" checked="checked" value="1" class="input_check" />' . $txt['want_automerge'] . '</label></li>' : '', '
 							', $context['astream_active'] ? '<li><label for="noactivity"><input type="checkbox" name="noactivity" id="noactivity" value="1" class="input_check" />' . $txt['no_activity_record'] . '</label></li>' : '', '
+							', $context['can_tag_users'] ? '<li><label for="allowtags"><input type="checkbox" name="allowtags" id="allowtags" value="1" class="input_check" />' . $txt['disable_user_tagging'] . '</label></li>' : '', '
 						</ul>';
 	if($context['can_stick_firstpost'])
 		echo '
@@ -611,7 +612,7 @@ function template_main()
 						\'poll_max_votes\', \'poll_expire\', \'poll_change_vote\', \'poll_hide\'
 					];
 					var checkboxFields = [
-						\'ns\'
+						\'ns\', \'allowtags\'
 					];
 
 					for (var i = 0, n = textFields.length; i < n; i++)

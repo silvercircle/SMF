@@ -981,8 +981,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				$disabled[trim($tag)] = true;
 		}
 
-		if (empty($modSettings['enableEmbeddedFlash']))
-			$disabled['flash'] = true;
+		$disabled['flash'] = true;
 
 		/* The following bbc are formatted as an array, with keys as follows:
 
@@ -1519,7 +1518,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 					'id' => array('match' => '(\d+)', 'value' => '$1'),
 					//'name' => array('match' => '([\w\s\d]+)', 'validate' => 'urlencode'),
 				),
-				'content' => '<a onclick="getMcard({id},$(this));" href="' . $scripturl . '?action=profile;u={id}">$1</a>',
+				'content' => '<a onclick="getMcard({id},$(this));return(false);" href="' . $scripturl . '?action=profile;u={id}">$1</a>',
 			),
 			array(
 				'tag' => 'url',
