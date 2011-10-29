@@ -199,7 +199,7 @@ class URL {
 	public static function topic($topicid, $topicname, $start = 0, $force_start = true, $msgfragment = '', $a = '')
 	{
 		if(self::$is_sef)
-			return(self::$impl->topic($topicid, $topicname, $start, $force_start, $msgfragment = '', $a = ''));
+			return(self::$impl->topic($topicid, $topicname, $start, $force_start, $msgfragment, $a));
 		
 		return(self::$scripturl . '?topic=' . (int)$topicid . ($start > 0 || $force_start ? ('.' . $start) : '') . $msgfragment . $a);
 	}

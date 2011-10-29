@@ -239,7 +239,9 @@ function template_body_above()
 	echo '
 	</form>
 	</div>
-	<div class="clear cContainer_end"></div>';
+	<div class="clear cContainer_end"></div>
+	',$context['template_hooks']['global']['above'];
+
 	if($context['news_item_count'] && isset($context['is_board_index'])) {
 		//$collapser = array('id' => 'news_boardindex', 'title' => 'NEWS', 'bodyclass' => 'blue_container');
 		//template_create_collapsible_container($collapser);
@@ -307,6 +309,7 @@ function template_body_below()
 	echo '
 	// ]]>
 	</script>
+	',$context['template_hooks']['global']['footer'],'
 	<footer>
 	<div class="clear" id="footer_section">';
 	// Show the load time?
@@ -348,8 +351,6 @@ EOT;
 
 function template_html_below()
 {
-	global $context, $settings, $options, $scripturl, $txt, $modSettings;
-
 	echo '
 	</div>';
 	template_footer_scripts();
@@ -361,7 +362,7 @@ function template_html_below()
 // Show a linktree. This is that thing that shows "My Community | General Category | General Discussion"..
 function theme_linktree($force_show = false)
 {
-	global $context, $settings, $options, $shown_linktree;
+	global $context, $shown_linktree;
 	static $ltree = '';
 	
 	// If linktree is empty, just return - also allow an override.
@@ -552,10 +553,10 @@ function socialbar_passive($l, $t)
 
 function template_sidebar_content()
 {
-	global $context, $txt, $modSettings, $scripturl, $settings, $user_info, $fbxml, $twitter_widgets, $plusone, $options, $boardurl;
+	global $context, $txt, $modSettings, $scripturl, $settings, $user_info, $options;
 
 	$widgetstyle = 'blue_container cleantop inset_shadow smallpadding';
-
+	echo $context['template_hooks']['global']['sidebar_top'];
 	$collapser = array('id' => 'user_panel', 'title' => 'User panel', 'bodyclass' => $widgetstyle);
 	echo '<script>
 		   // <![CDATA[
@@ -665,7 +666,6 @@ function template_sidebar_content()
 	if(($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar']))) {
 		$collapser = array('id' => 'social_panel', 'title' => 'Socialize', 'bodyclass' => $widgetstyle);
 		template_create_collapsible_container($collapser);
-		$plusone++;
 		echo '
 		<div id="socialshareprivacy"></div>
 		<div class="clear"></div>
@@ -759,6 +759,7 @@ function template_sidebar_content()
 			<div class="cContainer_end"></div>
 			';
 	}
+	echo $context['template_hooks']['global']['sidebar_bottom'];
 }
 
 /*

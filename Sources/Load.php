@@ -126,7 +126,7 @@ if (!defined('SMF'))
 // Load the $modSettings array.
 function reloadSettings()
 {
-	global $modSettings, $smcFunc, $sourcedir, $boardurl, $db_cache_api, $db_cache_memcached;
+	global $modSettings, $sourcedir, $boardurl, $db_cache_api, $db_cache_memcached;
 
 	$no_hooks = ((isset($g_disable_all_hooks) && $g_disable_all_hooks === true) || isset($_REQUEST['nohooks']));
 
@@ -203,10 +203,15 @@ function reloadSettings()
 			db_fatal_error(true);
 	}
 
-	// Is post moderation alive and well?
-	$modSettings['postmod_active'] = isset($modSettings['admin_features']) ? in_array('pm', explode(',', $modSettings['admin_features'])) : true;
-	$modSettings['astream_active'] = isset($modSettings['admin_features']) ? in_array('as', explode(',', $modSettings['admin_features'])) : true;
-
+	if(isset($modSettings['admin_features'])) {
+		$_f = explode(',', $modSettings['admin_features']);
+		$modSettings['postmod_active'] = in_array('pm', $_f);
+		$modSettings['astream_active'] = in_array('as', $_f);
+		$modSettings['tags_active'] = in_array('ts', $_f);
+	}
+	else
+		$modSettings['tags_active'] = $modSettings['postmod_active'] = $modSettings['astream_active'] = true;
+	
 	require_once($sourcedir . '/SimpleSEF.php');
 	//require_once($sourcedir . '/URLFactory.php');
 	URL::init($boardurl);
@@ -226,7 +231,7 @@ function reloadSettings()
 // Load all the important user information...
 function loadUserSettings()
 {
-	global $modSettings, $user_settings, $sourcedir, $smcFunc;
+	global $modSettings, $user_settings, $sourcedir;
 	global $cookiename, $user_info, $language, $context;
 
 	// Check first the integration, then the cookie, and last the session.
@@ -499,7 +504,7 @@ function loadUserSettings()
 function loadBoard()
 {
 	global $txt, $scripturl, $context, $modSettings;
-	global $board_info, $board, $topic, $user_info, $smcFunc;
+	global $board_info, $board, $topic, $user_info;
 
 	// Assume they are not a moderator.
 	$user_info['is_mod'] = false;
@@ -779,7 +784,7 @@ function loadBoard()
 // Load this user's permissions.
 function loadPermissions()
 {
-	global $user_info, $board, $board_info, $modSettings, $smcFunc, $sourcedir;
+	global $user_info, $board, $board_info, $modSettings, $sourcedir;
 
 	if ($user_info['is_admin'])
 	{
@@ -1054,8 +1059,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 function loadMemberContext($user, $display_custom_fields = false)
 {
 	global $memberContext, $user_profile, $txt, $scripturl, $user_info;
-	global $context, $modSettings, $board_info, $settings;
-	global $smcFunc;
+	global $context, $modSettings, $settings;
 	static $dataLoaded = array();
 
 	// If this person's data is already loaded, skip it.
@@ -1276,9 +1280,9 @@ function detectBrowser()
 // Load a theme, by ID.
 function loadTheme($id_theme = 0, $initialize = true)
 {
-	global $user_info, $user_settings, $board_info, $sc, $boarddir;
-	global $txt, $boardurl, $scripturl, $mbname, $modSettings, $language;
-	global $context, $settings, $options, $sourcedir, $ssi_theme, $smcFunc;
+	global $user_info, $user_settings, $board_info, $boarddir;
+	global $txt, $boardurl, $scripturl, $mbname, $modSettings;
+	global $context, $settings, $options, $sourcedir, $ssi_theme;
 
 	// The theme was specified by parameter.
 	if (!empty($id_theme))
@@ -1663,7 +1667,6 @@ function loadTheme($id_theme = 0, $initialize = true)
 
 	// This allows us to change the way things look for the admin.
 	$context['admin_features'] = isset($modSettings['admin_features']) ? explode(',', $modSettings['admin_features']) : array('cd,cp,k,w,rg,ml,pm');
-	$context['astream_active'] = in_array('as', $context['admin_features']);
 	// If we think we have mail to send, let's offer up some possibilities... robots get pain (Now with scheduled task support!)
 	if ((!empty($modSettings['mail_next_send']) && $modSettings['mail_next_send'] < time() && empty($modSettings['mail_queue_use_cron'])) || empty($modSettings['next_task_time']) || $modSettings['next_task_time'] < time())
 	{
@@ -1800,7 +1803,7 @@ function loadTemplate($template_name, $style_sheets = array(), $fatal = true)
 // Load a sub template... fatal is for templates that shouldn't get a 'pretty' error screen.
 function loadSubTemplate($sub_template_name, $fatal = false)
 {
-	global $context, $settings, $options, $txt, $db_show_debug;
+	global $context, $txt, $db_show_debug;
 
 	if ($db_show_debug === true)
 		$context['debug']['sub_templates'][] = $sub_template_name;
@@ -1826,7 +1829,7 @@ function loadSubTemplate($sub_template_name, $fatal = false)
 function loadLanguage($template_name, $lang = '', $fatal = true, $force_reload = false)
 {
 	global $user_info, $language, $settings, $context, $modSettings;
-	global $cachedir, $db_show_debug, $sourcedir, $txt;
+	global $db_show_debug, $sourcedir, $txt;
 	static $already_loaded = array();
 
 	// Default to the user's language.
@@ -1917,8 +1920,6 @@ function loadLanguage($template_name, $lang = '', $fatal = true, $force_reload =
 // Get all parent boards (requires first parent as parameter)
 function getBoardParents($id_parent)
 {
-	global $scripturl, $smcFunc;
-
 	// First check if we have this cached already.
 	if (($boards = CacheAPI::getCache('board_parents-' . $id_parent, 480)) === null)
 	{
@@ -1980,7 +1981,7 @@ function getBoardParents($id_parent)
 // Attempt to reload our languages.
 function getLanguages($use_cache = true, $favor_utf8 = true)
 {
-	global $context, $smcFunc, $settings, $modSettings;
+	global $context, $settings, $modSettings;
 
 	// Either we don't use the cache, or its expired.
 	if (!$use_cache || ($context['languages'] = CacheAPI::getCache('known_languages' . ($favor_utf8 ? '' : '_all'), !empty($modSettings['cache_enable']) && $modSettings['cache_enable'] < 1 ? 86400 : 3600)) == null)
@@ -2050,7 +2051,7 @@ function getLanguages($use_cache = true, $favor_utf8 = true)
 function &censorText(&$text, $force = false)
 {
 	global $modSettings, $options, $settings, $txt;
-	static $censor_vulgar = null, $censor_proper;
+	static $censor_vulgar = null, $censor_proper = null;
 
 	if ((!empty($options['show_no_censored']) && $settings['allow_no_censored'] && !$force) || empty($modSettings['censor_vulgar']))
 		return $text;
@@ -2083,8 +2084,8 @@ function &censorText(&$text, $force = false)
 // Load the template/language file using eval or require? (with eval we can show an error message!)
 function template_include($filename, $once = false)
 {
-	global $context, $settings, $options, $txt, $scripturl, $modSettings;
-	global $user_info, $boardurl, $boarddir, $sourcedir;
+	global $context, $settings, $txt, $scripturl, $modSettings;
+	global $boardurl, $boarddir, $sourcedir;
 	global $maintenance, $mtitle, $mmessage;
 	static $templates = array();
 
@@ -2394,8 +2395,6 @@ function sessionWrite($session_id, $data)
 
 function sessionDestroy($session_id)
 {
-	global $smcFunc;
-
 	if (preg_match('~^[A-Za-z0-9,-]{16,32}$~', $session_id) == 0)
 		return false;
 
@@ -2487,7 +2486,7 @@ function cache_quick_get($key, $file, $function, $params, $level = 1)
 // Do we think the current user is a spider?
 function SpiderCheck()
 {
-	global $modSettings, $smcFunc;
+	global $modSettings;
 
 	if (isset($_SESSION['id_robot']))
 		unset($_SESSION['id_robot']);
@@ -2561,7 +2560,7 @@ function SpiderCheck()
 //!!! Different file?
 function logSpider()
 {
-	global $smcFunc, $modSettings, $context;
+	global $modSettings, $context;
 
 	if (empty($modSettings['spider_mode']) || empty($_SESSION['id_robot']))
 		return;

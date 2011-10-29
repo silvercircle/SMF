@@ -30,7 +30,7 @@ if (!defined('SMF'))
  
 function GiveLike($mid)
 {
-	global $context, $user_info, $sourcedir, $txt;
+	global $context, $user_info, $sourcedir, $txt, $modSettings;
 	$total = array();
 	$content_type = 1;			// > post content type, we should define them elsewhere later when we have more than just this one
 	
@@ -140,7 +140,7 @@ function GiveLike($mid)
 					
 				$update_mode = true;
 
-				if($context['astream_active']) {
+				if($modSettings['astream_active']) {
 					require_once($sourcedir . '/Subs-Activities.php');
 					aStreamAdd($uid, ACT_LIKE,
 							array('member_name' => $context['user']['name'],

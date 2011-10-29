@@ -116,9 +116,12 @@ function BoardIndex()
 
 	$context['page_title'] = sprintf($txt['forum_index'], $context['forum_name']);
 
+	$context['template_hooks']['boardindex'] = array(
+		'above_boardlisting' => '',
+		'below_boardlisting' => ''
+	);
 	if(!empty($modSettings['enableAdvancedHooks']))
 		HookAPI::callHook('integrate_boardindex', array());
-
 	fetchNewsItems(0, 0);
 }
 

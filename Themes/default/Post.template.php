@@ -441,7 +441,7 @@ function template_main()
 							', $context['show_approval'] ? '<li><label for="approve"><input type="checkbox" name="approve" id="approve" value="2" class="input_check" ' . ($context['show_approval'] === 2 ? 'checked="checked"' : '') . ' /> ' . $txt['approve_this_post'] . '</label></li>' : '', '
 							', $context['can_stick_firstpost'] ? '<li><label for="stickfirst"><input type="checkbox" name="stickfirst" id="stickfirst" value="1" class="input_check" '.($context['first_is_sticky'] ? 'checked="checked"' : '') . ' />' . $txt['first_post_sticky'] . '</label></li>' : '', '
 							', $context['can_merge_with_last'] ? '<li><label for="want_automerge"><input type="checkbox" name="want_automerge" id="want_automerge" checked="checked" value="1" class="input_check" />' . $txt['want_automerge'] . '</label></li>' : '', '
-							', $context['astream_active'] ? '<li><label for="noactivity"><input type="checkbox" name="noactivity" id="noactivity" value="1" class="input_check" />' . $txt['no_activity_record'] . '</label></li>' : '', '
+							', $modSettings['astream_active'] ? '<li><label for="noactivity"><input type="checkbox" name="noactivity" id="noactivity" value="1" class="input_check" />' . $txt['no_activity_record'] . '</label></li>' : '', '
 							', $context['can_tag_users'] ? '<li><label for="allowtags"><input type="checkbox" name="allowtags" id="allowtags" value="1" class="input_check" />' . $txt['disable_user_tagging'] . '</label></li>' : '', '
 						</ul>';
 	if($context['can_stick_firstpost'])
@@ -714,7 +714,7 @@ function template_main()
 						if (newPosts[i].getElementsByTagName("is_ignored")[0].firstChild.nodeValue != 0)
 							ignored_replies[ignored_replies.length] = ignoring = newPosts[i].getAttribute("id");
 
-						newPostsHTML += \'<div class="windowbg\' + (++reply_counter % 2 == 0 ? \'2\' : \'\') + \' core_posts"><span class="topslice"><span></span></span><div class="content" id="msg\' + newPosts[i].getAttribute("id") + \'"><div class="floatleft"><h5>', $txt['posted_by'], ': \' + newPosts[i].getElementsByTagName("poster")[0].firstChild.nodeValue + \'</h5><span class="smalltext">&#171;&nbsp;<strong>', $txt['on'], ':</strong> \' + newPosts[i].getElementsByTagName("time")[0].firstChild.nodeValue + \'&nbsp;&#187;</span> <img src="\' + smf_images_url + \'/', $context['user']['language'], '/new.gif" alt="', $txt['preview_new'], '" id="image_new_\' + newPosts[i].getAttribute("id") + \'" /></div>\';';
+						newPostsHTML += \'<div class="windowbg\' + (++reply_counter % 2 == 0 ? \'2\' : \'\') + \' core_posts"><span class="topslice"><span></span></span><div class="content" id="msg\' + newPosts[i].getAttribute("id") + \'"><div class="floatleft"><h5>', $txt['posted_by'], ': \' + newPosts[i].getElementsByTagName("poster")[0].firstChild.nodeValue + \'</h5><span class="smalltext">&#171;&nbsp;<strong>', $txt['on'], ':</strong> \' + newPosts[i].getElementsByTagName("time")[0].firstChild.nodeValue + \'&nbsp;&#187;</span> <img src="\' + smf_images_url + \'/', 'new.png" alt="', $txt['preview_new'], '" id="image_new_\' + newPosts[i].getAttribute("id") + \'" /></div>\';';
 
 	if ($context['can_quote'])
 		echo '

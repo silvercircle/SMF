@@ -184,22 +184,26 @@ function Display()
 		$_SESSION['last_read_topic'] = $topic;
 	}
 
-	// get the tags for this topic
-	$dbresult= smf_db_query( '
-       SELECT t.tag,l.ID,t.ID_TAG FROM {db_prefix}tags_log as l, {db_prefix}tags as t
-       	WHERE t.ID_TAG = l.ID_TAG && l.ID_TOPIC = {int:topic}',
-       	array('topic' => $topic));
-    
-    $context['topic_tags'] = array();
-    while($row = mysql_fetch_assoc($dbresult)) {
-    	$context['topic_tags'][] = array(
-        	'ID' => $row['ID'],
-            'ID_TAG' => $row['ID_TAG'],
-            'tag' => $row['tag'],
-        );
-    }
-	mysql_free_result($dbresult);
-        	
+	if($modSettings['tags_active']) {
+		$dbresult= smf_db_query( '
+		   SELECT t.tag,l.ID,t.ID_TAG FROM {db_prefix}tags_log as l, {db_prefix}tags as t
+			WHERE t.ID_TAG = l.ID_TAG && l.ID_TOPIC = {int:topic}',
+			array('topic' => $topic));
+
+		$context['topic_tags'] = array();
+		while($row = mysql_fetch_assoc($dbresult)) {
+			$context['topic_tags'][] = array(
+				'ID' => $row['ID'],
+				'ID_TAG' => $row['ID_TAG'],
+				'tag' => $row['tag'],
+			);
+		}
+		mysql_free_result($dbresult);
+		$context['tags_active'] = true;
+	}
+	else
+		$context['topic_tags'] = $context['tags_active'] = 0;
+	
 	// Get all the important topic info.
 	$request = smf_db_query( '
 		SELECT
@@ -1227,8 +1231,8 @@ function Display()
 // Callback for the message display.
 function prepareDisplayContext($reset = false)
 {
-	global $settings, $txt, $modSettings, $scripturl, $options, $user_info;
-	global $memberContext, $context, $messages_request, $topic, $board_info;
+	global $txt, $modSettings, $options, $user_info;
+	global $memberContext, $context, $messages_request, $topic;
 
 	static $counter = null;
 
@@ -1309,14 +1313,12 @@ function prepareDisplayContext($reset = false)
 	censorText($message['body']);
 
 	// Compose the memory eat- I mean message array.
-	$t_href = URL::topic($topic, $message['subject'], 0, false, '.msg' . $message['id_msg'] . '#msg'.$message['id_msg']);
+	//$t_href = URL::topic($topic, $message['subject'], 0, false, '.msg' . $message['id_msg'] . '#msg'.$message['id_msg']);
 	$output = array(
 		'attachment' => loadAttachmentContext($message['id_msg']),
 		'alternate' => $counter % 2,
 		'id' => $message['id_msg'],
-		//'href' => $scripturl . '?topic=' . $topic . '.msg' . $message['id_msg'] . '#msg' . $message['id_msg'],
 		'permahref' => URL::parse('?msg=' . $message['id_msg']),
-		//'link' => '<a href="' . $scripturl . '?topic=' . $topic . '.msg' . $message['id_msg'] . '#msg' . $message['id_msg'] . '" rel="nofollow">' . $message['subject'] . '</a>',
 		'member' => &$memberContext[$message['id_member']],
 		'icon' => $message['icon'],
 		'icon_url' => getPostIcon($message['icon']),
@@ -1352,7 +1354,7 @@ function prepareDisplayContext($reset = false)
 		$output['likes_count'] = 0;
 	// Is this user the message author?
 	$output['is_message_author'] = $message['id_member'] == $user_info['id'];
-	$counter = (empty($options['view_newest_first']) ? $counter++ : $counter--);
+	$counter += (empty($options['view_newest_first']) ? 1 : -1);
 	// hooks can populate these fields with additional content
 	$output['template_hook'] = array(
 		'before_sig' => '',
@@ -1369,7 +1371,7 @@ function prepareDisplayContext($reset = false)
 // Download an attachment.
 function Download()
 {
-	global $txt, $modSettings, $user_info, $scripturl, $context, $sourcedir, $topic, $smcFunc;
+	global $txt, $modSettings, $user_info, $context, $topic;
 
 	// Some defaults that we need.
 	$context['character_set'] = empty($modSettings['global_character_set']) ? (empty($txt['lang_character_set']) ? 'ISO-8859-1' : $txt['lang_character_set']) : $modSettings['global_character_set'];
@@ -1785,7 +1787,7 @@ function approved_attach_sort($a, $b)
 // In-topic quick moderation.
 function QuickInTopicModeration()
 {
-	global $sourcedir, $topic, $board, $user_info, $smcFunc, $modSettings, $context;
+	global $sourcedir, $topic, $board, $user_info, $modSettings, $context;
 
 	// Check the session = get or post.
 	checkSession('request');

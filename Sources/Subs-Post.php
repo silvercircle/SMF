@@ -916,7 +916,7 @@ function AddMailQueue($flush = false, $to_array = array(), $subject = '', $messa
 function sendpm($recipients, $subject, $message, $store_outbox = false, $from = null, $pm_head = 0)
 {
 	global $scripturl, $txt, $user_info, $language;
-	global $modSettings, $smcFunc, $sourcedir;
+	global $modSettings, $sourcedir;
 
 	// Make sure the PM language file is loaded, we might need something out of it.
 	loadLanguage('PersonalMessage');
@@ -1506,7 +1506,7 @@ function server_parse($message, $socket, $response)
 // Notify members that something has happened to a topic they marked!
 function sendNotifications($topics, $type, $exclude = array(), $members_only = array())
 {
-	global $txt, $scripturl, $language, $user_info;
+	global $scripturl, $language, $user_info;
 	global $modSettings;
 
 	// Can't do it if there's no topics.
@@ -1936,7 +1936,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		// What if we want to export new topics out to a CMS?
 		HookAPI::callHook('integrate_create_topic', array($msgOptions, $topicOptions, $posterOptions));
 		// record the activity
-		if($context['astream_active'] && !$context['no_astream']) {
+		if($modSettings['astream_active'] && !$context['no_astream']) {
 			require_once($sourcedir . '/Subs-Activities.php');
 			aStreamAdd($posterOptions['id'], ACT_NEWTOPIC,
 				   		array('member_name' => $posterOptions['real_name'], 'topic_title' => $msgOptions['subject']),
@@ -1973,7 +1973,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		if(false === $automerge_posts)
 			trackStats(array('posts' => '+'));
 
-		if($context['astream_active'] && !$context['no_astream']) {
+		if($modSettings['astream_active'] && !$context['no_astream']) {
 			// add to activity stream, but do not notify when we reply to our own topic
 			require_once($sourcedir . '/Subs-Activities.php');
 			aStreamAdd($posterOptions['id'], ACT_REPLIED,
@@ -2695,7 +2695,7 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		approvePosts($msgOptions['id'], $msgOptions['approved']);
 
 	// record in activity stream
-	if($context['astream_active'] && !$context['no_astream']) {
+	if($modSettings['astream_active'] && !$context['no_astream']) {
 		require_once($sourcedir . '/Subs-Activities.php');
 		aStreamAdd($user_info['id'], ACT_MODIFY_POST,
 					   array('member_name' => $user_info['name'], 'topic_title' => $msgOptions['subject']),
@@ -2957,7 +2957,7 @@ function approveTopics($topics, $approve = true)
 // A special function for handling the hell which is sending approval notifications.
 function sendApprovalNotifications(&$topicData)
 {
-	global $txt, $scripturl, $language, $user_info;
+	global $scripturl, $language, $user_info;
 	global $modSettings;
 
 	// Clean up the data...
@@ -3211,7 +3211,7 @@ function updateLastMessages($setboards, $id_msg = 0)
 // This simple function gets a list of all administrators and sends them an email to let them know a new member has joined.
 function adminNotify($type, $memberID, $member_name = null, $actid = 0, $atype = 0)
 {
-	global $txt, $modSettings, $language, $scripturl, $user_info, $context, $sourcedir;
+	global $txt, $modSettings, $language, $scripturl, $user_info, $sourcedir;
 
 	// If the setting isn't enabled then just exit.
 	if (empty($modSettings['notify_new_registration']))
@@ -3304,7 +3304,7 @@ function adminNotify($type, $memberID, $member_name = null, $actid = 0, $atype =
 
 function loadEmailTemplate($template, $replacements = array(), $lang = '', $loadLang = true)
 {
-	global $txt, $mbname, $scripturl, $settings, $user_info;
+	global $txt, $mbname, $scripturl, $settings;
 
 	// First things first, load up the email templates language file, if we need to.
 	if ($loadLang)
@@ -3446,6 +3446,14 @@ function handleUserTags(&$message)
 	return(array_unique($users_found));
 }
 
+/**
+ * @param type $members			int: a single member id or an array of UNIQUE member ids
+ * @param type $postOptions		array: must contain id_topic and id_message of the message
+ *								that triggered the @mention.
+ * 
+ * creates an activity stream entry and sends out notifications to one or more 
+ * members about a user tagging event in the message specified in $postOptions[].
+ */
 function notifyTaggedUsers(&$members, $postOptions)
 {
 	global $user_info, $modSettings, $sourcedir;
@@ -3456,7 +3464,8 @@ function notifyTaggedUsers(&$members, $postOptions)
 		$id_act = aStreamAdd($user_info['id'], ACT_USERTAGGED,
 				array('member_name' => $user_info['name']),
 				0, $postOptions['id_topic'], $postOptions['id_message'], $user_info['id'], ACT_PLEVEL_PRIVATE);
-		aStreamAddNotification($to_notify, $id_act, ACT_USERTAGGED);
+		if($id_act)
+			aStreamAddNotification($to_notify, $id_act, ACT_USERTAGGED);
 	}
 }
 ?>

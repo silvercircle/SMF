@@ -31,7 +31,9 @@ function template_boardbit(&$board)
 
 		if(!empty($board['boardicon'])) {
 			echo '
-		  <img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'boards/',$board['boardicon'],($board['new'] || $board['children_new'] ? '_new' : ''),'.png" alt="', $txt['new_posts'], '" title="', $txt['new_posts'], '" />';
+		  <img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'boards/',$board['boardicon'],'.png" alt="', $txt['new_posts'], '" title="', $txt['new_posts'], '" />';
+			if($board['new'] || $board['children_new'])
+				echo '<img style="position:absolute;bottom:-4px;right:-3px;" src="',$settings['images_url'], '/new.png" />';
 		}
 		else {
 		// If the board or children is new, show an indicator.
@@ -205,7 +207,7 @@ function template_topicbit(&$topic)
 	// Is this topic new? (assuming they are logged in!)
 		if ($is_new)
 			echo '
-			<a href="', $topic['new_href'], '" id="newicon' . $topic['first_post']['id'] . '"><img src="', $settings['lang_images_url'], '/new.gif" alt="', $txt['new'], '" /></a>';
+			<a href="', $topic['new_href'], '" id="newicon' . $topic['first_post']['id'] . '"><img src="', $settings['images_url'], '/new.png" alt="', $txt['new'], '" /></a>';
 
 		echo '
 			<p>', $topic['first_post']['member']['link'],', ',$topic['first_post']['time'], '
@@ -304,7 +306,7 @@ function template_topicbit_generic(&$topic)
 	// Is this topic new? (assuming they are logged in!)
 		if ($is_new)
 			echo '
-			<a href="', $topic['new_href'], '" id="newicon' . $topic['first_post']['id'] . '"><img src="', $settings['lang_images_url'], '/new.gif" alt="', $txt['new'], '" /></a>';
+			<a href="', $topic['new_href'], '" id="newicon' . $topic['first_post']['id'] . '"><img src="', $settings['images_url'], '/new.png" alt="', $txt['new'], '" /></a>';
 
 		echo '
 			<p>', $topic['first_post']['member']['link'],', ',$topic['first_post']['time'], '

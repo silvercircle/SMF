@@ -3971,7 +3971,8 @@ function setupMenuContext()
 			),
 			*/
 		);
-
+		if(!$modSettings['tags_active'])
+			unset($buttons['tags']);
 		// Allow editing menu buttons easily.
 		HookAPI::callHook('integrate_menu_buttons', array(&$buttons));
 

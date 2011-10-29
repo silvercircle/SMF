@@ -10,7 +10,7 @@ $txt['act_no_results'] = 'The activity stream for the current context is empty';
 $txt['act_no_results_title'] = 'No results';
 $txt['act_recent_notifications'] = 'Recent notifications';
 $txt['act_no_unread_notifications'] = 'You currently have no unread notifications';
-$txt['act_mark_all_read'] = 'Mark all as read';
+$txt['act_mark_all_read'] = 'Mark all as seen';
 $txt['act_view_all'] = 'View all';
 
 $txt['unknown activity stream type'] = 'Unknown activity stream type';
@@ -41,7 +41,9 @@ $txt['activity_missing_callback'] = 'Invalid or missing formatter callback for a
  *
  * meaning of class="_m": this link, when clicked, will mark the notification as read when using the inline notification
  * popup.
- * also, @SCRIPTURL@ is always replaced by $scripturl to construct valid links.
+ * also, @SCRIPTURL@ is always replaced by $scripturl to construct valid links and @URL_MEMBER@ is a shortcut for the
+ * URL of the member who created the activity. @NM@ will be replaced by the ;nmdismiss action that triggers the mark
+ * seen event for the notification.
  */
 
 $txt['acfmt_like_given_1'] = '<a href="@URL_MEMBER@">%member_name$s</a> liked <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
@@ -72,6 +74,6 @@ $txt['acfmt_post_quoted_1'] = '<a href="@URL_MEMBER@">%member_name$s</a> quoted 
 $txt['acfmt_post_quoted_2'] = 'You quoted <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> by <a href="@URL_OWNER@">%owner_name$s</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
 $txt['acfmt_post_quoted_3'] = '<a href="@URL_MEMBER@">%member_name$s</a> quoted <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">your post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
 
-$txt['acfmt_user_tagged_1'] = 'You were mentioned in <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a message</a> posted by <a href="@URL_MEMBER@">%member_name$s</a>.';
+$txt['acfmt_user_tagged_1'] = 'You were mentioned in <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s@NM@#msg%id_content$s">a message</a> posted by <a href="@URL_MEMBER@">%member_name$s</a>.';
 
 ?>

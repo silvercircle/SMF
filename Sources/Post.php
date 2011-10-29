@@ -842,11 +842,12 @@ function Post()
 	else
 	{
 
-		$context['tagging_ui'] = '<dt><b>'. $txt['smftags_topic']. '</b>
-		</dt>
+		if($modSettings['tags_active'])
+			$context['tagging_ui'] = '
+		<dt><b>'. $txt['smftags_topic']. '</b></dt>
 		<dd>
-											<input type="text" name="tags"'. ' tabindex="'. $context['tabindex']++. '" size="80" maxlength="80" />
-											<br /><span class="smalltext">'. $txt['smftags_seperate']. '</span>
+			<input type="text" name="tags"'. ' tabindex="'. $context['tabindex']++. '" size="80" maxlength="80" />
+			<br /><span class="smalltext">'. $txt['smftags_seperate']. '</span>
 		</dd>';
 		
 		// By default....

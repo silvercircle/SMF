@@ -471,7 +471,8 @@ function AdminMain()
 			),
 		),
 	);
-
+	if(!$modSettings['tags_active'])
+		unset($admin_areas['layout']['areas']['postsettings']['subsections']['tags']);
 	// Any files to include for administration?
 	if (!empty($modSettings['integrate_admin_include']))
 	{

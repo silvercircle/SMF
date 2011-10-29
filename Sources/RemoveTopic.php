@@ -534,17 +534,14 @@ function removeTopics($topics, $decreasePostCount = true, $ignoreRecycling = fal
 		)
 	);
 	
-		
-		// Tagging System for Topics
-				smf_db_query( '
-						DELETE FROM {db_prefix}tags_log 
-						WHERE id_topic IN ({array_int:topics})',
-						array(
-							'topics' => $topics,
-						)
-		// End Tagging System for Topics
+	smf_db_query( '
+		DELETE FROM {db_prefix}tags_log 
+		WHERE id_topic IN ({array_int:topics})',
+		array(
+			'topics' => $topics,
+		)
 	);
-smf_db_query( '
+	smf_db_query( '
 		DELETE FROM {db_prefix}log_search_subjects
 		WHERE id_topic IN ({array_int:topics})',
 		array(
@@ -569,7 +566,7 @@ smf_db_query( '
 // Remove a specific message (including permission checks).
 function removeMessage($message, $decreasePostCount = true)
 {
-	global $board, $sourcedir, $modSettings, $user_info, $smcFunc, $context;
+	global $board, $sourcedir, $modSettings, $user_info;
 
 	if (empty($message) || !is_numeric($message))
 		return false;

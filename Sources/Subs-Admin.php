@@ -55,7 +55,7 @@ if (!defined('SMF'))
 
 function getServerVersions($checkFor)
 {
-	global $txt, $db_connection, $_PHPA, $smcFunc, $memcached, $modSettings;
+	global $txt, $db_connection, $_PHPA, $memcached, $modSettings;
 
 	loadLanguage('Admin');
 

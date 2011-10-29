@@ -367,10 +367,10 @@ function ModifyCoreFeatures($return_config = false)
 				'paid_enabled' => 1,
 			),
 			'setting_callback' => create_function('$value', '
-				global $smcFunc, $sourcedir;
+				global $sourcedir;
 
 				// Set the correct disabled value for scheduled task.
-				$smcFunc[\'db_query\'](\'\', \'
+				smf_db_query(\'
 					UPDATE {db_prefix}scheduled_tasks
 					SET disabled = {int:disabled}
 					WHERE task = {string:task}\',
@@ -443,6 +443,11 @@ function ModifyCoreFeatures($return_config = false)
 			'url' => 'action=admin;area=socialsettings;sa=astream',
 			'settings' => array(
 				'astream_enabled' => 1,
+			),
+		),
+		'ts' => array(
+			'url' => 'action=admin;area=postsettings;sa=tags',
+			'settings' => array(
 			),
 		),
 		'dr' => array(

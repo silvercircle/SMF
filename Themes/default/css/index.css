@@ -3028,9 +3028,6 @@ dl.addrules dt.floatleft {
 #addrule fieldset {
 	clear: both;
 }
-
-/* Styles for the calendar section.
-------------------------------------------------- */
 .calendar_table {
 	margin-bottom: 0.7em;
 }

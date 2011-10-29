@@ -207,7 +207,7 @@ function template_main()
 	if($context['use_share'])
 		socialbar($scripturl . '?topic=' . $topic, urlencode($context['subject']));
 				
-	// Tags
+	if($context['tags_active']) {
 	echo '
 		<div id="tagstrip"><span id="tags">';
 	foreach ($context['topic_tags'] as $i => $tag) {
@@ -226,7 +226,7 @@ function template_main()
 		echo '&nbsp;';
 	echo '
 		</div>';
-				
+	}
 
 	if (!empty($settings['display_who_viewing']))
 	{
@@ -418,7 +418,7 @@ function template_main()
 			// Is this topic new? (assuming they are logged in!)
 			if ($topic['new'] && $context['user']['is_logged'])
 					echo '
-									<a href="', $topic['new_href'], '" id="newicon' . $topic['first_post']['id'] . '"><img src="', $settings['lang_images_url'], '/new.gif" alt="', $txt['new'], '" /></a>';
+									<a href="', $topic['new_href'], '" id="newicon' . $topic['first_post']['id'] . '"><img src="', $settings['images_url'], '/new.png" alt="', $txt['new'], '" /></a>';
 
 			echo '
 									<p>', $txt['started_by'], ' ', $topic['first_post']['member']['link'], '

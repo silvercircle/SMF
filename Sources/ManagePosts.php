@@ -55,7 +55,7 @@ if (!defined('SMF'))
 
 function ManagePostSettings()
 {
-	global $context, $txt, $scripturl;
+	global $context, $txt, $modSettings;
 
 	// Make sure you can be here.
 	isAllowedTo('admin_forum');
@@ -66,9 +66,10 @@ function ManagePostSettings()
 		'censor' => 'SetCensor',
 		'topics' => 'ModifyTopicSettings',
 		'prefixes' => 'ModifyPrefixSettings',
-		'tags' => 'ModifyTagSettings',
 	);
-
+	if($modSettings['tags_active'])
+		$subActions['tags'] = 'ModifyTagSettings';
+	
 	if(in_array('dr', $context['admin_features']))
 		$subActions['drafts'] = 'ModifyDraftSettings';
 
@@ -108,7 +109,7 @@ function ManagePostSettings()
 // Set the censored words.
 function SetCensor()
 {
-	global $txt, $modSettings, $context, $smcFunc;
+	global $txt, $modSettings, $context;
 
 	if (!empty($_POST['save_censor']))
 	{
@@ -187,7 +188,7 @@ function SetCensor()
 // Modify all settings related to posts and posting.
 function ModifyPostSettings($return_config = false)
 {
-	global $context, $txt, $modSettings, $scripturl, $sourcedir, $smcFunc, $db_prefix;
+	global $context, $txt, $modSettings, $scripturl, $sourcedir;
 
 	// All the settings...
 	$config_vars = array(
@@ -284,7 +285,7 @@ function ModifyPostSettings($return_config = false)
 // Bulletin Board Code...a lot of Bulletin Board Code.
 function ModifyBBCSettings($return_config = false)
 {
-	global $context, $txt, $modSettings, $helptxt, $scripturl, $sourcedir;
+	global $context, $txt, $modSettings, $scripturl, $sourcedir;
 
 	$config_vars = array(
 			// Main tweaks
@@ -395,7 +396,7 @@ function ModifyTopicSettings($return_config = false)
 
 function getPrefixes()
 {
-	global $context, $smcFunc;
+	global $context;
 	
 	$request = smf_db_query( '
 		SELECT * FROM {db_prefix}prefixes');

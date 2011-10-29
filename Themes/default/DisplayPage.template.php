@@ -202,7 +202,7 @@ function template_main()
 		if($message['id'] == $context['first_message']) {
 			if($context['use_share'] && ($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar'])))
 				socialbar($scripturl . '?topic=' . $topic, urlencode($context['subject']));
-			// Tags
+			if($context['tags_active']) {
 			echo '
 				<div id="tagstrip"><span id="tags">';
 			foreach ($context['topic_tags'] as $i => $tag) {
@@ -220,7 +220,9 @@ function template_main()
 			else
 				echo '&nbsp;';
 			echo '
-				</div>',$context['num_replies'], ' Replies<div class="clear"></div>';
+				</div>';
+			}
+			echo $context['num_replies'], ' Replies<div class="clear"></div>';
 		}
 	}
 	echo '

@@ -1,7 +1,6 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]unified all line endings among the entire project[/li]
-[li]experimental user tagging in posts (@username, username: )[/li]
-[li]refactored the URLFactory code a bit[/li]
+[li]hunted and killed a few remaining smcFunc[] references[/li]
+[li]new.gif is dead, long live new.png :)[/li]
 [/list]

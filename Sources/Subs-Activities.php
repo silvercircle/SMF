@@ -45,6 +45,7 @@ define('ACT_PLEVEL_PRIVATE', 4);	// nobody except owner or receiver can see it (
  */
 function _vsprintf($format, &$data)
 {
+	$match = array();
 	preg_match_all( '/ (?<!%) % ( (?: [[:alpha:]_-][[:alnum:]_-]* | ([-+])? [0-9]+ (?(2) (?:\.[0-9]+)? | \.[0-9]+ ) ) ) \$ [-+]? \'? .? -? [0-9]* (\.[0-9]+)? \w/x', $format, $match, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
 	$offset = 0;
     $keys = array_keys($data);
@@ -72,13 +73,13 @@ function _vsprintf($format, &$data)
  * @param int $priv_level   privacy level for is_private.
  * @param int $dont_notify  do not send the owner a notification for the activity.
  *
- * @return unique id of the inserted activity type
+ * @return unique id of the inserted activity type, 0 if something went wrong.
  */
 function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $id_content = 0, $id_owner = 0, $priv_level = 0, $dont_notify = false)
 {
 	$act_must_notify = array(ACT_LIKE, ACT_REPLIED);	// these activity types will trigger a *mandatory*
 	if(0 == $id_member || 0 == $id_owner)				// notification for $id_owner unless $dont_notify indicates otherwise
-		return;
+		return(0);
 
 	smf_db_insert('',
 		'{db_prefix}log_activities',
@@ -97,7 +98,7 @@ function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $
 
 	// if this activity triggers a notification for the id_owner, use the $id_act to link it
 	// to the notifications table.
-	if($id_owner && in_array($atype, $act_must_notify) && !$dont_notify)
+	if($id_act && $id_owner && in_array($atype, $act_must_notify) && !$dont_notify)
 		aStreamAddNotification($id_owner, $id_act, $atype);
 	return($id_act);
 }
@@ -200,38 +201,41 @@ function aStreamFormatActivity(&$row, $is_notification = false)
 }
 
 /**
- * @param $content_ids  array of content ids
+ * @param $content_ids  array of content ids or a single content id
  *
  * remove all activities and linked notifications that relate to the given set
  * of content ids.
  */
-function aStreamRemoveByContent($content_ids, $types = array())
+function aStreamRemoveByContent(&$content_ids, $types = array())
 {
+	$_content_ids = !is_array($content_ids) ? array($content_ids) : array_unique($content_ids);
 	// types that define a activity related to a post
 	// this is needed, because id_content does not *have* to be a id_msg, it could be a pm id or even user id
 	// depending on the activity type.
 	if(empty($types))
-		$types = array(ACT_LIKE, ACT_MODIFY_POST, ACT_NEWTOPIC, ACT_REPLIED);
+		$types = array(ACT_LIKE, ACT_MODIFY_POST, ACT_NEWTOPIC, ACT_REPLIED, ACT_QUOTED, ACT_USERTAGGED);
 
 	smf_db_query('
 		DELETE a.*, n.* FROM {db_prefix}log_activities AS a LEFT JOIN {db_prefix}log_notifications AS n ON(n.id_act = a.id_act)
 		WHERE a.id_content IN ({array_int:content_ids}) AND a.id_type IN ({array_int:types})',
-		array('content_ids' => $content_ids, 'types' => $types));
+		array('content_ids' => $_content_ids, 'types' => $types));
 }
 
 /**
- * @param $topic_ids  array of topic ids
+ * @param $topic_ids  int: array of topic ids or a single topic id
  *
  * remove all activities and linked notifications that relate to the given set
  * of topic ids
  *
  * used when a topic is really deleted (not recycled)
  */
-function aStreamRemoveByTopic($topic_ids)
+function aStreamRemoveByTopic(&$topic_ids)
 {
+	$_topic_ids = !is_array($topic_ids) ? array($topic_ids) : array_unique($topic_ids);
+	
 	smf_db_query('
 		DELETE a.*, n.* FROM {db_prefix}log_activities AS a LEFT JOIN {db_prefix}log_notifications AS n ON(n.id_act = a.id_act)
 		WHERE a.id_topic IN ({array_int:topic_ids})',
-		array('topic_ids' => $topic_ids));
+		array('topic_ids' => $_topic_ids));
 }
 ?>

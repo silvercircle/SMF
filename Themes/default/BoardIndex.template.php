@@ -15,7 +15,7 @@ function template_main()
 {
 	global $context, $settings, $options, $txt, $scripturl, $modSettings;
 
-	echo '
+	echo $context['template_hooks']['boardindex']['above_boardlisting'],'
 	<div id="boardindex_table">';
 	/* Each category in categories is made up of:
 	id, href, link, name, is_collapsed (is it collapsed?), can_collapse (is it okay if it is?),
@@ -115,6 +115,7 @@ function template_main()
 	}
 
 	template_info_center();
+	echo $context['template_hooks']['boardindex']['below_boardlisting'];
 }
 
 function template_info_center()
