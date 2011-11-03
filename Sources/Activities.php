@@ -297,6 +297,12 @@ function showActivitiesProfile($memID)
 	loadTemplate('Activities');
 	loadLanguage('Activities');
 
+	$sa = isset($_GET['sa']) ? $_GET['sa'] : 'activities';
+	$start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
+
+	if($sa == 'settings')
+		return(showActivitiesProfileSettings($memID));
+	
 	$context['page_title'] = $txt['showActivities'] . ' - ' . $user_profile[$memID]['real_name'];
 	$context['pageindex_multiplier'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) && !WIRELESS ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
 	$context['act_results'] = 0;
@@ -308,9 +314,6 @@ function showActivitiesProfile($memID)
 		'tabs' => array(
 		),
 	);
-
-	$sa = isset($_GET['sa']) ? $_GET['sa'] : 'activities';
-	$start = isset($_GET['start']) ? (int)$_GET['start'] : 0;
 
 	// these areas cannot be visited if it's not our own profile unless you are the mighty one
 	if(($sa == 'notifications' || $sa == 'settings') && !$context['user']['is_owner'] && !$user_info['is_admin'])
@@ -325,11 +328,55 @@ function showActivitiesProfile($memID)
 
 		$context['act_global'] = true;
 
-	if($sa == 'activities' || $sa == 'notifications')
-		$context['sub_template'] = 'showactivity_profile';
-	else
-		$context['sub_template'] = 'showactivity_settings';
+	$context['sub_template'] = 'showactivity_profile';
 	aStreamOutput($result);
 	$context['titletext'] = $context['page_title'];
+}
+
+/**
+ * @param type $memID	int: member ID
+ * 
+ * show the settings to customize opt-outs for activity entries and notifications
+ * to receive.
+ * 
+ * todo: we need to find a way to filter out notifications that are for
+ * admins/mods only. probably needs a db scheme change...
+ */
+function showActivitiesProfileSettings($memID)
+{
+	global $modSettings, $context, $user_info, $txt, $user_profile;
+	
+	loadLanguage('Activities-Profile');
+	if(empty($modSettings['astream_active']) || ($user_info['id'] != $memID && !$user_info['is_admin']))
+		fatal_lang_error ('no_access');
+	
+	$context['sub_template'] = 'showactivity_settings';
+
+	$context['page_title'] = $txt['showActivities'] . ' - ' . $user_profile[$memID]['real_name'];
+
+	$context[$context['profile_menu_name']]['tab_data'] = array(
+		'title' => $txt['showActivitiesSettings'],
+		'description' => $txt['showActivitiesSettings_desc'],
+		'tabs' => array(
+		),
+	);
+	
+	$result = smf_db_query('SELECT * FROM {db_prefix}activity_types ORDER BY id_type ASC');
+	
+	$my_act_optout = empty($user_info['act_optout']) ? array(0) : explode(',', $user_info['act_optout']);
+	$my_notify_optout = empty($user_info['notify_optout']) ? array(0) : explode(',', $user_info['notify_optout']);
+	$activity_types = array();
+	
+	while($row = mysql_fetch_assoc($result)) {
+		$activity_types[] = array(
+			'id' => $row['id_type'],
+			'shortdesc' => $row['id_desc'],
+			'longdesc_act' => $txt['actdesc_' . trim($row['id_desc'])],
+			'longdesc_not' => isset($txt['ndesc_' . trim($row['id_desc'])]) ? $txt['ndesc_' . trim($row['id_desc'])] : '',
+			'act_optout' => in_array($row['id_type'], $my_act_optout),
+			'notify_optout' => in_array($row['id_type'], $my_notify_optout),
+		);
+	}
+	mysql_free_result($result);
 }
 ?>

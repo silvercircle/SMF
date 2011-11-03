@@ -3,4 +3,7 @@ Note: this is just a memo pad to record changes and prepare the posts for the de
 [list]
 [li]hunted and killed a few remaining smcFunc[] references[/li]
 [li]new.gif is dead, long live new.png :)[/li]
+[li]template hooks for header, footer and boardindex added[/li]
+[li]Opt-Out settings for the activity stream and notifications got an user interface. It is now possible to select which activities should be recorded and which types of notifications a member wants to receive.[/li]
+[li]
 [/list]

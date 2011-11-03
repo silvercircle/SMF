@@ -276,14 +276,14 @@ function template_merge_done()
 
 function template_merge()
 {
-	global $context, $settings, $options, $txt, $scripturl;
+	global $context, $txt, $scripturl;
 
 	echo '
 		<div id="merge_topics">
 			<div class="cat_bar">
 				<h3>', $txt['merge'], '</h3>
 			</div>
-			<div class="information yellow_container">
+			<div class="orange_container cleantop">
 				', $txt['merge_desc'], '
 			</div>
 			<br>
@@ -378,21 +378,21 @@ function template_merge_extra_options()
 			<div class="cat_bar">
 				<h3>', $txt['merge_topic_list'], '</h3>
 			</div>
-			<table width="100%" class="bordercolor table_grid">
+			<table width="100%" class="table_grid mlist cleantop">
 				<thead>
-					<tr class="catbg">
-						<th scope="col" class="first_th" align="center" width="10px">', $txt['merge_check'], '</th>
-						<th scope="col" class="lefttext">', $txt['subject'], '</th>
-						<th scope="col" class="lefttext">', $txt['started_by'], '</th>
-						<th scope="col" class="lefttext">', $txt['last_post'], '</th>
-						<th scope="col" class="last_th" width="20px">' . $txt['merge_include_notifications'] . '</th>
+					<tr>
+						<th scope="col" class="centertext glass first_th" style="width:10px;">', $txt['merge_check'], '</th>
+						<th scope="col" class="glass lefttext">', $txt['subject'], '</th>
+						<th scope="col" class="glass lefttext">', $txt['started_by'], '</th>
+						<th scope="col" class="glass lefttext">', $txt['last_post'], '</th>
+						<th scope="col" class="nowrap centertext glass last_th" style="width:20px;">' . $txt['merge_include_notifications'] . '</th>
 					</tr>
 				</thead>
 				<tbody>';
 		foreach ($context['topics'] as $topic)
 			echo '
-					<tr class="windowbg2">
-						<td align="center">
+					<tr>
+						<td class="centertext">
 							<input type="checkbox" class="input_check" name="topics[]" value="' . $topic['id'] . '" checked="checked" />
 						</td>
 						<td>
@@ -406,7 +406,7 @@ function template_merge_extra_options()
 							' . $topic['updated']['link'] . '<br />
 							<span class="smalltext">', $topic['updated']['time'], '</span>
 						</td>
-						<td align="center">
+						<td class="centertext">
 							<input type="checkbox" class="input_check" name="notifications[]" value="' . $topic['id'] . '" checked="checked" />
 						</td>
 					</tr>';
@@ -414,8 +414,7 @@ function template_merge_extra_options()
 				</tbody>
 			</table>
 			<br />
-			<div class="windowbg">
-				<span class="topslice"><span></span></span>
+			<div class="blue_container">
 				<div class="content">';
 
 	echo '
@@ -471,7 +470,6 @@ function template_merge_extra_options()
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 					<input type="hidden" name="sa" value="execute" /><br class="clear" />
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 		</form>
 	</div>

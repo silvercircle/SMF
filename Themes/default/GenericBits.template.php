@@ -105,7 +105,7 @@ function template_boardbit(&$board)
 		foreach ($board['children'] as $child)
 		{
 			if (!$child['is_redirect'])
-				$child['link'] = '<h4><a class="boardlink" href="' . $child['href'] . '" ' . ($child['new'] ? 'class="new_posts" ' : 'class="no_new_posts" ') . 'title="' . ($child['new'] ? $txt['new_posts'] : $txt['old_posts']) . ' (' . $txt['board_topics'] . ': ' . comma_format($child['topics']) . ', ' . $txt['posts'] . ': ' . comma_format($child['posts']) . ')">' . $child['name'] . '</a></h4>'.'&nbsp;<span title="'.$child['description'].'">'.$child['short_description'].'</span>';
+				$child['link'] = '<h4><a href="' . $child['href'] . '" ' . ($child['new'] ? 'class="boardlink new_posts" ' : 'class="boardlink no_new_posts" ') . 'title="' . ($child['new'] ? $txt['new_posts'] : $txt['old_posts']) . ' (' . $txt['board_topics'] . ': ' . comma_format($child['topics']) . ', ' . $txt['posts'] . ': ' . comma_format($child['posts']) . ')">' . $child['name'] . '</a></h4>'.'&nbsp;<span title="'.$child['description'].'">'.$child['short_description'].'</span>';
 			else
 				$child['link'] = '<a class="boardlink" href="' . $child['href'] . '" title="' . comma_format($child['posts']) . ' ' . $txt['redirects'] . '"><h4>' . $child['name'] . '</h4></a>'.'&nbsp;('.$child['description'].')';
 

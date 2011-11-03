@@ -35,9 +35,9 @@ function template_main()
 		</div>
 		<div id="share_bar" style="display:none;position:absolute;right:0;white-space:nowrap;width:auto;">
 		<div class="bmbar">
-		 <a role="button" rel="nofollow" class="share_button share_fb" data-href="http://www.facebook.com/sharer.php?u=%%uri%%">Share</a>
-		 <a role="button" rel="nofollow" class="share_button share_tw" data-href="http://twitter.com/share?text=%%txt%%&amp;url=%%uri%%">Tweet</a>
-		 <a role="button" rel="nofollow" class="share_button share_digg" data-href="http://digg.com/submit?phase=2&amp;title=%%txt%%&amp;url=%%uri%%">Digg</a>
+		 <span role="button" rel="nofollow" class="button icon share_this share_fb" data-href="http://www.facebook.com/sharer.php?u=%%uri%%">Share</span>
+		 <span role="button" rel="nofollow" class="button icon share_this share_tw" data-href="http://twitter.com/share?text=%%txt%%&amp;url=%%uri%%">Tweet</span>
+		 <span role="button" rel="nofollow" class="button icon share_this share_digg" data-href="http://digg.com/submit?phase=2&amp;title=%%txt%%&amp;url=%%uri%%">Digg</span>
 		 <div class="clear"></div>
        	</div>
        	</div>';

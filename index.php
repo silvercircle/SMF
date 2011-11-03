@@ -169,7 +169,7 @@ obExit(null, null, true);
 // The main controlling function.
 function smf_main()
 {
-	global $modSettings, $settings, $user_info, $board, $topic, $board_info, $maintenance, $sourcedir, $scripturl, $boardurl;
+	global $modSettings, $settings, $user_info, $board, $topic, $board_info, $maintenance, $sourcedir;
 
 	// Special case: session keep-alive, output a transparent pixel.
 	if (isset($_GET['action']) && $_GET['action'] == 'keepalive')

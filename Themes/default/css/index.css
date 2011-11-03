@@ -927,21 +927,14 @@ span.m_downarrow:hover {
 	position: relative;
 	right: 5000px;
 }
-
-/* Styles for the standard button lists.
-------------------------------------------------------- */
-
 .align_top ul li a, .align_bottom ul li a {
 	margin: 0 12px 0 0;
 }
-
-/* the navigation list */
 ul#navigation {
 	margin: 0;
 	font-size: 0.9em;
 	padding: 1em 0.4em;
 }
-
 ul#navigation li {
 	float: none;
 	font-size: 0.95em;
@@ -1678,7 +1671,12 @@ input[type=button], .button_submit, .button_reset {
 span.button {
 	margin: 0 0.3em;
 }
-
+span.button.icon {
+	padding-left:22px;
+}
+span.button.icon:hover {
+	background-color:#f0f0f0;
+}
 span.button.notify {
 	font-size: 10px !important;
 	line-height: 20px !important;
@@ -3203,28 +3201,6 @@ span.hidelink {
 .search_results_posts .buttons {
 	padding: 5px 1em 0 0;
 }
-
-/* Styles for the help section.
-------------------------------------------------- */
-
-#help_container {
-	margin: 0;
-	padding: 0;
-}
-
-#helpmain {
-	padding: 0 1em;
-}
-
-#helpmain p {
-	margin: 0 0 1.5em 0;
-	line-height: 1.5em;
-}
-
-#helpmain ul {
-	line-height: 1.5em;
-}
-
 .blue_container, .cContainer_body {
 	background-color: #f2f5fe;
 	border: 1px solid #d5ecfa;
@@ -3296,6 +3272,13 @@ div.cContainer_end {
 .blue_container.cleantop, .orange_container.cleantop, .red_container.cleantop, .yellow_container.cleantop {
 	border-top:0;
 	border-radius:0 0 3px 3px;
+}
+table.cleantop {
+	border-top: 0;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	padding-top:0;
+	margin-top:0;
 }
 .blue_container.cleanvert, .orange_container.cleanvert, .red_container.cleanvert, .yellow_container.cleanvert {
 	border-left:none;
@@ -3623,36 +3606,14 @@ div.bmbar > div.title {
 	padding: 0;
 	line-height: 20px;
 }
-.share_button {
-	font-size: 10px !important;
-	font-family: Verdana, arial, sans-serif;
-	font-weight: bold;
-	text-shadow: 2px 2px 10px white;
-	float: left;
-	line-height: 16px !important;
-	text-decoration: none;
-	padding: 1px 4px 1px 22px;
-	color: #555;
-	background: #d8dfea;
-	border: 1px solid #9bb1db;
-	border-radius: 2px;
-	margin-right: 4px;
-}
-.share_button:hover {
-	background-color: #ccc !important;
-	border-color: #888;
-}
 .share_fb {
-	background: #D8DFEA url(../images/theme/sprite.png) 0 -328px no-repeat;
+	background: #D8DFEA url(../images/theme/sprite.png) 0 -328px no-repeat !important;
 }
 .share_tw {
-	background: #D8DFEA url(../images/theme/sprite.png) 0 -358px no-repeat;
-}
-.share_buzz {
-	background: #D8DFEA url(../images/theme/sprite.png) 0 -391px no-repeat;
+	background: #D8DFEA url(../images/theme/sprite.png) 0 -358px no-repeat !important;
 }
 .share_digg {
-	background: #D8DFEA url(../images/theme/sprite.png) 0 -422px no-repeat;
+	background: #D8DFEA url(../images/theme/sprite.png) 0 -422px no-repeat !important;
 }
 .bbc_editor_button:hover {
 	background-color: #888;

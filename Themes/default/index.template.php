@@ -84,7 +84,7 @@ function template_html_above()
 	var t2 = document.createElement('SCRIPT');
 	t2.type = "text/javascript";
 	t2.async = true;
-	t2.src = '{$settings['theme_url']}/scripts/footer.js{$context['jsver']}';
+	t2.src = '{$settings['default_theme_url']}/scripts/footer.js{$context['jsver']}';
 	anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
 	</script>
@@ -158,12 +158,7 @@ function template_body_above()
 	<div id="header">
 	<div id="upper_section" class="middletext">
 		<div class="floatleft" style="overflow:hidden;max-height:87px;"><img src="',$settings['images_url'],'/logo.png" alt="logo" /></div>
-	<div class="clear"></div>';
-	echo '
-			<div class="news normaltext">';
-	// Show a random news item? (or you could pick one from news_lines...)
-	echo '
-			</div>
+	<div class="clear"></div>
 	</div>
 		<div class="notibar">
 			<div class="notibar right">

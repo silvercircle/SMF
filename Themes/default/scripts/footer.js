@@ -1323,9 +1323,9 @@ jQuery(document).ready(function() {
 	// bbcode img tag and attachment handlers
 	$('a.attach_thumb').prettyPhoto({social_tools:'', deeplinking:false, animation_speed:0});
 	// passive share button (for sharing a topic)
-	$('.share_button').click(function() {
+	$('.share_this').click(function() {
 		$('#share_bar').hide();
-		share_popup($(this).attr('href'), 700, 400);
+		share_popup($(this).attr('data-target'), 700, 400);
 		return(false);
 	});
 	$('.givelike').click(function() {
@@ -1446,10 +1446,10 @@ function sharePost(el)
 	var permalink = el.parent().find('a:first');
 	var subject = el.parent().parent().find('h5:first').html().trim();
 	$('#share_bar').insertBefore(el.parent());
-	$('#share_bar a.share_button').each(function() {
+	$('#share_bar span.share_this').each(function() {
 		var href = $(this).attr('data-href').replace(/%%uri%%/g, permalink.attr('href'));
 		var new_href = href.replace(/%%txt%%/g, encodeURIComponent(subject));
-		$(this).attr('href', new_href);
+		$(this).attr('data-target', new_href);
 	});
 	$('#share_bar').fadeIn();
 	

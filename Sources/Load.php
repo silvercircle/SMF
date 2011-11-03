@@ -451,6 +451,7 @@ function loadUserSettings()
 		'notify_count' => isset($user_settings['notify_count']) ? $user_settings['notify_count'] : 0,
 		'permissions' => array(),
 		'act_optout' => isset($user_settings['act_optout']) ? $user_settings['act_optout'] : '',
+		'notify_optout' => isset($user_settings['notify_optout']) ? $user_settings['notify_optout'] : ''
 	);
 	
 	$user_info['groups'] = array_unique($user_info['groups']);

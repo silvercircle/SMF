@@ -264,4 +264,11 @@ function template_notifications()
 	</div>';
 	template_notifications_scripts();
 }
+
+function template_showactivity_settings()
+{
+	global $context, $txt;
+	
+	
+}
 ?>
