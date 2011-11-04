@@ -160,6 +160,9 @@ if (isset($_GET['openid_restore_post']) && !empty($_SESSION['openid']['saved_dat
 	unset($_SESSION['openid']['saved_data'][$_GET['openid_restore_post']]);
 }
 
+//HookAPI::removeAll('LegacyBBC');
+//HookAPI::addHook('integrate_postbit', 'LegacyBBC', 'main.php', 'foo');
+
 // What function shall we execute? (done like this for memory's sake.)
 call_user_func(smf_main());
 

@@ -96,7 +96,10 @@ function RecentPosts()
 	//$context['hide_all_hidden'] = true;
     loadTemplate('Recent');
 	loadTemplate('PostbitExtra');
-	$context['page_title'] = $txt['recent_posts'];
+	$context['messages_per_page'] = $modSettings['defaultMaxMessages'];
+	$context['page_number'] = isset($_REQUEST['start']) ? $_REQUEST['start'] / $context['messages_per_page'] : 0;
+	$context['page_title'] = $txt['recent_posts'] . ((int) $context['page_number'] > 0 ? ' - ' . $txt['page'] . ' ' . ($context['page_number'] + 1) : '');
+
 
 	$boards_hidden_1  = boardsAllowedTo('see_hidden1');
 	$boards_hidden_2  = boardsAllowedTo('see_hidden2');
@@ -169,7 +172,7 @@ function RecentPosts()
 			$query_parameters['max_id_msg'] = max(0, $modSettings['maxMsgID'] - 400 - $_REQUEST['start'] * 7);
 		}
 
-		$context['page_index'] = constructPageIndex($scripturl . '?action=recent;c=' . implode(',', $_REQUEST['c']), $_REQUEST['start'], min(100, $total_cat_posts), 10, false);
+		$context['page_index'] = constructPageIndex($scripturl . '?action=recent;c=' . implode(',', $_REQUEST['c']), $_REQUEST['start'], min(100, $total_cat_posts), $context['messages_per_page'], false);
 	}
 	elseif (!empty($_REQUEST['boards']))
 	{
@@ -211,7 +214,7 @@ function RecentPosts()
 			$query_parameters['max_id_msg'] = max(0, $modSettings['maxMsgID'] - 500 - $_REQUEST['start'] * 9);
 		}
 
-		$context['page_index'] = constructPageIndex($scripturl . '?action=recent;boards=' . implode(',', $_REQUEST['boards']), $_REQUEST['start'], min(100, $total_posts), 10, false);
+		$context['page_index'] = constructPageIndex($scripturl . '?action=recent;boards=' . implode(',', $_REQUEST['boards']), $_REQUEST['start'], min(100, $total_posts), $context['messages_per_page'], false);
 	}
 	elseif (!empty($board))
 	{
@@ -238,7 +241,7 @@ function RecentPosts()
 			$query_parameters['max_id_msg'] = max(0, $modSettings['maxMsgID'] - 600 - $_REQUEST['start'] * 10);
 		}
 
-		$context['page_index'] = constructPageIndex($scripturl . '?action=recent;board=' . $board . '.%1$d', $_REQUEST['start'], min(100, $total_posts), 10, true);
+		$context['page_index'] = constructPageIndex($scripturl . '?action=recent;board=' . $board . '.%1$d', $_REQUEST['start'], min(100, $total_posts), $context['messages_per_page'], true);
 	}
 	else
 	{
@@ -249,7 +252,7 @@ function RecentPosts()
 		$query_parameters['recycle_board'] = $modSettings['recycle_board'];
 
 		// !!! This isn't accurate because we ignore the recycle bin.
-		$context['page_index'] = constructPageIndex($scripturl . '?action=recent', $_REQUEST['start'], min(100, $modSettings['totalMessages']), 10, false);
+		$context['page_index'] = constructPageIndex($scripturl . '?action=recent', $_REQUEST['start'], min(100, $modSettings['totalMessages']), $context['messages_per_page'], false);
 	}
 
 	$context['linktree'][] = array(
@@ -277,11 +280,11 @@ function RecentPosts()
 				array_merge($query_parameters, array(
 					'is_approved' => 1,
 					'offset' => $_REQUEST['start'],
-					'limit' => 10,
+					'limit' => $context['messages_per_page'],
 				))
 			);
 			// If we don't have 10 results, try again with an unoptimized version covering all rows, and cache the result.
-			if (isset($query_parameters['max_id_msg']) && mysql_num_rows($request) < 10)
+			if (isset($query_parameters['max_id_msg']) && mysql_num_rows($request) < $context['messages_per_page'])
 			{
 				mysql_free_result($request);
 				$query_this_board = str_replace('AND m.id_msg >= {int:max_id_msg}', '', $query_this_board);
@@ -362,6 +365,7 @@ function RecentPosts()
 		$context['posts'][$row['id_msg']] = array(
 			'id' => $row['id_msg'],
 			'counter' => $counter++,
+			'sequence_number' => true,
 			'icon' => $row['icon'],
 			'icon_url' => getPostIcon($row['icon']),
 			'category' => array(
@@ -395,7 +399,7 @@ function RecentPosts()
 				'href' => $topichref,
 				'link' => '<a href="' . $topichref . '" rel="nofollow">' . $row['first_subject'] . '</a>',
 			),
-			'permahref' => $scripturl . '?msg=' . $row['id_msg'],
+			'permahref' => URL::parse('?msg=' . $row['id_msg']),
 			'permalink' => $txt['view_in_thread'],
 			'id_member' => $row['id_member'],
 			'body' => $row['body'],

@@ -93,6 +93,7 @@ function Display()
 	}
 	// How much are we sticking on each page?
 	$context['messages_per_page'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) && !WIRELESS ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
+	$context['page_number'] = isset($_REQUEST['start']) ? $_REQUEST['start'] / $context['messages_per_page'] : 0;
 
 	// Let's do some work on what to search index.
 
@@ -413,7 +414,7 @@ function Display()
 
 	// Censor the title...
 	censorText($topicinfo['subject']);
-	$context['page_title'] = $topicinfo['subject'];
+	$context['page_title'] = $topicinfo['subject'] . ((int) $context['page_number'] > 0 ? ' - ' . $txt['page'] . ' ' . ($context['page_number'] + 1) : '');
 
 	// Is this topic sticky, or can it even be?
 	$topicinfo['is_sticky'] = empty($modSettings['enableStickyTopics']) ? '0' : $topicinfo['is_sticky'];

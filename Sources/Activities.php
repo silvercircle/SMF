@@ -344,14 +344,18 @@ function showActivitiesProfile($memID)
  */
 function showActivitiesProfileSettings($memID)
 {
-	global $modSettings, $context, $user_info, $txt, $user_profile;
+	global $modSettings, $context, $user_info, $txt, $user_profile, $scripturl;
 	
 	loadLanguage('Activities-Profile');
 	if(empty($modSettings['astream_active']) || ($user_info['id'] != $memID && !$user_info['is_admin']))
 		fatal_lang_error ('no_access');
-	
-	$context['sub_template'] = 'showactivity_settings';
 
+	if(isset($_GET['save'])) {
+		redirectexit($scripturl . '?action=profile;area=activities;sa=settings;u='. $memID);
+	}
+	$context['sub_template'] = 'showactivity_settings';
+	$context['submiturl'] = $scripturl . '?action=profile;area=activities;sa=settings;save;u=' . $memID;
+	
 	$context['page_title'] = $txt['showActivities'] . ' - ' . $user_profile[$memID]['real_name'];
 
 	$context[$context['profile_menu_name']]['tab_data'] = array(

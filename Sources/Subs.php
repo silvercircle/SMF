@@ -224,7 +224,7 @@ if (!defined('SMF'))
 // Update some basic statistics...
 function updateStats($type, $parameter1 = null, $parameter2 = null)
 {
-	global $sourcedir, $modSettings, $smcFunc;
+	global $modSettings;
 
 	switch ($type)
 	{
@@ -429,7 +429,7 @@ function updateStats($type, $parameter1 = null, $parameter2 = null)
 // Assumes the data has been htmlspecialchar'd.
 function updateMemberData($members, $data)
 {
-	global $modSettings, $user_info, $smcFunc;
+	global $modSettings, $user_info;
 
 	$parameters = array();
 	if (is_array($members))
@@ -565,7 +565,7 @@ function updateMemberData($members, $data)
 // Updates the settings table as well as $modSettings... only does one at a time if $update is true.
 function updateSettings($changeArray, $update = false, $debug = false)
 {
-	global $modSettings, $smcFunc;
+	global $modSettings;
 
 	if (empty($changeArray) || !is_array($changeArray))
 		return;
@@ -726,6 +726,7 @@ function comma_format($number, $override_decimal_count = false)
 	// Cache these values...
 	if ($decimal_separator === null)
 	{
+		$matches = array();
 		// Not set for whatever reason?
 		if (empty($txt['number_format']) || preg_match('~^1([^\d]*)?234([^\d]*)(0*?)$~', $txt['number_format'], $matches) != 1)
 			return $number;
@@ -743,8 +744,8 @@ function comma_format($number, $override_decimal_count = false)
 // Format a time to make it look purdy.
 function timeformat($log_time, $show_today = false, $offset_type = false)
 {
-	global $context, $user_info, $txt, $modSettings, $smcFunc;
-	static $non_twelve_hour;
+	global $context, $user_info, $txt, $modSettings;
+	static $non_twelve_hour = null;
 
 	// Offset the time.
 	if (!$offset_type)
@@ -759,16 +760,11 @@ function timeformat($log_time, $show_today = false, $offset_type = false)
 	if ($log_time < 0)
 		$log_time = 0;
 
-	// Today and Yesterday?
-	// Get the current time.
-	$nowtime = forum_time();
-	$now = @getdate($nowtime);
-
 	$str = $user_info['time_format'];
 
 	if (setlocale(LC_TIME, $txt['lang_locale']))
 	{
-		if (!isset($non_twelve_hour))
+		if (is_null($non_twelve_hour))
 			$non_twelve_hour = trim(strftime('%p')) === '';
 		if ($non_twelve_hour && strpos($str, '%p') !== false)
 			$str = str_replace('%p', (strftime('%H', $time) < 12 ? $txt['time_am'] : $txt['time_pm']), $str);
@@ -800,8 +796,8 @@ function timeformat($log_time, $show_today = false, $offset_type = false)
 // be dynamic (for example: local time display in the user's profile)
 function timeformat_static($log_time, $show_today = true, $offset_type = false)
 {
-	global $context, $user_info, $txt, $modSettings, $smcFunc;
-	static $non_twelve_hour;
+	global $context, $user_info, $txt, $modSettings;
+	static $non_twelve_hour = null;
 
 	// Offset the time.
 	if (!$offset_type)
@@ -848,7 +844,7 @@ function timeformat_static($log_time, $show_today = true, $offset_type = false)
 
 	if (setlocale(LC_TIME, $txt['lang_locale']))
 	{
-		if (!isset($non_twelve_hour))
+		if (is_null($non_twelve_hour))
 			$non_twelve_hour = trim(strftime('%p')) === '';
 		if ($non_twelve_hour && strpos($str, '%p') !== false)
 			$str = str_replace('%p', (strftime('%H', $time) < 12 ? $txt['time_am'] : $txt['time_pm']), $str);
@@ -938,7 +934,7 @@ function permute($array)
 // Parse bulletin board code in a string, as well as smileys optionally.
 function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = array())
 {
-	global $txt, $scripturl, $context, $modSettings, $user_info, $smcFunc;
+	global $txt, $scripturl, $context, $modSettings, $user_info;
 	static $bbc_codes = array(), $itemcodes = array(), $no_autolink_tags = array();
 	static $disabled;
 
@@ -2425,7 +2421,7 @@ function parse_bbc_stage2(&$message, $is_for_editor = false)
 // Parse smileys in the passed message.
 function parsesmileys(&$message)
 {
-	global $modSettings, $txt, $user_info, $context, $smcFunc;
+	global $modSettings, $txt, $user_info, $context;
 	static $smileyPregSearch = array(), $smileyPregReplacements = array();
 
 	// No smiley set at all?!
@@ -2496,8 +2492,6 @@ function parsesmileys(&$message)
 // Highlight any code...
 function highlight_php_code($code)
 {
-	global $context;
-
 	// Remove special characters.
 	$code = un_htmlspecialchars(strtr($code, array('<br />' => "\n", "\t" => 'SMF_TAB();', '&#91;' => '[')));
 
@@ -2516,7 +2510,7 @@ function highlight_php_code($code)
 // Put this user in the online log.
 function writeLog($force = false)
 {
-	global $user_info, $user_settings, $context, $modSettings, $settings, $topic, $board, $smcFunc, $sourcedir;
+	global $user_info, $user_settings, $context, $modSettings, $settings, $topic, $board, $sourcedir;
 
 	// If we are showing who is viewing a topic, let's see if we are, and force an update if so - to make it accurate.
 	if (!empty($settings['display_who_viewing']) && ($topic || $board))
@@ -2711,7 +2705,7 @@ function redirectexit($setLocation = '', $refresh = false)
 // Ends execution.  Takes care of template loading and remembering the previous URL.
 function obExit($header = null, $do_footer = null, $from_index = false, $from_fatal_error = false)
 {
-	global $context, $settings, $modSettings, $txt, $smcFunc;
+	global $context, $modSettings;
 	static $header_done = false, $footer_done = false, $level = 0, $has_fatal_error = false;
 
 	// Attempt to prevent a recursive loop.
@@ -2737,7 +2731,7 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 	{
 		// Was the page title set last minute? Also update the HTML safe one.
 		if (!empty($context['page_title']) && empty($context['page_title_html_safe']))
-			$context['page_title_html_safe'] = commonAPI::htmlspecialchars(un_htmlspecialchars($context['page_title']));
+			$context['page_title_html_safe'] = $context['forum_name_html_safe'] . ' - ' . commonAPI::htmlspecialchars(un_htmlspecialchars($context['page_title']));
 
 		// Start up the session URL fixer.
 		ob_start('ob_sessrewrite');
@@ -2796,7 +2790,7 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 // Usage: logAction('remove', array('starter' => $id_member_started));
 function logAction($action, $extra = array(), $log_type = 'moderate')
 {
-	global $modSettings, $user_info, $smcFunc, $sourcedir;
+	global $modSettings, $user_info, $sourcedir;
 
 	$log_types = array(
 		'moderate' => 1,
@@ -2898,7 +2892,7 @@ function logAction($action, $extra = array(), $log_type = 'moderate')
 // Track Statistics.
 function trackStats($stats = array())
 {
-	global $modSettings, $smcFunc;
+	global $modSettings;
 	static $cache_stats = array();
 
 	if (empty($modSettings['trackStats']))
@@ -2951,7 +2945,7 @@ function trackStats($stats = array())
 // Make sure the user isn't posting over and over again.
 function spamProtection($error_type)
 {
-	global $modSettings, $txt, $user_info, $smcFunc;
+	global $modSettings, $user_info;
 
 	// Certain types take less/more time.
 	$timeOverrides = array(
@@ -3100,8 +3094,7 @@ function determineTopicClass(&$topic_context)
 // Sets up the basic theme context stuff.
 function setupThemeContext($forceload = false)
 {
-	global $modSettings, $user_info, $scripturl, $context, $settings, $options, $txt, $maintenance;
-	global $user_settings, $smcFunc;
+	global $modSettings, $user_info, $scripturl, $context, $settings, $options, $txt, $maintenance, $user_settings;
 	static $loaded = false;
 
 	// Under SSI this function can be called more then once.  That can cause some problems.
@@ -3243,8 +3236,9 @@ function setupThemeContext($forceload = false)
 		$context['page_title'] = '';
 
 	// Set some specific vars.
-	$context['page_title_html_safe'] = commonAPI::htmlspecialchars(un_htmlspecialchars($context['page_title']));
+	$context['page_title_html_safe'] = $context['forum_name_html_safe'] . ' - ' . commonAPI::htmlspecialchars(un_htmlspecialchars($context['page_title']));
 	$context['meta_keywords'] = !empty($modSettings['meta_keywords']) ? commonAPI::htmlspecialchars($modSettings['meta_keywords']) : '';
+	$context['page_description_html_safe'] = isset($context['meta_page_description']) ? commonAPI::htmlspecialchars(un_htmlspecialchars($context['meta_page_description'])) : $context['page_title_html_safe'];
 }
 
 // This is the only template included in the sources...
@@ -3355,7 +3349,7 @@ function template_header()
 // Show the copyright...
 function theme_copyright($get_it = false)
 {
-	global $forum_copyright, $context, $boardurl, $forum_version, $txt, $modSettings;
+	global $forum_copyright, $forum_version;
 
 	// Don't display copyright for things like SSI.
 	if (!isset($forum_version))
@@ -3510,7 +3504,7 @@ function db_debug_junk()
 // Get an attachment's encrypted filename.  If $new is true, won't check for file existence.
 function getAttachmentFilename($filename, $attachment_id, $dir = null, $new = false, $file_hash = '')
 {
-	global $modSettings, $smcFunc;
+	global $modSettings;
 
 	// Just make up a nice hash...
 	if ($new)
@@ -3747,7 +3741,6 @@ function clean_cache($type = '')
 function loadClassFile($filename)
 {
 	global $sourcedir;
-	static $files_included = array();
 
 	if (!file_exists($sourcedir . '/' . $filename))
 		fatal_lang_error('error_bad_file', 'general', array($sourcedir . '/' . $filename));
@@ -4140,7 +4133,7 @@ function registerFooterScriptFragment($key, $script)
  */
 function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 {
-	global $context, $user_info, $smcFunc;
+	global $context, $user_info;
 
 	$cached_news = array();
 	$context['news_items'] = array();

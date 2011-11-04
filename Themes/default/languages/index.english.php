@@ -40,7 +40,7 @@ $txt['moderate'] = 'Moderate';
 $txt['save'] = 'Save';
 
 $txt['modify'] = 'Modify';
-$txt['forum_index'] = '%1$s - Index';
+$txt['forum_index'] = 'Index';
 $txt['members'] = 'Members';
 $txt['board_name'] = 'Board name';
 $txt['posts'] = 'Posts';
@@ -115,6 +115,7 @@ $txt['regards_team'] = 'Regards,' . "\n" . 'The ' . $context['forum_name'] . ' T
 $txt['notify_replies'] = 'Notify of replies';
 $txt['move_topic'] = 'Move Topic';
 $txt['move_to'] = 'Move to';
+$txt['page'] = 'Page';
 $txt['pages'] = 'Pages';
 $txt['users_active'] = 'Users active in past %1$d minutes';
 $txt['personal_messages'] = 'Personal Messages';

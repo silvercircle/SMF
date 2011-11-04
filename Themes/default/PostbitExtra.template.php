@@ -53,6 +53,9 @@ function template_postbit_compact(&$message)
 		echo '
 		<div class="blue_container cleantop cleanvert">
 		<div class="content inset_shadow smalltext" style="line-height:19px;">';
+		if(isset($message['sequence_number']))
+			echo '
+		<div class="floatright"><strong style="font-size:1.5em;">#',$message['counter'],'</strong></div>';
 		if (!empty($settings['show_user_images']) && empty($options['show_no_avatars'])) {
 			if(!empty($message['member']['avatar']['image']))
 				echo '

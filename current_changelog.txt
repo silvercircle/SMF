@@ -1,9 +1,10 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]hunted and killed a few remaining smcFunc[] references[/li]
-[li]new.gif is dead, long live new.png :)[/li]
-[li]template hooks for header, footer and boardindex added[/li]
-[li]Opt-Out settings for the activity stream and notifications got an user interface. It is now possible to select which activities should be recorded and which types of notifications a member wants to receive.[/li]
-[li]
+[li]HookAPI::addHook() - check the file and function and only add the hook when both are ok, otherwise log an error.[/li]
+[li]Avoid duplicated page title(s) by adding the page number to topic and message index pages.[/li]
+[li]Set the meta description tag from a board's description (if available, otherwise use the page title).[/li]
+[li]Use the forum name in the page title.[/li]
+[li]And more $smcFunc cleanup...[/li]
+[li]Respect messages per page setting in "show recent content"[/li]
 [/list]

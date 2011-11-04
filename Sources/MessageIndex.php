@@ -207,8 +207,9 @@ function MessageIndex()
 		$context['is_marked_notify'] = false;
 
 	// 'Print' the header and board info.
-	$context['page_title'] = strip_tags($board_info['name']);
-
+	$context['page_number'] = isset($_REQUEST['start']) ? $_REQUEST['start'] / $context['topics_per_page'] : 0;
+	$context['page_title'] = strip_tags($board_info['name'] . ((int)$context['page_number'] > 0 ? ' - ' . $txt['page'] . ' ' . ($context['page_number'] + 1) : ''));
+	$context['meta_page_description'] = (!empty($board_info['description']) ? $board_info['description'] : $context['page_title']);
 	// Set the variables up for the template.
 	$context['can_mark_notify'] = allowedTo('mark_notify') && !$user_info['is_guest'];
 	$context['can_post_new'] = allowedTo('post_new') || ($modSettings['postmod_active'] && allowedTo('post_unapproved_topics'));

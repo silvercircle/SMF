@@ -80,7 +80,8 @@ class commonAPI {
 	public static function truncate($string, $length)
 	{
 		$string = self::ent_check($string);
-
+		$matches = array();
+		
 		preg_match('~^(' . self::$ent_list . '|.){' . self::strlen(substr($string, 0, $length)) . '}~u', $string, $matches);
 		$string = $matches[0];
 		while (strlen($string) > $length)
@@ -98,7 +99,7 @@ class commonAPI {
 		return preg_replace('~^(?:[ \t\n\r\x0B\x00' . self::$space_chars . ']|&nbsp;)+|(?:[ \t\n\r\x0B\x00' . self::$space_chars . ']|&nbsp;)+$~u', '', self::ent_check($string));
 	}
 
-	public static function htmlspecialchars($string, $quote_style = ENT_COMPAT, $charset = 'UTF-8')
+	public static function htmlspecialchars($string, $quote_style = ENT_COMPAT)
 	{
 		return preg_replace(strtr('~(&#(\d{1,7}|x[0-9a-fA-F]{1,6});)~e', array('&' => '&amp;')), self::entity_fix($string), htmlspecialchars($string, $quote_style, 'UTF-8'));
 	}
@@ -106,7 +107,7 @@ class commonAPI {
 	public static function strpos($haystack, $needle, $offset = 0)
 	{
 		$haystack_arr = preg_split('~(&#\d{1,7}' . ';|&quot;|&amp;|&lt;|&gt;|&nbsp;|.)~u', self::ent_check($haystack), -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
-		$haystack_size = count($haystack_arr);
+		//$haystack_size = count($haystack_arr);
 		if (strlen($needle) === 1)
 		{
 			$result = array_search($needle, array_slice($haystack_arr, $offset));
@@ -138,6 +139,7 @@ class commonAPI {
  */
 class HookAPI {
 	private static $hooks = array();
+	private static $addonsdir;
 
 	/**
 	 * @param $the_hooks	string - serialized array of hooks
@@ -147,7 +149,10 @@ class HookAPI {
 	 */
 	public static function setHooks(&$the_hooks)
 	{
+		global $boarddir;
+		
 		self::$hooks = @unserialize($the_hooks);
+		self::$addonsdir = $boarddir . '/addons/';
 	}
 
 	public static function addHook($hook, $product, $file, $function)
@@ -156,9 +161,22 @@ class HookAPI {
 
 		if(isset(self::$hooks[$hook]) && is_array(self::$hooks[$hook])) {
 			foreach(self::$hooks[$hook] as $current_hook) {
-				if($current_hook == $ref)
+				if($current_hook == $ref) {
+					log_error(sprintf('HookAPI: duplicate hook installation detected in hook %s (product: %s, function: %s, file: %s', $hook, $ref['p'], $ref['c'], $ref['f']));
 					return;
+				}
 			}
+		}
+		// check the hook for validity
+		$file = self::$addonsdir . $ref['p'] . '/' . $ref['f'];
+		if(!file_exists($file)) {
+			log_error(sprintf('HookAPI: missing hook file while installing into hook %s (product: %s, function: %s, file: %s', $hook, $ref['p'], $ref['c'], $ref['f']));
+			return;
+		}
+		@include_once($file);
+		if(!is_callable($ref['c'])) {
+			log_error(sprintf('HookAPI: missing function while installing into hook %s (product: %s, function: %s, file: %s', $hook, $ref['p'], $ref['c'], $ref['f']));
+			return;
 		}
 		self::$hooks[$hook][] = array('p' => $product, 'f' => $file, 'c' => $function);
 		$change_array = array('integration_hooks' => serialize(self::$hooks));
@@ -168,13 +186,11 @@ class HookAPI {
 	// Process functions of an integration hook.
 	public static function callHook($hook, $parameters = array())
 	{
-		global $boarddir;
-
 		$results = array();
 
 		if(isset(self::$hooks[$hook]) && is_array(self::$hooks[$hook])) {
 			foreach(self::$hooks[$hook] as $current_hook) {
-				@include_once($boarddir . '/addons/' . $current_hook['p'] . '/' . $current_hook['f']);
+				@include_once(self::$addonsdir . $current_hook['p'] . '/' . $current_hook['f']);
 				$function = trim($current_hook['c']);
 				if(is_callable($function))
 					$results[$function] = call_user_func_array($function, $parameters);
@@ -183,13 +199,15 @@ class HookAPI {
 		return $results;
 	}
 
+	/*
+	 * special case - hooks that work on the output buffer - they
+	 * must be called via ob_start() and therefore need their own method.
+	 */
 	public static function integrateOB()
 	{
-		global $boarddir;
-
 		if(isset(self::$hooks['integrate_buffer'])) {
 			foreach(self::$hooks['integrate_buffer'] as $current_hook) {
-				@include_once($boarddir . '/addons/' . $current_hook['p'] . '/' . $current_hook['f']);
+				@include_once(self::$addonsdir . $current_hook['p'] . '/' . $current_hook['f']);
 				$function = trim($current_hook['c']);
 				if(is_callable($function))
 					ob_start($function);

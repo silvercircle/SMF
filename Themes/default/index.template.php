@@ -89,7 +89,7 @@ function template_html_above()
 	// ]]>
 	</script>
 	<meta http-equiv="Content-Type" content="text/html; charset={$context['character_set']}" />
-	<meta name="description" content="{$context['page_title_html_safe']}" />
+	<meta name="description" content="{$context['page_description_html_safe']}" />
 	{$h(!empty($context['meta_keywords']), '<meta name="keywords" content="' . $context['meta_keywords'] . '" />', '')}
 	<title>{$context['page_title_html_safe']}</title>
 EOT;
