@@ -185,7 +185,6 @@ function template_main()
 		<div class="padding">
 			<input type="checkbox" name="all" id="check_all" value=""', $context['boards_check_all'] ? ' checked="checked"' : '', ' onclick="invertAll(this, this.form, \'brd\');" class="input_check floatleft" />
 			<label for="check_all" class="floatleft">', $txt['check_all'], '</label>
-			<input type="submit" name="submit" value="', $txt['search'], '" class="button_submit floatright" />
 		</div>
 		<br class="clear" />
 		</div>
@@ -196,7 +195,10 @@ function template_main()
 	}
 
 	echo '
-	</div></form>
+	<input style="margin-top:5px;" type="submit" name="submit" value="', $txt['search'], '" class="button_submit floatright" />
+	<div class="clear"></div>
+	</div>
+	</form>
 
 	<script type="text/javascript"><!-- // --><![CDATA[
 		function selectBoards(ids)

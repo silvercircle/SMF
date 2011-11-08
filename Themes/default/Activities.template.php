@@ -285,10 +285,12 @@ function template_showactivity_settings()
 	<br>
 	<div class="blue_container">
 	 <div class="content">
+	 <ol class="commonlist">
 EOT;
 	 foreach($context['activity_types'] as $t) {
 		 if(!empty($t['longdesc_act']))
 			 echo '
+	  <li>
 	  <dl class="settings">
 	  <dt style="width:90%;">
 	  ',$t['longdesc_act'],'
@@ -296,9 +298,11 @@ EOT;
 	  <dd style="width:10%;">
 	  <input type="checkbox" class="input_check" name="act_check_', trim ($t['id']), '" id="act_check_',trim($t['id']),'" ',($t['act_optout'] ? '' : 'checked="checked"'), ' />
 	  </dd>
-	  </dl>';
+	  </dl>
+	  </li>';
 	 }
 	echo <<< EOT
+	 </ol>
 	 </div>
 	</div>
 	<br>
@@ -313,11 +317,13 @@ EOT;
 	<br>
 	<div class="blue_container">
 	 <div class="content">
+	 <ol class="commonlist">
 EOT;
 	 reset($context['activity_types']);
 	 foreach ($context['activity_types'] as $t) {
 		if (!empty($t['longdesc_not']))
 			echo '
+	  <li>
 	  <dl class="settings">
 	  <dt style="width:90%;">
 	  ', $t['longdesc_not'], '
@@ -325,9 +331,11 @@ EOT;
 	  <dd style="width:10%;">
 	  <input type="checkbox" class="input_check" name="not_check_', trim ($t['id']), '" id="not_check_', trim($t['id']), '" ', ($t['notify_optout'] ? '' : 'checked="checked"'), ' />
 	  </dd>
-	  </dl>';
+	  </dl>
+	  </li>';
 	}
 	echo '
+	 </ol>
 	 </div>
 	</div>
 	<br>

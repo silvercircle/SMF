@@ -73,7 +73,7 @@ function _vsprintf($format, &$data)
  * @param int $priv_level   privacy level for is_private.
  * @param int $dont_notify  do not send the owner a notification for the activity.
  *
- * @return unique id of the inserted activity type, 0 if something went wrong.
+ * @return unique id (positive integer) of the inserted activity type, 0 if something went wrong.
  */
 function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $id_content = 0, $id_owner = 0, $priv_level = 0, $dont_notify = false)
 {

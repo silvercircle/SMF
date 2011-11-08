@@ -364,8 +364,15 @@ function showActivitiesProfileSettings($memID)
 	
 	$result = smf_db_query('SELECT * FROM {db_prefix}activity_types ORDER BY id_type ASC');
 	
-	$my_act_optout = empty($user_info['act_optout']) ? array(0) : explode(',', $user_info['act_optout']);
-	$my_notify_optout = empty($user_info['notify_optout']) ? array(0) : explode(',', $user_info['notify_optout']);
+	if($user_info['id'] == $memID) {
+		$my_act_optout = empty($user_info['act_optout']) ? array(0) : explode(',', $user_info['act_optout']);
+		$my_notify_optout = empty($user_info['notify_optout']) ? array(0) : explode(',', $user_info['notify_optout']);
+	}
+	else {
+		loadMemberData($memID, false, 'minimal');
+		$my_act_optout = empty($user_profile[$memID]['act_optout']) ? array(0) : explode(',', $user_profile[$memID]['act_optout']);
+		$my_notify_optout = empty($user_profile[$memID]['notify_optout']) ? array(0) : explode(',', $user_profile[$memID]['notify_optout']);
+	}
 	$context['activity_types'] = array();
 	
 	while($row = mysql_fetch_assoc($result)) {
@@ -383,17 +390,22 @@ function showActivitiesProfileSettings($memID)
 	if (isset($_GET['save'])) {
 		$new_not_optout = array();
 		$new_act_optout = array();
+		$update_array = array();
 		
 		foreach($context['activity_types'] as $t) {
-			if(!empty($t['longdesc_act']) && (!isset($_REQUEST['act_check_' . trim($t['id'])]) || empty($_REQUEST['act_check_' . trim($t['id'])])))
-				$new_act_optout[] = $t['id'];
-			if(!empty($t['longdesc_not']) && (!isset($_REQUEST['not_check_' . trim($t['id'])]) || empty($_REQUEST['not_check_' . trim($t['id'])])))
-				$new_not_optout[] = $t['id'];
+			$_id = trim($t['id']);
+			if(!empty($t['longdesc_act']) && (!isset($_REQUEST['act_check_' . $_id]) || empty($_REQUEST['act_check_' . $_id])))
+				$new_act_optout[] = $_id;
+			if(!empty($t['longdesc_not']) && (!isset($_REQUEST['not_check_' . $_id]) || empty($_REQUEST['not_check_' . $_id])))
+				$new_not_optout[] = $_id;
 		}
-		$act_optout = implode(',', array_unique($new_act_optout));
-		$not_optout = implode(',', array_unique($new_not_optout));
+		if(count(array_unique($new_act_optout)) > 0)
+			$update_array['act_optout'] = implode(',', array_unique($new_act_optout));
+		if(count(array_unique($new_not_optout)) > 0)
+			$update_array['notify_optout'] = implode(',', array_unique($new_not_optout));
 
-		updateMemberData($memID, array('act_optout' => $act_optout, 'notify_optout' => $not_optout));
+		if(count($update_array))
+			updateMemberData($memID, $update_array);
 		redirectexit($scripturl . '?action=profile;area=activities;sa=settings;u=' . $memID);
 	}
 }

@@ -1,7 +1,8 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]aStreamAdd() now respects opt-out settings for activities[/li]
-[li]finished UI for customizing activities and notifications in a user's profile.[/li]
-[li]style change: important buttons should stick out to grab attention and are now using a higher contrast background.[/li]
+[li]Styling changes for the tabstrip menu (profile and admin areas)[/li]
+[li]More style updates for form elements[/li]
+[li]administrators can now modify activity and notifications settings for other members (just like they can modify any profile).[/li]
+
 [/list]

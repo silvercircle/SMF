@@ -965,7 +965,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 	{
 		$select_columns = '
 			mem.id_member, mem.member_name, mem.real_name, mem.email_address, mem.hide_email, mem.date_registered,
-			mem.posts, mem.last_login, mem.member_ip, mem.member_ip2, mem.lngfile, mem.id_group, mem.notify_optout';
+			mem.posts, mem.last_login, mem.member_ip, mem.member_ip2, mem.lngfile, mem.id_group, mem.act_optout, mem.notify_optout';
 		$select_tables = '';
 	}
 	else

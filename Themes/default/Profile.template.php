@@ -365,6 +365,7 @@ function template_showPosts()
 	global $context, $settings, $options, $scripturl, $modSettings, $txt;
 
 	echo '
+		<br>
 		<h1 class="bigheader secondary"><strong>
 			', (!isset($context['attachments']) && empty($context['is_topics']) ? $txt['showMessages'] : (!empty($context['is_topics']) ? $txt['showTopics'] : $txt['showAttachments'])),' ',$txt['by'], ' ',$context['member']['name'], '
 		</strong></h1>

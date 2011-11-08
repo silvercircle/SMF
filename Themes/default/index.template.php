@@ -150,7 +150,7 @@ function template_body_above()
 		$astream_link = '<a data-board="'.$context['current_board'].'" href="'.$scripturl . '?action=astream;sa=get;b=' . $context['current_board']. '">Recent activity</a>';
 	}
 	echo '
-	<div id="jsconfirm" style="width:450px;" class="jqmWindow"><div class="glass jsconfirm title"></div><div class="blue_container mediummargin"><div class="jsconfirm content"></div><div class="floatright mediummargin"><input type="submit" id="c_yes" value="Yes" class="button_submit" /><input type="submit" id="c_no" value="No" class="button_submit" /><input type="submit" id="c_ok" value="Ok" class="button_submit" /></div></div></div>
+	<div id="jsconfirm" style="width:450px;" class="jqmWindow"><div class="glass jsconfirm title"></div><div class="blue_container mediummargin"><div class="jsconfirm content"></div><div class="floatright mediummargin"><input type="submit" id="c_yes" value="Yes" class="button_submit" /><input type="reset" id="c_no" value="No" class="button_reset" /><input type="submit" id="c_ok" value="Ok" class="button_submit" /></div></div></div>
 	<div id="ajaxbusy" style="display:none;"><img src="',$settings['images_url'],'/ajax-loader.gif" alt="loader" /></div>
 	<div id="mcard" style="display:none;"><div onclick="mcardClose();" id="mcard_close">X</div><div id="mcard_inner"></div></div>
 	<div id="wrap" style="max-width:',empty($settings['forum_width']) ? '3000px' : $settings['forum_width'],';">

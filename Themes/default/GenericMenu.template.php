@@ -280,8 +280,8 @@ function template_generic_menu_tabs(&$menu_context)
 			if (!empty($tab['is_selected']))
 			{
 				echo '
-			<li>
-				<a class="active firstlevel" href="', isset($tab['url']) ? $tab['url'] : $menu_context['base_url'] . ';area=' . $menu_context['current_area'] . ';sa=' . $sa, $menu_context['extra_parameters'], isset($tab['add_params']) ? $tab['add_params'] : '', '"><span class="firstlevel">', $tab['label'], '</span></a>
+			<li class="active">
+				<a class="firstlevel" href="', isset($tab['url']) ? $tab['url'] : $menu_context['base_url'] . ';area=' . $menu_context['current_area'] . ';sa=' . $sa, $menu_context['extra_parameters'], isset($tab['add_params']) ? $tab['add_params'] : '', '"><span class="firstlevel">', $tab['label'], '</span></a>
 			</li>';
 			}
 			else
@@ -294,7 +294,8 @@ function template_generic_menu_tabs(&$menu_context)
 		// the end of tabs
 		echo '
 		</ul>
-	</div><br class="clear" />';
+		<div class="clear"></div>
+	</div>';
 }
 
 ?>

@@ -109,7 +109,10 @@ input[type="text"], input[type="password"], select {
 select {
 	padding:3px;
 }
-input:focus, textarea:focus, select:focus {
+textarea {
+	border: 1px solid #6b81ab;
+}
+input[type="text"]:focus, textarea:focus, select:focus {
 	border: 1px solid orange;
 }
 select option {
@@ -943,51 +946,50 @@ ul#navigation li {
 
 #adm_submenus {
 	padding-left: 2em;
-	overflow: hidden;
+	overflow: normal;
 	background-color: white;
-	border-bottom: 1px solid #aaa;
+	border-bottom: 3px solid #ccc;
+	margin-bottom:-2px;
 }
 
 #adm_submenus li {
 	margin: 0 1px;
 	color: black;
-	padding: 0 0 4px 0;
-	position: relative;
-	top: 4px;
-}
-
-#adm_submenus li a {
-	background: transparent;
-	color: #666;
-	padding: 0;
-	margin: 0;
-}
-
-#adm_submenus li a span {
-	padding: 0 4px;
+	padding: 0 5px;
 	border: 1px solid #ccc;
 	border-bottom: 0;
-	margin: 0;
+	line-height:20px;
+	height:20px;
 	border-radius: 3px 3px 0 0;
 }
 
-#adm_submenus li a span:hover {
-	background: transparent;
+#adm_submenus li a {
+	color: #666;
+	padding: 0;
+	margin: 0;
+	font-size:11px;
+	text-shadow:none;
+	line-height:19px;
 }
 
+#adm_submenus li a span {
+	padding: 0;
+	margin: 0;
+}
 #adm_submenus li:hover {
 	background: #ccc;
 }
 
-#adm_submenus li a.active span {
+#adm_submenus li.active {
 	background: #ddd;
 	margin-left: -3px;
-	padding: 1px 5px;
-	position: relative;
-	top: -2px;
-	margin-bottom: -2px;
+	line-height:22px;
+	height:22px;
+	margin-top:-2px;
 }
-
+#adm_submenus li.active a {
+	line-height:21px;
+}
 /* Styles for the general looks for the Curve theme.
 ------------------------------------------------------- */
 
@@ -1458,11 +1460,12 @@ p#whoisviewing {
 }
 .post_wrapper {
 	width: auto;
-	border: 1px solid #ddd;
-	border-radius:0 0 4px 4px;
-	margin-bottom: 10px;
+	/*border: 1px solid #aFc5d3;*/
+	border: 1px solid #ccc;
+	/*border-radius:0 0 4px 4px;*/
+	margin-bottom: 5px;
 	background-color: #eaeaea;
-	padding:0 1px 1px 1px;
+	padding:0;
 }
 .post_wrapper.approval, .approval .post_content {
 	background-color: rgb(250, 233, 216);
@@ -1479,10 +1482,11 @@ div.ignoringpost {
 	display:none;
 }
 .post_bottom {
-	padding: 2px 10px 1px 10px;
+	padding: 3px 10px 2px 10px;
 	clear: both;
 	font-size: 11px;
 	line-height: 20px;
+	background-color:#ddd;
 }
 .poster {
 	float: left;
@@ -1583,12 +1587,13 @@ div.userbit_compact_textpart {
 .keyinfo {
 	font-size: 12px;
 	padding: 0 10px 0 10px;
-	min-height: 26px;
-	max-height: 26px;
-	line-height: 26px;
-	background: #f2f2f2 url(../images/clipsrc.png) 0 -139px repeat-x;
-	border-bottom:2px solid #f0dca3;
-	/*margin:0 -1px;*/
+	min-height: 24px;
+	max-height: 24px;
+	line-height: 24px;
+	/*background: #f2f2f2 url(../images/clipsrc.png) 0 -139px repeat-x;*/
+	background: #c9d8dd url(../images/clipsrc.png) 0 -175px repeat-x;
+	border-bottom: 1px solid #bbb;
+/*	background-color:#ddd;*/
 }
 .approval .keyinfo {
 	background: #edcc82;
@@ -1603,9 +1608,9 @@ div.userbit_compact_textpart {
 }
 .keyinfo h5 {
 	color:#666;
-	font-size:1.1em;
-	text-shadow: 1px 1px 1px white;
-	font-weight:normal;
+	font-size:1.0em;
+	/*text-shadow: 1px 1px 1px white;*/
+	font-weight:bold;
 }
 .keyinfo .timeago {
 	color: #d69538;
@@ -1655,16 +1660,19 @@ ul.quickbuttons li a, .buttonlist ul li a, span.button {
 	padding: 0 6px 1px 6px;
 	color: #777;
 	font-weight:bold;
-	border: 1px solid #ccc;
+	border: 1px solid #A6C5D9;
 	border-radius: 2px;
 	cursor: pointer;
-	background: #E2E2E2 url(../images/theme/sprite.png) 0 -118px repeat-x;
+	/*background: #c9d8dd url(../images/clipsrc.png) 0 -175px repeat-x;*/
+	background: #f2f2f2 url(../images/clipsrc.png) 0 -139px repeat-x;
+
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box; 	
+	font-family:Tahoma,sans-serif;
 }
 input[type=button], .button_submit, .button_reset {
-	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x !important;
+	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;
 	color:white !important;
 	border:2px solid #888;
 	border-radius:2px;
@@ -1678,6 +1686,17 @@ input[type=button], .button_submit, .button_reset {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	padding:0 6px 1px 6px;
+}
+input.button_reset {
+	background: rgb(169,3,41);
+	background: -moz-linear-gradient(top, rgba(169,3,41,1) 0%, rgba(143,2,34,1) 44%, rgba(109,0,25,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(169,3,41,1)), color-stop(44%,rgba(143,2,34,1)), color-stop(100%,rgba(109,0,25,1)));
+	background: -webkit-linear-gradient(top, rgba(169,3,41,1) 0%,rgba(143,2,34,1) 44%,rgba(109,0,25,1) 100%);
+	background: -o-linear-gradient(top, rgba(169,3,41,1) 0%,rgba(143,2,34,1) 44%,rgba(109,0,25,1) 100%);
+	background: -ms-linear-gradient(top, rgba(169,3,41,1) 0%,rgba(143,2,34,1) 44%,rgba(109,0,25,1) 100%);
+	background: linear-gradient(top, rgba(169,3,41,1) 0%,rgba(143,2,34,1) 44%,rgba(109,0,25,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a90329', endColorstr='#6d0019',GradientType=0 );	
+	border:2px solid #ff6666;
 }
 input.button_submit:hover, input.button_reset:hover {
 	border:2px solid orange !important;
