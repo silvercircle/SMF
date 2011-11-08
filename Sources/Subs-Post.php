@@ -1188,7 +1188,8 @@ function sendpm($recipients, $subject, $message, $store_outbox = false, $from = 
 		$id_act = aStreamAdd($from['id'], ACT_PM,
 					   array('member_name' => $from['username']),
 					   0, 0, $id_pm, $from['id'], ACT_PLEVEL_PRIVATE);
-		aStreamAddNotification($as_notifications, $id_act, ACT_PM);
+		if((int)$id_act > 0)
+			aStreamAddNotification($as_notifications, $id_act, ACT_PM);
 	}
 	// Add the recipients.
 	if (!empty($id_pm))
@@ -3293,7 +3294,7 @@ function adminNotify($type, $memberID, $member_name = null, $actid = 0, $atype =
 		$notify_users[] = $row['id_member'];
 	}
 	mysql_free_result($request);
-	if($actid && $atype && $modSettings['astream_active'] && count($notify_users)) {
+	if((int)$actid > 0 && $atype && $modSettings['astream_active'] && count($notify_users)) {
 		require_once($sourcedir . '/Subs-Activities.php');
 		aStreamAddNotification($notify_users, $actid, $atype);
 	}
@@ -3464,7 +3465,7 @@ function notifyTaggedUsers(&$members, $postOptions)
 		$id_act = aStreamAdd($user_info['id'], ACT_USERTAGGED,
 				array('member_name' => $user_info['name']),
 				0, $postOptions['id_topic'], $postOptions['id_message'], $user_info['id'], ACT_PLEVEL_PRIVATE);
-		if($id_act)
+		if((int)$id_act > 0)
 			aStreamAddNotification($to_notify, $id_act, ACT_USERTAGGED);
 	}
 }

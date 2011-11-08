@@ -439,10 +439,10 @@ function template_main()
 							', $context['can_move'] ? '<li><input type="hidden" name="move" value="0" /><label for="check_move"><input type="checkbox" name="move" id="check_move" value="1" class="input_check" ' . (!empty($context['move']) ? 'checked="checked" ' : '') . '/> ' . $txt['move_after2'] . '</label></li>' : '', '
 							', $context['can_announce'] && $context['is_first_post'] ? '<li><label for="check_announce"><input type="checkbox" name="announce_topic" id="check_announce" value="1" class="input_check" ' . (!empty($context['announce']) ? 'checked="checked" ' : '') . '/> ' . $txt['announce_topic'] . '</label></li>' : '', '
 							', $context['show_approval'] ? '<li><label for="approve"><input type="checkbox" name="approve" id="approve" value="2" class="input_check" ' . ($context['show_approval'] === 2 ? 'checked="checked"' : '') . ' /> ' . $txt['approve_this_post'] . '</label></li>' : '', '
-							', $context['can_stick_firstpost'] ? '<li><label for="stickfirst"><input type="checkbox" name="stickfirst" id="stickfirst" value="1" class="input_check" '.($context['first_is_sticky'] ? 'checked="checked"' : '') . ' />' . $txt['first_post_sticky'] . '</label></li>' : '', '
-							', $context['can_merge_with_last'] ? '<li><label for="want_automerge"><input type="checkbox" name="want_automerge" id="want_automerge" checked="checked" value="1" class="input_check" />' . $txt['want_automerge'] . '</label></li>' : '', '
-							', $modSettings['astream_active'] ? '<li><label for="noactivity"><input type="checkbox" name="noactivity" id="noactivity" value="1" class="input_check" />' . $txt['no_activity_record'] . '</label></li>' : '', '
-							', $context['can_tag_users'] ? '<li><label for="allowtags"><input type="checkbox" name="allowtags" id="allowtags" value="1" class="input_check" />' . $txt['disable_user_tagging'] . '</label></li>' : '', '
+							', $context['can_stick_firstpost'] ? '<li><label for="stickfirst"><input type="checkbox" name="stickfirst" id="stickfirst" value="1" class="input_check" '.($context['first_is_sticky'] ? 'checked="checked"' : '') . ' /> ' . $txt['first_post_sticky'] . '</label></li>' : '', '
+							', $context['can_merge_with_last'] ? '<li><label for="want_automerge"><input type="checkbox" name="want_automerge" id="want_automerge" class="input_check" checked="checked" value="1" class="input_check" /> ' . $txt['want_automerge'] . '</label></li>' : '', '
+							', $modSettings['astream_active'] ? '<li><label for="noactivity"><input type="checkbox" name="noactivity" id="noactivity" value="1" class="input_check" /> ' . $txt['no_activity_record'] . '</label></li>' : '', '
+							', $context['can_tag_users'] ? '<li><label for="allowtags"><input type="checkbox" name="allowtags" id="allowtags" value="1" class="input_check" /> ' . $txt['disable_user_tagging'] . '</label></li>' : '', '
 						</ul>';
 	if($context['can_stick_firstpost'])
 		echo '

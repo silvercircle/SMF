@@ -350,9 +350,6 @@ function showActivitiesProfileSettings($memID)
 	if(empty($modSettings['astream_active']) || ($user_info['id'] != $memID && !$user_info['is_admin']))
 		fatal_lang_error ('no_access');
 
-	if(isset($_GET['save'])) {
-		redirectexit($scripturl . '?action=profile;area=activities;sa=settings;u='. $memID);
-	}
 	$context['sub_template'] = 'showactivity_settings';
 	$context['submiturl'] = $scripturl . '?action=profile;area=activities;sa=settings;save;u=' . $memID;
 	
@@ -369,10 +366,10 @@ function showActivitiesProfileSettings($memID)
 	
 	$my_act_optout = empty($user_info['act_optout']) ? array(0) : explode(',', $user_info['act_optout']);
 	$my_notify_optout = empty($user_info['notify_optout']) ? array(0) : explode(',', $user_info['notify_optout']);
-	$activity_types = array();
+	$context['activity_types'] = array();
 	
 	while($row = mysql_fetch_assoc($result)) {
-		$activity_types[] = array(
+		$context['activity_types'][] = array(
 			'id' => $row['id_type'],
 			'shortdesc' => $row['id_desc'],
 			'longdesc_act' => $txt['actdesc_' . trim($row['id_desc'])],
@@ -382,5 +379,22 @@ function showActivitiesProfileSettings($memID)
 		);
 	}
 	mysql_free_result($result);
+	
+	if (isset($_GET['save'])) {
+		$new_not_optout = array();
+		$new_act_optout = array();
+		
+		foreach($context['activity_types'] as $t) {
+			if(!empty($t['longdesc_act']) && (!isset($_REQUEST['act_check_' . trim($t['id'])]) || empty($_REQUEST['act_check_' . trim($t['id'])])))
+				$new_act_optout[] = $t['id'];
+			if(!empty($t['longdesc_not']) && (!isset($_REQUEST['not_check_' . trim($t['id'])]) || empty($_REQUEST['not_check_' . trim($t['id'])])))
+				$new_not_optout[] = $t['id'];
+		}
+		$act_optout = implode(',', array_unique($new_act_optout));
+		$not_optout = implode(',', array_unique($new_not_optout));
+
+		updateMemberData($memID, array('act_optout' => $act_optout, 'notify_optout' => $not_optout));
+		redirectexit($scripturl . '?action=profile;area=activities;sa=settings;u=' . $memID);
+	}
 }
 ?>

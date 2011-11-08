@@ -12,7 +12,8 @@ $txt['act_recent_notifications'] = 'Recent notifications';
 $txt['act_no_unread_notifications'] = 'You currently have no unread notifications';
 $txt['act_mark_all_read'] = 'Mark all as seen';
 $txt['act_view_all'] = 'View all';
-
+$txt['activities_label'] = 'Activities';
+$txt['notifications_label'] = 'Notifications';
 $txt['unknown activity stream type'] = 'Unknown activity stream type';
 $txt['activity_missing_format'] = 'Missing activity formatting string (atype = %d)';
 $txt['activity_missing_callback'] = 'Invalid or missing formatter callback for atype = %d';

@@ -212,7 +212,7 @@ function template_body_above()
 				<input style="width:215px;padding-left:26px;margin:0;" onclick="var s_event = arguments[0] || window.event;openAdvSearch(s_event);return(false);" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" name="search" value="',$search_label,'" class="searchfield" />
 				<br><h3 class="bbc_head l2">',$txt['search_by_member'],'</h3>
 				<div style="text-align:center;margin-bottom:10px;"><input style="width:90%;" class="input_text" type="text" name="userspec" id="userspec" value="*" /></div>
-				<input class="input_check floatleft" style="margin-top:6px;" type="checkbox" name="show_complete" id="show_complete" value="1" /><h3 class="bbc_head l2 floatleft" style="margin-left:0;">',$txt['search_show_complete_messages'],'</h3><br class="clear">';
+				<input class="input_check floatleft" type="checkbox" name="show_complete" id="show_complete" value="1" />&nbsp;<h3 class="bbc_head l2" style="margin-left:0;">',$txt['search_show_complete_messages'],'</h3><br class="clear">';
 				if($scope == 2) {
 					echo '<div style="padding-left:20px;"><input type="radio" name="type" id="i_topic" class="input_radio" checked="checked" />',$txt['search_topic'],'<br />
 						<input type="radio" name="type" id="i_board" class="input_radio" />',$txt['search_board'],'<br />

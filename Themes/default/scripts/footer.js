@@ -109,7 +109,7 @@
 		doresize = true, scroll_pos = _get_scroll();
 	
 		// Window/Keyboard events
-		$(window).unbind('resize.prettyphoto').bind('resize.prettyphoto',function(){ _center_overlay(); _resize_overlay(); });
+		$(window).unbind('resize.prettyphoto').bind('resize.prettyphoto',function(){_center_overlay();_resize_overlay();});
 		
 		if(pp_settings.keyboard_shortcuts) {
 			$(document).unbind('keydown.prettyphoto').bind('keydown.prettyphoto',function(e){
@@ -152,9 +152,9 @@
 			isSet = (galleryRegExp.exec(theRel)) ? true : false;
 			
 			// Put the SRCs, TITLEs, ALTs into an array.
-			pp_images = (isSet) ? jQuery.map(matchedObjects, function(n, i){ if($(n).attr('rel').indexOf(theRel) != -1) return $(n).attr('href'); }) : $.makeArray($(this).attr('href'));
-			pp_titles = (isSet) ? jQuery.map(matchedObjects, function(n, i){ if($(n).attr('rel').indexOf(theRel) != -1) return ($(n).find('img').attr('alt')) ? $(n).find('img').attr('alt') : ""; }) : $.makeArray($(this).find('img').attr('alt'));
-			pp_descriptions = (isSet) ? jQuery.map(matchedObjects, function(n, i){ if($(n).attr('rel').indexOf(theRel) != -1) return ($(n).attr('title')) ? $(n).attr('title') : ""; }) : $.makeArray($(this).attr('title'));
+			pp_images = (isSet) ? jQuery.map(matchedObjects, function(n, i){if($(n).attr('rel').indexOf(theRel) != -1) return $(n).attr('href');}) : $.makeArray($(this).attr('href'));
+			pp_titles = (isSet) ? jQuery.map(matchedObjects, function(n, i){if($(n).attr('rel').indexOf(theRel) != -1) return ($(n).find('img').attr('alt')) ? $(n).find('img').attr('alt') : "";}) : $.makeArray($(this).find('img').attr('alt'));
+			pp_descriptions = (isSet) ? jQuery.map(matchedObjects, function(n, i){if($(n).attr('rel').indexOf(theRel) != -1) return ($(n).attr('title')) ? $(n).attr('title') : "";}) : $.makeArray($(this).attr('title'));
 			
 			if(pp_images.length > 30) settings.overlay_gallery = false;
 			
@@ -164,7 +164,7 @@
 			_build_overlay(this); // Build the overlay {this} being the caller
 			
 			if(settings.allow_resize)
-				$(window).bind('scroll.prettyphoto',function(){ _center_overlay(); });
+				$(window).bind('scroll.prettyphoto',function(){_center_overlay();});
 			
 			
 			$.prettyPhoto.open();
@@ -229,8 +229,8 @@
 			
 			// If the size is % based, calculate according to window dimensions
 			percentBased=false;
-			if(movie_height.indexOf('%') != -1) { movie_height = parseFloat(($(window).height() * parseFloat(movie_height) / 100) - 150); percentBased = true; }
-			if(movie_width.indexOf('%') != -1) { movie_width = parseFloat(($(window).width() * parseFloat(movie_width) / 100) - 150); percentBased = true; }
+			if(movie_height.indexOf('%') != -1) {movie_height = parseFloat(($(window).height() * parseFloat(movie_height) / 100) - 150);percentBased = true;}
+			if(movie_width.indexOf('%') != -1) {movie_width = parseFloat(($(window).width() * parseFloat(movie_width) / 100) - 150);percentBased = true;}
 			
 			// Fade the holder
 			$pp_pic_holder.fadeIn(function(){
@@ -310,7 +310,7 @@
 				
 					case 'quicktime':
 						pp_dimensions = _fitToViewport(movie_width,movie_height); // Fit item to viewport
-						pp_dimensions['height']+=15; pp_dimensions['contentHeight']+=15; pp_dimensions['containerHeight']+=15; // Add space for the control bar
+						pp_dimensions['height']+=15;pp_dimensions['contentHeight']+=15;pp_dimensions['containerHeight']+=15; // Add space for the control bar
 				
 						toInject = settings.quicktime_markup.replace(/{width}/g,pp_dimensions['width']).replace(/{height}/g,pp_dimensions['height']).replace(/{wmode}/g,settings.wmode).replace(/{path}/g,pp_images[set_position]).replace(/{autoplay}/g,settings.autoplay);
 					break;
@@ -401,7 +401,7 @@
 			if(!doresize) doresize = true; // Allow the resizing of the images
 			$('.pp_contract').removeClass('pp_contract').addClass('pp_expand');
 
-			_hideContent(function(){ $.prettyPhoto.open(); });
+			_hideContent(function(){$.prettyPhoto.open();});
 		};
 
 
@@ -469,7 +469,7 @@
 			
 			$pp_pic_holder.stop().find('object,embed').css('visibility','hidden');
 			
-			$('div.pp_pic_holder,div.ppt,.pp_fade').fadeOut(settings.animation_speed,function(){ $(this).remove(); });
+			$('div.pp_pic_holder,div.ppt,.pp_fade').fadeOut(settings.animation_speed,function(){$(this).remove();});
 			
 			$pp_overlay.fadeOut(settings.animation_speed, function(){
 				if($.browser.msie && $.browser.version == 6) $('select').css('visibility','visible'); // To fix the bug with IE select boxes
@@ -522,7 +522,7 @@
 				$pp_pic_holder.find('.pp_fade').fadeIn(settings.animation_speed); // Fade the new content
 
 				// Show the nav
-				if(isSet && _getFileType(pp_images[set_position])=="image") { $pp_pic_holder.find('.pp_hoverContainer').show(); }else{ $pp_pic_holder.find('.pp_hoverContainer').hide(); }
+				if(isSet && _getFileType(pp_images[set_position])=="image") {$pp_pic_holder.find('.pp_hoverContainer').show();}else{$pp_pic_holder.find('.pp_hoverContainer').hide();}
 			
 				if(pp_dimensions['resized']){ // Fade the resizing link if the image is resized
 					$('a.pp_expand,a.pp_contract').show();
@@ -831,7 +831,7 @@
 					if(!settings.modal) $.prettyPhoto.close();
 				});
 
-			$('a.pp_close').bind('click',function(){ $.prettyPhoto.close(); return false; });
+			$('a.pp_close').bind('click',function(){$.prettyPhoto.close();return false;});
 
 			$('a.pp_expand').bind('click',function(e){
 				// Expand the image
@@ -843,7 +843,7 @@
 					doresize = true;
 				};
 			
-				_hideContent(function(){ $.prettyPhoto.open(); });
+				_hideContent(function(){$.prettyPhoto.open();});
 		
 				return false;
 			});
@@ -874,7 +874,7 @@
 
 			// Little timeout to make sure all the prettyPhoto initialize scripts has been run.
 			// Useful in the event the page contain several init scripts.
-			setTimeout(function(){ $("a[rel^='"+hashRel+"']:eq("+hashIndex+")").trigger('click'); },50);
+			setTimeout(function(){$("a[rel^='"+hashRel+"']:eq("+hashIndex+")").trigger('click');},50);
 		}
 		
 		return this.unbind('click.prettyphoto').bind('click.prettyphoto',$.prettyPhoto.initialize); // Return the jQuery object for chaining. The unbind method is used to avoid click conflict when the plugin is called more than once
@@ -1125,7 +1125,7 @@ var pp_alreadyInitialized = false; // Used for the deep linking to make sure not
             // Info-Overlays mit leichter Verzoegerung einblenden
             $('.help_info:not(.info_off)', context).live('mouseenter', function(){
                 var $info_wrapper = $(this);
-                var timeout_id = window.setTimeout(function(){ $($info_wrapper).addClass('display'); }, 500);
+                var timeout_id = window.setTimeout(function(){$($info_wrapper).addClass('display');}, 500);
                 $(this).data('timeout_id',timeout_id);
             });
             $('.help_info', context).live('mouseleave', function(){
@@ -1198,7 +1198,7 @@ var pp_alreadyInitialized = false; // Used for the deep linking to make sure not
 
                 // Einstellungs-Menue bei mouseover ein-/ausblenden
                 $($container_settings_info.find('span.settings'), context).live('mouseenter', function(){
-                    var timeout_id = window.setTimeout(function(){ $container_settings_info.find('.settings_info_menu').removeClass('off').addClass('on'); }, 500);
+                    var timeout_id = window.setTimeout(function(){$container_settings_info.find('.settings_info_menu').removeClass('off').addClass('on');}, 500);
                     $(this).data('timeout_id',timeout_id);
                 }); 
                 $($container_settings_info, context).live('mouseleave', function(){
@@ -1713,7 +1713,7 @@ function submitSearchBox()
 }
 
 $('#adv_search').live('mouseleave',function(event) {
-	$('#search_form').css({overflow: 'hidden', height: '26px', 'padding-bottom': '0'});
+	$('#search_form').css({overflow: 'hidden', height: '24px', 'padding-bottom': '0'});
 	$('#search_form').removeClass('search_form_active');
 });
 $('.brd_moderators_chld, #share_bar').live('mouseleave',function(event) {

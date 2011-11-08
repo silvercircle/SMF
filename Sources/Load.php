@@ -453,7 +453,6 @@ function loadUserSettings()
 		'act_optout' => isset($user_settings['act_optout']) ? $user_settings['act_optout'] : '',
 		'notify_optout' => isset($user_settings['notify_optout']) ? $user_settings['notify_optout'] : ''
 	);
-	
 	$user_info['groups'] = array_unique($user_info['groups']);
 	// Make sure that the last item in the ignore boards array is valid.  If the list was too long it could have an ending comma that could cause problems.
 	if (!empty($user_info['ignoreboards']) && empty($user_info['ignoreboards'][$tmp = count($user_info['ignoreboards']) - 1]))

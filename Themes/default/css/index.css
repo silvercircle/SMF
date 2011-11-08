@@ -50,7 +50,7 @@ img.icon {
 	border-top-right-radius: 6px;
 	border: 2px solid white;
 	margin-bottom: -70px;
-	height: 26px;
+	height: 24px;
 	overflow: hidden;
 	z-index: 1000;
 }
@@ -68,9 +68,8 @@ img.icon {
 .searchfield {
 	background: #fff url(../images/theme/sicon.png) 3px center no-repeat;
 	font-weight: bold;
-	font-size: 12px;
+	font-size: 11px;
 	border: 1px solid #A3B2D0;
-	min-height: 16px;
 }
 div.inlinePopup {
 	background: #f0f0f0;
@@ -94,26 +93,27 @@ div.popup_wrapper {
 	right: 0;
 	top: 20px;
 }
-input, select, textarea {
+input[type="text"], input[type="password"], select {
 	color: #000;
 	border: 1px solid #6b81ab;
-	padding: 3px;
 	background-color: #fff;
-	font-size: 11px;
 	border-radius: 3px;
+	padding-left:4px;
+	padding-right:4px;
+	padding-bottom:2px;
+	font-family:Tahoma,sans-serif;
+	font-size: 11px !important;
+	line-height:11px !important;
+	padding:4px;
 }
 select {
-	padding: 2px;
+	padding:3px;
 }
 input:focus, textarea:focus, select:focus {
 	border: 1px solid orange;
 }
 select option {
 	padding: 0;
-}
-input.input_check, input.input_radio {
-	border: none;
-	background: none;
 }
 h3.catbg input.input_check {
 	margin: 9px 7px 0 7px;
@@ -1645,28 +1645,44 @@ ul.quickbuttons li, .buttonlist ul li {
 	cursor: pointer;
 }
 
-ul.quickbuttons li a, .buttonlist ul li a, span.button, input[type=button], .button_submit, .button_reset {
+ul.quickbuttons li a, .buttonlist ul li a, span.button {
 	font-size: 10px !important;
-	font-family: Verdana, arial, sans-serif;
 	text-shadow: 1px 1px 1px #fff;
 	float: left;
-	line-height: 18px !important;
-	height:18px;
+	height:20px !important;
+	line-height:18px !important;
 	text-decoration: none;
-	padding: 0 4px;
+	padding: 0 6px 1px 6px;
 	color: #777;
 	font-weight:bold;
 	border: 1px solid #ccc;
 	border-radius: 2px;
 	cursor: pointer;
 	background: #E2E2E2 url(../images/theme/sprite.png) 0 -118px repeat-x;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box; 	
 }
 input[type=button], .button_submit, .button_reset {
-	float:none;
-	line-height: 20px !important;
-	height:20px;
-	padding: 0 6px;
+	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x !important;
+	color:white !important;
+	border:2px solid #888;
+	border-radius:2px;
 	margin:0 5px;
+	font-family:Tahoma,sans-serif;
+	height:23px !important;
+	line-height:11px !important;
+	font-size:11px !important;
+	cursor: pointer;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding:0 6px 1px 6px;
+}
+input.button_submit:hover, input.button_reset:hover {
+	border:2px solid orange !important;
+	background: #aaa !important;
+	color:black;
 }
 span.button {
 	margin: 0 0.3em;
@@ -1728,7 +1744,6 @@ ul.quickbuttons li.inline_mod_check {
 img.smiley {
 	vertical-align: bottom;
 }
-
 #forumposts .modified {
 	margin-left: 20px;
 	white-space: nowrap;
@@ -3547,7 +3562,7 @@ abbr.timeago {
 	color: #888;
 }
 .inline_highlight {
-	background-color: yellow;
+	background-color: #ffff99;
 }
 .transparent {
 	background-color: transparent !important;
@@ -3692,4 +3707,3 @@ a.fnote_ref {
 		border: none;
 	}
 }
-

@@ -77,10 +77,17 @@ function _vsprintf($format, &$data)
  */
 function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $id_content = 0, $id_owner = 0, $priv_level = 0, $dont_notify = false)
 {
+	global $user_info;
+	
 	$act_must_notify = array(ACT_LIKE, ACT_REPLIED);	// these activity types will trigger a *mandatory*
 	if(0 == $id_member || 0 == $id_owner)				// notification for $id_owner unless $dont_notify indicates otherwise
 		return(0);
 
+	// respect opt out setting
+	if(!empty($user_info['act_optout'])) {
+		if(in_array($atype, explode(',', $user_info['act_optout'])) !== false)
+			return(0);
+	}
 	smf_db_insert('',
 		'{db_prefix}log_activities',
 		array(

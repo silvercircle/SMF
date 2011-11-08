@@ -1,10 +1,7 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]HookAPI::addHook() - check the file and function and only add the hook when both are ok, otherwise log an error.[/li]
-[li]Avoid duplicated page title(s) by adding the page number to topic and message index pages.[/li]
-[li]Set the meta description tag from a board's description (if available, otherwise use the page title).[/li]
-[li]Use the forum name in the page title.[/li]
-[li]And more $smcFunc cleanup...[/li]
-[li]Respect messages per page setting in "show recent content"[/li]
+[li]aStreamAdd() now respects opt-out settings for activities[/li]
+[li]finished UI for customizing activities and notifications in a user's profile.[/li]
+[li]style change: important buttons should stick out to grab attention and are now using a higher contrast background.[/li]
 [/list]

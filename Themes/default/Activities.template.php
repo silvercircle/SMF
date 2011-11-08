@@ -265,10 +265,76 @@ function template_notifications()
 	template_notifications_scripts();
 }
 
+/**
+ * opt-out settings for activities and notifications in the profile area
+ */
 function template_showactivity_settings()
 {
 	global $context, $txt;
 	
-	
+	echo <<<EOT
+	<form method="post" action="{$context['submiturl']}">
+	<div class="cat_bar">
+	   <h3>{$txt['activities_label']}</h3>
+	</div>
+	<div class="orange_container cleantop">
+	 <div class="content">
+	 {$txt['act_optout_desc']}
+	 </div>
+	</div>
+	<br>
+	<div class="blue_container">
+	 <div class="content">
+EOT;
+	 foreach($context['activity_types'] as $t) {
+		 if(!empty($t['longdesc_act']))
+			 echo '
+	  <dl class="settings">
+	  <dt style="width:90%;">
+	  ',$t['longdesc_act'],'
+	  </dt>
+	  <dd style="width:10%;">
+	  <input type="checkbox" class="input_check" name="act_check_', trim ($t['id']), '" id="act_check_',trim($t['id']),'" ',($t['act_optout'] ? '' : 'checked="checked"'), ' />
+	  </dd>
+	  </dl>';
+	 }
+	echo <<< EOT
+	 </div>
+	</div>
+	<br>
+	<div class="cat_bar">
+	   <h3>{$txt['notifications_label']}</h3>
+	</div>
+	<div class="orange_container cleantop">
+	 <div class="content">
+	 {$txt['notify_optout_desc']}
+	 </div>
+	</div>
+	<br>
+	<div class="blue_container">
+	 <div class="content">
+EOT;
+	 reset($context['activity_types']);
+	 foreach ($context['activity_types'] as $t) {
+		if (!empty($t['longdesc_not']))
+			echo '
+	  <dl class="settings">
+	  <dt style="width:90%;">
+	  ', $t['longdesc_not'], '
+	  </dt>
+	  <dd style="width:10%;">
+	  <input type="checkbox" class="input_check" name="not_check_', trim ($t['id']), '" id="not_check_', trim($t['id']), '" ', ($t['notify_optout'] ? '' : 'checked="checked"'), ' />
+	  </dd>
+	  </dl>';
+	}
+	echo '
+	 </div>
+	</div>
+	<br>
+	<div class="floatright">
+	 <input type="submit" class="button_submit" value="', $txt['change_profile'], '" />
+	</div>
+	<div class="clear"></div>
+	</form>';
 }
 ?>
