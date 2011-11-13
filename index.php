@@ -84,7 +84,7 @@ $context['template_hooks']['global'] = array(
 	'sidebar_bottom' => '',
 	'footer' => ''
 );
-$context['jsver'] = '?v=1498';
+$context['jsver'] = '?v=1499';
 
 // Seed the random generator.
 if (empty($modSettings['rand_seed']) || mt_rand(1, 250) == 69)

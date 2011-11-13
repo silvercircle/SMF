@@ -370,7 +370,7 @@ function template_postbit_lean(&$message)
 	
 	// Show information about the poster of this message.
 	echo '
-	<div class="keyinfo" style="margin-left:-1px;padding:0 10px;">';
+	<div class="keyinfo">';
 				echo '<div>
 					  <div class="messageicon">
 					  <img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' id="msg_icon_' . $message['id'] . '"' : '', ' />
@@ -579,7 +579,7 @@ function template_postbit_lean(&$message)
 	// How about... even... remove it entirely?!
 	if ($message['can_remove'])
 		echo '
-			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');">', $txt['remove'], '</a></li>';
+			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
 
 	if ($message['can_unapprove'])
 		echo '
@@ -810,7 +810,7 @@ function template_postbit_comment(&$message)
 	// How about... even... remove it entirely?!
 	if ($message['can_remove'])
 		echo '
-			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');">', $txt['remove'], '</a></li>';
+			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
 	if ($message['can_unapprove'])
 		echo '
 			<li class="approve_button"><a href="', $scripturl, '?action=moderate;area=postmod;sa=unapprove;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['unapprove'], '</a></li>';
@@ -1002,7 +1002,7 @@ function template_postbit_clean(&$message)
 	// How about... even... remove it entirely?!
 	if ($message['can_remove'])
 		echo '
-								<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return confirm(\'', $txt['remove_message'], '?\');">', $txt['remove'], '</a></li>';
+			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
 
 	// What about splitting it off the rest of the topic?
 	if ($context['can_split'] && !empty($context['real_num_replies']))

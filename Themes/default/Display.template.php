@@ -16,9 +16,9 @@ function template_main()
 	global $context, $settings, $options, $txt, $scripturl, $modSettings, $topic;
 
 	echo '
-		<div class="inlinePopup centertext dark" style="display:none;" id="interpostlink_helper">
-		<div class="cat_bar2 norounded">
-		<h3>Quick post link</h3>
+		<div class="jqmWindow" style="display:none;" id="interpostlink_helper">
+		<div class="glass jsconfirm title">
+		Quick post link
 		</div>
 		<div class="flat_container lefttext smalltext">
 		You can use this BBCode to create a quick link to this post. Such links are created from your<br>
@@ -26,9 +26,9 @@ function template_main()
 		<br>
 		Hit Ctrl+C to copy the BBCode to the clipboard.
 		<br><br>
-		<dl class="common left">
-		<dt><strong>BBCode:</strong></dt><dd><input size="80" type="text" id="interpostlink_helper_content" value="foo" /></dd>
-		<dt><strong>Full link:</strong></dt><dd><input size="80" type="text" id="interpostlink_helper_content_full" value="foo" /></dd>
+		<dl class="common left" style="line-height:24px;">
+		<dt><strong>BBCode: </strong></dt><dd><input size="78" type="text" id="interpostlink_helper_content" value="foo" /></dd>
+		<dt><strong>Full link:&nbsp;</strong></dt><dd><input size="78" type="text" id="interpostlink_helper_content_full" value="foo" /></dd>
 		</dl>
 		</div>
 		<div class="centertext smalltext smallpadding"><input type="button" class="button_submit" onclick="$(\'#interpostlink_helper\').css(\'position\',\'static\');$(\'#interpostlink_helper\').hide();" value="Click to dismiss (or press ESC)" /></div>

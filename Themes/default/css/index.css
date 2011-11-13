@@ -14,8 +14,8 @@ table {
 }
 body {
 	background: #D0D1E6;
-	font-family: "Tahoma", "Arial", sans-serif;
-	font-size: 1.0em;
+	font-family: "Droid Sans", "Trebuchet MS", "Tahoma", "Arial", sans-serif;
+	font-size: 11pt;
 	margin: 0;
 	padding: 0;
 }
@@ -243,11 +243,11 @@ blockquote.bbc_standard_quote, blockquote.bbc_alternate_quote {
 	border-left: 3px solid #a88;
 }
 blockquote.bbc_standard_quote {
-	background-color: #eee;
+	background-color: #f5f5f5;
 }
 
 blockquote.bbc_alternate_quote {
-	background-color: #eee;
+	background-color: #f5f5f5;
 }
 .codeoperation {
 	font-weight: normal;
@@ -1460,12 +1460,12 @@ p#whoisviewing {
 }
 .post_wrapper {
 	width: auto;
-	/*border: 1px solid #aFc5d3;*/
-	border: 1px solid #ccc;
-	/*border-radius:0 0 4px 4px;*/
-	margin-bottom: 5px;
-	background-color: #eaeaea;
+	border: 1px solid #cecfec;
+	background-color: #f2f2f2;
 	padding:0;
+	margin-bottom:10px;
+	border-bottom:3px solid #cecfec;
+	box-shadow: 0 0 5px 0 #aeafcc;
 }
 .post_wrapper.approval, .approval .post_content {
 	background-color: rgb(250, 233, 216);
@@ -1486,7 +1486,7 @@ div.ignoringpost {
 	clear: both;
 	font-size: 11px;
 	line-height: 20px;
-	background-color:#ddd;
+	background-color:#e8e8e8;
 }
 .poster {
 	float: left;
@@ -1513,7 +1513,7 @@ div.userbit_compact_textpart {
 .post_content {
 	margin-left: 220px;
 	padding-bottom:5px;
-	background-color:#f5f5f5;
+	background-color:#fcfcfc;
 }
 .post_content.lean {
 	margin-left: 0 !important;
@@ -1590,10 +1590,13 @@ div.userbit_compact_textpart {
 	min-height: 24px;
 	max-height: 24px;
 	line-height: 24px;
-	/*background: #f2f2f2 url(../images/clipsrc.png) 0 -139px repeat-x;*/
-	background: #c9d8dd url(../images/clipsrc.png) 0 -175px repeat-x;
-	border-bottom: 1px solid #bbb;
-/*	background-color:#ddd;*/
+	/*background: #c9d8dd url(../images/clipsrc.png) 0 -175px repeat-x;*/
+	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;
+	/*background-color: #e0e1f6;*/
+	/*border-bottom:2px solid #bebfdc;*/
+	margin-left:-1px;
+	margin-right:-1px;
+	color:white;
 }
 .approval .keyinfo {
 	background: #edcc82;
@@ -1607,10 +1610,10 @@ div.userbit_compact_textpart {
 	color:#888;
 }
 .keyinfo h5 {
-	color:#666;
-	font-size:1.0em;
-	/*text-shadow: 1px 1px 1px white;*/
-	font-weight:bold;
+	/*color: #66a;*/
+	color:#ddd;
+	font-size:1.1em;
+	font-weight:normal;
 }
 .keyinfo .timeago {
 	color: #d69538;
@@ -1624,6 +1627,9 @@ div.userbit_compact_textpart {
 	width: 16px;
 	height: 16px;
 	vertical-align:middle;
+}
+.keyinfo a {
+	color:white;
 }
 .horizontal_userblock {
 	padding: 3px 10px;
@@ -1665,7 +1671,6 @@ ul.quickbuttons li a, .buttonlist ul li a, span.button {
 	cursor: pointer;
 	/*background: #c9d8dd url(../images/clipsrc.png) 0 -175px repeat-x;*/
 	background: #f2f2f2 url(../images/clipsrc.png) 0 -139px repeat-x;
-
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box; 	
@@ -1759,9 +1764,8 @@ ul.quickbuttons li.inline_mod_check {
 	padding: 1px 10px 2px 0;
 	margin: 0;
 }
-
 img.smiley {
-	vertical-align: bottom;
+	vertical-align: middle;
 }
 #forumposts .modified {
 	margin-left: 20px;
@@ -3459,18 +3463,19 @@ div.td_children a.no_new_posts, .permalink_old {
 	padding-left: 12px;
 }
 .permalink_old {
-	background-position: 0 -729px;
+	background-position: 0 -731px;
 }
 div.td_children a.new_posts, .permalink_new {
 	background: transparent url(../images/theme/sprite.png) 0 -706px no-repeat;
 	padding-left: 12px;
 }
 .permalink_new {
-	background-position: 0 -701px;
+	background-position: 0 -703px;
 }
 .permalink_old, .permalink_new {
 	float: right;
 	font-size: 0.9em;
+	line-height:24px;
 }
 
 .td_children h4 {

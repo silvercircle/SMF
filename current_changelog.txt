@@ -1,8 +1,9 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]Styling changes for the tabstrip menu (profile and admin areas)[/li]
-[li]More style updates for form elements[/li]
-[li]administrators can now modify activity and notifications settings for other members (just like they can modify any profile).[/li]
-
+[li]Fixed a couple of things with the modal JS dialog and help popups.[/li]
+[li]Simplified styling of the modal JS popup.[/li]
+[li]Playing with Google's web fonts for various parts of the UI[/li]
+[li]Some minor optimizations in the hooks api.[/li]
+[li]reduced overall number of gradients a bit.[/li]
 [/list]

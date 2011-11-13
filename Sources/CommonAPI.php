@@ -152,7 +152,7 @@ class HookAPI {
 		global $boarddir;
 		
 		self::$hooks = @unserialize($the_hooks);
-		self::$addonsdir = $boarddir . '/addons/';
+		self::$addonsdir = $boarddir . '/addons/';		//todo: make addons directory customizable?
 	}
 
 	public static function addHook($hook, $product, $file, $function)
@@ -178,7 +178,7 @@ class HookAPI {
 			log_error(sprintf('HookAPI: missing function while installing into hook %s (product: %s, function: %s, file: %s', $hook, $ref['p'], $ref['c'], $ref['f']));
 			return;
 		}
-		self::$hooks[$hook][] = array('p' => $product, 'f' => $file, 'c' => $function);
+		self::$hooks[$hook][] = array('p' => $product, 'f' => $file, 'c' => trim($function));
 		$change_array = array('integration_hooks' => serialize(self::$hooks));
 		updateSettings($change_array, true);
 	}
@@ -191,9 +191,8 @@ class HookAPI {
 		if(isset(self::$hooks[$hook]) && is_array(self::$hooks[$hook])) {
 			foreach(self::$hooks[$hook] as $current_hook) {
 				@include_once(self::$addonsdir . $current_hook['p'] . '/' . $current_hook['f']);
-				$function = trim($current_hook['c']);
-				if(is_callable($function))
-					$results[$function] = call_user_func_array($function, $parameters);
+				if(is_callable($current_hook['c']))
+					$results[$current_hook['c']] = call_user_func_array($current_hook['c'], $parameters);
 			}
 		}
 		return $results;
@@ -208,9 +207,8 @@ class HookAPI {
 		if(isset(self::$hooks['integrate_buffer'])) {
 			foreach(self::$hooks['integrate_buffer'] as $current_hook) {
 				@include_once(self::$addonsdir . $current_hook['p'] . '/' . $current_hook['f']);
-				$function = trim($current_hook['c']);
-				if(is_callable($function))
-					ob_start($function);
+				if(is_callable($current_hook['c']))
+					ob_start($current_hook['c']);
 			}
 		}
 	}
