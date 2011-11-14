@@ -2409,7 +2409,7 @@ function parse_bbc_stage2(&$message, $is_for_editor = false)
 					if ($allowed_level[(int)$match[1]] && !$is_for_editor)
 						$message = str_replace($match[0], '<div class="spoiler head">' . $txt['hidden_show_content'] . '</div><div class="spoiler content" style="display:none;">' . $match[2] . '</div>', $message);
 					elseif (!$allowed_level[(int)$match[1]])
-						$message = str_replace($match[0], $is_for_editor ? '' : '<div class="spoiler head">' . $txt['hidden_' . trim($match[1]) . '_no_access'] . '</div><div></div>', $message);
+						$message = str_replace($match[0], $is_for_editor ? '' : '<div class="spoiler head">' . (isset($modSettings['hidden_content_no_view_msg'][trim($match[1])]) ? $modSettings['hidden_content_no_view_msg'][trim($match[1])] : $txt['hidden_no_access']) . '</div><div></div>', $message);
 				}
 			}
 		}

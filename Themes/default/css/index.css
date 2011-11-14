@@ -1463,9 +1463,8 @@ p#whoisviewing {
 	border: 1px solid #cecfec;
 	background-color: #f2f2f2;
 	padding:0;
-	margin-bottom:10px;
-	border-bottom:3px solid #cecfec;
-	box-shadow: 0 0 5px 0 #aeafcc;
+	margin-bottom:2px;
+	border-top:none;
 }
 .post_wrapper.approval, .approval .post_content {
 	background-color: rgb(250, 233, 216);
@@ -1587,9 +1586,9 @@ div.userbit_compact_textpart {
 .keyinfo {
 	font-size: 12px;
 	padding: 0 10px 0 10px;
-	min-height: 24px;
-	max-height: 24px;
-	line-height: 24px;
+	min-height: 26px;
+	max-height: 26px;
+	line-height: 26px;
 	/*background: #c9d8dd url(../images/clipsrc.png) 0 -175px repeat-x;*/
 	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;
 	/*background-color: #e0e1f6;*/
@@ -1605,12 +1604,15 @@ div.userbit_compact_textpart {
 	background:transparent;
 	box-shadow: none;
 	border:none;
+	color:black;
 }
 .keyinfo.clean .timeago {
 	color:#888;
 }
+.keyinfo.clean a {
+	color: #637d96;
+}
 .keyinfo h5 {
-	/*color: #66a;*/
 	color:#ddd;
 	font-size:1.1em;
 	font-weight:normal;
@@ -3463,19 +3465,18 @@ div.td_children a.no_new_posts, .permalink_old {
 	padding-left: 12px;
 }
 .permalink_old {
-	background-position: 0 -731px;
+	background-position: 0 -730px;
 }
 div.td_children a.new_posts, .permalink_new {
 	background: transparent url(../images/theme/sprite.png) 0 -706px no-repeat;
 	padding-left: 12px;
 }
 .permalink_new {
-	background-position: 0 -703px;
+	background-position: 0 -702px;
 }
 .permalink_old, .permalink_new {
 	float: right;
 	font-size: 0.9em;
-	line-height:24px;
 }
 
 .td_children h4 {
@@ -3493,9 +3494,9 @@ div#mcard, .tcard {
 	font-size: 12px;
 	color: #225;
 	text-align: left;
-	border: 4px solid #888;
+	border: 4px solid #444;
 	border-radius: 4px;
-	box-shadow: 0 0 12px 2px #888;
+	box-shadow: 0 0 12px 2px #444;
 	max-width: 720px;
 	width: auto;
 }

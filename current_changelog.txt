@@ -1,9 +1,10 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]Fixed a couple of things with the modal JS dialog and help popups.[/li]
-[li]Simplified styling of the modal JS popup.[/li]
-[li]Playing with Google's web fonts for various parts of the UI[/li]
-[li]Some minor optimizations in the hooks api.[/li]
-[li]reduced overall number of gradients a bit.[/li]
+[li]Consistent look for all popup dialogs.[/li]
+[li]Background dimming should now be consistent among all ajax overlays (dialogs and normal content output overlays).[/li]
+[li]The quick - link dialog is now using language strings ($txt[]) and its design has been updated to look like other dialogs.[/li]
+[li]The no permission messages for unviewable hidden content can now be customized on the BB Code administration page.[/li]
+[li]template_show_settings() now supports a callback_template config variable type. This can be useful for some special cases where additional settings must be shown in the form.[/li]
+[li]
 [/list]

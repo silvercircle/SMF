@@ -800,7 +800,10 @@ $txt['show_all'] = 'View all';
 $txt['spoiler_title'] = 'Spoiler, click to toggle visibilty';
 $txt['hidden_not_visible'] = 'Hidden content is only supported in full topic view';
 $txt['hidden_show_content'] = 'Hidden content, click to view';
-$txt['hidden_1_no_access'] = 'Hidden content (you have insufficient permission to view)';
-$txt['hidden_2_no_access'] = 'Hidden content (you have insufficient permission to view)';
-$txt['hidden_3_no_access'] = 'Hidden content (you have insufficient permission to view)';
+$txt['hidden_no_access'] = 'Hidden content (you have insufficient permission to view)';
+$txt['quick_post_link_title'] = 'Quick post link';
+$txt['quick_post_link_text'] = 'You can use this BBCode to create a quick link to this post. Such links are created from your<br>forum URL and will stay valid in case your forum should move to a different URL at a later time.<br>Hit Ctrl+C to copy the BBCode to the clipboard.<br><br>';
+$txt['quick_post_link_dismiss'] = 'Click to dismiss (or press ESC)';
+$txt['quick_post_link_bbcode'] = 'BBCode:&nbsp;';
+$txt['quick_post_link_full'] = 'Full link:&nbsp;';
 ?>

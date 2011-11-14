@@ -293,8 +293,9 @@ function ModifyBBCSettings($return_config = false)
 			array('check', 'enablePostHTML'),
 			array('check', 'autoLinkUrls'),
 			array('check', 'legacyBBC'),
-		'',
+			'',
 			array('bbc', 'disabledBBC'),
+			array('callback_template', 'template_bbc_settings')
 	);
 
 	if ($return_config)
@@ -325,12 +326,19 @@ function ModifyBBCSettings($return_config = false)
 		// Work out what is actually disabled!
 		$_POST['disabledBBC'] = implode(',', array_diff($bbcTags, $_POST['disabledBBC_enabledTags']));
 
+		$hidden_content_messages = array();
+		for($i = 1; $i <= 3; $i++) {
+			if(isset($_POST['hidden_content_level_' . $i]) && !empty($_POST['hidden_content_level_' . $i]) && $_POST['hidden_content_level_' . $i] != $txt['hidden_no_access'])
+				$hidden_content_messages[$i] = $_POST['hidden_content_level_' . $i];
+		}
 		if(isset($_POST['legacyBBC']) && !empty($_POST['legacyBBC']))
 			HookAPI::addHook('integrate_bbc_codes', 'LegacyBBC', 'main.php', 'legacybbc_addtags');
 		else
 			HookAPI::removeAll('LegacyBBC');
 
 		saveDBSettings($config_vars);
+		if(count($hidden_content_messages))
+			updateSettings(array('hidden_content_no_view' => serialize($hidden_content_messages)));
 		redirectexit('action=admin;area=postsettings;sa=bbc');
 	}
 

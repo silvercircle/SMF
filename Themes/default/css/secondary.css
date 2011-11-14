@@ -1092,19 +1092,14 @@ div.ppt {
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 }
-
-/* Tooltips end */
-/* Settings/Info begin */
 .social_share_privacy_area li.settings_info {
 	position: relative;
 	top: -2px;
 }
-
 .social_share_privacy_area li.settings_info a {
 	text-decoration: none;
 	margin: 0 !important;
 }
-
 .social_share_privacy_area li.settings_info .settings_info_menu {
 	background-color: #f3f4f5;
 	border: 2px solid #e7e3e3;
@@ -1177,13 +1172,9 @@ div.ppt {
 	line-height: 24px;
 	transition: color .5s ease-in;
 }
-
 .social_share_privacy_area li.settings_info .settings_info_menu form fieldset label.checked {
 	color: #090;
 }
-/* jqModal base Styling courtesy of;
-	Brice Burgess <bhb@iceburg.net> */
-
 .jqmWindow {
     display: none;
     background-color: #eaeaea;
@@ -1195,7 +1186,7 @@ div.ppt {
 .jqmWindow div.content {
 	background-color:white;
 }
-.jqmOverlay { background-color: #000; }
+.jqmOverlay { background-color: #888; }
 
 * iframe.jqm {position:absolute;top:0;left:0;z-index:-1;
 	width: expression(this.parentNode.offsetWidth+'px');

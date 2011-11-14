@@ -16,22 +16,18 @@ function template_single_post()
 	global $context, $settings, $options, $txt, $scripturl, $modSettings, $topic;
 
 	echo '
-		<div class="inlinePopup centertext dark" style="display:none;position:fixed;" id="interpostlink_helper">
-		<div class="cat_bar2 norounded">
-		<h3>Quick post link</h3>
+		<div class="jqmWindow" style="display:none;" id="interpostlink_helper">
+		<div class="glass jsconfirm title">',
+		$txt['quick_post_link_title'], '
 		</div>
-		<div class="flat_container lefttext smalltext">
-		You can use this BBCode to create a quick link to this post. Such links are created from your<br>
-		forum URL and will stay valid in case your forum should move to a different URL at a later time.
-		<br>
-		Hit Ctrl+C to copy the BBCode to the clipboard.
-		<br><br>
-		<dl class="common left">
-		<dt><strong>BBCode:</strong></dt><dd><input size="80" type="text" id="interpostlink_helper_content" value="foo" /></dd>
-		<dt><strong>Full link:</strong></dt><dd><input size="80" type="text" id="interpostlink_helper_content_full" value="foo" /></dd>
+		<div class="flat_container lefttext smalltext">',
+		$txt['quick_post_link_text'], '
+		<dl class="common left" style="line-height:24px;">
+		<dt><strong>', $txt['quick_post_link_bbcode'], '</strong></dt><dd><input size="78" type="text" id="interpostlink_helper_content" value="" /></dd>
+		<dt><strong>', $txt['quick_post_link_full'], '</strong></dt><dd><input size="78" type="text" id="interpostlink_helper_content_full" value="" /></dd>
 		</dl>
 		</div>
-		<div class="centertext smalltext smallpadding"><input type="button" class="button_submit" onclick="$(\'#interpostlink_helper\').css(\'position\',\'static\');$(\'#interpostlink_helper\').hide();" value="Click to dismiss (or press ESC)" /></div>
+		<div class="centertext smalltext smallpadding"><input type="button" class="button_submit" onclick="$(\'#interpostlink_helper\').css(\'position\',\'static\');$(\'#interpostlink_helper\').hide();setDimmed(0);" value="', $txt['quick_post_link_dismiss'], '" /></div>
 		</div>
 		<div id="share_bar" style="display:none;position:absolute;right:0;white-space:nowrap;width:auto;">
 		<div class="bmbar">
@@ -357,6 +353,7 @@ function template_single_post()
 		$("#interpostlink_helper_content_full").val(e.attr("href"));
 		centerElement(el, -200);
 		el.css("z-index", 9999);
+		setDimmed(1);
 		el.show();
 		$("#interpostlink_helper_content").focus();
 		$("#interpostlink_helper_content").select();
@@ -365,6 +362,7 @@ function template_single_post()
 		if(e.keyCode == 27 && $("#interpostlink_helper").css("display") != "none") {
         	$("#interpostlink_helper").css("position", "static");
         	$("#interpostlink_helper").hide();
+			setDimmed(0);
     	}
 	});
 	var topic_id = '.$context['current_topic'].';

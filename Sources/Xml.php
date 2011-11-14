@@ -49,7 +49,7 @@ function XMLhttpMain()
 // Get a list of boards and categories used for the jumpto dropdown.
 function GetJumpTo()
 {
-	global $user_info, $context, $smcFunc, $sourcedir;
+	global $context, $sourcedir;
 
 	// Find the boards/cateogories they can see.
 	require_once($sourcedir . '/Subs-MessageIndex.php');
@@ -90,7 +90,6 @@ function ListMessageIcons()
 function GetMcard()
 {
 	global $memberContext, $context, $txt;
-	global $settings, $user_info, $sourcedir, $scripturl;
 
 	$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
 	
@@ -220,9 +219,7 @@ function TagsActionDispatcher()
  */
 function WhoPosted()
 {
-	global $smcFunc, $context, $txt;
-	
-	$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
+	global $context;
 	
 	$tid = isset($_REQUEST['t']) ? (int)$_REQUEST['t'] : 0;
 		

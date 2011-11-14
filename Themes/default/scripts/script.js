@@ -475,7 +475,7 @@ function smf_avatarResize()
 
 	for (var i = 0; i < possibleAvatars.length; i++)
 	{
-		var tempAvatars = []; j = 0;
+		var tempAvatars = [];j = 0;
 		if (possibleAvatars[i].className != 'avatar')
 			continue;
 
@@ -1146,7 +1146,7 @@ function setTextSize(_s)
     self.each(refresh);
     var $s = $t.settings;
     if ($s.refreshMillis > 0) {
-      setInterval(function() { self.each(refresh); }, $s.refreshMillis);
+      setInterval(function() {self.each(refresh);}, $s.refreshMillis);
     }
     return self;
   };
@@ -1162,7 +1162,7 @@ function setTextSize(_s)
   function prepareData(element) {
     element = $(element);
     if (!element.data("timeago")) {
-      element.data("timeago", { datetime: $t.datetime(element) });
+      element.data("timeago", {datetime: $t.datetime(element)});
       var text = $.trim(element.text());
       if (text.length > 0) {
         element.attr("title", text);
@@ -1268,12 +1268,12 @@ open:function(s,t){var h=H[s],c=h.c,cc='.'+c.closeClass,z=(parseInt(h.w.css('z-i
 close:function(s){var h=H[s];if(!h.a)return F;h.a=F;
  if(A[0]){A.pop();if(!A[0])L('unbind');}
  if(h.c.toTop&&h.o)$('#jqmP'+h.w[0]._jqm).after(h.w).remove();
- if(h.c.onHide)h.c.onHide(h);else{h.w.hide();if(h.o)h.o.remove();} return F;
+ if(h.c.onHide)h.c.onHide(h);else{h.w.hide();if(h.o)h.o.remove();}return F;
 },
 params:{}};
 var s=0,H=$.jqm.hash,A=[],ie6=$.browser.msie&&($.browser.version == "6.0"),F=false,
 i=$('<iframe src="javascript:false;document.write(\'\');" class="jqm"></iframe>').css({opacity:0}),
-e=function(h){if(ie6)if(h.o)h.o.html('<p style="width:100%;height:100%"/>').prepend(i);else if(!$('iframe.jqm',h.w)[0])h.w.prepend(i); f(h);},
+e=function(h){if(ie6)if(h.o)h.o.html('<p style="width:100%;height:100%"/>').prepend(i);else if(!$('iframe.jqm',h.w)[0])h.w.prepend(i);f(h);},
 f=function(h){try{$(':input:visible',h.w)[0].focus();}catch(_){}},
 L=function(t){$()[t]("keypress",m)[t]("keydown",m)[t]("mousedown",m);},
 m=function(e){var h=H[A[A.length-1]],r=(!$(e.target).parents('.jqmID'+h.s)[0]);if(r)f(h);return !r;},

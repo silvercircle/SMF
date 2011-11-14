@@ -845,6 +845,11 @@ function template_show_settings()
 			// Otherwise it's an input box of some kind.
 			else
 			{
+				if ($config_var['type'] == 'callback_template') {
+					if (is_callable($config_var['name']))
+						$config_var['name']();
+					continue;
+				}
 				echo '
 						<dt', is_array($config_var) && !empty($config_var['force_div_id']) ? ' id="' . $config_var['force_div_id'] . '"' : '', '>';
 
@@ -2158,5 +2163,29 @@ function template_tag_admin_settings()
 		<input type="submit" class="button_submit floatright" name="savesettings" value="', $txt['smftags_savesettings'],  '" />
 		<div class="clear"></div>
 		</form></div>';
+}
+function template_bbc_settings()
+{
+	global $txt, $modSettings;
+	
+	echo <<<EOT
+    <div class="clear"></div>
+    <div class="cat_bar">
+		<h3>{$txt['hidden_content_bbc_settings']}</h3>
+	</div>
+	<div class="blue_container cleantop">
+	<div class="content">
+	<dl class="settings">
+EOT;
+	for($i = 1; $i <= 3; $i++) {
+		$val = isset($modSettings['hidden_content_no_view_msg'][$i]) ? $modSettings['hidden_content_no_view_msg'][$i] : $txt['hidden_no_access'];
+		echo '
+			<dt>',sprintf($txt['hidden_content_level_x_admin'], $i), '</dt>
+			<dd><input size="60" type="text" name="hidden_content_level_',$i,'" id="hidden_content_level_',$i,'" value="',$val,'" /></dd>';
+	}
+	echo '
+	</dl>
+	</div>
+	</div>';
 }
 ?>

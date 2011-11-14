@@ -1264,6 +1264,19 @@ String.prototype.trim = function() {
 	return this.replace(/^\s+|\s+$/g,"");
 };
 
+function setDimmed(mode)
+{
+	if(mode) {
+		if($('#pagedimmer').length > 0)
+			return;
+		var _e = $('<div id="pagedimmer" style="background-color:#888;opacity:0.6;position:fixed;left:0;top:0;z-index:3000;width:100%;height:100%;"></div>');
+		_e.insertBefore('#wrap');
+	}
+	else {
+		if($('#pagedimmer').length > 0)
+			$('#pagedimmer').remove();
+	}
+}
 function setBusy(mode)
 {
 	var el = $('#ajaxbusy');
@@ -1400,7 +1413,7 @@ jQuery(document).ready(function() {
 		if($(this).html().match(/<img .*>/))
 			$(this).css('border', 'none');
 	});
-	$('#jsconfirm').jqm({overlay: true, modal: true, trigger: false, center:true});
+	$('#jsconfirm').jqm({overlay: 50, modal: true, trigger: false, center:true});
 });
 
 /*
@@ -1459,7 +1472,7 @@ function mcardClose()
 	$('#mcard').hide();
 	$('#mcard').css('position', 'static');
 	$('#mcard_inner').html('');
-	$('#wrap').css('opacity', '1.0');
+	setDimmed(0);
 	return(false);
 }
 
@@ -1587,8 +1600,8 @@ function openResult(html, width, offset)
 {
 	var el = $('#mcard');
 
+	setDimmed(1);
 	var windowheight = $(window).height();
-	$('#wrap').css('opacity', '0.6');
 	$('#mcard_inner').html(html);
 	if($('#mcard_content'))
 		$('#mcard_content').css({'max-height': windowheight * 0.8 + 'px', 'overflow': 'auto'});

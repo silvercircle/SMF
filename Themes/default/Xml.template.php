@@ -13,7 +13,7 @@
  */
 function template_sendbody()
 {
-	global $context, $settings, $options, $txt;
+	global $context;
 
 	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>
 <smf>
@@ -23,7 +23,7 @@ function template_sendbody()
 
 function template_quotefast()
 {
-	global $context, $settings, $options, $txt;
+	global $context;
 
 	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>
 <smf>
@@ -33,7 +33,7 @@ function template_quotefast()
 
 function template_modifyfast()
 {
-	global $context, $settings, $options, $txt;
+	global $context;
 
 	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>
 <smf>
@@ -45,7 +45,7 @@ function template_modifyfast()
 
 function template_modifydone()
 {
-	global $context, $settings, $options, $txt;
+	global $context, $txt;
 
 	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>
 <smf>
@@ -67,7 +67,7 @@ function template_modifydone()
 
 function template_modifytopicdone()
 {
-	global $context, $settings, $options, $txt;
+	global $context, $txt;
 
 	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>
 <smf>
@@ -93,7 +93,7 @@ function template_modifytopicdone()
 
 function template_post()
 {
-	global $context, $settings, $options, $txt;
+	global $context, $txt;
 
 	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>
 <smf>
@@ -138,7 +138,7 @@ function template_post()
 
 function template_stats()
 {
-	global $context, $settings, $options, $txt, $modSettings;
+	global $context, $modSettings;
 
 	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>
 <smf>';
@@ -159,7 +159,7 @@ function template_stats()
 
 function template_split()
 {
-	global $context, $settings, $options;
+	global $context;
 
 	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>
 <smf>
@@ -200,7 +200,7 @@ if (!function_exists('template_button_strip'))
 */
 function template_results()
 {
-	global $context, $settings, $options, $txt;
+	global $context, $txt;
 	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>
 <smf>';
 
@@ -262,7 +262,7 @@ function template_results()
 
 function template_jump_to()
 {
-	global $context, $settings, $options;
+	global $context;
 
 	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>
 <smf>';
@@ -295,7 +295,7 @@ function template_message_icons()
 		width:200px;
 	}
 	</style>
-	<div class="blue_container smalltext" id="iconlist">
+	<div class="jqmWindow smalltext" id="iconlist">
 	<input id="_iconlist_id" type="hidden" value="',$context['id_msg'],'" />
 	<div class="content inset_shadow smallpadding">
 	<ol class="commonlist notifications">';
@@ -304,14 +304,13 @@ function template_message_icons()
 		<li data-id="',$icon['value'],'">
 		  <img class="icon" src="',$icon['url'],'" />',cleanXml($icon['name']), '
 		</li>';
-	echo '
+	echo <<<EOT
 	</ol>
 	<div class="centertext smallpadding">
-	  <input type="submit" class="button_submit" value="',$txt['modify_cancel'],'" onclick="$(\'#iconlist\').jqmHide();$(\'#iconlist\').remove();return(false);" />
+	  <input type="submit" class="button_submit" value="{$txt['modify_cancel']}" onclick="$('#iconlist').jqmHide();$('#iconlist').remove();return(false);" />
 	</div>
 	</div>
-	</div>';
-	echo <<< EOT
+	</div>
 	<script>
 		$(document).ready(function() {
 			$('#iconlist').jqm({overlay: true, modal: true, trigger: false, center:true});
@@ -337,7 +336,7 @@ EOT;
 
 function template_check_username()
 {
-	global $context, $settings, $options, $txt;
+	global $context;
 
 	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>
 <smf>
@@ -348,7 +347,7 @@ function template_check_username()
 // This prints XML in it's most generic form.
 function template_generic_xml()
 {
-	global $context, $settings, $options, $txt;
+	global $context;
 
 	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>';
 

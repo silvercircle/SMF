@@ -212,8 +212,9 @@ function reloadSettings()
 	else
 		$modSettings['tags_active'] = $modSettings['postmod_active'] = $modSettings['astream_active'] = true;
 	
+	$modSettings['hidden_content_no_view_msg'] = @unserialize($modSettings['hidden_content_no_view']);
+	
 	require_once($sourcedir . '/SimpleSEF.php');
-	//require_once($sourcedir . '/URLFactory.php');
 	URL::init($boardurl);
 
 	// Integration is cool.
