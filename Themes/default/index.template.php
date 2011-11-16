@@ -156,7 +156,7 @@ function template_body_above()
 	<div id="wrap" style="max-width:',empty($settings['forum_width']) ? '3000px' : $settings['forum_width'],';">
 	<header>
 	<div id="header">
-	<div id="upper_section" class="middletext">
+	<div id="upper_section" class="smalltext">
 		<div class="floatleft" style="overflow:hidden;max-height:87px;"><img src="',$settings['images_url'],'/logo.png" alt="logo" /></div>
 	<div class="clear"></div>
 	</div>
@@ -314,7 +314,7 @@ function template_body_below()
 	$time_now = forum_time(false);
 	$tz = date_default_timezone_get();
 	echo '
-	<div class="smalltext righttext floatright">',$loadtime,'<br>Forum time: ',strftime($modSettings['time_format'], $time_now) . ' '. $tz,'</div>
+	<div class="righttext floatright">',$loadtime,'<br>Forum time: ',strftime($modSettings['time_format'], $time_now) . ' '. $tz,'</div>
 	<div class="copyright">', my_theme_copyright(), '</div>
 	<div><a id="button_xhtml" href="http://validator.w3.org/check?uri=referer" target="_blank" class="new_win" title="Valid HTML"><span>HTML</span></a> |
 	', !empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']) ? '<a id="button_rss" href="' . $scripturl . '?action=.xml;type=rss" class="new_win"><span>' . $txt['rss'] . '</span></a> | ' : '', '
@@ -519,7 +519,7 @@ function my_theme_copyright($get_it = false)
 
 	$forum_copyright = sprintf($forum_copyright, $forum_version);
 	echo '
-	<span class="smalltext" style="display: inline; visibility: visible;">' . $forum_copyright . '</span>';
+	<span>' . $forum_copyright . '</span>';
 }
 
 function socialbar($l, $t)
@@ -608,18 +608,20 @@ function template_sidebar_content()
 		echo '
 				<div class="smalltext">
 				<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/sha1.js',$context['jsver'],'"></script>
-				<div><form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
-					', sprintf($txt['welcome_guest'], $txt['guest_title']), '<br /><br />
-					', $txt['quick_login_dec'], '<br />
-					<input type="text" name="user" size="10" class="input_text" />
-					<input type="password" name="passwrd" size="10" class="input_password" />
-					<select name="cookielength">
-						<option value="60">', $txt['one_hour'], '</option>
-						<option value="1440">', $txt['one_day'], '</option>
-						<option value="10080">', $txt['one_week'], '</option>
-						<option value="43200">', $txt['one_month'], '</option>
-						<option value="-1" selected="selected">', $txt['forever'], '</option>
-					</select>
+				<div>
+					<form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
+					<div class="orange_container centertext">', sprintf($txt['welcome_guest'], $txt['guest_title']), '</div>
+					<table>
+					<tr>
+					<td class="nowrap"><strong>',$txt['username'],':</strong></td>
+					<td><input type="text" name="user" size="20" class="input_text" /></td>
+					</tr>
+					<tr>
+					<td class="nowrap"><strong>',$txt['password'],':</strong></td>
+					<td><input type="password" name="passwrd" size="20" class="input_password" /></td>
+					</tr>
+					</table>
+					<span style="line-height:20px;">',$txt['always_logged_in'],'<input type="checkbox" name="cookielength" value="-1"></span>
 					<input style="width:90%;margin-left:5%;margin-top:10px;" type="submit" value="', $txt['login'], '" class="button_submit" /><br />';
 
 		if (!empty($modSettings['enableOpenID']))
@@ -628,7 +630,13 @@ function template_sidebar_content()
 
 		echo '
 					<input type="hidden" name="hash_passwrd" value="" />
-				</form></div></div>';
+					</form>
+					<br>
+					<div class="orange_container">
+					',$txt['login_or_register'],'
+					</div>
+					</div>
+				</div>';
 	}
 	echo '</div>
 		<div class="cContainer_end"></div>';
@@ -686,7 +694,7 @@ function template_sidebar_content()
 			// latest_post has link, href, time, subject, short_subject (shortened with...), and topic. (its id.)
 			echo '
 				<strong><a href="', $scripturl, '?action=recent">', $txt['recent_posts'], '</a></strong>
-				<p id="infocenter_onepost" class="middletext">
+				<p id="infocenter_onepost" class="smalltext">
 					', $txt['recent_view'], ' &quot;', $context['latest_post']['link'], '&quot; ', $txt['recent_updated'], ' (', $context['latest_post']['time'], ')<br />
 				</p>';
 		}
@@ -720,7 +728,7 @@ function template_sidebar_content()
 		$collapser = array('bodyclass'=> $widgetstyle, 'id' => 'cal_panel', 'title' => '<a href="'. URL::action($scripturl . '?action=calendar') . '">'. $title . '</a>');
 		template_create_collapsible_container($collapser);
 		echo '
-			<div class="smallertext">';
+			<div class="smalltext">';
 
 		// Holidays like "Christmas", "Chanukah", and "We Love [Unknown] Day" :P.
 		if (!empty($context['calendar_holidays']))

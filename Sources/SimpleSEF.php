@@ -374,7 +374,7 @@ class SimpleSEF {
      * @return void
      */
     public static function convertQueryString() {
-        global $boardurl, $modSettings, $scripturl, $smcFunc, $language, $sourcedir;
+        global $boardurl, $modSettings, $scripturl;
 
         if (empty($modSettings['simplesef_enable']))
             return;
@@ -390,9 +390,6 @@ class SimpleSEF {
             $_SERVER['REQUEST_URL'] = $match[1] . $_SERVER['REQUEST_URI'];
         else
             $_SERVER['REQUEST_URL'] = $_SERVER['REQUEST_URI'];
-
-        if (!empty($modSettings['queryless_urls']))
-            updateSettings(array('queryless_urls' => '0'));
 
         if (SMF == 'SSI')
             return;
@@ -658,12 +655,15 @@ class SimpleSEF {
     public static function adminAreas(&$admin_areas) {
         global $txt, $modSettings;
 
-        // We insert it after Features and Options
+        if (empty($modSettings['simplesef_enable']))
+			return;
+
+		// We insert it after Features and Options
         $counter = array_search('featuresettings', array_keys($admin_areas['config']['areas'])) + 1;
 
         $admin_areas['config']['areas'] = array_merge(
             array_slice($admin_areas['config']['areas'], 0, $counter, TRUE), array('simplesef' => array(
-                'label' => $txt['simplesef'],
+                'label' => $txt['simplesef_admin_label'],
                 'function' => create_function(NULL, 'SimpleSEF::ModifySimpleSEFSettings();'),
                 'icon' => 'search.gif',
                 'subsections' => array(
@@ -728,7 +728,6 @@ class SimpleSEF {
         global $scripturl, $txt, $context, $boarddir, $modSettings;
 
         $config_vars = array(
-            array('check', 'simplesef_enable', 'subtext' => $txt['simplesef_enable_desc']),
 			array('text', 'simplesef_topicsbase', 'size' => 20, 'subtext' => $txt['simplesef_topicsbase_desc']),
 			array('check', 'simplesef_redirect', 'subtext' => $txt['simplesef_redirect_desc']),
             array('text', 'simplesef_space', 'size' => 6, 'subtext' => $txt['simplesef_space_desc']),

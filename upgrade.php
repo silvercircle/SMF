@@ -3451,9 +3451,9 @@ function template_upgrade_above()
 			<h1 class="forumtitle">', $txt['upgrade_upgrade_utility'], '</h1>
 			<img id="smflogo" src="Themes/default/images/smflogo.png" alt="Simple Machines Forum" title="Simple Machines Forum" />
 		</div>
-		<div id="upper_section" class="middletext flow_hidden">
+		<div id="upper_section" class="smalltext flow_hidden">
 			<div class="user"></div>
-			<div class="news normaltext">
+			<div class="news">
 			</div>
 		</div>
 	</div></div>

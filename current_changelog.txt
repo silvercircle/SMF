@@ -1,10 +1,10 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]Consistent look for all popup dialogs.[/li]
-[li]Background dimming should now be consistent among all ajax overlays (dialogs and normal content output overlays).[/li]
-[li]The quick - link dialog is now using language strings ($txt[]) and its design has been updated to look like other dialogs.[/li]
-[li]The no permission messages for unviewable hidden content can now be customized on the BB Code administration page.[/li]
-[li]template_show_settings() now supports a callback_template config variable type. This can be useful for some special cases where additional settings must be shown in the form.[/li]
-[li]
+[li]Queryless URLs (aka pathinfo - URLs) are gone. We already have pretty URLs provided by a custom SimpleSEF modification, so this is just another redundant feature that is no longer needed.[/li]
+[li]More tighter integration of SimpleSEF in the admin panel.[/li]
+[li]minor style updates for the board index.[/li]
+[li]Some CSS cleanup and font size changes.[/li]
+[li]Droid sans (from Google web fonts) is now the default font for all instances where we use a sans-serif font.[/li]
+[li]Reworked login forms and inline quick login box in the side bar.[/li]
 [/list]

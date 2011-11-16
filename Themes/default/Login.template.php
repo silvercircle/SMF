@@ -19,14 +19,14 @@ function template_login()
 		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/sha1.js"></script>
 
 		<form action="', $scripturl, '?action=login2" name="frmLogin" id="frmLogin" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
-		<div class="tborder login">
-			<div class="cat_bar rounded_top">
-				<h3 class="catbg centertext">
+		<div class="login">
+			<div class="cat_bar2">
+				<h3>
 					', $txt['login'], '
 				</h3>
 			</div>
-			<div class="blue_container"><br class="clear" />';
-
+			<div class="blue_container cleantop">
+			<div class="content">';
 	// Did they make a mistake last time?
 	if (!empty($context['login_errors']))
 		foreach ($context['login_errors'] as $error)
@@ -40,7 +40,7 @@ function template_login()
 
 	// Now just get the basic information - username, password, etc.
 	echo '
-				<dl>
+				<dl class="input">
 					<dt>', $txt['username'], ':</dt>
 					<dd><input type="text" name="user" size="20" value="', $context['default_username'], '" class="input_text" /></dd>
 					<dt>', $txt['password'], ':</dt>
@@ -49,13 +49,13 @@ function template_login()
 
 	if (!empty($modSettings['enableOpenID']))
 		echo '<p><strong>&mdash;', $txt['or'], '&mdash;</strong></p>
-				<dl>
+				<dl class="input">
 					<dt>', $txt['openid'], ':</dt>
 					<dd><input type="text" name="openid_identifier" class="input_text openid_login" size="17" />&nbsp;<em><a href="', $scripturl, '?action=helpadmin;help=register_openid" onclick="return reqWin(this.href);" class="help">(?)</a></em></dd>
 				</dl><hr />';
 
 	echo '
-				<dl>
+				<dl class="input">
 					<dt>', $txt['mins_logged_in'], ':</dt>
 					<dd><input type="text" name="cookielength" size="4" maxlength="4" value="', $modSettings['cookieTime'], '"', $context['never_expire'] ? ' disabled="disabled"' : '', ' class="input_text" /></dd>
 					<dt>', $txt['always_logged_in'], ':</dt>
@@ -64,12 +64,15 @@ function template_login()
 	if (isset($context['login_show_undelete']))
 		echo '
 					<dt class="alert">', $txt['undelete_account'], ':</dt>
-					<dd><input type="checkbox" name="undelete" class="input_check" /></dd>';
+					<dd><input type="checkbox" name="undelete" /></dd>';
 	echo '
 				</dl>
+				<div class="centertext">
 				<p><input type="submit" value="', $txt['login'], '" class="button_submit" /></p>
 				<p class="smalltext"><a href="', $scripturl, '?action=reminder">', $txt['forgot_your_password'], '</a></p>
 				<input type="hidden" name="hash_passwrd" value="" />
+				</div>
+			</div>
 			</div>
 		</div></form>';
 

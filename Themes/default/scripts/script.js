@@ -228,7 +228,7 @@ function reqWin(desktopURL, alternateWidth, alternateHeight, noScrollbars)
 	el.insertBefore('#wrap');
 	el.css('position', 'fixed');
 	setBusy(1);
-	$('#helpoverlay').jqm({overlay:20, modal:true, ajax:desktopURL, target:'#help_content', onLoad: function() {$('#helpoverlay').show();setBusy(0);centerElement($('#helpoverlay'), -100);}});
+	$('#helpoverlay').jqm({overlay:60, modal:true, ajax:desktopURL, target:'#help_content', onLoad: function() {$('#helpoverlay').show();setBusy(0);centerElement($('#helpoverlay'), -100);}});
 	centerElement(el, -100);
 	$('#helpoverlay').jqmShow();
 	$('#helpoverlay').hide();

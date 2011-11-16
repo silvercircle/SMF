@@ -79,8 +79,8 @@ function template_main()
 			foreach ($context['poll']['options'] as $option)
 			{
 				echo '
-						<dt class="middletext', $option['voted_this'] ? ' voted' : '', '">', $option['option'], '</dt>
-						<dd class="middletext statsbar', $option['voted_this'] ? ' voted' : '', '">';
+						<dt class="smalltext', $option['voted_this'] ? ' voted' : '', '">', $option['option'], '</dt>
+						<dd class="smalltext statsbar', $option['voted_this'] ? ' voted' : '', '">';
 
 				if ($context['allow_poll_view'])
 					echo '
@@ -115,7 +115,7 @@ function template_main()
 			// Show each option with its button - a radio likely.
 			foreach ($context['poll']['options'] as $option)
 				echo '
-								<li class="middletext">', $option['vote_button'], ' <label for="', $option['id'], '">', $option['option'], '</label></li>';
+								<li class="smalltext">', $option['vote_button'], ' <label for="', $option['id'], '">', $option['option'], '</label></li>';
 
 			echo '
 							</ul>

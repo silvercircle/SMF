@@ -747,7 +747,7 @@ function template_search_results()
 			<div class="windowbg', $alternate ? '2': '', '">
 				<div class="content">
 					', $message['body'], '
-					<p class="pm_reply righttext middletext">';
+					<p class="pm_reply righttext smalltext">';
 
 				if ($context['can_send_pm'])
 				{

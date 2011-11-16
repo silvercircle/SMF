@@ -17,11 +17,13 @@ function template_registration_agreement()
 
 	echo '
 		<form action="', $scripturl, '?action=register" method="post" accept-charset="', $context['character_set'], '" id="registration">
-			<div class="cat_bar">
-				<h3 class="catbg">', $txt['registration_agreement'], '</h3>
+			<div class="cat_bar2">
+				<h3>', $txt['registration_agreement'], '</h3>
 			</div>
-			<div class="blue_container">
+			<div class="blue_container cleantop">
+			 <div class="content">
 				<p>', $context['agreement'], '</p>
+			 </div>
 			</div>
 			<div id="confirm_buttons">';
 
@@ -122,13 +124,12 @@ function template_registration_form()
 
 	echo '
 		<form action="', $scripturl, '?action=register2" method="post" accept-charset="', $context['character_set'], '" name="registration" id="registration" onsubmit="return verifyAgree();">
-			<h1 class="bigheader">
-				', $txt['registration_form'], '
-			</h1>
-			<div class="cat_bar">
-				<h3>', $txt['required_info'], '</h3>
+			<div class="cat_bar2">
+				<h3>', $txt['registration_form'], '</h3>
 			</div>
-			<div class="blue_container">
+			<div class="blue_container cleantop">
+			 <div class="content">
+			  <h1 class="bigheader secondary">',$txt['required_info'],'</h1>
 				<fieldset class="content">
 					<dl class="register_form">
 						<dt><strong><label for="smf_autov_username">', $txt['username'], ':</label></strong></dt>
@@ -208,13 +209,13 @@ function template_registration_form()
 
 	echo '
 				</fieldset>
-				<span class="botslice"><span></span></span>
+			 </div>
 			</div>';
 
 	// If we have either of these, show the extra group.
 	if (!empty($context['profile_fields']) || !empty($context['custom_fields']))
 	{
-		echo '
+		echo '<br>
 			<div class="cat_bar">
 				<h3>', $txt['additional_information'], '</h3>
 			</div>
@@ -329,10 +330,12 @@ function template_registration_form()
 			<div class="cat_bar">
 			<h3>', $txt['verification'], '</h3>
 			</div>
-			<div class="blue_container">
+			<div class="blue_container cleantop">
+			 <div class="content">
 				<fieldset class="content centertext">
 					', template_control_verification($context['visual_verification_id'], 'all'), '
 				</fieldset>
+			</div>
 			</div>';
 	}echo '
 			<div id="confirm_buttons">

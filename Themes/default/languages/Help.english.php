@@ -404,7 +404,6 @@ $helptxt['enableParticipation'] = 'This shows a little icon on the topics the us
 $helptxt['db_persist'] = 'Keeps the connection active to increase performance.  If you aren\'t on a dedicated server, this may cause you problems with your host.';
 $helptxt['ssi_db_user'] = 'Optional setting to use a different database user and password when you are using SSI.php.';
 
-$helptxt['queryless_urls'] = 'This changes the format of URLs a little so search engines will like them better.  They will look like index.php/topic,1.0.html.<br /><br />This feature will ' . (isset($_SERVER['SERVER_SOFTWARE']) && (strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false || strpos($_SERVER['SERVER_SOFTWARE'], 'lighttpd') !== false) ? '' : 'not') . ' work on your server.';
 $helptxt['embed_GA'] = 'If this is checked and you\'ve also set your tracker ID and registered domain name below, the necessary Google Analytics tracking code will be added to your theme\'s footer.<br /><br />Note that registered users can opt-out from being tracked by setting a profile option.';
 $helptxt['GA_tracker_id'] = 'This is your Google Analytics tracker id. It usually begins with UA- and you get this ID when setting up Analytics for your site.';
 $helptxt['GA_domain_name'] = 'The domain you have configured in Google Analytics. Do not add a http:// in front of it and don\'t add trailing slashes. Just enter the domain name that matches your tracker id.';
@@ -608,5 +607,5 @@ $helptxt['custom_mask'] = 'The input mask is important for your forum\'s securit
 		\ - Escapes the next character.<br />
 	</div><br /><br />
 	More information and advanced techniques may be found on the internet.';
-
+$helptxt['simplesef_enable'] = 'You can enable this option to generate pretty (or SEO-friendly URLs) for all boards, topics and user profiles on your board. Please note that this may not work on every server setup and needs further configuration.<br><br> Your server <strong>must</strong> support mod_rewrite or a similar mechanism and you are responsible for setting up the URL rewrite rules.<br><br>After enabling this feature, please review its settings which you can find under &quot;Board URLs&quot; in the administration menu on the left.';
 ?>

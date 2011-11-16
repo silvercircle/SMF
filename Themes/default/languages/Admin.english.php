@@ -1,7 +1,7 @@
 <?php
 // Version: 2.0; Admin
 
-global $settings, $scripturl;
+global $scripturl;
 
 $txt['admin_boards'] = 'Boards';
 $txt['admin_users'] = 'Members';
@@ -645,9 +645,11 @@ $txt['newsitem_show_groups'] = 'Only show it to the following user group(s):';
 $txt['newsitem_display_options'] = 'Display options';
 
 $txt['simplesef'] = 'SimpleSEF';
-$txt['simplesef_desc'] = 'This section allows you to edit the options for SimpleSEF.<br>
-SimpleSEF implements "pretty" or so-called SEO-friendly URLs for your forum.<br><br>
-<strong>Note: If you enable this and start receiving 404 errors on your board, it is likely because .htaccess or web.config was not created, or your host does not have the mod_rewrite or Microsoft Url Rewrite module installed on the web server and you will not be able to use this mod.</strong> [<a href="#" onclick="showSimpleSEFHelp(); return false;">Help</a>]
+$txt['simplesef_admin_label'] = 'Board URLs';
+$txt['simplesef_desc'] = 'This section allows you to edit the options for pretty board URLs.<br>
+It implements "pretty" or so-called SEO-friendly URLs for your forum.<br><br>
+To verify whether pretty URLs will work on your setup, please click <a href="'.URL::user(1, 'admin').'"><strong>this link</strong></a>. If all has been set up properly, it should display the member profile page for the member with the ID 1 (that\'s normally you or the administrator who installed the forum). If it does NOT work, you should immediately disable the option to generate this kind of URls, otherwise your forum will be unusable.<br><br>
+<strong>Note: If you have this enabled and start receiving 404 errors on your board, it is likely because .htaccess or web.config was not created, or your host does not have the mod_rewrite or Microsoft Url Rewrite module installed on the web server and you will not be able to use this mod.</strong> <strong>[<a href="#" onclick="showSimpleSEFHelp(); return false;">Help</a>]</strong>
 <span style="display:block;" id="simplesef_help">If you have an Apache webserver, or one that uses .htaccess and has mod_rewrite functionality, you need a .htaccess file in your main SMF directory with the following:
 <span style="display:block;" class="codeheader">Code:</span>
 <code>RewriteEngine On<br /># Uncomment the following line if its not working right<br /># RewriteBase /<br />RewriteCond %{REQUEST_FILENAME} !-f<br />RewriteCond %{REQUEST_FILENAME} !-d<br />RewriteRule ^(.*)$ index.php?q=$1 [L,QSA]</code>
@@ -670,7 +672,7 @@ function showSimpleSEFHelp()
 }
 // ]]' . '></script>';
 $txt['simplesef_basic'] = 'Basic Options';
-$txt['simplesef_enable'] = 'Enable SimpleSEF';
+$txt['simplesef_enable'] = 'Enable pretty (aka SEO-friendly) URLs for your forum. Make sure to read the <strong>[help]</strong> before you enable this feature.';
 $txt['simplesef_topicsbase'] = 'Base component for topic URLs';
 $txt['simplesef_topicsbase_desc'] = 'The rewrite base for all topics. Example: topics/';
 $txt['simplesef_redirect'] = 'Rewrite and redirect requests with SEF URLs';

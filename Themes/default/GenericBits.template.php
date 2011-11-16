@@ -98,10 +98,7 @@ function template_boardbit(&$board)
 	// Show the "Child Boards: ". (there's a link_children but we're going to bold the new ones...)
 	if (!empty($board['children']))
 	{
-		// Sort the links into an array with new boards bold so it can be imploded.
 		$children = array();
-		/* Each child in each board's children has:
-				id, name, description, new (is it new?), topics (#), posts (#), href, link, and last_post. */
 		foreach ($board['children'] as $child)
 		{
 			if (!$child['is_redirect'])
@@ -109,7 +106,6 @@ function template_boardbit(&$board)
 			else
 				$child['link'] = '<a class="boardlink" href="' . $child['href'] . '" title="' . comma_format($child['posts']) . ' ' . $txt['redirects'] . '"><h4>' . $child['name'] . '</h4></a>'.'&nbsp;('.$child['description'].')';
 
-			// Has it posts awaiting approval?
 			if ($child['can_approve_posts'] && ($child['unapproved_posts'] || $child['unapproved_topics']))
 				$child['link'] .= ' <a href="' . $scripturl . '?action=moderate;area=postmod;sa=' . ($child['unapproved_topics'] > 0 ? 'topics' : 'posts') . ';brd=' . $child['id'] . ';' . $context['session_var'] . '=' . $context['session_id'] . '" title="' . sprintf($txt['unapproved_posts'], $child['unapproved_topics'], $child['unapproved_posts']) . '" class="moderation_link">(!)</a>';
 

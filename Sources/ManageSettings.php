@@ -567,7 +567,7 @@ function ModifyBasicSettings($return_config = false)
 			array('text', 'default_personal_text'),
 		'',
 			// SEO stuff
-			array('check', 'queryless_urls'),
+			array('check', 'simplesef_enable'),
 			array('text', 'meta_keywords', 'size' => 50),
 		'',
 			// Number formatting, timezones.

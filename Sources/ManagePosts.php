@@ -328,7 +328,7 @@ function ModifyBBCSettings($return_config = false)
 
 		$hidden_content_messages = array();
 		for($i = 1; $i <= 3; $i++) {
-			if(isset($_POST['hidden_content_level_' . $i]) && !empty($_POST['hidden_content_level_' . $i]) && $_POST['hidden_content_level_' . $i] != $txt['hidden_no_access'])
+			if(isset($_POST['hidden_content_level_' . $i]) && !empty($_POST['hidden_content_level_' . $i]))
 				$hidden_content_messages[$i] = $_POST['hidden_content_level_' . $i];
 		}
 		if(isset($_POST['legacyBBC']) && !empty($_POST['legacyBBC']))

@@ -1298,7 +1298,7 @@ function template_admin_search_results()
 						<br /><span class="smalltext"><a href="', $result['category']['href'], '" target="_blank" class="new_win">', $result['category']['name'], '</a> &nbsp;/&nbsp;
 						<a href="', $result['board']['href'], '" target="_blank" class="new_win">', $result['board']['name'], '</a> /</span>
 					</p>
-					<p class="double_height">
+					<p>
 						', $result['messages'][0]['body'], '
 					</p>
 				</li>';
@@ -1312,7 +1312,7 @@ function template_admin_search_results()
 
 				if ($result['help'])
 					echo '
-					<p class="double_height">', $result['help'], '</p>';
+					<p>', $result['help'], '</p>';
 
 				echo '
 				</li>';

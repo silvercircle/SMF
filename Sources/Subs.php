@@ -2414,8 +2414,8 @@ function parse_bbc_stage2(&$message, $is_for_editor = false)
 			}
 		}
 	}
-	//if(!empty($modSettings['enableAdvancedHooks']))
-	//	HookAPI::callHook('bbc_stage2', array(&$message));
+	if(!empty($modSettings['enableAdvancedHooks']))
+		HookAPI::callHook('bbc_stage2', array(&$message, &$is_for_editor));
 }
 
 // Parse smileys in the passed message.
@@ -2674,14 +2674,6 @@ function redirectexit($setLocation = '', $refresh = false)
 	// Keep that debug in their for template debugging!
 	elseif (isset($_GET['debug']))
 		$setLocation = preg_replace('/^' . preg_quote($scripturl, '/') . '\\??/', $scripturl . '?debug;', $setLocation);
-
-	if (!empty($modSettings['queryless_urls']) && (empty($context['server']['is_cgi']) || @ini_get('cgi.fix_pathinfo') == 1 || @get_cfg_var('cgi.fix_pathinfo') == 1) && (!empty($context['server']['is_apache']) || !empty($context['server']['is_lighttpd'])))
-	{
-		if (defined('SID') && SID != '')
-			$setLocation = preg_replace('/^' . preg_quote($scripturl, '/') . '\?(?:' . SID . '(?:;|&|&amp;))((?:board|topic)=[^#]+?)(#[^"]*?)?$/e', "\$scripturl . '/' . strtr('\$1', '&;=', '//,') . '.html\$2?' . SID", $setLocation);
-		else
-			$setLocation = preg_replace('/^' . preg_quote($scripturl, '/') . '\?((?:board|topic)=[^#"]+?)(#[^"]*?)?$/e', "\$scripturl . '/' . strtr('\$1', '&;=', '//,') . '.html\$2'", $setLocation);
-	}
 
 	// Maybe integrations want to change where we are heading?
 	HookAPI::callHook('integrate_redirect', array(&$setLocation, &$refresh));
@@ -3172,8 +3164,9 @@ function setupThemeContext($forceload = false)
 		$context['user']['popup_messages'] = false;
 
 		if (!empty($modSettings['registration_method']) && $modSettings['registration_method'] == 1)
-			$txt['welcome_guest'] .= $txt['welcome_guest_activate'];
-
+			$txt['welcome_guest_missed_activation'] = $txt['welcome_guest_activate'];
+		else 
+			$txt['welcome_guest_missed_activation'] = '';
 		// If we've upgraded recently, go easy on the passwords.
 		if (!empty($modSettings['disableHashTime']) && ($modSettings['disableHashTime'] == 1 || time() < $modSettings['disableHashTime']))
 			$context['disable_login_hashing'] = true;
@@ -3772,6 +3765,16 @@ function setupMenuContext()
 				'href' => URL::home(),
 				'show' => true,
 				'sub_buttons' => array(
+					'unread' => array(
+						'title' => $txt['unread_since_visit'],
+						'href' => $scripturl . '?action=unread',
+						'show' => $context['user']['is_logged'],
+					),
+					'replies' => array(
+						'title' => $txt['show_unread_replies'],
+						'href' => $scripturl . '?action=unreadreplies',
+						'show' => $context['user']['is_logged'],
+					)
 				),
 				'is_last' => $context['right_to_left'],
 			),
@@ -3816,12 +3819,6 @@ function setupMenuContext()
 											'show' => allowedTo('manage_permissions'),
 											'is_last' => true,
 					),
-					'tags_settings' => array(
-						'title' => $txt['smftags_admin'],
-						'href' => $scripturl . '?action=admin;area=tags;sa=admin',
-						'show' => allowedTo('admin_forum'),
-					),
-
 				),
 			),
 			'moderate' => array(

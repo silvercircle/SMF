@@ -15,7 +15,7 @@ table {
 body {
 	background: #D0D1E6;
 	font-family: "Droid Sans", "Trebuchet MS", "Tahoma", "Arial", sans-serif;
-	font-size: 11pt;
+	font-size: 10pt;
 	margin: 0;
 	padding: 0;
 }
@@ -186,21 +186,7 @@ em {
 	clear: right !important;
 }
 .smalltext {
-	font-size: 0.9em;
-}
-.smallertext {
-	font-size: 0.85em;
-}
-.middletext {
-	font-size: 0.95em;
-	line-height: 1em;
-}
-.normaltext {
-	font-size: 1em;
-	line-height: 1.2em;
-}
-.largetext {
-	font-size: 1.4em;
+	font-size: 9pt;
 }
 .centertext {
 	margin: 0 auto;
@@ -215,9 +201,6 @@ em {
 	margin-left: 0;
 	margin-right: auto;
 	text-align: left;
-}
-.double_height {
-	line-height: 2em;
 }
 .padding {
 	padding: 0.7em;
@@ -605,8 +588,28 @@ p.para2 {
 	padding: 1em 0 3.5em 0;
 	margin: 0;
 }
+dl.input {
+	line-height:26px;
+}
+dl.input input {
+	box-sizing: border-box;
+	height:24px;
+}
+dl.input dt {
+	float: left;
+	text-align: right;
+	width:44%;
+	margin:0;
+	margin-bottom:10px;
+}
 
-/* common list */
+dl.input dd {
+	text-align: left;
+	width:54%;
+	float:right;
+	margin:0;
+	margin-bottom:10px;
+}
 dl.common {
 	clear: right;
 	overflow: hidden;
@@ -861,11 +864,11 @@ div.dropselect_content.right {
 .dropmenu li ul ul {
 	margin: -1.8em 0 0 13em;
 }
-.dropmenu li.active, .dropmenu li.active span.m_downarrow {
+.dropmenu li.active {
 	background-color: #D0D1E6;
-	border-top: 2px solid #FFC6C6;
-	border-radius:4px 4px 0 0;
-	margin-top:-2px;
+	/*border-top: 2px solid #FFC6C6;*/
+	/*border-radius:4px 4px 0 0;*/
+	/*margin-top:-2px;*/
 }
 .dropmenu li.active > a {
 	color: black;
@@ -916,7 +919,7 @@ a.prefix {
 	border-radius:3px;
 }
 span.m_downarrow:hover {
-	background-color: black !important;
+	background-color: green !important;
 }
 
 /* The dropdown menu toggle image */
@@ -1028,10 +1031,6 @@ ul#navigation li {
 	cursor: pointer;
 	margin-bottom: -20px;
 }
-
-#container {
-}
-
 /* the main title, always stay at 45 pixels in height! */
 h1.forumtitle {
 	line-height: 45px;
@@ -1185,11 +1184,11 @@ div.navigate_section {
 }
 /* The footer wih copyright links etc. */
 #footer_section {
-	background: #333355;
+	background: #222;
 	color: #ddd;
-	font-size: 10px;
 	text-align: left;
 	padding: 3px 10px;
+	font-size:8pt;
 }
 
 #footer_section a {
@@ -1258,7 +1257,7 @@ ol.commonlist.category {
 	border-right: 1px solid #ddd !important;
 	border-bottom: 1px solid #ddd !important;
 	box-shadow:0 0 10px #ccc inset;
-	border-radius:0 0 4px 4px;
+	/*border-radius:0 0 4px 4px;*/
 	background-color:#f5f5f5;
 	padding:5px;
 	padding-top:0;
@@ -2133,32 +2132,7 @@ fieldset.merge_options {
 	width: 540px;
 	margin: 0 auto;
 }
-
-.login dl {
-	overflow: auto;
-	clear: right;
-}
-
-.login dt, .login dd {
-	margin: 0 0 0.4em 0;
-	width: 44%;
-	padding: 0.1em;
-}
-
-.login dt {
-	float: left;
-	clear: both;
-	text-align: right;
-	font-weight: bold;
-}
-
-.login dd {
-	width: 54%;
-	float: right;
-	text-align: left;
-}
-
-.login p {
+login p {
 	text-align: center;
 }
 
@@ -3311,7 +3285,7 @@ div.cContainer_end {
 
 .blue_container.cleantop, .orange_container.cleantop, .red_container.cleantop, .yellow_container.cleantop {
 	border-top:0;
-	border-radius:0 0 3px 3px;
+	border-radius:0 !important;
 }
 table.cleantop {
 	border-top: 0;

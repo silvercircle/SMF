@@ -374,10 +374,6 @@ function fix_possible_url($val)
 
 	HookAPI::callHook('integrate_fix_url', array(&$val));
 
-	if (empty($modSettings['queryless_urls']) || ($context['server']['is_cgi'] && @ini_get('cgi.fix_pathinfo') == 0 && @get_cfg_var('cgi.fix_pathinfo') == 0) || (!$context['server']['is_apache'] && !$context['server']['is_lighttpd']))
-		return $val;
-
-	$val = preg_replace('/^' . preg_quote($scripturl, '/') . '\?((?:board|topic)=[^#"]+)(#[^"]*)?$/e', '\'\' . $scripturl . \'/\' . strtr(\'$1\', \'&;=\', \'//,\') . \'.html$2\'', $val);
 	return $val;
 }
 

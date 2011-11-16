@@ -56,7 +56,6 @@ $txt['autoOptMaxOnline'] = 'Maximum users online when optimizing<div class="smal
 $txt['autoFixDatabase'] = 'Automatically fix broken tables';
 $txt['allow_disableAnnounce'] = 'Allow users to disable announcements';
 $txt['disallow_sendBody'] = 'Don\'t allow post text in notifications';
-$txt['queryless_urls'] = 'Search engine friendly URLs<div class="smalltext"><strong>Apache/Lighttpd only!</strong></div>';
 $txt['embed_GA'] = 'Embed Google Analytics code into theme\'s footer<div class="smalltext">Note: you also MUST set the tracker ID and domain name in the next fields.</div>';
 $txt['fb_appid'] = 'Your Facebook APP ID - you need this to enable theFacebook Like button on the forum index.';
 $txt['twitter_id'] = 'Our twitter ID. If you fill this out, a follow button will be placed in the side bar allowing visitors to follow you on Twitter';

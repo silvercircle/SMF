@@ -60,7 +60,6 @@ $txt['autoOptMaxOnline'] = 'Maximum users online when optimizing<div class="smal
 $txt['autoFixDatabase'] = 'Automatically fix broken tables';
 $txt['notifyAnncmnts_UserDisable'] = 'Allow users to disable announcements';
 $txt['modlog_enabled'] = 'Log moderation actions';
-$txt['queryless_urls'] = 'Search engine friendly URLs<div class="smalltext"><b>Apache only!</b></div>';
 $txt['maxwidth'] = 'Max width of posted pictures (0 = disable)';
 $txt['maxheight'] = 'Max height of posted pictures (0 = disable)';
 $txt['mail_type'] = 'Mail type';
