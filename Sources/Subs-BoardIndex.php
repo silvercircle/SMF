@@ -258,7 +258,7 @@ function getBoardIndex($boardIndexOptions)
 			'topic' => $row_board['id_topic'],
 			'prefix' => html_entity_decode($row_board['topic_prefix'])
 		);
-		$row_board['short_subject'] = shorten_subject($row_board['subject'], 50);
+		$row_board['short_subject'] = shorten_subject($row_board['first_subject'], 50);
 		$this_last_post['subject'] = $row_board['short_subject'];
 
 		$this_first_post = array(
@@ -276,7 +276,7 @@ function getBoardIndex($boardIndexOptions)
 			//$this_last_post['href'] = $scripturl . '?topic=' . $row_board['id_topic'] . '.msg' . ($user_info['is_guest'] ? $row_board['id_msg'] : $row_board['new_from']) . (empty($row_board['is_read']) ? ';boardseen' : '') . '#new';
 			$this_last_post['link'] = '<a rel="nofollow" href="' . $this_last_post['href'] . '" title="' . $row_board['subject'] . '">' . $row_board['short_subject'] . '</a>';
 			$this_last_post['topichref'] = URL::topic($row_board['id_topic'], $row_board['first_subject'], 0);// $scripturl . '?topic=' . $row_board['id_topic'];
-			$this_last_post['topiclink'] = '<a href="' . $this_last_post['topichref'] . '" title="' . $row_board['subject'] . '">' . $row_board['short_subject'] . '</a>';
+			$this_last_post['topiclink'] = '<a href="' . $this_last_post['topichref'] . '" title="' . $row_board['first_subject'] . '">' . $row_board['short_subject'] . '</a>';
 		}
 		else
 		{

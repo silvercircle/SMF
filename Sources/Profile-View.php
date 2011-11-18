@@ -248,7 +248,7 @@ function summary($memID)
 function showPosts($memID)
 {
 	global $txt, $user_info, $scripturl, $modSettings;
-	global $context, $user_profile, $sourcedir, $board, $memberContext;
+	global $context, $user_profile, $sourcedir, $board, $memberContext, $options;
 
 	$context['need_synhlt'] = true;
 

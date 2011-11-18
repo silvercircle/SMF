@@ -148,7 +148,7 @@ function template_view_package()
 			{
 				echo '
 				<tr id="operation_', $action_num, '">
-					<td colspan="5" class="windowbg3">
+					<td colspan="5" class="windowbg2">
 						<table border="0" cellpadding="3" cellspacing="0" width="100%">';
 
 				// Show the operations.
@@ -243,7 +243,7 @@ function template_view_package()
 					{
 						echo '
 					<tr id="operation_', $action_num, '">
-						<td colspan="5" class="windowbg3">
+						<td colspan="5" class="windowbg2">
 							<table border="0" cellpadding="3" cellspacing="0" width="100%">';
 
 						$alternate2 = true;

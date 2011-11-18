@@ -319,8 +319,8 @@ function smf_db_query($db_string, $db_values = array(), $connection = null)
 		elseif (strpos($clean, 'benchmark') !== false && preg_match('~(^|[^a-z])benchmark($|[^[a-z])~s', $clean) != 0)
 			$fail = true;
 		// Sub selects?  We don't use those either.
-		elseif (preg_match('~\([^)]*?select~s', $clean) != 0)
-			$fail = true;
+		//elseif (preg_match('~\([^)]*?select~s', $clean) != 0)
+		//	$fail = true;
 
 		if (!empty($fail) && function_exists('log_error'))
 			smf_db_error_backtrace('Hacking attempt...', 'Hacking attempt...' . "\n" . $db_string, E_USER_ERROR, __FILE__, __LINE__);

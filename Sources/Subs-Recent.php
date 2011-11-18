@@ -78,14 +78,14 @@ function getLastPosts($latestPostOptions)
 				'href' => empty($row['id_member']) ? '' : $mhref,
 				'link' => empty($row['id_member']) ? $row['poster_name'] : '<a href="' . $mhref . '">' . $row['poster_name'] . '</a>'
 			),
-			'subject' => $row['subject'],
-			'short_subject' => shorten_subject($row['subject'], 35),
+			'subject' => $row['first_subject'],
+			'short_subject' => shorten_subject($row['first_subject'], 35),
 			'preview' => $row['body'],
 			'time' => timeformat($row['poster_time']),
 			'timestamp' => forum_time(true, $row['poster_time']),
 			'raw_timestamp' => $row['poster_time'],
 			'href' => $thref,
-			'link' => '<a href="' . $thref . '" rel="nofollow">' . $row['subject'] . '</a>'
+			'link' => '<a href="' . $thref . '" rel="nofollow">' . $row['first_subject'] . '</a>'
 		);
 	}
 	mysql_free_result($request);

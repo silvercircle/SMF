@@ -218,10 +218,12 @@ function template_main()
 			echo '
 				</div>';
 			}
-			echo $context['num_replies'], ' Replies<div class="clear"></div>';
+			echo $context['num_replies'], ' Replies<div class="clear"></div>
+				<div class="posts_container commentstyle">';
 		}
 	}
 	echo '
+				</div>
 				<input type="hidden" name="goadvanced" value="1" />
 				</form>
 			</div>

@@ -709,8 +709,9 @@ function template_sidebar_content()
 			foreach ($context['latest_posts'] as $post)
 				echo '
 				<li class="smallpadding">
-					<span class="nowrap floatright">', $post['time'], '</span><strong>', $post['poster']['link'],'<br>',
-					$txt['in'], ':</strong>&nbsp;<a href="',$post['href'],'" title="',$post['subject'],'">',$post['short_subject'],'</a>';
+					<a href = "',$post['href'],'" title = "',$post['subject'],'">',$post['short_subject'],'</a><br>
+					<span class="nowrap floatright">', $post['time'], '</span><strong>', $post['poster']['link'],'</strong><br>
+				</li>';
 			echo '
 				</ol>';
 		}

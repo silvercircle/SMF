@@ -1586,18 +1586,18 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	}
 
 	// Shall we take the time to cache this?
-	/*
+	
 	if ($cache_id != '' && $modSettings['cache_enable'] >= 2 && strlen($message) > 1000)
 	{
 		// It's likely this will change if the message is modified.
 		$cache_key = 'parse:' . $cache_id . '-' . md5(md5($message) . '-' . $smileys . (empty($disabled) ? '' : implode(',', array_keys($disabled))) . serialize($context['browser']) . $txt['lang_locale'] . $user_info['time_offset'] . $user_info['time_format']);
 
-		if (($temp = CacheAPI::getCache($cache_key, 600)) != null)
+		if (($temp = CacheAPI::getCache($cache_key, 1200)) != null)
 			return $temp;
 
 		$cache_t = microtime();
 	}
-    */
+    
 	if ($smileys === 'print')
 	{
 		// [glow], [shadow], and [move] can't really be printed.
@@ -2365,8 +2365,8 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	HookAPI::callHook('integrate_parse_bbc_after', array(&$message, &$parse_tags, &$smileys));
 
 	// Cache the output if it took some time...
-	//if (isset($cache_key, $cache_t) && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
-	//	CacheAPI::putCache($cache_key, $message, 600);
+	if (isset($cache_key, $cache_t)) // && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
+		CacheAPI::putCache($cache_key, $message, 1200);
 
 	// If this was a force parse revert if needed.
 	if (!empty($parse_tags))
@@ -3949,17 +3949,7 @@ function setupMenuContext()
 				'sub_buttons' => array(
 				),
 				'is_last' => !$context['right_to_left'],
-			),
-			/*
-			'logout' => array(
-				'title' => $txt['logout'],
-				'href' => $scripturl . '?action=logout;%1$s=%2$s',
-				'show' => !$user_info['is_guest'],
-				'sub_buttons' => array(
-				),
-				'is_last' => !$context['right_to_left'],
-			),
-			*/
+			)
 		);
 		if(!$modSettings['tags_active'])
 			unset($buttons['tags']);
@@ -4206,7 +4196,7 @@ function HDC($a, $b, $c)
  * output a simple error message for xmlhttp requests. The message will
  * be displayed via the custom modal javascript dialog (Eos_Confirm() or Eos_Alert() ).
  */
-function AjaxErrorMsg($msg, $title = 'Error', $code = 1)
+function AjaxErrorMsg($msg = 'Unknown or unspecified error', $title = 'Error', $code = 1)
 {
 	global $context;
 	header('Content-Type: text/xml; charset=' . $context['character_set']);

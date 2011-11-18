@@ -21,7 +21,7 @@ function template_boardbit(&$board)
 	if(!$board['is_page']) {
 		echo'
 		<div class="info">
-		<div class="stats">
+		<div class="stats smalltext">
 		 ', comma_format($board['posts']), ' ', $board['is_redirect'] ? $txt['redirects'] : $txt['posts'], ' <br />
 		 ', $board['is_redirect'] ? '' : comma_format($board['topics']) . ' ' . $txt['board_topics'], '
 		</div>
@@ -73,9 +73,9 @@ function template_boardbit(&$board)
 	if (!empty($board['last_post']['id']))
 			echo (empty($options['post_icons_index']) ? '' : '
 		<img src="'.$board['first_post']['icon_url'].'" alt="icon" />'), '
-		',$txt['in'], ': ', $board['last_post']['prefix'],'&nbsp;',$board['last_post']['topiclink'], '<br />
+		',$board['last_post']['prefix'],$board['last_post']['topiclink'], '<br />
 		<a class="lp_link" title="',$txt['last_post'],'" href="',$board['last_post']['href'],'">',$board['last_post']['time'], '</a>
-		<span ',(empty($options['post_icons_index']) ? '' : 'style="padding-left:20px;"'),'>', $txt['by'], ': </span>', $board['last_post']['member']['link'];
+		<span ',(empty($options['post_icons_index']) ? '' : 'style="padding-left:20px;"'),'>',$txt['last_post'],'&nbsp;',$txt['by'],':&nbsp;</span>', $board['last_post']['member']['link'];
 	else
 		echo $txt['not_applicable'];
 	echo '
@@ -102,7 +102,7 @@ function template_boardbit(&$board)
 		foreach ($board['children'] as $child)
 		{
 			if (!$child['is_redirect'])
-				$child['link'] = '<h4><a href="' . $child['href'] . '" ' . ($child['new'] ? 'class="boardlink new_posts" ' : 'class="boardlink no_new_posts" ') . 'title="' . ($child['new'] ? $txt['new_posts'] : $txt['old_posts']) . ' (' . $txt['board_topics'] . ': ' . comma_format($child['topics']) . ', ' . $txt['posts'] . ': ' . comma_format($child['posts']) . ')">' . $child['name'] . '</a></h4>'.'&nbsp;<span title="'.$child['description'].'">'.$child['short_description'].'</span>';
+				$child['link'] = '<h4><strong class="'.($child['new'] ? 'child_new' : 'child_old').'">&#x25cf;&nbsp;</strong><a href="' . $child['href'] . '" class="boardlink" title="' . ($child['new'] ? $txt['new_posts'] : $txt['old_posts']) . ' (' . $txt['board_topics'] . ': ' . comma_format($child['topics']) . ', ' . $txt['posts'] . ': ' . comma_format($child['posts']) . ')">' . $child['name'] . '</a></h4>'.'&nbsp;<span title="'.$child['description'].'">'.$child['short_description'].'</span>';
 			else
 				$child['link'] = '<a class="boardlink" href="' . $child['href'] . '" title="' . comma_format($child['posts']) . ' ' . $txt['redirects'] . '"><h4>' . $child['name'] . '</h4></a>'.'&nbsp;('.$child['description'].')';
 

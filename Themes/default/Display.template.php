@@ -242,7 +242,9 @@ function template_main()
 	}
 
 	echo '
-				<div class="clear"></div><form data-alt="',$scripturl,'?action=post;msg=%id_msg%;topic=',$context['current_topic'],'.',$context['start'], '" action="', $scripturl, '?action=quickmod2;topic=', $context['current_topic'], '.', $context['start'], '" method="post" accept-charset="', $context['character_set'], '" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave(\'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\') : false">';
+		<div class="clear"></div>
+		 <form data-alt="',$scripturl,'?action=post;msg=%id_msg%;topic=',$context['current_topic'],'.',$context['start'], '" action="', $scripturl, '?action=quickmod2;topic=', $context['current_topic'], '.', $context['start'], '" method="post" accept-charset="', $context['character_set'], '" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave(\'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\') : false">
+		  <div class="posts_container">';
 
 	$removableMessageIDs = array();
 
@@ -255,10 +257,11 @@ function template_main()
 		$message['postbit_callback']($message);
 	}
 	echo '
-				<input type="hidden" name="goadvanced" value="1" />
-				</form>
-			</div>
-			<a id="lastPost"></a>';
+		  </div>
+		  <input type="hidden" name="goadvanced" value="1" />
+		 </form>
+		</div>
+		<a id="lastPost"></a>';
 			
 	if ($context['can_reply'] && !empty($options['display_quick_reply']))
 	{

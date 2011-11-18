@@ -334,7 +334,7 @@ function showActivitiesProfile($memID)
 }
 
 /**
- * @param type $memID	int: member ID
+ * @param $memID	int member ID
  * 
  * show the settings to customize opt-outs for activity entries and notifications
  * to receive.

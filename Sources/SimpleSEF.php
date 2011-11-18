@@ -452,7 +452,7 @@ class SimpleSEF {
 		self::benchmark('buffer');
 
   		if (!empty($context['show_load_time']))
-      		$buffer = preg_replace('~(.*[s]\sCPU,\s.*queries\.)~', '$1' . sprintf(' OB_Rewrite: %d replacements', $count) . ' ' . round(self::$benchMark['total'], 3) . $txt['seconds_with'] . self::$queryCount . $txt['queries'], $buffer);
+      		$buffer = preg_replace('~(.*[s]\sCPU,\s.*queries\.)~', '$1' . sprintf(' OB_rewrite_fast: %d', $count) . ' (' . round(self::$benchMark['total'], 3) . $txt['seconds_with'] . self::$queryCount . $txt['queries'].')', $buffer);
 
   		//self::log('SimpleSEF rewrote ' . $count . ' urls in ' . self::$benchMark['total'] . ' seconds');
 
@@ -781,12 +781,11 @@ class SimpleSEF {
      * @global string $scripturl
      * @global array $txt
      * @global array $context
-     * @global string $boarddir
      * @global array $modSettings
      * @global array $settings
      */
     public static function ModifyAdvancedSettings() {
-        global $scripturl, $txt, $context, $boarddir, $modSettings, $settings;
+        global $scripturl, $txt, $context, $modSettings, $settings;
 
         loadTemplate('SimpleSEF');
         $config_vars = array(
@@ -853,7 +852,7 @@ class SimpleSEF {
      * @global array $modSettings
      */
     public static function ModifyAliasSettings() {
-        global $scripturl, $txt, $context, $modSettings;
+        global $scripturl, $context, $modSettings;
 
         loadTemplate('SimpleSEF');
         $context['sub_template'] = 'alias_settings';
@@ -1063,7 +1062,7 @@ class SimpleSEF {
      * @return string Topic name with it's associated board name
      */
     private static function getTopicName($id) {
-        global $modSettings, $smcFunc;
+        global $modSettings;
 
         @list($value, $start) = explode('.', $id);
         if (!isset($start))
@@ -1096,7 +1095,7 @@ class SimpleSEF {
      * @return string User name
      */
     private static function getUserName($id) {
-        global $modSettings, $smcFunc;
+        global $modSettings;
 
         if (!is_numeric($id))
             return 'user' . $modSettings['simplesef_space'] . $id;
@@ -1116,14 +1115,13 @@ class SimpleSEF {
      * how to put the URL into terms SMF can understand.  If it can't, it forces
      * the action to SimpleSEF's own 404 action and throws a nice error page.
      *
-     * @global string $boardurl
      * @global array $modSettings
      * @global string $sourcedir
      * @param string $query Querystring to deal with
      * @return array Returns an array suitable to be merged with $_GET
      */
     private static function route($query) {
-        global $boardurl, $modSettings, $sourcedir;
+        global $modSettings, $sourcedir;
 
         $url_parts = explode('/', trim($query, '/'));
         $querystring = array();
@@ -1277,7 +1275,6 @@ class SimpleSEF {
      * @param mixed $ids Can either be a single id or an array of ids
      */
     private static function loadTopicNames($ids) {
-        global $smcFunc;
 
         $ids = is_array($ids) ? $ids : array($ids);
 
@@ -1308,7 +1305,6 @@ class SimpleSEF {
      * @param mixed $ids can be either a single id or an array of them
      */
     private static function loadUserNames($ids) {
-        global $smcFunc;
 
         $ids = is_array($ids) ? $ids : array($ids);
 
@@ -1357,7 +1353,7 @@ class SimpleSEF {
 
 	public static function encodeTest($string)
 	{
-		global $modSettings, $sourcedir, $txt;
+		global $modSettings, $sourcedir;
   		global $utf8_db;
 		$utf8_db = array();
 

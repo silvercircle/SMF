@@ -37,6 +37,7 @@ function GiveLike($mid)
 	if($mid > 0) {
 		$uid = $user_info['id'];
 		$remove_it = isset($_REQUEST['remove']) ? true : false;
+		$repair = isset($_REQUEST['repair']) && $user_info['is_admin'] ? true : false;
 		$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
 		$update_mode = false;
 		
@@ -54,25 +55,8 @@ function GiveLike($mid)
 		
 		$c = intval($count[0]);
 		$like_owner = intval($count[1]);
-		/*
-		 * this is a debugging feature and allows the admin to repair
-		 * the likes for a post.
-		 * it may go away at a later time.
-		 */
-		if(isset($_REQUEST['repair'])) {
-			if(!$user_info['is_admin'])
-				die;
-			$total = LikesUpdate($mid);
-			$output = '';
-			LikesGenerateOutput($total['status'], $output, $total['count'], $mid, $c > 0 ? true : false);
-			if($is_xmlreq) {
-				echo $output;
-				die;
-			}
-			else
-				redirectexit();
-		}
-		if($c > 0 && !$remove_it)		// duplicate like (but not when removing it)
+
+		if($c > 0 && !$remove_it && !$repair)		// duplicate like (but not when removing it)
 			AjaxErrorMsg($txt['like_verify_error'], $is_xmlreq);
 			
 		/*
@@ -90,7 +74,33 @@ function GiveLike($mid)
 		$like_receiver = intval($m[0]);
 		$id_topic = (int)$m[2];
 		$topic_title = $m[3];
-		
+
+		/*
+		 * this is a debugging feature and allows the admin to repair
+		 * the likes for a post.
+		 * it may go away at a later time.
+		 */
+		if($repair) {
+			if(!$user_info['is_admin'])
+				obExit(false);
+			$total = LikesUpdate($mid);
+			$output = '';
+			LikesGenerateOutput($total['status'], $output, $total['count'], $mid, $c > 0 ? true : false);
+			// fix like stats for the like_giver and like_receiver. This might be a very slow query, but
+			// since this feature will most likely go away, right now I do not care.
+			smf_db_query('UPDATE {db_prefix}members AS m
+				SET m.likes_given = (SELECT COUNT(l.id_user) FROM {db_prefix}likes AS l WHERE l.id_user = m.id_member),
+					m.likes_received = (SELECT COUNT(l1.id_receiver) FROM {db_prefix}likes AS l1 WHERE l1.id_receiver = m.id_member)
+				WHERE m.id_member = {int:owner} OR m.id_member = {int:receiver}', array('owner' => $like_owner, 'receiver' => $like_receiver));
+			updateMemberData(array($like_owner, $like_receiver), array('last_login' => time()));
+			if($is_xmlreq) {
+				echo $output;
+				obExit(false);
+			}
+			else
+				redirectexit();
+		}
+
 		if($like_receiver == $uid)
 			AjaxErrorMsg($txt['cannot_like_own'], $is_xmlreq);
 		
