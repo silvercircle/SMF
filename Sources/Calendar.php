@@ -12,8 +12,6 @@
  * @version 1.0pre
  */
 
-// Original module by Aaron O'Neil - aaron@mud-master.com
-
 if (!defined('SMF'))
 	die('Hacking attempt...');
 

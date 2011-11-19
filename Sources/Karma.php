@@ -73,6 +73,7 @@ function ModifyKarma()
 	if (!empty($modSettings['karmaTimeRestrictAdmins']) || !allowedTo('moderate_forum'))
 	{
 		// Find out if this user has done this recently...
+		
 		$request = smf_db_query( '
 			SELECT action
 			FROM {db_prefix}log_karma
@@ -200,5 +201,4 @@ function BookOfUnknown()
 
 	obExit(false);
 }
-
 ?>

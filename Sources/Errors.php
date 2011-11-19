@@ -412,5 +412,4 @@ function show_db_error($loadavg = false)
 
 	die;
 }
-
 ?>

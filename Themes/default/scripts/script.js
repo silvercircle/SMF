@@ -218,11 +218,11 @@ String.prototype.easyReplace = function (oReplacements)
 function reqWin(desktopURL, alternateWidth, alternateHeight, noScrollbars)
 {
 
-	var el = $('<div id="helpoverlay" class="jqmWindow jsconfirm" style="width:500px;">\
+	var el = $('<div id="helpoverlay" class="jqmWindow jsconfirm" style="width:500px;"><div class="jqmWindow_container">\
 		 <div class="jsconfirm glass title">Help</div> <div class="jsconfirm content" id="help_content"></div>\
 		 <div class="smallpadding centertext">\
 		  <input id="helpclose" type="submit" class="button_submit" value="Close" />\
-		 </div>\
+		 </div></div>\
 		</div>');
 
 	el.insertBefore('#wrap');

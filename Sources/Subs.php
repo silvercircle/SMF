@@ -3695,15 +3695,16 @@ function text2words($text, $max_chars = 20, $encrypt = false)
 }
 
 // Creates an image/text button
-function create_button($name, $alt, $label = '', $custom = '', $force_use = false)
+function create_button($class, $label = '', $has_icon = false)
 {
-	global $settings, $txt, $context;
+	global $txt;
+	/*
+	 * this kind of image buttons are no longer supported
+	 */
+	//if (function_exists('template_create_button') && !$force_use)
+	//	return template_create_button($name, $alt, $label = '', $custom = '');
 
-	// Does the current loaded theme have this and we are not forcing the usage of this function?
-	if (function_exists('template_create_button') && !$force_use)
-		return template_create_button($name, $alt, $label = '', $custom = '');
-
-	return '<span class="button '.$alt.'">'.$txt[$alt].'</span>';
+	return $has_icon ? '<span class="button icon '.$class.'">'.$txt[$label].'</span>' : '<span class="button '.$class.'">'.$txt[$label].'</span>';
 }
 
 // Empty out the cache folder.
@@ -4184,6 +4185,11 @@ function getPostIcon($the_icon)
 	else
 		return($context['posticons'][$the_icon]);
 }
+
+/*
+ * this is needed to support $a ? $foo : $bar constructs in HEREDoc output
+ * templates that need it do a $h = 'HDC'; and then use it as {$h($a, $foo, $bar)}
+ */
 function HDC($a, $b, $c)
 {
 	return($a ? $b : $c);
@@ -4195,6 +4201,8 @@ function HDC($a, $b, $c)
  *
  * output a simple error message for xmlhttp requests. The message will
  * be displayed via the custom modal javascript dialog (Eos_Confirm() or Eos_Alert() ).
+ * right now, the error code has no relevance and no special meaning, but this could
+ * change in a future version.
  */
 function AjaxErrorMsg($msg = 'Unknown or unspecified error', $title = 'Error', $code = 1)
 {

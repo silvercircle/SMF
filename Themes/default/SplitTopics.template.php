@@ -347,7 +347,7 @@ function template_merge()
 				<div class="content">
 					<ul class="reset merge_topics">';
 
-		$merge_button = create_button('merge.gif', 'merge', '');
+		$merge_button = create_button('merge', 'merge');
 
 		foreach ($context['topics'] as $topic)
 			echo '

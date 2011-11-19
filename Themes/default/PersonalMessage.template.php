@@ -143,6 +143,7 @@ function template_folder()
 	}
 
 	// Got some messages to display?
+	echo '<div class="posts_container">';
 	if ($context['get_pmessage']('message', true))
 	{
 		// Show a few buttons if we are in conversation mode and outputting the first message.
@@ -389,7 +390,7 @@ function template_folder()
 		</div>
 		</div>
 		<div class="post_bottom">';
-			echo '<ul class="reset smalltext quickbuttons">';
+			echo '<ul class="reset floatright quickbuttons">';
 
 			// Show reply buttons if you have the permission to send PMs.
 			if ($context['can_send_pm'])
@@ -422,7 +423,9 @@ function template_folder()
 				</ul><div class="clear"></div>
 		</div>
 	</div>';
-		}
+	}
+	echo '
+	</div>';
 
 		if (empty($context['display_mode']))
 			echo '
@@ -751,8 +754,8 @@ function template_search_results()
 
 				if ($context['can_send_pm'])
 				{
-					$quote_button = create_button('quote.gif', 'reply_quote', 'reply_quote', 'align="middle"');
-					$reply_button = create_button('im_reply.gif', 'reply', 'reply', 'align="middle"');
+					$quote_button = create_button('reply_quote', 'reply_quote');
+					$reply_button = create_button('reply', 'reply');
 					// You can only reply if they are not a guest...
 					if (!$message['member']['is_guest'])
 						echo '

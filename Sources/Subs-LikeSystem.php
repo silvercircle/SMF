@@ -23,9 +23,6 @@ if (!defined('SMF'))
  * 
  * TODO: remove likes from the database when a user is deleted
  * TODO: make it work without AJAX and JavaScript
- * TODO: allow likes for more than just post content types (i.e. profile messages in a later stage)
- * ctype is already available as content type in the database, but right now,
- * there is only one content type: a post (ctype == 1)
  */
  
 function GiveLike($mid)

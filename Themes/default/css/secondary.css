@@ -1177,14 +1177,16 @@ div.ppt {
 }
 .jqmWindow {
     display: none;
-    background-color: #eaeaea;
     color: #333;
-	border:2px solid #444;
+	border:4px solid rgba(0, 0, 0, 0.20);
 	border-radius:3px;
 	box-shadow: 0 0 8px 2px #666;
 }
 .jqmWindow div.content {
 	background-color:white;
+}
+.jqmWindow_container {
+	background-color: #eaeaea;
 }
 .jqmOverlay { background-color: #888; }
 

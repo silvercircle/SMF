@@ -150,7 +150,7 @@ if (!defined('SMF'))
 /*
  * creates the dropdown of available prefixes for $board
  * optionally preselects the given prefix id (if we modify a first post)
- * $mandatory: a prefix is required dictated by board settings. TODO: NOT IMPLEMENTE YET
+ * $mandatory: a prefix is required dictated by board settings. TODO: NOT IMPLEMENTED YET
  */
 function getPrefixSelector($board, $id = 0, $mandatory = 0)
 {
