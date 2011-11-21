@@ -1,10 +1,8 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]removed .gif icon support for create_button(). We're doing everything with CSS sprites anyway.[/li]
-[li]Overlays can now have a semi-transparent border (updated styling to allow this)[/li]
-[li]updated personal messages templates for the new styling[/li]
-[li]last post column in the board index and for child boards is now showing the topic subject without the Re:[/li]
-[li]increased padding in a few areas (board index, message index)[/li]
-[li]pagination links now inherit the styling for generic buttons[/li]
+[li]Default setting for showing the message icon in the last post column (board index, child-board display) is now off.[/li]
+[li]LikeSystem: added error messages for the profile display when no likes could be found for a member.[/li]
+[li]Use posts_container CSS class in other areas that display messages (recent content, profile -> show content -> posts.[/li]
+[li]Fixed [code] so that it allows a default highlighting mode (text/plain).[/code]
 [/list]

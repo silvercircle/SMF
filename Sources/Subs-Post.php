@@ -3305,7 +3305,7 @@ function adminNotify($type, $memberID, $member_name = null, $actid = 0, $atype =
 
 function loadEmailTemplate($template, $replacements = array(), $lang = '', $loadLang = true)
 {
-	global $txt, $mbname, $scripturl, $settings;
+	global $txt, $mbname, $scripturl, $settings, $foo;
 
 	// First things first, load up the email templates language file, if we need to.
 	if ($loadLang)

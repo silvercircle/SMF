@@ -22,12 +22,14 @@ function template_main()
 		</h1>
 		<div class="pagelinks">
 			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
-		</div>';
+		</div>
+		<div class="posts_container">';
 
 	foreach ($context['posts'] as &$post)
 		template_postbit_compact($post);
 
 	echo '
+		</div>
 		<div class="pagelinks">
 			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
 		</div>

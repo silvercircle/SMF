@@ -358,6 +358,12 @@ function template_showlikes()
 		,$txt['pages'],':&nbsp;&nbsp;',$context['pages'],'
 	</div>';
 	}
+	else
+		echo '
+	<br>
+	<div class="red_container centertext">',
+			$context['displaymode'] ? $txt['no_likes_given'] : $txt['no_likes_received'],'
+	</div>';
 }
 // Template for showing all the posts of the user, in chronological order.
 function template_showPosts()
@@ -408,8 +414,12 @@ function template_showPosts()
 			</table>';
 		}
 		else {
+			echo '
+				<div class="posts_container">';
 			foreach ($context['posts'] as &$post)
 				$context['postbit_callback']($post);
+			echo '
+				</div>';
 		}
 	}
 	else

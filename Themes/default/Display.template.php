@@ -253,7 +253,6 @@ function template_main()
 	// Get all the messages...
   	while ($message = $context['get_message']())
 	{
-		$ignoring = false;
 		if ($message['can_remove'])
 			$removableMessageIDs[] = $message['id'];
 		$message['postbit_callback']($message);
@@ -271,6 +270,7 @@ function template_main()
 		echo '
 			<a id="quickreply"></a>
 			<div class="clear"></div>
+			<br>
 			<div style="overflow:hidden;" id="quickreplybox">';
 				template_create_collapsible_container($collapser);
 				echo '

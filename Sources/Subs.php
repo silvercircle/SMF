@@ -1117,6 +1117,13 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			),
 			array(
 				'tag' => 'code',
+				'type' => 'unparsed_content',
+				'content' => '<div class="codeheader">Code:</div><pre class="brush:text;">$1</pre>',
+				'block_level' => false,
+				'disabled_content' => '$1',
+			),
+			array(
+				'tag' => 'code',
             	'type' => 'unparsed_equals_content',
             	'test' => '[A-Za-z0-9_,\-\s]+?\]',
             	'block_level' => true,

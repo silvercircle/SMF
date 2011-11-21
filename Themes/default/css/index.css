@@ -1438,7 +1438,8 @@ div#pollmoderation {
 }
 .posts_container {
 	padding:0 3px 3px 3px;
-	background:#ccc;
+	background:white;
+	box-shadow: 0 0 10px #aaa inset;
 }
 .posts_container.commentstyle {
 	padding:0;
@@ -1579,11 +1580,10 @@ div.userbit_compact_textpart {
 }
 
 .keyinfo {
-	font-size: 12px;
 	padding: 0 10px 0 10px;
-	min-height: 28px;
-	max-height: 28px;
-	line-height: 28px;
+	min-height: 26px;
+	max-height: 26px;
+	line-height: 26px;
 	/*background: #c9d8dd url(../images/clipsrc.png) 0 -175px repeat-x;*/
 	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;
 	margin-left:-3px;
@@ -3558,7 +3558,7 @@ abbr.timeago {
 	color: #888;
 }
 .inline_highlight {
-	background-color: #ffff99;
+	background-color: #ffff99 !important;
 }
 .transparent {
 	background-color: transparent !important;

@@ -113,6 +113,8 @@ function LikesByUser($memID)
 		array('id_user' => $memID, 'startwith' => $start, 'perpage' => $perpage, 'boards' => $boards_like_see));
 
 	$context['results_count'] = 0;
+	$context['likes'] = array();
+	$context['displaymode'] = $out ? true : false;
 	$context['pages'] = '';
 	if($context['total_likes'] > $perpage)
 		$context['pages'] = constructPageIndex($scripturl . '?action=profile;area=showposts;sa='.$_GET['sa'].';u=' . trim($memID), $start, $context['total_likes'], $perpage);
