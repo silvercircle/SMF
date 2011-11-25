@@ -27,7 +27,7 @@ CREATE TABLE {$db_prefix}messages_cache (
 # id_receiver - member who receives it (= owner of the content)
 #
 
-CREATE TABLE {$db_prefix}smf_likes (
+CREATE TABLE {$db_prefix}likes (
   id_like int(10) NOT NULL auto_increment,
   id_msg int(10) unsigned NOT NULL default '0',
   id_user mediumint(8) unsigned NOT NULL default '0',

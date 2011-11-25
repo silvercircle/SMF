@@ -22,7 +22,7 @@ if (!defined('SMF'))
 */
 
 // Initialize the database settings
-function smf_db_initiate($db_server, $db_name, $db_user, $db_passwd, $db_prefix, $db_options = array())
+function smf_db_initiate($db_server, $db_name, $db_user, $db_passwd, $db_options = array())
 {
 	global $mysql_set_mode;
 
@@ -680,5 +680,16 @@ function smf_db_escape_wildcard_string($string, $translate_human_wildcards=false
 		);
 
 	return strtr($string, $replacements);
+}
+// Get the version number.
+function smf_db_get_version() {
+	$request = smf_db_query('
+		SELECT VERSION()', array(
+			)
+	);
+	list ($ver) = mysql_fetch_row($request);
+	mysql_free_result($request);
+
+	return $ver;
 }
 ?>

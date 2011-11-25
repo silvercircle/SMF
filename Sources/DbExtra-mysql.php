@@ -423,19 +423,4 @@ function smf_db_table_sql($tableName)
 
 	return $schema_create;
 }
-
-// Get the version number.
-function smf_db_get_version()
-{
-	$request = smf_db_query( '
-		SELECT VERSION()',
-		array(
-		)
-	);
-	list ($ver) = mysql_fetch_row($request);
-	mysql_free_result($request);
-
-	return $ver;
-}
-
 ?>

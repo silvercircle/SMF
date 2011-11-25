@@ -11,11 +11,14 @@
  *
  * @version 1.0pre
  */
-$GLOBALS['current_smf_version'] = '2.0';
+$GLOBALS['current_smf_version'] = '1.0pre';
 $GLOBALS['db_script_version'] = '2-0';
 
 $GLOBALS['required_php_version'] = '5.2.0';
 
+global $installurl, $smfsite, $incontext, $databases;
+
+$incontext = array();
 // Don't have PHP support, do you?
 // ><html dir="ltr"><head><title>Error!</title></head><body>Sorry, this installer requires PHP!<div style="display: none;">
 
@@ -23,7 +26,7 @@ $GLOBALS['required_php_version'] = '5.2.0';
 $databases = array(
 	'mysql' => array(
 		'name' => 'MySQL',
-		'version' => '4.0.18',
+		'version' => '4.1.0',
 		'version_check' => 'return min(mysql_get_server_info(), mysql_get_client_info());',
 		'supported' => function_exists('mysql_connect'),
 		'default_user' => 'mysql.default_user',
@@ -34,7 +37,7 @@ $databases = array(
 		'utf8_version' => '4.1.0',
 		'utf8_version_check' => 'return mysql_get_server_info();',
 		'utf8_default' => true,
-		'utf8_required' => false,
+		'utf8_required' => true,
 		'alter_support' => true,
 		'validate_prefix' => create_function('&$value', '
 			$value = preg_replace(\'~[^A-Za-z0-9_\$]~\', \'\', $value);
@@ -215,8 +218,9 @@ function initialize_inputs()
 // Load the list of language files, and the current language file.
 function load_lang_file()
 {
-	global $txt, $incontext;
-
+	global $incontext, $txt;
+	
+	$txt = array();
 	$incontext['detected_languages'] = array();
 
 	// Make sure the languages directory actually exists.
@@ -278,7 +282,7 @@ function load_lang_file()
 			list (, $_SESSION['installer_temp_lang']) = array_keys($incontext['detected_languages']);
 	}
 
-	// And now include the actual language file itself.
+	// And now include the actual language file itself but still make sure it exists, otherwise fall back
 	if(file_exists(dirname(__FILE__) . '/Themes/default/languages/' . $_SESSION['installer_temp_lang']))
 		require_once(dirname(__FILE__) . '/Themes/default/languages/' . $_SESSION['installer_temp_lang']);
 	else
@@ -288,8 +292,8 @@ function load_lang_file()
 // This handy function loads some settings and the like.
 function load_database()
 {
-	global $db_prefix, $db_connection, $db_character_set, $sourcedir, $language;
-	global $smcFunc, $mbname, $scripturl, $boardurl, $modSettings, $db_type, $db_name, $db_user;
+	global $db_connection, $sourcedir;
+	global $modSettings, $db_name, $db_user;
 
 	if (empty($sourcedir))
 		$sourcedir = dirname(__FILE__) . '/Sources';
@@ -298,25 +302,23 @@ function load_database()
 	require(dirname(__FILE__) . '/Settings.php');
 	if (!defined('SMF'))
 		define('SMF', 1);
-	if (empty($smcFunc))
-		$smcFunc = array();
 
 	$modSettings['disableQueryCheck'] = true;
 
 	// Connect the database.
 	if (!$db_connection)
 	{
-		require_once($sourcedir . '/Subs-Db-' . $db_type . '.php');
+		require_once($sourcedir . '/Subs-Db-mysql.php');
 
 		if (!$db_connection)
-			$db_connection = smf_db_initiate($db_server, $db_name, $db_user, $db_passwd, $db_prefix, array('persist' => $db_persist));
+			$db_connection = smf_db_initiate($db_server, $db_name, $db_user, $db_passwd, array('persist' => $db_persist));
 	}
 }
 
 // This is called upon exiting the installer, for template etc.
 function installExit($fallThrough = false)
 {
-	global $incontext, $installurl, $txt;
+	global $incontext, $installurl;
 
 	// Send character set.
 	header('Content-Type: text/html; charset=UTF-8');
@@ -394,10 +396,7 @@ function Welcome()
 				$txt['error_db_script_missing'] = sprintf($txt['error_db_script_missing'], 'install_' . $GLOBALS['db_script_version'] . '_' . $key . '.sql');
 			}
 			else
-			{
-				$db_type = $key;
 				$incontext['supported_databases'][] = $db;
-			}
 		}
 	}
 
@@ -757,14 +756,14 @@ function DatabaseSettings()
 
 		// Attempt a connection.
 		$needsDB = !empty($databases[$db_type]['always_has_db']);
-		$db_connection = smf_db_initiate($db_server, $db_name, $db_user, $db_passwd, $db_prefix, array('non_fatal' => true, 'dont_select_db' => !$needsDB));
+		$db_connection = smf_db_initiate($db_server, $db_name, $db_user, $db_passwd, array('non_fatal' => true, 'dont_select_db' => !$needsDB));
 
 		// No dice?  Let's try adding the prefix they specified, just in case they misread the instructions ;)
 		if ($db_connection == null)
 		{
 			$db_error = @mysql_error($db_connection);
 
-			$db_connection = smf_db_initiate($db_server, $db_name, $_POST['db_prefix'] . $db_user, $db_passwd, $db_prefix, array('non_fatal' => true, 'dont_select_db' => !$needsDB));
+			$db_connection = smf_db_initiate($db_server, $db_name, $_POST['db_prefix'] . $db_user, $db_passwd, array('non_fatal' => true, 'dont_select_db' => !$needsDB));
 			if ($db_connection != null)
 			{
 				$db_user = $_POST['db_prefix'] . $db_user;
@@ -835,7 +834,7 @@ function DatabaseSettings()
 // Let's start with basic forum type settings.
 function ForumSettings()
 {
-	global $txt, $incontext, $databases, $smcFunc, $db_connection, $db_type;
+	global $txt, $incontext, $databases, $db_type, $boardurl;
 
 	$incontext['sub_template'] = 'forum_settings';
 	$incontext['page_title'] = $txt['install_settings'];
@@ -858,9 +857,9 @@ function ForumSettings()
 
 	// Check if the database sessions will even work.
 	$incontext['test_dbsession'] = @ini_get('session.auto_start') != 1 && @version_compare(PHP_VERSION, '4.2.0') != -1;
-	$incontext['utf8_should_work'] = strpos(strtolower(PHP_OS), 'win') === false || @version_compare(PHP_VERSION, '4.2.3') != -1;
-	$incontext['utf8_default'] = $databases[$db_type]['utf8_default'];
-	$incontext['utf8_required'] = $databases[$db_type]['utf8_required'];
+	$incontext['utf8_should_work'] = true;
+	$incontext['utf8_default'] = true;
+	$incontext['utf8_required'] = true;
 
 	$incontext['continue'] = 1;
 
@@ -883,7 +882,7 @@ function ForumSettings()
 			'mbname' => strtr($_POST['mbname'], array('\"' => '"')),
 			'language' => substr($_SESSION['installer_temp_lang'], 8, -4),
 		);
-
+		$boardurl = $_POST['boardurl'];
 		// Must save!
 		if (!updateSettingsFile($vars) && substr(__FILE__, 1, 2) == ':\\')
 		{
@@ -895,17 +894,14 @@ function ForumSettings()
 		require(dirname(__FILE__) . '/Settings.php');
 
 		// UTF-8 requires a setting to override the language charset.
-		if (isset($_POST['utf8']) && !empty($databases[$db_type]['utf8_support']))
+		if (version_compare($databases[$db_type]['utf8_version'], preg_replace('~\-.+?$~', '', eval($databases[$db_type]['utf8_version_check']))) > 0)
 		{
-			if (version_compare($databases[$db_type]['utf8_version'], preg_replace('~\-.+?$~', '', eval($databases[$db_type]['utf8_version_check']))) > 0)
-			{
-				$incontext['error'] = sprintf($txt['error_utf8_version'], $databases[$db_type]['utf8_version']);
-				return false;
-			}
-			else
-				// Set the character set here.
-				updateSettingsFile(array('db_character_set' => 'utf8'));
+			$incontext['error'] = sprintf($txt['error_utf8_version'], $databases[$db_type]['utf8_version']);
+			return false;
 		}
+		else
+			// Set the character set here.
+			updateSettingsFile(array('db_character_set' => 'utf8'));
 
 		// Good, skip on.
 		return true;
@@ -917,7 +913,7 @@ function ForumSettings()
 // Step one: Do the SQL thang.
 function DatabasePopulation()
 {
-	global $db_character_set, $txt, $db_connection, $smcFunc, $databases, $modSettings, $db_type, $sourcedir, $db_prefix, $incontext, $db_name, $boardurl;
+	global $txt, $db_connection, $smcFunc, $databases, $modSettings, $db_type, $db_prefix, $incontext, $db_name, $boardurl;
 
 	$incontext['sub_template'] = 'populate_database';
 	$incontext['page_title'] = $txt['db_populate'];
@@ -954,16 +950,12 @@ function DatabasePopulation()
 		}
 	}
 
-	// If doing UTF8, select it. PostgreSQL requires passing it as a string...
-	if (!empty($db_character_set) && $db_character_set == 'utf8' && !empty($databases[$db_type]['utf8_support']))
-		smf_db_query('
-			SET NAMES {'. ($db_type == 'postgresql' ? 'string' : 'raw') . ':utf8}',
-			array(
-				'db_error_skip' => true,
-				'utf8' => 'utf8',
-			)
-		);
+	smf_db_query('
+		SET NAMES utf8', array()
+	);
 
+	$boardurl = $_POST['boardurl'];
+	echo $boardurl;
 	$replaces = array(
 		'{$db_prefix}' => $db_prefix,
 		'{$boarddir}' => mysql_real_escape_string(dirname(__FILE__)),
@@ -982,10 +974,7 @@ function DatabasePopulation()
 	}
 	$replaces['{$default_reserved_names}'] = strtr($replaces['{$default_reserved_names}'], array('\\\\n' => '\\n'));
 
-	// If the UTF-8 setting was enabled, add it to the table definitions.
-	//!!! Very MySQL specific still
-	if ($db_type == 'mysql' && isset($_POST['utf8']) && !empty($databases[$db_type]['utf8_support']))
-		$replaces[') ENGINE=MyISAM;'] = ') ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;';
+	$replaces[') ENGINE=MyISAM;'] = ') ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;';
 
 	// Read in the SQL.  Turn this on and that off... internationalize... etc.
 	$sql_lines = explode("\n", strtr(implode(' ', file(dirname(__FILE__) . '/install_' . $GLOBALS['db_script_version'] . '_' . $db_type . '.sql')), $replaces));
@@ -1104,43 +1093,8 @@ function DatabasePopulation()
 		}
 	}
 
-	// Are we allowing stat collection?
-	if (isset($_POST['stats']) && substr($_POST['boardurl'], 0, 16) != 'http://localhost')
-	{
-		// Attempt to register the site etc.
-		$fp = @fsockopen("www.simplemachines.org", 80, $errno, $errstr);
-		if ($fp)
-		{
-			$out = "GET /smf/stats/register_stats.php?site=" . base64_encode($_POST['boardurl']) . " HTTP/1.1\r\n";
-			$out .= "Host: www.simplemachines.org\r\n";
-			$out .= "Connection: Close\r\n\r\n";
-			fwrite($fp, $out);
-
-			$return_data = '';
-			while (!feof($fp))
-				$return_data .= fgets($fp, 128);
-
-			fclose($fp);
-
-			// Get the unique site ID.
-			preg_match('~SITE-ID:\s(\w{10})~', $return_data, $ID);
-
-			if (!empty($ID[1]))
-				$smcFunc['db_insert']('',
-					$db_prefix . 'settings',
-					array(
-						'variable' => 'string-255', 'value' => 'string-65534',
-					),
-					array(
-						'allow_sm_stats', $ID[1],
-					),
-					array('variable')
-				);
-		}
-	}
-
 	// As of PHP 5.1, setting a timezone is required.
-	if (!isset($modSettings['default_timezone']) && function_exists('date_default_timezone_set'))
+	if (!isset($modSettings['default_timezone']))
 	{
 		$server_offset = mktime(0, 0, 0, 1, 1, 1970);
 		$timezone_id = 'Etc/GMT' . ($server_offset > 0 ? '+' : '') . ($server_offset / 3600);
@@ -1194,7 +1148,7 @@ function DatabasePopulation()
 // Ask for the administrator login information.
 function AdminAccount()
 {
-	global $txt, $db_type, $db_connection, $databases, $smcFunc, $incontext, $db_prefix, $db_passwd, $sourcedir;
+	global $txt, $db_type, $db_connection, $incontext, $db_prefix, $db_passwd, $sourcedir;
 
 	$incontext['sub_template'] = 'admin_account';
 	$incontext['page_title'] = $txt['user_settings'];
@@ -1331,8 +1285,8 @@ function AdminAccount()
 					1, 0, time(), 0,
 					$incontext['member_salt'], '', '', '',
 					$ip, $ip, '', '',
-					'', '', '', '',
-					'', '', '', '', '', '',
+					'', '',
+					'', '', '',
 					'', '', '',
 				),
 				array('id_member')
@@ -1359,9 +1313,8 @@ function AdminAccount()
 // Final step, clean up and a complete message!
 function DeleteInstall()
 {
-	global $txt, $db_prefix, $db_connection, $HTTP_SESSION_VARS, $cookiename, $incontext;
-	global $smcFunc, $db_character_set, $mbname, $context, $scripturl, $boardurl;
-	global $current_smf_version, $databases, $sourcedir, $forum_version, $modSettings, $user_info, $language, $db_type;
+	global $txt, $HTTP_SESSION_VARS, $incontext;
+	global $current_smf_version, $sourcedir, $forum_version, $modSettings, $user_info, $db_type;
 
 	$incontext['page_title'] = $txt['congratulations'];
 	$incontext['sub_template'] = 'delete_install';
@@ -1374,6 +1327,7 @@ function DeleteInstall()
 
 	require_once($sourcedir . '/Errors.php');
 	require_once($sourcedir . '/Subs.php');
+	require_once($sourcedir . '/CommonAPI.php');
 	require_once($sourcedir . '/Load.php');
 	require_once($sourcedir . '/Security.php');
 	require_once($sourcedir . '/Subs-Auth.php');
@@ -1382,14 +1336,9 @@ function DeleteInstall()
 	if (!empty($incontext['account_existed']))
 		$incontext['warning'] = $incontext['account_existed'];
 
-	if (!empty($db_character_set) && !empty($databases[$db_type]['utf8_support']))
-		smf_db_query('
-			SET NAMES {raw:db_character_set}',
-			array(
-				'db_character_set' => $db_character_set,
-				'db_error_skip' => true,
-			)
-		);
+	smf_db_query('
+		SET NAMES utf8', array()
+	);
 
 	// As track stats is by default enabled let's add some activity.
 	smf_db_insert('ignore',
@@ -1458,10 +1407,6 @@ function DeleteInstall()
 	updateStats('message');
 	updateStats('topic');
 
-	// This function is needed to do the updateStats('subject') call.
-	$smcFunc['strtolower'] = $db_character_set === 'utf8' || $txt['lang_character_set'] === 'UTF-8' ? create_function('$string', '
-		return $string;') : 'strtolower';
-
 	$request = smf_db_query('
 		SELECT id_msg
 		FROM {db_prefix}messages
@@ -1491,7 +1436,7 @@ function DeleteInstall()
 	}
 
 	// Check if we need some stupid MySQL fix.
-	$server_version = $smcFunc['db_server_info']();
+	$server_version = smf_db_get_version();
 	if ($db_type == 'mysql' && in_array(substr($server_version, 0, 6), array('5.0.50', '5.0.51')))
 		updateSettings(array('db_mysql_group_by_fix' => '1'));
 
@@ -2074,10 +2019,9 @@ function template_install_below()
 // Welcome them to the wonderful world of SMF!
 function template_welcome_message()
 {
-	global $incontext, $installurl, $txt;
+	global $incontext, $txt;
 
 	echo '
-	<script type="text/javascript" src="http://www.simplemachines.org/smf/current-version.js?version=' . $GLOBALS['current_smf_version'] . '"></script>
 	<form action="', $incontext['form_url'], '" method="post">
 		<p>', sprintf($txt['install_welcome_desc'], $GLOBALS['current_smf_version']), '</p>
 		<div id="version_warning" style="margin: 2ex; padding: 2ex; border: 2px dashed #a92174; color: black; background-color: #fbbbe2; display: none;">
@@ -2223,7 +2167,7 @@ function template_chmod_files()
 // Get the database settings prepared.
 function template_database_settings()
 {
-	global $incontext, $installurl, $txt;
+	global $incontext, $txt;
 
 	echo '
 	<form action="', $incontext['form_url'], '" method="post">
@@ -2341,7 +2285,7 @@ function template_database_settings()
 // Stick in their forum settings.
 function template_forum_settings()
 {
-	global $incontext, $installurl, $txt;
+	global $incontext, $txt;
 
 	echo '
 	<form action="', $incontext['form_url'], '" method="post">
@@ -2377,31 +2321,14 @@ function template_forum_settings()
 				</td>
 			</tr>';
 
-	if ($incontext['utf8_should_work'])
-		echo '
-			<tr>
-				<td valign="top" class="textbox">', $txt['install_settings_utf8'], ':</td>
-				<td>
-					<input type="checkbox" name="utf8" id="utf8_check"', $incontext['utf8_default'] ? ' checked="checked"' : '', ' class="input_check"', $incontext['utf8_required'] ? ' disabled="disabled"' : '', ' /> <label for="utf8_check">', $txt['install_settings_utf8_title'], '</label><br />
-					<div style="font-size: smaller; margin-bottom: 2ex;">', $txt['install_settings_utf8_info'], '</div>
-				</td>
-			</tr>';
-
 	echo '
-			<tr>
-				<td valign="top" class="textbox">', $txt['install_settings_stats'], ':</td>
-				<td>
-					<input type="checkbox" name="stats" id="stats_check" class="input_check" /> <label for="stats_check">', $txt['install_settings_stats_title'], '</label><br />
-					<div style="font-size: smaller; margin-bottom: 2ex;">', $txt['install_settings_stats_info'], '</div>
-				</td>
-			</tr>
 		</table>';
 }
 
 // Show results of the database population.
 function template_populate_database()
 {
-	global $incontext, $installurl, $txt;
+	global $incontext, $txt;
 
 	echo '
 	<form action="', $incontext['form_url'], '" method="post">
@@ -2441,7 +2368,7 @@ function template_populate_database()
 // Create the admin account.
 function template_admin_account()
 {
-	global $incontext, $installurl, $txt;
+	global $incontext, $txt;
 
 	echo '
 	<form action="', $incontext['form_url'], '" method="post">

@@ -809,7 +809,7 @@ function loadEssentialData()
 		require_once($sourcedir . '/Subs-Db-' . $db_type . '.php');
 
 		// Make the connection...
-		$db_connection = smf_db_initiate($db_server, $db_name, $db_user, $db_passwd, $db_prefix, array('non_fatal' => true));
+		$db_connection = smf_db_initiate($db_server, $db_name, $db_user, $db_passwd, array('non_fatal' => true));
 
 		// Oh dear god!!
 		if ($db_connection === null)

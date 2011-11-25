@@ -13,11 +13,11 @@ $txt['install_step_databasechange'] = 'Database Population';
 $txt['install_step_admin'] = 'Admin Account';
 $txt['install_step_delete'] = 'Finalize Install';
 
-$txt['smf_installer'] = 'SMF Installer';
+$txt['smf_installer'] = 'EosAlpha Installer';
 $txt['installer_language'] = 'Language';
 $txt['installer_language_set'] = 'Set';
 $txt['congratulations'] = 'Congratulations, the installation process is complete!';
-$txt['congratulations_help'] = 'If at any time you need support, or SMF fails to work properly, please remember that <a href="http://www.simplemachines.org/community/index.php" target="_blank">help is available</a> if you need it.';
+$txt['congratulations_help'] = 'If at any time you need support, or EosAlpha fails to work properly, please remember that <a href="http://forum.miranda.or.at/index.php" target="_blank">help is available</a> if you need it.';
 $txt['still_writable'] = 'Your installation directory is still writable.  It\'s a good idea to chmod it so that it is not writable for security reasons.';
 $txt['delete_installer'] = 'Click here to delete this install.php file now.';
 $txt['delete_installer_maybe'] = '<em>(doesn\'t work on all servers.)</em>';
@@ -25,19 +25,19 @@ $txt['go_to_your_forum'] = 'Now you can see <a href="%1$s">your newly installed 
 $txt['good_luck'] = 'Good luck!<br />Simple Machines';
 
 $txt['install_welcome'] = 'Welcome';
-$txt['install_welcome_desc'] = 'Welcome to SMF. This script will guide you through the process for installing %1$s. We\'ll gather a few details about your forum over the next few steps, and after a couple of minutes your forum will be ready for use.';
+$txt['install_welcome_desc'] = 'Welcome to EosAlpha BBS. This script will guide you through the process for installing %1$s. We\'ll gather a few details about your forum over the next few steps, and after a couple of minutes your forum will be ready for use.';
 $txt['install_all_lovely'] = 'We\'ve completed some initial tests on your server and everything appears to be in order. Simply click the &quot;Continue&quot; button below to get started.';
 
 $txt['user_refresh_install'] = 'Forum Refreshed';
 $txt['user_refresh_install_desc'] = 'While installing, the installer found that (with the details you provided) one or more of the tables this installer might create already existed.<br />Any missing tables in your installation have been recreated with the default data, but no data was deleted from existing tables.';
 
-$txt['default_topic_subject'] = 'Welcome to SMF!';
-$txt['default_topic_message'] = 'Welcome to Simple Machines Forum!<br /><br />We hope you enjoy using your forum.&nbsp; If you have any problems, please feel free to [url=http://www.simplemachines.org/community/index.php]ask us for assistance[/url].<br /><br />Thanks!<br />Simple Machines';
+$txt['default_topic_subject'] = 'Welcome to EosAlpha!';
+$txt['default_topic_message'] = 'Welcome to EosAlpha Bulletin Board System!<br /><br />We hope you enjoy using your forum.&nbsp; If you have any problems, please feel free to [url=http://www.simplemachines.org/community/index.php]ask us for assistance[/url].<br /><br />Thanks!<br />Simple Machines';
 $txt['default_board_name'] = 'General Discussion';
 $txt['default_board_description'] = 'Feel free to talk about anything and everything in this board.';
 $txt['default_category_name'] = 'General Category';
 $txt['default_time_format'] = '%B %d, %Y, %I:%M:%S %p';
-$txt['default_news'] = 'SMF - Just Installed!';
+$txt['default_news'] = 'EosAlpha - Just Installed!';
 $txt['default_karmaLabel'] = 'Karma:';
 $txt['default_karmaSmiteLabel'] = '[smite]';
 $txt['default_karmaApplaudLabel'] = '[applaud]';
@@ -45,10 +45,7 @@ $txt['default_reserved_names'] = 'Admin\nWebmaster\nGuest\nroot';
 $txt['default_smileyset_name'] = 'Alienine\'s Set';
 $txt['default_aaron_smileyset_name'] = 'Aaron\'s Set';
 $txt['default_akyhne_smileyset_name'] = 'Akyhne\'s Set';
-$txt['default_theme_name'] = 'SMF Default Theme - Curve';
-$txt['default_core_theme_name'] = 'Core Theme';
-$txt['default_classic_theme_name'] = 'Classic YaBB SE Theme';
-$txt['default_babylon_theme_name'] = 'Babylon Theme';
+$txt['default_theme_name'] = 'EosAlpha Default Theme';
 
 $txt['default_administrator_group'] = 'Administrator';
 $txt['default_global_moderator_group'] = 'Global Moderator';
@@ -101,12 +98,6 @@ $txt['install_settings_dbsession'] = 'Database Sessions';
 $txt['install_settings_dbsession_title'] = 'Use the database for sessions instead of using files.';
 $txt['install_settings_dbsession_info1'] = 'This feature is almost always for the best, as it makes sessions more dependable.';
 $txt['install_settings_dbsession_info2'] = 'This feature is generally a good idea, but may not work properly on this server.';
-$txt['install_settings_utf8'] = 'UTF-8 Character Set';
-$txt['install_settings_utf8_title'] = 'Use UTF-8 as default character set';
-$txt['install_settings_utf8_info'] = 'This feature lets both the database and the forum use an international character set, UTF-8. This can be useful when working with multiple languages that use different character sets.';
-$txt['install_settings_stats'] = 'Allow Stat Collection';
-$txt['install_settings_stats_title'] = 'Allow Simple Machines to Collect Basic Stats Monthly';
-$txt['install_settings_stats_info'] = 'If enabled, this will allow Simple Machines to visit your site once a month to collect basic statistics. This will help us make decisions as to which configurations to optimize the software for. For more information please visit our <a href="http://www.simplemachines.org/about/stats.php" target="_blank">info page</a>.';
 $txt['install_settings_proceed'] = 'Proceed';
 
 $txt['db_settings'] = 'Database Server Settings';
