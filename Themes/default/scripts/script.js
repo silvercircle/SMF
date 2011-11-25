@@ -608,17 +608,17 @@ smc_Cookie.prototype.init = function()
 			this.oCookies[aNameValuePair[0].replace(/^\s+|\s+$/g, '')] = decodeURIComponent(aNameValuePair[1]);
 		}
 	}
-}
+};
 
 smc_Cookie.prototype.get = function(sKey)
 {
 	return sKey in this.oCookies ? this.oCookies[sKey] : null;
-}
+};
 
 smc_Cookie.prototype.set = function(sKey, sValue)
 {
 	document.cookie = sKey + '=' + encodeURIComponent(sValue);
-}
+};
 
 function createEventListener(oTarget)
 {
@@ -691,7 +691,7 @@ JumpTo.prototype.showSelect = function ()
 		sChildLevelPrefix += this.opt.sBoardChildLevelIndicator;
 	setInnerHTML(document.getElementById(this.opt.sContainerId), this.opt.sJumpToTemplate.replace(/%select_id%/, this.opt.sContainerId + '_select').replace(/%dropdown_list%/, '<select name="' + this.opt.sContainerId + '_select" id="' + this.opt.sContainerId + '_select" ' + ('implementation' in document ? '' : 'onmouseover="grabJumpToContent();" ') + ('onbeforeactivate' in document ? 'onbeforeactivate' : 'onfocus') + '="grabJumpToContent();"><option value="?board=' + this.opt.iCurBoardId + '.0">' + sChildLevelPrefix + this.opt.sBoardPrefix + this.opt.sCurBoardName.removeEntities() + '</option></select>&nbsp;<input type="button" value="' + this.opt.sGoButtonLabel + '" onclick="window.location.href = \'' + smf_prepareScriptUrl(smf_scripturl) + 'board=' + this.opt.iCurBoardId + '.0\';" />'));
 	this.dropdownList = document.getElementById(this.opt.sContainerId + '_select');
-}
+};
 
 // Fill the jump to box with entries. Method of the JumpTo class.
 JumpTo.prototype.fillSelect = function (aBoardsAndCategories)
@@ -767,7 +767,7 @@ JumpTo.prototype.fillSelect = function (aBoardsAndCategories)
 		if (this.selectedIndex > 0 && this.options[this.selectedIndex].value)
 			window.location.href = smf_scripturl + this.options[this.selectedIndex].value.substr(smf_scripturl.indexOf('?') == -1 || this.options[this.selectedIndex].value.substr(0, 1) != '?' ? 0 : 1);
 	};
-}
+};
 // Handy shortcuts for getting the mouse position on the screen - only used for IE at the moment.
 function smf_mousePose(oEvent)
 {
@@ -1175,6 +1175,7 @@ function setTextSize(_s)
     var now = new Date();
     var ref = (date.getTime() + (now.getTimezoneOffset() * 60 * 1000));
     var dist = now.getTime() - ref;
+	var onehour = 3600 * 1000;
     
     now.setHours(0);
     now.setMinutes(0);
@@ -1183,7 +1184,6 @@ function setTextSize(_s)
     
     if(ref < todayref) {
     	todayref -= ref;
-    	var onehour = 3600 * 1000;
     	var hours = todayref / onehour;
     	if(hours > 24 && hours < 144 )
     		return($t.settings.strings.weekdays[date.getUTCDay()] + ', ' + pad(date.getUTCHours()) + ':'+ pad(date.getUTCMinutes()));

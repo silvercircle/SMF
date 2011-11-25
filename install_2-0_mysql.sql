@@ -680,7 +680,7 @@ CREATE TABLE {$db_prefix}categories (
 #
 
 INSERT INTO {$db_prefix}categories
-VALUES (1, 0, '{$default_category_name}', 1);
+VALUES (1, 0, '{$default_category_name}', '', 1);
 # --------------------------------------------------------
 
 #
@@ -1469,7 +1469,7 @@ CREATE TABLE {$db_prefix}drafts (
 	is_locked tinyint(2) NOT NULL default '0',
 	is_sticky tinyint(2) NOT NULL default '0',
 	subject varchar(255) NOT NULL default '',
-	body mediumtext NOT NULL default '',
+	body mediumtext NOT NULL,
 	PRIMARY KEY (id_draft),
 	KEY (id_member)
 ) Engine=MyISAM;
@@ -1923,7 +1923,7 @@ VALUES ('use_post_cache', '0'),
 	('post_cache_cutoff', '30'),
 	('enableAdvancedHooks', '0'),
 	('legacyBBC', '0'),
-	('integration_hooks'), ''),
+	('integration_hooks', ''),
 	('fb_appid', ''),
 	('GA_tracker_id', ''),
 	('GA_domain_name', ''),
@@ -2168,8 +2168,8 @@ CREATE TABLE {$db_prefix}topics (
 
 CREATE TABLE {$db_prefix}news (
 	id_news mediumint(8) unsigned NOT NULL auto_increment,
-	body tinytext NOT NULL default '',
-	teaser tinytext NOT NULL default '',
+	body tinytext NOT NULL,
+	teaser tinytext NOT NULL,
 	boards varchar(100) NOT NULL default '',
 	topics varchar(100) NOT NULL default '',
 	groups varchar(50) NOT NULL default '',

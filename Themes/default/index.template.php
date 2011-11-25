@@ -88,7 +88,7 @@ function template_html_above()
 	anchor.parentNode.insertBefore(t2, anchor);
 	// ]]>
 	</script>
-	<meta http-equiv="Content-Type" content="text/html; charset={$context['character_set']}" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="description" content="{$context['page_description_html_safe']}" />
 	{$h(!empty($context['meta_keywords']), '<meta name="keywords" content="' . $context['meta_keywords'] . '" />', '')}
 	<title>{$context['page_title_html_safe']}</title>
@@ -153,12 +153,12 @@ function template_body_above()
 	<div id="jsconfirm" style="width:450px;" class="jqmWindow"><div class="jqmWindow_container"><div class="glass jsconfirm title"></div><div class="jsconfirm content"></div><div class="floatright mediummargin"><input type="submit" id="c_yes" value="Yes" class="button_submit" /><input type="reset" id="c_no" value="No" class="button_reset" /><input type="submit" id="c_ok" value="Ok" class="button_submit" /></div><div class="clear"></div></div></div>
 	<div id="ajaxbusy" style="display:none;"><img src="',$settings['images_url'],'/ajax-loader.gif" alt="loader" /></div>
 	<div id="mcard" style="display:none;"><div onclick="mcardClose();" id="mcard_close">X</div><div id="mcard_inner"></div></div>
-	<div id="wrap" style="max-width:',empty($settings['forum_width']) ? '3000px' : $settings['forum_width'],';">
+	<div id="wrap" style="max-width:',empty($settings['forum_width']) ? '3000px;' : $settings['forum_width'],';">
 	<header>
 	<div id="header">
 	<div id="upper_section" class="smalltext">
 		<div class="floatleft" style="overflow:hidden;max-height:87px;"><img src="',$settings['images_url'],'/logo.png" alt="logo" /></div>
-	<div class="clear"></div>
+		<div class="clear"></div>
 	</div>
 		<div class="notibar">
 			<div class="notibar right">
@@ -188,7 +188,8 @@ function template_body_above()
 	<script>
 		// <![CDATA[
     	setTextSize(textsize);
-	// ]]></script>
+		// ]]>
+	</script>
 	</div></header>';
 	// The main content should go here.
 	echo '
@@ -307,6 +308,7 @@ function template_body_below()
 	',$context['template_hooks']['global']['footer'],'
 	<footer>
 	<div class="clear" id="footer_section">';
+	
 	// Show the load time?
 	if ($context['show_load_time'])
 		$loadtime = $context['load_time']. 's CPU, '.$context['load_queries'] . $txt['queries'];
@@ -407,7 +409,7 @@ function theme_linktree($force_show = false)
 // Show the menu up top. Something like [home] [help] [profile] [logout]...
 function template_menu()
 {
-	global $context, $settings, $options, $scripturl, $txt;
+	global $context;
 
 	$context['menu_buttons']['blog']['title'] = "Blog";
 	$context['menu_buttons']['blog']['show'] = true;
@@ -478,7 +480,7 @@ function template_menu()
 // Generate a strip of buttons.
 function template_button_strip($button_strip, $direction = 'top', $strip_options = array())
 {
-	global $settings, $context, $txt, $scripturl;
+	global $context, $txt;
 
 	if (!is_array($strip_options))
 		$strip_options = array();
@@ -530,7 +532,7 @@ function socialbar($l, $t)
 
 function socialbar_passive($l, $t)
 {
-	global $social_privacy, $plusone;
+	global $plusone;
 	
 	echo '<div class="bmbar"><div class="title">Share this topic: </div>';
 		$url = $l;
@@ -829,6 +831,8 @@ function template_create_collapsible_container(array &$_c)
 
 function template_create_dropselector(&$_c)
 {
+	global $context;
+	
 	$id = $_c['id'];
 	echo '
 	<div class="dropselect">

@@ -149,7 +149,7 @@ CREATE TABLE {$db_prefix}drafts (
 	is_locked tinyint(2) NOT NULL default '0',
 	is_sticky tinyint(2) NOT NULL default '0',
 	subject varchar(255) NOT NULL default '',
-	body mediumtext NOT NULL default '',
+	body mediumtext NOT NULL,
 	PRIMARY KEY (id_draft),
 	KEY (id_member)
 ) Engine=MyISAM;
@@ -160,8 +160,8 @@ CREATE TABLE {$db_prefix}drafts (
 
 CREATE TABLE {$db_prefix}news (
 	id_news mediumint(8) unsigned NOT NULL auto_increment,
-	body tinytext NOT NULL default '',
-	teaser tinytext NOT NULL default '',
+	body tinytext NOT NULL,
+	teaser tinytext NOT NULL,
 	boards varchar(100) NOT NULL default '',
 	topics varchar(100) NOT NULL default '',
 	groups varchar(50) NOT NULL default '',

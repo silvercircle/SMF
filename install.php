@@ -14,7 +14,7 @@
 $GLOBALS['current_smf_version'] = '2.0';
 $GLOBALS['db_script_version'] = '2-0';
 
-$GLOBALS['required_php_version'] = '5.1.0';
+$GLOBALS['required_php_version'] = '5.2.0';
 
 // Don't have PHP support, do you?
 // ><html dir="ltr"><head><title>Error!</title></head><body>Sorry, this installer requires PHP!<div style="display: none;">
@@ -279,7 +279,10 @@ function load_lang_file()
 	}
 
 	// And now include the actual language file itself.
-	require_once(dirname(__FILE__) . '/Themes/default/languages/' . $_SESSION['installer_temp_lang']);
+	if(file_exists(dirname(__FILE__) . '/Themes/default/languages/' . $_SESSION['installer_temp_lang']))
+		require_once(dirname(__FILE__) . '/Themes/default/languages/' . $_SESSION['installer_temp_lang']);
+	else
+		require_once(dirname(__FILE__) . '/Themes/default/languages/Install.english.php');
 }
 
 // This handy function loads some settings and the like.
@@ -316,7 +319,7 @@ function installExit($fallThrough = false)
 	global $incontext, $installurl, $txt;
 
 	// Send character set.
-	header('Content-Type: text/html; charset=' . (isset($txt['lang_character_set']) ? $txt['lang_character_set'] : 'ISO-8859-1'));
+	header('Content-Type: text/html; charset=UTF-8');
 
 	// We usually dump our templates out.
 	if (!$fallThrough)
@@ -759,7 +762,7 @@ function DatabaseSettings()
 		// No dice?  Let's try adding the prefix they specified, just in case they misread the instructions ;)
 		if ($db_connection == null)
 		{
-			$db_error = @$smcFunc['db_error']();
+			$db_error = @mysql_error($db_connection);
 
 			$db_connection = smf_db_initiate($db_server, $db_name, $_POST['db_prefix'] . $db_user, $db_passwd, $db_prefix, array('non_fatal' => true, 'dont_select_db' => !$needsDB));
 			if ($db_connection != null)
@@ -787,7 +790,7 @@ function DatabaseSettings()
 		// Let's try that database on for size... assuming we haven't already lost the opportunity.
 		if ($db_name != '' && !$needsDB)
 		{
-			$smcFunc['db_query']('', "
+			smf_db_query("
 				CREATE DATABASE IF NOT EXISTS `$db_name`",
 				array(
 					'security_override' => true,
@@ -797,9 +800,9 @@ function DatabaseSettings()
 			);
 
 			// Okay, let's try the prefix if it didn't work...
-			if (!$smcFunc['db_select_db']($db_name, $db_connection) && $db_name != '')
+			if (!mysql_select_db($db_name, $db_connection) && $db_name != '')
 			{
-				$smcFunc['db_query']('', "
+				smf_db_query("
 					CREATE DATABASE IF NOT EXISTS `$_POST[db_prefix]$db_name`",
 					array(
 						'security_override' => true,
@@ -808,7 +811,7 @@ function DatabaseSettings()
 					$db_connection
 				);
 
-				if ($smcFunc['db_select_db']($_POST['db_prefix'] . $db_name, $db_connection))
+				if (mysql_select_db($_POST['db_prefix'] . $db_name, $db_connection))
 				{
 					$db_name = $_POST['db_prefix'] . $db_name;
 					updateSettingsFile(array('db_name' => $db_name));
@@ -816,7 +819,7 @@ function DatabaseSettings()
 			}
 
 			// Okay, now let's try to connect...
-			if (!$smcFunc['db_select_db']($db_name, $db_connection))
+			if (!mysql_select_db($db_name, $db_connection))
 			{
 				$incontext['error'] = sprintf($txt['error_db_database'], $db_name);
 				return false;
@@ -929,7 +932,7 @@ function DatabasePopulation()
 	load_database();
 
 	// Before running any of the queries, let's make sure another version isn't already installed.
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query('
 		SELECT variable, value
 		FROM {db_prefix}settings',
 		array(
@@ -953,7 +956,7 @@ function DatabasePopulation()
 
 	// If doing UTF8, select it. PostgreSQL requires passing it as a string...
 	if (!empty($db_character_set) && $db_character_set == 'utf8' && !empty($databases[$db_type]['utf8_support']))
-		$smcFunc['db_query']('', '
+		smf_db_query('
 			SET NAMES {'. ($db_type == 'postgresql' ? 'string' : 'raw') . ':utf8}',
 			array(
 				'db_error_skip' => true,
@@ -963,7 +966,7 @@ function DatabasePopulation()
 
 	$replaces = array(
 		'{$db_prefix}' => $db_prefix,
-		'{$boarddir}' => $smcFunc['db_escape_string'](dirname(__FILE__)),
+		'{$boarddir}' => mysql_real_escape_string(dirname(__FILE__)),
 		'{$boardurl}' => $boardurl,
 		'{$enableCompressedOutput}' => isset($_POST['compress']) ? '1' : '0',
 		'{$databaseSession_enable}' => isset($_POST['dbsession']) ? '1' : '0',
@@ -975,7 +978,7 @@ function DatabasePopulation()
 	foreach ($txt as $key => $value)
 	{
 		if (substr($key, 0, 8) == 'default_')
-			$replaces['{$' . $key . '}'] = $smcFunc['db_escape_string']($value);
+			$replaces['{$' . $key . '}'] = mysql_real_escape_string($value);
 	}
 	$replaces['{$default_reserved_names}'] = strtr($replaces['{$default_reserved_names}'], array('\\\\n' => '\\n'));
 
@@ -1015,7 +1018,7 @@ function DatabasePopulation()
 			continue;
 		}
 
-		if ($smcFunc['db_query']('', $current_statement, array('security_override' => true, 'db_error_skip' => true), $db_connection) === false)
+		if (smf_db_query($current_statement, array('security_override' => true, 'db_error_skip' => true), $db_connection) === false)
 		{
 			// Error 1050: Table already exists!
 			//!!! Needs to be made better!
@@ -1027,7 +1030,7 @@ function DatabasePopulation()
 			// Don't error on duplicate indexes (or duplicate operators in PostgreSQL.)
 			elseif (!preg_match('~^\s*CREATE( UNIQUE)? INDEX ([^\n\r]+?)~', $current_statement, $match) && !($db_type == 'postgresql' && preg_match('~^\s*CREATE OPERATOR (^\n\r]+?)~', $current_statement, $match)))
 			{
-				$incontext['failures'][$count] = $smcFunc['db_error']();
+				$incontext['failures'][$count] = mysql_error($db_connection);
 			}
 		}
 		else
@@ -1058,7 +1061,7 @@ function DatabasePopulation()
 
 	// Make sure UTF will be used globally.
 	if (isset($_POST['utf8']) && !empty($databases[$db_type]['utf8_support']))
-		$smcFunc['db_insert']('replace',
+		smf_db_insert('replace',
 			$db_prefix . 'settings',
 			array(
 				'variable' => 'string-255', 'value' => 'string-65534',
@@ -1142,7 +1145,7 @@ function DatabasePopulation()
 		$server_offset = mktime(0, 0, 0, 1, 1, 1970);
 		$timezone_id = 'Etc/GMT' . ($server_offset > 0 ? '+' : '') . ($server_offset / 3600);
 		if (date_default_timezone_set($timezone_id))
-			$smcFunc['db_insert']('',
+			smf_db_insert('',
 				$db_prefix . 'settings',
 				array(
 					'variable' => 'string-255', 'value' => 'string-65534',
@@ -1159,7 +1162,7 @@ function DatabasePopulation()
 	$tables = smf_db_list_tables($db_name, $db_prefix . '%');
 	foreach ($tables as $table)
 	{
-		$smcFunc['db_optimize_table']($table) != -1 or $db_messed = true;
+		smf_db_optimize_table($table) != -1 or $db_messed = true;
 
 		// Optimizing one sqlite table, optimizes them all
 		if($db_type == 'sqlite')
@@ -1167,13 +1170,13 @@ function DatabasePopulation()
 
 		if (!empty($db_messed))
 		{
-			$incontext['failures'][-1] = $smcFunc['db_error']();
+			$incontext['failures'][-1] = mysql_error($db_connection);
 			break;
 		}
 	}
 
 	// Check for the ALTER privilege.
-	if (!empty($databases[$db_type]['alter_support']) && $smcFunc['db_query']('', "ALTER TABLE {$db_prefix}boards ORDER BY id_board", array('security_override' => true, 'db_error_skip' => true)) === false)
+	if (!empty($databases[$db_type]['alter_support']) && smf_db_query("ALTER TABLE {$db_prefix}boards ORDER BY id_board", array('security_override' => true, 'db_error_skip' => true)) === false)
 	{
 		$incontext['error'] = $txt['error_db_alter_priv'];
 		return false;
@@ -1220,7 +1223,7 @@ function AdminAccount()
 	$incontext['require_db_confirm'] = empty($db_type) || $db_type != 'sqlite';
 
 	// Only allow skipping if we think they already have an account setup.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query('
 		SELECT id_member
 		FROM {db_prefix}members
 		WHERE id_group = {int:admin_group} OR FIND_IN_SET({int:admin_group}, additional_groups) != 0
@@ -1230,9 +1233,9 @@ function AdminAccount()
 			'admin_group' => 1,
 		)
 	);
-	if ($smcFunc['db_num_rows']($request) != 0)
+	if (mysql_num_rows($request) != 0)
 		$incontext['skip'] = 1;
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// Trying to create an account?
 	if (isset($_POST['password1']) && !empty($_POST['contbutt']))
@@ -1269,7 +1272,7 @@ function AdminAccount()
 		$invalid_characters = preg_match('~[<>&"\'=\\\]~', $_POST['username']) != 0;
 		$_POST['username'] = preg_replace('~[<>&"\'=\\\]~', '', $_POST['username']);
 
-		$result = $smcFunc['db_query']('', '
+		$result = smf_db_query('
 			SELECT id_member, password_salt
 			FROM {db_prefix}members
 			WHERE member_name = {string:username} OR email_address = {string:email}
@@ -1280,10 +1283,10 @@ function AdminAccount()
 				'db_error_skip' => true,
 			)
 		);
-		if ($smcFunc['db_num_rows']($result) != 0)
+		if (mysql_num_rows($result) != 0)
 		{
-			list ($incontext['member_id'], $incontext['member_salt']) = $smcFunc['db_fetch_row']($result);
-			$smcFunc['db_free_result']($result);
+			list ($incontext['member_id'], $incontext['member_salt']) = mysql_fetch_row($result);
+			mysql_free_result($result);
 
 			$incontext['account_existed'] = $txt['error_user_settings_taken'];
 		}
@@ -1312,8 +1315,7 @@ function AdminAccount()
 			// Format the username properly.
 			$_POST['username'] = preg_replace('~[\t\n\r\x0B\0\xA0]+~', ' ', $_POST['username']);
 			$ip = isset($_SERVER['REMOTE_ADDR']) ? substr($_SERVER['REMOTE_ADDR'], 0, 255) : '';
-
-			$request = $smcFunc['db_insert']('',
+			$request = smf_db_insert('insert',
 				$db_prefix . 'members',
 				array(
 					'member_name' => 'string-25', 'real_name' => 'string-25', 'passwd' => 'string', 'email_address' => 'string',
@@ -1321,7 +1323,7 @@ function AdminAccount()
 					'password_salt' => 'string', 'lngfile' => 'string', 'personal_text' => 'string', 'avatar' => 'string',
 					'member_ip' => 'string', 'member_ip2' => 'string', 'buddy_list' => 'string', 'pm_ignore_list' => 'string',
 					'message_labels' => 'string', 'location' => 'string',
-					'aim' => 'string', 'icq' => 'string', 'msn' => 'string', 'signature' => 'string', 'usertitle' => 'string', 'secret_question' => 'string',
+					'signature' => 'string', 'usertitle' => 'string', 'secret_question' => 'string',
 					'additional_groups' => 'string', 'ignore_boards' => 'string', 'openid_uri' => 'string',
 				),
 				array(
@@ -1340,11 +1342,11 @@ function AdminAccount()
 			if ($request === false)
 			{
 				$incontext['error'] = $txt['error_user_settings_query'] . '<br />
-				<div style="margin: 2ex;">' . nl2br(htmlspecialchars($smcFunc['db_error']($db_connection))) . '</div>';
+				<div style="margin: 2ex;">' . nl2br(htmlspecialchars(mysql_error($db_connection))) . '</div>';
 				return false;
 			}
 
-			$incontext['member_id'] = $smcFunc['db_insert_id']("{$db_prefix}members", 'id_member');
+			$incontext['member_id'] = smf_db_insert_id("{$db_prefix}members", 'id_member');
 		}
 
 		// If we're here we're good.
@@ -1381,7 +1383,7 @@ function DeleteInstall()
 		$incontext['warning'] = $incontext['account_existed'];
 
 	if (!empty($db_character_set) && !empty($databases[$db_type]['utf8_support']))
-		$smcFunc['db_query']('', '
+		smf_db_query('
 			SET NAMES {raw:db_character_set}',
 			array(
 				'db_character_set' => $db_character_set,
@@ -1390,7 +1392,7 @@ function DeleteInstall()
 		);
 
 	// As track stats is by default enabled let's add some activity.
-	$smcFunc['db_insert']('ignore',
+	smf_db_insert('ignore',
 		'{db_prefix}log_activity',
 		array('date' => 'date', 'topics' => 'int', 'posts' => 'int', 'registers' => 'int'),
 		array(strftime('%Y-%m-%d', time()), 1, 1, (!empty($incontext['member_id']) ? 1 : 0)),
@@ -1401,7 +1403,7 @@ function DeleteInstall()
 	if (isset($incontext['member_id']) && isset($incontext['member_salt']))
 		setLoginCookie(3153600 * 60, $incontext['member_id'], sha1(sha1(strtolower($_POST['username']) . $_POST['password1']) . $incontext['member_salt']));
 
-	$result = $smcFunc['db_query']('', '
+	$result = smf_db_query('
 		SELECT value
 		FROM {db_prefix}settings
 		WHERE variable = {string:db_sessions}',
@@ -1410,9 +1412,9 @@ function DeleteInstall()
 			'db_error_skip' => true,
 		)
 	);
-	if ($smcFunc['db_num_rows']($result) != 0)
-		list ($db_sessions) = $smcFunc['db_fetch_row']($result);
-	$smcFunc['db_free_result']($result);
+	if (mysql_num_rows($result) != 0)
+		list ($db_sessions) = mysql_fetch_row($result);
+	mysql_free_result($result);
 
 	if (empty($db_sessions))
 	{
@@ -1424,7 +1426,7 @@ function DeleteInstall()
 	{
 		$_SERVER['HTTP_USER_AGENT'] = substr($_SERVER['HTTP_USER_AGENT'], 0, 211);
 
-		$smcFunc['db_insert']('replace',
+		smf_db_insert('replace',
 			'{db_prefix}sessions',
 			array(
 				'session_id' => 'string', 'last_update' => 'int', 'data' => 'string',
@@ -1437,7 +1439,7 @@ function DeleteInstall()
 	}
 
 	// We're going to want our lovely $modSettings now.
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query('
 		SELECT variable, value
 		FROM {db_prefix}settings',
 		array(
@@ -1447,9 +1449,9 @@ function DeleteInstall()
 	// Only proceed if we can load the data.
 	if ($request)
 	{
-		while ($row = $smcFunc['db_fetch_row']($request))
+		while ($row = mysql_fetch_row($request))
 			$modSettings[$row[0]] = $row[1];
-		$smcFunc['db_free_result']($request);
+		mysql_free_result($request);
 	}
 
 	updateStats('member');
@@ -1460,7 +1462,7 @@ function DeleteInstall()
 	$smcFunc['strtolower'] = $db_character_set === 'utf8' || $txt['lang_character_set'] === 'UTF-8' ? create_function('$string', '
 		return $string;') : 'strtolower';
 
-	$request = $smcFunc['db_query']('', '
+	$request = smf_db_query('
 		SELECT id_msg
 		FROM {db_prefix}messages
 		WHERE id_msg = 1
@@ -1470,9 +1472,9 @@ function DeleteInstall()
 			'db_error_skip' => true,
 		)
 	);
-	if ($smcFunc['db_num_rows']($request) > 0)
+	if (mysql_num_rows($request) > 0)
 		updateStats('subject', 1, htmlspecialchars($txt['default_topic_subject']));
-	$smcFunc['db_free_result']($request);
+	mysql_free_result($request);
 
 	// Now is the perfect time to fetch the SM files.
 	require_once($sourcedir . '/ScheduledTasks.php');
@@ -1965,12 +1967,11 @@ function fixModSecurity()
 
 function template_install_above()
 {
-	global $incontext, $txt, $smfsite, $installurl;
+	global $incontext, $txt, $installurl;
 
-	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"', !empty($txt['lang_rtl']) ? ' dir="rtl"' : '', '>
+	echo '<!DOCTYPE html>
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=', isset($txt['lang_character_set']) ? $txt['lang_character_set'] : 'ISO-8859-1', '" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta name="robots" content="noindex" />
 		<title>', $txt['smf_installer'], '</title>
 		<link rel="stylesheet" type="text/css" href="Themes/default/css/index.css?fin20" />
@@ -1978,15 +1979,13 @@ function template_install_above()
 		<script type="text/javascript" src="Themes/default/scripts/script.js"></script>
 	</head>
 	<body>
-	<div id="header"><div class="frame">
-		<div id="top_section">
-			<h1 class="forumtitle">', $txt['smf_installer'], '</h1>
-			<img id="smflogo" src="Themes/default/images/smflogo.png" alt="Simple Machines Forum" title="Simple Machines Forum" />
+	<div id="wrap" style="max-width:3000px;">
+	<div id="header">
+		<div id="upper_section" class="smalltext">
+			<div class="floatleft" style="overflow:hidden;max-height:87px;"><img src="Themes/default/images/logo.png" alt="logo" /></div>
+			<div class="clear"></div>
 		</div>
-		<div id="upper_section" class="smalltext flow_hidden">
-			<div class="user"></div>
-			<div class="news normaltext">';
-
+	<div class="notibar">';
 	// Have we got a language drop down - if so do it on the first step only.
 	if (!empty($incontext['detected_languages']) && count($incontext['detected_languages']) > 1 && $incontext['current_step'] == 0)
 	{
@@ -2007,11 +2006,12 @@ function template_install_above()
 	}
 
 	echo '
-			</div>
-		</div>
 	</div></div>
-	<div id="content_section"><div class="frame">
+	<div class="clear"></div>
+	<div id="content_section">
 		<div id="main_content_section">
+		<br>
+			<div class="clear"></div>
 			<div id="main-steps">
 				<h2>', $txt['upgrade_progress'], '</h2>
 				<ul>';
@@ -2059,14 +2059,14 @@ function template_install_below()
 							</form>';
 
 	echo '
-					</div>
 				</div>
 			</div>
 		</div>
 	</div></div>
-	<div id="footer_section"><div class="frame" style="height: 40px;">
+	<div id="footer_section">
 		<div class="smalltext"><a href="http://www.simplemachines.org/" title="Simple Machines Forum" target="_blank" class="new_win">SMF &copy; 2011, Simple Machines</a></div>
-	</div></div>
+	</div>
+	</div>
 	</body>
 </html>';
 }
