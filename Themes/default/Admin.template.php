@@ -25,7 +25,7 @@ function template_admin()
 	if ($context['user']['is_admin'])
 		echo '
 			<object id="quick_search">
-				<form action="', $scripturl, '?action=admin;area=search" method="post" accept-charset="', $context['character_set'], '" class="floatright">
+				<form action="', $scripturl, '?action=admin;area=search" method="post" accept-charset="UTF-8" class="floatright">
 					<input type="text" name="search_term" value="', $txt['admin_search'], '" onclick="if (this.value == \'', $txt['admin_search'], '\') this.value = \'\';" class="input_text" />
 					<select name="search_type">
 						<option value="internal"', (empty($context['admin_preferences']['sb']) || $context['admin_preferences']['sb'] == 'internal' ? ' selected="selected"' : ''), '>', $txt['admin_search_type_internal'], '</option>
@@ -583,7 +583,7 @@ function template_edit_censored()
 	// First section is for adding/removing words from the censored list.
 	echo '
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=postsettings;sa=censor" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=postsettings;sa=censor" method="post" accept-charset="UTF-8">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					', $txt['admin_censored_words'], '
@@ -694,7 +694,7 @@ function template_not_done()
 				</div>';
 
 	echo '
-				<form action="', $scripturl, $context['continue_get_data'], '" method="post" accept-charset="', $context['character_set'], '" style="margin: 0;" name="autoSubmit" id="autoSubmit">
+				<form action="', $scripturl, $context['continue_get_data'], '" method="post" accept-charset="UTF-8" style="margin: 0;" name="autoSubmit" id="autoSubmit">
 					<div style="margin: 1ex; text-align: right;"><input type="submit" name="cont" value="', $txt['not_done_continue'], '" class="button_submit" /></div>
 					', $context['continue_post_data'], '
 				</form>
@@ -757,7 +757,7 @@ function template_show_settings()
 
 	echo '
 	<div id="admincenter">
-		<form action="', $context['post_url'], '" method="post" accept-charset="', $context['character_set'], '"', !empty($context['force_form_onsubmit']) ? ' onsubmit="' . $context['force_form_onsubmit'] . '"' : '', '>';
+		<form action="', $context['post_url'], '" method="post" accept-charset="UTF-8"', !empty($context['force_form_onsubmit']) ? ' onsubmit="' . $context['force_form_onsubmit'] . '"' : '', '>';
 
 	// Is there a custom title?
 	if (isset($context['settings_title']))
@@ -1048,7 +1048,7 @@ function template_edit_profile_field()
 
 	echo '
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=featuresettings;sa=profileedit;fid=', $context['fid'], ';', $context['session_var'], '=', $context['session_id'], '" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=featuresettings;sa=profileedit;fid=', $context['fid'], ';', $context['session_var'], '=', $context['session_id'], '" method="post" accept-charset="UTF-8">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					', $context['page_title'], '
@@ -1264,7 +1264,7 @@ function template_admin_search_results()
 		<div class="cat_bar">
 			<h3 class="catbg">
 				<object id="quick_search">
-					<form action="', $scripturl, '?action=admin;area=search" method="post" accept-charset="', $context['character_set'], '" class="floatright">
+					<form action="', $scripturl, '?action=admin;area=search" method="post" accept-charset="UTF-8" class="floatright">
 						<input type="text" name="search_term" value="', $context['search_term'], '" class="input_text" />
 						<input type="hidden" name="search_type" value="', $context['search_type'], '" />
 						<input type="submit" name="search_go" value="', $txt['admin_search_results_again'], '" class="button_submit" />
@@ -1367,7 +1367,7 @@ function template_core_features()
 	}
 
 	echo '
-		<form action="', $scripturl, '?action=admin;area=corefeatures;" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=corefeatures;" method="post" accept-charset="UTF-8">
 			<div class="cat_bar2">
 				<h3>
 					', $txt['core_settings_title'], '
@@ -1428,7 +1428,7 @@ function template_add_language()
 
 	echo '
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=languages;sa=add;', $context['session_var'], '=', $context['session_id'], '" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=languages;sa=add;', $context['session_var'], '=', $context['session_id'], '" method="post" accept-charset="UTF-8">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					', $txt['add_language'], '
@@ -1534,7 +1534,7 @@ function template_download_language()
 	// Provide something of an introduction...
 	echo '
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=languages;sa=downloadlang;did=', $context['download_id'], ';', $context['session_var'], '=', $context['session_id'], '" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=languages;sa=downloadlang;did=', $context['download_id'], ';', $context['session_var'], '=', $context['session_id'], '" method="post" accept-charset="UTF-8">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					', $txt['languages_download'], '
@@ -1692,7 +1692,7 @@ function template_modify_language_entries()
 
 	echo '
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=languages;sa=editlang;lid=', $context['lang_id'], '" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=languages;sa=editlang;lid=', $context['lang_id'], '" method="post" accept-charset="UTF-8">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					', $txt['edit_languages'], '
@@ -1764,7 +1764,7 @@ function template_modify_language_entries()
 			</div>
 		</form>
 
-		<form action="', $scripturl, '?action=admin;area=languages;sa=editlang;lid=', $context['lang_id'], ';entries" id="entry_form" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=languages;sa=editlang;lid=', $context['lang_id'], ';entries" id="entry_form" method="post" accept-charset="UTF-8">
 			<div class="cat_bar">
 				<h3>
 					', $txt['edit_language_entries'], '
@@ -2067,7 +2067,7 @@ function template_prefix_settings()
 	global $context, $txt, $modSettings, $sourcedir, $scripturl;
 	
 	echo '
-		<form action="', $scripturl, '?action=admin;area=postsettings;sa=prefixes;save" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=postsettings;sa=prefixes;save" method="post" accept-charset="UTF-8">
 		<div class="cat_bar">
 			<h3>',$txt['manageposts_prefix_settings'],'</h3>
 		</div>
@@ -2126,7 +2126,7 @@ function template_tag_admin_settings()
 			<h3>',$txt['manageposts_tag_settings'],'</h3>
 		</div>
 		<div class="blue_container mediumpadding">
-		<form action="', $scripturl, '?action=admin;area=postsettings;sa=tags;save" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=postsettings;sa=tags;save" method="post" accept-charset="UTF-8">
 		<table class="table_grid mlist">
 			<tr>
 				<td style="white-space:nowrap;">',$txt['smftags_set_mintaglength'],'</td>

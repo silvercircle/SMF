@@ -3265,10 +3265,10 @@ function template_header()
 		if (!isset($_REQUEST['xml']) && isset($_GET['debug']) && !$context['browser']['is_ie'] && !WIRELESS)
 			header('Content-Type: application/xhtml+xml');
 		elseif (!isset($_REQUEST['xml']) && !WIRELESS)
-			header('Content-Type: text/html; charset=' . (empty($context['character_set']) ? 'ISO-8859-1' : $context['character_set']));
+			header('Content-Type: text/html; charset=UTF-8');
 	}
 
-	header('Content-Type: text/' . (isset($_REQUEST['xml']) ? 'xml' : 'html') . '; charset=' . (empty($context['character_set']) ? 'ISO-8859-1' : $context['character_set']));
+	header('Content-Type: text/' . (isset($_REQUEST['xml']) ? 'xml' : 'html') . '; charset=UTF-8');
 
 	$checked_securityFiles = false;
 	$showed_banned = false;
@@ -4214,8 +4214,8 @@ function HDC($a, $b, $c)
 function AjaxErrorMsg($msg = 'Unknown or unspecified error', $title = 'Error', $code = 1)
 {
 	global $context;
-	header('Content-Type: text/xml; charset=' . $context['character_set']);
-	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '" ?', '>
+	header('Content-Type: text/xml; charset=UTF-8');
+	echo '<', '?xml version="1.0" encoding="UTF-8" ?', '>
 <document>
  <response error="',$code,'">
 	<title>

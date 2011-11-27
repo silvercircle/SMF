@@ -17,7 +17,7 @@ function template_modify_weights()
 
 	echo '
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=managesearch;sa=weights" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=managesearch;sa=weights" method="post" accept-charset="UTF-8">
 			<div class="cat_bar">
 				<h3>', $txt['search_weights'], '</h3>
 			</div>
@@ -110,7 +110,7 @@ function template_select_search_method()
 
 	echo '
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=managesearch;sa=method" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=managesearch;sa=method" method="post" accept-charset="UTF-8">
 			<div class="cat_bar">
 				<h3>', $txt['search_method'], '</h3>
 			</div>
@@ -222,7 +222,7 @@ function template_create_index()
 
 	echo '
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=managesearch;sa=createmsgindex;step=1" method="post" accept-charset="', $context['character_set'], '" name="create_index">
+		<form action="', $scripturl, '?action=admin;area=managesearch;sa=createmsgindex;step=1" method="post" accept-charset="UTF-8" name="create_index">
 			<div class="cat_bar">
 				<h3 class="catbg">', $txt['search_create_index'], '</h3>
 			</div>
@@ -257,7 +257,7 @@ function template_create_index_progress()
 	global $context, $settings, $options, $scripturl, $txt;
 	echo '
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=managesearch;sa=createmsgindex;step=1" name="autoSubmit" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=managesearch;sa=createmsgindex;step=1" name="autoSubmit" method="post" accept-charset="UTF-8">
 			<div class="cat_bar">
 				<h3 class="catbg">', $txt['search_create_index'], '</h3>
 			</div>
@@ -329,7 +329,7 @@ function template_spider_edit()
 	global $context, $settings, $options, $scripturl, $txt;
 	echo '
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=sengines;sa=editspiders;sid=', $context['spider']['id'], '" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=sengines;sa=editspiders;sid=', $context['spider']['id'], '" method="post" accept-charset="UTF-8">
 			<div class="cat_bar">
 				<h3 class="catbg">', $context['page_title'], '</h3>
 			</div>
@@ -388,7 +388,7 @@ function template_show_spider_logs()
 		<div class="cat_bar">
 			<h3 class="catbg">', $txt['spider_logs_delete'], '</h3>
 		</div>
-		<form action="', $scripturl, '?action=admin;area=sengines;sa=logs;', $context['session_var'], '=', $context['session_id'], '" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=sengines;sa=logs;', $context['session_var'], '=', $context['session_id'], '" method="post" accept-charset="UTF-8">
 			<div class="windowbg">
 				<span class="topslice"><span></span></span>
 				<div class="content">
@@ -438,7 +438,7 @@ function template_manage_sphinx()
 		</div>
 		<br />
 		<div class="blue_container">
-		<form action="', $scripturl, '?action=admin;area=managesearch;sa=managesphinx;save=1" method="post" accept-charset="', $context['character_set'], '" name="create_index">
+		<form action="', $scripturl, '?action=admin;area=managesearch;sa=managesphinx;save=1" method="post" accept-charset="UTF-8" name="create_index">
 			<table style="margin-bottom: 2ex;width:100%;">
 				<tr>
 					<td class="textbox"><label for="sphinx_data_path_input">Index data path:</label></td>
@@ -499,7 +499,7 @@ function template_manage_sphinx()
 		</div>
 		<br>
 		<div class="orange_container centertext mediumpadding">
-		<form action="', $scripturl, '?action=admin;area=managesearch;sa=managesphinx;checkconnect=1" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=managesearch;sa=managesphinx;checkconnect=1" method="post" accept-charset="UTF-8">
 			<input type="submit" class="button_submit" value="Test connection to Sphinx search daemon" />
 		</form>
 		</div>

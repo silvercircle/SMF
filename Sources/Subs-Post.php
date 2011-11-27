@@ -1266,7 +1266,7 @@ function mimespecialchars($string, $with_charset = true, $hotmail_fix = false, $
 {
 	global $context;
 
-	$charset = $custom_charset !== null ? $custom_charset : $context['character_set'];
+	$charset = $custom_charset !== null ? $custom_charset : 'UTF-8';
 
 	// This is the fun part....
 	if (preg_match_all('~&#(\d{3,8});~', $string, $matches) !== 0 && !$hotmail_fix)
@@ -1283,14 +1283,6 @@ function mimespecialchars($string, $with_charset = true, $hotmail_fix = false, $
 			$string = preg_replace('~&#(\d{3,8});~e', 'chr(\'$1\')', $string);
 		else
 		{
-			// Try to convert the string to UTF-8.
-			if (!$context['utf8'] && function_exists('iconv'))
-			{
-				$newstring = @iconv($context['character_set'], 'UTF-8', $string);
-				if ($newstring)
-					$string = $newstring;
-			}
-
 			$fixchar = create_function('$n', '
 				if ($n < 128)
 					return chr($n);
@@ -1309,15 +1301,8 @@ function mimespecialchars($string, $with_charset = true, $hotmail_fix = false, $
 	}
 
 	// Convert all special characters to HTML entities...just for Hotmail :-\
-	if ($hotmail_fix && ($context['utf8'] || function_exists('iconv') || $context['character_set'] === 'ISO-8859-1'))
+	if ($hotmail_fix)
 	{
-		if (!$context['utf8'] && function_exists('iconv'))
-		{
-			$newstring = @iconv($context['character_set'], 'UTF-8', $string);
-			if ($newstring)
-				$string = $newstring;
-		}
-
 		$entityConvert = create_function('$c', '
 			if (strlen($c) === 1 && ord($c[0]) <= 0x7F)
 				return $c;

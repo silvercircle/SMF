@@ -53,7 +53,7 @@ function template_main()
 	template_create_collapsible_container($formcontent);
 		
 	echo '
-		<form action="'. $scripturl. '?action=mlist;sa=search" method="post" accept-charset="'. $context['character_set']. '">
+		<form action="'. $scripturl. '?action=mlist;sa=search" method="post" accept-charset="UTF-8">
 				<div id="mlist_search" class="flow_hidden">
 					<div id="search_term_input">
 						<input type="text" name="search" value="'. $context['old_search']. '" size="35" class="input_text" /> <input type="submit" name="submit" value="'.$txt['search'] . '" class="button_submit" />
@@ -142,7 +142,7 @@ function template_search()
 
 	// Start the submission form for the search!
 	echo '
-	<form action="', $scripturl, '?action=mlist;sa=search" method="post" accept-charset="', $context['character_set'], '">
+	<form action="', $scripturl, '?action=mlist;sa=search" method="post" accept-charset="UTF-8">
 		<div id="memberlist">
 			<h1 class="bigheader">
 					<img src="' . $settings['images_url'] . '/buttons/search.gif" alt="" class="icon" />', $txt['mlist_search'], '

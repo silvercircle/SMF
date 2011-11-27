@@ -115,8 +115,8 @@ function draftXmlReturn($draft)
 		return;
 
 	global $txt, $context;
-	header('Content-Type: text/xml; charset=' . (empty($context['character_set']) ? 'ISO-8859-1' : $context['character_set']));
-	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '"?', '>
+	header('Content-Type: text/xml; charset=UTF-8');
+	echo '<', '?xml version="1.0" encoding="UTF-8"?', '>
 	<response>
 		<lastsave id="', $draft, '"><![CDATA[', $txt['last_saved_on'], ': ', timeformat(time()), ']', ']></lastsave>
 	</response>';

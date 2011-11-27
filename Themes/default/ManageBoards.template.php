@@ -47,7 +47,7 @@ function template_main()
 
 		// Boards table header.
 		echo '
-		<form action="', $scripturl, '?action=admin;area=manageboards;sa=newboard;cat=', $category['id'], '" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=manageboards;sa=newboard;cat=', $category['id'], '" method="post" accept-charset="UTF-8">
 			<div class="blue_container cleantop">
 				<div class="content">
 					<ul id="category_', $category['id'], '" class="floatleft" style="width:100%;">';
@@ -111,7 +111,7 @@ function template_modify_category()
 	// Print table header.
 	echo '
 	<div id="manage_boards">
-		<form action="', $scripturl, '?action=admin;area=manageboards;sa=cat2" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=manageboards;sa=cat2" method="post" accept-charset="UTF-8">
 			<input type="hidden" name="cat" value="', $context['category']['id'], '" />
 				<div class="cat_bar">
 					<h3>
@@ -197,7 +197,7 @@ function template_confirm_category_delete()
 	// Print table header.
 	echo '
 	<div id="manage_boards">
-		<form action="', $scripturl, '?action=admin;area=manageboards;sa=cat2" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=manageboards;sa=cat2" method="post" accept-charset="UTF-8">
 			<input type="hidden" name="cat" value="', $context['category']['id'], '" />
 			<div class="cat_bar">
 				<h3 class="catbg">', $txt['mboards_delete_cat'], '</h3>
@@ -256,7 +256,7 @@ function template_modify_board()
 	// The main table header.
 	echo '
 	<div id="manage_boards">
-		<form action="', $scripturl, '?action=admin;area=manageboards;sa=board2" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=manageboards;sa=board2" method="post" accept-charset="UTF-8">
 			<input type="hidden" name="boardid" value="', $context['board']['id'], '" />
 			<div class="cat_bar">
 				<h3>
@@ -604,7 +604,7 @@ function template_confirm_board_delete()
 	// Print table header.
 	echo '
 	<div id="manage_boards">
-		<form action="', $scripturl, '?action=admin;area=manageboards;sa=board2" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=manageboards;sa=board2" method="post" accept-charset="UTF-8">
 			<input type="hidden" name="boardid" value="', $context['board']['id'], '" />
 
 			<div class="cat_bar">

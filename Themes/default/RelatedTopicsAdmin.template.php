@@ -17,7 +17,7 @@ function template_related_topics_admin_methods()
 	global $context, $modSettings, $txt, $scripturl;
 
 	echo '
-	<form action="', $scripturl, '?action=admin;area=relatedtopics;sa=methods;save" method="post" accept-charset="', $context['character_set'], '">
+	<form action="', $scripturl, '?action=admin;area=relatedtopics;sa=methods;save" method="post" accept-charset="UTF-8">
 		<div class="cat_bar">
 			<h3 class="catbg">', $txt['related_topics_ignored_boards'], '</h3>
 		</div>

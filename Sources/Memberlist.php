@@ -210,7 +210,7 @@ function MLAll()
 
 	if (!is_numeric($_REQUEST['start']))
 	{
-		if (preg_match('~^[^\'\\\\/]~' . ($context['utf8'] ? 'u' : ''), commonAPI::strtolower($_REQUEST['start']), $match) === 0)
+		if (preg_match('~^[^\'\\\\/]~u', commonAPI::strtolower($_REQUEST['start']), $match) === 0)
 			fatal_error('Hacker?', false);
 
 		$_REQUEST['start'] = $match[0];

@@ -29,7 +29,7 @@ function template_alias_settings() {
 
     echo '
 	<div id="admincenter">
-		<form action="', $context['post_url'], '" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $context['post_url'], '" method="post" accept-charset="UTF-8">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					', $txt['simplesef_alias'], '

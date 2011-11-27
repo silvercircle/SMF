@@ -14,7 +14,7 @@
 function template_main()
 {
 	global $context, $scripturl, $txt;
-	echo '<', '?xml version="1.0" encoding="', $context['character_set'], '" ?', '>
+	echo '<', '?xml version="1.0" encoding="UTF-8" ?', '>
 <document>
  <response open="default_overlay" width="0" />
  <onready>

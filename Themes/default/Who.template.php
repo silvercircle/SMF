@@ -18,7 +18,7 @@ function template_main()
 	// Display the table header and linktree.
 	echo '
 	<div class="main_section" id="whos_online">
-		<form action="', $scripturl, '?action=who" method="post" id="whoFilter" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=who" method="post" id="whoFilter" accept-charset="UTF-8">
 			<h1 class="bigheader">', $txt['who_title'], '</h1>
 			<br />
 			<div class="table_grid mediumpadding" id="mlist">

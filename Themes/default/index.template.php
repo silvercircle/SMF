@@ -65,7 +65,7 @@ function template_html_above()
 	var smf_images_url = '{$settings['images_url']}';
 	var smf_scripturl = '{$scripturl}';
 	var smf_iso_case_folding = {$h($context['server']['iso_case_folding'], 'true', 'false')};
-	var smf_charset = '{$context['character_set']}';
+	var smf_charset = 'UTF-8';
 	var sSessionId = '{$context['session_id']}';
 	var sSessionVar = '{$context['session_var']}';
 	var disableDynamicTime = {$h(empty($options['disable_dynatime']), 0, 1)};
@@ -206,7 +206,7 @@ function template_body_above()
 			<div onclick="sbToggle($(this));" id="sbtoggle">',$sidebar_vis ? '&nbsp;&gt;' : '&nbsp;&lt;','</div>';
 	// Show the navigation tree.
 	echo '<div style="position:relative;">
-		  <form onmouseout="return false;" onsubmit="submitSearchBox();" class="floatright" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="', $context['character_set'], '">';
+		  <form onmouseout="return false;" onsubmit="submitSearchBox();" class="floatright" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="UTF-8">';
 			// Search within current topic?
 			echo '
 				<div id="adv_search" style="width:246px;padding:0;" class="smalltext">
@@ -611,7 +611,7 @@ function template_sidebar_content()
 				<div class="smalltext">
 				<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/sha1.js',$context['jsver'],'"></script>
 				<div>
-					<form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="', $context['character_set'], '" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
+					<form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="UTF-8" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
 					<div class="orange_container centertext">', sprintf($txt['welcome_guest'], $txt['guest_title']), '</div>
 					<table>
 					<tr>

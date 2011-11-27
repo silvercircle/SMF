@@ -1375,8 +1375,7 @@ function Download()
 	global $txt, $modSettings, $user_info, $context, $topic;
 
 	// Some defaults that we need.
-	$context['character_set'] = empty($modSettings['global_character_set']) ? (empty($txt['lang_character_set']) ? 'ISO-8859-1' : $txt['lang_character_set']) : $modSettings['global_character_set'];
-	$context['utf8'] = $context['character_set'] === 'UTF-8' && (strpos(strtolower(PHP_OS), 'win') === false || @version_compare(PHP_VERSION, '4.2.3') != -1);
+	$context['character_set'] = 'UTF-8';
 	$context['no_last_modified'] = true;
 
 	// Make sure some attachment was requested!
@@ -1459,7 +1458,7 @@ function Download()
 		loadLanguage('Errors');
 
 		header('HTTP/1.0 404 ' . $txt['attachment_not_found']);
-		header('Content-Type: text/plain; charset=' . (empty($context['character_set']) ? 'ISO-8859-1' : $context['character_set']));
+		header('Content-Type: text/plain; charset=UTF-8');
 
 		// We need to die like this *before* we send any anti-caching headers as below.
 		die('404 - ' . $txt['attachment_not_found']);
@@ -1515,7 +1514,7 @@ function Download()
 	}
 
 	// Convert the file to UTF-8, cuz most browsers dig that.
-	$utf8name = !$context['utf8'] && function_exists('iconv') ? iconv($context['character_set'], 'UTF-8', $real_filename) : (!$context['utf8'] && function_exists('mb_convert_encoding') ? mb_convert_encoding($real_filename, 'UTF-8', $context['character_set']) : $real_filename);
+	$utf8name = $real_filename;
 	$fixchar = create_function('$n', '
 		if ($n < 32)
 			return \'\';

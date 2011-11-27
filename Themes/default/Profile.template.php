@@ -538,7 +538,7 @@ function template_editBuddies()
 	// Add a new buddy?
 	echo '
 	<br />
-	<form action="', $scripturl, '?action=profile;u=', $context['id_member'], ';area=lists;sa=buddies" method="post" accept-charset="', $context['character_set'], '">
+	<form action="', $scripturl, '?action=profile;u=', $context['id_member'], ';area=lists;sa=buddies" method="post" accept-charset="UTF-8">
 		<div class="tborder add_buddy">
 			<div class="cat_bar">
 				<h3>', $txt['buddy_add'], '</h3>
@@ -616,7 +616,7 @@ function template_editIgnoreList()
 	// Add a new buddy?
 	echo '
 	<br />
-	<form action="', $scripturl, '?action=profile;u=', $context['id_member'], ';area=lists;sa=ignore" method="post" accept-charset="', $context['character_set'], '">
+	<form action="', $scripturl, '?action=profile;u=', $context['id_member'], ';area=lists;sa=ignore" method="post" accept-charset="UTF-8">
 		<div class="tborder add_buddy">
 			<div class="cat_bar">
 				<h3>', $txt['ignore_add'], '</h3>
@@ -716,7 +716,7 @@ function template_trackIP()
 			<h3>', $txt['trackIP'], '</h3>
 		</div>
 		<div class="blue_container cleantop">
-			<form action="', $context['base_url'], '" method="post" accept-charset="', $context['character_set'], '">
+			<form action="', $context['base_url'], '" method="post" accept-charset="UTF-8">
 				<div class="padding">', $txt['enter_ip'], ':&nbsp;&nbsp;<input type="text" name="searchip" value="', $context['ip'], '" class="input_text" />&nbsp;&nbsp;<input type="submit" value="', $txt['trackIP'], '" class="button_submit" /></div>
 			</form>
 		</div>
@@ -873,7 +873,7 @@ function template_showPermissions()
 		// Board permission section.
 		echo '
 			<div class="tborder">
-				<form action="' . $scripturl . '?action=profile;u=', $context['id_member'], ';area=permissions#board_permissions" method="post" accept-charset="', $context['character_set'], '">
+				<form action="' . $scripturl . '?action=profile;u=', $context['id_member'], ';area=permissions#board_permissions" method="post" accept-charset="UTF-8">
 					<div class="cat_bar">
 						<h3><span class="ie6_header floatleft">
 							<a id="board_permissions"></a>', $txt['showPermissions_select'], ':
@@ -1103,7 +1103,7 @@ function template_edit_options()
 
 	// The main header!
 	echo '
-		<form action="', (!empty($context['profile_custom_submit_url']) ? $context['profile_custom_submit_url'] : $scripturl . '?action=profile;area=' . $context['menu_item_selected'] . ';u=' . $context['id_member'] . ';save'), '" method="post" accept-charset="', $context['character_set'], '" name="creator" id="creator" enctype="multipart/form-data" onsubmit="return checkProfileSubmit();">
+		<form action="', (!empty($context['profile_custom_submit_url']) ? $context['profile_custom_submit_url'] : $scripturl . '?action=profile;area=' . $context['menu_item_selected'] . ';u=' . $context['id_member'] . ';save'), '" method="post" accept-charset="UTF-8" name="creator" id="creator" enctype="multipart/form-data" onsubmit="return checkProfileSubmit();">
 			<div class="cat_bar2">
 				<h3>';
 		// Don't say "Profile" if this isn't the profile...
@@ -1569,7 +1569,7 @@ function template_notification()
 			<div class="orange_container cleantop mediumpadding">', $txt['notification_info'], '</div><br>
 			<div class="blue_container">
 				<div class="content">
-					<form action="', $scripturl, '?action=profile;area=notification;save" method="post" accept-charset="', $context['character_set'], '" id="notify_options" class="flow_hidden">';
+					<form action="', $scripturl, '?action=profile;area=notification;save" method="post" accept-charset="UTF-8" id="notify_options" class="flow_hidden">';
 
 	// Allow notification on announcements to be disabled?
 	if (!empty($modSettings['allow_disableAnnounce']))
@@ -1631,7 +1631,7 @@ function template_groupMembership()
 
 	// The main containing header.
 	echo '
-		<form action="', $scripturl, '?action=profile;area=groupmembership;save" method="post" accept-charset="', $context['character_set'], '" name="creator" id="creator">
+		<form action="', $scripturl, '?action=profile;area=groupmembership;save" method="post" accept-charset="UTF-8" name="creator" id="creator">
 			<div class="cat_bar">
 				<h3>
 					<span class="ie6_header floatleft">', $txt['profile'], '</span>
@@ -1807,7 +1807,7 @@ function template_ignoreboards()
 		}
 	// ]]></script>
 
-	<form action="', $scripturl, '?action=profile;area=ignoreboards;save" method="post" accept-charset="', $context['character_set'], '" name="creator" id="creator">
+	<form action="', $scripturl, '?action=profile;area=ignoreboards;save" method="post" accept-charset="UTF-8" name="creator" id="creator">
 		<div class="cat_bar2">
 			<h3>
 				<span class="ie6_header floatleft">', $txt['profile'], '</span>
@@ -2086,7 +2086,7 @@ function template_issueWarning()
 	// ]]></script>';
 
 	echo '
-	<form action="', $scripturl, '?action=profile;u=', $context['id_member'], ';area=issuewarning" method="post" class="flow_hidden" accept-charset="', $context['character_set'], '">
+	<form action="', $scripturl, '?action=profile;u=', $context['id_member'], ';area=issuewarning" method="post" class="flow_hidden" accept-charset="UTF-8">
 		<div class="cat_bar2">
 			<h3>
 				<span class="ie6_header floatleft">
@@ -2286,7 +2286,7 @@ function template_deleteAccount()
 
 	// The main containing header.
 	echo '
-		<form action="', $scripturl, '?action=profile;area=deleteaccount;save" method="post" accept-charset="', $context['character_set'], '" name="creator" id="creator">
+		<form action="', $scripturl, '?action=profile;area=deleteaccount;save" method="post" accept-charset="UTF-8" name="creator" id="creator">
 			<div class="cat_bar">
 				<h3>
 					<span class="ie6_header floatleft">', $txt['deleteAccount'], '</span>
@@ -2841,7 +2841,7 @@ function template_authentication_method()
 	// The main header!
 	echo '
 		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/register.js"></script>
-		<form action="', $scripturl, '?action=profile;area=authentication;save" method="post" accept-charset="', $context['character_set'], '" name="creator" id="creator" enctype="multipart/form-data">
+		<form action="', $scripturl, '?action=profile;area=authentication;save" method="post" accept-charset="UTF-8" name="creator" id="creator" enctype="multipart/form-data">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/profile_sm.gif" alt="" class="icon" />', $txt['authentication'], '</span>

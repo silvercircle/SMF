@@ -23,7 +23,7 @@ function template_edit_news_item()
 	</div>
 	<div class="blue_container cleantop">
 	 <div class="content">
-	 <form action="{$context['submit_url']}" method="post" accept-charset="{$context['character_set']}" name="editnewsitem" id="editnewsitem">
+	 <form action="{$context['submit_url']}" method="post" accept-charset="UTF-8" name="editnewsitem" id="editnewsitem">
 	 <input type="hidden" name="id" value="{$context['news_item']['id']}" />
 	 <textarea style="width:99%;height:20ex;" name="body">{$context['news_item']['body']}</textarea>
 	 <br>
@@ -57,7 +57,7 @@ function template_edit_news()
 
 	echo <<<EOT
 	<div id="admincenter">
-		<form action="{$scripturl}?action=admin;area=news;sa=editnews" method="get" accept-charset="{$context['character_set']}" name="postmodify" id="postmodify">
+		<form action="{$scripturl}?action=admin;area=news;sa=editnews" method="get" accept-charset="UTF-8" name="postmodify" id="postmodify">
 		 <ol class="commonlist">
 		  <li class="glass lefttext">{$txt['preview']}</li>
 EOT;
@@ -117,7 +117,7 @@ function template_email_members()
 
 	echo '
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=news;sa=mailingcompose" method="post" class="flow_hidden" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=news;sa=mailingcompose" method="post" class="flow_hidden" accept-charset="UTF-8">
 			<div class="cat_bar">
 				<h3 class="catbg">', $txt['admin_newsletters'], '</h3>
 			</div>
@@ -257,7 +257,7 @@ function template_email_members_compose()
 
 	echo '
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=news;sa=mailingsend" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=news;sa=mailingsend" method="post" accept-charset="UTF-8">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					<a href="', $scripturl, '?action=helpadmin;help=email_members" onclick="return reqWin(this.href);" class="help"><strong>[',$txt['help'],']&nbsp;&nbsp;</strong></a> ', $txt['admin_newsletters'], '
@@ -307,7 +307,7 @@ function template_email_members_send()
 
 	echo '
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=news;sa=mailingsend" method="post" accept-charset="', $context['character_set'], '" name="autoSubmit" id="autoSubmit">
+		<form action="', $scripturl, '?action=admin;area=news;sa=mailingsend" method="post" accept-charset="UTF-8" name="autoSubmit" id="autoSubmit">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					<a href="', $scripturl, '?action=helpadmin;help=email_members" onclick="return reqWin(this.href);" class="help"><strong>[',$txt['help'],']&nbsp;&nbsp;</strong></a> ', $txt['admin_newsletters'], '

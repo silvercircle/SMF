@@ -71,7 +71,7 @@ function template_view_package()
 	}
 
 	echo '
-		<form action="', $scripturl, '?action=admin;area=packages;sa=', $context['uninstalling'] ? 'uninstall' : 'install', $context['ftp_needed'] ? '' : '2', ';package=', $context['filename'], ';pid=', $context['install_id'], '" onsubmit="submitonce(this);" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=packages;sa=', $context['uninstalling'] ? 'uninstall' : 'install', $context['ftp_needed'] ? '' : '2', ';package=', $context['filename'], ';pid=', $context['install_id'], '" onsubmit="submitonce(this);" method="post" accept-charset="UTF-8">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					', $context['uninstalling'] ? $txt['package_uninstall_actions'] : $txt['package_install_actions'], ' &quot;', $context['package_name'], '&quot;
@@ -881,7 +881,7 @@ function template_servers()
 				<p>
 					', $txt['package_ftp_why_download'], '
 				</p>
-				<form action="', $scripturl, '?action=admin;area=packages;get" method="post" accept-charset="', $context['character_set'], '">
+				<form action="', $scripturl, '?action=admin;area=packages;get" method="post" accept-charset="UTF-8">
 					<dl class="settings">
 						<dt>
 							<label for="ftp_server">', $txt['package_ftp_server'], ':</label>
@@ -935,7 +935,7 @@ function template_servers()
 				</fieldset>
 				<fieldset>
 					<legend>' . $txt['add_server'] . '</legend>
-					<form action="' . $scripturl . '?action=admin;area=packages;get;sa=add" method="post" accept-charset="', $context['character_set'], '">
+					<form action="' . $scripturl . '?action=admin;area=packages;get;sa=add" method="post" accept-charset="UTF-8">
 						<dl class="settings">
 							<dt>
 								<strong>' . $txt['server_name'] . ':</strong>
@@ -958,7 +958,7 @@ function template_servers()
 				</fieldset>
 				<fieldset>
 					<legend>', $txt['package_download_by_url'], '</legend>
-					<form action="', $scripturl, '?action=admin;area=packages;get;sa=download;byurl;', $context['session_var'], '=', $context['session_id'], '" method="post" accept-charset="', $context['character_set'], '">
+					<form action="', $scripturl, '?action=admin;area=packages;get;sa=download;byurl;', $context['session_var'], '=', $context['session_id'], '" method="post" accept-charset="UTF-8">
 						<dl class="settings">
 							<dt>
 								<strong>' . $txt['serverurl'] . ':</strong>
@@ -987,7 +987,7 @@ function template_servers()
 		</div>
 		<div class="blue_container">
 			<div class="content">
-				<form action="' . $scripturl . '?action=admin;area=packages;get;sa=upload" method="post" accept-charset="', $context['character_set'], '" enctype="multipart/form-data" style="margin-bottom: 0;">
+				<form action="' . $scripturl . '?action=admin;area=packages;get;sa=upload" method="post" accept-charset="UTF-8" enctype="multipart/form-data" style="margin-bottom: 0;">
 					<dl class="settings">
 						<dt>
 							<strong>' . $txt['package_upload_select'] . ':</strong>
@@ -1216,7 +1216,7 @@ function template_install_options()
 		<br>
 		<div class="blue_container">
 			<div class="content">
-				<form action="', $scripturl, '?action=admin;area=packages;sa=options" method="post" accept-charset="', $context['character_set'], '">
+				<form action="', $scripturl, '?action=admin;area=packages;sa=options" method="post" accept-charset="UTF-8">
 					<dl class="settings">
 						<dt>
 							<label for="pack_server"><strong>', $txt['package_install_options_ftp_server'], ':</strong></label>
@@ -1282,7 +1282,7 @@ function template_control_chmod()
 
 	if (!empty($context['package_ftp']['destination']))
 		echo '
-				<form action="', $context['package_ftp']['destination'], '" method="post" accept-charset="', $context['character_set'], '" style="margin: 0;">';
+				<form action="', $context['package_ftp']['destination'], '" method="post" accept-charset="UTF-8" style="margin: 0;">';
 
 	echo '
 					<fieldset>
@@ -1441,7 +1441,7 @@ function template_view_operations()
 <html xmlns="http://www.w3.org/1999/xhtml"', $context['right_to_left'] ? ' dir="rtl"' : '', '>
 	<head>
 		<title>', $txt['operation_title'], '</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=', $context['character_set'], '" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index.css" />
 		<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/admin.css" />
 		<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js?fin20"></script>
@@ -1750,7 +1750,7 @@ function template_file_permissions()
 		</div>
 	</div>
 
-	<form action="', $scripturl, '?action=admin;area=packages;sa=perms;', $context['session_var'], '=', $context['session_id'], '" method="post" accept-charset="', $context['character_set'], '">
+	<form action="', $scripturl, '?action=admin;area=packages;sa=perms;', $context['session_var'], '=', $context['session_id'], '" method="post" accept-charset="UTF-8">
 		<div class="cat_bar">
 			<h3>
 				<span class="floatleft">', $txt['package_file_perms'], '</span><span class="fperm floatright">', $txt['package_file_perms_new_status'], '</span>
@@ -1949,7 +1949,7 @@ function template_action_permissions()
 
 	echo '
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=packages;sa=perms;', $context['session_var'], '=', $context['session_id'], '" id="perm_submit" method="post" accept-charset="', $context['character_set'], '">
+		<form action="', $scripturl, '?action=admin;area=packages;sa=perms;', $context['session_var'], '=', $context['session_id'], '" id="perm_submit" method="post" accept-charset="UTF-8">
 			<div class="cat_bar">
 				<h3 class="catbg">', $txt['package_file_perms_applying'], '</h3>
 			</div>';

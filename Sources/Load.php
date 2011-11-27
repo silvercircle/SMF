@@ -1656,7 +1656,7 @@ function loadTheme($id_theme = 0, $initialize = true)
 	$settings['lang_images_url'] = $settings['images_url'] . '/' . (!empty($txt['image_lang']) ? $txt['image_lang'] : $user_info['language']);
 
 	// Set the character set from the template.
-	$context['character_set'] = empty($modSettings['global_character_set']) ? $txt['lang_character_set'] : $modSettings['global_character_set'];
+	$context['character_set'] = 'UTF-8';
 	$context['utf8'] = true;
 	$context['right_to_left'] = !empty($txt['lang_rtl']);
 
@@ -2125,7 +2125,7 @@ function template_include($filename, $once = false)
 			ob_start();
 
 		if (isset($_GET['debug']) && !WIRELESS)
-			header('Content-Type: application/xhtml+xml; charset=' . (empty($context['character_set']) ? 'ISO-8859-1' : $context['character_set']));
+			header('Content-Type: application/xhtml+xml; charset=UTF-8');
 
 		// Don't cache error pages!!
 		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
@@ -2143,9 +2143,8 @@ function template_include($filename, $once = false)
 		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"', !empty($context['right_to_left']) ? ' dir="rtl"' : '', '>
 	<head>';
-		if (isset($context['character_set']))
-			echo '
-		<meta http-equiv="Content-Type" content="text/html; charset=', $context['character_set'], '" />';
+		echo '
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
 
 		if (!empty($maintenance) && !allowedTo('admin_forum'))
 			echo '
