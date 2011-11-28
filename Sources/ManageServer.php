@@ -150,7 +150,7 @@ if (!defined('SMF'))
 // This is the main pass through function, it creates tabs and the like.
 function ModifySettings()
 {
-	global $context, $txt, $scripturl, $boarddir;
+	global $context, $txt, $boarddir;
 
 	// This is just to keep the database password more secure.
 	isAllowedTo('admin_forum');
@@ -246,7 +246,7 @@ function ModifyGeneralSettings($return_config = false)
 // Basic database and paths settings - database name, host, etc.
 function ModifyDatabaseSettings($return_config = false)
 {
-	global $scripturl, $context, $settings, $txt, $boarddir;
+	global $scripturl, $context, $txt;
 
 	/* If you're writing a mod, it's a bad idea to add things here....
 	For each option:
@@ -349,7 +349,7 @@ function ModifyCookieSettings($return_config = false)
 // Simply modifying cache functions
 function ModifyCacheSettings($return_config = false)
 {
-	global $context, $scripturl, $txt, $helptxt, $modSettings;
+	global $context, $scripturl, $txt, $modSettings;
 
 	// Define the variables we want to edit.
 	$config_vars = array(
@@ -408,7 +408,7 @@ function ModifyCacheSettings($return_config = false)
 
 function ModifyLoadBalancingSettings($return_config = false)
 {
-	global $txt, $scripturl, $context, $settings, $modSettings;
+	global $txt, $scripturl, $context, $modSettings;
 
 	// Setup a warning message, but disabled by default.
 	$disabled = true;
@@ -488,7 +488,7 @@ function ModifyLoadBalancingSettings($return_config = false)
 // This is the main function for the language area.
 function ManageLanguages()
 {
-	global $context, $txt, $scripturl, $modSettings;
+	global $context, $txt, $modSettings;
 
 	loadLanguage('ManageSettings');
 
@@ -520,7 +520,7 @@ function ManageLanguages()
 // Interface for adding a new language
 function AddLanguage()
 {
-	global $context, $sourcedir, $forum_version, $boarddir, $txt, $smcFunc, $scripturl;
+	global $context, $sourcedir, $forum_version, $scripturl;
 
 	// Are we searching for new languages courtesy of Simple Machines?
 	if (!empty($_POST['smf_add_sub']))
@@ -571,7 +571,7 @@ function AddLanguage()
 // Download a language file from the Simple Machines website.
 function DownloadLanguage()
 {
-	global $context, $sourcedir, $forum_version, $boarddir, $txt, $smcFunc, $scripturl, $modSettings;
+	global $context, $sourcedir, $forum_version, $boarddir, $txt, $scripturl, $modSettings;
 
 	loadLanguage('ManageSettings');
 	require_once($sourcedir . '/Subs-Package.php');
@@ -934,7 +934,7 @@ function DownloadLanguage()
 function ModifyLanguages()
 {
 	global $txt, $context, $scripturl;
-	global $user_info, $smcFunc, $sourcedir, $language, $boarddir, $forum_version;
+	global $sourcedir, $language, $boarddir;
 
 	// Setting a new default?
 	if (!empty($_POST['set_default']) && !empty($_POST['def_language']))
@@ -1056,8 +1056,6 @@ function ModifyLanguages()
 // How many languages?
 function list_getNumLanguages()
 {
-	global $settings;
-
 	// Return how many we have.
 	return count(getLanguages(true, false));
 }
@@ -1065,7 +1063,7 @@ function list_getNumLanguages()
 // Fetch the actual language information.
 function list_getLanguages()
 {
-	global $settings, $smcFunc, $language, $context, $txt;
+	global $settings, $language, $context, $txt;
 
 	$languages = array();
 	// Keep our old entries.
@@ -1131,7 +1129,7 @@ function list_getLanguages()
 // Edit language related settings.
 function ModifyLanguageSettings($return_config = false)
 {
-	global $scripturl, $context, $txt, $boarddir, $settings, $smcFunc;
+	global $scripturl, $context, $txt, $boarddir;
 
 	// Warn the user if the backup of Settings.php failed.
 	$settings_not_writable = !is_writable($boarddir . '/Settings.php');
@@ -1180,7 +1178,7 @@ function ModifyLanguageSettings($return_config = false)
 // Edit a particular set of language entries.
 function ModifyLanguage()
 {
-	global $settings, $context, $smcFunc, $txt, $modSettings, $boarddir, $sourcedir, $language;
+	global $settings, $context, $txt, $modSettings, $boarddir, $sourcedir, $language;
 
 	loadLanguage('ManageSettings');
 
@@ -1565,8 +1563,6 @@ function ModifyLanguage()
 // This function could be two functions - either way it cleans language entries to/from display.
 function cleanLangString($string, $to_display = true)
 {
-	global $smcFunc;
-
 	// If going to display we make sure it doesn't have any HTML in it - etc.
 	$new_string = '';
 	if ($to_display)
@@ -1967,7 +1963,7 @@ function prepareDBSettingContext(&$config_vars)
 // Helper function. Saves settings by putting them in Settings.php or saving them in the settings table.
 function saveSettings(&$config_vars)
 {
-	global $sc, $sourcedir;
+	global $sourcedir;
 
 	// Fix the darn stupid cookiename! (more may not be allowed, but these for sure!)
 	if (isset($_POST['cookiename']))
@@ -2057,7 +2053,7 @@ function saveSettings(&$config_vars)
 // Helper function for saving database settings.
 function saveDBSettings(&$config_vars)
 {
-	global $sourcedir, $context;
+	global $sourcedir;
 
 	$inlinePermissions = array();
 	foreach ($config_vars as $var)

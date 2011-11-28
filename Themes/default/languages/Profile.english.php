@@ -300,6 +300,7 @@ $txt['display_quick_mod'] = 'Show quick-moderation as ';
 $txt['display_quick_mod_none'] = 'don\'t show.';
 $txt['display_quick_mod_check'] = 'checkboxes.';
 $txt['display_quick_mod_image'] = 'icons.';
+$txt['content_width'] = 'Width of the content section';
 
 $txt['whois_title'] = 'Look up IP on a regional whois-server';
 $txt['whois_afrinic'] = 'AfriNIC (Africa)';

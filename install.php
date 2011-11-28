@@ -14,9 +14,9 @@
 $GLOBALS['current_smf_version'] = '1.0pre';
 $GLOBALS['db_script_version'] = '2-0';
 
-$GLOBALS['required_php_version'] = '5.2.0';
+$GLOBALS['required_php_version'] = '5.2.10';
 
-global $installurl, $smfsite, $incontext, $databases;
+global $installurl, $incontext, $databases, $txt;
 
 $incontext = array();
 // Don't have PHP support, do you?
@@ -52,8 +52,6 @@ load_lang_file();
 
 // This is what we are.
 $installurl = $_SERVER['PHP_SELF'];
-// This is where SMF is.
-$smfsite = 'http://www.simplemachines.org/smf';
 
 // All the steps in detail.
 // Number,Name,Function,Progress Weight.

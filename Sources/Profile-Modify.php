@@ -704,7 +704,7 @@ function loadProfileFields($force_reload = false)
 // Setup the context for a page load!
 function setupProfileContext($fields)
 {
-	global $profile_fields, $context, $cur_profile, $smcFunc, $txt;
+	global $profile_fields, $context, $cur_profile, $txt;
 
 	// Make sure we have this!
 	loadProfileFields(true);
@@ -787,7 +787,7 @@ function setupProfileContext($fields)
 // Save the profile changes.
 function saveProfileFields()
 {
-	global $profile_fields, $profile_vars, $context, $old_profile, $post_errors, $sourcedir, $modSettings, $cur_profile, $smcFunc;
+	global $profile_fields, $profile_vars, $context, $old_profile, $post_errors, $cur_profile;
 
 	// Load them up.
 	loadProfileFields();
@@ -1649,7 +1649,7 @@ function getAvatars($directory, $level)
 
 function theme($memID)
 {
-	global $txt, $context, $user_profile, $modSettings, $settings, $user_info, $smcFunc;
+	global $txt, $context;
 
 	loadThemeOptions($memID);
 	if (allowedTo(array('profile_extra_own', 'profile_extra_any')))
@@ -1670,7 +1670,7 @@ function theme($memID)
 // Changing authentication method? Only appropriate for people using OpenID.
 function authentication($memID, $saving = false)
 {
-	global $context, $cur_profile, $sourcedir, $txt, $post_errors, $modSettings;
+	global $context, $cur_profile, $sourcedir, $post_errors, $modSettings;
 
 	loadLanguage('Login');
 
@@ -2067,7 +2067,7 @@ function list_getBoardNotifications($start, $items_per_page, $sort, $memID)
 
 function loadThemeOptions($memID)
 {
-	global $context, $options, $cur_profile, $smcFunc;
+	global $context, $options, $cur_profile;
 
 	if (isset($_POST['default_options']))
 		$_POST['options'] = isset($_POST['options']) ? $_POST['options'] + $_POST['default_options'] : $_POST['default_options'];

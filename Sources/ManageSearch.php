@@ -64,7 +64,7 @@ if (!defined('SMF'))
 
 function ManageSearch()
 {
-	global $context, $txt, $scripturl;
+	global $context, $txt;
 
 	isAllowedTo('admin_forum');
 
@@ -206,7 +206,7 @@ function EditWeights()
 
 function EditSearchMethod()
 {
-	global $txt, $context, $modSettings, $smcFunc, $db_type, $db_prefix;
+	global $txt, $context, $modSettings, $db_type, $db_prefix;
 
 	$context[$context['admin_menu_name']]['current_subsection'] = 'method';
 	$context['page_title'] = $txt['search_method_title'];
@@ -342,7 +342,7 @@ function EditSearchMethod()
 
 function CreateMessageIndex()
 {
-	global $modSettings, $context, $smcFunc, $db_prefix, $txt;
+	global $modSettings, $context, $db_prefix, $txt;
 
 	// Scotty, we need more time...
 	@set_time_limit(600);
@@ -625,7 +625,7 @@ function loadSearchAPIs()
 
 function ManageSphinx()
 {
-	global $txt, $context, $modSettings, $smcFunc, $sourcedir;
+	global $txt, $context, $modSettings, $sourcedir;
 
 	if(isset($_REQUEST['save'])) {
 		checkSession();

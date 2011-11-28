@@ -100,7 +100,7 @@ function aStreamGetNotifications()
  */
 function aStreamMarkNotificationRead()
 {
-	global $context, $user_info;
+	global $user_info;
 
 	$xml = isset($_REQUEST['xml']) ? true : false;
 	if($user_info['is_guest'])

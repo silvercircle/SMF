@@ -47,7 +47,6 @@ $timeLimitThreshold = 3;
 $upgrade_path = dirname(__FILE__);
 $upgradeurl = $_SERVER['PHP_SELF'];
 // Where the SMF images etc are kept.
-$smfsite = 'http://www.simplemachines.org/smf';
 // Disable the need for admins to login?
 $disable_security = 0;
 // How long, in seconds, must admin be inactive to allow someone else to run?
@@ -3410,7 +3409,7 @@ function template_chmod()
 
 function template_upgrade_above()
 {
-	global $modSettings, $txt, $smfsite, $settings, $upcontext, $upgradeurl;
+	global $modSettings, $txt, $settings, $upcontext, $upgradeurl;
 
 	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"', $upcontext['right_to_left'] ? ' dir="rtl"' : '', '>

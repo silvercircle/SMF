@@ -1422,7 +1422,7 @@ function template_profile_pm_settings()
 // Template for showing theme settings. Note: template_options() actually adds the theme specific options.
 function template_profile_theme_settings()
 {
-	global $context, $settings, $options, $scripturl, $modSettings, $txt;
+	global $context, $settings, $modSettings, $txt;
 
 	echo '
 							<dd></dd>
@@ -1549,6 +1549,10 @@ function template_profile_theme_settings()
 									<option value="0"', empty($context['member']['options']['display_quick_mod']) ? ' selected="selected"' : '', '>', $txt['display_quick_mod_none'], '</option>
 									<option value="1"', !empty($context['member']['options']['display_quick_mod']) && $context['member']['options']['display_quick_mod'] == 1 ? ' selected="selected"' : '', '>', $txt['display_quick_mod_check'], '</option>
 								</select>
+							</li>
+							<li>
+								<label for="content_width">', $txt['content_width'], '</label>
+								<input type="text" name="default_options[content_width]" id="content_width" value="',empty($context['member']['options']['content_width']) ? '95%' : $context['member']['options']['content_width'], '" />
 							</li>
 						</ul>
 						<dl>

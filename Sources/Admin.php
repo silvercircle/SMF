@@ -47,7 +47,7 @@ if (!defined('SMF'))
 // The main admin handling function.
 function AdminMain()
 {
-	global $txt, $context, $scripturl, $sc, $modSettings, $user_info, $settings, $sourcedir, $options, $smcFunc, $boarddir;
+	global $txt, $context, $scripturl, $modSettings, $settings, $sourcedir, $options, $boarddir;
 
 	// Load the language and templates....
 	loadLanguage('Admin');
@@ -533,7 +533,7 @@ function AdminMain()
 // The main administration section.
 function AdminHome()
 {
-	global $sourcedir, $forum_version, $txt, $scripturl, $context, $user_info, $boardurl, $modSettings, $smcFunc;
+	global $sourcedir, $forum_version, $txt, $scripturl, $context, $user_info;
 
 	// You have to be able to do at least one of the below to see this page.
 	isAllowedTo(array('admin_forum', 'manage_permissions', 'moderate_forum', 'manage_membergroups', 'manage_bans', 'send_mail', 'edit_news', 'manage_boards', 'manage_smileys', 'manage_attachments'));
@@ -644,7 +644,7 @@ function AdminHome()
 // Get one of the admin information files from Simple Machines.
 function DisplayAdminFile()
 {
-	global $context, $modSettings, $smcFunc;
+	global $context, $modSettings;
 
 	@ini_set('memory_limit', '32M');
 
@@ -692,7 +692,7 @@ if (!(\'smfForum_sessionvar\' in window))
 // This allocates out all the search stuff.
 function AdminSearch()
 {
-	global $txt, $context, $smcFunc, $sourcedir;
+	global $txt, $context, $sourcedir;
 
 	isAllowedTo('admin_forum');
 

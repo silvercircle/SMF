@@ -35,7 +35,7 @@ if (!defined('SMF'))
 // Locks a topic... either by way of a moderator or the topic starter.
 function LockTopic()
 {
-	global $topic, $user_info, $sourcedir, $board, $smcFunc;
+	global $topic, $user_info, $sourcedir, $board;
 
 	// Just quit if there's no topic to lock.
 	if (empty($topic))
@@ -103,7 +103,7 @@ function LockTopic()
 // Sticky a topic.  Can't be done by topic starters - that would be annoying!
 function Sticky()
 {
-	global $modSettings, $topic, $board, $sourcedir, $smcFunc;
+	global $modSettings, $topic, $board, $sourcedir;
 
 	// Make sure the user can sticky it, and they are stickying *something*.
 	isAllowedTo('make_sticky');

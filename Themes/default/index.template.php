@@ -126,6 +126,9 @@ EOT;
 	// Output any remaining HTML headers. (from mods, maybe?)
 	echo $context['html_headers'];
 	echo '
+	<style>
+	 #main_content_section {max-width:',isset($options['content_width']) ? $options['content_width'] : '95%', ';}
+	</style>
 </head>
 <body>';
 }
