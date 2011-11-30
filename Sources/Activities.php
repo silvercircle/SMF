@@ -184,15 +184,18 @@ function aStreamGetStream()
 
 function aStreamGet($b = 0, $xml = false, $global = false)
 {
-	global $board, $context, $user_info;
+	global $board, $context, $user_info, $modSettings, $options, $scripturl;
 
 	if(!isset($board) || !$board)
 		$board = $b;
 
-	$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
+	$start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
 	$context['xml'] = $xml;
 	$context['act_global'] = false;
-
+	$total = 0;
+	
+	$perpage = $xml ? 15 : (empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) && !WIRELESS ? $options['topics_per_page'] : $modSettings['defaultMaxTopics']);	
+	
 	if($user_info['is_admin'])
 		$pquery = ' AND (a.is_private <= ' . ACT_PLEVEL_ADMIN . ' OR a.id_member = {int:id_user} OR a.id_owner = {int:id_user}) ';
 	else
@@ -206,23 +209,47 @@ function aStreamGet($b = 0, $xml = false, $global = false)
 	}
 
 	if($global) {
+		if(!$xml) {
+			$result = smf_db_query('SELECT COUNT(a.id_act) FROM {db_prefix}log_activities AS a
+				LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
+				WHERE ({query_see_board} OR a.id_board = 0)'.$pquery,
+				array('start' => 0, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage));
+			
+			list($total) = mysql_fetch_row($result);
+			mysql_free_result($result);
+		}
 		$result = smf_db_query('
 			SELECT a.*, t.*, b.name AS board_name FROM {db_prefix}log_activities AS a
 			LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
 			LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
-			WHERE ({query_see_board} OR a.id_board = 0)'.$pquery.' ORDER BY a.id_act DESC LIMIT {int:start}, 20',
-			array('start' => $start, 'id_user' => $user_info['id'], 'filter' => $filterby));
+			WHERE ({query_see_board} OR a.id_board = 0)'.$pquery.' ORDER BY a.id_act DESC LIMIT {int:start}, {int:perpage}',
+			array('start' => $start, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage));
 
 		$context['act_global'] = true;
+		$context['viewall_url'] = $scripturl . '?action=astream;sa=get;all'; 
 	}
-	else
+	else {
+		if(!$xml) {
+			$result = smf_db_query('SELECT COUNT(a.id_act) FROM {db_prefix}log_activities AS a
+				LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
+				WHERE a.id_board = {int:id_board} AND {query_see_board} '.$pquery,
+				array('start' => 0, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage));
+
+			list($total) = mysql_fetch_row($result);
+			mysql_free_result($result);
+		}
 		$result = smf_db_query('
 			SELECT a.*, t.*, b.name AS board_name FROM {db_prefix}log_activities AS a
 			LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
 			LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
-			WHERE a.id_board = {int:id_board} AND {query_see_board}'.$pquery.' ORDER BY a.id_act DESC LIMIT {int:start}, 20',
-			array('id_board' => $board, 'start' => $start, 'id_user' => $user_info['id'], 'filter' => $filterby));
-
+			WHERE a.id_board = {int:id_board} AND {query_see_board}'.$pquery.' ORDER BY a.id_act DESC LIMIT {int:start}, {int:perpage}',
+			array('id_board' => $board, 'start' => $start, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage));
+		
+		$context['viewall_url'] = $scripturl . '?action=astream;sa=get;b=' . $board;
+	}
+	$context['pages'] = $total ? constructPageIndex($scripturl . '?action=astream;sa=get;all', $start, $total, $perpage) : '';
+	if($xml)
+		header('Content-Type: text/xml; charset=UTF-8');
 	aStreamOutput($result);
 }
 

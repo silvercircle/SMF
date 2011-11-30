@@ -77,16 +77,16 @@ function LikesByUser($memID)
 {
 	global $context, $user_info, $scripturl, $memberContext, $txt, $modSettings, $options;
 	
-	// let's use the same value as for topics per page here.
+	// let us use the same value as for topics per page here.
 	$perpage = empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) && !WIRELESS ? $options['topics_per_page'] : $modSettings['defaultMaxTopics'];	
 	$out = $_GET['sa'] === 'likesout';			// display likes *given* instead of received ones
-	$is_owner = $user_info['id'] == $memID;		// we are owner of this profile, this is important for proper formatting (you/yours etc.)
+	$is_owner = $user_info['id'] == $memID;		// we are the owner of this profile, this is important for proper formatting (you/yours etc.)
 	
 	loadLanguage('Like');
-	$boards_like_see  = boardsAllowedTo('like_see');
+	$boards_like_see  = boardsAllowedTo('like_see');	// respect permissions
 	$start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
 
-	if(!($user_info['is_admin'] || allowedTo('moderate_forum')))
+	if(!($user_info['is_admin'] || allowedTo('moderate_forum')))	// admins and global mods can see everything
 		$bq = ' AND b.id_board IN({array_int:boards})';
 	else
 		$bq = '';

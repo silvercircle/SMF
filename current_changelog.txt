@@ -1,9 +1,6 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]Started with updating the installer (install.php). Review and update version checks, remove obsolute options (character set for example, which defaults to UTF-8), make sure the updated db scheme installs flawlessly.[/li]
-[li]Adjust styling for install.php so that it matches the default EoS theme.[/li]
-[li]Get rid of $smcFunc[] in install.php.[/li]
-[li]Cleaned up the directory structure a bit, added subdirectories that were missing (cache, Packages, useravs)[/li]
-[li]Make sure install.php validates HTML(5)[/li]
+[li]ensure the activity list overlay never exceeds the height of the browser window[/li]
+[li]implemented paging for the activity stream output[/li]
 [/list]

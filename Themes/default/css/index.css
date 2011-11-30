@@ -1589,6 +1589,7 @@ div.userbit_compact_textpart {
 	margin-left:-3px;
 	margin-right:-3px;
 	color:white;
+	font-size:12px;
 }
 .approval .keyinfo {
 	background: #edcc82;
@@ -1615,7 +1616,6 @@ div.userbit_compact_textpart {
 	color: #637d96;
 }
 .keyinfo h5 {
-	font-size:1.1em;
 	font-weight:normal;
 	color:white;
 }

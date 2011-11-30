@@ -105,6 +105,7 @@ function GiveLike($mid)
 			AjaxErrorMsg($txt['like_no_permission'], $is_xmlreq);
 
 		if($remove_it && $c > 0) {
+			// remove a like (unlike feature)
 			if($like_owner == $uid) {
 				smf_db_query( '
 					DELETE FROM {db_prefix}likes WHERE id_msg = {int:id_msg} AND id_user = {int:id_user} AND ctype = {int:ctype}',
@@ -119,6 +120,7 @@ function GiveLike($mid)
 					UPDATE {db_prefix}members SET likes_given = likes_given - 1 WHERE id_member = {int:id_member}',
 					array('id_member' => $uid));
 
+				// if we remove a like (unlike) a post, also delete the corresponding activity
 				smf_db_query( 'DELETE a.*, n.* FROM {db_prefix}log_activities AS a LEFT JOIN {db_prefix}log_notifications AS n ON(n.id_act = a.id_act)
 					WHERE a.id_member = {int:id_member} AND a.id_type = 1 AND a.id_content = {int:id_content}',
 					array('id_member' => $uid, 'id_content' => $mid));

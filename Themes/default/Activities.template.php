@@ -49,12 +49,14 @@ function template_showactivity()
 
 	if($context['act_results']) {
 	echo '
-	<ol class="commonlist">
+	<div class="pagelinks">',$context['pages'],'</div>
+	<ol class="commonlist notifications">
 	<li class="glass centertext">',$context['titletext'],'</li>';
 	foreach($context['activities'] as $activity)
 		template_activitybit($activity);
 	echo '
-	</ol>';
+	</ol>
+	<div class="pagelinks">',$context['pages'],'</div>';
 	}
 	else
 		echo '
@@ -67,11 +69,17 @@ function template_showactivity_xml()
 {
 	global $context, $txt;
 
+	echo '<', '?xml version="1.0" encoding="UTF-8" ?', '>
+<document>
+ <response open="default_overlay" width="500" />
+  <content>
+  <![CDATA[
+';	
 	echo '
 	<div class="title_bar">
 		<h1>',$context['titletext'],'</h1>
 	</div>
-	<div class="smallpadding">';
+	<div class="smallpadding" id="mcard_content">';
 	if($context['act_results']) {
 		echo '
 	<ol class="commonlist notifications">';
@@ -86,7 +94,16 @@ function template_showactivity_xml()
 	',$txt['act_no_results'],'
 	</div>';
 	echo '
-	</div>';
+	</div>
+	<div class="yellow_container smalltext cleantop smallpadding">';
+	if(isset($context['viewall_url']))
+		echo '
+		<a href="',$context['viewall_url'],'" >View all</a>';
+	echo '
+	</div>
+	]]>
+  </content>
+</document>';
 }
 
 function template_showactivity_profile()

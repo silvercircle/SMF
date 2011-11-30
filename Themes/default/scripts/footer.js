@@ -1431,13 +1431,12 @@ function getAStream(el)
 {
 	var _el = el.children('a:first');
 	if(_el.attr('data-board') == 'all')
-		sendRequest('action=astream;sa=get;all', _el);
+		sendRequest('action=astream;sa=get;all;xml', null);
 	else
-		sendRequest('action=astream;sa=get;b=' + parseInt(_el.attr('data-board')), _el);
+		sendRequest('action=astream;sa=get;b=' + parseInt(_el.attr('data-board')) + ';xml', null);
 }
 function getMcard(uid, el)
 {
-	// initiate a ajax request to open a member card
 	if(uid > 0)
 		sendRequest('action=xmlhttp;sa=mcard;u=' + parseInt(uid), null);
 	return(false);
@@ -1603,8 +1602,8 @@ function openResult(html, width, offset)
 	setDimmed(1);
 	var windowheight = $(window).height();
 	$('#mcard_inner').html(html);
-	if($('#mcard_content'))
-		$('#mcard_content').css({'max-height': windowheight * 0.8 + 'px', 'overflow': 'auto'});
+	if($('#mcard_content').length)
+		$('#mcard_content').css({'max-height': windowheight * 0.9 + 'px', 'overflow': 'auto'});
 
 	el.css({'width': width > 0 ? width + 'px' : 'auto', "position": 'fixed', 'z-index': '10000'});
 	centerElement(el, offset);
