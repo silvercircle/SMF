@@ -4213,7 +4213,6 @@ function HDC($a, $b, $c)
  */
 function AjaxErrorMsg($msg = 'Unknown or unspecified error', $title = 'Error', $code = 1)
 {
-	global $context;
 	header('Content-Type: text/xml; charset=UTF-8');
 	echo '<', '?xml version="1.0" encoding="UTF-8" ?', '>
 <document>

@@ -738,8 +738,7 @@ function showPosts($memID)
 // Show all the attachments of a user.
 function showAttachments($memID)
 {
-	global $txt, $user_info, $scripturl, $modSettings, $board;
-	global $context, $user_profile, $sourcedir, $smcFunc;
+	global $scripturl, $modSettings, $board, $context;
 
 	$context['results_counter'] = 0;
 	// OBEY permissions!
@@ -840,7 +839,7 @@ function showAttachments($memID)
 
 function statPanel($memID)
 {
-	global $txt, $scripturl, $context, $user_profile, $user_info, $modSettings, $smcFunc;
+	global $txt, $scripturl, $context, $user_profile, $user_info, $modSettings;
 
 	$context['page_title'] = $txt['statPanel_showStats'] . ' ' . $user_profile[$memID]['real_name'];
 
@@ -1020,7 +1019,7 @@ function statPanel($memID)
 
 function tracking($memID)
 {
-	global $sourcedir, $context, $txt, $scripturl, $modSettings, $user_profile;
+	global $sourcedir, $context, $txt, $modSettings, $user_profile;
 
 	$subActions = array(
 		'activity' => array('trackActivity', $txt['trackActivity']),
@@ -1060,7 +1059,7 @@ function tracking($memID)
 function trackActivity($memID)
 {
 	global $scripturl, $txt, $modSettings, $sourcedir;
-	global $user_profile, $context, $smcFunc;
+	global $user_profile, $context;
 
 	// Verify if the user has sufficient permissions.
 	isAllowedTo('moderate_forum');
@@ -1273,8 +1272,6 @@ function trackActivity($memID)
 
 function list_getUserErrorCount($where, $where_vars = array())
 {
-	global $smcFunc;
-
 	$request = smf_db_query( '
 		SELECT COUNT(*) AS error_count
 		FROM {db_prefix}log_errors
@@ -1289,7 +1286,7 @@ function list_getUserErrorCount($where, $where_vars = array())
 
 function list_getUserErrors($start, $items_per_page, $sort, $where, $where_vars = array())
 {
-	global $smcFunc, $txt, $scripturl;
+	global $txt, $scripturl;
 
 	// Get a list of error messages from this ip (range).
 	$request = smf_db_query( '
@@ -1322,8 +1319,6 @@ function list_getUserErrors($start, $items_per_page, $sort, $where, $where_vars 
 
 function list_getIPMessageCount($where, $where_vars = array())
 {
-	global $smcFunc;
-
 	$request = smf_db_query( '
 		SELECT COUNT(*) AS message_count
 		FROM {db_prefix}messages AS m
@@ -1339,7 +1334,7 @@ function list_getIPMessageCount($where, $where_vars = array())
 
 function list_getIPMessages($start, $items_per_page, $sort, $where, $where_vars = array())
 {
-	global $smcFunc, $txt, $scripturl;
+	global $scripturl;
 
 	// Get all the messages fitting this where clause.
 	// !!!SLOW This query is using a filesort.
@@ -1378,8 +1373,7 @@ function list_getIPMessages($start, $items_per_page, $sort, $where, $where_vars 
 
 function TrackIP($memID = 0)
 {
-	global $user_profile, $scripturl, $txt, $user_info, $modSettings, $sourcedir;
-	global $context, $smcFunc;
+	global $context, $user_profile, $scripturl, $txt, $user_info, $modSettings, $sourcedir;
 
 	// Can the user do this?
 	isAllowedTo('moderate_forum');
@@ -1656,7 +1650,7 @@ function TrackIP($memID = 0)
 
 function trackEdits($memID)
 {
-	global $scripturl, $txt, $modSettings, $sourcedir, $context, $smcFunc;
+	global $scripturl, $txt, $modSettings, $sourcedir, $context;
 
 	require_once($sourcedir . '/Subs-List.php');
 
@@ -1753,8 +1747,6 @@ function trackEdits($memID)
 // How many edits?
 function list_getProfileEditCount($memID)
 {
-	global $smcFunc;
-
 	$request = smf_db_query( '
 		SELECT COUNT(*) AS edit_count
 		FROM {db_prefix}log_actions
@@ -1773,7 +1765,7 @@ function list_getProfileEditCount($memID)
 
 function list_getProfileEdits($start, $items_per_page, $sort, $memID)
 {
-	global $smcFunc, $txt, $scripturl, $context;
+	global $txt, $scripturl, $context;
 
 	// Get a list of error messages from this ip (range).
 	$request = smf_db_query( '
@@ -1852,8 +1844,8 @@ function list_getProfileEdits($start, $items_per_page, $sort, $memID)
 
 function showPermissions($memID)
 {
-	global $scripturl, $txt, $board, $modSettings;
-	global $user_profile, $context, $user_info, $sourcedir, $smcFunc;
+	global $txt, $board;
+	global $user_profile, $context, $sourcedir;
 
 	// Verify if the user has sufficient permissions.
 	isAllowedTo('manage_permissions');
@@ -2127,10 +2119,9 @@ function viewWarning($memID)
 }
 function displayDrafts($memID)
 {
-	global $txt, $user_info, $scripturl, $modSettings;
-	global $context, $user_profile, $sourcedir, $smcFunc, $board;
+	global $txt, $user_info, $scripturl, $modSettings, $context;
 
-	if (!empty($_GET['delete']) && isset($_GET['topic'])) {
+	if (!empty($_GET['de2lete']) && isset($_GET['topic'])) {
 		$draft_id = (int) $_GET['delete'];
 		$topic_id = (int) $_GET['topic'];
 		$msgid = isset($_GET['msg']) ? (int)$_GET['msg'] : 0;

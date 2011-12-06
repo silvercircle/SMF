@@ -18,7 +18,7 @@ function template_getlikes_xml()
 	echo '<', '?xml version="1.0" encoding="UTF-8" ?', '>';
 	echo '
 <document>
- <response open="default" width="400">
+ <response open="default" width="400px">
   <content>
   <![CDATA[
 	<div class="title_bar">

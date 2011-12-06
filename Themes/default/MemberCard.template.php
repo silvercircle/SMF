@@ -17,7 +17,7 @@ function template_main()
 
 	echo '<', '?xml version="1.0" encoding="UTF-8"?', '>
 <document>
- <response open="default_overlay" width="500" offset="-150" />
+ <response open="default_overlay" width="500px" offset="-150" />
  <content>
  <![CDATA[
 ';

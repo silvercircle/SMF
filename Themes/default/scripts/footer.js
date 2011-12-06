@@ -1269,8 +1269,8 @@ function setDimmed(mode)
 	if(mode) {
 		if($('#pagedimmer').length > 0)
 			return;
-		var _e = $('<div id="pagedimmer" style="background-color:#888;opacity:0.6;position:fixed;left:0;top:0;z-index:3000;width:100%;height:100%;"></div>');
-		_e.insertBefore('#wrap');
+		var _e = $('<div id="pagedimmer" style="position:fixed;left:0;top:0;z-index:2999;width:100%;height:100%;"></div>');
+		_e.prependTo('body');
 	}
 	else {
 		if($('#pagedimmer').length > 0)
@@ -1605,7 +1605,7 @@ function openResult(html, width, offset)
 	if($('#mcard_content').length)
 		$('#mcard_content').css({'max-height': windowheight * 0.9 + 'px', 'overflow': 'auto'});
 
-	el.css({'width': width > 0 ? width + 'px' : 'auto', "position": 'fixed', 'z-index': '10000'});
+	el.css({'width': parseInt(width) > 0 ? width : 'auto', "position": 'fixed', 'z-index': '10000'});
 	centerElement(el, offset);
 	el.show();
 }
@@ -1629,7 +1629,7 @@ function response_xml(responseXML)
 				Eos_Alert(title, msg);
 				return(false);
 			}
-			var width = _r.attr('width') || 300;
+			var width = _r.attr('width') || '300px';
 			var offset = parseInt(_r.attr('offset')) || 0;
 			var content = data.find('content').text();
 			openResult(content, width, offset);
@@ -1665,7 +1665,7 @@ function response(ele, responseText)
 			return;
 		}
 		if(ele.attr('class') == 'tpeek') {
-			openResult(responseText, 710, 0);
+			openResult(responseText, '710px', 0);
     		$('div#mcard_inner abbr.timeago').timeago();
 			return;
 		}
@@ -1697,7 +1697,7 @@ function response(ele, responseText)
 			sidebar_content_loaded = true;
 			return;
 		}
-		openResult(responseText, 500, 0);
+		openResult(responseText, '500px', 0);
 		$('div#mcard_inner abbr.timeago').timeago();
 	} catch(e) {
 		setBusy(0);

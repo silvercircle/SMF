@@ -879,7 +879,11 @@ function Display()
 		list($id_member, $approved) = mysql_fetch_row($request);
 		mysql_free_result($request);
 		loadTemplate('DisplaySingle');
-		$context['sub_template'] = 'single_post';
+		$context['sub_template'] = isset($_REQUEST['xml']) ? 'single_post_xml' : 'single_post';
+		if(isset($_REQUEST['xml'])) {
+			$context['template_layers'] = array();
+			header('Content-Type: text/xml; charset=UTF-8');
+		}
 		$messages = array($virtual_msg);
 		$posters[$virtual_msg] = $id_member;
 	}

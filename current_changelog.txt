@@ -1,6 +1,7 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]ensure the activity list overlay never exceeds the height of the browser window[/li]
-[li]implemented paging for the activity stream output[/li]
+[li]fixed page dimming for IE8[/li]
+[li]implemented xml handler and template skeleton for single post display[/li]
+[li]For IE7/8, fallback to non-transparent borders for overlays and JavaScript dialog boxes.[/li]
 [/list]

@@ -30,7 +30,7 @@ if (!defined('SMF'))
 function ModifyProfile($post_errors = array())
 {
 	global $txt, $scripturl, $user_info, $context, $sourcedir, $user_profile, $cur_profile;
-	global $modSettings, $memberContext, $profile_vars, $smcFunc, $post_errors, $options, $user_settings;
+	global $modSettings, $memberContext, $profile_vars, $post_errors, $user_settings;
 
 	// Don't reload this as we may have processed error strings.
 	if (empty($post_errors))
@@ -686,7 +686,7 @@ function ModifyProfile($post_errors = array())
 // Load any custom fields for this area... no area means load all, 'summary' loads all public ones.
 function loadCustomFields($memID, $area = 'summary')
 {
-	global $context, $txt, $user_profile, $smcFunc, $user_info, $settings, $scripturl;
+	global $context, $txt, $user_profile, $user_info, $settings, $scripturl;
 
 	// Get the right restrictions in place...
 	$where = 'active = 1';

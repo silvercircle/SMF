@@ -1178,6 +1178,7 @@ div.ppt {
 .jqmWindow {
     display: none;
     color: #333;
+	border:4px solid black;
 	border:4px solid rgba(0, 0, 0, 0.20);
 	border-radius:3px;
 	box-shadow: 0 0 8px 2px #666;
@@ -1188,7 +1189,7 @@ div.ppt {
 .jqmWindow_container {
 	background-color: #eaeaea;
 }
-.jqmOverlay { background-color: #888; }
+.jqmOverlay, #pagedimmer { opacity:0.5;background-color: #888; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";}
 
 * iframe.jqm {position:absolute;top:0;left:0;z-index:-1;
 	width: expression(this.parentNode.offsetWidth+'px');

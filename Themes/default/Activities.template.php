@@ -71,7 +71,7 @@ function template_showactivity_xml()
 
 	echo '<', '?xml version="1.0" encoding="UTF-8" ?', '>
 <document>
- <response open="default_overlay" width="500" />
+ <response open="default_overlay" width="50%" />
   <content>
   <![CDATA[
 ';	
