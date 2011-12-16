@@ -53,7 +53,7 @@ if (!defined('SMF'))
 // This is the notoriously defunct package manager..... :/.
 function Packages()
 {
-	global $txt, $scripturl, $sourcedir, $context;
+	global $txt, $sourcedir, $context;
 
 	//!!! Remove this!
 	if (isset($_GET['get']) || isset($_GET['pgdownload']))
@@ -125,7 +125,7 @@ function Packages()
 // Test install a package.
 function PackageInstallTest()
 {
-	global $boarddir, $txt, $context, $scripturl, $sourcedir, $modSettings, $smcFunc, $settings;
+	global $boarddir, $txt, $context, $scripturl, $sourcedir, $modSettings, $settings;
 
 	// You have to specify a file!!
 	if (!isset($_REQUEST['package']) || $_REQUEST['package'] == '')
@@ -1193,7 +1193,7 @@ function ExamineFile()
 // List the installed packages.
 function InstalledList()
 {
-	global $txt, $scripturl, $context;
+	global $txt, $context;
 
 	$context['page_title'] .= ' - ' . $txt['installed_packages'];
 	$context['sub_template'] = 'view_installed';
@@ -1205,7 +1205,7 @@ function InstalledList()
 // Empty out the installed list.
 function FlushInstall()
 {
-	global $boarddir, $sourcedir, $smcFunc;
+	global $boarddir, $sourcedir;
 
 	// Always check the session.
 	checkSession('get');
@@ -1417,7 +1417,7 @@ function PackageBrowse()
 
 function PackageOptions()
 {
-	global $txt, $scripturl, $context, $sourcedir, $modSettings;
+	global $txt, $context, $modSettings;
 
 	if (isset($_POST['submit']))
 	{
@@ -1451,7 +1451,7 @@ function PackageOptions()
 
 function ViewOperations()
 {
-	global $context, $txt, $boarddir, $sourcedir, $smcFunc, $modSettings;
+	global $context, $txt, $boarddir, $sourcedir, $modSettings;
 
 	// Can't be in here buddy.
 	isAllowedTo('admin_forum');
@@ -1536,7 +1536,7 @@ function ViewOperations()
 // Allow the admin to reset permissions on files.
 function PackagePermissions()
 {
-	global $context, $txt, $modSettings, $boarddir, $sourcedir, $cachedir, $smcFunc, $package_ftp;
+	global $context, $txt, $modSettings, $boarddir, $sourcedir, $cachedir, $package_ftp;
 
 	// Let's try and be good, yes?
 	checkSession('get');

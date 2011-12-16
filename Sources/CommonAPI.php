@@ -14,7 +14,7 @@
  * this is what once was in $smcFunc[], a bit simplified for utf-8 only and entity check
  * always enforced.
  *
- * it also implements the Hook API.
+ * it also implements the Hook and Cache APIs.
  */
 if (!defined('SMF'))
 	die('No access');
@@ -146,15 +146,32 @@ class HookAPI {
 	 *
 	 * initialize the hooks
 	 * this must be called immediately after loading modSettings[] from the database
+	 * 
+	 * also: sets the addons base directory. It must exist, be writeable and be a directory.
+	 * If any check fails, it falls back to the default hardcoded sub-folder ($boarddir/addons).
 	 */
 	public static function setHooks(&$the_hooks)
 	{
 		global $boarddir;
 		
 		self::$hooks = @unserialize($the_hooks);
-		self::$addonsdir = $boarddir . '/addons/';		//todo: make addons directory customizable?
+		if(isset($GLOBALS['addonsdir']) && !empty($GLOBALS['addonsdir']) && file_exists($GLOBALS['addonsdir']) && is_dir($GLOBALS['addonsdir']))
+			self::$addonsdir = rtrim($GLOBALS['addonsdir'], '/\\ ') . '/';
+		else
+			self::$addonsdir = $boarddir . 'addons/';
 	}
 
+	/**
+	 *
+	 * @param type $hook     string - the name of the hook
+	 * @param type $product  string - a product name. This also defines the sub-folder in which the files of the addons must be
+	 * @param string $file   string - the file to include
+	 * @param type $function string - a function name to call
+	 * @return type			 bool   - true if all ok, false if the file or function could not be found.
+	 * 
+	 * this function is typicalle called from the install procedure of an addon. It adds one file/function
+	 * to a named hook.
+	 */
 	public static function addHook($hook, $product, $file, $function)
 	{
 		$ref = array('p' => $product, 'f' => $file, 'c' => $function);
@@ -171,16 +188,17 @@ class HookAPI {
 		$file = self::$addonsdir . $ref['p'] . '/' . $ref['f'];
 		if(!file_exists($file)) {
 			log_error(sprintf('HookAPI: missing hook file while installing into hook %s (product: %s, function: %s, file: %s', $hook, $ref['p'], $ref['c'], $ref['f']));
-			return;
+			return(false);
 		}
 		@include_once($file);
 		if(!is_callable($ref['c'])) {
 			log_error(sprintf('HookAPI: missing function while installing into hook %s (product: %s, function: %s, file: %s', $hook, $ref['p'], $ref['c'], $ref['f']));
-			return;
+			return(false);
 		}
 		self::$hooks[$hook][] = array('p' => $product, 'f' => $file, 'c' => trim($function));
 		$change_array = array('integration_hooks' => serialize(self::$hooks));
 		updateSettings($change_array, true);
+		return(true);
 	}
 
 	// Process functions of an integration hook.
@@ -201,6 +219,8 @@ class HookAPI {
 	/*
 	 * special case - hooks that work on the output buffer - they
 	 * must be called via ob_start() and therefore need their own method.
+	 * 
+	 * all functions registered under the integrate_buffer hook will run here
 	 */
 	public static function integrateOB()
 	{

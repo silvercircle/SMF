@@ -128,7 +128,7 @@ function reloadSettings()
 {
 	global $modSettings, $sourcedir, $boardurl, $db_cache_api, $db_cache_memcached;
 
-	$no_hooks = ((isset($g_disable_all_hooks) && $g_disable_all_hooks === true) || isset($_REQUEST['nohooks']));
+	$no_hooks = ((isset($GLOBALS['disable_all_hooks']) && $GLOBALS['g_disable_all_hooks'] === true) || isset($_REQUEST['nohooks']));
 
 	CacheAPI::cacheInit($db_cache_api, md5($boardurl . filemtime($sourcedir . '/Load.php')) . '-SMF-', $db_cache_memcached);
 
@@ -172,8 +172,11 @@ function reloadSettings()
 	if(empty($modSettings['cache_enable']))
 		CacheAPI::disable();
 
-	if(!empty($modSettings['integration_hooks']) && !$no_hooks)
-		HookAPI::setHooks($modSettings['integration_hooks']);
+	if($no_hooks)
+		$the_hooks = '';
+	else
+		$the_hooks = &$modSettings['integration_hooks'];
+	HookAPI::setHooks($the_hooks);
 
 	if(__APICOMPAT__)
 		require_once($sourcedir . '/Compat.php');
@@ -2275,7 +2278,7 @@ function template_include($filename, $once = false)
 // Attempt to start the session, unless it already has been.
 function loadSession()
 {
-	global $HTTP_SESSION_VARS, $modSettings, $boardurl, $sc;
+	global $modSettings, $boardurl, $sc;
 
 	// Attempt to change a few PHP settings.
 	@ini_set('session.use_cookies', true);

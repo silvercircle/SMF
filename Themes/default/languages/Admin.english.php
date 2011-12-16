@@ -33,6 +33,7 @@ $txt['admin_webmaster_email'] = 'Webmaster Email Address';
 $txt['boarddir'] = 'SMF Directory';
 $txt['sourcesdir'] = 'Sources Directory';
 $txt['cachedir'] = 'Cache Directory';
+$txt['addonsdir'] = 'Add-Ons Directory';
 $txt['admin_news'] = 'Enable News';
 $txt['admin_guest_post'] = 'Enable Guest Posting';
 $txt['admin_manage_members'] = 'Members';

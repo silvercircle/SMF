@@ -54,7 +54,7 @@ $GLOBALS['search_versions'] = array(
 // Ask the user what they want to search for.
 function PlushSearch1()
 {
-	global $txt, $scripturl, $modSettings, $user_info, $context, $smcFunc, $sourcedir;
+	global $txt, $scripturl, $modSettings, $user_info, $context, $sourcedir;
 
 	// Is the load average too high to allow searching just now?
 	if (!empty($context['load_average']) && !empty($modSettings['loadavg_search']) && $context['load_average'] >= $modSettings['loadavg_search'])
@@ -251,9 +251,9 @@ function PlushSearch1()
 // Gather the results and show them.
 function PlushSearch2()
 {
-	global $scripturl, $modSettings, $sourcedir, $txt, $db_connection;
+	global $scripturl, $modSettings, $sourcedir, $txt;
 	global $user_info, $context, $options, $messages_request, $boards_can;
-	global $excludedWords, $participants, $smcFunc, $search_versions, $searchAPI;
+	global $excludedWords, $participants, $search_versions, $searchAPI;
 
 	if (!empty($context['load_average']) && !empty($modSettings['loadavg_search']) && $context['load_average'] >= $modSettings['loadavg_search'])
 		fatal_lang_error('loadavg_search_disabled', false);
@@ -1623,8 +1623,8 @@ function PlushSearch2()
 function prepareSearchContext($reset = false)
 {
 	global $txt, $modSettings, $scripturl, $user_info, $sourcedir;
-	global $memberContext, $context, $settings, $options, $messages_request;
-	global $boards_can, $participants, $smcFunc;
+	global $memberContext, $context, $options, $messages_request;
+	global $boards_can, $participants;
 
 	// Remember which message this is.  (ie. reply #83)
 	static $counter = null;

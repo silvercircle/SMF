@@ -40,8 +40,8 @@ if (!defined('SMF'))
 // Begin the registration process.
 function Register($reg_errors = array())
 {
-	global $txt, $boarddir, $context, $settings, $modSettings, $user_info;
-	global $language, $scripturl, $smcFunc, $sourcedir, $smcFunc, $cur_profile;
+	global $txt, $boarddir, $context, $modSettings, $user_info;
+	global $language, $scripturl, $sourcedir, $cur_profile;
 
 	// Is this an incoming AJAX check?
 	if (isset($_GET['sa']) && $_GET['sa'] == 'usernamecheck')
@@ -211,8 +211,7 @@ function Register($reg_errors = array())
 // Actually register the member.
 function Register2($verifiedOpenID = false)
 {
-	global $scripturl, $txt, $modSettings, $context, $sourcedir;
-	global $user_info, $options, $settings, $smcFunc;
+	global $txt, $modSettings, $context, $sourcedir;
 
 	// Start collecting together any errors.
 	$reg_errors = array();
@@ -671,7 +670,7 @@ function Activate()
 // This function will display the contact information for the forum, as well a form to fill in.
 function CoppaForm()
 {
-	global $context, $modSettings, $txt, $smcFunc;
+	global $context, $modSettings, $txt;
 
 	loadLanguage('Login');
 	loadTemplate('Register');
@@ -752,7 +751,7 @@ function CoppaForm()
 // Show the verification code or let it hear.
 function VerificationCode()
 {
-	global $sourcedir, $modSettings, $context, $scripturl;
+	global $sourcedir, $context, $scripturl;
 
 	$verification_id = isset($_GET['vid']) ? $_GET['vid'] : '';
 	$code = $verification_id && isset($_SESSION[$verification_id . '_vv']) ? $_SESSION[$verification_id . '_vv']['code'] : (isset($_SESSION['visual_verification_code']) ? $_SESSION['visual_verification_code'] : '');
@@ -818,7 +817,7 @@ function VerificationCode()
 // See if a username already exists.
 function RegisterCheckUsername()
 {
-	global $sourcedir, $smcFunc, $context, $txt;
+	global $sourcedir, $context, $txt;
 
 	// This is XML!
 	loadTemplate('Xml');

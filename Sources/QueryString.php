@@ -73,7 +73,7 @@ if (!defined('SMF'))
 // Clean the request variables - add html entities to GET and slashes if magic_quotes_gpc is Off.
 function cleanRequest()
 {
-	global $board, $topic, $boardurl, $scripturl, $modSettings, $smcFunc;
+	global $board, $topic, $boardurl, $scripturl, $modSettings;
 
 	// Makes it easier to refer to things this way.
 	$scripturl = $boardurl . '/index.php';
@@ -324,8 +324,6 @@ function cleanRequest()
 // Adds slashes to the array/variable.  Uses two underscores to guard against overloading.
 function escapestring__recursive($var)
 {
-	global $smcFunc;
-
 	if (!is_array($var))
 		return addslashes($var);
 
@@ -342,8 +340,6 @@ function escapestring__recursive($var)
 // Adds html entities to the array/variable.  Uses two underscores to guard against overloading.
 function htmlspecialchars__recursive($var, $level = 0)
 {
-	global $smcFunc;
-
 	if (!is_array($var))
 		return commonAPI::htmlspecialchars($var, ENT_QUOTES);
 
@@ -372,8 +368,6 @@ function urldecode__recursive($var, $level = 0)
 // Unescapes any array or variable.  Two underscores for the normal reason.
 function unescapestring__recursive($var)
 {
-	global $smcFunc;
-
 	if (!is_array($var))
 		return stripslashes($var);
 
@@ -422,8 +416,6 @@ function htmltrim__recursive($var, $level = 0)
 // Clean up the XML to make sure it doesn't contain invalid characters.
 function cleanXml($string)
 {
-	global $context;
-
 	// http://www.w3.org/TR/2000/REC-xml-20001006#NT-Char
 	//return preg_replace('~[\x00-\x08\x0B\x0C\x0E-\x19' . ($context['utf8'] ? (@version_compare(PHP_VERSION, '4.3.3') != -1 ? '\x{D800}-\x{DFFF}\x{FFFE}\x{FFFF}' : "\xED\xA0\x80-\xED\xBF\xBF\xEF\xBF\xBE\xEF\xBF\xBF") : '') . ']~' . ($context['utf8'] ? 'u' : ''), '', $string);
 	return preg_replace('~[\x00-\x08\x0B\x0C\x0E-\x19' . ('\x{D800}-\x{DFFF}\x{FFFE}\x{FFFF}') . ']~u', '', $string);
@@ -449,7 +441,7 @@ function JavaScriptEscape($string)
 // Rewrite URLs to include the session ID.
 function ob_sessrewrite($buffer)
 {
-	global $scripturl, $modSettings, $user_info, $context;
+	global $scripturl, $modSettings, $context;
 
 	// If $scripturl is set to nothing, or the SID is not defined (SSI?) just quit.
 	if ($scripturl == '' || !defined('SID'))

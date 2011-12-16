@@ -246,7 +246,7 @@ function ModifyGeneralSettings($return_config = false)
 // Basic database and paths settings - database name, host, etc.
 function ModifyDatabaseSettings($return_config = false)
 {
-	global $scripturl, $context, $txt;
+	global $scripturl, $context, $txt, $boarddir;
 
 	/* If you're writing a mod, it's a bad idea to add things here....
 	For each option:
@@ -271,8 +271,12 @@ function ModifyDatabaseSettings($return_config = false)
 		array('boarddir', $txt['boarddir'], 'file', 'text', 36),
 		array('sourcedir', $txt['sourcesdir'], 'file', 'text', 36),
 		array('cachedir', $txt['cachedir'], 'file', 'text', 36),
+		array('addonsdir', $txt['addonsdir'], 'file', 'text', 36)
 	);
 
+	if(empty($GLOBALS['addonsdir']))
+		$GLOBALS['addonsdir'] = $boarddir . 'addons/';
+	
 	if ($return_config)
 		return $config_vars;
 
@@ -1993,7 +1997,7 @@ function saveSettings(&$config_vars)
 		'cookiename',
 		'webmaster_email',
 		'db_name', 'db_user', 'db_server', 'db_prefix', 'ssi_db_user',
-		'boarddir', 'sourcedir', 'cachedir',
+		'boarddir', 'sourcedir', 'cachedir', 'addonsdir'
 	);
 	// All the numeric variables.
 	$config_ints = array(

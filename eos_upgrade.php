@@ -1,22 +1,22 @@
 <?php
-
 /**
+ * @name      EosAlpha BBS
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines http://www.simplemachines.org
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.0
+ * @version 1.0pre
  */
-
 // Version information...
-define('SMF_VERSION', '2.0');
-define('SMF_LANG_VERSION', '2.0');
+define('SMF_VERSION', '1.0');
+define('SMF_LANG_VERSION', '1.0');
 
-$GLOBALS['required_php_version'] = '4.1.0';
-$GLOBALS['required_mysql_version'] = '4.0.18';
+$GLOBALS['required_php_version'] = '5.2.0';
+$GLOBALS['required_mysql_version'] = '5.0.50';
 
 $databases = array(
 	'mysql' => array(
@@ -27,19 +27,7 @@ $databases = array(
 		'utf8_version' => '4.1.0',
 		'utf8_version_check' => 'return mysql_get_server_info();',
 		'alter_support' => true,
-	),
-	'postgresql' => array(
-		'name' => 'PostgreSQL',
-		'version' => '8.0',
-		'version_check' => '$version = pg_version(); return $version[\'client\'];',
-		'always_has_db' => true,
-	),
-	'sqlite' => array(
-		'name' => 'SQLite',
-		'version' => '1',
-		'version_check' => 'return 1;',
-		'always_has_db' => true,
-	),
+	)
 );
 
 // General options for the script.
@@ -59,8 +47,6 @@ $upcontext['steps'] = array(
 	1 => array(2, 'Upgrade Options', 'UpgradeOptions', 2),
 	2 => array(3, 'Backup', 'BackupDatabase', 10),
 	3 => array(4, 'Database Changes', 'DatabaseChanges', 70),
-	// This is removed as it doesn't really work right at the moment.
-	//4 => array(5, 'Cleanup Mods', 'CleanupMods', 10),
 	4 => array(5, 'Delete Upgrade', 'DeleteUpgrade', 1),
 );
 // Just to remember which one has files in it.

@@ -1,7 +1,9 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]fixed page dimming for IE8[/li]
-[li]implemented xml handler and template skeleton for single post display[/li]
-[li]For IE7/8, fallback to non-transparent borders for overlays and JavaScript dialog boxes.[/li]
+[li]Make addons base directory customizable under database and path settings (for security purposes)[/li]
+[li]started work on the upgrade.php script. The first goal is to allow a seamless upgrade from any SMF 2.0 installation.[/li]
+[li]added a few help texts for new options[/li]
+[li]continued code cleanup (orphan globals, references to $smcFunc[])[/li]
+[li]Make sure, HookAPI is always initialized, even when all hooks are disabled (either via Settings.php option or request string).[/li]
 [/list]
