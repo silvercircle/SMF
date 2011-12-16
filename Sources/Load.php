@@ -546,7 +546,7 @@ function loadBoard()
 		// Remember redirection is the key to avoiding fallout from your bosses.
 		if (!empty($topic)) {
 			if(isset($_REQUEST['perma']))
-				redirectexit('topic=' . $topic . '.msg' . $_REQUEST['msg'] . ';perma');
+				redirectexit('topic=' . $topic . '.msg' . $_REQUEST['msg'] . ';perma' . (isset($_REQUEST['xml']) ? ';xml' : ''));
 			else
 				redirectexit('topic=' . $topic . '.msg' . $_REQUEST['msg'] . '#msg' . $_REQUEST['msg']);
 		}

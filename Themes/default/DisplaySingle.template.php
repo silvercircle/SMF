@@ -376,18 +376,9 @@ function template_single_post_xml() {
 
 	echo '<', '?xml version="1.0" encoding="UTF-8" ?', '>
 <document>
-  <response open="default_overlay" width="90%" />
+  <response open="default_overlay" width="70%" />
     <content>
     <![CDATA[';
-	echo '
-		<div id="share_bar" style="display:none;position:absolute;right:0;white-space:nowrap;width:auto;">
-		<div class="bmbar">
-		 <span role="button" class="button icon share_this share_fb" data-href="http://www.facebook.com/sharer.php?u=%%uri%%">Share</span>
-		 <span role="button" class="button icon share_this share_tw" data-href="http://twitter.com/share?text=%%txt%%&amp;url=%%uri%%">Tweet</span>
-		 <span role="button" class="button icon share_this share_digg" data-href="http://digg.com/submit?phase=2&amp;title=%%txt%%&amp;url=%%uri%%">Digg</span>
-		 <div class="clear"></div>
-       	</div>
-       	</div>';
 
 	// Build the normal button array.
 	$normal_buttons = array(
@@ -404,39 +395,12 @@ function template_single_post_xml() {
 
 	// Show the topic information - icon, subject, etc.
 	echo '
-			<div id="forumposts">
-				<div>
-					<h1 class="bigheader">
-						', $txt['topic'], ': ', $context['prefix'], $context['subject'], ' &nbsp;(', $txt['read'], ' ', $context['num_views'], ' ', $txt['times'], ')
-					</h1>
-				</div>';
+			<div id="mcard_content">';
 
-	// social share bar
-	if ($context['use_share'])
-		socialbar($scripturl . '?topic=' . $topic, urlencode($context['subject']));
-
-	if ($context['tags_active']) {
-		echo '
-		<div id="tagstrip"><span id="tags">';
-		foreach ($context['topic_tags'] as $i => $tag) {
-			echo '<a href="' . $scripturl . '?action=tags;tagid=' . $tag['ID_TAG'] . '">' . $tag['tag'] . '</a>';
-			if ($context['can_delete_tags'])
-				echo '<a href="' . $scripturl . '?action=tags;sa=deletetag;tagid=' . $tag['ID'] . '"><span onclick="sendRequest(\'action=xmlhttp;sa=tags;deletetag=1;tagid=' . $tag['ID'] . '\', $(\'#tags\'));return(false);" class="xtag">&nbsp;&nbsp;</span></a>';
-			else
-				echo '&nbsp;&nbsp;';
-		}
-		echo '</span>';
-
-		if ($context['can_add_tags'])
-			echo '
-			&nbsp;<a rel="nofollow" id="addtag" onclick="$(\'#tagform\').remove();sendRequest(\'action=xmlhttp;sa=tags;addtag=1;topic=', $topic, '\', $(\'#addtag\'));return(false);" data-id="', $topic, '" href="' . $scripturl . '?action=tags;sa=addtag;topic=', $topic, '">' . $txt['smftags_addtag'] . '</a>';
-		else
-			echo '&nbsp;';
-		echo '
-		</div>';
-	}
 	echo '
-		<div class="clear"></div><form data-alt="', $scripturl, '?action=post;msg=%id_msg%;topic=', $context['current_topic'], '.', $context['start'], '" action="', $scripturl, '?action=quickmod2;topic=', $context['current_topic'], '.', $context['start'], '" method="post" accept-charset="UTF-8" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave(\'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\') : false">';
+		<div class="clear"></div>
+		<form data-alt="', $scripturl, '?action=post;msg=%id_msg%;topic=', $context['current_topic'], '.', $context['start'], '" action="', $scripturl, '?action=quickmod2;topic=', $context['current_topic'], '.', $context['start'], '" method="post" accept-charset="UTF-8" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave(\'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\') : false">
+	      <div class="posts_container">';
 
 	$ignoredMsgs = array();
 	$removableMessageIDs = array();
@@ -445,10 +409,11 @@ function template_single_post_xml() {
 	while ($message = $context['get_message']()) {
 		if ($message['can_remove'])
 			$removableMessageIDs[] = $message['id'];
-		$context['postbit_callbacks']['firstpost']($message);
+		template_postbit_normal($message);
 	}
 	echo '
 				<input type="hidden" name="goadvanced" value="1" />
+				</div>
 				</form>
 			</div>
 			<a id="lastPost"></a>';
@@ -457,30 +422,9 @@ function template_single_post_xml() {
 	var smf_likelabel = \'' . $txt['like_label'] . '\';
 	var smf_unlikelabel = \'' . $txt['unlike_label'] . '\'
 	';
-	// Show the lower breadcrumbs.
-	theme_linktree();
-	$mod_buttons = array(
-		'move' => array('test' => 'can_move', 'text' => 'move_topic', 'image' => 'admin_move.gif', 'lang' => true, 'url' => $scripturl . '?action=movetopic;topic=' . $context['current_topic'] . '.0'),
-		'delete' => array('test' => 'can_delete', 'text' => 'remove_topic', 'image' => 'admin_rem.gif', 'lang' => true, 'custom' => 'onclick="return confirm(\'' . $txt['are_sure_remove_topic'] . '\');"', 'url' => $scripturl . '?action=removetopic2;topic=' . $context['current_topic'] . '.0;' . $context['session_var'] . '=' . $context['session_id']),
-		'lock' => array('test' => 'can_lock', 'text' => empty($context['is_locked']) ? 'set_lock' : 'set_unlock', 'image' => 'admin_lock.gif', 'lang' => true, 'url' => $scripturl . '?action=lock;topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
-		'sticky' => array('test' => 'can_sticky', 'text' => empty($context['is_sticky']) ? 'set_sticky' : 'set_nonsticky', 'image' => 'admin_sticky.gif', 'lang' => true, 'url' => $scripturl . '?action=sticky;topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
-		'merge' => array('test' => 'can_merge', 'text' => 'merge', 'image' => 'merge.gif', 'lang' => true, 'url' => $scripturl . '?action=mergetopics;board=' . $context['current_board'] . '.0;from=' . $context['current_topic']),
-		'calendar' => array('test' => 'calendar_post', 'text' => 'calendar_link', 'image' => 'linktocal.gif', 'lang' => true, 'url' => $scripturl . '?action=post;calendar;msg=' . $context['topic_first_message'] . ';topic=' . $context['current_topic'] . '.0'),
-	);
-
 	// Restore topic. eh?  No monkey business.
 	if ($context['can_restore_topic'])
 		$mod_buttons[] = array('text' => 'restore_topic', 'image' => '', 'lang' => true, 'url' => $scripturl . '?action=restoretopic;topics=' . $context['current_topic'] . ';' . $context['session_var'] . '=' . $context['session_id']);
-
-	// Allow adding new mod buttons easily.
-	HookAPI::callHook('integrate_mod_buttons', array(&$mod_buttons));
-
-	echo '
-			<div id="moderationbuttons">', template_button_strip($mod_buttons, 'bottom', array('id' => 'moderationbuttons_strip')), '</div>';
-
-	// Show the jumpto box, or actually...let Javascript do it.
-	echo '
-			<div class="plainbox" id="display_jump_to">&nbsp;</div>';
 
 	if (!empty($options['display_quick_mod']) && $context['can_remove_post'])
 		$context['inline_footer_script'] .= '

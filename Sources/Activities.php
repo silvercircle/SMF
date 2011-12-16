@@ -233,7 +233,7 @@ function aStreamGet($b = 0, $xml = false, $global = false)
 			$result = smf_db_query('SELECT COUNT(a.id_act) FROM {db_prefix}log_activities AS a
 				LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
 				WHERE a.id_board = {int:id_board} AND {query_see_board} '.$pquery,
-				array('start' => 0, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage));
+				array('id_board' => $board, 'start' => 0, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage));
 
 			list($total) = mysql_fetch_row($result);
 			mysql_free_result($result);
@@ -353,11 +353,12 @@ function showActivitiesProfile($memID)
 		WHERE ({query_see_board} OR a.id_board = 0) AND (a.id_member = {int:id_user} OR a.id_owner = {int:id_user}) ORDER BY a.id_act DESC LIMIT {int:start}, 20',
 		array('start' => $start, 'id_user' => $memID));
 
-		$context['act_global'] = true;
+	$context['act_global'] = true;
 
 	$context['sub_template'] = 'showactivity_profile';
 	aStreamOutput($result);
 	$context['titletext'] = $context['page_title'];
+	mysql_free_result($result);
 }
 
 /**

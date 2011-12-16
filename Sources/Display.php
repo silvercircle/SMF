@@ -1231,6 +1231,7 @@ function Display()
 
     if(!empty($modSettings['enableAdvancedHooks']))
         HookAPI::callHook('integrate_display', array());
+	
 }
 
 // Callback for the message display.

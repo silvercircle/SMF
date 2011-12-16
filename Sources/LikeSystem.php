@@ -135,9 +135,11 @@ function LikesByUser($memID)
 			'post' => array(
 				'href' => $phref,
 				'link' => '<a href="'.$phref.'">'.$row['subject'].'</a>',
-				'subject' => $row['subject']
+				'subject' => $row['subject'],
+				'id' => $row['id_msg']
 			),
-			'teaser' => strip_tags(preg_replace('~[[\/\!]*?[^\[\]]*?]~si', '', $row['body'])) . '...'
+			'teaser' => strip_tags(preg_replace('~[[\/\!]*?[^\[\]]*?]~si', '', $row['body'])) . '...',
+			'morelink' => URL::parse('?msg=' . $row['id_msg'] . ';perma')
 		);
 	}
 	loadMemberData(array_unique($users));

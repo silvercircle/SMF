@@ -346,7 +346,7 @@ function template_showlikes()
 		  </div>
 		  <span class="floatright">',$like['time'],'</span>
 		  ',$like['text'],'<br>
-		  <em>',$like['teaser'],'</em>
+		  <em>',$like['teaser'],'</em> <a onclick="singlePost(',$like['post']['id'],');return(false);" href="',$like['morelink'],'">More...</a>
 		  <div class="clear"></div>
 		</li>';
 		}

@@ -1420,6 +1420,10 @@ jQuery(document).ready(function() {
  * all "onclick" handlers
  */
 
+function singlePost(id) 
+{
+	sendRequest('msg=' + id + ';perma;xml', null);
+}
 function getNotifications(el)
 {
 	if($('#notify_wrapper').length > 0)		// it already exists in the dom tree
