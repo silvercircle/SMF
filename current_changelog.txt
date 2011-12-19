@@ -1,9 +1,8 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]Make addons base directory customizable under database and path settings (for security purposes)[/li]
-[li]started work on the upgrade.php script. The first goal is to allow a seamless upgrade from any SMF 2.0 installation.[/li]
-[li]added a few help texts for new options[/li]
-[li]continued code cleanup (orphan globals, references to $smcFunc[])[/li]
-[li]Make sure, HookAPI is always initialized, even when all hooks are disabled (either via Settings.php option or request string).[/li]
+[li]Get rid of the advanced hooks switch. There is almost no performance penalty for calling empty hooks anyway.[/li]
+[li]It is now possible to disable all hook calls in Server Settings -> General. Basically, a quick fix for a misbehaving addon.[/li]
+[li]Debugging feature: If [b]nohooks[/b] is present as a request string parameter, all hooks will be disabled. Note: might go away later...[/li]
+[li]Option to load jQuery from Google CDN - the required jQuery version number is currently hardcoded in index.php (bad idea, I know)[/li]
 [/list]

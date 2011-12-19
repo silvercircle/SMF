@@ -1088,8 +1088,7 @@ function Display()
 			'id_user' => $user_info['id']
 		);
 
-		if(!empty($modSettings['enableAdvancedHooks']))
-			HookAPI::callHook('integrate_messagerequest', array(&$sql_what, &$sql_from, &$sql_array));
+		HookAPI::callHook('integrate_messagerequest', array(&$sql_what, &$sql_from, &$sql_array));
 
 		$messages_request = smf_db_query('
 			SELECT ' . $sql_what . ' ' . $sql_from . '
@@ -1229,8 +1228,7 @@ function Display()
 	if($context['can_autosave_draft'])
 		enqueueThemeScript('drafts', 'scripts/drafts.js', true);
 
-    if(!empty($modSettings['enableAdvancedHooks']))
-        HookAPI::callHook('integrate_display', array());
+	HookAPI::callHook('integrate_display', array());
 	
 }
 
@@ -1368,8 +1366,7 @@ function prepareDisplayContext($reset = false)
 		'postbit_below' => '',
 		'poster_details' => ''
 	);
-    if(!empty($modSettings['enableAdvancedHooks']))
-        HookAPI::callHook('integrate_postbit', array(&$output));
+	HookAPI::callHook('integrate_postbit', array(&$output));
 
 	return $output;
 }

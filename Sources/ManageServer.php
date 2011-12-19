@@ -223,6 +223,8 @@ function ModifyGeneralSettings($return_config = false)
 		array('enableCompressedOutput', $txt['enableCompressedOutput'], 'db', 'check', null, 'enableCompressedOutput'),
 		array('disableTemplateEval', $txt['disableTemplateEval'], 'db', 'check', null, 'disableTemplateEval'),
 		array('disableHostnameLookup', $txt['disableHostnameLookup'], 'db', 'check', null, 'disableHostnameLookup'),
+		array('g_disable_all_hooks', $txt['disableAllHooks'], 'file', 'check', null, 'disableAllHooks'),
+		array('jQueryFromGoogleCDN', $txt['jQueryFromGoogleCDN'], 'db', 'check', null, 'jQueryFromGoogleCDN'),
 	);
 
 	if ($return_config)
@@ -2006,6 +2008,7 @@ function saveSettings(&$config_vars)
 	$config_bools = array(
 		'db_persist', 'db_error_send',
 		'maintenance',
+		'g_disable_all_hooks',
 	);
 
 	// Now sort everything into a big array, and figure out arrays and etc.

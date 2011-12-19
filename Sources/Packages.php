@@ -1428,7 +1428,6 @@ function PackageOptions()
 			'package_port' => $_POST['pack_port'],
 			'package_username' => $_POST['pack_user'],
 			'package_make_backups' => !empty($_POST['package_make_backups']),
-			'enableAdvancedHooks' => !empty($_POST['enableAdvancedHooks'])
 		));
 
 		redirectexit('action=admin;area=packages;sa=options');
@@ -1446,7 +1445,6 @@ function PackageOptions()
 	$context['package_ftp_port'] = isset($modSettings['package_port']) ? $modSettings['package_port'] : '21';
 	$context['package_ftp_username'] = isset($modSettings['package_username']) ? $modSettings['package_username'] : $default_username;
 	$context['package_make_backups'] = !empty($modSettings['package_make_backups']);
-	$context['enableAdvancedHooks'] = !empty($modSettings['enableAdvancedHooks']);
 }
 
 function ViewOperations()

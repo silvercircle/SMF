@@ -128,7 +128,7 @@ function reloadSettings()
 {
 	global $modSettings, $sourcedir, $boardurl, $db_cache_api, $db_cache_memcached;
 
-	$no_hooks = ((isset($GLOBALS['disable_all_hooks']) && $GLOBALS['g_disable_all_hooks'] === true) || isset($_REQUEST['nohooks']));
+	$no_hooks = ((isset($GLOBALS['g_disable_all_hooks']) && $GLOBALS['g_disable_all_hooks'] === true) || isset($_REQUEST['nohooks']));
 
 	CacheAPI::cacheInit($db_cache_api, md5($boardurl . filemtime($sourcedir . '/Load.php')) . '-SMF-', $db_cache_memcached);
 
@@ -975,8 +975,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 	else
 		trigger_error('loadMemberData(): Invalid member data set \'' . $set . '\'', E_USER_WARNING);
 
-	if(!empty($modSettings['enableAdvancedHooks']))
-		HookAPI::callHook('integrate_loadmemberdata', array(&$set, &$select_columns, &$select_tables));
+	HookAPI::callHook('integrate_loadmemberdata', array(&$set, &$select_columns, &$select_tables));
 
 	if (!empty($users))
 	{
@@ -1228,8 +1227,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 		}
 	}
 
-	if(!empty($modSettings['enableAdvancedHooks']))
-		HookAPI::callHook('integrate_loadmembercontext', array(&$memberContext[$user], &$profile));
+	HookAPI::callHook('integrate_loadmembercontext', array(&$memberContext[$user], &$profile));
 
 	return true;
 }

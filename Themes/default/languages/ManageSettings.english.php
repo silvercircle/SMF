@@ -80,6 +80,8 @@ $txt['enableVBStyleLogin'] = 'Show a quick login on every page';
 $txt['defaultMaxMembers'] = 'Members per page in member list';
 $txt['timeLoadPageEnable'] = 'Display time taken to create every page';
 $txt['disableHostnameLookup'] = 'Disable hostname lookups';
+$txt['disableAllHooks'] = 'Disable all hooks';
+$txt['jQueryFromGoogleCDN'] = 'Load jQuery from Google\'s network';
 $txt['who_enabled'] = 'Enable who\'s online list';
 $txt['make_email_viewable'] = 'Allow viewable email addresses';
 $txt['meta_keywords'] = 'Meta keywords associated with forum<div class="smalltext">For search engines. Leave blank for default.</div>';

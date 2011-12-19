@@ -120,8 +120,7 @@ function BoardIndex()
 		'above_boardlisting' => '',
 		'below_boardlisting' => ''
 	);
-	if(!empty($modSettings['enableAdvancedHooks']))
-		HookAPI::callHook('integrate_boardindex', array());
+	HookAPI::callHook('integrate_boardindex', array());
 	fetchNewsItems(0, 0);
 }
 

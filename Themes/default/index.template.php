@@ -45,8 +45,13 @@ function template_html_above()
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/rtl.css" />';
 
 	// Here comes the JavaScript bits!
+	if(!empty($modSettings['jQueryFromGoogleCDN']))
 		echo '
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js?v=162"></script>
+	<script type="text/javascript" src="', ($context['is_https'] ? 'https://' : 'http://'), 'ajax.googleapis.com/ajax/libs/jquery/',$context['jquery_version'],'/jquery.min.js"></script>';
+	else
+		echo '
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js?v=162"></script>';
+	echo '
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js',$context['jsver'],'"></script>';
 	if(!empty($context['theme_scripts'])) {
 		foreach($context['theme_scripts'] as $type => $script) {

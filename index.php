@@ -84,8 +84,9 @@ $context['template_hooks']['global'] = array(
 	'sidebar_bottom' => '',
 	'footer' => ''
 );
+$context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
 $context['jsver'] = '?v=1505';
-
+$context['jquery_version'] = '1.6.2';
 // Seed the random generator.
 if (empty($modSettings['rand_seed']) || mt_rand(1, 250) == 69)
 	smf_seed_generator();

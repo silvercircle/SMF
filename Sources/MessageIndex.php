@@ -616,8 +616,7 @@ function MessageIndex()
 	$context['no_topic_listing'] = !empty($context['boards']) && empty($context['topics']) && !$context['can_post_new'];
 
 	enqueueThemeScript('topic', 'scripts/topic.js', true);
-	if(!empty($modSettings['enableAdvancedHooks']))
-		HookAPI::callHook('integrate_messageindex', array());
+	HookAPI::callHook('integrate_messageindex', array());
 }
 
 // Allows for moderation from the message index.

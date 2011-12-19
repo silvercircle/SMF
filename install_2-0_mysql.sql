@@ -1921,7 +1921,7 @@ INSERT INTO {$db_prefix}settings
 	(variable, value)
 VALUES ('use_post_cache', '0'),
 	('post_cache_cutoff', '30'),
-	('enableAdvancedHooks', '0'),
+	('jQueryFromGoogleCDN', '0'),
 	('legacyBBC', '0'),
 	('integration_hooks', ''),
 	('fb_appid', ''),
