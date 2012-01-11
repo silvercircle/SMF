@@ -338,7 +338,7 @@ class cacheAPI {
 			self::getMemcacheServer($level - 1);
 	}
 
-	public static function cacheInit($desired, $basekey, $memcached_hosts)
+	public static function init($desired, $basekey, $memcached_hosts)
 	{
 		self::$basekey = $basekey;
 		self::$memcached_hosts = $memcached_hosts;
@@ -368,10 +368,11 @@ class cacheAPI {
 
 	public static function getEngine()
 	{
+		global $txt;
 		$engines = array('Filesystem cache', 'APC', 'Xcache', 'Zend', 'Memcached', 'New PECL Memcached');
 
 		if(-1 == self::$API)
-			return('Caching is disabled or not available');
+			return($txt['caching_disabled']);
 		else
 			return($engines[(int)self::$API]);
 	}

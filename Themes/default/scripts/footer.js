@@ -1439,14 +1439,14 @@ function getAStream(el)
 	else
 		sendRequest('action=astream;sa=get;b=' + parseInt(_el.attr('data-board')) + ';xml', null);
 }
-function getMcard(uid, el)
+function getMcard(uid)
 {
 	if(uid > 0)
 		sendRequest('action=xmlhttp;sa=mcard;u=' + parseInt(uid), null);
 	return(false);
 }
 
-function getLikes(mid, el)
+function getLikes(mid)
 {
 	sendXMLDocument(smf_prepareScriptUrl(smf_scripturl) + 'action=like;sa=getlikes;m=' + mid + ';xml', '', response_xml);
 }

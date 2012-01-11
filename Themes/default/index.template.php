@@ -132,7 +132,14 @@ EOT;
 	echo $context['html_headers'];
 	echo '
 	<style>
-	 #main_content_section {max-width:',isset($options['content_width']) ? $options['content_width'] : '95%', ';}
+	 #main_content_section {max-width:',isset($options['content_width']) ? $options['content_width'] : '95%', ';}';
+	if(isset($context['css_overrides'])) {
+		foreach($context['css_overrides'] as $k)
+			echo '
+	',$k,'
+	';
+	}
+	echo '
 	</style>
 </head>
 <body>';

@@ -1,5 +1,8 @@
 <?php
-
+/*
+ * this is outsourced from the Activities language file, because all these strings are only needed
+ * in the user's profile secion. We avoid some language file bloat...
+ */
 $txt['act_optout_desc'] = 'Select the activity entries that should be created on your behalf. Any activity you uncheck here will prevent the activity stream from recording it. It will also stop other users from receiving notification from events done by you.<br><br>You will still receive notifications from events done by other users (see below for selecting the notification types you want to receive).';
 $txt['notify_optout_desc'] = 'Select what types of notifications from activities by other forum members you want to receive.';
 

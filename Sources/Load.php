@@ -126,11 +126,12 @@ if (!defined('SMF'))
 // Load the $modSettings array.
 function reloadSettings()
 {
-	global $modSettings, $sourcedir, $boardurl, $db_cache_api, $db_cache_memcached;
+	global $modSettings, $sourcedir, $boardurl;
 
+	//todo: the $_REQUEST[] thing should go away, it is only for debugging
 	$no_hooks = ((isset($GLOBALS['g_disable_all_hooks']) && $GLOBALS['g_disable_all_hooks'] === true) || isset($_REQUEST['nohooks']));
 
-	CacheAPI::cacheInit($db_cache_api, md5($boardurl . filemtime($sourcedir . '/Load.php')) . '-SMF-', $db_cache_memcached);
+	CacheAPI::init($GLOBALS['db_cache_api'], md5($boardurl . filemtime($sourcedir . '/Load.php')) . '-SMF-', $GLOBALS['db_cache_memcached']);
 
 	// Most database systems have not set UTF-8 as their default input charset.
 	smf_db_query('
@@ -1121,7 +1122,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'buddies' => $buddy_list,
 		'title' => !empty($modSettings['titlesEnable']) ? $profile['usertitle'] : '',
 		'href' => $m_href,
-		'link' => '<a onclick="getMcard('.$profile['id_member'].', $(this));return(false);" href="' . $m_href . '" title="' . $txt['profile_of'] . ' ' . $profile['real_name'] . '">' . $profile['real_name'] . '</a>',
+		'link' => '<a onclick="getMcard('.$profile['id_member'].');return(false);" href="' . $m_href . '" title="' . $txt['profile_of'] . ' ' . $profile['real_name'] . '">' . $profile['real_name'] . '</a>',
 		'email' => $profile['email_address'],
 		'show_email' => showEmailAddress(!empty($profile['hide_email']), $profile['id_member']),
 		'registered' => empty($profile['date_registered']) ? $txt['not_applicable'] : timeformat($profile['date_registered']),

@@ -10,6 +10,9 @@
  * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
  * @version 1.0pre
+ *
+ * this implements templates for the output of likes, except the templates for
+ * a member's profile which are in Profile.template.php
  */
 function template_getlikes_xml()
 {
@@ -18,7 +21,7 @@ function template_getlikes_xml()
 	echo '<', '?xml version="1.0" encoding="UTF-8" ?', '>';
 	echo '
 <document>
- <response open="default" width="400px">
+ <response open="default" width="400px" offset="-100">
   <content>
   <![CDATA[
 	<div class="title_bar">

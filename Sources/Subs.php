@@ -4116,6 +4116,14 @@ function registerFooterScriptFragment($key, $script)
 	if(!empty($key) && !empty($script))
 		$context['footer_script_fragments'][$key] = $script;
 }
+
+function registerCSSOverrideFragment($t)
+{
+	global $context;
+
+	if(!empty($t))
+		$context['css_overrides'][] = $t;
+}
 /**
  * @param int $board  board id or 0
  * @param int $topic  topic id or 0

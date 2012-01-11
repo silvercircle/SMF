@@ -117,6 +117,7 @@ $txt['caching_information'] = '<div class="smalltext"><div class="aligncenter un
 	%1$s
 	</div>';
 
+$txt['caching_disabled'] = 'Caching is either disabled or not supported on your server';
 $txt['detected_no_caching'] = '<strong class="alert">SMF has not been able to detect a compatible accelerator on your server.</strong>';
 $txt['detected_APC'] = '<strong style="color: green">SMF has detected that your server has APC installed.</strong> (config value for Settings.php = "apc")';
 $txt['detected_Zend'] = '<strong style="color: green">SMF has detected that your server has Zend installed.</strong> (config value for Settings.php = "zend")';
