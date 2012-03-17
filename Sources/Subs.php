@@ -932,7 +932,7 @@ function permute($array)
 }
 
 // Parse bulletin board code in a string, as well as smileys optionally.
-function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = array())
+function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = array(), $do_cache = true)
 {
 	global $txt, $scripturl, $context, $modSettings, $user_info;
 	static $bbc_codes = array(), $itemcodes = array(), $no_autolink_tags = array();
@@ -1594,7 +1594,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 
 	// Shall we take the time to cache this?
 	
-	if ($cache_id != '' && $modSettings['cache_enable'] >= 2 && strlen($message) > 1000)
+	if ($cache_id != '' && $modSettings['cache_enable'] >= 2)
 	{
 		// It's likely this will change if the message is modified.
 		$cache_key = 'parse:' . $cache_id . '-' . md5(md5($message) . '-' . $smileys . (empty($disabled) ? '' : implode(',', array_keys($disabled))) . serialize($context['browser']) . $txt['lang_locale'] . $user_info['time_offset'] . $user_info['time_format']);
@@ -1602,7 +1602,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 		if (($temp = CacheAPI::getCache($cache_key, 1200)) != null)
 			return $temp;
 
-		$cache_t = microtime();
+		// $cache_t = microtime();
 	}
     
 	if ($smileys === 'print')
@@ -2372,7 +2372,8 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	HookAPI::callHook('integrate_parse_bbc_after', array(&$message, &$parse_tags, &$smileys));
 
 	// Cache the output if it took some time...
-	if (isset($cache_key, $cache_t)) // && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
+	//if (isset($cache_key, $cache_t)) // && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
+	if (isset($cache_key)) // && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
 		CacheAPI::putCache($cache_key, $message, 1200);
 
 	// If this was a force parse revert if needed.
@@ -3901,12 +3902,11 @@ function setupMenuContext()
 			'tags' => array(
 				'title' => $txt['smftags_menu'],
 				'href' => URL::parse('?action=tags'),
-				'show' => true,
+				'show' => !empty($modSettings['tags_active']),
 				'sub_buttons' => array(
 				),
 			),
-	'calendar' => array(
-
+			'calendar' => array(
 				'title' => $txt['calendar'],
 				'href' => URL::parse('?action=calendar'),
 				'show' => $context['allow_calendar'],
@@ -3952,14 +3952,12 @@ function setupMenuContext()
 			'register' => array(
 				'title' => $txt['register'],
 				'href' => $scripturl . '?action=register',
-				'show' => $user_info['is_guest'],
+				'show' => ($user_info['is_guest'] && !(!empty($modSettings['registration_method']) && $modSettings['registration_method'] == 3)) ? true : false,
 				'sub_buttons' => array(
 				),
 				'is_last' => !$context['right_to_left'],
 			)
 		);
-		if(!$modSettings['tags_active'])
-			unset($buttons['tags']);
 		// Allow editing menu buttons easily.
 		HookAPI::callHook('integrate_menu_buttons', array(&$buttons));
 
@@ -4137,10 +4135,9 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 {
 	global $context, $user_info;
 
-	$cached_news = array();
 	$context['news_items'] = array();
-	$gsel = '';
 	$context['news_item_count'] = 0;
+	$sel = '';
 
 	$cache_key = 'news:board_'.trim($board).'_topic_'.trim($topic).'_groups_'.join(':',$user_info['groups']);
 	if (($cached_news = CacheAPI::getCache($cache_key, 360)) == null) {

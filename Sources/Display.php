@@ -1297,7 +1297,7 @@ function prepareDisplayContext($reset = false)
 	if($context['pcache_update_counter'] < PCACHE_UPDATE_PER_VIEW && (($context['time_cutoff_ref'] - $dateline) < ($modSettings['post_cache_cutoff'] * 86400))) {
 		if(empty($message['cached_body'])) {
 			$context['pcache_update_counter']++;
-			$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
+			$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], '');  // don't cache bbc when we pre-parse the post anyway...
 			smf_db_insert('replace', '{db_prefix}messages_cache',
 				array('id_msg' => 'int', 'body' => 'string', 'style' => 'string', 'lang' => 'string', 'updated' => 'int'),
 				array($message['id_msg'], $message['body'], $user_info['smiley_set_id'], $user_info['language_id'], $dateline),

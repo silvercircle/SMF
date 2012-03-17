@@ -29,7 +29,7 @@ function template_postbit_normal(&$message)
 		echo $message['first_new'] ? '<a id="new"></a>' : '';
 
 	echo '
-	<div class="keyinfo">
+	<div class="keyinfo std">
 	 <div class="messageicon">
 	  <img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' class="iconrequest" id="micon_' . $message['id'] . '"' : '', ' />
 	 </div>
@@ -44,7 +44,7 @@ function template_postbit_normal(&$message)
 
 	// Show information about the poster of this message.
 	echo '
-	<div itemscope="itemscope" itemtype="http://data-vocabulary.org/Person" class="poster">
+	<div itemscope="itemscope" itemtype="http://data-vocabulary.org/Person" class="poster std">
 	<h4>', $message['member']['link'], '</h4>
 	<ul class="reset smalltext" id="msg_', $message['id'], '_extra_info">';
 
@@ -148,7 +148,7 @@ function template_postbit_normal(&$message)
 		</ul>';
 	echo $message['template_hook']['poster_details'],'
 		</div>
-		<div class="post_content">
+		<div class="post_content std">
 		<div class="post" id="msg_', $message['id'], '">';
 
 	echo '

@@ -391,7 +391,7 @@ function scheduled_approval_notification()
 // Do some daily cleaning up.
 function scheduled_daily_maintenance()
 {
-	global $smcFunc, $modSettings, $sourcedir, $db_type;
+	global $modSettings, $sourcedir, $db_type;
 
 	// First clean out the cache.
 	clean_cache();
@@ -496,11 +496,11 @@ function scheduled_daily_maintenance()
 	if($modSettings['post_cache_cutoff'] < 10)
 		$modSettings['post_cache_cutoff'] = 10;
 	
-	$cache_cutoff = time() - ($modSettings['post_cache_cutoff'] * 86400);
 	smf_db_query('
 		DELETE FROM {db_prefix}messages_cache WHERE updated < {int:cutoff}',
-		array('cutoff' => $cache_cutoff));
+		array('cutoff' => time() - $modSettings['post_cache_cutoff'] * 86400));
 
+	HookAPI::callHook('sys_daily_maint');
 	// Log we've done it...
 	return true;
 }
@@ -508,7 +508,7 @@ function scheduled_daily_maintenance()
 // Auto optimize the database?
 function scheduled_auto_optimize()
 {
-	global $modSettings, $smcFunc, $db_prefix, $db_type;
+	global $modSettings, $db_prefix, $db_type;
 
 	// By default do it now!
 	$delay = false;
@@ -556,7 +556,7 @@ function scheduled_auto_optimize()
 // Send out a daily email of all subscribed topics.
 function scheduled_daily_digest()
 {
-	global $is_weekly, $txt, $mbname, $scripturl, $sourcedir, $smcFunc, $context, $modSettings;
+	global $is_weekly, $txt, $mbname, $scripturl, $sourcedir, $context, $modSettings;
 
 	// We'll want this...
 	require_once($sourcedir . '/Subs-Post.php');
@@ -1388,7 +1388,7 @@ function scheduled_birthdayemails()
 
 function scheduled_weekly_maintenance()
 {
-	global $modSettings, $smcFunc;
+	global $modSettings;
 
 	// Delete some settings that needn't be set if they are otherwise empty.
 	$emptySettings = array(
@@ -1574,13 +1574,25 @@ function scheduled_weekly_maintenance()
 			'last_update' => time() - 86400,
 		)
 	);
+
+	// perform maintainance for activity stream
+	if($modSettings['astream_active']) {
+		smf_db_query('
+			DELETE a.*, n.* FROM {db_prefix}log_activities AS a LEFT JOIN {db_prefix}log_notifications AS n ON(n.id_act = a.id_act)
+				WHERE a.updated < {int:cutoff_time}',
+			array(
+				'cutoff_time' => time() - 86400 * $modSettings['astream_expire_days']
+			)
+		);
+	}
+	HookAPI::callHook('sys_weekly_maint');
 	return true;
 }
 
 // Perform the standard checks on expiring/near expiring subscriptions.
 function scheduled_paid_subscriptions()
 {
-	global $txt, $sourcedir, $scripturl, $smcFunc, $modSettings, $language;
+	global $txt, $sourcedir, $scripturl, $modSettings, $language;
 
 	// Start off by checking for removed subscriptions.
 	$request = smf_db_query( '
@@ -1658,5 +1670,4 @@ function scheduled_paid_subscriptions()
 
 	return true;
 }
-
 ?>

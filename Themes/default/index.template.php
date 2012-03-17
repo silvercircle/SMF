@@ -38,8 +38,7 @@ function template_html_above()
 <head>';
 	echo '
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/index', $context['theme_variant'], '.css',$context['jsver'],'" />
-	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/secondary', $context['theme_variant'], '.css" />
-	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans">';
+	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/secondary', $context['theme_variant'], '.css" />';
 	if ($context['right_to_left'])
 		echo '
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/rtl.css" />';
@@ -648,10 +647,18 @@ function template_sidebar_content()
 		echo '
 					<input type="hidden" name="hash_passwrd" value="" />
 					</form>
-					<br>
+					<br>';
+		if(!(!empty($modSettings['registration_method']) && $modSettings['registration_method'] == 3))
+			echo '
 					<div class="orange_container">
 					',$txt['login_or_register'],'
-					</div>
+					</div>';
+		else
+			echo '
+					<div class="orange_container">
+					',$txt['registration_disabled'],'
+					</div>';
+		echo '
 					</div>
 				</div>';
 	}

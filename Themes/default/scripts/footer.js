@@ -1628,6 +1628,7 @@ function response_xml(responseXML)
 		if(_r) {
 			var _error = _r.attr('error') || 0;
 			if(_error) {
+				// TODO this *should* be translatable!
 				var title = _r.find('title').text() || 'XML response error';
 				var msg = _r.find('message').text() || 'Unknown or unspecified error.';
 				Eos_Alert(title, msg);
@@ -1645,7 +1646,6 @@ function response_xml(responseXML)
 		Eos_Alert('XmlHTTP Request', 'Unknown or unspecified error in response document.');
 		return(false);
 	}
-	return(false);
 }
 /*
  * generic handler for XMLHttp response. Determines its origin by observing ele

@@ -1,3 +1,5 @@
+/* TODO clean this up. There are still a lot of obsolete and unused classes */
+
 a:link, a:visited {
 	color: #637d96;
 	text-decoration: none;
@@ -14,7 +16,7 @@ table {
 }
 body {
 	background: #D0D1E6;
-	font-family: "Droid Sans", "Trebuchet MS", "Tahoma", "Arial", sans-serif;
+	font-family: "Tahoma", "Droid Sans", "Trebuchet MS", "Tahoma", "Arial", sans-serif;
 	font-size: 10pt;
 	margin: 0;
 	padding: 0;
@@ -1437,9 +1439,9 @@ div#pollmoderation {
 	clear: both;
 }
 .posts_container {
-	padding:0 3px 3px 3px;
+/*	padding:0 3px 3px 3px;
 	background:white;
-	box-shadow: 0 0 10px #aaa inset;
+	box-shadow: 0 0 10px #aaa inset;*/
 }
 .posts_container.commentstyle {
 	padding:0;
@@ -1454,6 +1456,9 @@ p#whoisviewing {
 	width: auto;
 	background-color: #f2f2f2;
 	padding:0;
+	border:1px solid #ddd;
+	border-bottom:3px solid #ccc;
+	margin-bottom:10px;
 }
 .post_wrapper.approval, .approval .post_content {
 	background-color: rgb(250, 233, 216);
@@ -1476,16 +1481,19 @@ div.ignoringpost {
 	clear: both;
 	font-size: 11px;
 	line-height: 20px;
-	background-color:#e8e8e8;
+	/*background-color:#e8e8e8;*/
 }
-.poster {
+.poster.std {
 	float: left;
 	width: 200px;
 	max-width: 200px;
 	min-width: 200px;
 	text-align: center;
 	margin:0 5px 10px 5px;
-	padding:1.0em 5px !important;
+	padding:0 5px;
+	position:relative;
+	top:-26px;
+	margin-bottom:-26px;
 }
 div.userbit_compact {
 	font-size: 11px;
@@ -1507,6 +1515,10 @@ div.userbit_compact_textpart {
 }
 .post_content.lean {
 	margin-left: 0 !important;
+}
+.post_content.std {
+	margin-right:10px;
+	box-shadow: 0 0 5px #ccc inset;
 }
 .post_content.commentstyle {
 	margin-left:0;
@@ -1532,6 +1544,7 @@ div.userbit_compact_textpart {
 .poster h4 {
 	font-size: 115%;
 	padding: 1px 3px;
+	line-height:26px;
 }
 
 .poster h4 a {
@@ -1585,11 +1598,13 @@ div.userbit_compact_textpart {
 	max-height: 26px;
 	line-height: 26px;
 	/*background: #c9d8dd url(../images/clipsrc.png) 0 -175px repeat-x;*/
-	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;
-	margin-left:-3px;
-	margin-right:-3px;
-	color:white;
+	/*background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;*/
+	/*margin-left:-1px;
+	margin-right:-1px;*/
 	font-size:12px;
+}
+.keyinfo.std {
+	padding-left:220px;
 }
 .approval .keyinfo {
 	background: #edcc82;
@@ -1616,8 +1631,10 @@ div.userbit_compact_textpart {
 	color: #637d96;
 }
 .keyinfo h5 {
-	font-weight:normal;
-	color:white;
+	font-weight:bold;
+	font-style: italic;
+	font-size:1.1em;
+	color:#666;
 }
 .keyinfo.commentstyle h5 {
 	color:#444;
@@ -1640,9 +1657,9 @@ div.userbit_compact_textpart {
 }
 .horizontal_userblock {
 	padding: 3px 10px;
-	background: #ececec;
+	background: #f2f2f2;
 	margin: 0 0 10px 15px;
-	border: 1px solid #ccc;
+	border: 1px solid #ddd;
 	border-top: 0;
 	border-right: 0;
 	border-bottom-left-radius: 8px;

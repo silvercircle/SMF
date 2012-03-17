@@ -1,8 +1,13 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li]Get rid of the advanced hooks switch. There is almost no performance penalty for calling empty hooks anyway.[/li]
-[li]It is now possible to disable all hook calls in Server Settings -> General. Basically, a quick fix for a misbehaving addon.[/li]
-[li]Debugging feature: If [b]nohooks[/b] is present as a request string parameter, all hooks will be disabled. Note: might go away later...[/li]
-[li]Option to load jQuery from Google CDN - the required jQuery version number is currently hardcoded in index.php (bad idea, I know)[/li]
+[li](core) Do not cache bbcode when updating the post cache (waste of cache memory).[/li]
+[li](core) Handle activity stream pruning in weekly maintenance task.[/li]
+[li](core) Handle post cache pruning in daily mainenance task.[/li]
+[li](core) New hooks in daily & weekly maintenance tasks.[/li]
+[li](ux) Postbit template cleanup.[/li]
+[li](ux) The zoom icon in the lightbox overlay no longer looks like a close button.[/li]
+
+
+
 [/list]
