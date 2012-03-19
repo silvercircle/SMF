@@ -358,7 +358,6 @@ function showActivitiesProfile($memID)
 	$context['sub_template'] = 'showactivity_profile';
 	aStreamOutput($result);
 	$context['titletext'] = $context['page_title'];
-	mysql_free_result($result);
 }
 
 /**

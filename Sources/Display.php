@@ -68,6 +68,8 @@ function Display()
 	global $options, $sourcedir, $user_info, $board_info, $topic, $board;
 	global $attachments, $messages_request, $topicinfo, $language;
 
+	$context['response_prefixlen'] = strlen($txt['response_prefix']);
+
 	$context['need_synhlt'] = true;
 	$context['is_display_std'] = true;
 
@@ -243,6 +245,7 @@ function Display()
 	$context['real_num_replies'] = $context['num_replies'] = $topicinfo['num_replies'];
 	$context['topic_first_message'] = $topicinfo['id_first_msg'];
 	$context['topic_last_message'] = $topicinfo['id_last_msg'];
+	$context['first_subject'] = $topicinfo['subject'];
 	$context['prefix'] = html_entity_decode($topicinfo['prefix_name']) .'&nbsp;';
 
 	// Add up unapproved replies to get real number of replies...
@@ -1236,9 +1239,9 @@ function Display()
 function prepareDisplayContext($reset = false)
 {
 	global $txt, $modSettings, $options, $user_info;
-	global $memberContext, $context, $messages_request, $topic;
-
+	global $memberContext, $context, $messages_request;
 	static $counter = null;
+	static $seqnr = 0;
 
 	// If the query returned false, bail.
 	if ($messages_request == false)
@@ -1326,7 +1329,7 @@ function prepareDisplayContext($reset = false)
 		'member' => &$memberContext[$message['id_member']],
 		'icon' => $message['icon'],
 		'icon_url' => getPostIcon($message['icon']),
-		'subject' => $message['subject'],
+		'subject' => ($seqnr++ == 0 || substr($message['subject'], $context['response_prefixlen']) != $context['first_subject']) ? $message['subject'] . ', ' : '',
 		'time' => timeformat($message['poster_time']),
 		'counter' => $counter,
 		'permalink' => isset($_REQUEST['perma']) ? $txt['view_in_thread'] : ($counter ? ($txt['reply_noun'].' #'.$counter) : $txt['permalink']),

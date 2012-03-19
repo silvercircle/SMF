@@ -171,44 +171,42 @@ function GiveLike($mid)
 
 function LikesUpdate($mid)
 {
-	$like_string = '';
 	$count = 0;
 	$likers = array();
-	$content_type = 1; 
-	
+	$content_type = 1;
+
 	$request = smf_db_query( '
 		SELECT l.id_msg AS like_message, l.id_user AS like_user, m.real_name AS member_name FROM {db_prefix}likes AS l
-			LEFT JOIN {db_prefix}members AS m on m.id_member = l.id_user WHERE l.id_msg = {int:id_message} 
-				AND l.ctype = {int:ctype} AND m.id_member <> 0 ORDER BY l.updated DESC LIMIT 4', 
+			LEFT JOIN {db_prefix}members AS m on m.id_member = l.id_user WHERE l.id_msg = {int:id_message}
+				AND l.ctype = {int:ctype} AND m.id_member <> 0 ORDER BY l.updated DESC LIMIT 4',
 				array('id_message' => $mid, 'ctype' => $content_type));
 
 	while ($row = mysql_fetch_assoc($request)) {
 		if(empty($row['member_name']))
 			continue;
-		$likers[$count] = $row['like_user'].'@' . base64_encode($row['member_name']);
+		$likers[$row['like_user']] = $row['member_name'];
 		$count++;
 		if($count > 3)
 			break;
 	}
-	$like_string = implode("|", $likers);
 	mysql_free_result($request);
-	
+
 	$request = smf_db_query( '
 		SELECT COUNT(id_msg) as count
-			FROM {db_prefix}likes AS l WHERE l.id_msg = {int:id_msg} AND l.ctype = {int:ctype}', 
+			FROM {db_prefix}likes AS l WHERE l.id_msg = {int:id_msg} AND l.ctype = {int:ctype}',
 			array('id_msg' => $mid, 'ctype' => $content_type));
-	
+
 	$count = mysql_fetch_row($request);
 	mysql_free_result($request);
 	$totalcount = $count[0];
 
 	smf_db_query( '
-		INSERT INTO {db_prefix}like_cache(id_msg, likes_count, like_status, updated, ctype) VALUES({int:id_msg}, {int:total}, {string:like_status}, {int:updated}, {int:ctype}) 
+		INSERT INTO {db_prefix}like_cache(id_msg, likes_count, like_status, updated, ctype) VALUES({int:id_msg}, {int:total}, {string:like_status}, {int:updated}, {int:ctype})
 			ON DUPLICATE KEY UPDATE updated = {int:updated}, likes_count = {int:total}, like_status = {string:like_status}',
-			array('id_msg' => $mid, 'total' => $totalcount, 'updated' => time(), 'like_status' => $like_string, 'ctype' => $content_type));
+			array('id_msg' => $mid, 'total' => $totalcount, 'updated' => time(), 'like_status' => serialize($likers), 'ctype' => $content_type));
 
 	$result['count'] = $totalcount;
-	$result['status'] = $like_string;
+	$result['status'] = $likers;
 	return($result);
 }
 
@@ -217,10 +215,11 @@ function LikesUpdate($mid)
  * store it in $output
  * $have_liked indicates that the current user has liked the post.
  */
+
 function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_liked)
 {
 	global $user_info, $scripturl, $txt;
-	
+
 	$like_template = array();
 	$like_template[1] = $txt['1like'];
 	$like_template[2] = $txt['2likes'];
@@ -228,35 +227,32 @@ function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_l
 	$like_template[4] = $txt['4likes'];
 	$like_template[5] = $txt['5likes'];
 
-	$likers = explode("|", $like_status);
 	$n = 1;
 	$results = array();
-	foreach($likers as $liker) {
-		if(!empty($liker)) {
-			$liker_components = explode("@", $liker);
-			if(isset($liker_components[0]) && isset($liker_components[1])) {
-				$liker_components[1] = base64_decode($liker_components[1]);
-				if((int)$liker_components[0] === (int)$user_info['id']) {
+	if(is_array($like_status) && count($like_status) > 0) {
+		foreach($like_status as $key => $liker) {
+			if(!empty($liker)) {
+				if((int)$key === (int)$user_info['id']) {
 					$results[0] = $txt['you_liker'];
 					continue;
 				}
-				$results[$n++] = '<a rel="nofollow" onclick="getMcard('.$liker_components[0].', $(this));return(false);" class="mcard" href="'.URL::user($liker_components[0], $liker_components[1]) .'">'.$liker_components[1].'</a>';
+				$results[$n++] = '<a rel="nofollow" onclick="getMcard('.$key.', $(this));return(false);" class="mcard" href="'.URL::user($key, $liker) .'">'.$liker.'</a>';
 			}
 		}
 	}
 	$count = count($results);
 	if($count == 0)
 		return($output);
-		
+
 	/*
-	 * we have liked it but our entry is too old to be in the top 4, so move 
+	 * we have liked it but our entry is too old to be in the top 4, so move
 	 * it to the front and remove the oldest - we always want our own like in the first position
 	 */
 	if($have_liked && !isset($results[0])) {
 		array_pop($results);
 		$results[0] = $txt['you_liker'];
 	}
-	
+
 	ksort($results);
 	if(isset($results[0]) && $count == 1)
 		$output = $txt['you_like_it'];
@@ -300,7 +296,7 @@ function AddLikeBar(&$row, $can_give_like, $now)
 		$row['likelink'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$row['id'].'">Repair Likes</a>';
 		
 	if($row['likes_count'] > 0)
-		LikesGenerateOutput($row['like_status'], $row['likers'], $row['likes_count'], $row['id'], $have_liked_it);
+		LikesGenerateOutput(unserialize($row['like_status']), $row['likers'], $row['likes_count'], $row['id'], $have_liked_it);
 }
 
 /**

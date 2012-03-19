@@ -932,7 +932,7 @@ function permute($array)
 }
 
 // Parse bulletin board code in a string, as well as smileys optionally.
-function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = array(), $do_cache = true)
+function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = array())
 {
 	global $txt, $scripturl, $context, $modSettings, $user_info;
 	static $bbc_codes = array(), $itemcodes = array(), $no_autolink_tags = array();

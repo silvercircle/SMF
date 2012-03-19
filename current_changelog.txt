@@ -9,5 +9,7 @@ Note: this is just a memo pad to record changes and prepare the posts for the de
 [li](ux) The zoom icon in the lightbox overlay no longer looks like a close button.[/li]
 
 
-
+[li](ux) Only show the message subject when it is different from the default (first post) subject.[/li]
+[li](ux) more postbit layout tweaks, reworked the compact ("blog-style") template.[/li]
+[li](core) cached likes are now stored as serialized arrays.[/li]
 [/list]
