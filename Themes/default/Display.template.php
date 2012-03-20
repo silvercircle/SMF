@@ -189,7 +189,7 @@ function template_main()
 	echo '
 			<div class="pagesection top">
 				<div class="nextlinks">', $context['previous_next'], '</div>', template_button_strip($normal_buttons, 'right');
-				echo '<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], $context['menu_separator'] . ' &nbsp;&nbsp;<a class="navPages topdown" href="#lastPost">' . $txt['go_down'] . '</a></div>
+				echo '<div class="pagelinks floatleft">', $context['page_index'], $context['menu_separator'] . ' &nbsp;&nbsp;<a class="navPages topdown" href="#lastPost">' . $txt['go_down'] . '</a></div>
 			</div>';
 
 	// Show the topic information - icon, subject, etc.
@@ -246,7 +246,7 @@ function template_main()
 	echo '
 		<div class="clear"></div>
 		 <form data-alt="',$scripturl,'?action=post;msg=%id_msg%;topic=',$context['current_topic'],'.',$context['start'], '" action="', $scripturl, '?action=quickmod2;topic=', $context['current_topic'], '.', $context['start'], '" method="post" accept-charset="UTF-8" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave(\'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\') : false">
-		  <div class="posts_container">';
+		  <div class="posts_container framed_region">';
 
 	$removableMessageIDs = array();
 
@@ -352,7 +352,7 @@ function template_main()
 	echo '
 			<div class="pagesection bottom">
 				', template_button_strip($normal_buttons, 'right'), '
-				<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], $context['menu_separator'] . ' &nbsp;&nbsp;<a class="navPages topdown" href="#top">' . $txt['go_up'] . '</a></div>
+				<div class="pagelinks floatleft">', $context['page_index'], $context['menu_separator'] . ' &nbsp;&nbsp;<a class="navPages topdown" href="#top">' . $txt['go_up'] . '</a></div>
 				<div class="nextlinks_bottom">', $context['previous_next'], '</div>
 			</div>';
 	// Added by Related Topics

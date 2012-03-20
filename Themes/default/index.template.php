@@ -267,16 +267,16 @@ function template_body_above()
 		<div class="cContainer_end"></div>';
 	}
 	echo '<aside>
-		  <div id="sidebar" style="width:255px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
+		  <div id="sidebar" class="framed_region" style="width:255px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
 		if($sidebar_allowed)
 			template_sidebar_content();
 	echo '</div>
 		  </aside>
-	      <div id="container" style="margin-right:',$sidebar_allowed ? '265px' : '0',';">
+	      <div id="container" style="margin-right:',$sidebar_allowed ? '270px' : '0',';">
 		  <script>
   		  // <![CDATA[
   		  		$("#sidebar").css("display", ',$sidebar_vis && $sidebar_allowed ? '"inline"' : '"none"', ');
-  		  		$("#container").css("margin-right", ',$sidebar_vis && $sidebar_allowed ? 'sideBarWidth + 15 + "px"' : "0", ');
+  		  		$("#container").css("margin-right", ',$sidebar_vis && $sidebar_allowed ? 'sideBarWidth + 20 + "px"' : "0", ');
 		  // ]]>
 	      </script>';
 }

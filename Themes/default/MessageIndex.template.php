@@ -75,7 +75,7 @@ function template_main()
 	{
 		echo '
 	<div class="pagesection top smallpadding">
-		<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], '&nbsp;&nbsp;<a class="navPages" href="#bot">' . $txt['go_down'] . '</a></div>
+		<div class="pagelinks floatleft">', $context['page_index'], '&nbsp;&nbsp;<a class="navPages" href="#bot">' . $txt['go_down'] . '</a></div>
 		', template_button_strip($normal_buttons, 'right'), '
 	</div>';
 
@@ -85,7 +85,7 @@ function template_main()
 	<form action="', $scripturl, '?action=quickmod;board=', $context['current_board'], '.', $context['start'], '" method="post" accept-charset="UTF-8" class="clear" name="quickModForm" id="quickModForm">';
 
 		echo '
-		<div id="messageindex">
+		<div id="messageindex" class="framed_region">
 		<table class="topic_table">';
 
 		// Are there actually any topics to show?
@@ -211,7 +211,7 @@ function template_main()
 		echo '
 	<div class="pagesection bottom smallpadding">
 		', template_button_strip($normal_buttons, 'right'), '
-		<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], '&nbsp;&nbsp;<a class="navPages" href="#top">' . $txt['go_up'] . '</a></div>
+		<div class="pagelinks floatleft">', $context['page_index'], '&nbsp;&nbsp;<a class="navPages" href="#top">' . $txt['go_up'] . '</a></div>
 	</div>';
 	}
 

@@ -624,14 +624,38 @@ function updateSettings($changeArray, $update = false, $debug = false)
 
 // Constructs a page list.
 // $pageindex = constructPageIndex($scripturl . '?board=' . $board, $_REQUEST['start'], $num_messages, $maxindex, true);
-function constructPageIndex($base_url, &$start, $max_value, $num_per_page, $flexible_start = false)
+function constructPageIndex($base_url, &$start, $max_value, $num_per_page, $flexible_start = false, $advanced = true, $compact = false)
 {
-	global $modSettings;
+	global $modSettings, $txt;
+	$pager_entry_script = <<<EOT
+jQuery(document).ready(function() {
+	$('.pagelinks .prefix').click(function() {
+		if($('#directpager').length <= 0) {
+			$(this).attr('data-save', $(this).html());
+			$(this).html('<form action="' + $(this).attr('data-urltemplate') + '" id="directpager" method="post">{$txt["page_go_to"]}<input name="directpager_pagenr" id="directpager_pagenr" size=3 /></form>');
+			$('#directpager_pagenr').focus();
+		}
+		$('#directpager').submit(function() {
+
+			var newstart = (parseInt($('#directpager_pagenr').val()) - 1) * parseInt($(this).parent().attr('data-perpage'));
+			if(newstart < 0)
+				newstart = 0;
+			$(this).attr('action', $(this).attr('action').replace(/\[\[PAGE\]\]/g, newstart));
+			$(this).submit();
+			return(false);
+		});
+	});
+
+	$('.pagelinks .prefix').live('mouseleave',function(event) {
+		$(this).html($(this).attr('data-save'));
+	});
+	return;
+});
+EOT;
 
 	// Save whether $start was less than 0 or not.
 	$start = (int) $start;
 	$start_invalid = $start < 0;
-
 	// Make sure $start is a proper variable - not less than 0.
 	if ($start_invalid)
 		$start = 0;
@@ -646,72 +670,74 @@ function constructPageIndex($base_url, &$start, $max_value, $num_per_page, $flex
 	if (WIRELESS)
 		$base_url .= ';' . WIRELESS_PROTOCOL;
 
-	$base_link = '<a class="navPages" href="' . ($flexible_start ? $base_url : strtr($base_url, array('%' => '%%')) . ';start=%1$d') . '">%2$s</a> ';
+	$base_link = '<a class="navPages'. ($compact ? ' compact' : '') . '" href="' . ($flexible_start ? $base_url : strtr($base_url, array('%' => '%%')) . ';start=%1$d') . '">%2$s</a> ';
 
-	// Compact pages is off or on?
-	if (empty($modSettings['compactTopicPagesEnable']))
-	{
-		// Show the left arrow.
-		$pageindex = $start == 0 ? ' ' : sprintf($base_link, $start - $num_per_page, '&#171;');
+	// If they didn't enter an odd value, pretend they did.
+	$PageContiguous = (int) ($modSettings['compactTopicPagesContiguous'] - ($modSettings['compactTopicPagesContiguous'] % 2)) / 2;
 
-		// Show all the pages.
-		$display_page = 1;
-		for ($counter = 0; $counter < $max_value; $counter += $num_per_page)
-			$pageindex .= $start == $counter && !$start_invalid ? '<strong>' . $display_page++ . '</strong> ' : sprintf($base_link, $counter, $display_page++);
+	// Show the first page. (>1< ... 6 7 [8] 9 10 ... 15)
+	if ($start > $num_per_page * $PageContiguous)
+		$pageindex = sprintf($base_link, 0, '1');
+	else
+		$pageindex = '';
 
-		// Show the right arrow.
-		$display_page = ($start + $num_per_page) > $max_value ? $max_value : ($start + $num_per_page);
-		if ($start != $counter - $max_value && !$start_invalid)
-			$pageindex .= $display_page > $counter - $num_per_page ? ' ' : sprintf($base_link, $display_page, '&#187;');
+	// Show the ... after the first page.  (1 >...< 6 7 [8] 9 10 ... 15)
+	if ($start > $num_per_page * ($PageContiguous + 1)) {
+		$pageindex .= '<span style="font-weight: bold;"> ... </span>';
+		//$pageindex .= '<span style="font-weight: bold;" onclick="' . htmlspecialchars('expandPages(this, ' . JavaScriptEscape(($flexible_start ? $base_url : strtr($base_url, array('%' => '%%')) . ';start=%1$d')) . ', ' . $num_per_page . ', ' . ($start - $num_per_page * $PageContiguous) . ', ' . $num_per_page . ');') . '" onmouseover="this.style.cursor = \'pointer\';"> ... </span>';
+		$need_direct_input = true;
+	}
+
+	// Show the pages before the current one. (1 ... >6 7< [8] 9 10 ... 15)
+	for ($nCont = $PageContiguous; $nCont >= 1; $nCont--)
+		if ($start >= $num_per_page * $nCont)
+		{
+			$tmpStart = $start - $num_per_page * $nCont;
+			$pageindex.= sprintf($base_link, $tmpStart, $tmpStart / $num_per_page + 1);
+		}
+
+	// Show the current page. (1 ... 6 7 >[8]< 9 10 ... 15)
+	if (!$start_invalid)
+		$pageindex .= '<span class="current">' . ($start / $num_per_page + 1) . '</span> ';
+	else
+		$pageindex .= sprintf($base_link, $start, $start / $num_per_page + 1);
+
+	// Show the pages after the current one... (1 ... 6 7 [8] >9 10< ... 15)
+	$tmpMaxPages = (int) (($max_value - 1) / $num_per_page) * $num_per_page;
+	for ($nCont = 1; $nCont <= $PageContiguous; $nCont++)
+		if ($start + $num_per_page * $nCont <= $tmpMaxPages)
+		{
+			$tmpStart = $start + $num_per_page * $nCont;
+			$pageindex .= sprintf($base_link, $tmpStart, $tmpStart / $num_per_page + 1);
+		}
+
+	// Show the '...' part near the end. (1 ... 6 7 [8] 9 10 >...< 15)
+	if ($start + $num_per_page * ($PageContiguous + 1) < $tmpMaxPages) {
+		//$pageindex .= '<span style="font-weight: bold;" onclick="expandPages(this, \'' . ($flexible_start ? strtr($base_url, array('\'' => '\\\'')) : strtr($base_url, array('%' => '%%', '\'' => '\\\'')) . ';start=%1$d') . '\', ' . ($start + $num_per_page * ($PageContiguous + 1)) . ', ' . $tmpMaxPages . ', ' . $num_per_page . ');" onmouseover="this.style.cursor=\'pointer\';"> ... </span>';
+		$pageindex .= '<span style="font-weight: bold;"> ... </span>';
+		$need_direct_input = true;
+	}
+
+	// Show the last number in the list. (1 ... 6 7 [8] 9 10 ... >15<)
+	if ($start + $num_per_page * $PageContiguous < $tmpMaxPages)
+		$pageindex .= sprintf($base_link, $tmpMaxPages, $tmpMaxPages / $num_per_page + 1);
+
+	// construct advanced pagination (first, prev, next, last) links
+	if($advanced) {
+		$data_url = strtr($base_url, array('%1$d' => '[[PAGE]]'));
+		if(false === strstr($data_url, '[[PAGE]]'))			// non-pretty url, append the ;start=
+			$data_url = $base_url . ';start=[[PAGE]]';
+		$prefix = sprintf('<span data-perpage="'.$num_per_page.'" data-urltemplate="'.$data_url.'" class="prefix'.(isset($need_direct_input) ? ' drop" title="Click to enter page number"' : '"').'>'.$txt['page_x_of_n'].'</span>', $start / $num_per_page + 1, $max_value / $num_per_page + 1);
+		$first = $start / $num_per_page > 1 ? sprintf($base_link, 0, $txt['page_first']) : '';
+		$prev = $start > 0 ? sprintf($base_link, $start - $num_per_page, '<') : '';
+		$next = $start <= $max_value - $num_per_page ? sprintf($base_link, $start + $num_per_page, '>') : '';
+		$last = $start <= $max_value - 2 *  $num_per_page ? sprintf($base_link, $max_value - $num_per_page, $txt['page_last']) : '';
+		if(isset($need_direct_input))
+			registerFooterScriptFragment('pager_entry', $pager_entry_script);
 	}
 	else
-	{
-		// If they didn't enter an odd value, pretend they did.
-		$PageContiguous = (int) ($modSettings['compactTopicPagesContiguous'] - ($modSettings['compactTopicPagesContiguous'] % 2)) / 2;
-
-		// Show the first page. (>1< ... 6 7 [8] 9 10 ... 15)
-		if ($start > $num_per_page * $PageContiguous)
-			$pageindex = sprintf($base_link, 0, '1');
-		else
-			$pageindex = '';
-
-		// Show the ... after the first page.  (1 >...< 6 7 [8] 9 10 ... 15)
-		if ($start > $num_per_page * ($PageContiguous + 1))
-			$pageindex .= '<span style="font-weight: bold;" onclick="' . htmlspecialchars('expandPages(this, ' . JavaScriptEscape(($flexible_start ? $base_url : strtr($base_url, array('%' => '%%')) . ';start=%1$d')) . ', ' . $num_per_page . ', ' . ($start - $num_per_page * $PageContiguous) . ', ' . $num_per_page . ');') . '" onmouseover="this.style.cursor = \'pointer\';"> ... </span>';
-
-		// Show the pages before the current one. (1 ... >6 7< [8] 9 10 ... 15)
-		for ($nCont = $PageContiguous; $nCont >= 1; $nCont--)
-			if ($start >= $num_per_page * $nCont)
-			{
-				$tmpStart = $start - $num_per_page * $nCont;
-				$pageindex.= sprintf($base_link, $tmpStart, $tmpStart / $num_per_page + 1);
-			}
-
-		// Show the current page. (1 ... 6 7 >[8]< 9 10 ... 15)
-		if (!$start_invalid)
-			$pageindex .= '<span class="current">' . ($start / $num_per_page + 1) . '</span> ';
-		else
-			$pageindex .= sprintf($base_link, $start, $start / $num_per_page + 1);
-
-		// Show the pages after the current one... (1 ... 6 7 [8] >9 10< ... 15)
-		$tmpMaxPages = (int) (($max_value - 1) / $num_per_page) * $num_per_page;
-		for ($nCont = 1; $nCont <= $PageContiguous; $nCont++)
-			if ($start + $num_per_page * $nCont <= $tmpMaxPages)
-			{
-				$tmpStart = $start + $num_per_page * $nCont;
-				$pageindex .= sprintf($base_link, $tmpStart, $tmpStart / $num_per_page + 1);
-			}
-
-		// Show the '...' part near the end. (1 ... 6 7 [8] 9 10 >...< 15)
-		if ($start + $num_per_page * ($PageContiguous + 1) < $tmpMaxPages)
-			$pageindex .= '<span style="font-weight: bold;" onclick="expandPages(this, \'' . ($flexible_start ? strtr($base_url, array('\'' => '\\\'')) : strtr($base_url, array('%' => '%%', '\'' => '\\\'')) . ';start=%1$d') . '\', ' . ($start + $num_per_page * ($PageContiguous + 1)) . ', ' . $tmpMaxPages . ', ' . $num_per_page . ');" onmouseover="this.style.cursor=\'pointer\';"> ... </span>';
-
-		// Show the last number in the list. (1 ... 6 7 [8] 9 10 ... >15<)
-		if ($start + $num_per_page * $PageContiguous < $tmpMaxPages)
-			$pageindex .= sprintf($base_link, $tmpMaxPages, $tmpMaxPages / $num_per_page + 1);
-	}
-
-	return $pageindex;
+		$prefix = $first = $prev = $next = $last = '';
+	return $prefix . $first . $prev . $pageindex . $next . $last;
 }
 
 // Formats a number to display in the style of the admin's choosing.

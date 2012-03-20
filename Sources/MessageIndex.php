@@ -432,11 +432,11 @@ function MessageIndex()
 
 				// We can't pass start by reference.
 				$start = -1;
-				$pages .= constructPageIndex(URL::topic($row['id_topic'], $row['first_subject'], '%1$d'), $start, $row['num_replies'] + 1, $context['messages_per_page'], true);
+				$pages .= constructPageIndex(URL::topic($row['id_topic'], $row['first_subject'], '%1$d'), $start, $row['num_replies'] + 1, $context['messages_per_page'], true, false, true);
 
 				// If we can use all, show all.
 				if (!empty($modSettings['enableAllMessages']) && $row['num_replies'] + 1 < $modSettings['enableAllMessages'])
-					$pages .= '<a class="navPages" href="' . URL::topic($row['id_topic'], $row['first_subject'], 0) .';all">' . $txt['show_all'] . '</a>';
+					$pages .= '<a class="navPages compact" href="' . URL::topic($row['id_topic'], $row['first_subject'], 0) .';all">' . $txt['show_all'] . '</a>';
 				$pages .= ' ';
 			}
 			else

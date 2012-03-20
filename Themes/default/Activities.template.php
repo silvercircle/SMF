@@ -50,12 +50,14 @@ function template_showactivity()
 	if($context['act_results']) {
 	echo '
 	<div class="pagelinks">',$context['pages'],'</div>
-	<ol class="commonlist notifications">
+	<div class="framed_region smallpadding">
+	<ol class="commonlist notifications" style="padding:0;">
 	<li class="glass centertext">',$context['titletext'],'</li>';
 	foreach($context['activities'] as $activity)
 		template_activitybit($activity);
 	echo '
 	</ol>
+	</div>
 	<div class="pagelinks">',$context['pages'],'</div>';
 	}
 	else

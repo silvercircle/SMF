@@ -1532,7 +1532,7 @@ function sbToggle(el)
 	else {
 		//if(!sidebar_content_loaded)
 		//	sendRequest(smf_scripturl, 'action=xmlhttp;sa=loadsb', $('#sidebar'));
-		$('#container').animate({marginRight: sideBarWidth + 15 + 'px'}, 50, function() {
+		$('#container').animate({marginRight: sideBarWidth + 20 + 'px'}, 50, function() {
 			$('#sidebar').fadeIn();
 		});
 		createCookie('smf_sidebar_disabled', 0, 300);

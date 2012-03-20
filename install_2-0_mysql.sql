@@ -1746,7 +1746,6 @@ INSERT INTO {$db_prefix}settings
 VALUES ('smfVersion', '{$smf_version}'),
 	('news', '{$default_news}'),
 	('compactTopicPagesContiguous', '5'),
-	('compactTopicPagesEnable', '1'),
 	('enableStickyTopics', '1'),
 	('todayMod', '1'),
 	('karmaMode', '0'),

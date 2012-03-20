@@ -400,7 +400,7 @@ function template_single_post_xml() {
 	echo '
 		<div class="clear"></div>
 		<form data-alt="', $scripturl, '?action=post;msg=%id_msg%;topic=', $context['current_topic'], '.', $context['start'], '" action="', $scripturl, '?action=quickmod2;topic=', $context['current_topic'], '.', $context['start'], '" method="post" accept-charset="UTF-8" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave(\'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\') : false">
-	      <div class="posts_container">';
+	      <div class="posts_container framed_region">';
 
 	$ignoredMsgs = array();
 	$removableMessageIDs = array();

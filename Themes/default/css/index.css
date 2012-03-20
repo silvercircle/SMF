@@ -780,6 +780,7 @@ div.dropselect_content.right {
 #main_menu {
 	padding: 0 0.5em;
 	font-size: 11px;
+	font-weight:bold;
 	text-shadow: 2px 2px 4px black;
 }
 .dropmenu, .dropmenu ul {
@@ -1001,7 +1002,7 @@ ul#navigation li {
 }
 #sidebar, #sbar {
 	float: right;
-	padding: 0;
+	padding: 3px;
 }
 #sbtoggle {
 	float: right;
@@ -1240,10 +1241,7 @@ ol.commonlist.category {
 	border-left: 1px solid #ddd !important;
 	border-right: 1px solid #ddd !important;
 	border-bottom: 1px solid #ddd !important;
-	box-shadow:0 0 10px #ccc inset;
-	/*border-radius:0 0 4px 4px;*/
 	background-color:#f5f5f5;
-	padding:5px;
 	padding-top:0;
 	margin: 0;
 }
@@ -1365,10 +1363,8 @@ div.table_frame .table_list {
 }
 #messageindex, #mlist, .mlist {
 	clear: both;
-	padding:3px;
-	border:1px solid #ddd;
-	border-radius:4px;
 	margin:5px 0;
+	padding:5px;
 }
 #moderationbuttons {
 	overflow: hidden;
@@ -1439,9 +1435,9 @@ div#pollmoderation {
 	clear: both;
 }
 .posts_container {
-	padding:0 10px 10px 10px;
-	background:#e2e2ea;
-	border:1px solid #ddd;
+	padding:5px;
+	padding-top:0;
+	margin:5px 0;
 }
 p#whoisviewing {
 	margin: 0;
@@ -1451,11 +1447,6 @@ p#whoisviewing {
 	width: auto;
 	background-color: #f2f2f2;
 	padding:0;
-	border:1px solid #ddd;
-	border-top:0;
-	border-bottom:0;
-	/*margin-bottom:10px;
-	border-radius:3px;*/
 }
 .post_wrapper.approval, .approval .post_content {
 	background-color: rgb(250, 233, 216);
@@ -1517,6 +1508,7 @@ div.userbit_compact_textpart {
 	margin-right:10px;
 	border-radius:5px;
 	margin-top:5px;
+	border:1px solid #ddd;
 }
 .post_content.commentstyle {
 	margin:5px;
@@ -1596,10 +1588,6 @@ div.userbit_compact_textpart {
 	min-height: 26px;
 	max-height: 26px;
 	line-height: 26px;
-	/*background: #c9d8dd url(../images/clipsrc.png) 0 -175px repeat-x;*/
-	/*background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;*/
-	margin-left:-10px;
-	margin-right:-10px;
 	font-size:12px;
 	background:#e2e2ea;
 }
@@ -2290,7 +2278,10 @@ tr.titlebg td {
 	min-height: 600px;
 	border-right: 1px solid #F8DA8B;
 }
-
+#boardindex_table {
+	padding:3px;
+	margin:0 0 5px 0;
+}
 #boardindex_table .cat_bar2 img {
 	margin-top:4px;
 }
@@ -2379,6 +2370,7 @@ tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td {
 table.topic_table {
 	width: 100%;
 	border-spacing: 0;
+	background:#f2f2fa;
 }
 
 table.topic_table td {
@@ -3319,6 +3311,11 @@ table.cleantop {
 	padding: 2px 4px;
 }
 
+.framed_region {
+	border:1px solid #ccf;
+	border-radius:4px;
+	background:#e2e2ea;
+}
 span.arrow {
 	line-height: 16px;
 	background: transparent url(../images/theme/sprite.png) left -457px no-repeat !important;
@@ -3340,7 +3337,7 @@ span.arrow {
 
 /* page links (navpages) */
 
-a.navPages, .pagelinks span.current {
+a.navPages, .pagelinks span.current, .pagelinks span.prefix {
 	display:inline-block;
 	line-height:17px;
 	text-align:center;
@@ -3349,19 +3346,33 @@ a.navPages, .pagelinks span.current {
 	padding:0 4px;
 	font-size: 11px;
 	border: 1px solid #A6C5D9;
-	border-radius: 2px;
 	cursor: pointer;
 	background: #f2f2f2 url(../images/clipsrc.png) 0 -139px repeat-x;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
-	box-sizing: border-box; 	
+	box-sizing: border-box;
 	color: #777;
 	font-family:Tahoma,sans-serif;
 	font-style: normal !important;
+	margin-right:-2px;
+}
+a.navPages.compact {
+	border:0;
+	background:transparent;
+	margin:0;
+	padding:0;
+	color:blue !important;
 }
 a.navPages:hover {
 	text-decoration:none;
 	background-color:#fff;
+}
+.pagelinks span.prefix {
+	margin-right:2px;
+}
+.pagelinks span.prefix.drop {
+	background: #f2f2f2 url(../images/theme/sprite.png) 0 4px no-repeat;
+	padding-left:20px;
 }
 .pagelinks span.current {
 	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;
@@ -3370,6 +3381,12 @@ a.navPages:hover {
 }
 a.navPages.topdown {
 	width:auto !important;
+}
+#directpager_pagenr, #directpager_submit {
+	padding:0;
+	font-size:11px;
+	margin:0 3px;
+	border:1px solid #ccc;
 }
 span.small_avatar img, li.medium_avatar img {
 	height: 32px;
@@ -3532,13 +3549,13 @@ span.mcard {
 
 div.likebar {
 	font-size: 11px;
-	padding: 2px 0;
+	padding: 2px 4px;
 	min-height: 18px;
 	line-height: 18px;
 	margin:10px 0 0 0;
 	border: 1px solid #d5ecfa;
-	border-left:none;
-	border-right:none;
+	border-radius:4px;
+	background-color: #f2f5fe;
 }
 div#ajaxbusy {
 	border: 2px solid white;

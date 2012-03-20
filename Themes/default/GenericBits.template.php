@@ -140,7 +140,6 @@ function template_boardbit(&$board)
 
 function template_topicbit(&$topic)
 {
-	global $alternate;
 	global $context, $settings, $options, $txt, $scripturl, $modSettings;
 
 	// Is this topic pending approval, or does it have any posts pending approval?

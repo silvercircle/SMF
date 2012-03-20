@@ -16,7 +16,7 @@ function template_main()
 	global $context, $settings, $options, $txt, $scripturl, $modSettings;
 
 	echo $context['template_hooks']['boardindex']['above_boardlisting'],'
-	<div id="boardindex_table">';
+	<div id="boardindex_table" class="framed_region">';
 	/* Each category in categories is made up of:
 	id, href, link, name, is_collapsed (is it collapsed?), can_collapse (is it okay if it is?),
 	new (is it new?), collapse_href (href to collapse/expand), collapse_image (up/down image),

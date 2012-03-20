@@ -221,7 +221,7 @@ function template_main()
 				</div>';
 			}
 			echo $context['num_replies'], ' Replies<div class="clear"></div>
-				<div class="posts_container commentstyle">';
+				<div class="posts_container framed_region commentstyle">';
 		}
 	}
 	echo '

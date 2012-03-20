@@ -143,7 +143,7 @@ function template_folder()
 	}
 
 	// Got some messages to display?
-	echo '<div class="posts_container">';
+	echo '<div class="posts_container framed_region">';
 	if ($context['get_pmessage']('message', true))
 	{
 		// Show a few buttons if we are in conversation mode and outputting the first message.

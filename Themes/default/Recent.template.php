@@ -21,9 +21,9 @@ function template_main()
 				,$txt['recent_posts'],'
 		</h1>
 		<div class="pagelinks">
-			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
+			<span>',$context['page_index'], '</span>
 		</div>
-		<div class="posts_container">';
+		<div class="posts_container framed_region">';
 
 	foreach ($context['posts'] as &$post)
 		template_postbit_compact($post);
@@ -31,7 +31,7 @@ function template_main()
 	echo '
 		</div>
 		<div class="pagelinks">
-			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
+			<span>', $context['page_index'], '</span>
 		</div>
 	</div>';
 }
