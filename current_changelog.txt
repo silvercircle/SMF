@@ -5,4 +5,9 @@ Note: this is just a memo pad to record changes and prepare the posts for the de
 [li](ux) it is now possible to directly enter a page number by clicking on the pager prefix.[/li]
 [li](core) the full page index (with all page links visible at the same time) was removed (compactTopicPagesEnable setting also removed).[/li]
 [li](ux) wrap various areas (boardindex, sidebar, message index and most other table-like content) within additional containers to allow more flexible styling.[/li]
+
+
+[li](ux) Images now have a subtle border + some padding to protect against spammers using invisible images for all kind of malicious stuff. The border will always be visible and reveal the existance of the image.[/li]
+[li](core) Converted more AJAX requests to the generic response handler.[/li]
+[li](core) Implemented logic for private response handlers.[/li]
 [/list]

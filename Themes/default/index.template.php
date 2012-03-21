@@ -164,6 +164,7 @@ function template_body_above()
 		$astream_link = '<a data-board="'.$context['current_board'].'" href="'.$scripturl . '?action=astream;sa=get;b=' . $context['current_board']. '">Recent activity</a>';
 	}
 	echo '
+	<div id="__t_script" style="display:none;"></div>
 	<div id="jsconfirm" style="width:450px;" class="jqmWindow"><div class="jqmWindow_container"><div class="glass jsconfirm title"></div><div class="jsconfirm content"></div><div class="floatright mediummargin"><input type="submit" id="c_yes" value="Yes" class="button_submit" /><input type="reset" id="c_no" value="No" class="button_reset" /><input type="submit" id="c_ok" value="Ok" class="button_submit" /></div><div class="clear"></div></div></div>
 	<div id="ajaxbusy" style="display:none;"><img src="',$settings['images_url'],'/ajax-loader.gif" alt="loader" /></div>
 	<div id="mcard" style="display:none;"><div onclick="mcardClose();" id="mcard_close">X</div><div id="mcard_inner"></div></div>
@@ -212,7 +213,35 @@ function template_body_above()
 	// Custom banners and shoutboxes should be placed here, before the linktree.
 
 	theme_linktree();
+	if(isset($context['need_pager_script_fragment'])) {
+		$pager_entry_script = <<<EOT
+	jQuery(document).ready(function() {
+		$('.pagelinks .prefix').click(function() {
+			if($('#directpager').length <= 0) {
+				$(this).attr('data-save', $(this).html());
+				$(this).html('<form action="' + $(this).attr('data-urltemplate') + '" id="directpager" method="post">{$txt["page_go_to"]}<input name="directpager_pagenr" id="directpager_pagenr" size=3 /></form>');
+				$('#directpager_pagenr').focus();
+			}
+			$('#directpager').submit(function() {
 
+				var newstart = (parseInt($('#directpager_pagenr').val()) - 1) * parseInt($(this).parent().attr('data-perpage'));
+				if(newstart < 0)
+					newstart = 0;
+				$(this).attr('action', $(this).attr('action').replace(/\[\[PAGE\]\]/g, newstart));
+				$(this).submit();
+				return(false);
+			});
+		});
+
+		$('.pagelinks .prefix').live('mouseleave',function(event) {
+			$(this).html($(this).attr('data-save'));
+		});
+		return;
+	});
+EOT;
+		registerFooterScriptFragment('pager_entry', $pager_entry_script);
+
+	}
 	$sidebar_allowed = isset($context['is_board_index']);			// todo: make this more flexible and define a set of pages where the sidebar can show up
 	$sidebar_vis = (isset($_COOKIE['smf_sidebar_disabled']) && $_COOKIE['smf_sidebar_disabled'] == 1) ? false : true;
 	if($sidebar_allowed)

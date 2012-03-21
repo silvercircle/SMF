@@ -298,8 +298,14 @@ function template_main()
 
 function template_ajaxresponse_whoposted()
 {
-	global $context, $txt, $scripturl;
+	global $context, $txt;
 
+	echo '<', '?xml version="1.0" encoding="UTF-8"?', '>
+<document>
+ <response open="default_overlay" width="auto" offset="-150" />
+ <content>
+ <![CDATA[
+';
 	echo '
 		<div class="title_bar">
 			<h1>',$txt['who_posted'],'</h1>
@@ -317,6 +323,9 @@ function template_ajaxresponse_whoposted()
 			<dd class="righttext">',$poster['count'], '</dd>';
 	}
 	echo '</dl>
-	</div>';
+	</div>
+	]]>
+ </content>
+</document>';
 }
 ?>

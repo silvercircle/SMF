@@ -1325,7 +1325,7 @@ jQuery(document).ready(function() {
 	});
 	$('img.resize_1').live('mouseenter', function(event) {
 		var resizer = $(this).prev();
-		resizer.css({'position':'absolute', 'width': $(this).width(), 'left': $(this).position().left});
+		resizer.css({'position':'absolute', 'width': $(this).width(), 'left': $(this).position().left + 3, 'top': $(this).position().top + 3});
 		resizer.show();
 	});
 	$('div.bbc_img_resizer').click(function() {
@@ -1428,7 +1428,7 @@ function getNotifications(el)
 {
 	if($('#notify_wrapper').length > 0)		// it already exists in the dom tree
 		return;
-	sendRequest('action=astream;sa=notifications', el);
+	sendRequest('action=astream;sa=notifications', null);
 }
 
 function getAStream(el)
@@ -1491,7 +1491,7 @@ function whoPosted(el)
 {
 	var t = el.attr('data-topic');
 	if(t)
-		sendRequest('action=xmlhttp;sa=whoposted;t=' + t, el);
+		sendRequest('action=xmlhttp;sa=whoposted;t=' + t, null);
 	return(false);
 }
 
@@ -1611,6 +1611,7 @@ function openResult(html, width, offset)
 
 	el.css({'width': parseInt(width) > 0 ? width : 'auto', "position": 'fixed', 'z-index': '10000'});
 	centerElement(el, offset);
+	$('div#mcard_inner abbr.timeago').timeago();
 	el.show();
 }
 
@@ -1634,13 +1635,30 @@ function response_xml(responseXML)
 				Eos_Alert(title, msg);
 				return(false);
 			}
+			var content = data.find('content').text();
+			/*
+			 * how private handlers work:
+			 *
+			 * the response must define a script in the <handler> element (separated from <content>).
+			 * This *has* to be a function and the <handler> must NOT contain <script> tags, just the
+			 * code.
+			 * The entry function must accept a single parameter (the <content>) and its name must
+			 * be defined in the fn attribute of the <response> element.
+			 * this callback function is then responsible for all further DOM manipulations to
+			 * display the response content.
+			 */
+			if(_r.attr('open') == 'private_handler') {
+				var handler = data.find('handler').text();
+				var fn = _r.attr('fn');
+				$('#__t_script').html('<script>' + handler + '</script>');
+				window[fn](content);
+				return(false);
+			}
 			var width = _r.attr('width') || '300px';
 			var offset = parseInt(_r.attr('offset')) || 0;
-			var content = data.find('content').text();
 			openResult(content, width, offset);
 			return(false);
 		}
-   		$('div#mcard_inner abbr.timeago').timeago();
 		return(false);
 	} catch(e) {
 		Eos_Alert('XmlHTTP Request', 'Unknown or unspecified error in response document.');
@@ -1654,25 +1672,6 @@ function response(ele, responseText)
 {
 	try {
 		setBusy(0);
-		if(ele.attr('id') == 'notification_anchor') {
-			var wrapper = $('<div id="notify_wrapper" class="popup_wrapper"></div>');
-			wrapper.html(responseText);
-			$('#notification_target').append(wrapper);
-			$('div.inlinePopup abbr.timeago').timeago();
-			$('#notificationsBody').live('mouseleave',function(event) {
-				$('#notify_wrapper').remove();
-			});
-			return;
-		}
-		if(ele.attr('class') == 'whoposted') {
-			openResult(responseText, 0, 0);
-			return;
-		}
-		if(ele.attr('class') == 'tpeek') {
-			openResult(responseText, '710px', 0);
-    		$('div#mcard_inner abbr.timeago').timeago();
-			return;
-		}
 		if(ele.attr('class') == 'givelike') {
 			var id = '#likers_msg_' + ele.attr('data-id');
 			$(id).html(responseText);

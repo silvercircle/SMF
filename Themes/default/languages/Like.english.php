@@ -9,7 +9,7 @@ $txt['like_others'] = " others</a> like this.";
 $txt['you_liker'] = "You";
 $txt['like_label'] = "Like";
 $txt['unlike_label'] = "Unlike";
-$txt['like_profile_report'] = '%s has <a href="%s">liked</a> %d posts and <a href="%s">received %d likes</a> on %d posts.';
+$txt['like_profile_report'] = '%s has <a href="%s">liked</a> %d posts and <a href="%s">received %d likes</a> on <a href="%s">%d posts</a>.';
 $txt['no_like_for_guests'] = 'You must be logged in to use this function';
 $txt['like_remove_ok'] = 'Removing is ok';
 $txt['cannot_like_own'] = 'You cannot like your own post';

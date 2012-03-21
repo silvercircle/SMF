@@ -138,7 +138,6 @@ function template_notifications_scripts()
 {
 	echo '
 	<script type="text/javascript">
-	// <![CDATA[
 	$("ol#notifylist li.unread a._m").die("click");
 	function markAllNotificationsRead()
 	{
@@ -193,7 +192,6 @@ function template_notifications_scripts()
 			$(this).attr("href", _s);
 		});
 	});
-	// ]]>
 	</script>';
 }
 
@@ -205,6 +203,12 @@ function template_notifications_xml()
 {
 	global $context, $txt, $scripturl;
 
+	echo '<', '?xml version="1.0" encoding="UTF-8"?', '>
+<document>
+ <response open="private_handler" fn="_h_notify_popup" width="500px" offset="-150" />
+ <content>
+ <![CDATA[
+';
 	echo '
 	<div class="inlinePopup notifications" id="notificationsBody">
 	<div class="cat_bar2 norounded">
@@ -239,9 +243,36 @@ function template_notifications_xml()
 	</dl>
 	</div>';
 	echo '
-	</div>';
+	</div>
+	';
 	template_notifications_scripts();
+	echo '
+	]]>
+ </content>';
+echo <<<EOT
+ <handler>
+ <![CDATA[
+	function _h_notify_popup(content)
+	{
+	var wrapper = $('<div id="notify_wrapper" class="popup_wrapper"></div>');
+	wrapper.html(content);
+	$('#notification_target').append(wrapper);
+	$('div.inlinePopup abbr.timeago').timeago();
+	$('#notificationsBody').live('mouseleave',function(event) {
+		$('#notify_wrapper').remove();
+	});
+	return;
+	}
+	function test_handler()
+	{
+	alert('test');
+	}
+ ]]>
+ </handler>
+</document>
+EOT;
 }
+
 function template_notifications()
 {
 	global $context, $txt, $scripturl;

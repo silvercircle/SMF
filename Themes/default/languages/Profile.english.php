@@ -483,4 +483,5 @@ $txt['trackEdit_action_additional_groups'] = 'Additional Membergroups';
 $txt['drafts_are_disabled'] = 'Drafts are currently disabled for your profile. You can enable them on the <strong>Look and Layout</strong> settings page.';
 $txt['my_drafts'] = 'My drafts';
 $txt['member_has_no_topics'] = 'No topics started by this member were found.';
+$txt['view_full_profile'] = 'View full profile';
 ?>

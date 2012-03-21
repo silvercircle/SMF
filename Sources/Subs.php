@@ -626,32 +626,7 @@ function updateSettings($changeArray, $update = false, $debug = false)
 // $pageindex = constructPageIndex($scripturl . '?board=' . $board, $_REQUEST['start'], $num_messages, $maxindex, true);
 function constructPageIndex($base_url, &$start, $max_value, $num_per_page, $flexible_start = false, $advanced = true, $compact = false)
 {
-	global $modSettings, $txt;
-	$pager_entry_script = <<<EOT
-jQuery(document).ready(function() {
-	$('.pagelinks .prefix').click(function() {
-		if($('#directpager').length <= 0) {
-			$(this).attr('data-save', $(this).html());
-			$(this).html('<form action="' + $(this).attr('data-urltemplate') + '" id="directpager" method="post">{$txt["page_go_to"]}<input name="directpager_pagenr" id="directpager_pagenr" size=3 /></form>');
-			$('#directpager_pagenr').focus();
-		}
-		$('#directpager').submit(function() {
-
-			var newstart = (parseInt($('#directpager_pagenr').val()) - 1) * parseInt($(this).parent().attr('data-perpage'));
-			if(newstart < 0)
-				newstart = 0;
-			$(this).attr('action', $(this).attr('action').replace(/\[\[PAGE\]\]/g, newstart));
-			$(this).submit();
-			return(false);
-		});
-	});
-
-	$('.pagelinks .prefix').live('mouseleave',function(event) {
-		$(this).html($(this).attr('data-save'));
-	});
-	return;
-});
-EOT;
+	global $modSettings, $txt, $context;
 
 	// Save whether $start was less than 0 or not.
 	$start = (int) $start;
@@ -733,7 +708,7 @@ EOT;
 		$next = $start <= $max_value - $num_per_page ? sprintf($base_link, $start + $num_per_page, '>') : '';
 		$last = $start <= $max_value - 2 *  $num_per_page ? sprintf($base_link, $max_value - $num_per_page, $txt['page_last']) : '';
 		if(isset($need_direct_input))
-			registerFooterScriptFragment('pager_entry', $pager_entry_script);
+			$context['need_pager_script_fragment'] = true;
 	}
 	else
 		$prefix = $first = $prev = $next = $last = '';

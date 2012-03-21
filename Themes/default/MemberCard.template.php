@@ -53,7 +53,7 @@ function template_main()
 				<br />
 				<br />Karma: ', $member['karma']['good'];
 		echo '
-				<br />Posts: <a class="important" href="',URL::parse('?action=profile;area=showposts;u='.$member['id']),'">', $member['posts'];
+				<br />',$txt['posts'],': <a class="important" href="',URL::parse('?action=profile;area=showposts;u='.$member['id']),'">', $member['posts'];
 		echo '
 			</td>';
 		echo '
@@ -90,18 +90,18 @@ function template_main()
 			echo '
 			',implode(', ', $loc), '<br />';
 		echo '
-			Member since: ', $member['registered'],'<br />';
+			',$txt['date_registered'],': ', $member['registered'],'<br />';
 		echo '
-			<br>',sprintf($txt['like_profile_report'], $member['name'], URL::parse('?action=profile;area=showposts;sa=likesout;u=' . $member['id']), $member['likesgiven'], URL::parse('?action=profile;area=showposts;sa=likes;u=' . $member['id']), $member['liked'], $member['posts']), '
+			<br>',sprintf($txt['like_profile_report'], $member['name'], URL::parse('?action=profile;area=showposts;sa=likesout;u=' . $member['id']), $member['likesgiven'], URL::parse('?action=profile;area=showposts;sa=likes;u=' . $member['id']), $member['liked'], URL::parse('?action=profile;area=showposts;u=' . $member['id']), $member['posts']), '
 			<br>
 			<br>';
 		
 		if($member['online']['is_online'])
 			echo '
-			',$member['name'], ' is <strong style="color:red;">online</strong>';
+			<strong style="color:green;">',$txt['online'],'</strong>';
 		else
 			echo '
-			Last activity: ',$member['last_login'];
+			',$txt['lastLoggedIn'],': ',$member['last_login'];
 		echo '
 			</div>
 			</td>
@@ -109,7 +109,7 @@ function template_main()
 	</table>';
 		echo '
 	<div class="cat_bar">
-		<div style="position:absolute;bottom:3px;right:8px;"><a href="',URL::parse('?action=profile;u='.$member['id']),'">View full profile</a>
+		<div style="position:absolute;bottom:3px;right:8px;"><a href="',URL::parse('?action=profile;u='.$member['id']),'">',$txt['view_full_profile'],'</a>
 	</div>
 	<div class="clear">	</div>
 	</div>';
