@@ -578,6 +578,9 @@ function EditBoard2()
 
 	$_POST['boardid'] = (int) $_POST['boardid'];
 
+	// invalidate the cache for cached board names (pretty URLs)
+	CacheAPI::putCache('simplesef_board_list', null, 0);
+
 	// Mode: modify aka. don't delete.
 	if (isset($_POST['edit']) || isset($_POST['add']))
 	{

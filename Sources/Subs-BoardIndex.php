@@ -45,7 +45,7 @@ function getBoardIndex($boardIndexOptions)
 			c.id_cat, c.name AS cat_name, c.description AS cat_desc,' : '') . '
 			b.id_board, b.name AS board_name, b.description, b.redirect, b.icon AS boardicon,
 			CASE WHEN b.redirect != {string:blank_string} THEN 1 ELSE 0 END AS is_redirect,
-			b.num_posts, b.num_topics, b.unapproved_posts, b.unapproved_topics, b.id_parent,
+			b.num_posts, b.num_topics, b.unapproved_posts, b.unapproved_topics, b.id_parent, b.allow_topics,
 			IFNULL(m.poster_time, 0) AS poster_time, IFNULL(mem.member_name, m.poster_name) AS poster_name,
 			m.subject, m1.subject AS first_subject, m.id_topic, t.id_first_msg AS id_first_msg, t.id_prefix, m1.icon AS icon, IFNULL(mem.real_name, m.poster_name) AS real_name, p.name as topic_prefix,
 			' . ($user_info['is_guest'] ? ' 1 AS is_read, 0 AS new_from,' : '
@@ -152,7 +152,8 @@ function getBoardIndex($boardIndexOptions)
 					'unapproved_posts' => $row_board['unapproved_posts'] - $row_board['unapproved_topics'],
 					'can_approve_posts' => !empty($user_info['mod_cache']['ap']) && ($user_info['mod_cache']['ap'] == array(0) || in_array($row_board['id_board'], $user_info['mod_cache']['ap'])),
 					'href' => $href,
-					'link' => '<a href="' . $href . '">' . $row_board['board_name'] . '</a>'
+					'link' => '<a href="' . $href . '">' . $row_board['board_name'] . '</a>',
+					'act_as_cat' => $row_board['allow_topics'] ? false : true
 				);
 			}
 			if (!empty($row_board['id_moderator']))
@@ -189,7 +190,8 @@ function getBoardIndex($boardIndexOptions)
 				'unapproved_posts' => $row_board['unapproved_posts'] - $row_board['unapproved_topics'],
 				'can_approve_posts' => !empty($user_info['mod_cache']['ap']) && ($user_info['mod_cache']['ap'] == array(0) || in_array($row_board['id_board'], $user_info['mod_cache']['ap'])),
 				'href' => $href,
-				'link' => '<a href="' . $href . '">' . $row_board['board_name'] . '</a>'
+				'link' => '<a href="' . $href . '">' . $row_board['board_name'] . '</a>',
+				'act_as_cat' => $row_board['allow_topics'] ? false : true
 			);
 
 			// Counting child board posts is... slow :/.

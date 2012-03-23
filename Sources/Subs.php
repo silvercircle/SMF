@@ -699,7 +699,7 @@ function constructPageIndex($base_url, &$start, $max_value, $num_per_page, $flex
 
 	// construct advanced pagination (first, prev, next, last) links
 	if($advanced) {
-		$data_url = strtr($base_url, array('%1$d' => '[[PAGE]]'));
+		$data_url = strtr($base_url, array('%1$d' => '[[PAGE]]'));		// [[PAGE]] is the placeholder for the JS code to generate the final URL
 		if(false === strstr($data_url, '[[PAGE]]'))			// non-pretty url, append the ;start=
 			$data_url = $base_url . ';start=[[PAGE]]';
 		$prefix = sprintf('<span data-perpage="'.$num_per_page.'" data-urltemplate="'.$data_url.'" class="prefix'.(isset($need_direct_input) ? ' drop" title="Click to enter page number"' : '"').'>'.$txt['page_x_of_n'].'</span>', $start / $num_per_page + 1, $max_value / $num_per_page + 1);

@@ -134,6 +134,9 @@ h1, h2, h3, h4, h5, h6 {
 	margin: 0;
 	padding: 0;
 }
+h4 {
+	font-weight:normal;
+}
 fieldset {
 	padding: 1em;
 	margin: 10px;
@@ -186,6 +189,9 @@ em {
 .smalltext {
 	font-size: 9pt;
 }
+.tinytext {
+	font-size:11px;
+}
 .centertext {
 	margin: 0 auto;
 	text-align: center;
@@ -202,6 +208,9 @@ em {
 }
 .padding {
 	padding: 0.7em;
+}
+.lowcontrast {
+	color:#777;
 }
 .main_section, .lower_padding {
 	padding-bottom: 0.5em;
@@ -1010,14 +1019,21 @@ ul#navigation li {
 #sbtoggle {
 	float: right;
 	position: relative;
-	right: -20px;
+	right: -28px;
 	top: -10px;
-	width: 14px;
-	height: 20px;
+	width: 20px;
+	height: 40px;
 	background: white;
 	border-radius: 0 4px 4px 0;
 	cursor: pointer;
-	margin-bottom: -20px;
+	margin-bottom: -40px;
+	background:transparent;
+}
+#sbtoggle.expand {
+	background: transparent url(../images/clipsrc.png) -152px 0 no-repeat;
+}
+#sbtoggle.collapse {
+	background: transparent url(../images/clipsrc.png) -179px 0 no-repeat;
 }
 /* the main title, always stay at 45 pixels in height! */
 h1.forumtitle {
@@ -1241,9 +1257,8 @@ ol.commonlist > li:last-child {
 	border-bottom:none;
 }
 ol.commonlist.category {
-	border-left: 1px solid #ddd !important;
-	border-right: 1px solid #ddd !important;
-	border-bottom: 1px solid #ddd !important;
+	border: 1px solid #ddd !important;
+	border-top:0 !important;
 	background-color:#f5f5f5;
 	padding-top:0;
 	margin: 0;
@@ -1251,7 +1266,18 @@ ol.commonlist.category {
 
 ol.commonlist.category li {
 	line-height: 16px;
-	padding:5px;
+	background: rgb(255,255,255);
+	background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(243,243,243,1) 52%, rgba(237,237,237,1) 100%, rgba(255,255,255,1) 100%);
+	background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(243,243,243,1) 52%,rgba(237,237,237,1) 100%,rgba(255,255,255,1) 100%);
+	background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(243,243,243,1) 52%,rgba(237,237,237,1) 100%,rgba(255,255,255,1) 100%);
+	background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(243,243,243,1) 52%,rgba(237,237,237,1) 100%,rgba(255,255,255,1) 100%);
+	border-bottom:2px solid ridge;
+}
+ol.commonlist.category li.boardrow {
+	padding:5px 10px;
+}
+ol.commonlist.category li.subcatrow {
+	padding:2px;
 }
 ol.commonlist.notifications {
 	box-shadow: none !important;
@@ -1296,7 +1322,7 @@ ol.category > li div.lastpost {
 	right:0;
 	top:0;
 	line-height:16px;
-	/*text-overflow:ellipsis; todo: this is slow on firefox :/ */
+	/*text-overflow:ellipsis; todo: this is sloooooooow on firefox :/ */
 }
 
 ol.category > li div.stats {
@@ -1318,7 +1344,9 @@ ol.category > li > div.info h3 {
 	display: inline;
 	font-size: 105%;
 }
-
+ol.category > li > div.info.subcat {
+	padding-right:0;
+}
 .unreadlink {
 	float:right;
 	margin-right:20px;
@@ -1539,6 +1567,7 @@ div.userbit_compact_textpart {
 	font-size: 115%;
 	padding: 1px 3px;
 	line-height:26px;
+	font-weight:bold;
 }
 
 .poster h4 a {
@@ -2302,17 +2331,21 @@ tr.titlebg td {
 }
 .cContainer_header, .cat_bar2 {
 	margin-bottom: 0;
-	background: #a0a0a0 url(../images/clipsrc.png) 0 -99px repeat-x;
-	border:0 !important;
-	height:26px !important;
-	line-height:26px;
+	background: #fff url(../images/theme/sprite.png) 0 -614px repeat-x;
+	/*background: #a0a0a0 url(../images/clipsrc.png) 0 -99px repeat-x;*/
+	border:0;
+	border-left:1px solid #ccc;
+	border-right:1px solid #ccc;
+	height:25px !important;
+	line-height:25px;
 	padding: 0 10px;
 	border-radius:2px 2px 0 0;
 }
 .cContainer_header a, .cat_bar2 a, .cContainer_header h3, .cat_bar2 h3 {
 	color: #555;
-	font-weight:normal;
+	font-weight:bold;
 	text-shadow:1px 1px 1px white;
+	font-size:1.05em;
 }
 .cContainer_header img {
 	margin-top:4px;
@@ -2325,9 +2358,10 @@ li.cat_desc {
 	padding:0 5px 2px 5px;
 }
 li.cat_desc > h3 {
-	color:#888;
+	color:#555;
 	text-shadow:1px 1px 1px white;
-	font-size:0.9em;
+	font-size:11px;
+	font-weight:normal;
 }
 #mcard .title_bar {
 	/*background: #377AD8 url(../images/theme/sprite.png) 0 -839px repeat-x;*/
@@ -2419,7 +2453,7 @@ td.lastpost img, div.lastpost img {
 	vertical-align: middle;
 }
 
-td.lastpost > a.lp_link, div.lastpost > a.lp_link {
+a.lp_link {
 	line-height: 16px;
 	background: transparent url(../images/theme/sprite.png) right -457px no-repeat !important;
 	margin-right: -20px;
@@ -2431,7 +2465,6 @@ td.lastpost > a.lp_link, div.lastpost > a.lp_link {
 
 td.lastpost, div.lastpost {
 	white-space: nowrap;
-	padding-right: 10px !important;
 }
 
 .topic_table td.lastpost {
@@ -3284,7 +3317,6 @@ div.cContainer_end {
 	background: -o-linear-gradient(top, rgba(247,246,232,1) 0%,rgba(247,246,232,0.74) 37%,rgba(237,244,129,0.3) 100%);
 	background: -ms-linear-gradient(top, rgba(247,246,232,1) 0%,rgba(247,246,232,0.74) 37%,rgba(237,244,129,0.3) 100%);
 }
-
 .red_container {
 	background-color: #FFF2F2;
 	border: 1px solid #FFCACA;
@@ -3714,7 +3746,11 @@ a.fnote_ref {
 	clip: rect(1px 83px 25px 59px);
 	left: -59px;
 }
-
+._subcat {
+	clip: rect(31px 130px 55px 106px);
+	left: -106px;
+	top: -31px;
+}
 ._page {
 	clip: rect(1px 112px 25px 88px);
 	left: -88px;

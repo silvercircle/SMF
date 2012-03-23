@@ -1522,12 +1522,13 @@ function sbToggle(el)
 {
 	// side bar (toggle, animate, load content via ajax request)
 	var is_visible = ($('#sidebar').css('display') == 'none' ? false : true);
+	$('#sbtoggle').removeClass('expand collapse');
 	if(is_visible) {
 		$('#sidebar').fadeOut(200, function() {
 			$('#container').animate({marginRight: '0'}, 50);
 		});
 		createCookie('smf_sidebar_disabled', 1, 300);
-		$('#sbtoggle').html('&nbsp;&lt;');
+		$('#sbtoggle').addClass('expand');
 	}
 	else {
 		//if(!sidebar_content_loaded)
@@ -1536,7 +1537,7 @@ function sbToggle(el)
 			$('#sidebar').fadeIn();
 		});
 		createCookie('smf_sidebar_disabled', 0, 300);
-		$('#sbtoggle').html('&nbsp;&gt;');
+		$('#sbtoggle').addClass('collapse');
 	}
 	return(false);
 }

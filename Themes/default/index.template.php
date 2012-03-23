@@ -246,7 +246,7 @@ EOT;
 	$sidebar_vis = (isset($_COOKIE['smf_sidebar_disabled']) && $_COOKIE['smf_sidebar_disabled'] == 1) ? false : true;
 	if($sidebar_allowed)
 		echo '
-			<div onclick="sbToggle($(this));" id="sbtoggle">',$sidebar_vis ? '&nbsp;&gt;' : '&nbsp;&lt;','</div>';
+			<div onclick="sbToggle($(this));" id="sbtoggle" class="',$sidebar_vis ? 'collapse' : 'expand','">&nbsp;</div>';
 	// Show the navigation tree.
 	echo '<div style="position:relative;">
 		  <form onmouseout="return false;" onsubmit="submitSearchBox();" class="floatright" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="UTF-8">';
@@ -763,7 +763,7 @@ function template_sidebar_content()
 				echo '
 				<li class="smallpadding">
 					<a href = "',$post['href'],'" title = "',$post['subject'],'">',$post['short_subject'],'</a><br>
-					<span class="nowrap floatright">', $post['time'], '</span><strong>', $post['poster']['link'],'</strong><br>
+					<span class="nowrap floatright tinytext">', $post['time'], '</span><strong class="tinytext">', $post['poster']['link'],'</strong><br>
 				</li>';
 			echo '
 				</ol>';

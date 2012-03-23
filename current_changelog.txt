@@ -1,13 +1,9 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li](ux) constructPageIndex() can now create more advanced paging links, including first/prev/next/last links[/li]
-[li](ux) it is now possible to directly enter a page number by clicking on the pager prefix.[/li]
-[li](core) the full page index (with all page links visible at the same time) was removed (compactTopicPagesEnable setting also removed).[/li]
-[li](ux) wrap various areas (boardindex, sidebar, message index and most other table-like content) within additional containers to allow more flexible styling.[/li]
-
-
-[li](ux) Images now have a subtle border + some padding to protect against spammers using invisible images for all kind of malicious stuff. The border will always be visible and reveal the existance of the image.[/li]
-[li](core) Converted more AJAX requests to the generic response handler.[/li]
-[li](core) Implemented logic for private response handlers.[/li]
+[li](ux) new style for sidebar collapser[/li]
+[li](ux) updated styling for board index and sub-categories (boards acting as categories)[/li]
+[li](core) invalidate SEF boardname cache when applying changes to the board configuration[/li]
+[li](ux) new subtle CSS3 gradients (boardindex, messageindex)[/li]
+[li](ux) always use the "new post" overlay image instead of different images[/li]
 [/list]

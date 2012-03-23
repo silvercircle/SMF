@@ -57,20 +57,12 @@ function template_main()
 			<h3>',$category['desc'],'</h3>
 			</li>';
 
-		/*echo '
-			<li class="brow glass cleantop">
-				<div class="floatright centertext lastpost">',$txt['last_post'],'</div>
-				<div class="floatright centertext stats">',$txt['content_label'],'</div>
-				<div class="centertext">',$txt['board'],'</div>
-			</li>
-			';*/
 			$context['alternate'] = 1;
 			foreach ($category['boards'] as &$board)
 				template_boardbit($board);
 		echo '
 			</ol>
 			<div class="cContainer_end"></div>';
-		//}
 	}
 	echo '
 	</div>';
@@ -88,7 +80,14 @@ function template_main()
 		echo '
 		<table>
 		<tr>
-			<td><div class="csrcwrapper24px"><img class="clipsrc _on" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['new_posts'], '</td>
+			<td>
+			<div>
+				<div style="left:-25px;margin-right:-25px;" class="csrcwrapper24px"><img class="clipsrc _off" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" />
+			    <img alt="" style="position:absolute;bottom:-4px;right:-28px;" src="',$settings['images_url'], '/new.png" />
+				</div>
+			</div>
+			</td>
+			<td class="nowrap smalltext" style="padding-left:28px;">', $txt['new_posts'], '</td>
 			<td><div class="csrcwrapper24px"><img class="clipsrc _off" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['old_posts'], '</td>
 			<td><div class="csrcwrapper24px"><img class="clipsrc _redirect" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['redirect_board'], '</td>
 			<td><div class="csrcwrapper24px"><img class="clipsrc _page" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['a_page'], '</td>
