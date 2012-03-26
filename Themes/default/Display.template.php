@@ -264,6 +264,27 @@ function template_main()
 		</div>
 		<a id="lastPost"></a>';
 			
+	$remove_url = $scripturl . '?action=removetopic2;topic=' . $context['current_topic'] . '.0;' . $context['session_var'] . '=' . $context['session_id'];
+	$mod_buttons = array(
+		'move' => array('test' => 'can_move', 'text' => 'move_topic', 'image' => 'admin_move.gif', 'lang' => true, 'url' => $scripturl . '?action=movetopic;topic=' . $context['current_topic'] . '.0'),
+		'delete' => array('test' => 'can_delete', 'text' => 'remove_topic', 'image' => 'admin_rem.gif', 'lang' => true, 'custom' => 'onclick="return Eos_Confirm(\'\',\'' . $txt['are_sure_remove_topic'] . '\',\''.$remove_url.'\');"', 'url' => $remove_url),
+		'lock' => array('test' => 'can_lock', 'text' => empty($context['is_locked']) ? 'set_lock' : 'set_unlock', 'image' => 'admin_lock.gif', 'lang' => true, 'url' => $scripturl . '?action=lock;topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
+		'sticky' => array('test' => 'can_sticky', 'text' => empty($context['is_sticky']) ? 'set_sticky' : 'set_nonsticky', 'image' => 'admin_sticky.gif', 'lang' => true, 'url' => $scripturl . '?action=sticky;topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
+		'merge' => array('test' => 'can_merge', 'text' => 'merge', 'image' => 'merge.gif', 'lang' => true, 'url' => $scripturl . '?action=mergetopics;board=' . $context['current_board'] . '.0;from=' . $context['current_topic']),
+		'calendar' => array('test' => 'calendar_post', 'text' => 'calendar_link', 'image' => 'linktocal.gif', 'lang' => true, 'url' => $scripturl . '?action=post;calendar;msg=' . $context['topic_first_message'] . ';topic=' . $context['current_topic'] . '.0'),
+	);
+
+	// Restore topic. eh?  No monkey business.
+	if ($context['can_restore_topic'])
+		$mod_buttons[] = array('text' => 'restore_topic', 'image' => '', 'lang' => true, 'url' => $scripturl . '?action=restoretopic;topics=' . $context['current_topic'] . ';' . $context['session_var'] . '=' . $context['session_id']);
+
+	// Allow adding new mod buttons easily.
+	HookAPI::callHook('integrate_mod_buttons', array(&$mod_buttons));
+
+	echo '
+		<div id="moderationbuttons">', template_button_strip($mod_buttons, 'right', array('id' => 'moderationbuttons_strip', 'class' => 'plainbuttonlist')), '</div>';
+
+
 	if ($context['can_reply'] && !empty($options['display_quick_reply']))
 	{
 		$collapser = array('id' => 'quickReplyOptions', 'title' => $txt['quick_reply'], 'bodyclass' => 'flat_container mediumpadding');
@@ -344,6 +365,7 @@ function template_main()
 				</div>
 			</div>';
 	}
+
 	$context['inline_footer_script'] .= '
 	var smf_likelabel = \''.$txt['like_label'].'\';
 	var smf_unlikelabel = \''.$txt['unlike_label'].'\'
@@ -446,25 +468,6 @@ function template_main()
 	}
 	// Show the lower breadcrumbs.
 	theme_linktree();
-	$mod_buttons = array(
-		'move' => array('test' => 'can_move', 'text' => 'move_topic', 'image' => 'admin_move.gif', 'lang' => true, 'url' => $scripturl . '?action=movetopic;topic=' . $context['current_topic'] . '.0'),
-		'delete' => array('test' => 'can_delete', 'text' => 'remove_topic', 'image' => 'admin_rem.gif', 'lang' => true, 'custom' => 'onclick="return confirm(\'' . $txt['are_sure_remove_topic'] . '\');"', 'url' => $scripturl . '?action=removetopic2;topic=' . $context['current_topic'] . '.0;' . $context['session_var'] . '=' . $context['session_id']),
-		'lock' => array('test' => 'can_lock', 'text' => empty($context['is_locked']) ? 'set_lock' : 'set_unlock', 'image' => 'admin_lock.gif', 'lang' => true, 'url' => $scripturl . '?action=lock;topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
-		'sticky' => array('test' => 'can_sticky', 'text' => empty($context['is_sticky']) ? 'set_sticky' : 'set_nonsticky', 'image' => 'admin_sticky.gif', 'lang' => true, 'url' => $scripturl . '?action=sticky;topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
-		'merge' => array('test' => 'can_merge', 'text' => 'merge', 'image' => 'merge.gif', 'lang' => true, 'url' => $scripturl . '?action=mergetopics;board=' . $context['current_board'] . '.0;from=' . $context['current_topic']),
-		'calendar' => array('test' => 'calendar_post', 'text' => 'calendar_link', 'image' => 'linktocal.gif', 'lang' => true, 'url' => $scripturl . '?action=post;calendar;msg=' . $context['topic_first_message'] . ';topic=' . $context['current_topic'] . '.0'),
-	);
-
-	// Restore topic. eh?  No monkey business.
-	if ($context['can_restore_topic'])
-		$mod_buttons[] = array('text' => 'restore_topic', 'image' => '', 'lang' => true, 'url' => $scripturl . '?action=restoretopic;topics=' . $context['current_topic'] . ';' . $context['session_var'] . '=' . $context['session_id']);
-
-	// Allow adding new mod buttons easily.
-	HookAPI::callHook('integrate_mod_buttons', array(&$mod_buttons));
-
-	echo '
-			<div id="moderationbuttons">', template_button_strip($mod_buttons, 'bottom', array('id' => 'moderationbuttons_strip')), '</div>';
-
 	// Show the jumpto box, or actually...let Javascript do it.
 	echo '
 			<div class="plainbox" id="display_jump_to">&nbsp;</div>';

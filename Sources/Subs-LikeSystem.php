@@ -89,7 +89,7 @@ function GiveLike($mid)
 				SET m.likes_given = (SELECT COUNT(l.id_user) FROM {db_prefix}likes AS l WHERE l.id_user = m.id_member),
 					m.likes_received = (SELECT COUNT(l1.id_receiver) FROM {db_prefix}likes AS l1 WHERE l1.id_receiver = m.id_member)
 				WHERE m.id_member = {int:owner} OR m.id_member = {int:receiver}', array('owner' => $like_owner, 'receiver' => $like_receiver));
-			updateMemberData(array($like_owner, $like_receiver), array('last_login' => time()));
+			invalidateMemberData(array($like_owner, $like_receiver));
 			if($is_xmlreq) {
 				echo $output;
 				obExit(false);

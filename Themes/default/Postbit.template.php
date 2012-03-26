@@ -137,6 +137,10 @@ function template_postbit_normal(&$message)
 		if ($message['member']['can_see_warning'])
 			echo '
 		<li class="warning">', $context['can_issue_warning'] ? '<a href="' . $scripturl . '?action=profile;area=issuewarning;u=' . $message['member']['id'] . '">' : '', '<img src="', $settings['images_url'], '/warning_', $message['member']['warning_status'], '.gif" alt="', $txt['user_warn_' . $message['member']['warning_status']], '" />', $context['can_issue_warning'] ? '</a>' : '', '<span class="warn_', $message['member']['warning_status'], '">', $txt['warn_' . $message['member']['warning_status']], '</span></li>';
+
+		if (!empty($modSettings['onlineEnable']) && !$message['member']['is_guest'] && $message['member']['online']['is_online'])
+			echo '
+			<li><br>', $context['can_send_pm'] ? '<a href="' . $message['member']['online']['href'] . '">' : '', $message['member']['online']['text'], $context['can_send_pm'] ? '</a>' : '', '</li>';
 	}
 	// Otherwise, show the guest's email.
 	elseif (!empty($message['member']['email']) && in_array($message['member']['show_email'], array('yes', 'yes_permission_override', 'no_through_forum')))
@@ -258,27 +262,19 @@ function template_postbit_normal(&$message)
 	 <div class="clear_right"></div>
 	</div>';
 	echo '
-		</div>
-		<div class="clear_left"></div>
-		</div>';
-	echo '
-		<div class="post_bottom">
-		<div style="display:inline;">';
-	// Show online and offline buttons?
-	if (!empty($modSettings['onlineEnable']) && !$message['member']['is_guest'])
-		echo '
-		', $context['can_send_pm'] ? '<a href="' . $message['member']['online']['href'] . '">' : '', $message['member']['online']['text'], $context['can_send_pm'] ? '</a>' : '';
-
-	echo '
-		<span class="modified" id="modified_', $message['id'], '">';
+		<span class="modified tinytext" id="modified_', $message['id'], '">';
 	if ($settings['show_modify'] && !empty($message['modified']['name']))
 		echo '
 		<em>', $txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'], '</em>';
 	echo '
 		</span>
 		</div>
-		<div class="reportlinks">
-		<ul class="floatright reset quickbuttons" style="line-height:100%;">';
+		<div class="clear_left"></div>
+		</div>';
+	echo '
+		<div class="post_bottom">
+		<div class="reportlinks lefttext">
+		<ul class="floatright plainbuttonlist orange">';
 
 	if ($context['can_quote'] && !empty($options['display_quick_reply']))
 		echo '
@@ -325,7 +321,7 @@ function template_postbit_normal(&$message)
 	// Maybe they want to report this post to the moderator(s)?
 	if ($context['can_report_moderator'])
 		echo '
-		<a href="', $scripturl, '?action=reporttm;topic=', $context['current_topic'], '.', $message['counter'], ';msg=', $message['id'], '">', $txt['report'], '</a>';
+		<a href="',$scripturl, '?action=reporttm;topic=', $context['current_topic'], '.', $message['counter'], ';msg=', $message['id'], '">',$txt['report'], '</a>';
 
 	// Can we issue a warning because of this post?  Remember, we can't give guests warnings.
 	if ($context['can_issue_warning'] && !$message['is_message_author'] && !$message['member']['is_guest'])
@@ -335,18 +331,18 @@ function template_postbit_normal(&$message)
 	// Show the IP to this user for this post - because you can moderate?
 	if ($context['can_moderate_forum'] && !empty($message['member']['ip']))
 		echo '
-		&nbsp;&nbsp;&nbsp;IP: <a href="', $scripturl, '?action=', !empty($message['member']['is_guest']) ? 'trackip' : 'profile;area=tracking;sa=ip;u=' . $message['member']['id'], ';searchip=', $message['member']['ip'], '">', $message['member']['ip'], '</a> <a href="', $scripturl, '?action=helpadmin;help=see_admin_ip" onclick="return reqWin(this.href);" class="help">(?)</a>';
+		&nbsp;&nbsp;&nbsp;<a href="', $scripturl, '?action=', !empty($message['member']['is_guest']) ? 'trackip' : 'profile;area=tracking;sa=ip;u=' . $message['member']['id'], ';searchip=', $message['member']['ip'], '">', $message['member']['ip'], '</a>';
 	// Or, should we show it because this is you?
 	elseif ($message['can_see_ip'])
 		echo '
-		&nbsp;&nbsp;&nbsp;IP: <a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $message['member']['ip'], '</a>';
+		&nbsp;&nbsp;&nbsp;<a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $message['member']['ip'], '</a>';
 	// Okay, are you at least logged in?  Then we can show something about why IPs are logged...
 	//elseif (!$context['user']['is_guest'])
 	//	echo '
 	//						<a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $txt['logged'], '</a>';
 	echo '
-		</div><div class="clear">
-		</div></div>
+		</div>
+		</div>
 		</div>
 		',$message['template_hook']['postbit_below'];
 }
@@ -423,11 +419,14 @@ function template_postbit_lean(&$message)
 		echo '
 							<li class="email"><a href="', $scripturl, '?action=emailuser;sa=email;msg=', $message['id'], '" rel="nofollow">', ($settings['use_image_buttons'] ? '<img src="' . $settings['images_url'] . '/email_sm.gif" alt="' . $txt['email'] . '" title="' . $txt['email'] . '" />' : $txt['email']), '</a></li>';
 
-
+	echo '<div class="clear"></div>';
 	// Show the member's custom title, if they have one.
 	if (!empty($message['member']['title']))
 		echo '
 			<li class="title">', $message['member']['title'], '</li>';
+
+	if (!empty($modSettings['onlineEnable']) && !$message['member']['is_guest'])
+		echo '<div class="centertext">', $context['can_send_pm'] ? '<a href="' . $message['member']['online']['href'] . '">' : '', $message['member']['online']['text'], $context['can_send_pm'] ? '</a>' : '', '</div>';
 
 	echo '</div>
 		</div>';
@@ -534,28 +533,23 @@ function template_postbit_lean(&$message)
 		echo '<div class="likebar">
 			<div class="floatright">',$message['likelink'],'</div>
 			<span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
-			<div class="clear"></div></div>';
+			<div class="clear"></div>
+			</div>';
 
 	echo '
+		<span class="modified tinytext" id="modified_', $message['id'], '">';
+	if ($settings['show_modify'] && !empty($message['modified']['name']))
+		echo '
+			<em>', $txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'], '</em>';
+
+		echo '
+		</span>
 		</div>
 		</div>';
-	echo '<div class="post_bottom">
-			<div style="display:inline;">';
-			// Show online and offline buttons?
-			if (!empty($modSettings['onlineEnable']) && !$message['member']['is_guest'])
-				echo '', $context['can_send_pm'] ? '<a href="' . $message['member']['online']['href'] . '">' : '', $message['member']['online']['text'], $context['can_send_pm'] ? '</a>' : '';
-				
-			echo '<span class="modified" id="modified_', $message['id'], '">';
-			// Show "� Last Edit: Time by Person �" if this post was edited.
-			if ($settings['show_modify'] && !empty($message['modified']['name']))
-				echo '
-					<em>', $txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'], '</em>';
-
-				echo '
-				</span>';
-			echo '</div>
+	echo '<div class="post_bottom">';
+			echo '
 				<div class="reportlinks">
-				<ul class="floatright reset smalltext quickbuttons">';
+				<ul class="floatright plainbuttonlist orange">';
 
 	// Can they reply? Have they turned on quick reply?
 	if ($context['can_quote'] && !empty($options['display_quick_reply']))
@@ -670,12 +664,9 @@ function template_postbit_comment(&$message)
 	</ul>
 	</div>
 	<div>',
-	 $message['member']['link'],' said <span class="smalltext">&nbsp;',$message['time'], '</span>
+	 $message['member']['link'],' said<span class="smalltext">&nbsp;',$message['time'], '</span>&nbsp;-&nbsp;',$message['subject'],'
 	 <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['permahref'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span style="cursor:pointer" onclick="sharePost($(this));">Share</span>' : ''),'</span>
 	 <div id="msg_', $message['id'], '_quick_mod"></div>
-	 <h5 style="display:inline;" id="subject_', $message['id'], '">
-	  ', $message['subject'], '
-	 </h5>
 	</div>
 	</div>
 	<div class="post_content commentstyle">';
@@ -765,72 +756,66 @@ function template_postbit_comment(&$message)
 		  <span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
 		  <div class="clear">
 		</div>
-		</div>
+		</div>';
+	echo '
+		<span class="tinytext" id="modified_', $message['id'], '">';
+	if ($settings['show_modify'] && !empty($message['modified']['name']))
+		echo '
+		<em>', $txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'], '</em>';
+	echo '
+		</span>
 		</div>
 		</div>
 		<div class="smalltext" style="padding:0 20px 5px 20px;">
-		<div style="display:inline;">';
-						echo '
-		<span id="modified_', $message['id'], '">';
-						if ($settings['show_modify'] && !empty($message['modified']['name']))
-							echo '
-		<em>', $txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'], '</em>';
-
-						echo '
-		</span>
-		</div>
 		<div class="reportlinks">';
 
+	echo '<ul class="floatright plainbuttonlist orange">';
 
-	echo '<ul class="floatright quickbuttons clean">';
+	// Maybe we can approve it, maybe we should?
+	if ($message['can_approve'])
+	echo '
+		<li><a href="', $scripturl, '?action=moderate;area=postmod;sa=approve;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['approve'], '</a></li>';
+	if ($context['can_quote'] && !empty($options['display_quick_reply']))
+	echo '
+		<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '" onclick="return oQuickReply.quote(', $message['id'], ');">', $txt['quote'], '</a></li>
+		<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
+		<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
 
-// Maybe we can approve it, maybe we should?
-if ($message['can_approve'])
-echo '
-	<li><a href="', $scripturl, '?action=moderate;area=postmod;sa=approve;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['approve'], '</a></li>';
-if ($context['can_quote'] && !empty($options['display_quick_reply']))
-echo '
-	<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '" onclick="return oQuickReply.quote(', $message['id'], ');">', $txt['quote'], '</a></li>
-	<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
-	<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
+	// So... quick reply is off, but they *can* reply?
+	elseif ($context['can_quote'])
+	echo '
+		<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '">', $txt['quote'], '</a></li>
+		<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
+		<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
 
-// So... quick reply is off, but they *can* reply?
-elseif ($context['can_quote'])
-echo '
-	<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '">', $txt['quote'], '</a></li>
-	<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
-	<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
+	// Can the user modify the contents of this post?
+	if ($message['can_modify'])
+	echo '
+		<li><a rel="nofollow" onclick="oQuickModify.modifyMsg(\'', $message['id'], '\');return(false);" href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
 
-// Can the user modify the contents of this post?
-if ($message['can_modify'])
-echo '
-	<li><a rel="nofollow" onclick="oQuickModify.modifyMsg(\'', $message['id'], '\');return(false);" href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
+	// How about... even... remove it entirely?!
+	if ($message['can_remove'])
+	echo '
+		<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
+	if ($message['can_unapprove'])
+	echo '
+		<li class="approve_button"><a href="', $scripturl, '?action=moderate;area=postmod;sa=unapprove;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['unapprove'], '</a></li>';
+	if ($context['can_split'] && !empty($context['real_num_replies']))
+	echo '
+		<li><a rel="nofollow" href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '">', $txt['split'], '</a></li>';
 
-// How about... even... remove it entirely?!
-if ($message['can_remove'])
-echo '
-	<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
-if ($message['can_unapprove'])
-echo '
-	<li class="approve_button"><a href="', $scripturl, '?action=moderate;area=postmod;sa=unapprove;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['unapprove'], '</a></li>';
-if ($context['can_split'] && !empty($context['real_num_replies']))
-echo '
-	<li><a rel="nofollow" href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '">', $txt['split'], '</a></li>';
+	// Can we restore topics?
+	if ($context['can_restore_msg'])
+	echo '
+		<li><a rel="nofollow" href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['restore_message'], '</a></li>';
 
-// Can we restore topics?
-if ($context['can_restore_msg'])
-echo '
-	<li><a rel="nofollow" href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['restore_message'], '</a></li>';
+	// Show a checkbox for quick moderation?
+	if (!empty($options['display_quick_mod']) && $message['can_remove'])
+	echo '
+		<li class="inline_mod_check" style="display: none;" id="in_topic_mod_check_', $message['id'], '"></li>';
 
-// Show a checkbox for quick moderation?
-if (!empty($options['display_quick_mod']) && $message['can_remove'])
-echo '
-	<li class="inline_mod_check" style="display: none;" id="in_topic_mod_check_', $message['id'], '"></li>';
-
-echo '
-</ul>';
-
-
+	echo '
+	</ul>';
 
 	// Maybe they want to report this post to the moderator(s)?
 	if ($context['can_report_moderator'])
@@ -987,7 +972,7 @@ function template_postbit_clean(&$message)
 				</span>';
 			echo '</div>
 				<div class="reportlinks">
-				<ul class="floatright reset smalltext quickbuttons">';
+				<ul class="floatright plainbuttonlist">';
 
 	// Maybe we can approve it, maybe we should?
 	if ($message['can_approve'])

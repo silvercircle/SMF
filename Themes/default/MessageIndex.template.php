@@ -44,13 +44,14 @@ function template_main()
 		
 		echo '<br>';
 		template_create_collapsible_container($collapser);
-		echo '<ol id="board_', $context['current_board'], '_children" class="commonlist category">';
+		echo '<div class="framed_region smallpadding"><ol id="board_', $context['current_board'], '_children" class="commonlist category">';
 
 		$context['alternate'] = 1;
 		foreach ($context['boards'] as &$board)
 			template_boardbit($board);
 		echo '
 			</ol>
+			</div>
 			</div>
 			';
 	}
@@ -85,8 +86,8 @@ function template_main()
 	<form action="', $scripturl, '?action=quickmod;board=', $context['current_board'], '.', $context['start'], '" method="post" accept-charset="UTF-8" class="clear" name="quickModForm" id="quickModForm">';
 
 		echo '
-		<div id="messageindex" class="framed_region">
-		<table class="topic_table">';
+		<div class="cat_bar2">
+		<table class="topic_table" style="background:transparent;">';
 
 		// Are there actually any topics to show?
 		if (!empty($context['topics']))
@@ -94,33 +95,32 @@ function template_main()
 			echo '
 					<thead>
 					<tr class="mediumpadding" style="margin:2px;">
-					<th scope="col" class="glass first_th" style="width:8%;" colspan="2">&nbsp;</th>
-					<th scope="col" class="glass lefttext"><a rel="nofollow" href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=subject', $context['sort_by'] == 'subject' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['subject'], $context['sort_by'] == 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a> / <a rel="nofollow" href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=starter', $context['sort_by'] == 'starter' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['started_by'], $context['sort_by'] == 'starter' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
-					<th scope="col" class="glass nowrap"><a rel="nofollow" href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=replies', $context['sort_by'] == 'replies' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['replies'], $context['sort_by'] == 'replies' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a> / <a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=views', $context['sort_by'] == 'views' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['views'], $context['sort_by'] == 'views' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
-					<th scope="col" class="glass centertext nowrap"><a rel="nofollow" href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=last_post', $context['sort_by'] == 'last_post' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['last_post'], $context['sort_by'] == 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>';
+					<th scope="col" class="first_th" style="width:8%;">&nbsp;</th>
+					<th scope="col" class="lefttext"><a rel="nofollow" href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=subject', $context['sort_by'] == 'subject' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['subject'], $context['sort_by'] == 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a> / <a rel="nofollow" href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=starter', $context['sort_by'] == 'starter' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['started_by'], $context['sort_by'] == 'starter' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
+					<th scope="col" class="nowrap"><a rel="nofollow" href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=replies', $context['sort_by'] == 'replies' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['replies'], $context['sort_by'] == 'replies' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a> / <a href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=views', $context['sort_by'] == 'views' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['views'], $context['sort_by'] == 'views' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
+					<th scope="col" class="centertext nowrap"><a rel="nofollow" href="', $scripturl, '?board=', $context['current_board'], '.', $context['start'], ';sort=last_post', $context['sort_by'] == 'last_post' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['last_post'], $context['sort_by'] == 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>';
 
 			// Show a "select all" box for quick moderation?
-			if (!empty($context['can_quick_mod']) && $options['display_quick_mod'] > 0)
+			if (!empty($context['can_quick_mod']))
 				echo '
-					<th scope="col" class="glass" style="width:24px;"><input type="checkbox" class="input_check cb_invertall" /></th>';
-
-			// If it's on in "image" mode, don't show anything but the column.
-			elseif (!empty($context['can_quick_mod']))
-				echo '
-					<th class="last_th glass" style="width:4%;">&nbsp;</th>';
+					<th scope="col" style="width:24px;"><input type="checkbox" class="input_check cb_invertall" /></th>';
 		}
 		// No topics.... just say, "sorry bub".
 		else
 			echo '
 					<thead>
 					<tr>
-					<th scope="col" class="first_th" style="width:8%;">&nbsp;</th>
-					<th colspan="3"><strong>', $txt['msg_alert_none'], '</strong></th>
-					<th scope="col" class="last_th" style="width:8%;">&nbsp;</th>';
+					<th class="red_container"><strong>', $txt['msg_alert_none'], '</strong></th>';
 
 		echo '
 				</tr>
 			</thead>
+			</table>
+			</div>';
+		if(!empty($context['topics'])) {
+			echo '
+			<div class="topic_table framed_region smallpadding">
+			<table class="topic_table">
 			<tbody>';
 
 		if (!empty($settings['display_who_viewing']))
@@ -199,7 +199,9 @@ function template_main()
 		echo '
 			</tbody>
 		</table>
-	</div>
+	</div>';
+	}
+	echo '
 	<a id="bot"></a>';
 
 		// Finish off the form - again.

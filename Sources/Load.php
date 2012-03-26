@@ -619,7 +619,8 @@ function loadBoard()
 				'moderators' => array(),
 				'cat' => array(
 					'id' => $row['id_cat'],
-					'name' => $row['cname']
+					'name' => $row['cname'],
+					'is_root' => $row['cname'][0] === '!' ? true : false
 				),
 				'name' => $row['bname'],
 				'allow_topics' => $row['allow_topics'],
@@ -729,7 +730,7 @@ function loadBoard()
 		// Build up the linktree.
 		$context['linktree'] = array_merge(
 			$context['linktree'],
-			array(array(
+			$board_info['cat']['is_root'] ? array() : array(array(
 				'url' => $scripturl . '#c' . $board_info['cat']['id'],
 				'name' => $board_info['cat']['name']
 			)),

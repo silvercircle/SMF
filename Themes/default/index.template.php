@@ -296,7 +296,7 @@ EOT;
 		<div class="cContainer_end"></div>';
 	}
 	echo '<aside>
-		  <div id="sidebar" class="framed_region" style="width:255px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
+		  <div id="sidebar" style="width:260px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
 		if($sidebar_allowed)
 			template_sidebar_content();
 	echo '</div>
@@ -437,7 +437,7 @@ function theme_linktree($force_show = false)
 
 		// Don't show a separator for the last one.
 		if ($link_num != $tree_items - 1)
-			$ltree .= ' &gt;';
+			$ltree .= ' &rarr;';
 
 		$ltree .= '
 		</li>';
@@ -548,9 +548,12 @@ function template_button_strip($button_strip, $direction = 'top', $strip_options
 	// Make the last one, as easy as possible.
 	$buttons[count($buttons) - 1] = str_replace('<span>', '<span class="last">', $buttons[count($buttons) - 1]);
 
+	if(!isset($strip_options['class']))
+		$strip_options['class'] = 'buttonlist';
+
 	echo '
-		<div class="buttonlist', !empty($direction) ? ' float' . $direction : '', '"', (empty($buttons) ? ' style="display: none;"' : ''), (!empty($strip_options['id']) ? ' id="' . $strip_options['id'] . '"': ''), '>
-			<ul>',
+		<div class="',$strip_options['class'], !empty($direction) ? ' float' . $direction : '', '"', (empty($buttons) ? ' style="display: none;"' : ''), (!empty($strip_options['id']) ? ' id="' . $strip_options['id'] . '"': ''), '>
+			<ul class="',$strip_options['class'],'">',
 				implode('', $buttons), '
 			</ul>
 		</div>';
@@ -595,7 +598,7 @@ function template_sidebar_content()
 {
 	global $context, $txt, $modSettings, $scripturl, $settings, $user_info, $options;
 
-	$widgetstyle = 'blue_container cleantop inset_shadow smallpadding';
+	$widgetstyle = 'framed_region cleantop smallpadding';
 	echo $context['template_hooks']['global']['sidebar_top'];
 	$collapser = array('id' => 'user_panel', 'title' => 'User panel', 'bodyclass' => $widgetstyle);
 	echo '<script>
@@ -609,6 +612,8 @@ function template_sidebar_content()
 		
 	// If the user is logged in, display stuff like their name, new messages, etc.
 	// for the logo -> <img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" />
+	echo '
+		<div class="blue_container inset_shadow smallpadding">';
 	if ($context['user']['is_logged'])
 	{
 		echo '<div class="smalltext user">';
@@ -646,7 +651,7 @@ function template_sidebar_content()
 			echo '
 					<div><a href="', $scripturl, '?action=moderate;area=reports">', sprintf($txt['mod_reports_waiting'], $context['open_mod_reports']), '</a></div>';
 
-		echo '</div></div>';
+		echo '</div></div></div>';
 	}
 	// Otherwise they're a guest - this time ask them to either register or login - lazy bums...
 	else {
@@ -689,7 +694,8 @@ function template_sidebar_content()
 					</div>';
 		echo '
 					</div>
-				</div>';
+				</div>
+			</div>';
 	}
 	echo '</div>
 		<div class="cContainer_end"></div>';
@@ -699,7 +705,9 @@ function template_sidebar_content()
 	{
 		$collapser = array('bodyclass' => $widgetstyle, 'id'=> 'stats_panel','title' => $txt['forum_stats']);
 		template_create_collapsible_container($collapser);
-		echo '<div class="smallpadding smalltext">
+		echo '
+			<div class="blue_container inset_shadow smallpadding">
+			<div class="smallpadding smalltext">
 				<dl class="common">
 				 <dt>', $txt['posts'], ': </dt><dd class="righttext">',$context['common_stats']['total_posts'], '</dd>
 				 <dt>', $txt['topics'], ': </dt><dd class="righttext">', $context['common_stats']['total_topics'], '</dd>
@@ -715,16 +723,19 @@ function template_sidebar_content()
 				</div>
 			</div>
 			</div>
+			</div>
 			<div class="cContainer_end"></div>';
 	}
 	
 	// social panel in the side bar
 	if(($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar']))) {
-		$collapser = array('id' => 'social_panel', 'title' => 'Socialize', 'bodyclass' => $widgetstyle);
+		$collapser = array('id' => 'social_panel', 'title' => 'Socialize', 'bodyclass' => $widgetstyle, 'framed' => 'smallpadding');
 		template_create_collapsible_container($collapser);
 		echo '
+		<div class="blue_container inset_shadow smallpadding">
 		<div id="socialshareprivacy"></div>
 		<div class="clear"></div>
+		</div>
 		</div>
 		<div class="cContainer_end"></div>';
 	}
@@ -732,9 +743,10 @@ function template_sidebar_content()
 	// This is the "Recent Posts" bar.
 	if (!empty($settings['number_recent_posts']) && (!empty($context['latest_posts']) || !empty($context['latest_post'])))
 	{
-		$collapser = array('bodyclass' => $widgetstyle, 'id' => 'recent_panel', 'title' => '<a href="'. $scripturl. '?action=recent">'. $txt['recent_posts']. '</a>');
+		$collapser = array('bodyclass' => $widgetstyle, 'id' => 'recent_panel', 'title' => '<a href="'. $scripturl. '?action=recent">'. $txt['recent_posts']. '</a>', 'framed' => 'smallpadding');
 		template_create_collapsible_container($collapser);
 		echo '
+			<div class="blue_container inset_shadow smallpadding">
 			<div class="smalltext" id="recent_posts_content" style="line-height:120%;">
 				<div class="entry-title" style="display: none;">', $context['forum_name_html_safe'], ' - ', $txt['recent_posts'], '</div>
 				<div class="entry-content" style="display: none;">
@@ -771,6 +783,7 @@ function template_sidebar_content()
 		echo '
 			</div>
 			</div>
+			</div>
 			<div class="cContainer_end"></div>
 			';
 	}
@@ -779,9 +792,10 @@ function template_sidebar_content()
 	if ($context['show_calendar'])
 	{
 		$title = $context['calendar_only_today'] ? $txt['calendar_today'] : ($txt['calendar']. ' (Next '.$modSettings['cal_days_for_index'].' days)');
-		$collapser = array('bodyclass'=> $widgetstyle, 'id' => 'cal_panel', 'title' => '<a href="'. URL::action($scripturl . '?action=calendar') . '">'. $title . '</a>');
+		$collapser = array('bodyclass'=> $widgetstyle, 'id' => 'cal_panel', 'title' => '<a href="'. URL::action($scripturl . '?action=calendar') . '">'. $title . '</a>', 'framed' => 'smallpadding');
 		template_create_collapsible_container($collapser);
 		echo '
+			<div class="blue_container inset_shadow smallpadding">
 			<div class="smalltext">';
 
 		// Holidays like "Christmas", "Chanukah", and "We Love [Unknown] Day" :P.
@@ -813,6 +827,7 @@ function template_sidebar_content()
 		echo '
 			</div>
 			</div>
+			</div>
 			<div class="cContainer_end"></div>
 			';
 	}
@@ -834,14 +849,6 @@ function template_create_collapsible_container(array &$_c)
 {
 	global $settings;
 	
-	if(!isset($_c['title'])) {
-		log_error('Collapsible container, missing mandatory title string');
-		return;
-	}
-	if(!isset($_c['id'])) {
-		log_error('Collapsible container, missing mandatory ID');
-		return;
-	}
 	$id = $_c['id']; 		// just bein' lazy :)
 	// one cookie to rule them all (it stores all collapsed ids, separated by ',')
 	// duplicate ids will break this, so be careful

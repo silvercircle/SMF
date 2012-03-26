@@ -113,7 +113,7 @@ function template_postbit_compact(&$message)
 		</div>
 		<div class="post_bottom">
 		 <div style="display:inline;">
-		<ul class="floatright reset quickbuttons" style="line-height:100%;">';
+		<ul class="floatright plainbuttonlist">';
 		if($message['can_quote'] || $message['can_reply'])
 			echo '
 			<li><a rel="nofollow" role="button" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $message['topic']['id'], '.', $context['start'], '">', $txt['quote'], '</a></li>';
@@ -137,7 +137,7 @@ function template_postbit_compact(&$message)
 		 </div>
 		 <div class="reportlinks">
 		 </div>
-		 <ul class="floatright reset smalltext quickbuttons">
+		 <ul class="floatright plainbuttonlist">
 		 </ul>';
 	echo '
 		 <div class="clear"></div>

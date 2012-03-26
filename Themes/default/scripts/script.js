@@ -1046,7 +1046,7 @@ function createCookie(name,value,days) {
 
 function setTextSize(_s)
 {
-    textsize = _s;
+    var textsize = _s;
   
 	if(textsize < textSizeMin || textsize > textSizeMax)
    		textsize = textSizeDefault;

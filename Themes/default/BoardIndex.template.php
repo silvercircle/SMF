@@ -13,10 +13,10 @@
  */
 function template_main()
 {
-	global $context, $settings, $options, $txt, $scripturl, $modSettings;
+	global $context, $settings, $txt, $scripturl;
 
 	echo $context['template_hooks']['boardindex']['above_boardlisting'],'
-	<div id="boardindex_table" class="framed_region">';
+	<div id="boardindex_table">';
 	/* Each category in categories is made up of:
 	id, href, link, name, is_collapsed (is it collapsed?), can_collapse (is it okay if it is?),
 	new (is it new?), collapse_href (href to collapse/expand), collapse_image (up/down image),
@@ -27,6 +27,7 @@ function template_main()
 		if (empty($category['boards']) && !$category['is_collapsed'])
 			continue;
 
+		if(!$category['is_root']) {
 		echo '
 			<div class="category" id="category_', $category['id'], '">
  			  <div class="cat_bar2">';
@@ -46,22 +47,21 @@ function template_main()
 			  	</h3>
 		      </div>
 			</div>';
-		// Assuming the category hasn't been collapsed...
-		//if (!$category['is_collapsed'])
-		//{
+		}
 		echo '
-			<ol class="commonlist category" ',$category['is_collapsed'] ? 'style="display:none;" ' : '', ' id="category_', $category['id'], '_boards">';
+			<div class="framed_region cleantop ', $category['is_root'] ? 'tinypadding' : 'smallpadding', ' norounded" style="',' ',$category['is_collapsed'] ? 'display:none;" ' : '', '" id="category_', $category['id'], '_boards">
+			<ol class="commonlist category">';
 		if(!empty($category['desc']))
 			echo '
 			<li class="cat_desc">
 			<h3>',$category['desc'],'</h3>
 			</li>';
 
-			$context['alternate'] = 1;
-			foreach ($category['boards'] as &$board)
-				template_boardbit($board);
+		foreach ($category['boards'] as &$board)
+			template_boardbit($board);
 		echo '
 			</ol>
+			</div>
 			<div class="cContainer_end"></div>';
 	}
 	echo '

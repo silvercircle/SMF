@@ -402,64 +402,6 @@ span.percent
 	text-align: left;
 }
 
-/* The quick buttons */
-ul.quickbuttons
-{
-	margin: 0.9em 0 0 11px;
-	clear: left;
-	float: left;
-	text-align: left;
-}
-ul.quickbuttons li
-{
-	float: left;
-	margin: 0 11px 0 0;
-}
-ul.quickbuttons li a
-{
-	padding: 0 20px 0 0;
-	float: left;
-}
-ul.quickbuttons li.quote_button
-{
-	background-position: 100% 0;
-}
-ul.quickbuttons li.remove_button
-{
-	background-position: 100% -30px;
-}
-ul.quickbuttons li.modify_button
-{
-	background-position: 100% -60px;
-}
-ul.quickbuttons li.approve_button
-{
-	background-position: 100% -90px;
-}
-ul.quickbuttons li.restore_button
-{
-	background-position: 100% -120px;
-}
-ul.quickbuttons li.split_button
-{
-	background-position: 100% -150px;
-}
-ul.quickbuttons li.reply_button
-{
-	background-position: 100% -180px;
-}
-ul.quickbuttons li.reply_all_button
-{
-	background-position: 100% -180px;
-}
-ul.quickbuttons li.notify_button
-{
-	background-position: 100% -210px;
-}
-ul.quickbuttons li.inline_mod_check
-{
-	margin: 0 5px 0 0;
-}
 .post
 {
 	clear: left;

@@ -544,6 +544,17 @@ function updateMemberData($members, $data)
 	updateStats('postgroups', $members, array_keys($data));
 
 	// Clear any caching?
+	invalidateMemberData($members);
+}
+/**
+ * @param $members			array of member ids
+ * invalidate cached user data (used when a member receives a notification or
+ * when likes are updated
+ */
+function invalidateMemberData($members)
+{
+	global $modSettings;
+
 	if (!empty($modSettings['cache_enable']) && $modSettings['cache_enable'] >= 2 && !empty($members))
 	{
 		if (!is_array($members))
@@ -706,7 +717,7 @@ function constructPageIndex($base_url, &$start, $max_value, $num_per_page, $flex
 		$first = $start / $num_per_page > 1 ? sprintf($base_link, 0, $txt['page_first']) : '';
 		$prev = $start > 0 ? sprintf($base_link, $start - $num_per_page, '<') : '';
 		$next = $start <= $max_value - $num_per_page ? sprintf($base_link, $start + $num_per_page, '>') : '';
-		$last = $start <= $max_value - 2 *  $num_per_page ? sprintf($base_link, $max_value - $num_per_page, $txt['page_last']) : '';
+		$last = $start <= $max_value - 2 *  $num_per_page ? sprintf($base_link, $tmpMaxPages, $txt['page_last']) : '';
 		if(isset($need_direct_input))
 			$context['need_pager_script_fragment'] = true;
 	}

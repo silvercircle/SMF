@@ -102,6 +102,7 @@ function getBoardIndex($boardIndexOptions)
 					'collapse_image' => isset($row_board['can_collapse']) ? '<img class="clipsrc '.($row_board['is_collapsed'] ? ' _expand' : '_collapse').'" src="' . $settings['images_url'] . '/' . $context['theme_variant_url'] . 'clipsrc.png" alt="-" />' : '',
 					'href' => $scripturl . '#c' . $row_board['id_cat'],
 					'boards' => array(),
+					'is_root' => $row_board['cat_name'][0] === '!' ? true : false,
 					'new' => false
 				);
 				$categories[$row_board['id_cat']]['link'] = '<a id="c' . $row_board['id_cat'] . '"></a>' . ($categories[$row_board['id_cat']]['can_collapse'] ? '<a href="' . $categories[$row_board['id_cat']]['collapse_href'] . '">' . $row_board['cat_name'] . '</a>' : $row_board['cat_name']);

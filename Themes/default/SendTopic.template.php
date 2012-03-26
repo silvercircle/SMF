@@ -202,8 +202,7 @@ function template_report()
 				<div class="cat_bar">
 					<h3 class="catbg">', $txt['report_to_mod'], '</h3>
 				</div>
-				<div class="windowbg">
-					<span class="topslice"><span></span></span>
+				<div class="blue_container cleantop inset_shadow">
 					<div class="content">';
 
 	if (!empty($context['post_errors']))
@@ -262,7 +261,6 @@ function template_report()
 							<input type="submit" name="submit" value="', $txt['rtm10'], '" style="margin-left: 1ex;" class="button_submit" />
 						</div>
 					</div>
-					<span class="botslice"><span></span></span>
 				</div>
 			<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 		</form>

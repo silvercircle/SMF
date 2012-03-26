@@ -1,9 +1,7 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li](ux) new style for sidebar collapser[/li]
-[li](ux) updated styling for board index and sub-categories (boards acting as categories)[/li]
-[li](core) invalidate SEF boardname cache when applying changes to the board configuration[/li]
-[li](ux) new subtle CSS3 gradients (boardindex, messageindex)[/li]
-[li](ux) always use the "new post" overlay image instead of different images[/li]
+[li](ux) simplified buttonlist styling a bit[/li]
+[li](core) root categories and topic-less boards (aka sub-categories)[/li]
+[li](ux) got rid of more default javascript dialogs and replaced them with custom modal dialogs[/li]
 [/list]

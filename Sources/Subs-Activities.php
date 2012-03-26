@@ -141,8 +141,7 @@ function aStreamAddNotification(&$users, $id_act, $id_type)
 		if(count($values)) {
 			$q = 'INSERT INTO {db_prefix}log_notifications (id_member, id_act) VALUES ' . implode(',', $values);
 			smf_db_query($q);
-
-			updateMemberData($members_to_update, array('last_login' => time()));
+			invalidateMemberData($members_to_update);
 		}
 	}
 }

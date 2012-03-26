@@ -3010,7 +3010,7 @@ function template_showDrafts()
 					</div>
 				</div>
 				<div class="floatright">
-					<ul class="reset smalltext quickbuttons">
+					<ul class="plainbuttonlist">
 						<li class="reply_button"><a href="', $scripturl . '?action=post;', (!empty($post['message']['id']) ? 'msg='.$post['message']['id'].';' : ''), (empty($post['topic']['id']) ? 'board=' . $post['board']['id'] : 'topic=' . $post['topic']['id']), '.0;draft;draft_id=', $post['id'], '"><span>', $txt['edit_draft'], '</span></a></li>
 						<li class="remove_button"><a href="', $scripturl, '?action=profile;u=', $context['member']['id'], ';area=drafts;delete=', $post['id'], ';topic=', $post['topic']['id'], ';',($post['message']['id'] ? 'msg='.$post['message']['id'] . ';' : ''), $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\',\'', $txt['remove_message'], '?\',$(this).attr(\'href\'));"><span>', $txt['remove_draft'], '</span></a></li>
 					</ul>

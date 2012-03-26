@@ -441,6 +441,7 @@ span.xtag:hover {
 .post, .personalmessage {
 	line-height: 1.55em;
 	padding: 0.5em 1.0em 0 1.0em;
+	overflow:hidden;
 }
 .post p {
 	margin:0;
@@ -1264,7 +1265,7 @@ ol.commonlist.category {
 	margin: 0;
 }
 
-ol.commonlist.category li {
+.rowgradient {
 	line-height: 16px;
 	background: rgb(255,255,255);
 	background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(243,243,243,1) 52%, rgba(237,237,237,1) 100%, rgba(255,255,255,1) 100%);
@@ -1476,7 +1477,7 @@ p#whoisviewing {
 }
 .post_wrapper {
 	width: auto;
-	background-color: #f2f2f2;
+	background-color: #f5f5f5;
 	padding:0;
 }
 .post_wrapper.approval, .approval .post_content {
@@ -1539,7 +1540,6 @@ div.userbit_compact_textpart {
 	margin-right:10px;
 	border-radius:5px;
 	margin-top:5px;
-	border:1px solid #ddd;
 }
 .post_content.commentstyle {
 	margin:5px;
@@ -1626,9 +1626,6 @@ div.userbit_compact_textpart {
 .keyinfo.std {
 	padding-left:230px;
 }
-.approval .keyinfo {
-	background: #edcc82;
-}
 .keyinfo.clean {
 	background:transparent;
 	box-shadow: none;
@@ -1683,20 +1680,41 @@ div.userbit_compact_textpart {
 	border-bottom-left-radius: 8px;
 }
 
-ul.quickbuttons {
-	margin: 0 4px 0 20px;
-	clear: right;
-}
-
-ul.quickbuttons li, .buttonlist ul li {
+ul.buttonlist li, ul.plainbuttonlist li {
 	float: left;
 	display: inline;
 	margin: 0 0 0 7px;
 	padding: 0;
 	cursor: pointer;
 }
+ul.plainbuttonlist {
+	margin:0;
+	height:18px;
+	line-height:18px;
+}
+ul.buttonlist {
+	z-index: 100;
+	margin: 0 0.2em 5px 0;
+}
+ul.plainbuttonlist li a {
+	font-size: 11px !important;
+	float: left;
+	text-decoration: none;
+	padding: 0 6px 1px 6px;
+	cursor: pointer;
+}
+ul.plainbuttonlist.orange li a {
+	color: #009999;
+}
+span.button:hover, ul.buttonlist li a:hover {
+	background: white;
+}
 
-ul.quickbuttons li a, .buttonlist ul li a, span.button {
+/* the active one */
+ul.buttonlist li a.active {
+	font-weight: bold;
+}
+ul.buttonlist li a, span.button {
 	font-size: 10px !important;
 	text-shadow: 1px 1px 1px #fff;
 	float: left;
@@ -1780,23 +1798,6 @@ span.button.notify a {
 	border-radius: 2px;
 	line-height: 100%;
 }
-
-ul.quickbuttons li a:hover, span.button:hover, .buttonlist ul li a:hover {
-	background: white;
-}
-
-.buttonlist ul {
-	z-index: 100;
-	margin: 0 0.2em 5px 0;
-}
-
-/* the active one */
-.buttonlist ul li a.active {
-	font-weight: bold;
-}
-ul.quickbuttons li.inline_mod_check {
-	margin: 0 0 0 5px;
-}
 .inner {
 	padding: 1px 10px 2px 0;
 	margin: 0;
@@ -1805,14 +1806,8 @@ img.smiley {
 	vertical-align: middle;
 }
 #forumposts .modified {
-	margin-left: 20px;
 	white-space: nowrap;
-}
-
-#forumposts .reportlinks {
-	text-align: right;
-	clear: right;
-	float: right;
+	margin-top:5px;
 }
 
 #forumposts .reportlinks a {
@@ -2407,7 +2402,7 @@ tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td {
 table.topic_table {
 	width: 100%;
 	border-spacing: 0;
-	background:#f2f2fa;
+	background:#f2f2f2;
 }
 
 table.topic_table td {
@@ -3348,7 +3343,6 @@ table.cleantop {
 
 .framed_region {
 	border:1px solid #ccf;
-	border-radius:4px;
 	background:#e2e2ea;
 }
 span.arrow {
@@ -3490,7 +3484,6 @@ div.td_children {
 	margin-top: 3px;
 	list-style: none;
 	background: transparent;
-	/*margin-left: -10px;*/
 }
 
 div.td_children table {
@@ -3501,11 +3494,8 @@ div.td_children table {
 div.td_children td {
 	vertical-align: top;
 }
-strong.child_old {
-	color:#333;
-}
-strong.child_new {
-	color: #cf3535;
+h4.childlink {
+	display:inline;
 }
 .permalink_old {
 	background: transparent url(../images/theme/sprite.png) 0 -729px no-repeat;
@@ -3518,9 +3508,6 @@ strong.child_new {
 	padding-left: 12px;
 	float: right;
 	font-size: 0.9em;
-}
-.td_children h4 {
-	display: inline;
 }
 #quick_search form {
 	padding-top: 1px !important;
@@ -3625,7 +3612,7 @@ abbr.timeago {
 	color: #888;
 }
 .inline_highlight {
-	background-color: #ffff99 !important;
+	background: #ffff99 !important;
 }
 .transparent {
 	background-color: transparent !important;
@@ -3648,6 +3635,9 @@ abbr.timeago {
 }
 .smallpadding {
 	padding: 5px !important;
+}
+.tinypadding {
+	padding: 3px !important;
 }
 .minpadding {
 	padding: 1px !important;
@@ -3733,6 +3723,14 @@ a.fnote_ref {
 	overflow:hidden;
 }
 
+._child_new {
+	clip: rect(706px 10px 723px 0);
+	top:-706px;
+}
+._child_old {
+	clip: rect(734px 10px 751px 0);
+	top: -734px;
+}
 ._on {
 	clip: rect(1px 25px 25px 1px);
 }

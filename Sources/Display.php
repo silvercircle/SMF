@@ -1329,7 +1329,7 @@ function prepareDisplayContext($reset = false)
 		'member' => &$memberContext[$message['id_member']],
 		'icon' => $message['icon'],
 		'icon_url' => getPostIcon($message['icon']),
-		'subject' => ($seqnr++ == 0 || substr($message['subject'], $context['response_prefixlen']) != $context['first_subject']) ? $message['subject'] . ', ' : '',
+		'subject' => $message['subject'],
 		'time' => timeformat($message['poster_time']),
 		'counter' => $counter,
 		'permalink' => isset($_REQUEST['perma']) ? $txt['view_in_thread'] : ($counter ? ($txt['reply_noun'].' #'.$counter) : $txt['permalink']),

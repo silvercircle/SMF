@@ -169,7 +169,7 @@ function template_folder()
 		{
 			echo '
 			<div class="post_wrapper">
-			<div class="keyinfo">
+			<div class="keyinfo std">
 				<h5 style="display:inline;" id="subject_', $message['id'], '">
 					', $message['subject'], '
 				</h5>';
@@ -196,7 +196,7 @@ function template_folder()
 
 			echo '
 				</div>
-						<div class="poster">
+						<div class="poster std">
 						<h4>', $message['member']['link'], '</h4>
 						<ul class="reset smalltext" id="msg_', $message['id'], '_extra_info">';
 
@@ -300,7 +300,7 @@ function template_folder()
 		echo '
 							</ul>
 						</div>
-		<div class="post_content">';
+		<div class="post_content std">';
 			if (!empty($message['is_replied_to']))
 				echo '
 					<div style="margin:3px;" class="orange_container smalltext">&#171; ', $txt['pm_is_replied_to'], ' &#187;</div>';
@@ -390,7 +390,7 @@ function template_folder()
 		</div>
 		</div>
 		<div class="post_bottom">';
-			echo '<ul class="reset floatright quickbuttons">';
+			echo '<ul class="floatright plainbuttonlist">';
 
 			// Show reply buttons if you have the permission to send PMs.
 			if ($context['can_send_pm'])
