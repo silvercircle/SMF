@@ -210,7 +210,7 @@ em {
 	padding: 0.7em;
 }
 .lowcontrast {
-	color:#777;
+	color:#999;
 }
 .main_section, .lower_padding {
 	padding-bottom: 0.5em;
@@ -715,6 +715,9 @@ table.table_grid {
 	margin-top: 0.1em;
 	border-collapse: separate;
 	border-spacing: 0 0;
+	border:1px solid #ddd;
+	border-radius:0 0 4px 4px;
+	border-top:0;
 }
 
 table.table_grid td {
@@ -1252,7 +1255,7 @@ ol.commonlist > li {
 	padding: 4px 8px 4px 8px;
 	border-bottom: 1px solid #ddd;
 	border-top: 0;
-	line-height: 130%;
+	line-height: 120%;
 }
 ol.commonlist > li:last-child {
 	border-bottom:none;
@@ -1314,8 +1317,8 @@ ol.commonlist.noshadow {
 	margin:0 !important;
 }
 ol.category > li div.lastpost {
-	min-width: 350px;
-	max-width: 350px;
+	min-width: 300px;
+	max-width: 300px;
 	white-space: nowrap;
 	margin-left: 5px;
 	overflow:hidden;
@@ -1325,7 +1328,6 @@ ol.category > li div.lastpost {
 	line-height:16px;
 	/*text-overflow:ellipsis; todo: this is sloooooooow on firefox :/ */
 }
-
 ol.category > li div.stats {
 	float: right;
 	white-space: nowrap;
@@ -1337,11 +1339,14 @@ ol.category > li div.stats {
 
 ol.category > li > div.info {
 	line-height: 110%;
-	padding-right:370px;
+	padding-right:310px;
 	position:relative;
 	min-height:30px;
 }
-ol.category > li > div.info h3 {
+ol.category > li > div.info.fullwidth {
+	padding-right:0;
+}
+ol.category > li > div.info h3, h3.subcatlink {
 	display: inline;
 	font-size: 105%;
 }
@@ -1393,7 +1398,7 @@ img.new_posts {
 div.table_frame .table_list {
 	margin: 0;
 }
-#messageindex, #mlist, .mlist {
+#messageindex {
 	clear: both;
 	margin:5px 0;
 	padding:5px;
@@ -1501,7 +1506,7 @@ div.ignoringpost {
 	clear: both;
 	font-size: 11px;
 	line-height: 20px;
-	/*background-color:#e8e8e8;*/
+	background-color:#eaeaea;
 }
 .poster.std {
 	float: left;
@@ -3637,7 +3642,7 @@ abbr.timeago {
 	padding: 5px !important;
 }
 .tinypadding {
-	padding: 3px !important;
+	padding: 2px !important;
 }
 .minpadding {
 	padding: 1px !important;
@@ -3707,6 +3712,7 @@ a.fnote_ref {
 	position: absolute;
 	top: 0;
 	left: 0;
+	border:0;
 }
 
 /* clip:rect(top, right, bottom, left) (yes, weird, but that's how it is...) */
@@ -3722,46 +3728,114 @@ a.fnote_ref {
 	width: 16px;
 	overflow:hidden;
 }
+.csrcwrapper16px.padded {
+	margin-right:10px;
+}
 
-._child_new {
+.clipsrc._child_new {
 	clip: rect(706px 10px 723px 0);
 	top:-706px;
 }
-._child_old {
+.clipsrc._child_old {
 	clip: rect(734px 10px 751px 0);
 	top: -734px;
 }
-._on {
+.clipsrc._on {
 	clip: rect(1px 25px 25px 1px);
 }
 
-._off {
+.clipsrc._off {
 	clip: rect(1px 54px 25px 30px);
 	left: -30px;
 }
 
-._redirect {
+.clipsrc._redirect {
 	clip: rect(1px 83px 25px 59px);
 	left: -59px;
 }
-._subcat {
+.clipsrc._subcat {
 	clip: rect(31px 130px 55px 106px);
 	left: -106px;
 	top: -31px;
 }
-._page {
+.clipsrc._page {
 	clip: rect(1px 112px 25px 88px);
 	left: -88px;
 }
 
-._expand {
+.clipsrc._expand {
 	clip: rect(1px 129px 14px 117px);
 	left: -117px;
 }
 
-._collapse {
+.clipsrc._collapse {
 	clip: rect(1px 145px 14px 133px);
 	left: -133px;
+}
+.clipsrc.reply {
+	clip: rect(200px 17px 216px 1px);
+	top:-200px;
+	left:-1px;
+}
+.clipsrc.mquote_add {
+	clip: rect(200px 34px 216px 18px);
+	top:-200px;
+	left:-18px;
+}
+.clipsrc.mquote_remove {
+	clip: rect(200px 51px 216px 35px);
+	top:-200px;
+	left:-35px;
+}
+.clipsrc.modify {
+	clip: rect(200px 68px 216px 52px);
+	top:-200px;
+	left:-52px;
+}
+.clipsrc.split {
+	clip: rect(200px 85px 216px 69px);
+	top:-200px;
+	left:-69px;
+}
+.clipsrc.remove {
+	clip: rect(200px 102px 216px 86px);
+	top:-200px;
+	left:-86px;
+}
+.clipsrc.unapprove {
+	clip: rect(200px 119px 216px 103px);
+	top:-200px;
+	left:-103px;
+}
+.clipsrc.approve {
+	clip: rect(200px 136px 216px 120px);
+	top:-200px;
+	left:-120px;
+}
+.clipsrc.reporttm {
+	clip: rect(200px 170px 216px 154px);
+	top:-200px;
+	left:-154px;
+}
+.clipsrc.warning {
+	clip: rect(200px 153px 216px 137px);
+	top:-200px;
+	left:-137px;
+}
+.clipsrc.network {
+	clip: rect(200px 187px 216px 171px);
+	top:-200px;
+	left:-171px;
+}
+.clipsrc.subscribe {
+	clip: rect(200px 204px 216px 188px);
+	top:-200px;
+	left:-188px;
+}
+.clipsrc.unsubscribe {
+	clip: rect(200px 221px 216px 205px);
+	top:-200px;
+	left:-205px;
 }
 @media print {
 	#headerarea {

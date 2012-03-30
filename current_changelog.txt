@@ -1,7 +1,5 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li](ux) simplified buttonlist styling a bit[/li]
-[li](core) root categories and topic-less boards (aka sub-categories)[/li]
-[li](ux) got rid of more default javascript dialogs and replaced them with custom modal dialogs[/li]
+[li](theme) moved generation of postbit quick-buttons (quote, edit, remove...) to its own theme function[/li]
 [/list]

@@ -13,8 +13,10 @@
  */
 function template_postbit_compact(&$message)
 {
-	global $context, $settings, $options, $txt, $scripturl, $modSettings, $topic;
-	
+	global $context, $settings, $options, $txt, $scripturl;
+
+	$imgsrc = $settings['images_url'].'/clipsrc.png';
+
 	// Show the message anchor and a "new" anchor if this message is new.
 	echo '
 	<div class="post_wrapper" data-mid="',$message['id'], '">';
@@ -116,13 +118,13 @@ function template_postbit_compact(&$message)
 		<ul class="floatright plainbuttonlist">';
 		if($message['can_quote'] || $message['can_reply'])
 			echo '
-			<li><a rel="nofollow" role="button" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $message['topic']['id'], '.', $context['start'], '">', $txt['quote'], '</a></li>';
+			<li><a rel="nofollow" role="button" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $message['topic']['id'], '.', $context['start'], '"><div class="csrcwrapper16px"><img class="clipsrc reply" src="',$imgsrc,'" alt="',$txt['quote'],'" title="',$txt['quote'],'" /></div></a></li>';
 		if($message['can_mark_notify'])
 			echo '
-			<li><a rel="nofollow" role="button" href="', $scripturl, '?action=notify;topic=', $message['topic']['id'], '.', $context['start'], '">', $txt['notify'], '</a></li>';
+			<li><a rel="nofollow" role="button" href="', $scripturl, '?action=notify;topic=', $message['topic']['id'], '.', $context['start'], '"><div class="csrcwrapper16px"><img class="clipsrc subscribe" src="',$imgsrc,'" alt="',$txt['notify'],'" title="',$txt['notify'],'" /></div></a></li>';
 		if($message['can_delete'])
 			echo '
-			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $message['topic']['id'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
+			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $message['topic']['id'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));"><div class="csrcwrapper16px"><img class="clipsrc remove" src="',$imgsrc,'" alt="',$txt['remove'],'" title="',$txt['remove'],'" /></div></a></li>';
 		echo '
 		</ul>';
 			echo '
@@ -134,11 +136,7 @@ function template_postbit_compact(&$message)
 				echo '
 		  </span>';
 			echo '
-		 </div>
-		 <div class="reportlinks">
-		 </div>
-		 <ul class="floatright plainbuttonlist">
-		 </ul>';
+		 </div>';
 	echo '
 		 <div class="clear"></div>
 		 </div>';

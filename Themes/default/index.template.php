@@ -598,7 +598,7 @@ function template_sidebar_content()
 {
 	global $context, $txt, $modSettings, $scripturl, $settings, $user_info, $options;
 
-	$widgetstyle = 'framed_region cleantop smallpadding';
+	$widgetstyle = 'framed_region cleantop tinypadding';
 	echo $context['template_hooks']['global']['sidebar_top'];
 	$collapser = array('id' => 'user_panel', 'title' => 'User panel', 'bodyclass' => $widgetstyle);
 	echo '<script>

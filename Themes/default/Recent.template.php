@@ -44,7 +44,7 @@ function template_unread()
 	<div id="recent" class="main_content">';
 
 	$showCheckboxes = !empty($options['display_quick_mod']) && $settings['show_mark_read'];
-
+	$context['can_quick_mod'] = $showCheckboxes;
 	if ($showCheckboxes)
 		echo '
 		<form action="', $scripturl, '?action=quickmod" method="post" accept-charset="UTF-8" name="quickModForm" id="quickModForm" style="margin: 0;">
@@ -81,30 +81,30 @@ function template_unread()
 			</div>';
 
 		echo '
-			<div class="topic_table" id="unread">
-				<table class="table_grid mlist">
+			<div class="topic_table framed_region" id="unread">
+				<table class="topic_table">
 					<thead>
 						<tr>
-							<th scope="col" style="width:2%;" class="glass first_th" colspan="2">&nbsp;</th>
-							<th class="glass" scope="col">
+							<th scope="col" style="width:2%;" class="glass cleantop first_th" colspan="2">&nbsp;</th>
+							<th class="glass cleantop" scope="col">
 								<a href="', $scripturl, '?action=unread', $context['showing_all_topics'] ? ';all' : '', $context['querystring_board_limits'], ';sort=subject', $context['sort_by'] == 'subject' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['subject'], $context['sort_by'] == 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 							</th>
-							<th scope="col" style="width:14%;" class="glass centertext">
+							<th scope="col" style="width:14%;" class="glass centertext cleantop">
 								<a href="', $scripturl, '?action=unread', $context['showing_all_topics'] ? ';all' : '', $context['querystring_board_limits'], ';sort=replies', $context['sort_by'] == 'replies' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['replies'], $context['sort_by'] == 'replies' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 							</th>';
 
 		// Show a "select all" box for quick moderation?
 		if ($showCheckboxes)
 			echo '
-							<th scope="col" style="width:22%;" class="glass">
+							<th scope="col" style="width:22%;" class="glass cleantop">
 								<a href="', $scripturl, '?action=unread', $context['showing_all_topics'] ? ';all' : '', $context['querystring_board_limits'], ';sort=last_post', $context['sort_by'] == 'last_post' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['last_post'], $context['sort_by'] == 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 							</th>
-							<th class="glass last_th">
+							<th class="glass cleantop last_th">
 								<input type="checkbox" onclick="invertAll(this, this.form, \'topics[]\');" class="input_check" />
 							</th>';
 		else
 			echo '
-							<th scope="col" class="glass smalltext last_th" style="width:22%;">
+							<th scope="col" class="glass cleantop smalltext last_th" style="width:22%;">
 								<a href="', $scripturl, '?action=unread', $context['showing_all_topics'] ? ';all' : '', $context['querystring_board_limits'], ';sort=last_post', $context['sort_by'] == 'last_post' && $context['sort_direction'] == 'up' ? ';desc' : '', '">', $txt['last_post'], $context['sort_by'] == 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 							</th>';
 		echo '

@@ -45,14 +45,12 @@ function template_postbit_normal(&$message)
 	// Show information about the poster of this message.
 	echo '
 	<div itemscope="itemscope" itemtype="http://data-vocabulary.org/Person" class="poster std">
-	<h4>', $message['member']['link'], '</h4><br>
+	<h4>', $message['member']['link'], '</h4>
 	<ul class="reset smalltext" id="msg_', $message['id'], '_extra_info">';
 
 	// Don't show these things for guests.
 	if (!$message['member']['is_guest'])
 	{
-		echo '
-		<li class="membergroup">', $message['member']['group_stars'], '</li>';
 		// Show avatars, images, etc.?
 		if (!empty($settings['show_user_images']) && empty($options['show_no_avatars'])) {
 			if(!empty($message['member']['avatar']['image']))
@@ -70,6 +68,8 @@ function template_postbit_normal(&$message)
 			</a>
 		</li>';
 		}
+		echo '
+		<li class="membergroup">', $message['member']['group_stars'], '</li>';
 		//if (!empty($message['member']['post_group']))
 		//	echo '
 		//<li class="membergroup"><span style="color:',$message['member']['post_group_color'], ';">',$message['member']['post_group'], '</span></li>';
@@ -273,69 +273,9 @@ function template_postbit_normal(&$message)
 		</div>';
 	echo '
 		<div class="post_bottom">
-		<div class="reportlinks lefttext">
-		<ul class="floatright plainbuttonlist orange">';
-
-	if ($context['can_quote'] && !empty($options['display_quick_reply']))
-		echo '
-			<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '" onclick="return oQuickReply.quote(', $message['id'], ');">', $txt['quote'], '</a></li>
-			<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
-			<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
-
-	// So... quick reply is off, but they *can* reply?
-	elseif ($context['can_quote'])
-		echo '
-			<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '">', $txt['quote'], '</a></li>
-			<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
-			<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
-
-	// Can the user modify the contents of this post?
-	if ($message['can_modify'])
-		echo '
-			<li><a rel="nofollow" onclick="oQuickModify.modifyMsg(\'', $message['id'], '\');return(false);" href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
-
-	// How about... even... remove it entirely?!
-	if ($message['can_remove'])
-		echo '
-			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
-	if ($message['can_unapprove'])
-		echo '
-			<li class="approve_button"><a href="', $scripturl, '?action=moderate;area=postmod;sa=unapprove;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['unapprove'], '</a></li>';
-	if ($context['can_split'] && !empty($context['real_num_replies']))
-		echo '
-			<li><a href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '">', $txt['split'], '</a></li>';
-
-	// Can we restore topics?
-	if ($context['can_restore_msg'])
-		echo '
-			<li><a href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['restore_message'], '</a></li>';
-
-	// Show a checkbox for quick moderation?
-	if (!empty($options['display_quick_mod']) && $message['can_remove'])
-		echo '
-			<li class="inline_mod_check" style="display: none;" id="in_topic_mod_check_', $message['id'], '"></li>';
-
-	echo '
-		</ul>';
-
+		<div class="reportlinks lefttext">';
+	template_postbit_quickbuttons($message);
 	// Maybe they want to report this post to the moderator(s)?
-	if ($context['can_report_moderator'])
-		echo '
-		<a href="',$scripturl, '?action=reporttm;topic=', $context['current_topic'], '.', $message['counter'], ';msg=', $message['id'], '">',$txt['report'], '</a>';
-
-	// Can we issue a warning because of this post?  Remember, we can't give guests warnings.
-	if ($context['can_issue_warning'] && !$message['is_message_author'] && !$message['member']['is_guest'])
-		echo '
-		&nbsp;&nbsp;&nbsp;<a href="', $scripturl, '?action=profile;area=issuewarning;u=', $message['member']['id'], ';msg=', $message['id'], '">', $txt['issue_warning'], '</a>';
-
-	// Show the IP to this user for this post - because you can moderate?
-	if ($context['can_moderate_forum'] && !empty($message['member']['ip']))
-		echo '
-		&nbsp;&nbsp;&nbsp;<a href="', $scripturl, '?action=', !empty($message['member']['is_guest']) ? 'trackip' : 'profile;area=tracking;sa=ip;u=' . $message['member']['id'], ';searchip=', $message['member']['ip'], '">', $message['member']['ip'], '</a>';
-	// Or, should we show it because this is you?
-	elseif ($message['can_see_ip'])
-		echo '
-		&nbsp;&nbsp;&nbsp;<a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $message['member']['ip'], '</a>';
 	// Okay, are you at least logged in?  Then we can show something about why IPs are logged...
 	//elseif (!$context['user']['is_guest'])
 	//	echo '
@@ -499,7 +439,7 @@ function template_postbit_lean(&$message)
 	}
 
 	echo '
-					<div class="moderatorbar" style="margin-left:10px;">';
+		<div class="moderatorbar" style="margin-left:10px;">';
 	// Are there any custom profile fields for above the signature?
 	if (!empty($message['member']['custom_fields']))
 	{
@@ -548,74 +488,8 @@ function template_postbit_lean(&$message)
 		</div>';
 	echo '<div class="post_bottom">';
 			echo '
-				<div class="reportlinks">
-				<ul class="floatright plainbuttonlist orange">';
-
-	// Can they reply? Have they turned on quick reply?
-	if ($context['can_quote'] && !empty($options['display_quick_reply']))
-		echo '
-								<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '" onclick="return oQuickReply.quote(', $message['id'], ');">', $txt['quote'], '</a></li>
-								<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
-								<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
-
-	// So... quick reply is off, but they *can* reply?
-	elseif ($context['can_quote'])
-		echo '
-								<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '">', $txt['quote'], '</a></li>
-								<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
-								<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
-
-	// Can the user modify the contents of this post?
-	if ($message['can_modify'])
-		echo '
-			<li><a rel="nofollow" onclick="oQuickModify.modifyMsg(\'', $message['id'], '\');return(false);" href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
-
-	// How about... even... remove it entirely?!
-	if ($message['can_remove'])
-		echo '
-			<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
-
-	if ($message['can_unapprove'])
-		echo '
-			<li class="approve_button"><a href="', $scripturl, '?action=moderate;area=postmod;sa=unapprove;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['unapprove'], '</a></li>';
-	// What about splitting it off the rest of the topic?
-	if ($context['can_split'] && !empty($context['real_num_replies']))
-		echo '
-								<li><a rel="nofollow" href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '">', $txt['split'], '</a></li>';
-
-	// Can we restore topics?
-	if ($context['can_restore_msg'])
-		echo '
-								<li><a rel="nofollow" href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['restore_message'], '</a></li>';
-
-	// Show a checkbox for quick moderation?
-	if (!empty($options['display_quick_mod']) && $message['can_remove'])
-		echo '
-								<li class="inline_mod_check" style="display: none;" id="in_topic_mod_check_', $message['id'], '"></li>';
-
-		echo '
-						</ul>
-						
-						';
-
-	// Maybe they want to report this post to the moderator(s)?
-	if ($context['can_report_moderator'])
-		echo '<a href="', $scripturl, '?action=reporttm;topic=', $context['current_topic'], '.', $message['counter'], ';msg=', $message['id'], '">', $txt['report'], '</a>';
-
-	// Can we issue a warning because of this post?  Remember, we can't give guests warnings.
-	if ($context['can_issue_warning'] && !$message['is_message_author'] && !$message['member']['is_guest'])
-		echo '&nbsp;&nbsp;&nbsp;<a href="', $scripturl, '?action=profile;area=issuewarning;u=', $message['member']['id'], ';msg=', $message['id'], '">', $txt['issue_warning'], '</a>';
-
-	// Show the IP to this user for this post - because you can moderate?
-	if ($context['can_moderate_forum'] && !empty($message['member']['ip']))
-		echo '&nbsp;&nbsp;&nbsp;IP: <a href="', $scripturl, '?action=', !empty($message['member']['is_guest']) ? 'trackip' : 'profile;area=tracking;sa=ip;u=' . $message['member']['id'], ';searchip=', $message['member']['ip'], '">', $message['member']['ip'], '</a> <a href="', $scripturl, '?action=helpadmin;help=see_admin_ip" onclick="return reqWin(this.href);" class="help">(?)</a>';
-	// Or, should we show it because this is you?
-	elseif ($message['can_see_ip'])
-		echo '&nbsp;&nbsp;&nbsp;IP: <a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $message['member']['ip'], '</a>';
-	// Okay, are you at least logged in?  Then we can show something about why IPs are logged...
-	//elseif (!$context['user']['is_guest'])
-	//	echo '
-	//						<a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $txt['logged'], '</a>';
+				<div class="reportlinks">';
+	template_postbit_quickbuttons($message);
 	echo '
 		</div><div class="clear"></div></div>';
 	echo '
@@ -769,76 +643,7 @@ function template_postbit_comment(&$message)
 		<div class="smalltext" style="padding:0 20px 5px 20px;">
 		<div class="reportlinks">';
 
-	echo '<ul class="floatright plainbuttonlist orange">';
-
-	// Maybe we can approve it, maybe we should?
-	if ($message['can_approve'])
-	echo '
-		<li><a href="', $scripturl, '?action=moderate;area=postmod;sa=approve;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['approve'], '</a></li>';
-	if ($context['can_quote'] && !empty($options['display_quick_reply']))
-	echo '
-		<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '" onclick="return oQuickReply.quote(', $message['id'], ');">', $txt['quote'], '</a></li>
-		<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
-		<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
-
-	// So... quick reply is off, but they *can* reply?
-	elseif ($context['can_quote'])
-	echo '
-		<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '">', $txt['quote'], '</a></li>
-		<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'none\');">', $txt['add_mq'], '</a></li>
-		<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="#!" onclick="return mquote(' . $message['id'] . ',\'remove\');">', $txt['remove_mq'], '</a></li>';
-
-	// Can the user modify the contents of this post?
-	if ($message['can_modify'])
-	echo '
-		<li><a rel="nofollow" onclick="oQuickModify.modifyMsg(\'', $message['id'], '\');return(false);" href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '">', $txt['modify'], '</a></li>';
-
-	// How about... even... remove it entirely?!
-	if ($message['can_remove'])
-	echo '
-		<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));">', $txt['remove'], '</a></li>';
-	if ($message['can_unapprove'])
-	echo '
-		<li class="approve_button"><a href="', $scripturl, '?action=moderate;area=postmod;sa=unapprove;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['unapprove'], '</a></li>';
-	if ($context['can_split'] && !empty($context['real_num_replies']))
-	echo '
-		<li><a rel="nofollow" href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '">', $txt['split'], '</a></li>';
-
-	// Can we restore topics?
-	if ($context['can_restore_msg'])
-	echo '
-		<li><a rel="nofollow" href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['restore_message'], '</a></li>';
-
-	// Show a checkbox for quick moderation?
-	if (!empty($options['display_quick_mod']) && $message['can_remove'])
-	echo '
-		<li class="inline_mod_check" style="display: none;" id="in_topic_mod_check_', $message['id'], '"></li>';
-
-	echo '
-	</ul>';
-
-	// Maybe they want to report this post to the moderator(s)?
-	if ($context['can_report_moderator'])
-		echo '
-		<a href="', $scripturl, '?action=reporttm;topic=', $context['current_topic'], '.', $message['counter'], ';msg=', $message['id'], '">', $txt['report'], '</a>';
-
-	// Can we issue a warning because of this post?  Remember, we can't give guests warnings.
-	if ($context['can_issue_warning'] && !$message['is_message_author'] && !$message['member']['is_guest'])
-		echo '
-		&nbsp;&nbsp;&nbsp;<a href="', $scripturl, '?action=profile;area=issuewarning;u=', $message['member']['id'], ';msg=', $message['id'], '">', $txt['issue_warning'], '</a>';
-
-	// Show the IP to this user for this post - because you can moderate?
-	if ($context['can_moderate_forum'] && !empty($message['member']['ip']))
-		echo '
-		&nbsp;&nbsp;&nbsp;IP: <a href="', $scripturl, '?action=', !empty($message['member']['is_guest']) ? 'trackip' : 'profile;area=tracking;sa=ip;u=' . $message['member']['id'], ';searchip=', $message['member']['ip'], '">', $message['member']['ip'], '</a> <a href="', $scripturl, '?action=helpadmin;help=see_admin_ip" onclick="return reqWin(this.href);" class="help">(?)</a>';
-	// Or, should we show it because this is you?
-	elseif ($message['can_see_ip'])
-		echo '
-		&nbsp;&nbsp;&nbsp;IP: <a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $message['member']['ip'], '</a>';
-	// Okay, are you at least logged in?  Then we can show something about why IPs are logged...
-	//elseif (!$context['user']['is_guest'])
-	//	echo '
-	//						<a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $txt['logged'], '</a>';
+	template_postbit_quickbuttons($message);
 	echo '
 		</div><div class="clear"></div>
 		</div></div>';
@@ -1014,5 +819,74 @@ function template_postbit_clean(&$message)
 
 
 	echo "</div>";
+}
+function template_postbit_quickbuttons(&$message)
+{
+	global $context, $scripturl, $txt, $settings, $options;
+	$imgsrc = $settings['images_url'].'/clipsrc.png';
+
+	echo '
+	<ul class="floatright plainbuttonlist orange">';
+
+	if ($message['can_approve'])
+		echo '
+		<li><a href="', $scripturl, '?action=moderate;area=postmod;sa=approve;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '"><div class="csrcwrapper16px"><img class="clipsrc approve" src="',$imgsrc,'" alt="',$txt['approve'],'" title="',$txt['approve'],'" /></div></a></li>';
+	if ($context['can_quote'])
+		echo '
+	<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '"><div class="csrcwrapper16px"><img class="clipsrc reply" src="',$imgsrc,'" alt="',$txt['quote'],'" title="',$txt['quote'],'" /></div></a></li>
+	<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'none\');"><div class="csrcwrapper16px"><img class="clipsrc mquote_add" src="',$imgsrc,'" alt="',$txt['add_mq'],'" title="',$txt['add_mq'],'" /></div></a></li>
+	<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'remove\');"><div class="csrcwrapper16px"><img class="clipsrc mquote_remove" src="',$imgsrc,'" alt="',$txt['remove_mq'],'" title="',$txt['remove_mq'],'" /></div></a></li>';
+
+	// Can the user modify the contents of this post?
+	if ($message['can_modify'])
+		echo '
+	<li><a rel="nofollow" onclick="oQuickModify.modifyMsg(\'', $message['id'], '\');return(false);" href="', $scripturl, '?action=post;msg=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], '"><div class="csrcwrapper16px"><img class="clipsrc modify" src="',$imgsrc,'" alt="',$txt['modify'],'" title="',$txt['modify'],'" /></div></a></li>';
+
+	// How about... even... remove it entirely?!
+	if ($message['can_remove'])
+		echo '
+	<li><a rel="nofollow" href="', $scripturl, '?action=deletemsg;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\', \'', $txt['remove_message'], '?\', $(this).attr(\'href\'));"><div class="csrcwrapper16px"><img class="clipsrc remove" src="',$imgsrc,'" alt="',$txt['remove'],'" title="',$txt['remove'],'" /></div></a></li>';
+
+	if ($message['can_unapprove'])
+		echo '
+	<li class="approve_button"><a href="', $scripturl, '?action=moderate;area=postmod;sa=unapprove;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '"><div class="csrcwrapper16px"><img class="clipsrc unapprove" src="',$imgsrc,'" alt="',$txt['unapprove'],'" title="',$txt['unapprove'],'" /></div></a></li>';
+
+	// What about splitting it off the rest of the topic?
+	if ($context['can_split'] && !empty($context['real_num_replies']))
+		echo '
+	<li><a rel="nofollow" href="', $scripturl, '?action=splittopics;topic=', $context['current_topic'], '.0;at=', $message['id'], '"><div class="csrcwrapper16px"><img class="clipsrc split" src="',$imgsrc,'" alt="',$txt['split'],'" title="',$txt['split'],'" /></div></a></li>';
+
+	// Can we restore topics?
+	if ($context['can_restore_msg'])
+		echo '
+	<li><a rel="nofollow" href="', $scripturl, '?action=restoretopic;msgs=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $txt['restore_message'], '</a></li>';
+
+	// Show a checkbox for quick moderation?
+	if (!empty($options['display_quick_mod']) && $message['can_remove'])
+		echo '
+	<li class="inline_mod_check" style="display: none;" id="in_topic_mod_check_', $message['id'], '"></li>';
+
+	echo '
+	</ul>';
+
+	if ($context['can_report_moderator'])
+		echo '
+	<a href="',$scripturl, '?action=reporttm;topic=', $context['current_topic'], '.', $message['counter'], ';msg=', $message['id'], '"><div class="csrcwrapper16px floatleft padded"><img class="clipsrc reporttm" src="',$imgsrc,'" alt="',$txt['report'],'" title="',$txt['report'],'" /></div></a>';
+
+	// Can we issue a warning because of this post?  Remember, we can't give guests warnings.
+	if ($context['can_issue_warning'] && !$message['is_message_author'] && !$message['member']['is_guest'])
+		echo '
+	<a href="', $scripturl, '?action=profile;area=issuewarning;u=', $message['member']['id'], ';msg=', $message['id'], '"><div class="csrcwrapper16px floatleft padded"><img class="clipsrc warning" src="',$imgsrc,'" alt="',$txt['issue_warning'],'" title="',$txt['issue_warning'],'" /></div></a>';
+
+	// Show the IP to this user for this post - because you can moderate?
+	if ($context['can_moderate_forum'] && !empty($message['member']['ip']))
+		echo '
+	<a href="', $scripturl, '?action=', !empty($message['member']['is_guest']) ? 'trackip' : 'profile;area=tracking;sa=ip;u=' . $message['member']['id'], ';searchip=', $message['member']['ip'], '"><div class="csrcwrapper16px floatleft padded"><img class="clipsrc network" src="',$imgsrc,'" alt="',$message['member']['ip'],'" title="',$message['member']['ip'],'" /></div></a>';
+	// Or, should we show it because this is you?
+	elseif ($message['can_see_ip'])
+		echo '
+	<a href="', $scripturl, '?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">', $message['member']['ip'], '</a>';
+	echo '
+	<div class="clear"></div>';
 }
 ?>

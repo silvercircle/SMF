@@ -21,7 +21,7 @@ function template_board_children(&$board)
 	foreach ($board['children'] as $child)
 	{
 		if (!$child['is_redirect']) {
-			$child['link'] = '<h4 class="childlink"><a href="' . $child['href'] . '" class="boardlink" title="' . ($child['new'] ? $txt['new_posts'] : $txt['old_posts']) . ' (' . $txt['board_topics'] . ': ' . comma_format($child['topics']) . ', ' . $txt['posts'] . ': ' . comma_format($child['posts']) . ')">' . $child['name'] . '</a></h4>'.'&nbsp;<span class="tinytext lowcontrast" title="'.$child['description'].'">'.$child['short_description'].'</span>';
+			$child['link'] = '<h4 class="childlink"><a href="' . $child['href'] . '" class="boardlink" title="' . (!empty($child['description']) ? $child['description'] . ' - ' : '') . ($child['new'] ? $txt['new_posts'] : $txt['old_posts']) . ' (' . $txt['board_topics'] . ': ' . comma_format($child['topics']) . ', ' . $txt['posts'] . ': ' . comma_format($child['posts']) . ')">' . $child['name'] . '</a></h4>';
 			$child['img'] = '<div class="csrcwrapper16px" style="left:-12px;margin-bottom:-16px;"><img class="clipsrc '.($child['new'] ? '_child_new' : '_child_old').'" src="' . $settings['images_url'] . '/'. $context['theme_variant_url'] . 'theme/sprite.png" alt="*" title="*" /></div>';
 		}
 		else
@@ -42,7 +42,7 @@ function template_board_children(&$board)
 		  $n = 0;
 		  $columns = $modSettings['tidy_child_display_columns'];
 		  foreach($children as &$child) {
-			  echo '<td><div style="padding-left:12px;">',$child['img'],$child['link'],'</div></td>';
+			  echo '<td class="tinytext"><div style="padding-left:12px;">',$child['img'],$child['link'],'</div></td>';
 			  if($n++ >= $columns) {
 				  $n = 0;
 				  echo '</tr><tr>';
@@ -64,10 +64,6 @@ function template_boardbit(&$board)
 	if(!$board['is_page']) {
 		echo'
 		<div class="info">
-		<div class="stats tinytext lowcontrast">
-		 ', comma_format($board['posts']), ' ', $board['is_redirect'] ? $txt['redirects'] : $txt['posts'], ' <br />
-		 ', $board['is_redirect'] ? '' : comma_format($board['topics']) . ' ' . $txt['board_topics'], '
-		</div>
 		 <div class="icon floatleft">
 		  <a href="', ($board['is_redirect'] || $context['user']['is_guest'] ? $board['href'] : $scripturl . '?action=unread;board=' . $board['id'] . '.0;children'), '">
 		  <div class="csrcwrapper24px">';
@@ -102,7 +98,7 @@ function template_boardbit(&$board)
 			echo '
 		  <span onclick="brdModeratorsPopup($(this));" class="brd_moderators" title="',$txt['moderated_by'],'"><span class="brd_moderators_chld" style="display:none;">', $txt['moderated_by'], ': ',implode(', ', $board['link_moderators']), '</span></span>';
 		echo '
-		  <h3><a class="boardlink" href="', $board['href'], '" id="b', $board['id'], '">', $board['name'], '</a></h3>';
+		  <h3><a class="boardlink" title="',$board['description'], '" href="', $board['href'], '" id="b', $board['id'], '">', $board['name'], '</a></h3>';
 
 	// Has it outstanding posts for approval?
 	if ($board['can_approve_posts'] && ($board['unapproved_posts'] || $board['unapproved_topics']))
@@ -110,8 +106,8 @@ function template_boardbit(&$board)
 		  <a href="', $scripturl, '?action=moderate;area=postmod;sa=', ($board['unapproved_topics'] > 0 ? 'topics' : 'posts'), ';brd=', $board['id'], ';', $context['session_var'], '=', $context['session_id'], '" title="', sprintf($txt['unapproved_posts'], $board['unapproved_topics'], $board['unapproved_posts']), '" class="moderation_link">(!)</a>';
 
 	echo '
-		 <div class="tinytext lowcontrast">', $board['description'] , '</div>
-		<div class="lastpost smalltext">';
+		 <div class="tinytext">', $board['posts'],' <span class="lowcontrast">',$txt['posts'], ' ', $txt['in'], '</span> ',$board['topics'],' <span class="lowcontrast">',$txt['topics'],'</span></div>
+		<div class="lastpost tinytext lowcontrast">';
 	if (!empty($board['last_post']['id']))
 			echo (empty($options['post_icons_index']) ? '' : '
 		<img src="'.$board['first_post']['icon_url'].'" alt="icon" />'), '
@@ -127,7 +123,7 @@ function template_boardbit(&$board)
 	}
 	else {
 		echo '
-		<div class="info">
+		<div class="info fullwidth">
 	 	<div class="icon floatleft">
 	  	<div class="csrcwrapper24px"><img class="clipsrc _page" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="*" title="*" /></div>
 	 	</div>
@@ -181,7 +177,7 @@ function template_boardbit_subcat(&$board)
 		  </a>
 		</div>
 		<div style="padding-left:32px;">
-	    <h3><a class="boardlink" href="', $board['href'], '" id="b', $board['id'], '">', $board['name'], '</a></h3>';
+	    <h3 class="subcatlink"><a class="boardlink" href="', $board['href'], '" id="b', $board['id'], '">', $board['name'], '</a></h3>';
 
 	// Has it outstanding posts for approval?
 	if ($board['can_approve_posts'] && ($board['unapproved_posts'] || $board['unapproved_topics']))
