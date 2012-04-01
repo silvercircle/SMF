@@ -21,18 +21,22 @@ function template_board_children(&$board)
 	foreach ($board['children'] as $child)
 	{
 		if (!$child['is_redirect']) {
-			$child['link'] = '<h4 class="childlink"><a href="' . $child['href'] . '" class="boardlink" title="' . (!empty($child['description']) ? $child['description'] . ' - ' : '') . ($child['new'] ? $txt['new_posts'] : $txt['old_posts']) . ' (' . $txt['board_topics'] . ': ' . comma_format($child['topics']) . ', ' . $txt['posts'] . ': ' . comma_format($child['posts']) . ')">' . $child['name'] . '</a></h4>';
+			$child['link'] = '<h4 class="childlink"><a data-tip="tip_b_'.$child['id'].'" href="' . $child['href'] . '" class="boardlink easytip">' . $child['name'] . '</a></h4>';
 			$child['img'] = '<div class="csrcwrapper16px" style="left:-12px;margin-bottom:-16px;"><img class="clipsrc '.($child['new'] ? '_child_new' : '_child_old').'" src="' . $settings['images_url'] . '/'. $context['theme_variant_url'] . 'theme/sprite.png" alt="*" title="*" /></div>';
+			$child['tip'] = '<div id="tip_b_'.$child['id'].'" style="display:none;">' . (!empty($child['description']) ? $child['description'] . '<br>' : '') . ($child['new'] ? $txt['new_posts'] : $txt['old_posts']) . ' (' . $txt['board_topics'] . ': ' . comma_format($child['topics']) . ', ' . $txt['posts'] . ': ' . comma_format($child['posts']) . ')' . '</div>';
 		}
-		else
+		else {
 			$child['link'] = '<a class="boardlink" href="' . $child['href'] . '" title="' . comma_format($child['posts']) . ' ' . $txt['redirects'] . '"><h4>' . $child['name'] . '</h4></a>'.'&nbsp;<span class="tinytext lowcontrast">('.$child['description'].')</span>';
+			$child['img'] = $child['tip'] = '';
+		}
 		if ($child['can_approve_posts'] && ($child['unapproved_posts'] || $child['unapproved_topics']))
 			$child['link'] .= ' <a href="' . $scripturl . '?action=moderate;area=postmod;sa=' . ($child['unapproved_topics'] > 0 ? 'topics' : 'posts') . ';brd=' . $child['id'] . ';' . $context['session_var'] . '=' . $context['session_id'] . '" title="' . sprintf($txt['unapproved_posts'], $child['unapproved_topics'], $child['unapproved_posts']) . '" class="moderation_link">(!)</a>';
 
 		$children[] = array(
 			'link' => $child['link'],
 			'new' => $child['new'],
-			'img' => $child['img']
+			'img' => $child['img'],
+			'tip' => $child['tip']
 			);
 	}
 	echo '
@@ -41,9 +45,10 @@ function template_board_children(&$board)
 		  <tr>';
 		  $n = 0;
 		  $columns = $modSettings['tidy_child_display_columns'];
+		  $width = 100 / $columns;
 		  foreach($children as &$child) {
-			  echo '<td class="tinytext"><div style="padding-left:12px;">',$child['img'],$child['link'],'</div></td>';
-			  if($n++ >= $columns) {
+			  echo '<td style="width:',$width,'%;" class="tinytext"><div style="padding-left:12px;">',$child['img'],$child['link'],'</div>',$child['tip'],'</td>';
+			  if(++$n >= $columns) {
 				  $n = 0;
 				  echo '</tr><tr>';
 			  }
@@ -98,7 +103,10 @@ function template_boardbit(&$board)
 			echo '
 		  <span onclick="brdModeratorsPopup($(this));" class="brd_moderators" title="',$txt['moderated_by'],'"><span class="brd_moderators_chld" style="display:none;">', $txt['moderated_by'], ': ',implode(', ', $board['link_moderators']), '</span></span>';
 		echo '
-		  <h3><a class="boardlink" title="',$board['description'], '" href="', $board['href'], '" id="b', $board['id'], '">', $board['name'], '</a></h3>';
+		  <h3>
+		   <a class="boardlink easytip" data-tip="tip_b_',$board['id'],'" href="', $board['href'], '" id="b', $board['id'], '">', $board['name'], '</a>
+		  </h3>
+		  <div style="display:none;" id="tip_b_',$board['id'],'">',$board['description'],'</div>';
 
 	// Has it outstanding posts for approval?
 	if ($board['can_approve_posts'] && ($board['unapproved_posts'] || $board['unapproved_topics']))
@@ -198,7 +206,7 @@ function template_boardbit_subcat(&$board)
 
 	if (!empty($board['last_post']['id']))
 			echo '
-		<div class="smalltext nowrap righttext" style="position:static;max-width:auto;">
+		<div class="tinytext nowrap righttext" style="position:static;max-width:auto;">
 		<a class="lp_link" title="',$txt['last_post'],'" href="',$board['last_post']['href'],'">',$board['last_post']['time'], '</a><span class="tinytext lowcontrast">',$txt['last_post'],' in: </span>',$board['last_post']['prefix'],$board['last_post']['topiclink'], '
 		&nbsp;<span class="tinytext lowcontrast">',$txt['by'],':&nbsp;</span>', $board['last_post']['member']['link'],'&nbsp;
 		</div>';

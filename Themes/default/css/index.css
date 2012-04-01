@@ -3708,6 +3708,40 @@ a.fnote_ref {
 #mitte #mitte_links {
 	overflow: visible !important;
 }
+
+/* Easy Tooltip */
+
+#easyTooltip{
+	margin:0 10px 1em 0;
+	max-width:50%;
+	background: transparent;
+	border-radius:4px;
+	line-height:110%;
+	opacity: 1.0;
+	border:4px solid rgba(0, 0, 0, 0.196);
+	box-shadow: 0 0 12px 2px #444;
+}
+#easyTooltip > div.content {
+	background: #fcecb8;
+	opacity: 1.0;
+	font-size:11px;
+}
+#easyTooltip h3{
+	margin:0 0 .5em 0;
+	font:12px;
+	text-transform:uppercase;
+}
+#easyTooltip p{
+	margin:0 0 .5em 0;
+}
+#easyTooltip img{
+		background:#fff;
+		padding:1px;
+		border:1px solid #e1e1e1;
+		float:left;
+		margin-right:10px;
+}
+
 .clipsrc {
 	position: absolute;
 	top: 0;

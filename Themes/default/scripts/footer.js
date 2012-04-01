@@ -1414,6 +1414,8 @@ jQuery(document).ready(function() {
 			$(this).css('border', 'none');
 	});
 	$('#jsconfirm').jqm({overlay: 50, modal: true, trigger: false, center:true});
+
+	$('a.easytip').easyTooltip( {parentData: true} );
 });
 
 /*
