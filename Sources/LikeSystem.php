@@ -78,7 +78,7 @@ function LikesByUser($memID)
 	global $context, $user_info, $scripturl, $memberContext, $txt, $modSettings, $options;
 	
 	// let us use the same value as for topics per page here.
-	$perpage = empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) && !WIRELESS ? $options['topics_per_page'] : $modSettings['defaultMaxTopics'];	
+	$perpage = empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) ? $options['topics_per_page'] : $modSettings['defaultMaxTopics'];
 	$out = $_GET['sa'] === 'likesout';			// display likes *given* instead of received ones
 	$is_owner = $user_info['id'] == $memID;		// we are the owner of this profile, this is important for proper formatting (you/yours etc.)
 	

@@ -23,7 +23,6 @@ if (!defined('SMF'))
 		  loading any post quoted.
 		- additionally handles previews of posts.
 		- uses the Post template and language file, main sub template.
-		- allows wireless access using the protocol_post sub template.
 		- requires different permissions depending on the actions, but most
 		  notably post_new, post_reply_own, and post_reply_any.
 		- shows options for the editing and posting of calendar events and
@@ -1168,10 +1167,6 @@ function Post()
 			'extra_after' => '<span' . ($settings['linktree_inline'] ? ' class="smalltext"' : '') . '><strong class="nav"> )</strong></span>'
 		);
 
-	// Give wireless a linktree url to the post screen, so that they can switch to full version.
-	if (WIRELESS)
-		$context['linktree'][count($context['linktree']) - 1]['url'] = $scripturl . '?action=post;' . (!empty($topic) ? 'topic=' . $topic : 'board=' . $board) . '.' . $_REQUEST['start'] . (isset($_REQUEST['msg']) ? ';msg=' . (int) $_REQUEST['msg'] . ';' . $context['session_var'] . '=' . $context['session_id'] : '');
-
 	// If they've unchecked an attachment, they may still want to attach that many more files, but don't allow more than num_allowed_attachments.
 	// !!! This won't work if you're posting an event.
 	$context['num_allowed_attachments'] = empty($modSettings['attachmentNumPerPostLimit']) ? 50 : min($modSettings['attachmentNumPerPostLimit'] - count($context['current_attachments']) + (isset($deleted_attachments) ? $deleted_attachments : 0), $modSettings['attachmentNumPerPostLimit']);
@@ -1299,9 +1294,7 @@ function Post()
 	checkSubmitOnce('register');
 
 	// Finally, load the template.
-	if (WIRELESS && WIRELESS_PROTOCOL != 'wap')
-		$context['sub_template'] = WIRELESS_PROTOCOL . '_post';
-	elseif (!isset($_REQUEST['xml']))
+	if (!isset($_REQUEST['xml']))
 		loadTemplate('Post');
 }
 

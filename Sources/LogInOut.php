@@ -22,8 +22,6 @@ if (!defined('SMF'))
 		- caches the referring URL in $_SESSION['login_url'].
 		- uses the Login template and language file with the login sub
 		  template.
-		- if you are using a wireless device, uses the protocol_login sub
-		  template in the Wireless template.
 		- accessed from ?action=login.
 
 	void Login2()
@@ -59,16 +57,9 @@ function Login()
 {
 	global $txt, $context, $scripturl;
 
-	// In wireless?  If so, use the correct sub template.
-	if (WIRELESS)
-		$context['sub_template'] = WIRELESS_PROTOCOL . '_login';
-	// Otherwise, we need to load the Login template/language file.
-	else
-	{
-		loadLanguage('Login');
-		loadTemplate('Login');
-		$context['sub_template'] = 'login';
-	}
+	loadLanguage('Login');
+	loadTemplate('Login');
+	$context['sub_template'] = 'login';
 
 	// Get the template ready.... not really much else to do.
 	$context['page_title'] = $txt['login'];
@@ -156,14 +147,8 @@ function Login2()
 		$modSettings['cookieTime'] = (int) $_POST['cookielength'];
 
 	loadLanguage('Login');
-	// Load the template stuff - wireless or normal.
-	if (WIRELESS)
-		$context['sub_template'] = WIRELESS_PROTOCOL . '_login';
-	else
-	{
-		loadTemplate('Login');
-		$context['sub_template'] = 'login';
-	}
+	loadTemplate('Login');
+	$context['sub_template'] = 'login';
 
 	// Set up the default/fallback stuff.
 	$context['default_username'] = isset($_POST['user']) ? preg_replace('~&amp;#(\\d{1,7}|x[0-9a-fA-F]{1,6});~', '&#\\1;', htmlspecialchars($_POST['user'])) : '';

@@ -362,8 +362,7 @@ function template_body_below()
 	<div class="righttext floatright">',$loadtime,'<br>Forum time: ',strftime($modSettings['time_format'], $time_now) . ' '. $tz,'</div>
 	<div class="copyright">', my_theme_copyright(), '</div>
 	<div><a id="button_xhtml" href="http://validator.w3.org/check?uri=referer" target="_blank" class="new_win" title="Valid HTML"><span>HTML</span></a> |
-	', !empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']) ? '<a id="button_rss" href="' . $scripturl . '?action=.xml;type=rss" class="new_win"><span>' . $txt['rss'] . '</span></a> | ' : '', '
-	<a id="button_wap2" href="', $scripturl , '?wap2" class="new_win"><span>', $txt['wap2'], '</span></a>
+	', !empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']) ? '<a id="button_rss" href="' . $scripturl . '?action=.xml;type=rss" class="new_win"><span>' . $txt['rss'] . '</span></a>' : '', '
 	</div>
 	</div>
 	</footer>';

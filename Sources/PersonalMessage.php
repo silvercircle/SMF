@@ -111,13 +111,7 @@ function MessageMain()
 	require_once($sourcedir . '/Subs-Post.php');
 
 	loadLanguage('PersonalMessage');
-
-	if (WIRELESS && WIRELESS_PROTOCOL == 'wap')
-		fatal_lang_error('wireless_error_notyet', false);
-	elseif (WIRELESS)
-		$context['sub_template'] = WIRELESS_PROTOCOL . '_pm';
-	else
-		loadTemplate('PersonalMessage');
+	loadTemplate('PersonalMessage');
 
 	// Load up the members maximum message capacity.
 	if ($user_info['is_admin'])
@@ -256,7 +250,7 @@ function MessageMain()
 	);
 
 	// Preferences...
-	$context['display_mode'] = WIRELESS ? 0 : $user_settings['pm_prefs'] & 3;
+	$context['display_mode'] = $user_settings['pm_prefs'] & 3;
 
 	$subActions = array(
 		'addbuddy' => 'WirelessAddBuddy',
@@ -418,8 +412,7 @@ function messageIndexBar($area)
 	$context['menu_item_selected'] = $pm_include_data['current_area'];
 
 	// obExit will know what to do!
-	if (!WIRELESS)
-		$context['template_layers'][] = 'pm';
+	$context['template_layers'][] = 'pm';
 }
 
 // A folder, ie. inbox/sent etc.
@@ -843,8 +836,7 @@ function MessageFolder()
 		$messages_request = false;
 
 	$context['can_send_pm'] = allowedTo('pm_send');
-	if (!WIRELESS)
-		$context['sub_template'] = 'folder';
+	$context['sub_template'] = 'folder';
 	$context['page_title'] = $txt['pm_inbox'];
 
 	// Finally mark the relevant messages as read.
@@ -1519,11 +1511,8 @@ function MessagePost()
 
 	loadLanguage('PersonalMessage');
 	// Just in case it was loaded from somewhere else.
-	if (!WIRELESS)
-	{
-		loadTemplate('PersonalMessage');
-		$context['sub_template'] = 'send';
-	}
+	loadTemplate('PersonalMessage');
+	$context['sub_template'] = 'send';
 
 	// Extract out the spam settings - cause it's neat.
 	list ($modSettings['max_pm_recipients'], $modSettings['pm_posts_verification'], $modSettings['pm_posts_per_hour']) = explode(',', $modSettings['pm_spam_settings']);
@@ -1795,9 +1784,7 @@ function messagePostError($error_types, $named_recipients, $recipient_ids = arra
 
 	$context['menu_data_' . $context['pm_menu_id']]['current_area'] = 'send';
 
-	if (!WIRELESS)
-		$context['sub_template'] = 'send';
-
+	$context['sub_template'] = 'send';
 	$context['page_title'] = $txt['send_message'];
 
 	// Got some known members?

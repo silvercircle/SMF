@@ -194,7 +194,7 @@ function aStreamGet($b = 0, $xml = false, $global = false)
 	$context['act_global'] = false;
 	$total = 0;
 	
-	$perpage = $xml ? 15 : (empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) && !WIRELESS ? $options['topics_per_page'] : $modSettings['defaultMaxTopics']);	
+	$perpage = $xml ? 15 : (empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) ? $options['topics_per_page'] : $modSettings['defaultMaxTopics']);
 	
 	if($user_info['is_admin'])
 		$pquery = ' AND (a.is_private <= ' . ACT_PLEVEL_ADMIN . ' OR a.id_member = {int:id_user} OR a.id_owner = {int:id_user}) ';
@@ -331,7 +331,7 @@ function showActivitiesProfile($memID)
 		return(showActivitiesProfileSettings($memID));
 	
 	$context['page_title'] = $txt['showActivities'] . ' - ' . $user_profile[$memID]['real_name'];
-	$context['pageindex_multiplier'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) && !WIRELESS ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
+	$context['pageindex_multiplier'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
 	$context['act_results'] = 0;
 	$context['rich_output'] = true;
 

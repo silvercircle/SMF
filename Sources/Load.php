@@ -715,7 +715,7 @@ function loadBoard()
 		if(isset($_t[0]) && isset($_t[1]) && intval($_t[1]) > 0) {
 			if($_t[0] == $board)
 				$stored_topicstart = $_t[1];
-				$topics_per_page = 	empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) && !WIRELESS ? $options['topics_per_page'] : $modSettings['defaultMaxTopics'];
+				$topics_per_page = 	empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) ? $options['topics_per_page'] : $modSettings['defaultMaxTopics'];
 		}
 	}
 	
@@ -1570,15 +1570,7 @@ function loadTheme($id_theme = 0, $initialize = true)
 		'quotefast',
 	);
 
-	// Wireless mode?  Load up the wireless stuff.
-	if (WIRELESS)
-	{
-		$context['template_layers'] = array(WIRELESS_PROTOCOL);
-		loadTemplate('Wireless');
-		loadLanguage('Wireless+index+Modifications');
-	}
-	// Output is fully XML, so no need for the index template.
-	elseif (isset($_REQUEST['xml']))
+	if (isset($_REQUEST['xml']))
 	{
 		loadLanguage('index+Modifications');
 		loadTemplate('Xml');
@@ -2127,7 +2119,7 @@ function template_include($filename, $once = false)
 		else
 			ob_start();
 
-		if (isset($_GET['debug']) && !WIRELESS)
+		if (isset($_GET['debug']))
 			header('Content-Type: application/xhtml+xml; charset=UTF-8');
 
 		// Don't cache error pages!!

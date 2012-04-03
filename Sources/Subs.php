@@ -652,10 +652,6 @@ function constructPageIndex($base_url, &$start, $max_value, $num_per_page, $flex
 	else
 		$start = max(0, (int) $start - ((int) $start % (int) $num_per_page));
 
-	// Wireless will need the protocol on the URL somewhere.
-	if (WIRELESS)
-		$base_url .= ';' . WIRELESS_PROTOCOL;
-
 	$base_link = '<a class="navPages'. ($compact ? ' compact' : '') . '" href="' . ($flexible_start ? $base_url : strtr($base_url, array('%' => '%%')) . ';start=%1$d') . '">%2$s</a> ';
 
 	// If they didn't enter an odd value, pretend they did.
@@ -954,10 +950,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	if ($message === '')
 		return '';
 
-	// Never show smileys for wireless clients.  More bytes, can't see it anyway :P.
-	if (WIRELESS)
-		$smileys = false;
-	elseif ($smileys !== null && ($smileys == '1' || $smileys == '0'))
+	if ($smileys !== null && ($smileys == '1' || $smileys == '0'))
 		$smileys = (bool) $smileys;
 
 	if (empty($modSettings['enableBBC']) && $message !== false)
@@ -2671,20 +2664,7 @@ function redirectexit($setLocation = '', $refresh = false)
 
 	$add = preg_match('~^(ftp|http)[s]?://~', $setLocation) == 0 && substr($setLocation, 0, 6) != 'about:';
 
-	if (WIRELESS)
-	{
-		// Add the scripturl on if needed.
-		if ($add)
-			$setLocation = $scripturl . '?' . $setLocation;
-
-		$char = strpos($setLocation, '?') === false ? '?' : ';';
-
-		if (strpos($setLocation, '#') !== false)
-			$setLocation = strtr($setLocation, array('#' => $char . WIRELESS_PROTOCOL . '#'));
-		else
-			$setLocation .= $char . WIRELESS_PROTOCOL;
-	}
-	elseif ($add)
+	if ($add)
 		$setLocation = $scripturl . ($setLocation != '' ? '?' . $setLocation : '');
 
 	// Put the session ID in.
@@ -2701,7 +2681,7 @@ function redirectexit($setLocation = '', $refresh = false)
 		SimpleSEF::fixRedirectUrl($setLocation, $refresh);
 
 	// We send a Refresh header only in special cases because Location looks better. (and is quicker...)
-	if ($refresh && !WIRELESS)
+	if ($refresh)
 		header('Refresh: 0; URL=' . strtr($setLocation, array(' ' => '%20')));
 	else
 		header('Location: ' . str_replace(' ', '%20', $setLocation));
@@ -2788,13 +2768,13 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 	$_SESSION['USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
 
 	// Hand off the output to the portal, etc. we're integrated with.
-	HookAPI::callHook('integrate_exit', array($do_footer && !WIRELESS));
+	HookAPI::callHook('integrate_exit', array($do_footer));
 
 	if(!empty($modSettings['simplesef_enable']))
-		SimpleSEF::fixXMLOutput($do_footer && !WIRELESS);
+		SimpleSEF::fixXMLOutput($do_footer);
 
 	// Don't exit if we're coming from index.php; that will pass through normally.
-	if (!$from_index || WIRELESS)
+	if (!$from_index)
 		exit;
 }
 
@@ -3443,7 +3423,6 @@ function db_debug_junk()
 		ob_end_clean();
 		ob_start('ob_sessrewrite');
 	}
-
 	echo preg_replace('~</body>\s*</html>~', '', $temp), '
 <div class="smalltext" style="text-align: left; margin: 1ex;">
 	', $txt['debug_templates'], count($context['debug']['templates']), ': <em>', implode('</em>, <em>', $context['debug']['templates']), '</em>.<br />
@@ -3672,7 +3651,7 @@ function host_from_ip($ip)
 // Chops a string into words and prepares them to be inserted into (or searched from) the database.
 function text2words($text, $max_chars = 20, $encrypt = false)
 {
-	global $smcFunc, $context;
+	global $context;
 
 	// Step 1: Remove entities/things we don't consider words:
 	$words = preg_replace('~(?:[\x0B\0' . ($context['server']['complex_preg_chars'] ? '\x{A0}' : "\xC2\xA0") . '\t\r\s\n(){}\\[\\]<>!@$%^*.,:+=`\~\?/\\\\]+|&(?:amp|lt|gt|quot);)+~u', ' ', strtr($text, array('<br />' => ' ')));
@@ -4217,7 +4196,6 @@ function HDC($a, $b, $c)
 {
 	return($a ? $b : $c);
 }
-
 /**
  * @param $title	the title for the message window
  * @param $msg		the message text

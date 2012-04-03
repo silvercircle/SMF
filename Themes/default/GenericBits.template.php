@@ -62,6 +62,7 @@ function template_board_children(&$board)
 function template_boardbit(&$board)
 {
 	global $context, $txt, $scripturl, $options, $settings;
+
 	if($board['act_as_cat'])
 		return template_boardbit_subcat($board);
 	echo '

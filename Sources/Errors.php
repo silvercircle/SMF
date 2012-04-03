@@ -52,7 +52,6 @@ if (!defined('SMF'))
 
 	void setup_fatal_error_context(string error_message)
 		- uses the fatal_error sub template of the Errors template - or the
-		  error sub template in the Wireless template.
 		- used by fatal_error() and fatal_lang_error()
 
 	void show_db_error(bool loadavg = false)
@@ -297,15 +296,8 @@ function setup_fatal_error_context($error_message)
 	if (empty($context['page_title']))
 		$context['page_title'] = $context['error_title'];
 
-	// Display the error message - wireless?
-	if (defined('WIRELESS') && WIRELESS)
-		$context['sub_template'] = WIRELESS_PROTOCOL . '_error';
-	// Load the template and set the sub template.
-	else
-	{
-		loadTemplate('Errors');
-		$context['sub_template'] = 'fatal_error';
-	}
+	loadTemplate('Errors');
+	$context['sub_template'] = 'fatal_error';
 
 	// If this is SSI, what do they want us to do?
 	if (SMF == 'SSI')

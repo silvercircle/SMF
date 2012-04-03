@@ -20,7 +20,6 @@ if (!defined('SMF'))
 
 	void Display()
 		- loads the posts in a topic up so they can be displayed.
-		- supports wireless, using wap/wap2/imode and the Wireless templates.
 		- uses the main sub template of the Display template.
 		- requires a topic, and can go to the previous or next topic from it.
 		- jumps to the correct post depending on a number/time/IS_MSG passed.
@@ -82,10 +81,6 @@ function Display()
 	if (empty($topic))
 		fatal_lang_error('no_board', false);
 
-	// Load the proper template and/or sub template.
-	if (WIRELESS)
-		$context['sub_template'] = WIRELESS_PROTOCOL . '_display';
-
 	// Not only does a prefetch make things slower for the server, but it makes it impossible to know if they read it.
 	if (isset($_SERVER['HTTP_X_MOZ']) && $_SERVER['HTTP_X_MOZ'] == 'prefetch')
 	{
@@ -94,7 +89,7 @@ function Display()
 		die;
 	}
 	// How much are we sticking on each page?
-	$context['messages_per_page'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) && !WIRELESS ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
+	$context['messages_per_page'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
 	$context['page_number'] = isset($_REQUEST['start']) ? $_REQUEST['start'] / $context['messages_per_page'] : 0;
 
 	// Let's do some work on what to search index.
@@ -511,7 +506,6 @@ function Display()
 		'num_pages' => floor(($context['total_visible_posts'] - 1) / $context['messages_per_page']) + 1,
 	);
 
-	// Figure out all the link to the next/prev/first/last/etc. for wireless mainly.
 	$context['links'] = array(
 		'first' => $_REQUEST['start'] >= $context['messages_per_page'] ? $scripturl . '?topic=' . $topic . '.0' : '',
 		'prev' => $_REQUEST['start'] >= $context['messages_per_page'] ? $scripturl . '?topic=' . $topic . '.' . ($_REQUEST['start'] - $context['messages_per_page']) : '',
@@ -1023,7 +1017,7 @@ function Display()
 		}
 	}
 	// now we know which display template we need
-	if(!WIRELESS && !isset($_REQUEST['perma']))
+	if(!isset($_REQUEST['perma']))
 		loadTemplate($layout > 1 ? 'DisplayPage' : 'Display');
 	loadTemplate('Postbit');
 
@@ -1209,12 +1203,6 @@ function Display()
 	$context['can_see_hidden_level1'] = allowedTo('see_hidden1');
 	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
 	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
-	// Wireless shows a "more" if you can do anything special.
-	if (WIRELESS && WIRELESS_PROTOCOL != 'wap')
-	{
-		$context['wireless_more'] = $context['can_sticky'] || $context['can_lock'] || allowedTo('modify_any');
-		$context['wireless_moderate'] = isset($_GET['moderate']) ? ';moderate' : '';
-	}
 
 	// Load up the "double post" sequencing magic.
 	if (!empty($options['display_quick_reply']))

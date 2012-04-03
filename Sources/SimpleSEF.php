@@ -579,7 +579,7 @@ class SimpleSEF {
      * our output buffer.  This catches the buffer and runs it through.
      *
      * @global array $modSettings
-     * @param boolean $do_footer If we didn't do a footer and we're not wireless
+     * @param boolean $do_footer If we didn't do a footer
      * @return void
      */
     public static function fixXMLOutput($do_footer) {
