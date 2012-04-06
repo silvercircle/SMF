@@ -23,7 +23,7 @@ function template_main()
 		<div class="pagelinks">
 			<span>',$context['page_index'], '</span>
 		</div>
-		<div class="posts_container framed_region">';
+		<div class="posts_container">';
 
 	foreach ($context['posts'] as &$post)
 		template_postbit_compact($post);

@@ -1,6 +1,6 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li](core) added jQuery plugin (easy tooltip) for pretty and formatted tooltips[/li]
-[li](core) added jQuery hoverIntent() plugin to implement mouseover with delay[/li]
+[li](ux) Some theme changes[/li]
+[li](core) removed old Wireless theme and support code. Instead of this, a new and modern mobile theme will be implemented at a later stage.[/li]
 [/list]

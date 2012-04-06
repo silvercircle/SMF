@@ -36,8 +36,8 @@ function template_postbit_normal(&$message)
 	 <h5 style="display:inline;" id="subject_', $message['id'], '">
 	  ', $message['subject'], '
 	 </h5>
-	 <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['permahref'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span style="cursor:pointer" onclick="sharePost($(this));">Share</span>' : ''),'</span>
-	 <span class="smalltext">&nbsp;',$message['time'], '</span>
+	 <span class="tinytext ',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['permahref'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span style="cursor:pointer" onclick="sharePost($(this));">Share</span>' : ''),'</span>
+	 <span class="tinytext">&nbsp;',$message['time'], '</span>
 	 <div id="msg_', $message['id'], '_quick_mod"></div>
     </div>
 	<div class="clear"></div>';

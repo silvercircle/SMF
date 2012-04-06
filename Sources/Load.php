@@ -1279,6 +1279,37 @@ function detectBrowser()
 	// Robots shouldn't be logging in or registering.  So, they aren't a bot.  Better to be wrong than sorry (or people won't be able to log in!), anyway.
 	if ((isset($_REQUEST['action']) && in_array($_REQUEST['action'], array('login', 'login2', 'register'))) || !$user_info['is_guest'])
 		$context['browser']['possibly_robot'] = false;
+
+	$disable_mobile = $force_mobile = false;
+
+	if(isset($_COOKIE['usemobile'])) {
+	    $force_mobile = $_COOKIE['usemobile'] == 'yes' ? true : false;
+		$disable_mobile = $_COOKIE['usemobile'] == 'no' ? true : false;
+	}
+
+	if(isset($_REQUEST['mobile']) && $_REQUEST['mobile'] == 1) {
+		setcookie('usemobile', 'yes', time() + 86400 * 365);
+		$force_mobile = true;
+	}
+	if(isset($_REQUEST['mobile']) && $_REQUEST['mobile'] == 0) {
+		setcookie('usemobile', 'no', time() + 86400 * 365);
+		$disable_mobile = true;
+		$force_mobile = false;
+	}
+
+	$mobile_detector = new Mobile_Detect();
+	if($force_mobile || (($mobile_detector->isMobile() || $mobile_detector->isTablet()) && !$disable_mobile)) {
+		$context['mobile'] = true;
+		define('MOBILE', true);
+		define('MOBILE_SUBDIR', '/m');
+		define('CSS_PRIMARY_BASE', 'mobile');
+	}
+	else {
+		$context['mobile'] = false;
+		define('MOBILE', false);
+		define('MOBILE_SUBDIR', '');
+		define('CSS_PRIMARY_BASE', 'index');
+	}
 }
 
 // Load a theme, by ID.
@@ -1551,7 +1582,6 @@ function loadTheme($id_theme = 0, $initialize = true)
 
 	// Detect the browser. This is separated out because it's also used in attachment downloads
 	detectBrowser();
-
 	// Set the top level linktree up.
 	array_unshift($context['linktree'], array(
 		'url' => URL::home(),		//$scripturl
@@ -1706,14 +1736,14 @@ function loadTheme($id_theme = 0, $initialize = true)
 		}
 	}
 
+	$settings['primary_css'] = $settings['theme_url'] . MOBILE_SUBDIR . '/css/' . CSS_PRIMARY_BASE . $context['theme_variant'] . '.css' . $context['jsver'];
+
 	$context['theme_scripts'] = array();
 	$context['inline_footer_script'] = '';
 	$context['news_item_count'] = 0;
 
 	// Call load theme integration functions.
 	HookAPI::callHook('integrate_load_theme');
-
-	//SimpleSEF::loadTheme();
 
 	// We are ready to go.
 	$context['theme_loaded'] = true;
@@ -1753,7 +1783,12 @@ function loadTemplate($template_name, $style_sheets = array(), $fatal = true)
 	$loaded = false;
 	foreach ($settings['template_dirs'] as $template_dir)
 	{
-		if (file_exists($template_dir . '/' . $template_name . '.template.php'))
+		if (MOBILE && file_exists($template_dir . MOBILE_SUBDIR . '/' . $template_name . '.template.php')) {
+			$loaded = true;
+			template_include($template_dir . MOBILE_SUBDIR . '/' . $template_name . '.template.php', true);
+			break;
+		}
+		else if (file_exists($template_dir . '/' . $template_name . '.template.php'))
 		{
 			$loaded = true;
 			template_include($template_dir . '/' . $template_name . '.template.php', true);

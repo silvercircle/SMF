@@ -167,7 +167,7 @@ function template_body_above()
 	<div id="jsconfirm" style="width:450px;" class="jqmWindow"><div class="jqmWindow_container"><div class="glass jsconfirm title"></div><div class="jsconfirm content"></div><div class="floatright mediummargin"><input type="submit" id="c_yes" value="Yes" class="button_submit" /><input type="reset" id="c_no" value="No" class="button_reset" /><input type="submit" id="c_ok" value="Ok" class="button_submit" /></div><div class="clear"></div></div></div>
 	<div id="ajaxbusy" style="display:none;"><img src="',$settings['images_url'],'/ajax-loader.gif" alt="loader" /></div>
 	<div id="mcard" style="display:none;"><div onclick="mcardClose();" id="mcard_close">X</div><div id="mcard_inner"></div></div>
-	<div id="wrap" style="max-width:',empty($settings['forum_width']) ? '3000px;' : $settings['forum_width'],';">
+	<div id="wrap">
 	<header>
 	<div id="header">
 	<div id="upper_section" class="smalltext">
@@ -177,19 +177,17 @@ function template_body_above()
 		<div class="notibar">
 			<div class="notibar right">
 			<div class="floatright">
-			<span id="curfontsize"></span>
-			<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
-			<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
+			 <span id="curfontsize"></span>
 			</div>
 			<div class="floatright" style="position:relative;">';
-			if($modSettings['astream_active']) {
-				echo '
+	if($modSettings['astream_active']) {
+		echo '
 			<span onclick="getAStream($(this));return(false);" class="button notify">',$astream_link,'</span>';
-			if(!$context['user']['is_guest'])
-				echo '
-			<span id="notification_anchor" onclick="getNotifications($(this));return(false);" class="button notify"><a>Your notifications</a></span><span style="',($alerts > 0 ? '':'display:none;'),'position:relative;top:-14px;right:14px;" id="alerts">',$alerts,'</span><div id="notification_target" style="display:inline;position:relative;"></div>';
-			}
+		if(!$context['user']['is_guest'])
 			echo '
+			<span id="notification_anchor" onclick="getNotifications($(this));return(false);" class="button notify"><a>Your notifications</a></span><span style="',($alerts > 0 ? '':'display:none;'),'position:relative;top:-14px;right:14px;" id="alerts">',$alerts,'</span><div id="notification_target" style="display:inline;position:relative;"></div>';
+	}
+	echo '
 			</div>
 			</div>
 			<div class="notibar_intro"></div>
@@ -243,42 +241,8 @@ EOT;
 	}
 	$sidebar_allowed = isset($context['is_board_index']);			// todo: make this more flexible and define a set of pages where the sidebar can show up
 	$sidebar_vis = (isset($_COOKIE['smf_sidebar_disabled']) && $_COOKIE['smf_sidebar_disabled'] == 1) ? false : true;
-	if($sidebar_allowed)
-		echo '
-			<div onclick="sbToggle($(this));" id="sbtoggle" class="',$sidebar_vis ? 'collapse' : 'expand','">&nbsp;</div>';
 	// Show the navigation tree.
-	echo '<div style="position:relative;">
-		  <form onmouseout="return false;" onsubmit="submitSearchBox();" class="floatright" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="UTF-8">';
-			// Search within current topic?
-			echo '
-				<div id="adv_search" style="width:246px;padding:0;" class="smalltext">
-				<input style="width:215px;padding-left:26px;margin:0;" onclick="var s_event = arguments[0] || window.event;openAdvSearch(s_event);return(false);" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" name="search" value="',$search_label,'" class="searchfield" />
-				<br><h3 class="bbc_head l2">',$txt['search_by_member'],'</h3>
-				<div style="text-align:center;margin-bottom:10px;"><input style="width:90%;" class="input_text" type="text" name="userspec" id="userspec" value="*" /></div>
-				<input class="input_check floatleft" type="checkbox" name="show_complete" id="show_complete" value="1" />&nbsp;<h3 class="bbc_head l2" style="margin-left:0;">',$txt['search_show_complete_messages'],'</h3><br class="clear">';
-				if($scope == 2) {
-					echo '<div style="padding-left:20px;"><input type="radio" name="type" id="i_topic" class="input_radio" checked="checked" />',$txt['search_topic'],'<br />
-						<input type="radio" name="type" id="i_board" class="input_radio" />',$txt['search_board'],'<br />
-						<input type="radio" name="type" id="i_site" class="input_radio" />',$txt['search_all_boards'],'
-						<input type="hidden" id="s_topic" name="topic" value="', $context['current_topic'], '" />
-						<input type="hidden" id="s_board" name="brd[', $context['current_board'], ']" value="', $context['current_board'], '" /></div>';
-				}
-				else if($scope == 1) {
-						echo '<div style="padding-left:20px;"><input name="type" type="radio" id="i_board" checked="checked" class="input_radio" />',$txt['search_board'],'<br />
-						<input type="radio" name="type" id="i_site" class="input_radio" />',$txt['search_all_boards'],'
-						<input type="hidden" id="s_board" name="brd[', $context['current_board'], ']" value="', $context['current_board'], '" /></div>';
-				}
-				echo '<input style="width:100%;margin:10px 0;" type="submit" name="submit" value="', 'Search now', '" class="button_submit" />
-			 	  <div class="centertext"><a href="',url::action($scripturl.'?action=search'),'" >',$txt['search_advanced'],'</a></div>';
-				echo '</div>
-				<noscript>
-				<input style="margin:0;" type="submit" name="submit" value="', $txt['go'], '" class="button_submit" />
-				</noscript>';
-	echo '
-	</form>
-	</div>
-	<div class="clear cContainer_end"></div>
-	',$context['template_hooks']['global']['above'];
+	echo $context['template_hooks']['global']['above'];
 
 	if($context['news_item_count'] && isset($context['is_board_index'])) {
 		//$collapser = array('id' => 'news_boardindex', 'title' => 'NEWS', 'bodyclass' => 'blue_container');
@@ -296,8 +260,8 @@ EOT;
 	}
 	echo '<aside>
 		  <div id="sidebar" style="width:260px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
-		if($sidebar_allowed)
-			template_sidebar_content();
+	if($sidebar_allowed)
+		template_sidebar_content();
 	echo '</div>
 		  </aside>
 	      <div id="container" style="margin-right:',$sidebar_allowed ? '270px' : '0',';">
@@ -313,7 +277,7 @@ function template_body_below()
 {
 	global $context, $settings, $options, $scripturl, $txt, $modSettings, $fbxml, $twitter_widgets, $plusone;
 	echo '<div class="clear"></div>
-		</div></div></div>';    
+		</div></div></div>';
 
 	// Show the "Powered by" and "Valid" logos, as well as the copyright. Remember, the copyright must be somewhere!
 	echo '
@@ -321,7 +285,7 @@ function template_body_below()
 	// <![CDATA[
 	';
 
-	if(isset($context['need_synhlt']))  // include syntax highlighter js when needed. 
+	if(isset($context['need_synhlt']))  // include syntax highlighter js when needed.
 		echo '
 	var t3 = document.createElement(\'SCRIPT\');
 	t3.type = "text/javascript";
@@ -336,7 +300,7 @@ function template_body_below()
 	_gaq.push([\'_setAccount\', \'',$modSettings['GA_tracker_id'], '\']);
 	_gaq.push([\'_setDomainName\', \'',$modSettings['GA_domain_name'],'\']);
    	_gaq.push([\'_trackPageview\']);
-	
+
 	var ga = document.createElement(\'script\');
 	var sa = document.getElementsByTagName(\'script\')[0];
 	ga.async = true;
@@ -350,11 +314,11 @@ function template_body_below()
 	',$context['template_hooks']['global']['footer'],'
 	<footer>
 	<div class="clear" id="footer_section">';
-	
+
 	// Show the load time?
 	if ($context['show_load_time'])
 		$loadtime = $context['load_time']. 's CPU, '.$context['load_queries'] . $txt['queries'];
-		
+
 	$time_now = forum_time(false);
 	$tz = date_default_timezone_get();
 	echo '
@@ -409,7 +373,7 @@ function theme_linktree($force_show = false)
 {
 	global $context, $shown_linktree;
 	static $ltree = '';
-	
+
 	// If linktree is empty, just return - also allow an override.
 	if (empty($context['linktree']) || (!empty($context['dont_default_linktree']) && !$force_show))
 		return;
@@ -449,7 +413,7 @@ function theme_linktree($force_show = false)
 	}
 	$ltree .= '
 	</ul></div>';
-	
+
 	echo($ltree);
 	$shown_linktree = true;
 }
@@ -462,7 +426,7 @@ function template_menu()
 	$context['menu_buttons']['blog']['title'] = "Blog";
 	$context['menu_buttons']['blog']['show'] = true;
 	$context['menu_buttons']['blog']['href'] = "http://blog.miranda.or.at";
-	
+
 	echo '
 		<div id="main_menu">
 			<ul class="dropmenu" id="menu_nav">';
@@ -476,10 +440,10 @@ function template_menu()
 				<li class="', $button['active_button'] ? 'active' : '', '" id="button_', $act, '">
 					<a class="firstlevel" href="', $button['href'], '"', isset($button['target']) ? ' target="' . $button['target'] . '"' : '', '>
 						<span class="', isset($button['is_last']) ? 'last ' : '', 'firstlevel">', $button['title'];
-					echo '</span>';
-					echo '</a>';
-					if($has_subitems)
-						echo '<span onclick="onMenuArrowClick($(this));" style="display:inline-block;" id="_',$act,'" class="m_downarrow">&nbsp;</span>';
+		echo '</span>';
+		echo '</a>';
+		if($has_subitems)
+			echo '<span onclick="onMenuArrowClick($(this));" style="display:inline-block;" id="_',$act,'" class="m_downarrow">&nbsp;</span>';
 		if ($has_subitems)
 		{
 			echo '
@@ -513,7 +477,7 @@ function template_menu()
 				echo '
 						</li>';
 			}
-				echo '
+			echo '
 					</ul>';
 		}
 		echo '
@@ -559,7 +523,7 @@ function template_button_strip($button_strip, $direction = 'top', $strip_options
 	echo '
 		<div class="',$strip_options['class'], !empty($direction) ? ' float' . $direction : '', '"', (empty($buttons) ? ' style="display: none;"' : ''), (!empty($strip_options['id']) ? ' id="' . $strip_options['id'] . '"': ''), '>
 			<ul class="',$strip_options['class'],'">',
-				implode('', $buttons), '
+	implode('', $buttons), '
 			</ul>
 		</div>';
 }
@@ -584,18 +548,18 @@ function socialbar($l, $t)
 function socialbar_passive($l, $t)
 {
 	global $plusone;
-	
+
 	echo '<div class="bmbar"><div class="title">Share this topic: </div>';
-		$url = $l;
-		$plusone++;
-		
-		//echo '<div class="floatleft"><a role="button" rel="nofollow" class="share_button share_fb" href="http://www.facebook.com/sharer.php?u=',$url,'">Share</a>
-			//<a role="button" rel="nofollow" class="share_button share_tw" href="http://twitter.com/share?text=',$t,'&amp;url=',$url,'">Tweet</a>
-			//<a role="button" rel="nofollow" class="share_button share_digg" href="http://digg.com/submit?phase=2&amp;title=',$t,'&amp;url=',$url,'">Digg</a>
-			//<a role="button" rel="nofollow" class="share_button share_buzz" href="http://www.google.com/buzz/post?url=',$url,'">Buzz</a></div>&nbsp;&nbsp;
-            //<div class="floatright" style="max-width:65px;overflow:hidden;"><div class="g-plusone" data-href="',$url,'" data-size="medium" data-count="true"></div></div>
-       		//<div class="clear"></div>';
-       	echo '<div id="socialshareprivacy"></div><div class="clear"></div>';
+	$url = $l;
+	$plusone++;
+
+	//echo '<div class="floatleft"><a role="button" rel="nofollow" class="share_button share_fb" href="http://www.facebook.com/sharer.php?u=',$url,'">Share</a>
+	//<a role="button" rel="nofollow" class="share_button share_tw" href="http://twitter.com/share?text=',$t,'&amp;url=',$url,'">Tweet</a>
+	//<a role="button" rel="nofollow" class="share_button share_digg" href="http://digg.com/submit?phase=2&amp;title=',$t,'&amp;url=',$url,'">Digg</a>
+	//<a role="button" rel="nofollow" class="share_button share_buzz" href="http://www.google.com/buzz/post?url=',$url,'">Buzz</a></div>&nbsp;&nbsp;
+	//<div class="floatright" style="max-width:65px;overflow:hidden;"><div class="g-plusone" data-href="',$url,'" data-size="medium" data-count="true"></div></div>
+	//<div class="clear"></div>';
+	echo '<div id="socialshareprivacy"></div><div class="clear"></div>';
 	echo '</div><div class="clear"></div>';
 }
 
@@ -613,8 +577,8 @@ function template_sidebar_content()
 		  </script>';
 
 	template_create_collapsible_container($collapser);
-		//<h1 class="bigheader greyback" style="margin-top:0;">User panel</h1>';
-		
+	//<h1 class="bigheader greyback" style="margin-top:0;">User panel</h1>';
+
 	// If the user is logged in, display stuff like their name, new messages, etc.
 	// for the logo -> <img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" />
 	echo '
@@ -704,7 +668,7 @@ function template_sidebar_content()
 	}
 	echo '</div>
 		<div class="cContainer_end"></div>';
-		
+
 	// Show statistical style information...
 	if ($settings['show_stats_index'] && isset($context['show_stats']))
 	{
@@ -717,10 +681,10 @@ function template_sidebar_content()
 				 <dt>', $txt['posts'], ': </dt><dd class="righttext">',$context['common_stats']['total_posts'], '</dd>
 				 <dt>', $txt['topics'], ': </dt><dd class="righttext">', $context['common_stats']['total_topics'], '</dd>
 				 <dt>', $txt['members'], ': </dt><dd class="righttext">', $context['common_stats']['total_members'], '</dd>';
-				 if(!empty($settings['show_latest_member']))
-				 	echo '<dt>', $txt['latest_member'] . ': </dt><dd class="righttext"><strong>', $context['common_stats']['latest_member']['link'] . '</strong></dd>';
-				 echo '</dl>';
-				echo '
+		if(!empty($settings['show_latest_member']))
+			echo '<dt>', $txt['latest_member'] . ': </dt><dd class="righttext"><strong>', $context['common_stats']['latest_member']['link'] . '</strong></dd>';
+		echo '</dl>';
+		echo '
 				<div>
 				  <div class="floatright righttext"><a href="', URL::action($scripturl . '?action=recent') . '">', $txt['recent_view'], '</a>', $context['show_stats'] ? '
 				  </div>
@@ -731,7 +695,7 @@ function template_sidebar_content()
 			</div>
 			<div class="cContainer_end"></div>';
 	}
-	
+
 	// social panel in the side bar
 	if(($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar']))) {
 		$collapser = array('id' => 'social_panel', 'title' => 'Socialize', 'bodyclass' => $widgetstyle, 'framed' => 'smallpadding');
@@ -744,7 +708,7 @@ function template_sidebar_content()
 		</div>
 		<div class="cContainer_end"></div>';
 	}
-	
+
 	// This is the "Recent Posts" bar.
 	if (!empty($settings['number_recent_posts']) && (!empty($context['latest_posts']) || !empty($context['latest_post'])))
 	{
@@ -792,7 +756,7 @@ function template_sidebar_content()
 			<div class="cContainer_end"></div>
 			';
 	}
-	
+
 	// Show information about events, birthdays, and holidays on the calendar.
 	if ($context['show_calendar'])
 	{
@@ -805,16 +769,16 @@ function template_sidebar_content()
 
 		// Holidays like "Christmas", "Chanukah", and "We Love [Unknown] Day" :P.
 		if (!empty($context['calendar_holidays']))
-				echo '
+			echo '
 				<div class="holiday">', $txt['calendar_prompt'], '</div>', implode(', ', $context['calendar_holidays']), '<br><div class="cContainer_end"></div>';
 
 		// People's birthdays. Like mine. And yours, I guess. Kidding.
 		if (!empty($context['calendar_birthdays']))	{
-				echo '
+			echo '
 				<div class="birthday">', $context['calendar_only_today'] ? $txt['birthdays'] : $txt['birthdays_upcoming'], '</div> ';
-		/* Each member in calendar_birthdays has:
-				id, name (person), age (if they have one set?), is_last. (last in list?), and is_today (birthday is today?) */
-		foreach ($context['calendar_birthdays'] as $member)
+			/* Each member in calendar_birthdays has:
+				   id, name (person), age (if they have one set?), is_last. (last in list?), and is_today (birthday is today?) */
+			foreach ($context['calendar_birthdays'] as $member)
 				echo '
 				<a href="', URL::user($member['id'], $member['name']), '">', $member['is_today'] ? '<strong>' : '', $member['name'], $member['is_today'] ? '</strong>' : '', isset($member['age']) ? ' (' . $member['age'] . ')' : '', '</a>', $member['is_last'] ? '<br />' : ', ';
 		}
@@ -843,7 +807,7 @@ function template_sidebar_content()
  * create a collapsible container with an id, a title and html content
  * caller is responsible to provide the final </div> unless you pass a box
  * content in $_c['content'].
- * 
+ *
  * you can optionally pass css classes for the the header bar and the body
  * object. By default, the cContainer_* classes define the style.
  * gracefully degrades for people without JavaScript - always expanded.
@@ -853,12 +817,12 @@ function template_sidebar_content()
 function template_create_collapsible_container(array &$_c)
 {
 	global $settings;
-	
+
 	$id = $_c['id']; 		// just bein' lazy :)
 	// one cookie to rule them all (it stores all collapsed ids, separated by ',')
 	// duplicate ids will break this, so be careful
 	$state = isset($_COOKIE['SF_collapsed']) ? array_search($id, explode(',', $_COOKIE['SF_collapsed'])) : false;
-		
+
 	if(!isset($_c['headerclass']))
 		$_c['headerclass'] = 'cContainer_header';
 	if(!isset($_c['headerstyle']))
@@ -870,20 +834,20 @@ function template_create_collapsible_container(array &$_c)
 		<div class="csrcwrapper16px floatright"><img onclick="cContainer($(this));" class="cContainer_c clipsrc ',($state ? '_expand' : '_collapse'),'" id="',$id,'" src="',$settings['images_url'].'/clipsrc.png" alt="*" /></div>';
 	echo '<h3>',$_c['title'],'</h3>
 		</div>';
-		
+
 	if(!isset($_c['bodyclass']))
 		$_c['bodyclass'] = 'cContainer_body';
 	if(!isset($_c['bodystyle']))
 		$_c['bodystyle'] = '';
 	else
 		$_c['bodystyle'] = ' style="'.$_c['bodystyle'].'"';
-		
+
 	echo '
 		<div id="',$id,'_body" class="',$_c['bodyclass'],'"',$_c['bodystyle'],'>
 		<script>
 		// <![CDATA[
 			$("#',$id,'_body").css("display", "',$state ? 'none' : 'normal','");
-		// ]]>	
+		// ]]>
 		</script>';
 	if(isset($_c['content']))
 		echo $_c['content'],'
@@ -895,7 +859,7 @@ function template_create_collapsible_container(array &$_c)
 function template_create_dropselector(&$_c)
 {
 	global $context;
-	
+
 	$id = $_c['id'];
 	echo '
 	<div class="dropselect">
@@ -906,14 +870,14 @@ function template_create_dropselector(&$_c)
 	if(isset($_c['content']))
 		echo $_c['content'];
 	elseif(isset($_c['items'])) {
-	echo '
-	<ol class="commonlist">';
-	foreach($_c['items'] as $item)
 		echo '
+	<ol class="commonlist">';
+		foreach($_c['items'] as $item)
+			echo '
 		<li>
 		 ',$item['html'],'
 		</li>';
-	echo '
+		echo '
 	</ol>';
 	}
 	echo '

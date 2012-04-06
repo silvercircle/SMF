@@ -21,7 +21,19 @@ table {
 }
 #wrap {
 	background-color: #D0D1E6;
-	margin: 0 auto;
+	margin:0;
+}
+#content_section {
+	padding: 0;
+}
+
+/* inner content section, defines the width for the forum itself (but not the header or footer)*/
+#main_content_section {
+	width: auto;
+	background-color: #fff;
+	min-height: 200px;
+	margin: 0;
+	padding-top:10px;
 }
 body, td, th, tr {
 	color: #555;
@@ -62,7 +74,7 @@ img.icon {
 	background: -ms-linear-gradient(top, #a9d4f9 1%,#f9fdff 51%);
 }
 .searchfield {
-	background: #fff url(../images/theme/sicon.png) 3px center no-repeat;
+	background: #fff url(../../images/theme/sicon.png) 3px center no-repeat;
 	font-weight: bold;
 	font-size: 11px;
 	border: 1px solid #A3B2D0;
@@ -223,7 +235,7 @@ blockquote.bbc_standard_quote, blockquote.bbc_alternate_quote {
 	font-style: italic;
 	color: #000;
 	line-height: 1.4em;
-	background: url(../images/theme/quote.png) 0.1em 0.1em no-repeat;
+	background: url(../../images/theme/quote.png) 0.1em 0.1em no-repeat;
 	padding: 1.1em 1.4em;
 	margin: 0 10px 0.8em 10px;
 	overflow: auto;
@@ -322,7 +334,7 @@ tr.titlebg th, tr.titlebg td {
 	color: #222;
 	font-size: 1.1em;
 	font-weight: bold;
-	background: #ccc url(../images/theme/sprite.png) 0 -171px repeat-x;
+	background: #ccc url(../../images/theme/sprite.png) 0 -171px repeat-x;
 }
 tr.titlebg th a:link, tr.titlebg th a:visited {
 	color: #222;
@@ -336,7 +348,7 @@ tr.titlebg th a:link, tr.titlebg th a:visited {
 	text-decoration: none;
 }
 .glass {
-	background: #fff url(../images/theme/sprite.png) 0 -614px repeat-x;
+	background: #fff url(../../images/theme/sprite.png) 0 -614px repeat-x;
 	color: #666;
 	font-size: 11px;
 	font-weight: bold !important;
@@ -350,7 +362,7 @@ tr.titlebg th a:link, tr.titlebg th a:visited {
 	box-sizing: border-box; 	
 }
 .glass.cleantop {
-	background: #F0F0F5 url(../images/theme/sprite.png) 0 -615px repeat-x;
+	background: #F0F0F5 url(../../images/theme/sprite.png) 0 -615px repeat-x;
 }
 .glass > div {
 	padding:0 !important;
@@ -385,7 +397,7 @@ div.pagesection div.floatright input {
 	font-size: 12px;
 	float: right;
 	padding: 5px 5px 5px 18px;
-	background: transparent url(../images/theme/sprite.png) 0 -239px no-repeat;
+	background: transparent url(../../images/theme/sprite.png) 0 -239px no-repeat;
 }
 #tagstrip a {
 	text-decoration: none;
@@ -394,14 +406,14 @@ span.xtag {
 	width: 14px;
 	min-width: 16px;
 	max-width: 16px;
-	background: transparent url(../images/theme/sprite.png) 0 -586px no-repeat;
+	background: transparent url(../../images/theme/sprite.png) 0 -586px no-repeat;
 	cursor: pointer;
 	display: inline-block;
 	margin-right: 4px;
 	margin-left: 2px;
 }
 span.xtag:hover {
-	background: transparent url(../images/theme/sprite.png) -22px -586px no-repeat;
+	background: transparent url(../../images/theme/sprite.png) -22px -586px no-repeat;
 }
 .approvebg {
 	color: #000;
@@ -513,14 +525,14 @@ ol.tiles li img.avatar {
 }
 
 a.brd_rsslink, span.brd_moderators {
-	background: transparent url(../images/theme/sprite.png) 0 -653px no-repeat;
+	background: transparent url(../../images/theme/sprite.png) 0 -653px no-repeat;
 	width: 20px;
 	height: 20px;
 	float: right;
 }
 
 span.brd_moderators {
-	background: transparent url(../images/theme/sprite.png) 0 -540px no-repeat;
+	background: transparent url(../../images/theme/sprite.png) 0 -540px no-repeat;
 	cursor: pointer;
 }
 
@@ -575,7 +587,7 @@ a.moderation_link, a.moderation_link:visited {
 }
 
 .openid_login {
-	background: white url(../images/openid.gif) no-repeat;
+	background: white url(../../images/openid.gif) no-repeat;
 	padding-left: 18px;
 }
 
@@ -757,7 +769,7 @@ div.dropselect {
 	font-size:11px;
 	text-shadow:white 1px 1px 6px;
 	padding: 0 5px 0 10px;
-	background: #E2E2E2 url(../images/theme/sprite.png) 0 -118px repeat-x;
+	background: #E2E2E2 url(../../images/theme/sprite.png) 0 -118px repeat-x;
 }
 
 div.dropselect div.downarrow {
@@ -765,7 +777,7 @@ div.dropselect div.downarrow {
 	height: 22px;
 	float:right;
 	margin-left:10px;
-	background: transparent url(../images/theme/sprite.png) 0 7px no-repeat;
+	background: transparent url(../../images/theme/sprite.png) 0 7px no-repeat;
 }
 
 div.dropselect div.downarrow:hover {
@@ -789,7 +801,7 @@ div.dropselect_content.right {
 	right:0;
 }
 #main_menu, #mcard .title_bar {
-	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;
+	background: #8f8f8f url(../../images/clipsrc.png) 0 -63px repeat-x;
 }
 #main_menu {
 	padding: 0 0.5em;
@@ -904,7 +916,7 @@ span.m_downarrow {
 	width: 14px;
 	margin-left: -8px;
 	height: 22px;
-	background: transparent url(../images/theme/sprite.png) 0 9px no-repeat;
+	background: transparent url(../../images/theme/sprite.png) 0 9px no-repeat;
 }
 a.prefix {
 	font-size:11px;
@@ -997,23 +1009,6 @@ ul#navigation li {
 
 /* the content section, wrapper for everything between header and footer */
 
-#content_section {
-	padding: 10px 40px 5px 40px;
-}
-
-/* inner content section, defines the width for the forum itself (but not the header or footer)*/
-#main_content_section {
-	min-width: 800px;
-	max-width: 1400px;
-	width: auto;
-	background-color: #fff;
-	min-height: 200px;
-	margin: 0 auto 20px auto;
-	border: 1px solid #aaa;
-	box-shadow: 0 10px 10px 1px #aaa;
-	padding: 10px;
-	padding-top:0;
-}
 #sidebar, #sbar {
 	float: right;
 	padding: 3px;
@@ -1032,10 +1027,10 @@ ul#navigation li {
 	background:transparent;
 }
 #sbtoggle.expand {
-	background: transparent url(../images/clipsrc.png) -152px 0 no-repeat;
+	background: transparent url(../../images/clipsrc.png) -152px 0 no-repeat;
 }
 #sbtoggle.collapse {
-	background: transparent url(../images/clipsrc.png) -179px 0 no-repeat;
+	background: transparent url(../../images/clipsrc.png) -179px 0 no-repeat;
 }
 /* the main title, always stay at 45 pixels in height! */
 h1.forumtitle {
@@ -1068,7 +1063,7 @@ div.spoiler.head {
 	border-bottom:0;
 	cursor:pointer;
 	font-weight:bold;
-	background: transparent url(../images/theme/sprite.png) 0 -455px no-repeat;
+	background: transparent url(../../images/theme/sprite.png) 0 -455px no-repeat;
 }
 div.spoiler.content {
 	padding:5px;
@@ -1103,7 +1098,7 @@ h3, h4 {
 	min-height: 65px;
 	font-size: 12px;
 	border-bottom:2px solid #516679;
-	background: #516679 url(../images/upper_bg.png) 225px 12px no-repeat;
+	background: #516679 url(../../images/upper_bg.png) 225px 12px no-repeat;
 }
 .notibar {
 	background: #516679;
@@ -1121,7 +1116,7 @@ h3, h4 {
 	color: white !important;
 }
 .notibar_intro {
-	background: transparent url(../images/clipsrc.png) 0 -32px no-repeat;
+	background: transparent url(../../images/clipsrc.png) 0 -32px no-repeat;
 	line-height: 24px;
 	float: right;
 	height: 24px;
@@ -1746,14 +1741,14 @@ ul.buttonlist li a, span.button {
 	border: 1px solid #A6C5D9;
 	border-radius: 2px;
 	cursor: pointer;
-	background: #f2f2f2 url(../images/clipsrc.png) 0 -139px repeat-x;
+	background: #f2f2f2 url(../../images/clipsrc.png) 0 -139px repeat-x;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box; 	
 	font-family:Tahoma,sans-serif;
 }
 input[type=button], .button_submit, .button_reset {
-	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;
+	background: #8f8f8f url(../../images/clipsrc.png) 0 -63px repeat-x;
 	color:white !important;
 	border:2px solid #888;
 	border-radius:2px;
@@ -2332,7 +2327,7 @@ tr.titlebg td {
 	margin-top:4px;
 }
 .cat_bar, #left_admsection .cat_bar, #main_admsection .cat_bar, .cat_bar2 {
-	background: #E2E2E2 url(../images/theme/sprite.png) 0 -118px repeat-x;
+	background: #E2E2E2 url(../../images/theme/sprite.png) 0 -118px repeat-x;
 	border: 1px solid #ddd;
 	border-bottom: 2px solid #ddd;
 	border-radius: 2px 2px 0 0;
@@ -2345,7 +2340,7 @@ tr.titlebg td {
 }
 .cContainer_header, .cat_bar2 {
 	margin-bottom: 0;
-	background: #fff url(../images/theme/sprite.png) 0 -614px repeat-x;
+	background: #fff url(../../images/theme/sprite.png) 0 -614px repeat-x;
 	/*background: #a0a0a0 url(../images/clipsrc.png) 0 -99px repeat-x;*/
 	border:0;
 	border-left:1px solid #ccc;
@@ -2469,7 +2464,7 @@ td.lastpost img, div.lastpost img {
 
 a.lp_link {
 	line-height: 16px;
-	background: transparent url(../images/theme/sprite.png) right -457px no-repeat !important;
+	background: transparent url(../../images/theme/sprite.png) right -457px no-repeat !important;
 	margin-right: -20px;
 	padding-right: 30px;
 	float: right;
@@ -2489,19 +2484,19 @@ td.lastpost, div.lastpost {
 }
 
 .topic_table td.stickybg2 {
-	background-image: url(../images/icons/quick_sticky.gif);
+	background-image: url(../../images/icons/quick_sticky.gif);
 	background-repeat: no-repeat;
 	background-position: 98% 4px;
 }
 
 .topic_table td.lockedbg2 {
-	background-image: url(../images/icons/quick_lock.gif);
+	background-image: url(../../images/icons/quick_lock.gif);
 	background-repeat: no-repeat;
 	background-position: 98% 4px;
 }
 
 .topic_table td.locked_sticky2 {
-	background-image: url(../images/icons/quick_sticky_lock.gif);
+	background-image: url(../../images/icons/quick_sticky_lock.gif);
 	background-repeat: no-repeat;
 	background-position: 98% 4px;
 }
@@ -2798,7 +2793,7 @@ div#profile_success {
 }
 
 .profile_pie {
-	background-image: url(../images/stats_pie.png);
+	background-image: url(../../images/stats_pie.png);
 	float: left;
 	height: 20px;
 	width: 20px;
@@ -3006,7 +3001,7 @@ dl.stats dd {
 
 .statsbar div.bar {
 	float: left;
-	background: url(../images/bar_stats.png) no-repeat;
+	background: url(../../images/bar_stats.png) no-repeat;
 	display: block;
 	margin: 0 4px;
 	height: 16px;
@@ -3016,7 +3011,7 @@ dl.stats dd {
 	position: relative;
 	right: -4px;
 	padding: 0 4px 0 0;
-	background: url(../images/bar_stats.png) no-repeat 100%;
+	background: url(../../images/bar_stats.png) no-repeat 100%;
 	height: 16px;
 }
 
@@ -3366,7 +3361,7 @@ table.cleantop {
 }
 span.arrow {
 	line-height: 16px;
-	background: transparent url(../images/theme/sprite.png) left -457px no-repeat !important;
+	background: transparent url(../../images/theme/sprite.png) left -457px no-repeat !important;
 	padding-left: 18px;
 	text-decoration: none;
 }
@@ -3395,7 +3390,7 @@ a.navPages, .pagelinks span.current, .pagelinks span.prefix {
 	font-size: 11px;
 	border: 1px solid #A6C5D9;
 	cursor: pointer;
-	background: #f2f2f2 url(../images/clipsrc.png) 0 -139px repeat-x;
+	background: #f2f2f2 url(../../images/clipsrc.png) 0 -139px repeat-x;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -3419,11 +3414,11 @@ a.navPages:hover {
 	margin-right:2px;
 }
 .pagelinks span.prefix.drop {
-	background: #f2f2f2 url(../images/theme/sprite.png) 0 4px no-repeat;
+	background: #f2f2f2 url(../../images/theme/sprite.png) 0 4px no-repeat;
 	padding-left:20px;
 }
 .pagelinks span.current {
-	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;
+	background: #8f8f8f url(../../images/clipsrc.png) 0 -63px repeat-x;
 	color:#ddd;
 	border-color:black;
 }
@@ -3522,7 +3517,7 @@ h4.childlink {
 	float: right;
 }
 .permalink_new {
-	background: transparent url(../images/theme/sprite.png) 0 -701px no-repeat;
+	background: transparent url(../../images/theme/sprite.png) 0 -701px no-repeat;
 	padding-left: 12px;
 	float: right;
 }
@@ -3580,7 +3575,7 @@ span.mcard {
 	width: 11px;
 	min-width: 11px;
 	max-width: 11px;
-	background: transparent url(../images/theme/sprite.png) 0 -561px no-repeat;
+	background: transparent url(../../images/theme/sprite.png) 0 -561px no-repeat;
 	cursor: pointer;
 	display: inline-block;
 	margin-left: 4px;
@@ -3635,12 +3630,12 @@ abbr.timeago {
 	background-color: transparent !important;
 }
 .fontinc {
-	background: transparent url(../images/theme/sprite.png) 0 -48px no-repeat;
+	background: transparent url(../../images/theme/sprite.png) 0 -48px no-repeat;
 	padding: 2px 7px;
 	cursor: pointer;
 }
 .fontdec {
-	background: transparent url(../images/theme/sprite.png) 0 -20px no-repeat;
+	background: transparent url(../../images/theme/sprite.png) 0 -20px no-repeat;
 	padding: 2px 7px;
 	cursor: pointer;
 }
@@ -3692,13 +3687,13 @@ div.bmbar > div.title {
 	line-height: 20px;
 }
 .share_fb {
-	background: #D8DFEA url(../images/theme/sprite.png) 0 -328px no-repeat !important;
+	background: #D8DFEA url(../../images/theme/sprite.png) 0 -328px no-repeat !important;
 }
 .share_tw {
-	background: #D8DFEA url(../images/theme/sprite.png) 0 -358px no-repeat !important;
+	background: #D8DFEA url(../../images/theme/sprite.png) 0 -358px no-repeat !important;
 }
 .share_digg {
-	background: #D8DFEA url(../images/theme/sprite.png) 0 -422px no-repeat !important;
+	background: #D8DFEA url(../../images/theme/sprite.png) 0 -422px no-repeat !important;
 }
 .bbc_editor_button:hover {
 	background-color: #888;
@@ -4317,17 +4312,17 @@ div.pp_default .pp_bottom .pp_right {
 }
 
 div.pp_default .pp_top .pp_left {
-	background: url(../images/prettyPhoto/default/sprite.png) -78px -93px no-repeat;
+	background: url(../../images/prettyPhoto/default/sprite.png) -78px -93px no-repeat;
 }
 
 /* Top left corner */
 div.pp_default .pp_top .pp_middle {
-	background: url(../images/prettyPhoto/default/sprite_x.png) top left repeat-x;
+	background: url(../../images/prettyPhoto/default/sprite_x.png) top left repeat-x;
 }
 
 /* Top pattern/color */
 div.pp_default .pp_top .pp_right {
-	background: url(../images/prettyPhoto/default/sprite.png) -112px -93px no-repeat;
+	background: url(../../images/prettyPhoto/default/sprite.png) -112px -93px no-repeat;
 }
 
 /* Top right corner */
@@ -4337,12 +4332,12 @@ div.pp_default .pp_content .ppt {
 }
 
 div.pp_default .pp_content_container .pp_left {
-	background: url(../images/prettyPhoto/default/sprite_y.png) -7px 0 repeat-y;
+	background: url(../../images/prettyPhoto/default/sprite_y.png) -7px 0 repeat-y;
 	padding-left: 13px;
 }
 
 div.pp_default .pp_content_container .pp_right {
-	background: url(../images/prettyPhoto/default/sprite_y.png) top right repeat-y;
+	background: url(../../images/prettyPhoto/default/sprite_y.png) top right repeat-y;
 	padding-right: 13px;
 }
 
@@ -4352,19 +4347,19 @@ div.pp_default .pp_content {
 
 /* Content background */
 div.pp_default .pp_next:hover {
-	background: url(../images/prettyPhoto/default/sprite_next.png) center right no-repeat;
+	background: url(../../images/prettyPhoto/default/sprite_next.png) center right no-repeat;
 	cursor: pointer;
 }
 
 /* Next button */
 div.pp_default .pp_previous:hover {
-	background: url(../images/prettyPhoto/default/sprite_prev.png) center left no-repeat;
+	background: url(../../images/prettyPhoto/default/sprite_prev.png) center left no-repeat;
 	cursor: pointer;
 }
 
 /* Previous button */
 div.pp_default .pp_expand {
-	background: url(../images/prettyPhoto/default/sprite.png) 0 -29px no-repeat;
+	background: url(../../images/prettyPhoto/default/sprite.png) 0 -29px no-repeat;
 	cursor: pointer;
 	width: 28px;
 	height: 28px;
@@ -4372,13 +4367,13 @@ div.pp_default .pp_expand {
 
 /* Expand button */
 div.pp_default .pp_expand:hover {
-	background: url(../images/prettyPhoto/default/sprite.png) 0 -56px no-repeat;
+	background: url(../../images/prettyPhoto/default/sprite.png) 0 -56px no-repeat;
 	cursor: pointer;
 }
 
 /* Expand button hover */
 div.pp_default .pp_contract {
-	background: url(../images/prettyPhoto/default/sprite.png) 0 -84px no-repeat;
+	background: url(../../images/prettyPhoto/default/sprite.png) 0 -84px no-repeat;
 	cursor: pointer;
 	width: 28px;
 	height: 28px;
@@ -4386,7 +4381,7 @@ div.pp_default .pp_contract {
 
 /* Contract button */
 div.pp_default .pp_contract:hover {
-	background: url(../images/prettyPhoto/default/sprite.png) 0 -113px no-repeat;
+	background: url(../../images/prettyPhoto/default/sprite.png) 0 -113px no-repeat;
 	cursor: pointer;
 }
 
@@ -4394,7 +4389,7 @@ div.pp_default .pp_contract:hover {
 div.pp_default .pp_close {
 	width: 30px;
 	height: 30px;
-	background: url(../images/prettyPhoto/default/sprite.png) 2px 1px no-repeat;
+	background: url(../../images/prettyPhoto/default/sprite.png) 2px 1px no-repeat;
 	cursor: pointer;
 }
 
@@ -4404,7 +4399,7 @@ div.pp_default #pp_full_res .pp_inline {
 }
 
 div.pp_default .pp_gallery ul li a {
-	background: url(../images/prettyPhoto/default/default_thumb.png) center center #f8f8f8;
+	background: url(../../images/prettyPhoto/default/default_thumb.png) center center #f8f8f8;
 	border: 1px solid #aaa;
 }
 
@@ -4425,7 +4420,7 @@ div.pp_default .pp_gallery a.pp_arrow_next {
 
 div.pp_default .pp_nav .pp_play,
 div.pp_default .pp_nav .pp_pause {
-	background: url(../images/prettyPhoto/default/sprite.png) -51px 1px no-repeat;
+	background: url(../../images/prettyPhoto/default/sprite.png) -51px 1px no-repeat;
 	height: 30px;
 	width: 30px;
 }
@@ -4440,7 +4435,7 @@ div.pp_default .pp_details {
 
 div.pp_default a.pp_arrow_previous,
 div.pp_default a.pp_arrow_next {
-	background: url(../images/prettyPhoto/default/sprite.png) -31px -3px no-repeat;
+	background: url(../../images/prettyPhoto/default/sprite.png) -31px -3px no-repeat;
 	height: 20px;
 	margin: 4px 0 0 0;
 	width: 20px;
@@ -4488,23 +4483,23 @@ div.pp_default .pp_description {
 }
 
 div.pp_default .pp_bottom .pp_left {
-	background: url(../images/prettyPhoto/default/sprite.png) -78px -127px no-repeat;
+	background: url(../../images/prettyPhoto/default/sprite.png) -78px -127px no-repeat;
 }
 
 /* Bottom left corner */
 div.pp_default .pp_bottom .pp_middle {
-	background: url(../images/prettyPhoto/default/sprite_x.png) bottom left repeat-x;
+	background: url(../../images/prettyPhoto/default/sprite_x.png) bottom left repeat-x;
 }
 
 /* Bottom pattern/color */
 div.pp_default .pp_bottom .pp_right {
-	background: url(../images/prettyPhoto/default/sprite.png) -112px -127px no-repeat;
+	background: url(../../images/prettyPhoto/default/sprite.png) -112px -127px no-repeat;
 }
 
 /* Bottom right corner */
 
 div.pp_default .pp_loaderIcon {
-	background: url(../images/prettyPhoto/default/loader.gif) center center no-repeat;
+	background: url(../../images/prettyPhoto/default/loader.gif) center center no-repeat;
 }
 
 /* Loader icon */
@@ -4709,7 +4704,7 @@ a.pp_arrow_next {
 }
 
 .pp_gallery li.default a {
-	background: url(../images/prettyPhoto/default/default_thumb.png) 0 0 no-repeat;
+	background: url(../../images/prettyPhoto/default/default_thumb.png) 0 0 no-repeat;
 	display: block;
 	height: 33px;
 	width: 50px;
@@ -4725,7 +4720,7 @@ a.pp_arrow_next {
 }
 
 a.pp_next {
-	background: url(../images/prettyPhoto/default/sprite_next.png) 10000px 10000px no-repeat;
+	background: url(../../images/prettyPhoto/default/sprite_next.png) 10000px 10000px no-repeat;
 	display: block;
 	float: right;
 	height: 100%;
@@ -4734,7 +4729,7 @@ a.pp_next {
 }
 
 a.pp_previous {
-	background: url(../images/prettyPhoto/default/sprite_prev.png) 10000px 10000px no-repeat;
+	background: url(../../images/prettyPhoto/default/sprite_prev.png) 10000px 10000px no-repeat;
 	display: block;
 	float: left;
 	height: 100%;
@@ -4899,7 +4894,7 @@ div.ppt {
 .social_share_privacy_area li .switch {
 	display: inline-block;
 	text-indent: -9999em;
-	background: transparent url(../images/theme/sprite.png) no-repeat 0 0 scroll;
+	background: transparent url(../../images/theme/sprite.png) no-repeat 0 0 scroll;
 	width: 23px;
 	height: 12px;
 	overflow: hidden;
@@ -4963,7 +4958,7 @@ div.ppt {
 }
 
 .social_share_privacy_area li .help_info.icon {
-	background: #fff url(../images/theme/sprite.png) no-repeat 0 -788px scroll;
+	background: #fff url(../../images/theme/sprite.png) no-repeat 0 -788px scroll;
 	width: 25px;
 	height: 20px;
 	position: relative;
@@ -5026,7 +5021,7 @@ div.ppt {
 .social_share_privacy_area li.settings_info .settings_info_menu .settings {
 	text-indent: -9999em;
 	display: inline-block;
-	background: #fff url(../images/theme/sprite.png) no-repeat 0 -809px scroll;
+	background: #fff url(../../images/theme/sprite.png) no-repeat 0 -809px scroll;
 	width: 25px;
 	height: 20px;
 	border: 2px solid #e7e3e3;
