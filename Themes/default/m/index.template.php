@@ -15,13 +15,7 @@ function template_init()
 {
 	global $context, $settings;
 
-	/* Use images from default theme when using templates from the default theme?
-		if this is 'always', images from the default theme will be used.
-		if this is 'defaults', images from the default theme will only be used with default templates.
-		if this is 'never' or isn't set at all, images from the default theme will not be used. */
 	$settings['use_default_images'] = 'never';
-
-	/*This should probably be the version of SMF it was created for. */
 	$settings['theme_version'] = '2.0';
 }
 
@@ -37,7 +31,8 @@ function template_html_above()
 <html id="_S_" lang="en-US">
 <head>';
 	echo '
-	<link rel="stylesheet" type="text/css" href="', $settings['primary_css'],'" />';
+	<meta name="viewport" content="width=device-width;
+		initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />	<link rel="stylesheet" type="text/css" href="', $settings['primary_css'],'" />';
 	if ($context['right_to_left'])
 		echo '
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/rtl.css" />';
@@ -190,7 +185,6 @@ function template_body_above()
 	echo '
 			</div>
 			</div>
-			<div class="notibar_intro"></div>
 		</div>
 	<nav>';
 	// Show the menu here, according to the menu sub template.

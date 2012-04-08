@@ -415,7 +415,7 @@ function template_showPosts()
 		}
 		else {
 			echo '
-				<div class="posts_container framed_region">';
+				<div class="posts_container">';
 			foreach ($context['posts'] as &$post)
 				$context['postbit_callback']($post);
 			echo '

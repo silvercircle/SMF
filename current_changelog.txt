@@ -1,6 +1,5 @@
 Note: this is just a memo pad to record changes and prepare the posts for the dev topics.
 
 [list]
-[li](ux) Some theme changes[/li]
-[li](core) removed old Wireless theme and support code. Instead of this, a new and modern mobile theme will be implemented at a later stage.[/li]
+[li](ux) updated personal message templates to keep the layout consistent with recent postbit changes.[/li]
 [/list]

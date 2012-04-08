@@ -46,7 +46,7 @@ function template_postbit_normal(&$message)
 	echo '
 	<div itemscope="itemscope" itemtype="http://data-vocabulary.org/Person" class="poster std">
 	<h4>', $message['member']['link'], '</h4>
-	<ul class="reset smalltext" id="msg_', $message['id'], '_extra_info">';
+	<ul class="reset tinytext" id="msg_', $message['id'], '_extra_info">';
 
 	// Don't show these things for guests.
 	if (!$message['member']['is_guest'])
@@ -826,7 +826,7 @@ function template_postbit_quickbuttons(&$message)
 	$imgsrc = $settings['images_url'].'/clipsrc.png';
 
 	echo '
-	<ul class="floatright plainbuttonlist orange">';
+	<ul class="floatright plainbuttonlist">';
 
 	if ($message['can_approve'])
 		echo '

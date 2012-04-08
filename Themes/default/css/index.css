@@ -91,7 +91,8 @@ div.popup_wrapper {
 }
 input[type="text"], input[type="password"], select {
 	color: #000;
-	border: 1px solid #6b81ab;
+	/*border: 1px solid #6b81ab;*/
+	border: 1px solid #ddd;
 	background-color: #fff;
 	border-radius: 3px;
 	padding-left:4px;
@@ -101,6 +102,7 @@ input[type="text"], input[type="password"], select {
 	font-size: 11px !important;
 	line-height:11px !important;
 	padding:4px;
+	box-shadow: 0 0 10px 0px #ddd inset;
 }
 select {
 	padding:3px;
@@ -1492,7 +1494,7 @@ p#whoisviewing {
 	/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ececec', endColorstr='#ffffff',GradientType=1 );*/
 	margin-bottom:10px;
 	border:1px solid #ddd;
-	box-shadow: 0 0 5px 2px #ccc;
+	box-shadow: 0 0 5px 0 #ccc;
 }
 .post_wrapper.approval, .approval .post_content {
 	background-color: rgb(250, 233, 216);
@@ -1508,10 +1510,9 @@ div.ignoringpost {
 	display:none;
 }
 .post_bottom {
-	padding: 3px 10px 4px 10px;
+	padding: 3px 10px 2px 10px;
 	clear: both;
 	font-size: 11px;
-	line-height: 20px;
 	background-color:#eaeaea;
 }
 .poster.std {
@@ -1543,7 +1544,7 @@ div.userbit_compact_textpart {
 	margin-left: 220px;
 	padding-bottom:5px;
 	background-color:#fcfcfc;
-	border:1px solid #ddd;
+	border:1px dotted #ddd;
 	border-radius:4px;
 	margin-bottom:5px;
 }
@@ -1721,9 +1722,6 @@ ul.plainbuttonlist li a {
 	text-decoration: none;
 	padding: 0 6px 1px 6px;
 	cursor: pointer;
-}
-ul.plainbuttonlist.orange li a {
-	color: #009999;
 }
 span.button:hover, ul.buttonlist li a:hover {
 	background: white;
@@ -2303,14 +2301,20 @@ tr.titlebg td {
 }
 
 .left_admmenu li.active {
-	padding: 2px 4px 2px 4px;
+	padding: 4px 4px 4px 4px;
 	position: relative;
-	background-color: #FFF6E2;
-	border: 1px solid #F8DA8B;
+	background-color: #e2e2e2;
+	background: -moz-linear-gradient(left,  #ececec 1%, #f2f2f2 80%);
+	background: -webkit-gradient(linear, left top, right top, color-stop(1%,#ddd), color-stop(80%,#f2f2f2));
+	background: -webkit-linear-gradient(left,  #ddd 1%,#f2f2f2 80%);
+	background: -o-linear-gradient(left,  #ddd 1%,#f2f2f2 80%);
+	background: -ms-linear-gradient(left,  #ececec 1%,#f2f2f2 80%);
+	background: linear-gradient(left,  #ddd 1%,#f2f2f2 80%);
+	border: 1px solid #ccc;
 	border-right: 0;
 	right: -2px;
 	z-index: 11;
-	border-radius: 5px 0 0 5px;
+	font-weight:bold;
 }
 
 #left_admsection {
@@ -2322,7 +2326,7 @@ tr.titlebg td {
 	margin-top: 15px;
 	z-index: 10;
 	min-height: 600px;
-	border-right: 1px solid #F8DA8B;
+	border-right: 1px solid #ddd;
 }
 #boardindex_table {
 	padding:3px;
@@ -2331,22 +2335,12 @@ tr.titlebg td {
 #boardindex_table .cat_bar2 img {
 	margin-top:4px;
 }
-.cat_bar, #left_admsection .cat_bar, #main_admsection .cat_bar, .cat_bar2 {
-	background: #E2E2E2 url(../images/theme/sprite.png) 0 -118px repeat-x;
-	border: 1px solid #ddd;
-	border-bottom: 2px solid #ddd;
-	border-radius: 2px 2px 0 0;
-	height:24px;
-	line-height:24px;
-	padding:0 10px;
-}
 .cat_bar h3 {
 	text-shadow: 2px 2px 5px white;
 }
-.cContainer_header, .cat_bar2 {
+.cContainer_header, .cat_bar2, .cat_bar {
 	margin-bottom: 0;
 	background: #fff url(../images/theme/sprite.png) 0 -614px repeat-x;
-	/*background: #a0a0a0 url(../images/clipsrc.png) 0 -99px repeat-x;*/
 	border:0;
 	border-left:1px solid #ccc;
 	border-right:1px solid #ccc;
@@ -2399,9 +2393,10 @@ li.cat_desc > h3 {
 
 #main_admsection {
 	min-height: 600px;
-	border: 1px solid #F8DA8B;
-	background-color: #FFFbEc;
-	border-radius: 8px 8px 8px 0;
+	/*border: 1px solid #F8DA8B;*/
+	border: 1px solid #ddd;
+	background-color: #f2f2f2;
+	/*border-radius: 8px 8px 8px 0;*/
 	padding: 5px;
 	overflow: hidden;
 }
@@ -3356,7 +3351,7 @@ table.cleantop {
 
 .flat_container {
 	border: 1px solid #ddd;
-	background-color: #f5f5f5;
+	background-color: #f2f2f2;
 	padding: 2px 4px;
 }
 
@@ -3395,7 +3390,8 @@ a.navPages, .pagelinks span.current, .pagelinks span.prefix {
 	font-size: 11px;
 	border: 1px solid #A6C5D9;
 	cursor: pointer;
-	background: #f2f2f2 url(../images/clipsrc.png) 0 -139px repeat-x;
+	/*background: #f2f2f2 url(../images/clipsrc.png) 0 -139px repeat-x;*/
+	background:#eee;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;

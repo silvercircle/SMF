@@ -200,10 +200,10 @@ function template_admin_login()
 	<div class="tborder login" id="admin_login">
 		<div class="cat_bar rounded_top">
 			<h3 class="catbg">
-				<span class="ie6_header floatleft"><img src="', $settings['images_url'], '/icons/login_sm.gif" alt="" class="icon" /> ', $txt['login'], '</span>
+				<span class="ie6_header floatleft">', $txt['login'], '</span>
 			</h3>
 		</div>
-		<div class="blue_container centertext">';
+		<div class="blue_container centertext cleantop">';
 
 	if (!empty($context['incorrect_password']))
 		echo '

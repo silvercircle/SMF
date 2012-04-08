@@ -1287,14 +1287,16 @@ function detectBrowser()
 		$disable_mobile = $_COOKIE['usemobile'] == 'no' ? true : false;
 	}
 
-	if(isset($_REQUEST['mobile']) && $_REQUEST['mobile'] == 1) {
-		setcookie('usemobile', 'yes', time() + 86400 * 365);
-		$force_mobile = true;
-	}
-	if(isset($_REQUEST['mobile']) && $_REQUEST['mobile'] == 0) {
-		setcookie('usemobile', 'no', time() + 86400 * 365);
-		$disable_mobile = true;
-		$force_mobile = false;
+	if(isset($_REQUEST['mobile'])) {
+		if($_REQUEST['mobile'] == 1) {
+			setcookie('usemobile', 'yes', time() + 86400 * 365);
+			$force_mobile = true;
+		}
+		if($_REQUEST['mobile'] == 0) {
+			setcookie('usemobile', 'no', time() + 86400 * 365);
+			$disable_mobile = true;
+			$force_mobile = false;
+		}
 	}
 
 	$mobile_detector = new Mobile_Detect();

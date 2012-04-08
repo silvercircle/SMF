@@ -30,8 +30,8 @@ function template_generic_menu_sidebar_above()
 	{
 		// Show the section header - and pump up the line spacing for readability.
 		echo '
-			<div class="orange_container minpadding" style="margin-bottom:15px;border-right:0;border-radius:3px 0 0 3px;">
-				<div class="cat_bar">
+			<div class="flat_container minpadding" style="margin-bottom:15px;border-right:0;border-radius:3px 0 0 3px;">
+				<div class="cat_bar2">
 					<h3>';
 
 			echo '
@@ -39,7 +39,7 @@ function template_generic_menu_sidebar_above()
 		echo '
 					</h3>
 				</div>
-				<ul class="smalltext left_admmenu">';
+				<ul class="smalltext left_admmenu" style="padding:5px 0;">';
 
 		// For every area of this section show a link to that area (bold if it's currently selected.)
 		foreach ($section['areas'] as $i => $area)

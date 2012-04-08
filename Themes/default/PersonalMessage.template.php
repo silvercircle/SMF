@@ -51,6 +51,7 @@ function template_pm_below()
 function template_folder()
 {
 	global $context, $settings, $options, $scripturl, $modSettings, $txt;
+	$imgsrc = $settings['images_url'].'/clipsrc.png';
 
 	// The every helpful javascript!
 	echo '
@@ -141,9 +142,15 @@ function template_folder()
 		template_subject_list();
 		echo '<div class="clear"><br /></div>';
 	}
+	else
+		echo '
+	<div class="floatright tinytext smallpadding">
+	 <a href="', $scripturl, '?action=pm;view;f=', $context['folder'], ';start=', $context['start'], ';sort=', $context['sort_by'], ($context['sort_direction'] == 'up' ? '' : ';desc'), ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : ''), '">',$txt['pm_change_view'],'</a>
+	</div>
+	<div class="clear"></div>';
 
 	// Got some messages to display?
-	echo '<div class="posts_container framed_region">';
+	echo '<div class="posts_container">';
 	if ($context['get_pmessage']('message', true))
 	{
 		// Show a few buttons if we are in conversation mode and outputting the first message.
@@ -176,7 +183,7 @@ function template_folder()
 
 			// Show who the message was sent to.
 			echo '
-					<span class="smalltext">&#171; <strong> ', $txt['sent_to'], ':</strong> ';
+					<span class="tinytext">&nbsp;&nbsp;-&nbsp;&nbsp;', $txt['sent_to'], ': ';
 
 			// People it was sent directly to....
 			if (!empty($message['recipients']['to']))
@@ -185,8 +192,7 @@ function template_folder()
 			elseif ($context['folder'] != 'sent')
 				echo '(', $txt['pm_undisclosed_recipients'], ')';
 
-			echo '
-						<strong> ', $txt['on'], ':</strong> ', $message['time'], ' &#187;
+			echo ', ', $message['time'], '
 					</span>';
 
 			// If we're in the sent items, show who it was sent to besides the "To:" people.
@@ -303,16 +309,11 @@ function template_folder()
 		<div class="post_content std">';
 			if (!empty($message['is_replied_to']))
 				echo '
-					<div style="margin:3px;" class="orange_container smalltext">&#171; ', $txt['pm_is_replied_to'], ' &#187;</div>';
+					<div style="margin:3px;" class="orange_container tinytext">&#171; ', $txt['pm_is_replied_to'], ' &#187;</div>';
 
 			echo '
 			<div class="post">
-				<div class="inner" id="msg_', $message['id'], '"', '>', $message['body'], '</div>
-				<div class="smalltext reportlinks">
-					', (!empty($modSettings['enableReportPM']) && $context['folder'] != 'sent' ? '<div class="righttext"><a href="' . $scripturl . '?action=pm;sa=report;l=' . $context['current_label_id'] . ';pmsg=' . $message['id'] . '">' . $txt['pm_report_to_admin'] . '</a></div>' : '');
-
-			echo '
-				</div>';
+				<div class="inner" id="msg_', $message['id'], '"', '>', $message['body'], '</div>';
 
 			// Are there any custom profile fields for above the signature?
 			if (!empty($message['member']['custom_fields']))
@@ -340,7 +341,7 @@ function template_folder()
 
 			// Show the member's signature?
 			if (!empty($message['member']['signature']) && empty($options['show_no_signatures']) && $context['signature_enabled'])
-				echo '
+				echo '<br>
 				<div class="signature">', $message['member']['signature'], '</div>';
 
 			// Add an extra line at the bottom if we have labels enabled.
@@ -401,11 +402,11 @@ function template_folder()
 					// Is there than more than one recipient you can reply to?
 					if ($message['number_recipients'] > 1 && $context['display_mode'] != 2)
 						echo '
-					<li class="reply_all_button"><a href="', $scripturl, '?action=pm;sa=send;f=', $context['folder'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pmsg=', $message['id'], ';quote;u=all">', $txt['reply_to_all'], '</a></li>';
+					<li><a href="', $scripturl, '?action=pm;sa=send;f=', $context['folder'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pmsg=', $message['id'], ';quote;u=all">', $txt['reply_to_all'], '</a></li>';
 
 					echo '
-					<li class="reply_button"><a href="', $scripturl, '?action=pm;sa=send;f=', $context['folder'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pmsg=', $message['id'], ';u=', $message['member']['id'], '">', $txt['reply'], '</a></li>
-					<li class="quote_button"><a href="', $scripturl, '?action=pm;sa=send;f=', $context['folder'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pmsg=', $message['id'], ';quote', $context['folder'] == 'sent' ? '' : ';u=' . $message['member']['id'], '">', $txt['quote'], '</a></li>';
+					<li><a href="', $scripturl, '?action=pm;sa=send;f=', $context['folder'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pmsg=', $message['id'], ';u=', $message['member']['id'], '"><div class="csrcwrapper16px"><img class="clipsrc reply" src="',$imgsrc,'" alt="',$txt['reply'],'" title="',$txt['reply'],'" /></div></a></li>
+					<li><a href="', $scripturl, '?action=pm;sa=send;f=', $context['folder'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pmsg=', $message['id'], ';quote', $context['folder'] == 'sent' ? '' : ';u=' . $message['member']['id'], '"><div class="csrcwrapper16px"><img class="clipsrc mquote_add" src="',$imgsrc,'" alt="',$txt['quote'],'" title="',$txt['quote'],'" /></div></a></li>';
 				}
 				// This is for "forwarding" - even if the member is gone.
 				else
@@ -413,14 +414,20 @@ function template_folder()
 					<li class="forward_button"><a href="', $scripturl, '?action=pm;sa=send;f=', $context['folder'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';pmsg=', $message['id'], ';quote">', $txt['reply_quote'], '</a></li>';
 			}
 			echo '
-					<li class="remove_button"><a href="', $scripturl, '?action=pm;sa=pmactions;pm_actions[', $message['id'], ']=delete;f=', $context['folder'], ';start=', $context['start'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';', $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\', \'', addslashes($txt['remove_message']), '?\');">', $txt['delete'], '</a></li>';
+					<li class="remove_button"><a href="', $scripturl, '?action=pm;sa=pmactions;pm_actions[', $message['id'], ']=delete;f=', $context['folder'], ';start=', $context['start'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', ';', $context['session_var'], '=', $context['session_id'], '" onclick="return Eos_Confirm(\'\', \'', addslashes($txt['remove_message']), '?\');"><div class="csrcwrapper16px"><img class="clipsrc remove" src="',$imgsrc,'" alt="',$txt['remove'],'" title="',$txt['remove'],'" /></div></a></li>';
 
 			if (empty($context['display_mode']))
 				echo '
 					<li class="inline_mod_check"><input type="checkbox" name="pms[]" id="deletedisplay', $message['id'], '" value="', $message['id'], '" onclick="document.getElementById(\'deletelisting', $message['id'], '\').checked = this.checked;" class="input_check" /></li>';
 
 			echo '
-				</ul><div class="clear"></div>
+				</ul>';
+			if(!empty($modSettings['enableReportPM']) && $context['folder'] != 'sent')
+				echo '
+					<a href="' . $scripturl . '?action=pm;sa=report;l=' . $context['current_label_id'] . ';pmsg=' . $message['id'] . '"><div class="csrcwrapper16px floatleft padded"><img class="clipsrc reporttm" src="',$imgsrc,'" alt="',$txt['pm_report_to_admin'],'" title="',$txt['pm_report_to_admin'],'" /></div></a>';
+
+			echo '
+				<div class="clear"></div>
 		</div>
 	</div>';
 	}
@@ -470,22 +477,27 @@ function template_subject_list()
 	global $context, $options, $settings, $modSettings, $txt, $scripturl;
 
 	echo '
-	<table width="100%" id="messageindex" class="table_grid mediumpadding ">
+	<div class="floatright tinytext smallpadding">
+	 <a href="', $scripturl, '?action=pm;view;f=', $context['folder'], ';start=', $context['start'], ';sort=', $context['sort_by'], ($context['sort_direction'] == 'up' ? '' : ';desc'), ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : ''), '">',$txt['pm_change_view'],'</a>
+	</div>
+	<div class="clear"></div>
+	<div class="framed_region">
+	<table width="100%" class="topic_table">
 	<thead>
 		<tr>
-			<th width="4%" class="centertext glass first_th">
-				<a href="', $scripturl, '?action=pm;view;f=', $context['folder'], ';start=', $context['start'], ';sort=', $context['sort_by'], ($context['sort_direction'] == 'up' ? '' : ';desc'), ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : ''), '"><img src="', $settings['images_url'], '/im_switch.gif" alt="', $txt['pm_change_view'], '" title="', $txt['pm_change_view'], '" width="16" height="16" /></a>
+			<th class="centertext glass cleantop first_th" style="width:4%;">
+				<a href="', $scripturl, '?action=pm;view;f=', $context['folder'], ';start=', $context['start'], ';sort=', $context['sort_by'], ($context['sort_direction'] == 'up' ? '' : ';desc'), ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : ''), '"></a>
 			</th>
-			<th class="glass lefttext" style="width:22%;">
+			<th class="glass cleantop lefttext" style="width:22%;">
 				<a href="', $scripturl, '?action=pm;f=', $context['folder'], ';start=', $context['start'], ';sort=date', $context['sort_by'] == 'date' && $context['sort_direction'] == 'up' ? ';desc' : '', $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', '">', $txt['date'], $context['sort_by'] == 'date' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 			</th>
-			<th class="glass lefttext" width="46%">
+			<th class="glass cleantop lefttext" style="width:46%;">
 				<a href="', $scripturl, '?action=pm;f=', $context['folder'], ';start=', $context['start'], ';sort=subject', $context['sort_by'] == 'subject' && $context['sort_direction'] == 'up' ? ';desc' : '', $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', '">', $txt['subject'], $context['sort_by'] == 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 			</th>
-			<th class="glass lefttext">
+			<th class="glass cleantop lefttext">
 				<a href="', $scripturl, '?action=pm;f=', $context['folder'], ';start=', $context['start'], ';sort=name', $context['sort_by'] == 'name' && $context['sort_direction'] == 'up' ? ';desc' : '', $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', '">', ($context['from_or_to'] == 'from' ? $txt['from'] : $txt['to']), $context['sort_by'] == 'name' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a>
 			</th>
-			<th width="4%" class="centertext glass last_th">
+			<th class="centertext glass cleantop last_th" style="width:4%;">
 				<input type="checkbox" onclick="invertAll(this, this.form);" class="input_check" />
 			</th>
 		</tr>
@@ -532,6 +544,7 @@ function template_subject_list()
 	echo '
 	</tbody>
 	</table>
+	</div>
 	<div class="pagesection">
 		<div class="floatleft">', $txt['pages'], ': ', $context['page_index'], '</div>
 		<div class="floatright">&nbsp;';
@@ -1177,11 +1190,11 @@ function template_report_message()
 		<div class="cat_bar">
 			<h3 class="catbg">', $txt['pm_report_title'], '</h3>
 		</div>
-		<div class="description">
+		<div class="orange_container cleantop">
 			', $txt['pm_report_desc'], '
 		</div>
-		<div class="windowbg">
-			<span class="topslice"><span></span></span>
+		<br>
+		<div class="blue_container">
 			<div class="content">
 				<dl class="settings">';
 

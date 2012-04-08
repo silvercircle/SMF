@@ -1500,7 +1500,7 @@ function Eos_Confirm(title, msg, callback)
 	el.css('position', 'fixed');
 	$('#jsconfirm').jqmShow().find('div.jsconfirm.content').html(msg);
 	centerElement(el, -200);
-	$('#jsconfirm .jsconfirm.title').html(title != '' ? title : 'JavaScript confirm');
+	$('#jsconfirm .jsconfirm.title').html(title != '' ? title : 'Please confirm action');
 	$('#jsconfirm #c_yes').click(function() {
 		typeof callback == 'string' ? window.location.href = callback : callback();
 	});

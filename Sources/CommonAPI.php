@@ -642,49 +642,6 @@ class Mobile_Detect {
 		return $this->detectionRules;
 	}
 
-	/**
-	 *
-	 * @method boolean isiPhone()
-	 * @method boolean isBlackBerry()
-	 * @method boolean isHTC()
-	 * @method boolean isNexus()
-	 * @method boolean isDellStreak()
-	 * @method boolean isMotorola()
-	 * @method boolean isSamsung()
-	 * @method boolean isSony()
-	 * @method boolean isAsus()
-	 * @method boolean isPalm()
-	 *
-	 * @method boolean isBlackBerryTablet()
-	 * @method boolean isiPad()
-	 * @method boolean isKindle()
-	 * @method boolean isSamsungTablet()
-	 * @method boolean isMotorolaTablet()
-	 * @method boolean isAsusTablet()
-	 *
-	 * @method boolean isAndroidOS()
-	 * @method boolean isBlackBerryOS()
-	 * @method boolean isPalmOS()
-	 * @method boolean isSymbianOS()
-	 * @method boolean isWindowsMobileOS()
-	 * @method boolean isiOS()
-	 *
-	 * @method boolean isChrome()
-	 * @method boolean isDolfin()
-	 * @method boolean isOpera()
-	 * @method boolean isSkyfire()
-	 * @method boolean isIE()
-	 * @method boolean isFirefox()
-	 * @method boolean isBolt()
-	 * @method boolean isTeaShark()
-	 * @method boolean isBlazer()
-	 * @method boolean isSafari()
-	 * @method boolean isMidori()
-	 *
-	 * @param string $name
-	 * @param array $arguments
-	 * @return mixed
-	 */
 	public function __call($name, $arguments)
 	{
 

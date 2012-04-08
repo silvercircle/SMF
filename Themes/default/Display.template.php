@@ -54,6 +54,13 @@ function template_main()
 		<a id="top"></a>
 		', $context['first_new_message'] ? '<a id="new"></a>' : '';
 
+
+	echo '
+		<div>
+		 <h1 class="bigheader">
+		  ', $txt['topic'], ': ', $context['prefix'], $context['subject'], ' &nbsp;(', $txt['read'], ' ', $context['num_views'], ' ', $txt['times'], ')
+		 </h1>
+		</div>';
 	// Is this topic also a poll?
 	if ($context['is_poll'])
 	{
@@ -194,12 +201,7 @@ function template_main()
 
 	// Show the topic information - icon, subject, etc.
 	echo '
-			<div id="forumposts">
-				<div>
-					<h1 class="bigheader">
-						', $txt['topic'], ': ', $context['prefix'], $context['subject'], ' &nbsp;(', $txt['read'], ' ', $context['num_views'], ' ', $txt['times'], ')
-					</h1>
-				</div>';
+			<div id="forumposts">';
 
 	// social share bar
 	if($context['use_share'])
