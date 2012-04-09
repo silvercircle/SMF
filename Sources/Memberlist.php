@@ -55,7 +55,8 @@ function Memberlist()
 	loadTemplate('Memberlist');
 	loadTemplate('GenericBits');
 	$context['listing_by'] = !empty($_GET['sa']) ? $_GET['sa'] : 'all';
-
+	$context['show_sidebar'] = true;
+	$context['sidebar_context_output'] = 'template_sidebar_memberlist';
 	MLSearch();
 	// $subActions array format:
 	// 'subaction' => array('label', 'function', 'is_selected')

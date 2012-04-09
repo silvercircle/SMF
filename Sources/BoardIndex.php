@@ -38,6 +38,8 @@ function BoardIndex()
 	loadTemplate('GenericBits');
 
 	$context['is_board_index'] = true;
+	$context['sidebar_context_output'] = 'template_sidebar_content_index';
+	$context['show_sidebar'] = true;
 	// Set a canonical URL for this page.
 	$context['canonical_url'] = $scripturl;
 	$context['share_url'] = $boardurl;

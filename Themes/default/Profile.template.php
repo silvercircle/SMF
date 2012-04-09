@@ -51,7 +51,7 @@ function template_summary()
 
 	// Display the basic information about the user
 	echo '
-<div id="profileview" class="flow_auto">
+<div id="profileview">
 	<div class="cat_bar2">
 		<h3>
 			',$txt['summary'],'
@@ -107,7 +107,7 @@ function template_summary()
 	</div>
 	<div id="detailedinfo"><br />
 		<div class="yellow_container">
-			<div class="content inset_shadow">
+			<div class="content inset_shadow mediumpadding">
 				<dl>';
 
 	if ($context['user']['is_owner'] || $context['user']['is_admin'])

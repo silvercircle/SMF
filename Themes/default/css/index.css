@@ -20,7 +20,7 @@ table {
 	border-spacing: 1px;
 }
 #wrap {
-	background-color: #D0D1E6;
+	background-color: #eaeaea; /*#D0D1E6*/
 	margin: 0 auto;
 }
 body, td, th, tr {
@@ -52,14 +52,14 @@ img.icon {
 	z-index: 1000;
 }
 .search_form_active {
-	border: 2px solid #aaa !important;
-	box-shadow:0 2px 6px 1px #aaa;
+	border: 2px solid #ddd !important;
+	box-shadow:0 0 6px 0px #ccc;
 	background: white;
 	padding-bottom:10px;
-	background: -moz-linear-gradient(top, #a9d4f9 1%, #f9fdff 51%);
-	background: -webkit-linear-gradient(top, #a9d4f9 1%,#f9fdff 51%);
-	background: -o-linear-gradient(top, #a9d4f9 1%,#f9fdff 51%);
-	background: -ms-linear-gradient(top, #a9d4f9 1%,#f9fdff 51%);
+	background: -moz-linear-gradient(top, #eaeaea 1%, #f9fdff 51%);
+	background: -webkit-linear-gradient(top, #eaeaea 1%,#f9fdff 51%);
+	background: -o-linear-gradient(top, #eaeaea 1%,#f9fdff 51%);
+	background: -ms-linear-gradient(top, #eaeaea 1%,#f9fdff 51%);
 }
 .searchfield {
 	background: #fff url(../images/theme/sicon.png) 3px center no-repeat;
@@ -452,17 +452,12 @@ ol.post_attachments, ol.tiles {
 	margin: 0;
 }
 
-ol.tiles {
-	padding-left: 1%;
-}
-
 ol.post_attachments li, ol.tiles li {
 	float: left;
 	width: 200px;
 	height: 60px;
 	margin-right: 10px;
 	margin-top: 5px;
-	background-color: #F9F9e0;
 	border: 1px solid #F2F2A5;
 	padding: 2px 4px;
 	border-radius: 3px;
@@ -471,10 +466,11 @@ ol.post_attachments li, ol.tiles li {
 ol.tiles li {
 	width: 50%;
 	height: 60px;
-	margin: 2px 0;
 	padding: 3px 0;
-	background: transparent;
 	border: 0;
+	margin:0;
+	border-radius: 0;
+	border-bottom:1px solid #ddd;
 }
 
 ol.post_attachments li img, ol.tiles li img.avatar {
@@ -796,7 +792,6 @@ div.dropselect_content.right {
 #main_menu {
 	padding: 0 0.5em;
 	font-size: 11px;
-	font-weight:bold;
 	text-shadow: 2px 2px 4px black;
 }
 .dropmenu, .dropmenu ul {
@@ -866,7 +861,7 @@ div.dropselect_content.right {
 	margin: -1.8em 0 0 13em;
 }
 .dropmenu li.active {
-	background-color: #D0D1E6;
+	background-color: #eaeaea; /*#D0D1E6;*/
 }
 .dropmenu li.active > a {
 	color: black;
@@ -920,17 +915,6 @@ span.m_downarrow:hover {
 	background-color: green !important;
 }
 
-/* The dropdown menu toggle image */
-#menu_toggle {
-	float: right;
-	margin-right: 10px;
-	padding-top: 3px;
-}
-
-#menu_toggle span {
-	position: relative;
-	right: 5000px;
-}
 .align_top ul li a, .align_bottom ul li a {
 	margin: 0 12px 0 0;
 }
@@ -1011,8 +995,8 @@ ul#navigation li {
 	background-color: #fff;
 	min-height: 200px;
 	margin: 0 auto 20px auto;
-	border: 1px solid #aaa;
-	box-shadow: 0 10px 10px 1px #aaa;
+	border: 1px solid #ccc;
+	box-shadow: 0 0 10px 0 #aaa;
 	padding: 10px;
 	padding-top:0;
 }
@@ -1159,18 +1143,17 @@ div.user .avatar img {
 }
 /* The navigation list (i.e. linktree) */
 div.navigate_section {
-	padding: 0 0 0 10px;
+	padding: 2px 0 2px 10px;
 	margin-top: 10px;
-	background-color: #e0e1f6;
-	border: 1px solid #BEBFDC;
+	border: 1px solid #ddd;
 	border-radius: 3px;
 	text-shadow: 1px 1px 1px #fff;
 	font-size:1.0em;
+	box-shadow: 0 0 2px 0 #ccc;
 }
 
 .navigate_section ul {
 	margin: 0;
-	font-size: 0.9em;
 	padding: 0.2em 0 0.2em 0;
 	overflow: hidden;
 	list-style: none;
@@ -1184,7 +1167,10 @@ div.navigate_section {
 }
 .navigate_section ul li a {
 	white-space: pre;
-	color:black;
+	color:#777;
+}
+.navigate_section ul li.last a {
+	font-weight:bold;
 }
 .navigate_section ul li a:hover {
 	text-decoration:underline;
@@ -2304,11 +2290,11 @@ tr.titlebg td {
 	padding: 4px 4px 4px 4px;
 	position: relative;
 	background-color: #e2e2e2;
-	background: -moz-linear-gradient(left,  #ececec 1%, #f2f2f2 80%);
+	background: -moz-linear-gradient(left,  #ddd 1%, #f2f2f2 80%);
 	background: -webkit-gradient(linear, left top, right top, color-stop(1%,#ddd), color-stop(80%,#f2f2f2));
 	background: -webkit-linear-gradient(left,  #ddd 1%,#f2f2f2 80%);
 	background: -o-linear-gradient(left,  #ddd 1%,#f2f2f2 80%);
-	background: -ms-linear-gradient(left,  #ececec 1%,#f2f2f2 80%);
+	background: -ms-linear-gradient(left,  #ddd 1%,#f2f2f2 80%);
 	background: linear-gradient(left,  #ddd 1%,#f2f2f2 80%);
 	border: 1px solid #ccc;
 	border-right: 0;
@@ -2321,14 +2307,14 @@ tr.titlebg td {
 	width: 200px;
 	position: relative;
 	background: white;
-	right: -1px;
+	/*right: -1px;*/
 	float: left;
 	margin-top: 15px;
 	z-index: 10;
 	min-height: 600px;
-	border-right: 1px solid #ddd;
+	/*border-right: 1px solid #ddd;*/
 }
-#boardindex_table {
+#boardindex_table, #memberlist {
 	padding:3px;
 	margin:0 0 5px 0;
 }
@@ -2393,10 +2379,8 @@ li.cat_desc > h3 {
 
 #main_admsection {
 	min-height: 600px;
-	/*border: 1px solid #F8DA8B;*/
 	border: 1px solid #ddd;
 	background-color: #f2f2f2;
-	/*border-radius: 8px 8px 8px 0;*/
 	padding: 5px;
 	overflow: hidden;
 }
@@ -2614,6 +2598,7 @@ dl {
 	margin: 0 0 3px 0;
 	padding: 0;
 	font-weight: bold;
+	color:#777;
 	clear: both;
 }
 
@@ -3200,11 +3185,6 @@ span.hidelink {
 
 /* Styles for the memberlist section.
 ------------------------------------------------- */
-#mlist_search {
-	margin: auto;
-	width: 500px;
-}
-
 /* Styles for the basic search section.
 ------------------------------------------------- */
 #searchform, #simple_search p {
@@ -3223,7 +3203,7 @@ span.hidelink {
 
 #search_term_input {
 	font-size: 115%;
-	margin: 0 0 1em;
+	margin: 0 0 0.5em;
 }
 
 /* Styles for the advanced search section.

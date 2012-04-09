@@ -162,7 +162,7 @@ function template_boardbit_subcat(&$board)
 	echo '
 	<li id="board_', $board['id'], '" class="subcatrow">';
 		echo'
-		<div class="blue_container">
+		<div class="rowgradient">
 		<div class="info subcat">
 		 <div class="icon floatleft">
 		  <a href="', ($board['is_redirect'] || $context['user']['is_guest'] ? $board['href'] : $scripturl . '?action=unread;board=' . $board['id'] . '.0;children'), '">

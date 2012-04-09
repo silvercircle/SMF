@@ -241,7 +241,7 @@ EOT;
 		registerFooterScriptFragment('pager_entry', $pager_entry_script);
 
 	}
-	$sidebar_allowed = isset($context['is_board_index']);			// todo: make this more flexible and define a set of pages where the sidebar can show up
+	$sidebar_allowed = isset($context['show_sidebar']);			// todo: make this more flexible and define a set of pages where the sidebar can show up
 	$sidebar_vis = (isset($_COOKIE['smf_sidebar_disabled']) && $_COOKIE['smf_sidebar_disabled'] == 1) ? false : true;
 	if($sidebar_allowed)
 		echo '
@@ -253,7 +253,7 @@ EOT;
 			echo '
 				<div id="adv_search" style="width:246px;padding:0;" class="smalltext">
 				<input style="width:215px;padding-left:26px;margin:0;" onclick="var s_event = arguments[0] || window.event;openAdvSearch(s_event);return(false);" type="text" onfocus="if(!this._haschanged){this.value=\'\'};this._haschanged=true;" name="search" value="',$search_label,'" class="searchfield" />
-				<br><h3 class="bbc_head l2">',$txt['search_by_member'],'</h3>
+				<br><br><h3 class="bbc_head l2">',$txt['search_by_member'],'</h3>
 				<div style="text-align:center;margin-bottom:10px;"><input style="width:90%;" class="input_text" type="text" name="userspec" id="userspec" value="*" /></div>
 				<input class="input_check floatleft" type="checkbox" name="show_complete" id="show_complete" value="1" />&nbsp;<h3 class="bbc_head l2" style="margin-left:0;">',$txt['search_show_complete_messages'],'</h3><br class="clear">';
 				if($scope == 2) {
@@ -296,8 +296,8 @@ EOT;
 	}
 	echo '<aside>
 		  <div id="sidebar" style="width:260px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
-		if($sidebar_allowed)
-			template_sidebar_content();
+		if($sidebar_allowed && is_callable($context['sidebar_context_output']))
+			$context['sidebar_context_output']();
 	echo '</div>
 		  </aside>
 	      <div id="container" style="margin-right:',$sidebar_allowed ? '270px' : '0',';">
@@ -419,7 +419,7 @@ function theme_linktree($force_show = false)
 		echo $ltree;
 		return;
 	}
-	$ltree = '<div class="navigate_section"><ul class="linktree" id="linktree_'. (empty($shown_linktree) ? 'upper' : 'lower'). '">';
+	$ltree = '<div class="navigate_section rowgradient"><ul class="linktree tinytext" id="linktree_'. (empty($shown_linktree) ? 'upper' : 'lower'). '">';
 
 	// Each tree item has a URL and name. Some may have extra_before and extra_after.
 	$tree_items = count($context['linktree']);
@@ -599,7 +599,7 @@ function socialbar_passive($l, $t)
 	echo '</div><div class="clear"></div>';
 }
 
-function template_sidebar_content()
+function template_sidebar_content_index()
 {
 	global $context, $txt, $modSettings, $scripturl, $settings, $user_info, $options;
 
