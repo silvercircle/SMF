@@ -109,6 +109,8 @@ $txt['topic'] = 'Topic';
 $txt['help'] = 'Help';
 $txt['notify'] = 'Subscribe';
 $txt['unnotify'] = 'Unsubscribe';
+$txt['you_are_subscribed'] = 'You are subscribed to this topic';
+$txt['you_are_not_subscribed'] = 'Subscribe to this topic';
 $txt['notify_request'] = 'Do you want a notification email if someone replies to this topic?';
 // Use numeric entities in the below string.
 $txt['regards_team'] = 'Regards,' . "\n" . 'The ' . $context['forum_name'] . ' Team.';
@@ -789,6 +791,7 @@ $txt['a_page'] = 'A page';
 $txt['and'] = 'and';
 $txt['ufrom'] = 'from';
 
+$txt['share_topic'] = 'Share this topic';
 $txt['search_board'] = 'Search this board only';
 $txt['search_topic'] = 'Search this topic only';
 $txt['search_all_boards'] = 'Search all public boards';

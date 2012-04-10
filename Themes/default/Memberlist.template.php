@@ -24,7 +24,7 @@ function template_main()
 				echo '
 				<span class="floatright">', $context['letter_links'], '</span>';
 		echo '
-			</h4>
+			</h3>
 		</div>
 		<div class="flat_container cleantop smallpadding">';
 		if(isset($context['page_index']))
@@ -127,13 +127,7 @@ function template_search()
 
 function template_sidebar_memberlist()
 {
-	global $context, $settings, $options, $scripturl, $txt;
-
-	// Build the memberlist button array.
-	$memberlist_buttons = array(
-		'view_all_members' => array('text' => 'view_all_members', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action=mlist' . ';sa=all', 'active'=> true),
-		'mlist_search' => array('text' => 'mlist_search', 'image' => 'mlist.gif', 'lang' => true, 'url' => $scripturl . '?action=mlist' . ';sa=search'),
-	);
+	global $context, $settings, $scripturl, $txt;
 
 	echo '
 	<div>';
@@ -168,11 +162,11 @@ function template_sidebar_memberlist()
 
 	echo '
 		<form action="'. $scripturl. '?action=mlist;sa=search" method="post" accept-charset="UTF-8">
-				<div id="mlist_search" class="flow_hidden">
-					<div id="search_term_input">
-						<input type="text" name="search" value="'. $context['old_search']. '" size="35" class="input_text" />
-					</div>
-				<span class="floatleft tinytext">';
+		 <div id="mlist_search" class="flow_hidden">
+		  <div id="search_term_input">
+		   <input type="text" name="search" value="'. $context['old_search']. '" size="35" class="input_text" />
+		  </div>
+		  <span class="floatleft tinytext">';
 	$count = 0;
 	if(isset($context['search_fields'])) {
 		foreach ($context['search_fields'] as $id => $title)
@@ -180,16 +174,15 @@ function template_sidebar_memberlist()
 			<label for="fields-',$id,'"><input type="checkbox" name="fields[]" id="fields-', $id, '" value="'. $id. '" ',(in_array($id,$context['search_defaults']) ? 'checked="checked"' : ''), ' class="input_check" />',$title,'</label><br />';
 	}
 	echo '
-		</span>
-	</div>
-	<br>
-	<div class="centertext">
- 	 <input type="submit" name="submit" value="'.$txt['search'] . '" class="button_submit" />	</div>
-	</form>
-	<div class="cContainer_end"></div>
-	</div>';
-
-	echo '
+		  </span>
+	     </div>
+	     <br>
+		 <div class="centertext">
+ 	 	  <input type="submit" name="submit" value="'.$txt['search'] . '" class="button_submit" />
+ 	 	 </div>
+		</form>
+		<div class="cContainer_end"></div>
+	   </div>
 	</div>';
 }
 ?>

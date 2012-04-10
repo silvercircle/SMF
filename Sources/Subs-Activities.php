@@ -22,6 +22,7 @@ if (!defined('SMF'))
 // activity types, reflect the id_type in log_activities and activity_types tables
 // mods will most likely be able to register their own activity types and provide
 // formatting for them.
+// so we need hooks (TODO)
 define('ACT_LIKE', 1);			// user liked a post (for activities)
 define('ACT_NEWTOPIC', 2);
 define('ACT_REPLIED', 3);

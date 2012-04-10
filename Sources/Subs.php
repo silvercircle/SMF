@@ -711,8 +711,8 @@ function constructPageIndex($base_url, &$start, $max_value, $num_per_page, $flex
 			$data_url = $base_url . ';start=[[PAGE]]';
 		$prefix = sprintf('<span data-perpage="'.$num_per_page.'" data-urltemplate="'.$data_url.'" class="prefix'.(isset($need_direct_input) ? ' drop" title="Click to enter page number"' : '"').'>'.$txt['page_x_of_n'].'</span>', $start / $num_per_page + 1, $max_value / $num_per_page + 1);
 		$first = $start / $num_per_page > 1 ? sprintf($base_link, 0, $txt['page_first']) : '';
-		$prev = $start > 0 ? sprintf($base_link, $start - $num_per_page, '<') : '';
-		$next = $start <= $max_value - $num_per_page ? sprintf($base_link, $start + $num_per_page, '>') : '';
+		$prev = $start > 0 ? sprintf($base_link, $start - $num_per_page, '&lt;') : '';
+		$next = $start <= $max_value - $num_per_page ? sprintf($base_link, $start + $num_per_page, '&gt;') : '';
 		$last = $start <= $max_value - 2 *  $num_per_page ? sprintf($base_link, $tmpMaxPages, $txt['page_last']) : '';
 		if(isset($need_direct_input))
 			$context['need_pager_script_fragment'] = true;

@@ -63,7 +63,7 @@ define('PCACHE_UPDATE_PER_VIEW', 5);
 // The central part of the board - topic display.
 function Display()
 {
-	global $scripturl, $txt, $modSettings, $context, $settings;
+	global $scripturl, $txt, $modSettings, $context, $settings, $memberContext;
 	global $options, $sourcedir, $user_info, $board_info, $topic, $board;
 	global $attachments, $messages_request, $topicinfo, $language;
 
@@ -205,7 +205,7 @@ function Display()
 	// Get all the important topic info.
 	$request = smf_db_query( '
 		SELECT
-			t.num_replies, t.num_views, t.locked, ms.subject, t.is_sticky, t.id_poll,
+			t.num_replies, t.num_views, t.locked, ms.poster_name, ms.subject, ms.poster_email, ms.poster_time AS first_post_time, t.is_sticky, t.id_poll,
 			t.id_member_started, t.id_first_msg, t.id_last_msg, t.approved, t.unapproved_posts, t.id_layout,
 			' . ($user_info['is_guest'] ? 't.id_last_msg + 1' : 'IFNULL(lt.id_msg, IFNULL(lmr.id_msg, -1)) + 1') . ' AS new_from
 			' . (!empty($modSettings['recycle_board']) && $modSettings['recycle_board'] == $board ? ', id_previous_board, id_previous_topic' : '') . ',
@@ -235,13 +235,14 @@ function Display()
 	
 	$topicinfo = mysql_fetch_assoc($request);
 	mysql_free_result($request);
-	
+
+
 	$context['topic_last_modified'] = max($topicinfo['last_post_time'], $topicinfo['last_modified_time']);		// todo: considering - make post cutoff time for the cache depend on the modification time of the topic's last post
 	$context['real_num_replies'] = $context['num_replies'] = $topicinfo['num_replies'];
 	$context['topic_first_message'] = $topicinfo['id_first_msg'];
 	$context['topic_last_message'] = $topicinfo['id_last_msg'];
 	$context['first_subject'] = $topicinfo['subject'];
-	$context['prefix'] = html_entity_decode($topicinfo['prefix_name']) .'&nbsp;';
+	$context['prefix'] = !empty($topicinfo['prefix_name']) ? html_entity_decode($topicinfo['prefix_name']) .'&nbsp;' : '';
 
 	// Add up unapproved replies to get real number of replies...
 	if ($modSettings['postmod_active'] && allowedTo('approve_posts'))
@@ -623,9 +624,9 @@ function Display()
 				'title' => $row['title'],
 				'can_edit' => allowedTo('calendar_edit_any') || ($row['id_member'] == $user_info['id'] && allowedTo('calendar_edit_own')),
 				'modify_href' => $scripturl . '?action=post;msg=' . $topicinfo['id_first_msg'] . ';topic=' . $topic . '.0;calendar;eventid=' . $row['id_event'] . ';' . $context['session_var'] . '=' . $context['session_id'],
-				'start_date' => timeformat($start_date, $date_string, 'none'),
+				'start_date' => timeformat_static($start_date, $date_string, 'none'),
 				'start_timestamp' => $start_date,
-				'end_date' => timeformat($end_date, $date_string, 'none'),
+				'end_date' => timeformat_static($end_date, $date_string, 'none'),
 				'end_timestamp' => $end_date,
 				'is_last' => false
 			);
@@ -862,6 +863,7 @@ function Display()
 			$messages[] = $row['id_msg'];
 		}
 		mysql_free_result($request);
+		$posters[$context['topic_first_message']] = $context['topic_starter_id'];
 		$posters = array_unique($all_posters);
 	}
 	else {
@@ -1065,6 +1067,22 @@ function Display()
 		// What?  It's not like it *couldn't* be only guests in this topic...
 		if (!empty($posters))
 			loadMemberData($posters);
+
+		if (!loadMemberContext($context['topic_starter_id'], true))
+		{
+			$context['topicstarter']['name'] = $topicinfo['poster_name'];
+			$context['topicstarter']['id'] = 0;
+			$context['topicstarter']['group'] = $txt['guest_title'];
+			$context['topicstarter']['link'] = $topicinfo['poster_name'];
+			$context['topicstarter']['email'] = $topicinfo['poster_email'];
+			$context['topicstarter']['show_email'] = showEmailAddress(true, 0);
+			$context['topicstarter']['is_guest'] = true;
+			$context['topicstarter']['avatar'] = array();
+		}
+		else
+			$context['topicstarter'] = &$memberContext[$context['topic_starter_id']];
+
+		$context['topicstarter']['start_time'] = timeformat($topicinfo['first_post_time']);
 
 		$sql_what = '
 			m.id_msg, m.icon, m.subject, m.poster_time, m.poster_ip, m.id_member, m.modified_time, m.modified_name, m.body, mc.body AS cached_body,

@@ -384,26 +384,26 @@ div.pagesection div.floatright input {
 }
 
 #tagstrip {
-	font-size: 12px;
 	float: right;
-	padding: 5px 5px 5px 18px;
-	background: transparent url(../images/theme/sprite.png) 0 -239px no-repeat;
+	padding: 0;
 }
-#tagstrip a {
+#tagstrip a.tag {
 	text-decoration: none;
+	background: transparent url(../images/theme/sprite.png) 0 -245px no-repeat;
+	padding-left:20px;
 }
 span.xtag {
 	width: 14px;
 	min-width: 16px;
 	max-width: 16px;
-	background: transparent url(../images/theme/sprite.png) 0 -586px no-repeat;
+	background: transparent url(../images/theme/sprite.png) 0 -587px no-repeat;
 	cursor: pointer;
 	display: inline-block;
 	margin-right: 4px;
 	margin-left: 2px;
 }
 span.xtag:hover {
-	background: transparent url(../images/theme/sprite.png) -22px -586px no-repeat;
+	background: transparent url(../images/theme/sprite.png) -22px -587px no-repeat;
 }
 .approvebg {
 	color: #000;
@@ -1042,7 +1042,11 @@ h1.bigheader, div.bigheader {
 	margin-bottom: 2px;
 	color: #888;
 }
-
+h1.bigheader.topic {
+	padding: 0;
+	border:0;
+	font-weight: normal;
+}
 h1.bigheader.secondary, div.spoiler.head {
 	font-size: 12px;
 	font-weight:normal;
@@ -1462,9 +1466,9 @@ div#pollmoderation {
 	padding-top:0;
 	margin:5px 0;
 }
-p#whoisviewing {
+div#whoisviewing {
 	margin: 0;
-	padding: 5px 0.5em;
+	padding: 0;
 }
 .post_wrapper {
 	width: auto;
@@ -1517,6 +1521,10 @@ div.userbit_compact {
 	font-size: 11px;
 	color: #888;
 	line-height: 150%;
+}
+div.userbit_compact.topic {
+	margin-bottom:5px;
+	border-bottom:2px solid #ddd;
 }
 div.userbit_compact h2 {
 	display: inline;
@@ -3635,6 +3643,9 @@ abbr.timeago {
 .minpadding {
 	padding: 1px !important;
 }
+.nopadding {
+	padding: 0 !important;
+}
 .mediummargin {
 	margin: 5px;
 }
@@ -3648,16 +3659,11 @@ abbr.timeago {
 	white-space: pre-line;
 }
 div.bmbar {
-	border-bottom: 1px solid #aac;
-	border-right: 1px solid #aac;
-	background: #eeeefa;
-	border-radius: 4px;
-	box-shadow: 1px 1px 5px 2px #cce;
+	border:1px solid #ddd;
+	border-radius: 2px;
+	box-shadow: 0 0 5px 0 #ccc;
 	margin: 8px 0;
-	font-size: 10px !important;
-	line-height: 100% !important;
-	font-family: Verdana, helvetica, sans-serif;
-	padding: 3px 5px;
+	padding: 5px;
 }
 div.bmbar > div.title {
 	float: left;
@@ -4841,23 +4847,23 @@ div.ppt {
 
 /* Facebook begin */
 .social_share_privacy_area .facebook {
-	width: 220px;
+	width: 180px;
 	display: inline-block;
 }
 
 .social_share_privacy_area .facebook .fb_like iframe {
-	width: 170px;
+	width: 130px;
 	height: 21px;
 }
 
 /* Facebook end */
 /* Twitter begin */
 .social_share_privacy_area .twitter {
-	width: 148px;
+	width: 140px;
 }
 
 .social_share_privacy_area li div.tweet {
-	width: 115px;
+	width: 100px;
 }
 
 /* Twitter end */

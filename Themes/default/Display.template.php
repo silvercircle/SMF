@@ -55,11 +55,92 @@ function template_main()
 		', $context['first_new_message'] ? '<a id="new"></a>' : '';
 
 
+	echo '<div class="bmbar rowgradient">
+	<div class="userbit_compact topic">
+	<div class="floatleft">
+	<span class="small_avatar">';
+	if(!empty($context['topicstarter']['avatar']['image'])) {
+		echo '
+	<img class="fourtyeight" src="', $context['topicstarter']['avatar']['href'], '" alt="avatar" />';
+	}
+	else {
+		echo '
+	<img class="fourtyeight" src="',$settings['images_url'],'/unknown.png" alt="avatar" />';
+	}
+	echo '
+	</span>
+	</div>
+	<div class="userbit_compact_textpart">
+		 <h1 class="bigheader topic">', $context['prefix'], $context['subject'], ' &nbsp;(', $txt['read'], ' ', $context['num_views'], ' ', $txt['times'], ')
+		 </h1>
+	',$txt['started_by'],'&nbsp;', $context['topicstarter']['link'], ', ', $context['topicstarter']['start_time'];
+
+	if($context['tags_active']) {
+		echo '
+		<div id="tagstrip" class="tinytext">
+		<span id="tags">';
+		foreach ($context['topic_tags'] as $i => $tag) {
+			echo '
+			<a class="tag" href="' . $scripturl . '?action=tags;tagid=' . $tag['ID_TAG']  . '">' . $tag['tag'] . '</a>';
+			if($context['can_delete_tags'])
+				echo '
+			<a href="' . $scripturl . '?action=tags;sa=deletetag;tagid=' . $tag['ID']  . '"><span onclick="sendRequest(\'action=xmlhttp;sa=tags;deletetag=1;tagid=' . $tag['ID']. '\', $(\'#tags\'));return(false);" class="xtag">&nbsp;&nbsp;</span></a>';
+			else
+				echo '
+			&nbsp;&nbsp;';
+		}
+		echo '
+		</span>';
+
+		if($context['can_add_tags'])
+			echo '
+			&nbsp;<a rel="nofollow" id="addtag" onclick="$(\'#tagform\').remove();sendRequest(\'action=xmlhttp;sa=tags;addtag=1;topic=',$topic,'\', $(\'#addtag\'));return(false);" data-id="',$topic,'" href="' . $scripturl . '?action=tags;sa=addtag;topic=',$topic, '">' . $txt['smftags_addtag'] . '</a>';
+		else
+			echo '&nbsp;';
+		echo '
+		</div>
+		<br>';
+	}
+	$notify_href = $scripturl . '?action=notify;sa=' . ($context['is_marked_notify'] ? 'off' : 'on') . ';topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id'];
+	$notify_confirm = 'return Eos_Confirm(\'\', \'' . ($context['is_marked_notify'] ? $txt['notification_disable_topic'] : $txt['notification_enable_topic']) . '\', $(this).attr(\'href\'));';
+
+	echo '
+		<div class="floatright">',
+		($context['is_marked_notify'] ? $txt['you_are_subscribed'] . ', ' : ''),'<a href="',$notify_href,'" onclick="',$notify_confirm,'">',($context['is_marked_notify'] ? $txt['unnotify'] : $txt['you_are_not_subscribed']),'</a>
+		</div>';
+
+	if (!empty($settings['display_who_viewing']))
+	{
+		echo '
+			<div id="whoisviewing" class="tinytext">';
+
+		// Show just numbers...?
+		if ($settings['display_who_viewing'] == 1)
+			echo count($context['view_members']), ' ', count($context['view_members']) == 1 ? $txt['who_member'] : $txt['members'];
+		// Or show the actual people viewing the topic?
+		else
+			echo empty($context['view_members_list']) ? '0 ' . $txt['members'] : implode(', ', $context['view_members_list']) . ((empty($context['view_num_hidden']) || $context['can_moderate_forum']) ? '' : ' (+ ' . $context['view_num_hidden'] . ' ' . $txt['hidden'] . ')');
+
+		// Now show how many guests are here too.
+		echo $txt['who_and'], $context['view_num_guests'], ' ', $context['view_num_guests'] == 1 ? $txt['guest'] : $txt['guests'], $txt['who_viewing_topic'], '
+			</div>';
+	}
+	echo '
+	<div class="clear"></div>
+	</div>
+	</div>';
+
+	if($context['use_share'])
+		echo '
+	<div class="clear"></div>
+	 <div class="title">',$txt['share_topic'],':</div>
+	 <div id="socialshareprivacy"></div><div class="clear"></div>';
+
+	echo '</div><div class="clear"></div>';
+
+
 	echo '
 		<div>
-		 <h1 class="bigheader">
-		  ', $txt['topic'], ': ', $context['prefix'], $context['subject'], ' &nbsp;(', $txt['read'], ' ', $context['num_views'], ' ', $txt['times'], ')
-		 </h1>
 		</div>';
 	// Is this topic also a poll?
 	if ($context['is_poll'])
@@ -183,7 +264,6 @@ function template_main()
 	$normal_buttons = array(
 		'reply' => array('test' => 'can_reply', 'text' => 'reply', 'image' => 'reply.gif', 'lang' => true, 'url' => $scripturl . '?action=post;topic=' . $context['current_topic'] . '.' . $context['start'] . ';last_msg=' . $context['topic_last_message'], 'active' => true),
 		'add_poll' => array('test' => 'can_add_poll', 'text' => 'add_poll', 'image' => 'add_poll.gif', 'lang' => true, 'url' => $scripturl . '?action=editpoll;add;topic=' . $context['current_topic'] . '.' . $context['start']),
-		'notify' => array('test' => 'can_mark_notify', 'text' => $context['is_marked_notify'] ? 'unnotify' : 'notify', 'image' => ($context['is_marked_notify'] ? 'un' : '') . 'notify.gif', 'lang' => true, 'custom' => 'onclick="return Eos_Confirm(\'\', \'' . ($context['is_marked_notify'] ? $txt['notification_disable_topic'] : $txt['notification_enable_topic']) . '\', $(this).attr(\'href\'));"', 'url' => $scripturl . '?action=notify;sa=' . ($context['is_marked_notify'] ? 'off' : 'on') . ';topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
 		'mark_unread' => array('test' => 'can_mark_unread', 'text' => 'mark_unread', 'image' => 'markunread.gif', 'lang' => true, 'url' => $scripturl . '?action=markasread;sa=topic;t=' . $context['mark_unread_time'] . ';topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
 		'send' => array('test' => 'can_send_topic', 'text' => 'send_topic', 'image' => 'sendtopic.gif', 'lang' => true, 'url' => $scripturl . '?action=emailuser;sa=sendtopic;topic=' . $context['current_topic'] . '.0'),
 		'print' => array('text' => 'print', 'image' => 'print.gif', 'lang' => true, 'custom' => 'rel="nofollow"', 'url' => $scripturl . '?action=printpage;topic=' . $context['current_topic'] . '.0'),
@@ -203,52 +283,9 @@ function template_main()
 	echo '
 			<div id="forumposts">';
 
-	// social share bar
-	if($context['use_share'])
-		socialbar($scripturl . '?topic=' . $topic, urlencode($context['subject']));
-				
-	if($context['tags_active']) {
 	echo '
-		<div id="tagstrip"><span id="tags">';
-	foreach ($context['topic_tags'] as $i => $tag) {
-		echo '<a href="' . $scripturl . '?action=tags;tagid=' . $tag['ID_TAG']  . '">' . $tag['tag'] . '</a>';
-		if($context['can_delete_tags'])
-			echo '<a href="' . $scripturl . '?action=tags;sa=deletetag;tagid=' . $tag['ID']  . '"><span onclick="sendRequest(\'action=xmlhttp;sa=tags;deletetag=1;tagid=' . $tag['ID']. '\', $(\'#tags\'));return(false);" class="xtag">&nbsp;&nbsp;</span></a>';
-		else
-			echo '&nbsp;&nbsp;';
-	}
-	echo '</span>';
-		
-	if($context['can_add_tags'])
-		echo '
-			&nbsp;<a rel="nofollow" id="addtag" onclick="$(\'#tagform\').remove();sendRequest(\'action=xmlhttp;sa=tags;addtag=1;topic=',$topic,'\', $(\'#addtag\'));return(false);" data-id="',$topic,'" href="' . $scripturl . '?action=tags;sa=addtag;topic=',$topic, '">' . $txt['smftags_addtag'] . '</a>';
-	else
-		echo '&nbsp;';
-	echo '
-		</div>';
-	}
-
-	if (!empty($settings['display_who_viewing']))
-	{
-		echo '
-				<p id="whoisviewing" class="smalltext">';
-
-		// Show just numbers...?
-		if ($settings['display_who_viewing'] == 1)
-				echo count($context['view_members']), ' ', count($context['view_members']) == 1 ? $txt['who_member'] : $txt['members'];
-		// Or show the actual people viewing the topic?
-		else
-			echo empty($context['view_members_list']) ? '0 ' . $txt['members'] : implode(', ', $context['view_members_list']) . ((empty($context['view_num_hidden']) || $context['can_moderate_forum']) ? '' : ' (+ ' . $context['view_num_hidden'] . ' ' . $txt['hidden'] . ')');
-
-		// Now show how many guests are here too.
-		echo $txt['who_and'], $context['view_num_guests'], ' ', $context['view_num_guests'] == 1 ? $txt['guest'] : $txt['guests'], $txt['who_viewing_topic'], '
-				</p>';
-	}
-
-	echo '
-		<div class="clear"></div>
 		 <form data-alt="',$scripturl,'?action=post;msg=%id_msg%;topic=',$context['current_topic'],'.',$context['start'], '" action="', $scripturl, '?action=quickmod2;topic=', $context['current_topic'], '.', $context['start'], '" method="post" accept-charset="UTF-8" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave(\'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\') : false">
-		  <div class="posts_container">';
+		  <div class="posts_container nopadding">';
 
 	$removableMessageIDs = array();
 

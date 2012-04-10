@@ -2,4 +2,6 @@ Note: this is just a memo pad to record changes and prepare the posts for the de
 
 [list]
 [li](ux) updated personal message templates to keep the layout consistent with recent postbit changes.[/li]
+[li](core) implemented first poster / topic header in topic display (Display.php, $context['topicstarter'][/li]
+
 [/list]

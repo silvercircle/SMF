@@ -1979,7 +1979,7 @@ function list_getTopicNotificationCount($memID)
 
 function list_getTopicNotifications($start, $items_per_page, $sort, $memID)
 {
-	global $smcFunc, $txt, $scripturl, $user_info, $context, $modSettings;
+	global $scripturl, $user_info, $modSettings;
 
 	// All the topics with notification on...
 	$request = smf_db_query( '

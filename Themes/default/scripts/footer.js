@@ -1533,8 +1533,6 @@ function sbToggle(el)
 		$('#sbtoggle').addClass('expand');
 	}
 	else {
-		//if(!sidebar_content_loaded)
-		//	sendRequest(smf_scripturl, 'action=xmlhttp;sa=loadsb', $('#sidebar'));
 		$('#container').animate({marginRight: sideBarWidth + 20 + 'px'}, 50, function() {
 			$('#sidebar').fadeIn();
 		});

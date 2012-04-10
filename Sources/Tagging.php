@@ -229,7 +229,7 @@ function RegenerateTagList($topic)
     $output = '';
         
     while($row = mysql_fetch_assoc($result)) {
-    	$output .= ' <a href="'.$scripturl.'?action=tags;tagid='.$row['id_tag'].'">'.$row['tag'].'</a>';
+    	$output .= ' <a class="tag" href="'.$scripturl.'?action=tags;tagid='.$row['id_tag'].'">'.$row['tag'].'</a>';
         $output .= '<a href="'.$scripturl.'?action=tags;sa=deletetag;tagid='.$row['id'].'"><span onclick="sendRequest(smf_scripturl, \'action=xmlhttp;sa=tags;deletetag=1;tagid=' . $row['id']. '\', $(\'#tags\'));return(false);" class="xtag">&nbsp;&nbsp;</span></a>';
 	}
 	mysql_free_result($result);

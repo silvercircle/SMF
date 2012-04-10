@@ -265,7 +265,7 @@ function template_postbit_normal(&$message)
 		<span class="modified tinytext" id="modified_', $message['id'], '">';
 	if ($settings['show_modify'] && !empty($message['modified']['name']))
 		echo '
-		<em>', $txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'], '</em>';
+		<div class="orange_container norounded smallpadding tinytext">', $txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'], '</div>';
 	echo '
 		</span>
 		</div>
