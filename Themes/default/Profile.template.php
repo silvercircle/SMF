@@ -1561,17 +1561,21 @@ function template_profile_theme_settings()
 
 function template_notification()
 {
-	global $context, $settings, $options, $txt, $scripturl, $modSettings;
+	global $context, $txt, $scripturl, $modSettings;
 
 	// The main containing header.
 	echo '
 			<div class="cat_bar2">
 				<h3>
-					<span class="ie6_header floatleft">', $txt['profile'], '</span>
+					<span class="ie6_header floatleft">', $txt['notifications_header'], '</span>
 				</h3>
 			</div>
-			<div class="orange_container cleantop mediumpadding">', $txt['notification_info'], '</div><br>
-			<div class="blue_container">
+			<div class="orange_container cleantop mediumpadding">', $txt['notification_info'], '</div><br>';
+
+	$collapser = array('id' => 'notify_settings_profile', 'title' => $txt['notifications_settings'], 'bodyclass' => 'blue_container cleantop');
+	template_create_collapsible_container($collapser);
+
+	echo '
 				<div class="content">
 					<form action="', $scripturl, '?action=profile;area=notification;save" method="post" accept-charset="UTF-8" id="notify_options" class="flow_hidden">';
 
@@ -1618,9 +1622,9 @@ function template_notification()
 					</form>
 				</div>
 			</div>
-			<br />';
+			<br>';
 
-	template_show_list('topic_notification_list');
+	template_topiclist($context['topiclist']);
 
 	echo '
 		<br />';

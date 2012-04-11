@@ -487,8 +487,6 @@ function MessageIndex()
 				'is_hot' => $row['num_replies'] >= $modSettings['hotTopicPosts'],
 				'is_very_hot' => $row['num_replies'] >= $modSettings['hotTopicVeryPosts'],
 				'is_posted_in' => false,
-				'icon' => $row['first_icon'],
-				'icon_url' => getPostIcon($row['first_icon']),
 				'subject' => $row['first_subject'],
 				'new' => $row['new_from'] <= $row['id_msg_modified'],
 				'new_from' => $row['new_from'],
@@ -509,7 +507,8 @@ function MessageIndex()
 			$all_posters = array_unique($first_posters);
 			loadMemberData($all_posters);
 			foreach($context['topics'] as &$_topic) {
-				loadMemberContext($first_posters[$_topic['id']], true);
+				if(!isset($memberContext[$first_posters[$_topic['id']]]))
+					loadMemberContext($first_posters[$_topic['id']], true);
 				if(isset($memberContext[$first_posters[$_topic['id']]]['avatar']['image']))
 					$_topic['first_post']['member']['avatar'] = &$memberContext[$first_posters[$_topic['id']]]['avatar']['image'];
 			}

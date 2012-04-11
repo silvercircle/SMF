@@ -261,13 +261,12 @@ function template_postbit_normal(&$message)
 	 <span id="likers_msg_',$message['id'],'">',$message['likers'],'</span>
 	 <div class="clear_right"></div>
 	</div>';
-	echo '
-		<span class="modified tinytext" id="modified_', $message['id'], '">';
 	if ($settings['show_modify'] && !empty($message['modified']['name']))
 		echo '
-		<div class="orange_container norounded smallpadding tinytext">', $txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'], '</div>';
+		<div class="orange_container norounded smallpadding tinytext" id="modified_', $message['id'], '">',
+		$txt['last_edit'], ': ', $message['modified']['time'], ' ', $txt['by'], ' ', $message['modified']['name'],'
+		</div>';
 	echo '
-		</span>
 		</div>
 		<div class="clear_left"></div>
 		</div>';

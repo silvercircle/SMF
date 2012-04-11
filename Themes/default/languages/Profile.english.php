@@ -484,4 +484,8 @@ $txt['drafts_are_disabled'] = 'Drafts are currently disabled for your profile. Y
 $txt['my_drafts'] = 'My drafts';
 $txt['member_has_no_topics'] = 'No topics started by this member were found.';
 $txt['view_full_profile'] = 'View full profile';
+
+$txt['active_topic_subscriptions'] = 'Active topic subscriptions';
+$txt['notifications_header'] = 'Topic and board subscriptions';
+$txt['notifications_settings'] = "Notification settings";
 ?>

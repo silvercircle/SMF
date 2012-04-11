@@ -1065,6 +1065,9 @@ function Display()
 		}
 
 		// What?  It's not like it *couldn't* be only guests in this topic...
+		if(!isset($posters[$context['topic_starter_id']]))
+			$posters[] = $context['topic_starter_id'];
+
 		if (!empty($posters))
 			loadMemberData($posters);
 

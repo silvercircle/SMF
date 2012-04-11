@@ -280,10 +280,14 @@ function template_topicbit(&$topic)
 			echo '
 			<a href="', $topic['new_href'], '" id="newicon' . $topic['first_post']['id'] . '"><img src="', $settings['images_url'], '/new.png" alt="', $txt['new'], '" /></a>';
 
+	if(!empty($topic['board']['id']))
 		echo '
+			<div class="floatright tinytext"><span class="lowcontrast">',$txt['in'], ' <a href="',$topic['board']['href'],'">',$topic['board']['name'],'</a></span></div>';
+	echo '
 			<p>', $topic['first_post']['member']['link'],', ',$topic['first_post']['time'], '
 			  <small id="pages' . $topic['first_post']['id'] . '">', $topic['pages'], '</small>
-			</p>
+			</p>';
+		echo '
 			</div>
 		</td>
 		<td class="stats nowrap ', $color_class, '">';
@@ -312,94 +316,6 @@ function template_topicbit(&$topic)
 		echo '
 			</td>';
 	}
-	echo '
-		</tr>';
-}
-
-function template_topicbit_generic(&$topic)
-{
-	global $alternate;
-	global $context, $settings, $options, $txt, $scripturl, $modSettings;
-
-	if ($topic['is_sticky'] && $topic['is_locked'])
-		$color_class = 'stickybg locked_sticky';
-	// Sticky topics should get a different color, too.
-	elseif ($topic['is_sticky'])
-		$color_class = 'stickybg';
-	// Locked topics get special treatment as well.
-	elseif ($topic['is_locked'])
-		$color_class = 'lockedbg';
-	// Last, but not least: regular topics.
-	else
-		$color_class = '';
-
-	// Some columns require a different shade of the color class.
-	$alternate_class = $color_class . '2';
-
-	echo '
-	<tr>
-	  <td class="icon1 ', $color_class, '">';
-		echo '
-	  <span class="small_avatar ',$topic['class'],'">';
-		if(!empty($topic['first_post']['member']['avatar'])) {
-			echo '
-		<a href="', $scripturl, '?action=profile;u=', $topic['first_post']['member']['id'], '">
-		  ', $topic['first_post']['member']['avatar'], '
-		</a>';
-		}
-		else {
-			echo '
-		<a href="', $scripturl, '?action=profile;u=', $topic['first_post']['member']['id'], '">
-		  <img src="',$settings['images_url'],'/unknown.png" alt="avatar" />
-		</a>';
-		}
-				/*
-				 * own avatar as overlay when
-				 * a) avatar is set
-				 * b) we have posted in this topic
-				 * c) we have NOT started the topic
-				 */
-		if($topic['is_posted_in'] && ($topic['first_post']['member']['id'] != $context['user']['id']) && isset($context['user']['avatar']['image']))
-			echo '
-		<span class="avatar_overlay">',$context['user']['avatar']['image'],'</span>';
-		echo '</span>';
-
-		$is_new = $topic['new'] && $context['user']['is_logged'];
-		echo '
-		</td>
-		<td class="icon2 ', $color_class, '">
-			<img src="', $topic['first_post']['icon_url'], '" alt="" />
-		</td>
-		<td class="subject ',$alternate_class,'">
-			<div>
-			<span class="tpeek" data-id="'.$topic['id'].'" id="msg_' . $topic['first_post']['id'] . '">', $topic['prefix'], ($is_new ? '<strong>' : '') , $topic['first_post']['link'], ($is_new ? '</strong>' : ''), '</span>';
-
-	// Is this topic new? (assuming they are logged in!)
-		if ($is_new)
-			echo '
-			<a href="', $topic['new_href'], '" id="newicon' . $topic['first_post']['id'] . '"><img src="', $settings['images_url'], '/new.png" alt="', $txt['new'], '" /></a>';
-
-		echo '
-			<p>', $topic['first_post']['member']['link'],', ',$topic['first_post']['time'], '
-			  <small id="pages' . $topic['first_post']['id'] . '">', $topic['pages'], '</small>
-			</p>
-			</div>
-		</td>
-		<td class="stats ', $color_class, '">';
-			if($topic['replies'])
-				echo '
-			<a title="',$txt['who_posted'],'" onclick="whoPosted($(this));return(false);" class="whoposted" data-topic="',$topic['id'], '" href="',$scripturl,'?action=xmlhttp;sa=whoposted;t=',$topic['id'],'" >', $topic['replies'], ' ', $txt['replies'], '</a>';
-			else
-				echo $topic['replies'], ' ', $txt['replies'];
-			echo '
-			<br />
-				', $topic['views'], ' ', $txt['views'], '
-		</td>
-		<td class="lastpost ', $color_class, '">',
-			$txt['by'], ': ', $topic['last_post']['member']['link'], '<br />
-			<a class="lp_link" title="', $txt['last_post'], '" href="', $topic['last_post']['href'], '">',$topic['last_post']['time'], '</a>
-		</td>';
-
 	echo '
 		</tr>';
 }

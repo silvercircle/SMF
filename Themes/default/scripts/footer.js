@@ -1372,8 +1372,15 @@ jQuery(document).ready(function() {
 	});
 	
 	$('table.table_grid th .input_check').change(function() {
-		$('table.table_grid td .input_check').each(function() {
-			$(this).change();
+		var cbox = this;
+		$(this).parent().parent().parent().parent().find('tbody').find('input.input_check').each(function() {
+			$(this).prop('checked', $(cbox).is(':checked') ? true : false);
+			$(this).parent().parent().children('td').each(function() {
+				if($(cbox).is(':checked'))
+					$(this).addClass('inline_highlight');
+				else
+					$(this).removeClass('inline_highlight');
+			});
 		});
 		return(false);
 	});
@@ -1526,15 +1533,15 @@ function sbToggle(el)
 	var is_visible = ($('#sidebar').css('display') == 'none' ? false : true);
 	$('#sbtoggle').removeClass('expand collapse');
 	if(is_visible) {
-		$('#sidebar').fadeOut(200, function() {
-			$('#container').animate({marginRight: '0'}, 50);
+		$('#sidebar').fadeOut(100, function() {
+			$('#container').animate({marginRight: '0'}, 350);
 		});
 		createCookie('smf_sidebar_disabled', 1, 300);
 		$('#sbtoggle').addClass('expand');
 	}
 	else {
-		$('#container').animate({marginRight: sideBarWidth + 20 + 'px'}, 50, function() {
-			$('#sidebar').fadeIn();
+		$('#container').animate({marginRight: sideBarWidth + 20 + 'px'}, 350, function() {
+			$('#sidebar').fadeIn(100);
 		});
 		createCookie('smf_sidebar_disabled', 0, 300);
 		$('#sbtoggle').addClass('collapse');

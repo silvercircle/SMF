@@ -305,5 +305,82 @@ function template_create_list_menu($list_menu, $direction = 'top')
 		</table>';
 	}
 }
+/*
+ * create a list of topics
+ */
+function template_topiclist(&$topiclist)
+{
+	global $context, $txt, $scripturl, $settings, $modSettings;
 
+	if(isset($topiclist['title']))
+		echo '
+	<h1 class="bigheader"><strong>',$topiclist['title'],'</strong></h1>';
+	echo '
+	<div class="pagelinks floatleft mediumpadding">',
+	$topiclist['pages'],'
+	</div>
+	<div class="clear"></div>';
+	if(!empty($topiclist['form'])) {
+		$form = $topiclist['form'];
+		echo '
+	<form id="',$form['id'],'" action="',$form['href'],'">';
+		foreach($form['hidden_fields'] as $field)
+			echo '
+		<input type="hidden" name="',$field['name'],'" value="',$field['value'],'" />';
+	}
+	echo '
+	<div class="framed_region">
+		<table class="topic_table table_grid borderless">';
+
+		// Are there actually any topics to show?
+		if (!empty($topiclist['items']))
+		{
+			echo '
+		<thead>
+					<tr class="mediumpadding">
+					<th scope="col" colspan="2" class="first_th glass cleantop" style="width:8%;">&nbsp;</th>
+					<th scope="col" class="lefttext nowrap glass cleantop"><a rel="nofollow" href="', $topiclist['baseurl'], ';start=', $context['start'], ';sort=subject', $context['sort_by'] == 'subject' && $context['sort_direction'] == 'down' ? ';desc' : '', '">', $txt['subject'], $context['sort_by'] == 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a> / ',$txt['started_by'], '</th>
+					<th scope="col" class="nowrap glass cleantop"><a rel="nofollow" href="', $topiclist['baseurl'], ';start=', $context['start'], ';sort=replies', $context['sort_by'] == 'replies' && $context['sort_direction'] == 'down' ? ';desc' : '', '">', $txt['replies'], $context['sort_by'] == 'replies' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a> / <a href="', $topiclist['baseurl'], ';start=', $context['start'], ';sort=views', $context['sort_by'] == 'views' && $context['sort_direction'] == 'down' ? ';desc' : '', '">', $txt['views'], $context['sort_by'] == 'views' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>
+					<th scope="col" class="centertext nowrap glass cleantop"><a rel="nofollow" href="', $topiclist['baseurl'], ';start=', $context['start'], ';sort=last_post', $context['sort_by'] == 'last_post' && $context['sort_direction'] == 'down' ? ';desc' : '', '">', $txt['last_post'], $context['sort_by'] == 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '', '</a></th>';
+
+			// Show a "select all" box for quick moderation?
+			if (!empty($context['can_quick_mod']))
+				echo '
+		<th scope="col" class="glass cleantop last_th" style="width:24px;"><input type="checkbox" class="input_check cb_invertall" /></th>';
+		}
+		// No topics.... just say, "sorry bub".
+		else
+			echo '
+					<thead>
+					<tr>
+					<th class="red_container"><strong>', $txt['msg_alert_none'], '</strong></th>';
+
+		echo '
+				</tr>
+			</thead>';
+		// If this person can approve items and we have some awaiting approval tell them.
+		if (!empty($context['unapproved_posts_message']))
+		{
+			echo '
+		<tr class="windowbg2">
+					<td colspan="', !empty($context['can_quick_mod']) ? '6' : '5', '">
+						<span class="alert">!</span> ', $context['unapproved_posts_message'], '
+		</td>
+				</tr>';
+		}
+
+		foreach ($topiclist['items'] as &$topic)
+		{
+			template_topicbit($topic);
+		}
+
+		echo '
+			</tbody>
+		</table>
+	</div>';
+
+	if(!empty($topiclist['form']))
+		echo '
+	</form>';
+}
 ?>

@@ -128,15 +128,25 @@ function template_main()
 	echo '
 	<div class="clear"></div>
 	</div>
+	</div>
+	<div class="floatright tinytext righttext" style="padding:0;line-height:100%;margin:0;">';
+	if($context['can_send_topic'])
+		echo '
+		<a href="',$scripturl . '?action=emailuser;sa=sendtopic;topic=' . $context['current_topic'] . '.0">',$txt['email_topic'],'</a><br>';
+		echo '
+		<a rel="nofollow" href="', $scripturl . '?action=printpage;topic=' . $context['current_topic'] . '.0','">',$txt['view_printable'],'</a>';
+	echo '
 	</div>';
+
+		//'send' => array('test' => 'can_send_topic', 'text' => 'send_topic', 'image' => 'sendtopic.gif', 'lang' => true, 'url' => $scripturl . '?action=emailuser;sa=sendtopic;topic=' . $context['current_topic'] . '.0'),
+		//'print' => array('text' => 'print', 'image' => 'print.gif', 'lang' => true, 'custom' => 'rel="nofollow"', 'url' => $scripturl . '?action=printpage;topic=' . $context['current_topic'] . '.0'),
 
 	if($context['use_share'])
 		echo '
-	<div class="clear"></div>
 	 <div class="title">',$txt['share_topic'],':</div>
 	 <div id="socialshareprivacy"></div><div class="clear"></div>';
 
-	echo '</div><div class="clear"></div>';
+	echo '<div class="clear"></div></div>';
 
 
 	echo '
@@ -265,8 +275,6 @@ function template_main()
 		'reply' => array('test' => 'can_reply', 'text' => 'reply', 'image' => 'reply.gif', 'lang' => true, 'url' => $scripturl . '?action=post;topic=' . $context['current_topic'] . '.' . $context['start'] . ';last_msg=' . $context['topic_last_message'], 'active' => true),
 		'add_poll' => array('test' => 'can_add_poll', 'text' => 'add_poll', 'image' => 'add_poll.gif', 'lang' => true, 'url' => $scripturl . '?action=editpoll;add;topic=' . $context['current_topic'] . '.' . $context['start']),
 		'mark_unread' => array('test' => 'can_mark_unread', 'text' => 'mark_unread', 'image' => 'markunread.gif', 'lang' => true, 'url' => $scripturl . '?action=markasread;sa=topic;t=' . $context['mark_unread_time'] . ';topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
-		'send' => array('test' => 'can_send_topic', 'text' => 'send_topic', 'image' => 'sendtopic.gif', 'lang' => true, 'url' => $scripturl . '?action=emailuser;sa=sendtopic;topic=' . $context['current_topic'] . '.0'),
-		'print' => array('text' => 'print', 'image' => 'print.gif', 'lang' => true, 'custom' => 'rel="nofollow"', 'url' => $scripturl . '?action=printpage;topic=' . $context['current_topic'] . '.0'),
 	);
 
 	// Allow adding new buttons easily.

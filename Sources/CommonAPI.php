@@ -719,4 +719,104 @@ class Mobile_Detect {
 
 
 }
+
+class Topiclist {
+
+	private $topiclist = array();
+	private $users_to_load = array();
+
+	function __construct($request, $total_items) {
+
+		global $context, $txt, $user_info, $scripturl, $options, $memberContext, $modSettings;
+
+		while ($row = mysql_fetch_assoc($request))
+		{
+			censorText($row['subject']);
+
+			$f_post_mem_href = !empty($row['id_member']) ? URL::user($row['id_member'], $row['first_member_name']) : '';
+			$t_href = URL::topic($row['id_topic'], $row['subject'], 0);
+
+			$l_post_mem_href = !empty($row['id_member_updated']) ? URL::user($row['id_member_updated'], $row['last_real_name'] ) : '';
+			$l_post_msg_href = URL::topic($row['id_topic'], $row['last_subject'], $user_info['is_guest'] ? (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) : 0, $user_info['is_guest'] ? true : false, $user_info['is_guest'] ? '' : ('.msg' . $row['id_last_msg']), $user_info['is_guest'] ? ('#msg' . $row['id_last_msg']) : '#new');
+
+			$this->topiclist[$row['id_topic']] = array(
+				'id' => $row['id_topic'],
+				'id_member_started' => empty($row['id_member']) ? 0 : $row['id_member'],
+				'first_post' => array(
+					'id' => $row['id_first_msg'],
+					'member' => array(
+						'username' => $row['first_member_name'],
+						'name' => $row['first_member_name'],
+						'id' => empty($row['id_member']) ? 0 : $row['id_member'],
+						'href' => $f_post_mem_href,
+						'link' => !empty($row['id_member']) ? '<a onclick="getMcard('.$row['id_member'].', $(this));return(false);" href="' . $f_post_mem_href . '" title="' . $txt['profile_of'] . ' ' . $row['first_member_name'] . '">' . $row['first_member_name'] . '</a>' : $row['first_member_name'],
+					),
+					'time' => timeformat($row['first_poster_time']),
+					'timestamp' => forum_time(true, $row['first_poster_time']),
+					'subject' => $row['subject'],
+					'icon' => $row['first_icon'],
+					'icon_url' => getPostIcon($row['first_icon']),
+					'href' => $t_href,
+					'link' => '<a href="' . $t_href .'">' . $row['subject'] . '</a>'
+				),
+				'last_post' => array(
+					'id' => $row['id_last_msg'],
+					'member' => array(
+						'username' => $row['last_real_name'],
+						'name' => $row['last_real_name'],
+						'id' => $row['id_member_updated'],
+						'href' => $l_post_mem_href,
+						'link' => !empty($row['id_member_updated']) ? '<a onclick="getMcard('.$row['id_member_updated'].', $(this));return(false);" href="' . $l_post_mem_href . '">' . $row['last_real_name'] . '</a>' : $row['last_real_name']
+					),
+					'time' => timeformat($row['last_post_time']),
+					'timestamp' => forum_time(true, $row['last_post_time']),
+					'subject' => $row['last_subject'],
+					'href' => $l_post_msg_href,
+					'link' => '<a href="' . $l_post_msg_href . ($row['num_replies'] == 0 ? '' : ' rel="nofollow"') . '>' . $row['last_subject'] . '</a>'
+				),
+				'subject' => $row['subject'],
+				'new' => $row['new_from'] <= $row['id_msg_modified'],
+				'new_from' => $row['new_from'],
+				'newtime' => $row['new_from'],
+				'updated' => timeformat($row['poster_time']),
+				'new_href' => $scripturl . '?topic=' . $row['id_topic'] . '.msg' . $row['new_from'] . '#new',
+				'new_link' => '<a href="' . $scripturl . '?topic=' . $row['id_topic'] . '.msg' . $row['new_from'] . '#new">' . $row['subject'] . '</a>',
+				'replies' => comma_format($row['num_replies']),
+				'views' => comma_format($row['num_views']),
+				'approved' => $row['approved'],
+				'unapproved_posts' => $row['unapproved_posts'],
+				'is_posted_in' => false,
+				'prefix' => '',
+				'pages' => '',
+				'is_sticky' => !empty($modSettings['enableStickyTopics']) && !empty($row['is_sticky']),
+				'is_locked' => !empty($row['locked']),
+				'is_poll' => false,
+				'is_hot' => $row['num_replies'] >= $modSettings['hotTopicPosts'],
+				'is_very_hot' => $row['num_replies'] >= $modSettings['hotTopicVeryPosts'],
+				'board' => isset($row['id_board']) && !empty($row['id_board']) ? array(
+					'name' => $row['board_name'],
+					'id' => $row['id_board'],
+					'href' => URL::board($row['id_board'], $row['board_name'])
+				) : array(
+					'name' => '',
+					'id' => 0,
+					'href' => ''
+				)
+			);
+			determineTopicClass($this->topiclist[$row['id_topic']]);
+			if(!empty($row['id_member']) && $row['id_member'] != $user_info['id'])
+				$this->users_to_load[$row['id_member']] = $row['id_member'];
+		}
+		loadMemberData($this->users_to_load);
+		foreach($this->topiclist as &$topic) {
+			if(!isset($memberContext[$topic['id_member_started']]))
+				loadMemberContext($topic['id_member_started']);
+			$topic['first_post']['member']['avatar'] = &$memberContext[$topic['id_member_started']]['avatar']['image'];
+		}
+	}
+
+	public function &getResult() {
+		return $this->topiclist;
+	}
+}
 ?>

@@ -327,13 +327,14 @@ $txt['to_view'] = 'to view them.';
 $txt['total_boards'] = 'Total Boards';
 
 $txt['print_page'] = 'Print Page';
-
+$txt['view_printable'] = 'View printable version';
 $txt['valid_email'] = 'This must be a valid email address.';
 
 $txt['geek'] = 'I am a geek!!';
 $txt['info_center_title'] = '%1$s - Info Center';
 
 $txt['send_topic'] = 'Send this topic';
+$txt['email_topic'] = 'Email this topic';
 
 $txt['sendtopic_title'] = 'Send the topic &quot;%1$s&quot; to a friend.';
 $txt['sendtopic_sender_name'] = 'Your name';
