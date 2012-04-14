@@ -94,6 +94,14 @@ function Display()
 
 	// Let's do some work on what to search index.
 
+	$context['multiquote_cookiename'] = 'mquote';
+	//$context['multiquote_cookiename'] = 'mq_' . $context['current_topic'];
+
+	$context['multiquote_posts'] = array();
+	if(isset($_COOKIE[$context['multiquote_cookiename']]) && strlen($_COOKIE[$context['multiquote_cookiename']]) > 1)
+		$context['multiquote_posts'] = explode(',', $_COOKIE[$context['multiquote_cookiename']]);
+
+	$context['multiquote_posts_count'] = count($context['multiquote_posts']);
 	if (count($_GET) > 2) {
 		foreach ($_GET as $k => $v)
 		{
@@ -1362,7 +1370,8 @@ function prepareDisplayContext($reset = false)
 		'liked' => $message['liked'],
 		'like_updated' => $message['like_updated'],
 		'id_member' => $message['id_member'],
-		'postbit_callback' => $message['approved'] ? ($message['id_msg'] == $context['first_message'] ? $context['postbit_callbacks']['firstpost'] : $context['postbit_callbacks']['post']) : 'template_postbit_comment'
+		'postbit_callback' => $message['approved'] ? ($message['id_msg'] == $context['first_message'] ? $context['postbit_callbacks']['firstpost'] : $context['postbit_callbacks']['post']) : 'template_postbit_comment',
+		'mq_marked' => in_array($message['id_msg'], $context['multiquote_posts'])
 	);
 
 	if($context['can_see_like'])

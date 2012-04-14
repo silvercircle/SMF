@@ -174,7 +174,7 @@ function template_main()
 	}
 	// Build the normal button array.
 	$normal_buttons = array(
-		'reply' => array('test' => 'can_reply', 'text' => 'reply', 'image' => 'reply.gif', 'lang' => true, 'url' => $scripturl . '?action=post;topic=' . $context['current_topic'] . '.' . $context['start'] . ';last_msg=' . $context['topic_last_message'], 'active' => true),
+		'reply' => array('test' => 'can_reply', 'text' => 'reply', 'custom' => 'onclick="return oQuickReply.quote(0);" ', 'image' => 'reply.gif', 'lang' => true, 'url' => $scripturl . '?action=post;topic=' . $context['current_topic'] . '.' . $context['start'] . ';last_msg=' . $context['topic_last_message'], 'active' => true),
 		'add_poll' => array('test' => 'can_add_poll', 'text' => 'add_poll', 'image' => 'add_poll.gif', 'lang' => true, 'url' => $scripturl . '?action=editpoll;add;topic=' . $context['current_topic'] . '.' . $context['start']),
 		'notify' => array('test' => 'can_mark_notify', 'text' => $context['is_marked_notify'] ? 'unnotify' : 'notify', 'image' => ($context['is_marked_notify'] ? 'un' : '') . 'notify.gif', 'lang' => true, 'custom' => 'onclick="return Eos_Confirm(\'\', \'' . ($context['is_marked_notify'] ? $txt['notification_disable_topic'] : $txt['notification_enable_topic']) . '\', $(this).attr(\'href\'));"', 'url' => $scripturl . '?action=notify;sa=' . ($context['is_marked_notify'] ? 'off' : 'on') . ';topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
 		'mark_unread' => array('test' => 'can_mark_unread', 'text' => 'mark_unread', 'image' => 'markunread.gif', 'lang' => true, 'url' => $scripturl . '?action=markasread;sa=topic;t=' . $context['mark_unread_time'] . ';topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
@@ -221,7 +221,7 @@ function template_main()
 				</div>';
 			}
 			echo $context['num_replies'], ' Replies<div class="clear"></div>
-				<div class="posts_container commentstyle">';
+		  		<div class="posts_container commentstyle" id="posts_container">';
 		}
 	}
 	echo '
@@ -250,20 +250,18 @@ function template_main()
 
 	if ($context['can_reply'] && !empty($options['display_quick_reply']))
 	{
-		$collapser = array('id' => 'quickReplyOptions', 'title' => $txt['quick_reply'], 'bodyclass' => 'flat_container mediumpadding');
 		echo '
 			<a id="quickreply"></a>
 			<div class="clear"></div>
-			<div style="overflow:hidden;" id="quickreplybox">';
-				template_create_collapsible_container($collapser);
-				echo '
-					<div>
-						', $txt['quick_reply_desc'], '<br><br>
-						', $context['is_locked'] ? '<p class="alert smalltext">' . $txt['quick_reply_warning'] . '</p>' : '',
-						$context['oldTopicError'] ? '<p class="alert smalltext">' . sprintf($txt['error_old_topic'], $modSettings['oldTopicDays']) . '</p>' : '', '
-						', $context['can_reply_approved'] ? '' : '<em>' . $txt['wait_for_approval'] . '</em>', '
-						', !$context['can_reply_approved'] && $context['require_verification'] ? '<br />' : '', '
-						<form action="', $scripturl, '?board=', $context['current_board'], ';action=post2" method="post" accept-charset="UTF-8" name="postmodify" id="postmodify" onsubmit="submitonce(this);" style="margin: 0;">
+			<div style="display:none;overflow:hidden;" id="quickreplybox">';
+		echo '
+					<div class="cat_bar">
+					 <strong>',$txt['post_reply'],'</strong>&nbsp;&nbsp;<a href="',$scripturl,'?action=helpadmin;help=quickreply_help','" onclick="return reqWin(this.href);" class="help tinytext">',$txt['post_reply_help'],'</a>
+					</div>
+					<div class="flat_container mediumpadding">';
+		//<form action="', $scripturl, '?board=', $context['current_board'], ';action=post2" method="post" accept-charset="UTF-8" name="postmodify" id="postmodify" style="margin: 0;">
+		echo '
+							<input type="hidden" name="_qr_board" value="', $context['current_board'], '" />
 							<input type="hidden" name="topic" value="', $context['current_topic'], '" />
 							<input type="hidden" name="subject" value="', $context['response_prefix'], $context['subject'], '" />
 							<input type="hidden" name="icon" value="xx" />
@@ -275,56 +273,63 @@ function template_main()
 							<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 							<input type="hidden" name="seqnum" value="', $context['form_sequence_number'], '" />';
 
-			// Guests just need more.
-			if ($context['user']['is_guest'])
-				echo '
+		// Guests just need more.
+		if ($context['user']['is_guest'])
+			echo '
 							<strong>', $txt['name'], ':</strong> <input type="text" name="guestname" value="', $context['name'], '" size="25" class="input_text" tabindex="', $context['tabindex']++, '" />
 							<strong>', $txt['email'], ':</strong> <input type="text" name="email" value="', $context['email'], '" size="25" class="input_text" tabindex="', $context['tabindex']++, '" /><br />';
 
-			// Is visual verification enabled?
-			if ($context['require_verification'])
-				echo '
+		// Is visual verification enabled?
+		if ($context['require_verification'])
+			echo '
 							<strong>', $txt['verification'], ':</strong>', template_control_verification($context['visual_verification_id'], 'quick_reply'), '<br />';
 
-			if(isset($context['user']['avatar']['image']) && !empty($context['user']['avatar']['image']))
-				echo '
-					<div class="floatleft blue_container smallpadding avatar">',
-					$context['user']['avatar']['image'],'
-					</div>';
+		if(isset($context['user']['avatar']['image']) && !empty($context['user']['avatar']['image']))
 			echo '
-							<div class="quickReplyContent" style="margin-left:150px;">
-								<textarea style="width:100%;" rows="7" name="message" tabindex="', $context['tabindex']++, '"></textarea>
+					<div class="floatleft blue_container smallpadding avatar">',
+			$context['user']['avatar']['image'],'
+					</div>';
+		echo '
+							<div class="quickReplyContent" style="margin-left:150px;">';
+		echo $context['is_locked'] ? '<div class="alert smalltext">' . $txt['quick_reply_warning'] . '</div>' : '',
+		$context['oldTopicError'] ? '<div class="alert smalltext">' . sprintf($txt['error_old_topic'], $modSettings['oldTopicDays']) . '</div>' : '', '
+						', $context['can_reply_approved'] ? '' : '<em>' . $txt['wait_for_approval'] . '</em>', '
+						', !$context['can_reply_approved'] && $context['require_verification'] ? '<br />' : '';
+		echo '
+								<textarea id="quickReplyMessage" style="width:99%;" rows="18" name="message" tabindex="', $context['tabindex']++, '"></textarea>
 							</div>
 							<div class="righttext padding">
 								<input type="submit" name="post" value="', $txt['post'], '" onclick="return submitThisOnce(this);" accesskey="s" tabindex="', $context['tabindex']++, '" class="button_submit" />
-								<input type="submit" name="preview" value="', $txt['preview'], '" onclick="return submitThisOnce(this);" accesskey="p" tabindex="', $context['tabindex']++, '" class="button_submit" />';
+								<input type="submit" name="preview" value="', $txt['go_advanced'], '" onclick="return submitThisOnce(this);" accesskey="p" tabindex="', $context['tabindex']++, '" class="button_submit" />
+								<input type="submit" name="cancel" value="', 'Cancel', '" onclick="return(oQuickReply.cancel());" accesskey="p" tabindex="', $context['tabindex']++, '" class="button_submit" />';
 
-			if (!empty($context['can_save_draft']))
-				echo '
-								<input type="hidden" id="draft_id" name="draft_id" value="', empty($context['draft_id']) ? '0' : $context['draft_id'], '" />
-								<input type="submit" name="draft" value="', $txt['save_draft'], '" onclick="return submitThisOnce(this);" accesskey="d" tabindex="', $context['tabindex']++, '" class="button_submit" />';
-								
-			if (!empty($context['can_autosave_draft'])) {
-				echo '
-								<div id="draft_lastautosave" class="clear righttext"></div>';
-				$context['inline_footer_script'] .= '
-	var oAutoSave = new draftAutosave({
-		sSelf: \'oAutoSave\',
-		sScriptUrl: smf_scripturl,
-		sSessionId: \''. $context['session_id']. '\',
-		sSessionVar: \''. $context['session_var']. '\',
-		sLastNote: \'draft_lastautosave\',
-		sType: \'quickreply\',
-		iBoard: '. (empty($context['current_board']) ? 0 : $context['current_board']). ',
-		iFreq: '. (empty($modSettings['enableAutoSaveDrafts']) ? 30000 : $modSettings['enableAutoSaveDrafts'] * 1000). '
-	});
-	';
-			}
-			echo '
+		/*		if (!empty($context['can_save_draft']))
+				  echo '
+								  <input type="hidden" id="draft_id" name="draft_id" value="', empty($context['draft_id']) ? '0' : $context['draft_id'], '" />
+								  <input type="submit" name="draft" value="', $txt['save_draft'], '" onclick="return submitThisOnce(this);" accesskey="d" tabindex="', $context['tabindex']++, '" class="button_submit" />';
+
+			  if (!empty($context['can_autosave_draft'])) {
+				  echo '
+								  <div id="draft_lastautosave" class="clear righttext"></div>';
+				  $context['inline_footer_script'] .= '
+	  var oAutoSave = new draftAutosave({
+		  sSelf: \'oAutoSave\',
+		  sScriptUrl: smf_scripturl,
+		  sSessionId: \''. $context['session_id']. '\',
+		  sSessionVar: \''. $context['session_var']. '\',
+		  sLastNote: \'draft_lastautosave\',
+		  sType: \'quickreply\',
+		  iBoard: '. (empty($context['current_board']) ? 0 : $context['current_board']). ',
+		  iFreq: '. (empty($modSettings['enableAutoSaveDrafts']) ? 30000 : $modSettings['enableAutoSaveDrafts'] * 1000). '
+	  });
+	  ';
+			  }*/
+		echo '
 							</div>
-						</form>
-					</div>
+						<!-- </form> -->
+					<!-- </div> -->
 				</div>
+				<br>
 			</div>';
 	}
 	$context['inline_footer_script'] .= '
@@ -334,8 +339,12 @@ function template_main()
 	// Show the page index... "Pages: [1]".
 	echo '
 			<div class="pagesection bottom">
-				', template_button_strip($normal_buttons, 'right'), '
-				<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . ' &nbsp;&nbsp;<a href="#top"><strong>' . $txt['go_up'] . '</strong></a>' : '', '</div>
+				', template_button_strip($normal_buttons, 'right');
+		if($context['multiquote_posts_count'] > 0)
+			echo '
+			<div class="floatright clear_right tinytext mediummargin mq_remove_msg">',sprintf($txt['posts_marked_mq'], $context['multiquote_posts_count']),',&nbsp;<a href="#" onclick="return oQuickReply.clearAllMultiquote(',$context['current_topic'],');">',$txt['remove'],'</a></div>';
+	echo '
+			<div class="pagelinks floatleft">', $txt['pages'], ': ', $context['page_index'], !empty($modSettings['topbottomEnable']) ? $context['menu_separator'] . ' &nbsp;&nbsp;<a href="#top"><strong>' . $txt['go_up'] . '</strong></a>' : '', '</div>
 				<div class="nextlinks_bottom">', $context['previous_next'], '</div>
 			</div>';
 	// Show the lower breadcrumbs.
@@ -363,8 +372,7 @@ function template_main()
 	echo '
 			<div class="plainbox" id="display_jump_to">&nbsp;</div>';
 
-	if (!empty($options['display_quick_reply']))
-		$context['inline_footer_script'] .= '
+	$context['inline_footer_script'] .= '
 	var oQuickReply = new QuickReply({
 		bDefaultCollapsed: '. (!empty($options['display_quick_reply']) && $options['display_quick_reply'] == 2 ? 'false' : 'true'). ',
 		iTopicId: '. $context['current_topic']. ',
@@ -375,7 +383,9 @@ function template_main()
 		sImageId: "quickReplyExpand",
 		sImageCollapsed: "collapse.gif",
 		sImageExpanded: "expand.gif",
-		sJumpAnchor: "quickreply"
+		iMarkedForMQ: ' . $context['multiquote_posts_count'] . ',
+		sJumpAnchor: "quickreplybox",
+		bEnabled: ' . (!empty($options['display_quick_reply']) ? 'true' : 'false') . '
 	});
 	';
 

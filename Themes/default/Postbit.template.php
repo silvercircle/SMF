@@ -271,7 +271,7 @@ function template_postbit_normal(&$message)
 		<div class="clear_left"></div>
 		</div>';
 	echo '
-		<div class="post_bottom">
+		<div class="post_bottom',$message['mq_marked'] ? ' mq' : '','">
 		<div class="reportlinks lefttext">';
 	template_postbit_quickbuttons($message);
 	// Maybe they want to report this post to the moderator(s)?
@@ -639,7 +639,7 @@ function template_postbit_comment(&$message)
 		</span>
 		</div>
 		</div>
-		<div class="smalltext" style="padding:0 20px 5px 20px;">
+		<div class="post_bottom">
 		<div class="reportlinks">';
 
 	template_postbit_quickbuttons($message);
@@ -832,9 +832,8 @@ function template_postbit_quickbuttons(&$message)
 		<li><a href="', $scripturl, '?action=moderate;area=postmod;sa=approve;topic=', $context['current_topic'], '.', $context['start'], ';msg=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '"><div class="csrcwrapper16px"><img class="clipsrc approve" src="',$imgsrc,'" alt="',$txt['approve'],'" title="',$txt['approve'],'" /></div></a></li>';
 	if ($context['can_quote'])
 		echo '
-	<li><a rel="nofollow" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '"><div class="csrcwrapper16px"><img class="clipsrc reply" src="',$imgsrc,'" alt="',$txt['quote'],'" title="',$txt['quote'],'" /></div></a></li>
-	<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'none\');"><div class="csrcwrapper16px"><img class="clipsrc mquote_add" src="',$imgsrc,'" alt="',$txt['add_mq'],'" title="',$txt['add_mq'],'" /></div></a></li>
-	<li style="display:none;" id="mquote_remove_' . $message['id'] . '"><a rel="nofollow" href="javascript:void(0);" onclick="return mquote(' . $message['id'] . ',\'remove\');"><div class="csrcwrapper16px"><img class="clipsrc mquote_remove" src="',$imgsrc,'" alt="',$txt['remove_mq'],'" title="',$txt['remove_mq'],'" /></div></a></li>';
+	<li><a rel="nofollow" onclick="return oQuickReply.quote(',$message['id'],');" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '"><div class="csrcwrapper16px"><img class="clipsrc reply" src="',$imgsrc,'" alt="',$txt['quote'],'" title="',$txt['quote'],'" /></div></a></li>
+	<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="javascript:void(0);" onclick="return oQuickReply.addForMultiQuote(' . $context['current_topic'], ', ', $message['id'],');"><div class="csrcwrapper16px"><img class="clipsrc mquote_add" src="',$imgsrc,'" alt="',$txt['add_mq'],'" title="',$txt['add_mq'],'" /></div></a></li>';
 
 	// Can the user modify the contents of this post?
 	if ($message['can_modify'])

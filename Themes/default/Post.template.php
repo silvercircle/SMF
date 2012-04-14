@@ -824,13 +824,13 @@ function template_main()
 			var this_post = ',empty($context['quoted_id']) ? 0 : $context['quoted_id'],';
 			function getMultiQuotes()
 			{
-               var _m = document.cookie.split(\'; \');
-               for (var i = 0; i < _m.length; i++) {
-               		if(_m[i].substr(0, 6)== \'mquote\') {
-						loadMultiQuoteById(_m[i].substr(6));
-					}
+               var _c = readCookie("mquote") || "";
+               if(_c.length > 1) {
+               	var _s = _c.split(",");
+               	for (var i = 0; i < _s.length; i++)
+					loadMultiQuoteById(_s[i]);
+				createCookie("mquote", "", -1);
                }
-               delete _m;
             }
 			function loadMultiQuoteById(mid)
 			{

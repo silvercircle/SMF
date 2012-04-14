@@ -610,4 +610,7 @@ $helptxt['custom_mask'] = 'The input mask is important for your forum\'s securit
 	</div><br /><br />
 	More information and advanced techniques may be found on the internet.';
 $helptxt['simplesef_enable'] = 'You can enable this option to generate pretty (or SEO-friendly URLs) for all boards, topics and user profiles on your board. Please note that this may not work on every server setup and needs further configuration.<br><br> Your server <strong>must</strong> support mod_rewrite or a similar mechanism and you are responsible for setting up the URL rewrite rules.<br><br>After enabling this feature, please review its settings which you can find under &quot;Board URLs&quot; in the administration menu on the left.';
+$helptxt['quickreply_help'] = '<p>You can quote additional posts by clicking the quote button below the post you want to include</p>
+	<p>Click <strong>Cancel</strong> to hide the post editor</p>
+	<p>Click <strong>Go advanced</strong> to switch to the full post editor with more features</p>';
 ?>

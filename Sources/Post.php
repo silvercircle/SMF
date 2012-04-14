@@ -370,7 +370,6 @@ function Post()
 
 		$context['event']['board'] = !empty($board) ? $board : $modSettings['cal_defaultboard'];
 	}
-
 	if (empty($context['post_errors']))
 		$context['post_errors'] = array();
 
@@ -840,7 +839,6 @@ function Post()
 	// Posting...
 	else
 	{
-
 		if($modSettings['tags_active'])
 			$context['tagging_ui'] = '
 		<dt><b>'. $txt['smftags_topic']. '</b></dt>

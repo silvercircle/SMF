@@ -1505,6 +1505,9 @@ div.ignoringpost {
 	font-size: 11px;
 	background-color:#eaeaea;
 }
+.post_bottom.mq {
+	background: #edd !important;
+}
 .poster.std {
 	float: left;
 	width: 200px;

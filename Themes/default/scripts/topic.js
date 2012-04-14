@@ -119,40 +119,109 @@ function QuickReply(oOptions)
 {
 	this.opt = oOptions;
 	this.bCollapsed = this.opt.bDefaultCollapsed;
+	this.bInReplyMode = false;
+	this.bMessageInitiated = 0;
+	this.iMessagesMarked = parseInt(this.opt.iMarkedForMQ);
+	//this.sCname = 'mq_' + parseInt(this.opt.iTopicId);
+	this.sCname = 'mquote';
 }
 
-// When a user presses quote, put it in the quick reply box (if expanded).
+QuickReply.prototype.addForMultiQuote = function(tid, _mid)
+{
+	var mid = parseInt(_mid);
+
+	var _c = readCookie(this.sCname) || '';
+	var _s;
+	var n;
+
+	if(_c.length > 1)
+		_s = _c.split(',');
+	else
+		_s = new Array();
+
+	for(n = 0; n < _s.length; n++) {
+		if(_s[n] == mid) {
+			_s.remove(n, n);
+			$('div#msg' + mid).find('div.post_bottom').each(function() { $(this).removeClass('mq'); } );
+			_c = _s.join(',');
+			if(_s.length == 0)
+				createCookie(this.sCname, '', -1);
+			else
+				createCookie(this.sCname, _c, 360);
+			this.iMessagesMarked--;
+			return(false);
+		}
+	}
+	this.iMessagesMarked++;
+	_s.push(mid);
+	_c = _s.join(',');
+	createCookie(this.sCname, _c, 360);
+	$('div#msg' + mid).find('div.post_bottom').each(function() { $(this).addClass('mq'); });
+	return(false);
+};
+QuickReply.prototype.clearAllMultiquote = function(_tid)
+{
+	createCookie(this.sCname, '', -1);
+	$('div.post_bottom').each(function() { $(this).removeClass('mq'); });
+	$('div.mq_remove_msg').each(function() { $(this).hide(); });
+	this.iMessagesMarked = 0;
+	return(false);
+};
+/*
+ * cancel the quick reply, relocate the quickreply ui and restore old state
+ */
+QuickReply.prototype.cancel = function()
+{
+	this.bMessageInitiated = 0;
+	this.bInReplyMode = false;
+
+	$('#quickModForm').attr('onsubmit', $('#quickModForm').attr('data-onsubmit'));
+	$('#quickModForm').attr('action', $('#quickModForm').attr('data-action'));
+
+	$('#quickreplybox').hide();
+	$('#moderationbuttons').after($('#quickreplybox'));
+	$('#quickReplyMessage').val('');
+	$('#moderationbuttons').fadeIn();
+	return(false);
+};
+/*
+ * insert the quickreply UI below the post we want to quote. For normal
+ * replies, insert the box at the end of the topic page.
+ */
 QuickReply.prototype.quote = function (iMessageId, xDeprecated)
 {
-	// Compatibility with older templates.
-	if (typeof(xDeprecated) != 'undefined')
-		return true;
+	if(parseInt(this.iMessagesMarked) > 0 || false == this.opt.bEnabled)
+		return(true);
 
-	if (this.bCollapsed)
-	{
-		window.location.href = smf_prepareScriptUrl(this.opt.sScriptUrl) + 'action=post;quote=' + iMessageId + ';topic=' + this.opt.iTopicId + '.' + this.opt.iStart;
-		return false;
+	$(parseInt(iMessageId) != 0 ? '#msg' + iMessageId : '#posts_container').after($('#quickreplybox'));
+	if(!this.bInReplyMode) {
+		$('#quickreplybox').show();
+		$('#quickReplyMessage').focus();
+		$('#quickModForm').attr('data-onsubmit', $('#quickModForm').attr('onsubmit'));
+		$('#quickModForm').attr('onsubmit', '');
+		this.bInReplyMode = true;
+		this.bMessageInitiated = iMessageId;
+		$('#quickModForm').attr('data-action', $('#quickModForm').attr('action'));
+		//$('#quickModForm').attr('action', smf_scripturl + '?topic=' + $('input[name=_qr_board]').val() + ';action=post;');
+		$('#quickModForm').attr('action', smf_scripturl + '?topic=' + this.opt.iTopicId + '.0;action=post');
+		$('#moderationbuttons').hide();
 	}
+	else {
+		if(parseInt(this.bMessageInitiated) == parseInt(iMessageId))
+			return(false);
+	}
+	if(parseInt(iMessageId) != 0) {
+		setBusy(true);
+		getXMLDocument(smf_prepareScriptUrl(this.opt.sScriptUrl) + 'action=quotefast;quote=' + iMessageId + ';xml', this.onQuoteReceived);
+	}
+
+	// Move the view to the quick reply box.
+	if (navigator.appName == 'Microsoft Internet Explorer')
+		window.location.hash = this.opt.sJumpAnchor;
 	else
-	{
-		// Doing it the XMLhttp way?
-		if (window.XMLHttpRequest)
-		{
-			setBusy(true);
-			getXMLDocument(smf_prepareScriptUrl(this.opt.sScriptUrl) + 'action=quotefast;quote=' + iMessageId + ';xml', this.onQuoteReceived);
-		}
-		// Or with a smart popup!
-		else
-			reqWin(smf_prepareScriptUrl(this.opt.sScriptUrl) + 'action=quotefast;quote=' + iMessageId, 240, 90);
+		window.location.hash = '#' + this.opt.sJumpAnchor;
 
-		// Move the view to the quick reply box.
-		if (navigator.appName == 'Microsoft Internet Explorer')
-			window.location.hash = this.opt.sJumpAnchor;
-		else
-			window.location.hash = '#' + this.opt.sJumpAnchor;
-
-		return false;
-	}
+	return false;
 }
 
 // This is the callback function used after the XMLhttp request.
@@ -163,7 +232,8 @@ QuickReply.prototype.onQuoteReceived = function (oXMLDoc)
 	for (var i = 0; i < oXMLDoc.getElementsByTagName('quote')[0].childNodes.length; i++)
 		sQuoteText += oXMLDoc.getElementsByTagName('quote')[0].childNodes[i].nodeValue;
 
-	replaceText(sQuoteText, document.forms.postmodify.message);
+	//replaceText(sQuoteText, document.forms.postmodify.message);
+	replaceText(sQuoteText, document.forms.quickModForm.message);
 
 	setBusy(false);
 }

@@ -272,7 +272,7 @@ function template_main()
 	}
 	// Build the normal button array.
 	$normal_buttons = array(
-		'reply' => array('test' => 'can_reply', 'text' => 'reply', 'image' => 'reply.gif', 'lang' => true, 'url' => $scripturl . '?action=post;topic=' . $context['current_topic'] . '.' . $context['start'] . ';last_msg=' . $context['topic_last_message'], 'active' => true),
+		'reply' => array('test' => 'can_reply', 'text' => 'reply', 'custom' => 'onclick="return oQuickReply.quote(0);" ', 'image' => 'reply.gif', 'lang' => true, 'url' => $scripturl . '?action=post;topic=' . $context['current_topic'] . '.' . $context['start'] . ';last_msg=' . $context['topic_last_message'], 'active' => true),
 		'add_poll' => array('test' => 'can_add_poll', 'text' => 'add_poll', 'image' => 'add_poll.gif', 'lang' => true, 'url' => $scripturl . '?action=editpoll;add;topic=' . $context['current_topic'] . '.' . $context['start']),
 		'mark_unread' => array('test' => 'can_mark_unread', 'text' => 'mark_unread', 'image' => 'markunread.gif', 'lang' => true, 'url' => $scripturl . '?action=markasread;sa=topic;t=' . $context['mark_unread_time'] . ';topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
 	);
@@ -282,7 +282,11 @@ function template_main()
 	
 	// Show the page index... "Pages: [1]".
 	echo '
-			<div class="pagesection top">
+			<div class="pagesection top">';
+				if($context['multiquote_posts_count'] > 0)
+					echo '
+				<div class="floatright tinytext mediummargin mq_remove_msg">',sprintf($txt['posts_marked_mq'], $context['multiquote_posts_count']),',&nbsp;<a href="#" onclick="return oQuickReply.clearAllMultiquote(',$context['current_topic'],');">',$txt['remove'],'</a></div>';
+				echo '
 				<div class="nextlinks">', $context['previous_next'], '</div>', template_button_strip($normal_buttons, 'right');
 				echo '<div class="pagelinks floatleft">', $context['page_index'], $context['menu_separator'] . ' &nbsp;&nbsp;<a class="navPages topdown" href="#lastPost">' . $txt['go_down'] . '</a></div>
 			</div>';
@@ -293,8 +297,7 @@ function template_main()
 
 	echo '
 		 <form data-alt="',$scripturl,'?action=post;msg=%id_msg%;topic=',$context['current_topic'],'.',$context['start'], '" action="', $scripturl, '?action=quickmod2;topic=', $context['current_topic'], '.', $context['start'], '" method="post" accept-charset="UTF-8" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave(\'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\') : false">
-		  <div class="posts_container nopadding">';
-
+		  <div class="posts_container nopadding" id="posts_container">';
 	$removableMessageIDs = array();
 
 	// Get all the messages...
@@ -334,21 +337,18 @@ function template_main()
 
 	if ($context['can_reply'] && !empty($options['display_quick_reply']))
 	{
-		$collapser = array('id' => 'quickReplyOptions', 'title' => $txt['quick_reply'], 'bodyclass' => 'flat_container mediumpadding');
 		echo '
 			<a id="quickreply"></a>
 			<div class="clear"></div>
-			<br>
-			<div style="overflow:hidden;" id="quickreplybox">';
-				template_create_collapsible_container($collapser);
+			<div style="display:none;overflow:hidden;" id="quickreplybox">';
 				echo '
-					<div>
-						', $txt['quick_reply_desc'], '<br><br>
-						', $context['is_locked'] ? '<p class="alert smalltext">' . $txt['quick_reply_warning'] . '</p>' : '',
-						$context['oldTopicError'] ? '<p class="alert smalltext">' . sprintf($txt['error_old_topic'], $modSettings['oldTopicDays']) . '</p>' : '', '
-						', $context['can_reply_approved'] ? '' : '<em>' . $txt['wait_for_approval'] . '</em>', '
-						', !$context['can_reply_approved'] && $context['require_verification'] ? '<br />' : '', '
-						<form action="', $scripturl, '?board=', $context['current_board'], ';action=post2" method="post" accept-charset="UTF-8" name="postmodify" id="postmodify" onsubmit="submitonce(this);" style="margin: 0;">
+					<div class="cat_bar">
+					 <strong>',$txt['post_reply'],'</strong>&nbsp;&nbsp;<a href="',$scripturl,'?action=helpadmin;help=quickreply_help','" onclick="return reqWin(this.href);" class="help tinytext">',$txt['post_reply_help'],'</a>
+					</div>
+					<div class="flat_container mediumpadding">';
+						//<form action="', $scripturl, '?board=', $context['current_board'], ';action=post2" method="post" accept-charset="UTF-8" name="postmodify" id="postmodify" style="margin: 0;">
+				echo '
+							<input type="hidden" name="_qr_board" value="', $context['current_board'], '" />
 							<input type="hidden" name="topic" value="', $context['current_topic'], '" />
 							<input type="hidden" name="subject" value="', $context['response_prefix'], $context['subject'], '" />
 							<input type="hidden" name="icon" value="xx" />
@@ -377,14 +377,20 @@ function template_main()
 					$context['user']['avatar']['image'],'
 					</div>';
 			echo '
-							<div class="quickReplyContent" style="margin-left:150px;">
-								<textarea style="width:99%;" rows="7" name="message" tabindex="', $context['tabindex']++, '"></textarea>
+							<div class="quickReplyContent" style="margin-left:150px;">';
+			echo $context['is_locked'] ? '<div class="alert smalltext">' . $txt['quick_reply_warning'] . '</div>' : '',
+						$context['oldTopicError'] ? '<div class="alert smalltext">' . sprintf($txt['error_old_topic'], $modSettings['oldTopicDays']) . '</div>' : '', '
+						', $context['can_reply_approved'] ? '' : '<em>' . $txt['wait_for_approval'] . '</em>', '
+						', !$context['can_reply_approved'] && $context['require_verification'] ? '<br />' : '';
+			echo '
+								<textarea id="quickReplyMessage" style="width:99%;" rows="18" name="message" tabindex="', $context['tabindex']++, '"></textarea>
 							</div>
 							<div class="righttext padding">
 								<input type="submit" name="post" value="', $txt['post'], '" onclick="return submitThisOnce(this);" accesskey="s" tabindex="', $context['tabindex']++, '" class="button_submit" />
-								<input type="submit" name="preview" value="', $txt['preview'], '" onclick="return submitThisOnce(this);" accesskey="p" tabindex="', $context['tabindex']++, '" class="button_submit" />';
+								<input type="submit" name="preview" value="', $txt['go_advanced'], '" onclick="return submitThisOnce(this);" accesskey="p" tabindex="', $context['tabindex']++, '" class="button_submit" />
+								<input type="submit" name="cancel" value="', 'Cancel', '" onclick="return(oQuickReply.cancel());" accesskey="p" tabindex="', $context['tabindex']++, '" class="button_submit" />';
 
-			if (!empty($context['can_save_draft']))
+	/*		if (!empty($context['can_save_draft']))
 				echo '
 								<input type="hidden" id="draft_id" name="draft_id" value="', empty($context['draft_id']) ? '0' : $context['draft_id'], '" />
 								<input type="submit" name="draft" value="', $txt['save_draft'], '" onclick="return submitThisOnce(this);" accesskey="d" tabindex="', $context['tabindex']++, '" class="button_submit" />';
@@ -404,12 +410,13 @@ function template_main()
 		iFreq: '. (empty($modSettings['enableAutoSaveDrafts']) ? 30000 : $modSettings['enableAutoSaveDrafts'] * 1000). '
 	});
 	';
-			}
+			}*/
 			echo '
 							</div>
-						</form>
-					</div>
+						<!-- </form> -->
+					<!-- </div> -->
 				</div>
+				<br>
 			</div>';
 	}
 
@@ -420,7 +427,11 @@ function template_main()
 	// Show the page index... "Pages: [1]".
 	echo '
 			<div class="pagesection bottom">
-				', template_button_strip($normal_buttons, 'right'), '
+				', template_button_strip($normal_buttons, 'right');
+			if($context['multiquote_posts_count'] > 0)
+				echo '
+				<div class="floatright clear_right tinytext mediummargin mq_remove_msg">',sprintf($txt['posts_marked_mq'], $context['multiquote_posts_count']),',&nbsp;<a href="#" onclick="return oQuickReply.clearAllMultiquote(',$context['current_topic'],');">',$txt['remove'],'</a></div>';
+	echo '
 				<div class="pagelinks floatleft">', $context['page_index'], $context['menu_separator'] . ' &nbsp;&nbsp;<a class="navPages topdown" href="#top">' . $txt['go_up'] . '</a></div>
 				<div class="nextlinks_bottom">', $context['previous_next'], '</div>
 			</div>';
@@ -519,8 +530,7 @@ function template_main()
 	echo '
 			<div class="plainbox" id="display_jump_to">&nbsp;</div>';
 
-	if (!empty($options['display_quick_reply']))
-		$context['inline_footer_script'] .= '
+	$context['inline_footer_script'] .= '
 	var oQuickReply = new QuickReply({
 		bDefaultCollapsed: '. (!empty($options['display_quick_reply']) && $options['display_quick_reply'] == 2 ? 'false' : 'true'). ',
 		iTopicId: '. $context['current_topic']. ',
@@ -531,7 +541,9 @@ function template_main()
 		sImageId: "quickReplyExpand",
 		sImageCollapsed: "collapse.gif",
 		sImageExpanded: "expand.gif",
-		sJumpAnchor: "quickreply"
+		iMarkedForMQ: ' . $context['multiquote_posts_count'] . ',
+		sJumpAnchor: "quickreplybox",
+		bEnabled: ' . (!empty($options['display_quick_reply']) ? 'true' : 'false') . '
 	});
 	';
 
@@ -574,7 +586,7 @@ function template_main()
 			<input type="hidden" name="msg" value="%msg_id%" />
 			<input type="hidden" style="width: 50%;" name="subject" value="%subject%" size="50" maxlength="80" tabindex="' . $context['tabindex']++ . '" class="input_text" />
 			<div class="righttext">
-				<span class="button floatright" onclick="return oQuickModify.goAdvanced(\'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\');" />Go Advanced</a></span>
+				<span class="button floatright" onclick="return oQuickModify.goAdvanced(\'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\');" />'.$txt['go_advanced'].'</a></span>
 				<span class="button floatright" onclick="return oQuickModify.modifyCancel();" >'.$txt['modify_cancel'].'</span>
 				<span class="button floatright" onclick="return oQuickModify.modifySave(\'' . $context['session_id'] . '\', \'' . $context['session_var'] . '\');" accesskey="s">'.$txt['save'].'</span>
 			</div>
@@ -605,22 +617,6 @@ function template_main()
 	{
 		$context['inline_footer_script'] .= '';
 	}
-
-	if ($context['can_reply'])
-		$context['inline_footer_script'] .= '
-	function mquote(msg_id,remove) {
-		if (!window.XMLHttpRequest)
-			return true;
-				
-		var elementButton = "mquote_" + msg_id;
-		var elementButtonDelete = "mquote_remove_" + msg_id;
-		var exdate = new Date();
-		(remove == "remove") ? exdate.setDate(exdate.getDate() - 1) : exdate.setDate(exdate.getDate() + 1);
-		document.getElementById(elementButton).style.display = (remove == "remove") ? "inline" : "none";
-		document.getElementById(elementButtonDelete).style.display = (remove == "remove") ? "none" : "inline";
-		document.cookie = "mquote" + msg_id + "=; expires="+exdate.toGMTString()+"; path=/";
-	}
-	';
 
 	$context['inline_footer_script'] .= '
 	function getIntralink(e, mid) {
