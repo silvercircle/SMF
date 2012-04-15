@@ -460,22 +460,6 @@ function template_main()
 		$context['inline_footer_script'] .= '';
 	}
 
-	if ($context['can_reply'])
-		$context['inline_footer_script'] .= '
-	function mquote(msg_id,remove) {
-		if (!window.XMLHttpRequest)
-			return true;
-
-		var elementButton = "mquote_" + msg_id;
-		var elementButtonDelete = "mquote_remove_" + msg_id;
-		var exdate = new Date();
-		(remove == "remove") ? exdate.setDate(exdate.getDate() - 1) : exdate.setDate(exdate.getDate() + 1);
-		document.getElementById(elementButton).style.display = (remove == "remove") ? "inline" : "none";
-		document.getElementById(elementButtonDelete).style.display = (remove == "remove") ? "none" : "inline";
-		document.cookie = "mquote" + msg_id + "=; expires="+exdate.toGMTString()+"; path=/";
-	}
-	';
-
 	$context['inline_footer_script'] .= '
 	function getIntralink(e, mid) {
 		var tid = '.$context['current_topic'].';

@@ -835,9 +835,6 @@ function template_main()
 			function loadMultiQuoteById(mid)
 			{
 			   var message_id = parseInt(mid);
-               var exdate = new Date();
-               exdate.setDate(exdate.getDate()- 1);
-               document.cookie = "mquote" + message_id + "=; expires="+exdate.toGMTString()+"; path=/";
                if(parseInt(message_id) != parseInt(this_post))
                	   insertQuoteFast(message_id);
 			}

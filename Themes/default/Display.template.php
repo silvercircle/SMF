@@ -285,7 +285,7 @@ function template_main()
 			<div class="pagesection top">';
 				if($context['multiquote_posts_count'] > 0)
 					echo '
-				<div class="floatright tinytext mediummargin mq_remove_msg">',sprintf($txt['posts_marked_mq'], $context['multiquote_posts_count']),',&nbsp;<a href="#" onclick="return oQuickReply.clearAllMultiquote(',$context['current_topic'],');">',$txt['remove'],'</a></div>';
+				<div class="floatright tinytext red_container alert mediummargin mq_remove_msg">',sprintf($txt['posts_marked_mq'], $context['multiquote_posts_count']),',&nbsp;<a href="#" onclick="return oQuickReply.clearAllMultiquote(',$context['current_topic'],');">',$txt['remove'],'</a></div>';
 				echo '
 				<div class="nextlinks">', $context['previous_next'], '</div>', template_button_strip($normal_buttons, 'right');
 				echo '<div class="pagelinks floatleft">', $context['page_index'], $context['menu_separator'] . ' &nbsp;&nbsp;<a class="navPages topdown" href="#lastPost">' . $txt['go_down'] . '</a></div>
@@ -378,14 +378,18 @@ function template_main()
 					</div>';
 			echo '
 							<div class="quickReplyContent" style="margin-left:150px;">';
-			echo $context['is_locked'] ? '<div class="alert smalltext">' . $txt['quick_reply_warning'] . '</div>' : '',
-						$context['oldTopicError'] ? '<div class="alert smalltext">' . sprintf($txt['error_old_topic'], $modSettings['oldTopicDays']) . '</div>' : '', '
+			echo $context['is_locked'] ? '<div class="red_container tinytext">' . $txt['quick_reply_warning'] . '</div>' : '',
+						$context['oldTopicError'] ? '<div class="red_container tinytext">' . sprintf($txt['error_old_topic'], $modSettings['oldTopicDays']) . '</div>' : '', '
 						', $context['can_reply_approved'] ? '' : '<em>' . $txt['wait_for_approval'] . '</em>', '
 						', !$context['can_reply_approved'] && $context['require_verification'] ? '<br />' : '';
 			echo '
-								<textarea id="quickReplyMessage" style="width:99%;" rows="18" name="message" tabindex="', $context['tabindex']++, '"></textarea>
-							</div>
-							<div class="righttext padding">
+								<textarea id="quickReplyMessage" style="width:99%;" rows="18" name="message" tabindex="', $context['tabindex']++, '"></textarea>';
+			if($context['automerge'])
+				echo '
+								<input type="checkbox" name="want_automerge" id="want_automerge" checked="checked" value="1" />',$txt['want_automerge'];
+			echo '
+								</div>
+								<div class="righttext padding">
 								<input type="submit" name="post" value="', $txt['post'], '" onclick="return submitThisOnce(this);" accesskey="s" tabindex="', $context['tabindex']++, '" class="button_submit" />
 								<input type="submit" name="preview" value="', $txt['go_advanced'], '" onclick="return submitThisOnce(this);" accesskey="p" tabindex="', $context['tabindex']++, '" class="button_submit" />
 								<input type="submit" name="cancel" value="', 'Cancel', '" onclick="return(oQuickReply.cancel());" accesskey="p" tabindex="', $context['tabindex']++, '" class="button_submit" />';
@@ -430,7 +434,7 @@ function template_main()
 				', template_button_strip($normal_buttons, 'right');
 			if($context['multiquote_posts_count'] > 0)
 				echo '
-				<div class="floatright clear_right tinytext mediummargin mq_remove_msg">',sprintf($txt['posts_marked_mq'], $context['multiquote_posts_count']),',&nbsp;<a href="#" onclick="return oQuickReply.clearAllMultiquote(',$context['current_topic'],');">',$txt['remove'],'</a></div>';
+				<div class="floatright clear_right tinytext red_container alert mediummargin mq_remove_msg">',sprintf($txt['posts_marked_mq'], $context['multiquote_posts_count']),',&nbsp;<a href="#" onclick="return oQuickReply.clearAllMultiquote(',$context['current_topic'],');">',$txt['remove'],'</a></div>';
 	echo '
 				<div class="pagelinks floatleft">', $context['page_index'], $context['menu_separator'] . ' &nbsp;&nbsp;<a class="navPages topdown" href="#top">' . $txt['go_up'] . '</a></div>
 				<div class="nextlinks_bottom">', $context['previous_next'], '</div>

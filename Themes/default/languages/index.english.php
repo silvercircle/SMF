@@ -812,4 +812,5 @@ $txt['go_advanced'] = 'Go Advanced';
 $txt['post_reply'] = 'Post a reply';
 $txt['post_reply_help'] = 'Click here for help';
 $txt['posts_marked_mq'] = '%d post(s) marked for quotation';
+$txt['want_automerge'] = 'When possible, merge this post with your last one';
 ?>

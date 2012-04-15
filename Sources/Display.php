@@ -217,8 +217,9 @@ function Display()
 			t.id_member_started, t.id_first_msg, t.id_last_msg, t.approved, t.unapproved_posts, t.id_layout,
 			' . ($user_info['is_guest'] ? 't.id_last_msg + 1' : 'IFNULL(lt.id_msg, IFNULL(lmr.id_msg, -1)) + 1') . ' AS new_from
 			' . (!empty($modSettings['recycle_board']) && $modSettings['recycle_board'] == $board ? ', id_previous_board, id_previous_topic' : '') . ',
-			p.name AS prefix_name, ms1.poster_time AS last_post_time, ms1.modified_time AS last_modified_time
+			p.name AS prefix_name, ms1.poster_time AS last_post_time, ms1.modified_time AS last_modified_time, IFNULL(b.automerge, 0) AS automerge
 		FROM {db_prefix}topics AS t
+			INNER JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
 			INNER JOIN {db_prefix}messages AS ms1 ON (ms1.id_msg = t.id_last_msg)
 			INNER JOIN {db_prefix}messages AS ms ON (ms.id_msg = t.id_first_msg)' . ($user_info['is_guest'] ? '' : '
 			LEFT JOIN {db_prefix}log_topics AS lt ON (lt.id_topic = {int:current_topic} AND lt.id_member = {int:current_member})
@@ -251,6 +252,7 @@ function Display()
 	$context['topic_last_message'] = $topicinfo['id_last_msg'];
 	$context['first_subject'] = $topicinfo['subject'];
 	$context['prefix'] = !empty($topicinfo['prefix_name']) ? html_entity_decode($topicinfo['prefix_name']) .'&nbsp;' : '';
+	$context['automerge'] = $topicinfo['automerge'] > 0;
 
 	// Add up unapproved replies to get real number of replies...
 	if ($modSettings['postmod_active'] && allowedTo('approve_posts'))

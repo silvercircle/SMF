@@ -186,9 +186,9 @@ QuickReply.prototype.cancel = function()
 };
 /*
  * insert the quickreply UI below the post we want to quote. For normal
- * replies, insert the box at the end of the topic page.
+ * replies (iMessageId == 0), insert the box at the end of the topic page.
  */
-QuickReply.prototype.quote = function (iMessageId, xDeprecated)
+QuickReply.prototype.quote = function (iMessageId)
 {
 	if(parseInt(this.iMessagesMarked) > 0 || false == this.opt.bEnabled)
 		return(true);
@@ -202,8 +202,8 @@ QuickReply.prototype.quote = function (iMessageId, xDeprecated)
 		this.bInReplyMode = true;
 		this.bMessageInitiated = iMessageId;
 		$('#quickModForm').attr('data-action', $('#quickModForm').attr('action'));
-		//$('#quickModForm').attr('action', smf_scripturl + '?topic=' + $('input[name=_qr_board]').val() + ';action=post;');
-		$('#quickModForm').attr('action', smf_scripturl + '?topic=' + this.opt.iTopicId + '.0;action=post');
+		$('#quickModForm').attr('action', smf_scripturl + '?board=' + $('input[name=_qr_board]').val() + ';action=post2');
+		//$('#quickModForm').attr('action', smf_scripturl + '?topic=' + this.opt.iTopicId + '.0;action=post');
 		$('#moderationbuttons').hide();
 	}
 	else {

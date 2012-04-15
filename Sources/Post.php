@@ -439,7 +439,7 @@ function Post()
 		{
 			if (htmltrim__recursive(htmlspecialchars__recursive($_REQUEST['subject'])) == '')
 				$context['post_error']['no_subject'] = true;
-			if (htmltrim__recursive(htmlspecialchars__recursive($_REQUEST['message'])) == '')
+			if (!isset($_REQUEST['goadvanced']) && htmltrim__recursive(htmlspecialchars__recursive($_REQUEST['message'])) == '')
 				$context['post_error']['no_message'] = true;
 			if (!empty($modSettings['max_messageLength']) && commonAPI::strlen($_REQUEST['message']) > $modSettings['max_messageLength'])
 				$context['post_error']['long_message'] = true;
@@ -619,6 +619,7 @@ function Post()
 				$context['preview_message'] = strtr($context['preview_message'], array(']]>' => ']]]]><![CDATA[>'));
 		}
 
+		$context['can_merge_with_last'] = isset($_REQUEST['want_automerge']) && $_REQUEST['want_automerge'] ? true : false;
 		// Set up the checkboxes.
 		$context['notify'] = !empty($_REQUEST['notify']);
 		$context['use_smileys'] = !isset($_REQUEST['ns']);
