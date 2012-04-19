@@ -804,7 +804,7 @@ $txt['hidden_not_visible'] = 'Hidden content is only supported in full topic vie
 $txt['hidden_show_content'] = 'Hidden content, click to view';
 $txt['hidden_no_access'] = 'Hidden content (you have insufficient permission to view)';
 $txt['quick_post_link_title'] = 'Quick post link';
-$txt['quick_post_link_text'] = 'You can use this BBCode to create a quick link to this post. Such links are created from your<br>forum URL and will stay valid in case your forum should move to a different URL at a later time.<br>Hit Ctrl+C to copy the BBCode to the clipboard.<br><br>';
+$txt['quick_post_link_text'] = '<h1 class="bigheader secondary"><strong>Links to this post</strong></h1>You can use this BBCode to create a quick link to this post. Such links are created from your<br>forum URL and will stay valid in case your forum should move to a different URL at a later time.<br>Hit Ctrl+C to copy the BBCode to the clipboard.<br><br>';
 $txt['quick_post_link_dismiss'] = 'Click to dismiss (or press ESC)';
 $txt['quick_post_link_bbcode'] = 'BBCode:&nbsp;';
 $txt['quick_post_link_full'] = 'Full link:&nbsp;';
@@ -813,4 +813,7 @@ $txt['post_reply'] = 'Post a reply';
 $txt['post_reply_help'] = 'Click here for help';
 $txt['posts_marked_mq'] = '%d post(s) marked for quotation';
 $txt['want_automerge'] = 'When possible, merge this post with your last one';
+$txt['forum_time'] = 'Forum time: ';
+$txt['clear_cookies'] = 'Clear all cookies';
+$txt['clear_cookies_warning'] = '<h1 class=\\\'bigheader secondary\\\'><strong>Clear all stored cookies</strong></h1><div class=\\\'tinytext\\\'>By clicking yes, all primary cookies set by this site will be cleared from your browser\\\'s memory. As a result you may loose some preferences and will be logged out (but youll be able to re-login at any time).<br><br>Click <strong>no</strong> to keep all cookies in their present state.</div>';
 ?>

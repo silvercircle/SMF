@@ -1320,7 +1320,7 @@ f=function(k){return parseInt(E.css(k))||false;};
 *
 */
 (function($) {
-	$.fn.hoverIntent = function(f,g) {
+	$.fn.hoverIntent = function(f,g, i) {
 		// default configuration options
 		var cfg = {
 			sensitivity: 1,
@@ -1329,6 +1329,7 @@ f=function(k){return parseInt(E.css(k))||false;};
 		};
 		// override configuration options with user supplied object
 		cfg = $.extend(cfg, g ? { over: f, out: g } : f );
+		cfg.interval = i == -1 ? 200 : i;
 
 		// instantiate variables
 		// cX, cY = current X and Y position of mouse, updated by mousemove event
@@ -1423,7 +1424,8 @@ f=function(k){return parseInt(E.css(k))||false;};
 			clickRemove: false,
 			content: "",
 			useElement: "",
-			parentData : false
+			parentData : false,
+			delay: 200
 		};
 
 		var options = $.extend(defaults, options);
@@ -1449,7 +1451,7 @@ f=function(k){return parseInt(E.css(k))||false;};
 			function(){
 				$("#" + options.tooltipId).remove();
 				$(this).attr("title",title);
-			});
+			}, options.delay);
 			/*
 			$(this).mousemove(function(e){
 				$("#" + options.tooltipId)
@@ -1504,5 +1506,14 @@ function Eos_Confirm(title, msg, callback)
 		$('#jsconfirm').jqmHide();
 		$('#jsconfirm').css('position', 'static');
 	});
+	return(false);
+}
+function Clear_Cookies()
+{
+	var allcookies = new Array(_cname, _mqcname, 'SMF_textsize', 'smf_topicstart', 'usemobile', 'SF_collapsed', 'smf_sidebar_disabled', 'PHPSESSID');
+
+	for(var i = 0; i < allcookies.length; i++)
+		createCookie(allcookies[i], '', -1);
+	window.location = smf_scripturl + '?action=logout;' + sSessionVar + '=' + sSessionId;
 	return(false);
 }

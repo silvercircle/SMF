@@ -35,8 +35,6 @@ function template_main()
 		echo '
 	<div class="smalltext">', $context['description'], '</div>';
 
-	//$foo = array('id' => 'testselector');
-	//template_create_dropselector($foo);
 	if (!empty($context['boards']) && (!empty($options['show_children']) || $context['start'] == 0))
 	{
 		$collapser = array('id' => $context['current_board'] . '_childboards',
@@ -57,7 +55,6 @@ function template_main()
 	}
 	if(!$context['act_as_cat']) {
 	
-	// Create the button set...
 	$normal_buttons = array(
 		'new_topic' => array('test' => 'can_post_new', 'text' => 'new_topic', 'image' => 'new_topic.gif', 'lang' => true, 'url' => $scripturl . '?action=post;board=' . $context['current_board'] . '.0', 'active' => true),
 		'post_poll' => array('test' => 'can_post_poll', 'text' => 'new_poll', 'image' => 'new_poll.gif', 'lang' => true, 'url' => $scripturl . '?action=post;board=' . $context['current_board'] . '.0;poll'),

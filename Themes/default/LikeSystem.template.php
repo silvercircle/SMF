@@ -14,45 +14,25 @@
  * this implements templates for the output of likes, except the templates for
  * a member's profile which are in Profile.template.php
  */
-function template_getlikes_xml()
+function template_getlikes()
 {
 	global $context, $txt;
-	header('Content-Type: text/xml; charset=UTF-8');
-	echo '<', '?xml version="1.0" encoding="UTF-8" ?', '>';
-	echo '
+	
+	if(isset($context['xml'])) {
+		header('Content-Type: text/xml; charset=UTF-8');
+		echo '<', '?xml version="1.0" encoding="UTF-8" ?', '>';
+		echo '
 <document>
  <response open="default" width="400px" offset="-100">
   <content>
   <![CDATA[
-	<div class="title_bar">
-		<h1>',$txt['members_who_liked'],'</h1>
-	</div>
-	<div class="mediummargin content">
-	<ol class="commonlist">';
-
-	foreach($context['likes'] as $like) {
-		echo '
-		<li>
-		<div class="floatright smalltext">', $like['dateline'], '</div>';
-		template_userbit_compact($like['member']);
-		echo '
-		<div class="clear"></div>
-		</li>';
+  ';
 	}
 	echo '
-	</ol>
-	</div>
-  ]]>
-  </content>
- </response>
-</document>';
-}
-function template_getlikes()
-{
-	global $context, $txt;
-	echo '
 	<div class="title_bar">
-		<h1>',$txt['members_who_liked'],'</h1>
+		<h1>
+		 ',$txt['members_who_liked'],'
+		</h1>
 	</div>
 	<div class="mediummargin content">
 	<ol class="commonlist">';
@@ -69,5 +49,11 @@ function template_getlikes()
 	echo '
 	</ol>
 	</div>';
+	if(isset($context['xml']))
+		echo '
+  ]]>
+  </content>
+ </response>
+</document>';
 }
 ?>

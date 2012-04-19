@@ -1123,18 +1123,15 @@ var pp_alreadyInitialized = false; // Used for the deep linking to make sure not
             context.append('<li class="settings_info"><div class="settings_info_menu off perma_option_off"><a href="'+options.info_link+'"><span class="help_info icon"><span class="info">'+options.txt_help+'</span></span></a></div></li>');
 
             // Info-Overlays mit leichter Verzoegerung einblenden
-            $('.help_info:not(.info_off)', context).live('mouseenter', function(){
-                var $info_wrapper = $(this);
-                var timeout_id = window.setTimeout(function(){$($info_wrapper).addClass('display');}, 500);
-                $(this).data('timeout_id',timeout_id);
-            });
-            $('.help_info', context).live('mouseleave', function(){
-                var timeout_id = $(this).data('timeout_id');
-                window.clearTimeout(timeout_id);
-                if($(this).hasClass('display')){
-                    $(this).removeClass('display');
-                }
-            });
+            // modified for jQuery hoverIntent plugin 
+            $('.help_info:not(.info_off)', context).hoverIntent(function() {
+            	$(this).addClass('display');
+            },
+            function() {
+            	if($(this).hasClass('display'))
+            		$(this).removeClass('display');
+            },
+            500);
 
             // Menue zum dauerhaften Einblenden der aktiven Dienste via Cookie einbinden
             // Die IE7 wird hier ausgenommen, da er kein JSON kann und die Cookies hier ueber JSON-Struktur abgebildet werden
@@ -1197,15 +1194,13 @@ var pp_alreadyInitialized = false; // Used for the deep linking to make sure not
                 $container_settings_info.find('span.settings').css('cursor','pointer');
 
                 // Einstellungs-Menue bei mouseover ein-/ausblenden
-                $($container_settings_info.find('span.settings'), context).live('mouseenter', function(){
-                    var timeout_id = window.setTimeout(function(){$container_settings_info.find('.settings_info_menu').removeClass('off').addClass('on');}, 500);
-                    $(this).data('timeout_id',timeout_id);
-                }); 
-                $($container_settings_info, context).live('mouseleave', function(){
-                    var timeout_id = $(this).data('timeout_id');
-                    window.clearTimeout(timeout_id);
-                    $container_settings_info.find('.settings_info_menu').removeClass('on').addClass('off');
-                });
+                $($container_settings_info.find('span.settings'), context).hoverIntent(function() {
+                	$container_settings_info.find('.settings_info_menu').removeClass('off').addClass('on');
+                },
+                function() {
+                	$container_settings_info.find('.settings_info_menu').removeClass('on').addClass('off');
+                },
+                300);
 
                 // Klick-Interaktion auf <input> um Dienste dauerhaft ein- oder auszuschalten (Cookie wird gesetzt oder geloescht)
                 $($container_settings_info.find('fieldset input')).live('click', function(event){
@@ -1272,10 +1267,8 @@ function setDimmed(mode)
 		var _e = $('<div id="pagedimmer" style="position:fixed;left:0;top:0;z-index:2999;width:100%;height:100%;"></div>');
 		_e.prependTo('body');
 	}
-	else {
-		if($('#pagedimmer').length > 0)
-			$('#pagedimmer').remove();
-	}
+	else if($('#pagedimmer').length > 0)
+		$('#pagedimmer').remove();
 }
 function setBusy(mode)
 {
@@ -1360,7 +1353,7 @@ jQuery(document).ready(function() {
 		}
 		return(false);
 	});
-	$('table.table_grid td .input_check').change(function() {
+	$('table.table_grid td .input_check, table.topic_table td .input_check').change(function() {
 		var cbox = this;
 		$(this).parent().parent().children('td').each(function() {
 			if($(cbox).is(':checked'))
@@ -1371,7 +1364,7 @@ jQuery(document).ready(function() {
 		return(false);
 	});
 	
-	$('table.table_grid th .input_check').change(function() {
+	$('table.table_grid th .input_check, table.topic_table th .input_check').change(function() {
 		var cbox = this;
 		$(this).parent().parent().parent().parent().find('tbody').find('input.input_check').each(function() {
 			$(this).prop('checked', $(cbox).is(':checked') ? true : false);

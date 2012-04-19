@@ -58,7 +58,7 @@ if (!defined('SMF'))
 
 */
 
-define('PCACHE_UPDATE_PER_VIEW', 5);
+define('PCACHE_UPDATE_PER_VIEW', 5); // maximum number of posts to be parse-cached during a single topic page display. TODO: make that an admin panel setting?
 
 // The central part of the board - topic display.
 function Display()
@@ -94,7 +94,6 @@ function Display()
 
 	// Let's do some work on what to search index.
 
-	$context['multiquote_cookiename'] = 'mquote';
 	//$context['multiquote_cookiename'] = 'mq_' . $context['current_topic'];
 
 	$context['multiquote_posts'] = array();
@@ -1344,7 +1343,7 @@ function prepareDisplayContext($reset = false)
 		'attachment' => loadAttachmentContext($message['id_msg']),
 		'alternate' => $counter % 2,
 		'id' => $message['id_msg'],
-		'permahref' => URL::parse('?msg=' . $message['id_msg']),
+		'permahref' => URL::parse('?msg=' . $message['id_msg'] . (isset($_REQUEST['perma']) ? '' : ';perma')),
 		'member' => &$memberContext[$message['id_member']],
 		'icon' => $message['icon'],
 		'icon_url' => getPostIcon($message['icon']),

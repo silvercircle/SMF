@@ -28,7 +28,7 @@ function template_init()
 // The main sub template above the content.
 function template_html_above()
 {
-	global $context, $settings, $options, $scripturl, $txt, $modSettings;
+	global $context, $settings, $options, $scripturl, $txt, $modSettings, $cookiename;
 
 	$h = 'HDC';
 	// Show right to left and the character set for ease of translating.
@@ -51,6 +51,7 @@ function template_html_above()
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js?v=162"></script>';
 	echo '
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js',$context['jsver'],'"></script>';
+
 	if(!empty($context['theme_scripts'])) {
 		foreach($context['theme_scripts'] as $type => $script) {
 			if(!$script['footer'])
@@ -85,6 +86,8 @@ function template_html_above()
 	var textsize = cookie ? parseInt(cookie) : textSizeDefault;
 	var anchor = document.getElementsByTagName('SCRIPT')[0];
 	var t2 = document.createElement('SCRIPT');
+	var _cname = '{$cookiename}';
+	var _mqcname = '{$context['multiquote_cookiename']}';
 	t2.type = "text/javascript";
 	t2.async = true;
 	t2.src = '{$settings['default_theme_url']}/scripts/footer.js{$context['jsver']}';
@@ -164,7 +167,7 @@ function template_body_above()
 	}
 	echo '
 	<div id="__t_script" style="display:none;"></div>
-	<div id="jsconfirm" style="width:450px;" class="jqmWindow"><div class="jqmWindow_container"><div class="glass jsconfirm title"></div><div class="jsconfirm content"></div><div class="floatright mediummargin"><input type="submit" id="c_yes" value="Yes" class="button_submit" /><input type="reset" id="c_no" value="No" class="button_reset" /><input type="submit" id="c_ok" value="Ok" class="button_submit" /></div><div class="clear"></div></div></div>
+	<div id="jsconfirm" style="width:450px;" class="jqmWindow"><div class="jqmWindow_container"><div class="glass jsconfirm title"></div><div class="jsconfirm content blue_container norounded smallpadding mediummargin tinytext"></div><div class="floatright mediummargin"><input type="submit" id="c_yes" value="Yes" class="button_submit" /><input type="reset" id="c_no" value="No" class="button_reset" /><input type="submit" id="c_ok" value="Ok" class="button_submit" /></div><div class="clear"></div></div></div>
 	<div id="ajaxbusy" style="display:none;"><img src="',$settings['images_url'],'/ajax-loader.gif" alt="loader" /></div>
 	<div id="mcard" style="display:none;"><div onclick="mcardClose();" id="mcard_close">X</div><div id="mcard_inner"></div></div>
 	<div id="wrap" style="max-width:',empty($settings['forum_width']) ? '3000px;' : $settings['forum_width'],';">
@@ -358,7 +361,7 @@ function template_body_below()
 	$time_now = forum_time(false);
 	$tz = date_default_timezone_get();
 	echo '
-	<div class="righttext floatright">',$loadtime,'<br>Forum time: ',strftime($modSettings['time_format'], $time_now) . ' '. $tz,'</div>
+	<div class="righttext floatright">',$loadtime,'<br><a onclick="Eos_Confirm(\'\', \'',$txt['clear_cookies_warning'],'\', Clear_Cookies);" href="#">',$txt['clear_cookies'],'</a> | ',$txt['forum_time'],strftime($modSettings['time_format'], $time_now) . ' '. $tz,'</div>
 	<div class="copyright">', my_theme_copyright(), '</div>
 	<div><a id="button_xhtml" href="http://validator.w3.org/check?uri=referer" target="_blank" class="new_win" title="Valid HTML"><span>HTML</span></a> |
 	', !empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']) ? '<a id="button_rss" href="' . $scripturl . '?action=.xml;type=rss" class="new_win"><span>' . $txt['rss'] . '</span></a>' : '';
@@ -374,11 +377,10 @@ function template_body_below()
 	</footer>';
 	if(1) { // piwik, todo: make configurable in admin area!
 		echo <<<EOT
+	
+	<script src="http://piwik.miranda.or.at/piwik.js"></script>
 	<script>
 	var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.miranda.or.at/" : "http://piwik.miranda.or.at/");
-	document.write(unescape("%3Cscript src=\'" + pkBaseURL + "piwik.js\' type=\'text/javascript\'%3E%3C/script%3E"));
-	</script>
-	<script>
 	try {
 		var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
 		piwikTracker.trackPageView();
@@ -631,7 +633,7 @@ function template_sidebar_content_index()
 				<div class="avatar floatleft"><img src="',$settings['images_url'],'/unknown.png" alt="avatar" /></div>';
 		echo '
 				 <ul class="reset" style="line-height:110%;">
-					<li class="greeting"><a href="',$scripturl,'?action=profile;u=',$context['user']['id'],'">', $context['user']['name'], '</a></li>
+					<li class="greeting"><a href="',URL::user($context['user']['id'], $context['user']['name']),'">', $context['user']['name'], '</a></li>
 					<li class="smalltext">',$user_info['posts'],' ',$txt['posts'],'<li>
 					<li class="smalltext">',$user_info['likesreceived'],' ',$txt['likes'],'<li>
 					<li class="smalltext"><span class="smalltext floatright"><a href="',$scripturl,'?action=logout;',$context['session_var'],'=',$context['session_id'], '">Sign out</a></span><li>
@@ -718,7 +720,7 @@ function template_sidebar_content_index()
 				 <dt>', $txt['topics'], ': </dt><dd class="righttext">', $context['common_stats']['total_topics'], '</dd>
 				 <dt>', $txt['members'], ': </dt><dd class="righttext">', $context['common_stats']['total_members'], '</dd>';
 				 if(!empty($settings['show_latest_member']))
-				 	echo '<dt>', $txt['latest_member'] . ': </dt><dd class="righttext"><strong>', $context['common_stats']['latest_member']['link'] . '</strong></dd>';
+				 	echo '<dt>', $txt['latest_member'] . ': </dt><dd class="righttext"><strong><a href="',URL::user($context['common_stats']['latest_member']['id'], $context['common_stats']['latest_member']['name']),'">', $context['common_stats']['latest_member']['name'] . '</a></strong></dd>';
 				 echo '</dl>';
 				echo '
 				<div>
@@ -937,6 +939,9 @@ EOT;
 	}
 }
 
+/*
+ * output all enqued scripts
+ */
 function template_footer_scripts()
 {
 	global $context, $settings;

@@ -61,7 +61,7 @@ function LikeDispatch()
 		loadLanguage('Like');
 		loadTemplate('LikeSystem');
 		loadTemplate('GenericBits');
-		$context['sub_template'] = $xml ? 'getlikes_xml' : 'getlikes';
+		$context['sub_template'] = 'getlikes';
 		if($xml)
 			$context['xml'] = true;
 	}

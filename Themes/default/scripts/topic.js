@@ -13,10 +13,6 @@ function modify_topic(topic_id, first_msg_id)
 			return;
 	}
 
-	// Add backwards compatibility with old themes.
-	if (typeof(cur_session_var) == 'undefined')
-		cur_session_var = 'sesc';
-
 	if (in_edit_mode == 1)
 	{
 		if (cur_topic_id == topic_id)
@@ -124,9 +120,10 @@ function QuickReply(oOptions)
 	this.iMessagesMarked = parseInt(this.opt.iMarkedForMQ);
 	//this.sCname = 'mq_' + parseInt(this.opt.iTopicId);
 	this.sCname = 'mquote';
+	this.iMultiQuoteLimit = 10;
 }
 
-QuickReply.prototype.addForMultiQuote = function(tid, _mid)
+QuickReply.prototype.addForMultiQuote = function(_mid)
 {
 	var mid = parseInt(_mid);
 
@@ -140,7 +137,7 @@ QuickReply.prototype.addForMultiQuote = function(tid, _mid)
 		_s = new Array();
 
 	for(n = 0; n < _s.length; n++) {
-		if(_s[n] == mid) {
+		if(parseInt(_s[n]) == mid) {
 			_s.remove(n, n);
 			$('div#msg' + mid).find('div.post_bottom').each(function() { $(this).removeClass('mq'); } );
 			_c = _s.join(',');
@@ -151,6 +148,10 @@ QuickReply.prototype.addForMultiQuote = function(tid, _mid)
 			this.iMessagesMarked--;
 			return(false);
 		}
+	}
+	if(this.iMessagesMarked >= this.iMultiQuoteLimit) {
+		Eos_Alert('Debug', 'Multiquote: limit reached<br>Fixme: make limit customizable');
+		return(false);
 	}
 	this.iMessagesMarked++;
 	_s.push(mid);
@@ -623,6 +624,7 @@ function hltColumn(el, state)
 }
 
 $(document).ready(function() {
+	/*
 	$('input.cb_inline').change(function() {
 		var cbox = this;
 		var state = $(cbox).is(':checked');
@@ -634,6 +636,7 @@ $(document).ready(function() {
 			hltColumn($(this), state);
 		});
 	});
+	*/
 	$('input.it_check').change(function() {
 		var cbox = this;
 		var id = $(this).val();

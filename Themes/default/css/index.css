@@ -1,6 +1,6 @@
 body {
 	background: #D0D1E6;
-	font-family: "Tahoma", "Droid Sans", "Trebuchet MS", "Tahoma", "Arial", sans-serif;
+	font-family: "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
 	font-size: 10pt;
 	margin: 0;
 	padding: 0;
@@ -221,7 +221,7 @@ ul.reset, ul.reset li {
 	list-style: none;
 }
 blockquote.bbc_standard_quote, blockquote.bbc_alternate_quote {
-	font-size: 8pt;
+	font-size: 9pt;
 	font-style: italic;
 	color: #000;
 	line-height: 1.4em;
@@ -1516,9 +1516,7 @@ div.ignoringpost {
 	text-align: center;
 	margin:0 5px 10px 5px;
 	padding:0 5px;
-	position:relative;
-	top:-26px;
-	margin-bottom:-26px;
+	overflow:hidden;
 }
 div.userbit_compact {
 	font-size: 11px;
@@ -1569,14 +1567,15 @@ div.userbit_compact_textpart {
 	padding:10px 10px 0 10px;
 }
 .post_wrapper .post {
-	font-family: "Georgia", sans-serif;
+	font-family: "Cambria", "Georgia", sans-serif;
+	font-size:11pt;
 }
 /* poster details and list of items */
 .poster h4, .poster ul {
 	padding: 0;
 }
 
-.poster h4 {
+h4.poster {
 	font-size: 110%;
 	padding: 1px 3px;
 	line-height:26px;
@@ -1637,8 +1636,8 @@ div.userbit_compact_textpart {
 }
 .keyinfo.std {
 	/*padding-left:230px;*/
-	margin-left:220px;
-	margin-right:10px;
+	/*margin-left:220px;*/
+	/*margin-right:10px;*/
 	border-bottom:1px dotted #ddd;
 }
 .keyinfo.clean {
@@ -1753,15 +1752,14 @@ input[type=button], .button_submit, .button_reset {
 	border:2px solid #888;
 	border-radius:2px;
 	margin:0 5px;
-	font-family:Tahoma,sans-serif;
-	height:23px !important;
+	height:22px !important;
 	line-height:11px !important;
 	font-size:11px !important;
 	cursor: pointer;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	padding:0 6px 1px 6px;
+	padding:0 6px 0 6px;
 }
 input.button_reset {
 	background: rgb(169,3,41);

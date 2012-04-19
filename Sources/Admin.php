@@ -11,6 +11,7 @@
  *
  * @version 1.0pre
  */
+
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
@@ -1018,5 +1019,4 @@ function AdminLogs()
 	require_once($sourcedir . '/' . $log_functions[$sub_action][0]);
 	$log_functions[$sub_action][1]();
 }
-
 ?>

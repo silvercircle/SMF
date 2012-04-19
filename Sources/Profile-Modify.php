@@ -679,6 +679,7 @@ function loadProfileFields($force_reload = false)
 			'log_change' => true,
 			'size' => 50,
 			'permission' => 'profile_title',
+			'input_attr' => array('maxlength="50"'),
 			'enabled' => !empty($modSettings['titlesEnable']),
 		),
 	);

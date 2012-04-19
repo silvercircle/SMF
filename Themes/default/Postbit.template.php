@@ -29,14 +29,17 @@ function template_postbit_normal(&$message)
 		echo $message['first_new'] ? '<a id="new"></a>' : '';
 
 	echo '
-	<div class="keyinfo std">
+	<div class="keyinfo std rowgradient">
+	<div class="floatleft" style="width:200px;text-align:center;margin-right:20px;" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">
+	<h4 class="poster">', $message['member']['link'], '</h4>
+	</div>
 	 <div class="messageicon">
 	  <img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' class="iconrequest" id="micon_' . $message['id'] . '"' : '', ' />
 	 </div>
 	 <h5 style="display:inline;" id="subject_', $message['id'], '">
 	  ', $message['subject'], '
 	 </h5>
-	 <span class="tinytext ',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['permahref'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span style="cursor:pointer" onclick="sharePost($(this));">Share</span>' : ''),'</span>
+	 <span class="tinytext ',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a ',(isset($_REQUEST['perma']) ? '' : 'onclick="getIntralink($(this),'.$message['id'].');return(false);"'), ' href="', $message['permahref'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] && 0 ? '&nbsp;&nbsp;<span style="cursor:pointer" onclick="sharePost($(this));">Share</span>' : ''),'</span>
 	 <span class="tinytext">&nbsp;',$message['time'], '</span>
 	 <div id="msg_', $message['id'], '_quick_mod"></div>
     </div>
@@ -44,8 +47,7 @@ function template_postbit_normal(&$message)
 
 	// Show information about the poster of this message.
 	echo '
-	<div itemscope="itemscope" itemtype="http://data-vocabulary.org/Person" class="poster std">
-	<h4>', $message['member']['link'], '</h4>
+	<div class="poster std">
 	<ul class="reset tinytext" id="msg_', $message['id'], '_extra_info">';
 
 	// Don't show these things for guests.
@@ -833,7 +835,7 @@ function template_postbit_quickbuttons(&$message)
 	if ($context['can_quote'])
 		echo '
 	<li><a rel="nofollow" onclick="return oQuickReply.quote(',$message['id'],');" href="', $scripturl, '?action=post;quote=', $message['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';last_msg=', $context['topic_last_message'], '"><div class="csrcwrapper16px"><img class="clipsrc reply" src="',$imgsrc,'" alt="',$txt['quote'],'" title="',$txt['quote'],'" /></div></a></li>
-	<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="javascript:void(0);" onclick="return oQuickReply.addForMultiQuote(' . $context['current_topic'], ', ', $message['id'],');"><div class="csrcwrapper16px"><img class="clipsrc mquote_add" src="',$imgsrc,'" alt="',$txt['add_mq'],'" title="',$txt['add_mq'],'" /></div></a></li>';
+	<li id="mquote_' . $message['id'] . '"><a rel="nofollow" href="javascript:void(0);" onclick="return oQuickReply.addForMultiQuote(', $message['id'],');"><div class="csrcwrapper16px"><img class="clipsrc mquote_add" src="',$imgsrc,'" alt="',$txt['add_mq'],'" title="',$txt['add_mq'],'" /></div></a></li>';
 
 	// Can the user modify the contents of this post?
 	if ($message['can_modify'])

@@ -21,7 +21,7 @@ function template_main()
 		<div class="glass jsconfirm title">',
 		$txt['quick_post_link_title'],'
 		</div>
-		<div class="flat_container lefttext smalltext">',
+		<div class="blue_container norounded lefttext smalltext mediumpadding mediummargin">',
 		$txt['quick_post_link_text'],'
 		<dl class="common left" style="line-height:24px;">
 		<dt><strong>',$txt['quick_post_link_bbcode'],'</strong></dt><dd><input size="78" type="text" id="interpostlink_helper_content" value="" /></dd>
@@ -59,14 +59,12 @@ function template_main()
 	<div class="userbit_compact topic">
 	<div class="floatleft">
 	<span class="small_avatar">';
-	if(!empty($context['topicstarter']['avatar']['image'])) {
+	if(!empty($context['topicstarter']['avatar']['image']))
 		echo '
 	<img class="fourtyeight" src="', $context['topicstarter']['avatar']['href'], '" alt="avatar" />';
-	}
-	else {
+	else
 		echo '
 	<img class="fourtyeight" src="',$settings['images_url'],'/unknown.png" alt="avatar" />';
-	}
 	echo '
 	</span>
 	</div>
@@ -346,7 +344,6 @@ function template_main()
 					 <strong>',$txt['post_reply'],'</strong>&nbsp;&nbsp;<a href="',$scripturl,'?action=helpadmin;help=quickreply_help','" onclick="return reqWin(this.href);" class="help tinytext">',$txt['post_reply_help'],'</a>
 					</div>
 					<div class="flat_container mediumpadding">';
-						//<form action="', $scripturl, '?board=', $context['current_board'], ';action=post2" method="post" accept-charset="UTF-8" name="postmodify" id="postmodify" style="margin: 0;">
 				echo '
 							<input type="hidden" name="_qr_board" value="', $context['current_board'], '" />
 							<input type="hidden" name="topic" value="', $context['current_topic'], '" />
@@ -392,33 +389,8 @@ function template_main()
 								<div class="righttext padding">
 								<input type="submit" name="post" value="', $txt['post'], '" onclick="return submitThisOnce(this);" accesskey="s" tabindex="', $context['tabindex']++, '" class="button_submit" />
 								<input type="submit" name="preview" value="', $txt['go_advanced'], '" onclick="return submitThisOnce(this);" accesskey="p" tabindex="', $context['tabindex']++, '" class="button_submit" />
-								<input type="submit" name="cancel" value="', 'Cancel', '" onclick="return(oQuickReply.cancel());" accesskey="p" tabindex="', $context['tabindex']++, '" class="button_submit" />';
-
-	/*		if (!empty($context['can_save_draft']))
-				echo '
-								<input type="hidden" id="draft_id" name="draft_id" value="', empty($context['draft_id']) ? '0' : $context['draft_id'], '" />
-								<input type="submit" name="draft" value="', $txt['save_draft'], '" onclick="return submitThisOnce(this);" accesskey="d" tabindex="', $context['tabindex']++, '" class="button_submit" />';
-								
-			if (!empty($context['can_autosave_draft'])) {
-				echo '
-								<div id="draft_lastautosave" class="clear righttext"></div>';
-				$context['inline_footer_script'] .= '
-	var oAutoSave = new draftAutosave({
-		sSelf: \'oAutoSave\',
-		sScriptUrl: smf_scripturl,
-		sSessionId: \''. $context['session_id']. '\',
-		sSessionVar: \''. $context['session_var']. '\',
-		sLastNote: \'draft_lastautosave\',
-		sType: \'quickreply\',
-		iBoard: '. (empty($context['current_board']) ? 0 : $context['current_board']). ',
-		iFreq: '. (empty($modSettings['enableAutoSaveDrafts']) ? 30000 : $modSettings['enableAutoSaveDrafts'] * 1000). '
-	});
-	';
-			}*/
-			echo '
-							</div>
-						<!-- </form> -->
-					<!-- </div> -->
+								<input type="submit" name="cancel" value="', 'Cancel', '" onclick="return(oQuickReply.cancel());" accesskey="p" tabindex="', $context['tabindex']++, '" class="button_submit" />
+						</div>
 				</div>
 				<br>
 			</div>';
@@ -648,5 +620,4 @@ function template_main()
 	var topic_id = '.$context['current_topic'].';
 	';
 }
-
 ?>

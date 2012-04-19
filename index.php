@@ -87,6 +87,8 @@ $context['template_hooks']['global'] = array(
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
 $context['jsver'] = '?v=1526';
 $context['jquery_version'] = '1.7.2';
+$context['multiquote_cookiename'] = 'mquote';
+
 // Seed the random generator.
 if (empty($modSettings['rand_seed']) || mt_rand(1, 250) == 69)
 	smf_seed_generator();
