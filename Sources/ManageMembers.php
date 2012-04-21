@@ -83,7 +83,7 @@ function ViewMembers()
 
 	// Load the essentials.
 	loadLanguage('ManageMembers');
-	loadTemplate('ManageMembers');
+	loadAdminTemplate('ManageMembers');
 
 	// Get counts on every type of activation - for sections and filtering alike.
 	$request = smf_db_query( '

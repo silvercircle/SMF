@@ -67,7 +67,7 @@ function Packages()
 	// Load all the basic stuff.
 	require_once($sourcedir . '/Subs-Package.php');
 	loadLanguage('Packages');
-	loadTemplate('Packages', 'admin');
+	loadAdminTemplate('Packages');
 
 	$context['page_title'] = $txt['package'];
 

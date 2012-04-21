@@ -214,7 +214,7 @@ function BrowseMailQueue()
 	require_once($sourcedir . '/Subs-List.php');
 	createList($listOptions);
 
-	loadTemplate('ManageMail');
+	loadAdminTemplate('ManageMail');
 	$context['sub_template'] = 'browse';
 }
 

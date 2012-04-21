@@ -75,7 +75,7 @@ function ManagePaidSubscriptions()
 
 	// Load the required language and template.
 	loadLanguage('ManagePaid');
-	loadTemplate('ManagePaid');
+	loadAdminTemplate('ManagePaid');
 
 	$subActions = array(
 		'modify' => array('ModifySubscription', 'admin_forum'),

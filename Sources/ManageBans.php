@@ -88,7 +88,7 @@ function Ban()
 
 	isAllowedTo('manage_bans');
 
-	loadTemplate('ManageBans');
+	loadAdminTemplate('ManageBans');
 
 	$subActions = array(
 		'add' => 'BanEdit',

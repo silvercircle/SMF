@@ -507,7 +507,7 @@ ul.theme_options li
 .is_directory
 {
 	padding-left: 18px;
-	background: url(../images/admin/boards.gif) no-repeat;
+	background: url(../default/images/admin/boards.gif) no-repeat;
 }
 .edit_file
 {

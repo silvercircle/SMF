@@ -68,7 +68,7 @@ function ManageNews()
 	// First, let's do a quick permissions check for the best error message possible.
 	isAllowedTo(array('edit_news', 'send_mail', 'admin_forum'));
 
-	loadTemplate('ManageNews');
+	loadAdminTemplate('ManageNews');
 
 	// Format: 'sub-action' => array('function', 'permission')
 	$subActions = array(

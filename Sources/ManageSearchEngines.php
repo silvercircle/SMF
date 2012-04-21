@@ -27,7 +27,7 @@ function SearchEngines()
 	isAllowedTo('admin_forum');
 
 	loadLanguage('Search');
-	loadTemplate('ManageSearch');
+	loadAdminTemplate('ManageSearch');
 
 	$subActions = array(
 		'editspiders' => 'EditSpider',
@@ -495,7 +495,7 @@ function SpiderLogs()
 
 	// Load the template and language just incase.
 	loadLanguage('Search');
-	loadTemplate('ManageSearch');
+	loadAdminTemplate('ManageSearch');
 
 	// Did they want to delete some entries?
 	if (!empty($_POST['delete_entries']) && isset($_POST['older']))

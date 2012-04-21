@@ -51,7 +51,7 @@ function ManageSmileys()
 	isAllowedTo('manage_smileys');
 
 	loadLanguage('ManageSmileys');
-	loadTemplate('ManageSmileys');
+	loadAdminTemplate('ManageSmileys');
 
 	$subActions = array(
 		'addsmiley' => 'AddSmiley',

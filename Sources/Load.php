@@ -1617,15 +1617,19 @@ function loadTheme($id_theme = 0, $initialize = true)
 	else
 	{
 		// Custom templates to load, or just default?
+		$is_admin = isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin';
 		if (isset($settings['theme_templates']))
 			$templates = explode(',', $settings['theme_templates']);
 		else
 			$templates = array('index');
 
 		// Load each template...
-		foreach ($templates as $template)
-			loadTemplate($template);
-
+		foreach ($templates as $template) {
+			if(!$is_admin)
+				loadTemplate($template);
+			else
+				loadAdminTemplate($template);
+		}
 		// ...and attempt to load their associated language files.
 		$required_files = implode('+', array_merge($templates, array('Modifications')));
 		loadLanguage($required_files, '', false);
@@ -1751,6 +1755,40 @@ function loadTheme($id_theme = 0, $initialize = true)
 	$context['theme_loaded'] = true;
 }
 
+function loadAdminTemplate($template_name, $fatal = true)
+{
+	global $settings, $db_show_debug, $context, $txt, $boardurl;
+
+	$base = dirname($settings['default_theme_dir']);
+	$settings['admin_css'] = $boardurl . '/Themes/admin/admin.css';
+	$settings['admin_js'] = $boardurl . '/Themes/admin/admin.js';
+
+	if ($template_name === false)
+		return true;
+
+	$loaded = false;
+	if (file_exists($base . '/admin/' . $template_name . '.template.php'))
+	{
+		$loaded = true;
+		template_include($base . '/admin/' . $template_name . '.template.php', true);
+	}
+
+	if ($loaded)
+	{
+		if ($db_show_debug === true)
+			$context['debug']['templates'][] = $template_name . ' (' . basename($settings['base_theme_dir']) . ')';
+
+		if (function_exists('template_' . $template_name . '_init'))
+			call_user_func('template_' . $template_name . '_init');
+	}
+	// Cause an error otherwise.
+	elseif ($template_name != 'Errors' && $template_name != 'index' && $fatal)
+		fatal_lang_error('theme_template_error', 'template', array((string) $template_name));
+	elseif ($fatal)
+		die(log_error(sprintf(isset($txt['theme_template_error']) ? $txt['theme_template_error'] : 'Unable to load Themes/default/%s.template.php!', (string) $template_name), 'template'));
+	else
+		return false;
+}
 // Load a template - if the theme doesn't include it, use the default.
 function loadTemplate($template_name, $style_sheets = array(), $fatal = true)
 {

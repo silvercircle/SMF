@@ -111,7 +111,7 @@ function ManageAttachments()
 	isAllowedTo('manage_attachments');
 
 	// Setup the template stuff we'll probably need.
-	loadTemplate('ManageAttachments');
+	loadAdminTemplate('ManageAttachments');
 
 	// If they want to delete attachment(s), delete them. (otherwise fall through..)
 	$subActions = array(

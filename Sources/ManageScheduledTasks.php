@@ -46,7 +46,7 @@ function ManageScheduledTasks()
 	isAllowedTo('admin_forum');
 
 	loadLanguage('ManageScheduledTasks');
-	loadTemplate('ManageScheduledTasks');
+	loadAdminTemplate('ManageScheduledTasks');
 
 	$subActions = array(
 		'taskedit' => 'EditTask',

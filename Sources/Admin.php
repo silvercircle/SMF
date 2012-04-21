@@ -52,10 +52,8 @@ function AdminMain()
 
 	// Load the language and templates....
 	loadLanguage('Admin');
-	loadTemplate('Admin', 'admin');
+	loadAdminTemplate('Admin');
 
-	enqueueThemeScript('admin', 'scripts/admin.js', false);
-	// No indexing evil stuff.
 	$context['robot_no_index'] = true;
 
 	require_once($sourcedir . '/Subs-Menu.php');

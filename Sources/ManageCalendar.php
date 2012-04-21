@@ -159,7 +159,6 @@ function ModifyHolidays()
 	require_once($sourcedir . '/Subs-List.php');
 	createList($listOptions);
 
-	//loadTemplate('ManageCalendar');
 	$context['page_title'] = $txt['manage_holidays'];
 
 	// Since the list is the only thing to show, use the default list template.
@@ -172,7 +171,7 @@ function EditHoliday()
 {
 	global $txt, $context, $scripturl, $smcFunc;
 
-	loadTemplate('ManageCalendar');
+	loadAdminTemplate('ManageCalendar');
 
 	$context['is_new'] = !isset($_REQUEST['holiday']);
 	$context['page_title'] = $context['is_new'] ? $txt['holidays_add'] : $txt['holidays_edit'];

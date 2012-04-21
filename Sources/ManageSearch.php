@@ -69,7 +69,7 @@ function ManageSearch()
 	isAllowedTo('admin_forum');
 
 	loadLanguage('Search');
-	loadTemplate('ManageSearch');
+	loadAdminTemplate('ManageSearch');
 
 	db_extend('search');
 

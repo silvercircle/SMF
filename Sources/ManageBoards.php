@@ -116,7 +116,7 @@ function ManageBoardsMain()
 {
 	global $txt, $context, $cat_tree, $boards, $boardList, $scripturl, $sourcedir, $txt;
 
-	loadTemplate('ManageBoards');
+	loadAdminTemplate('ManageBoards');
 
 	require_once($sourcedir . '/Subs-Boards.php');
 
@@ -235,7 +235,7 @@ function EditCategory()
 {
 	global $txt, $context, $cat_tree, $boardList, $boards, $sourcedir;
 
-	loadTemplate('ManageBoards');
+	loadAdminTemplate('ManageBoards');
 	require_once($sourcedir . '/Subs-Boards.php');
 	getBoardTree();
 
@@ -369,7 +369,7 @@ function EditBoard()
 {
 	global $txt, $context, $cat_tree, $boards, $boardList, $sourcedir, $smcFunc, $modSettings;
 
-	loadTemplate('ManageBoards');
+	loadAdminTemplate('ManageBoards');
 	require_once($sourcedir . '/Subs-Boards.php');
 	getBoardTree();
 
@@ -792,7 +792,7 @@ function EditBoardSettings($return_config = false)
 
 	$context['page_title'] = $txt['boards_and_cats'] . ' - ' . $txt['settings'];
 
-	loadTemplate('ManageBoards');
+	loadAdminTemplate('ManageBoards');
 	$context['sub_template'] = 'show_settings';
 
 	// Add some javascript stuff for the recycle box.
