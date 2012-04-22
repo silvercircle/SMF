@@ -816,4 +816,5 @@ $txt['want_automerge'] = 'When possible, merge this post with your last one';
 $txt['forum_time'] = 'Forum time: ';
 $txt['clear_cookies'] = 'Clear all cookies';
 $txt['clear_cookies_warning'] = '<h1 class=\\\'bigheader secondary\\\'><strong>Clear all stored cookies</strong></h1><div class=\\\'tinytext\\\'>By clicking yes, all primary cookies set by this site will be cleared from your browser\\\'s memory. As a result you may loose some preferences and will be logged out (but youll be able to re-login at any time).<br><br>Click <strong>no</strong> to keep all cookies in their present state.</div>';
+$txt['link_disabled'] = '[link disabled (no permission)]';
 ?>

@@ -293,6 +293,7 @@ function ModifyBBCSettings($return_config = false)
 			array('check', 'enablePostHTML'),
 			array('check', 'autoLinkUrls'),
 			array('check', 'legacyBBC'),
+			array('check', 'linkSecurity'),
 			'',
 			array('bbc', 'disabledBBC'),
 			array('callback_template', 'template_bbc_settings')

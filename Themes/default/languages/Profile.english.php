@@ -488,4 +488,8 @@ $txt['view_full_profile'] = 'View full profile';
 $txt['active_topic_subscriptions'] = 'Active topic subscriptions';
 $txt['notifications_header'] = 'Topic and board subscriptions';
 $txt['notifications_settings'] = "Notification settings";
+$txt['inactive_link_title'] = 'Inactive link';
+$txt['inactive_link_explain'] = 'The link you just clicked was posted by a member with insufficient permissions to post direct links. Typically, only new members or members who were banned have such restricted permissions. To protect our member\'s privacy and to take countermeasures against common forum spammers, such links are not immediately followed when you click them.
+	<br><br>
+	If you want to follow the link anyway, you can find it below. Note that you\'ll have to copy and paste the link into your browser\'s address bar';
 ?>

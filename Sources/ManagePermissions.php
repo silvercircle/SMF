@@ -1497,6 +1497,7 @@ function loadAllPermissions($loadType = 'classic')
 			'smftags_manage' => array(false, 'smftags', 'smftags'),
 			'drafts_allow' => array(false, 'drafts', 'drafts'),
 			'drafts_autosave_allow' => array(false, 'drafts', 'drafts'),
+			'post_links' => array(false, 'general', 'general'),
 		),
 		'board' => array(
 			'moderate_board' => array(false, 'general_board', 'moderate'),
@@ -1521,6 +1522,7 @@ function loadAllPermissions($loadType = 'classic')
 			'modify' => array(true, 'post', 'modify', 'moderate'),
 			'report_any' => array(false, 'post', 'participate'),
 			'tag_users' => array(false, 'post', 'participate'),
+			'post_links' => array(false, 'post', 'participate'),
 			'poll_view' => array(false, 'poll', 'participate'),
 			'poll_vote' => array(false, 'poll', 'participate'),
 			'poll_post' => array(false, 'poll', 'post_polls'),
@@ -1717,7 +1719,7 @@ function init_inline_permissions($permissions, $excluded_groups = array())
 	global $context, $txt, $modSettings, $smcFunc;
 
 	loadLanguage('ManagePermissions');
-	loadTemplate('ManagePermissions');
+	loadAdminTemplate('ManagePermissions');
 	$context['can_change_permissions'] = allowedTo('manage_permissions');
 
 	// Nothing to initialize here.

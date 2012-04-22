@@ -479,4 +479,28 @@ function template_single_post_xml() {
   </content>
 </document>';
 }
+
+function template_processlink()
+{
+	global $context, $txt;
+
+	echo <<<EOT
+
+	<div class="cat_bar2">
+		<h3>{$txt['inactive_link_title']}</h3>
+	</div>
+
+	<div class="blue_container cleantop">
+		<div class="content">
+			{$txt['inactive_link_explain']}
+			<br>
+			<br>
+		    <div class="centertext">
+		    	<strong>{$context['target_link']}</strong>
+		    </div>
+		</div>
+	</div>
+EOT;
+
+}
 ?>

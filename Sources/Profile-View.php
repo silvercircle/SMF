@@ -1852,7 +1852,7 @@ function showPermissions($memID)
 
 	loadLanguage('ManagePermissions');
 	loadLanguage('Admin');
-	loadTemplate('ManageMembers');
+	loadAdminTemplate('ManageMembers');
 
 	// Load all the permission profiles.
 	require_once($sourcedir . '/ManagePermissions.php');

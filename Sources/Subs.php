@@ -942,7 +942,7 @@ function permute($array)
 // Parse bulletin board code in a string, as well as smileys optionally.
 function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = array())
 {
-	global $txt, $scripturl, $context, $modSettings, $user_info;
+	global $txt, $scripturl, $context, $modSettings, $user_info, $board;
 	static $bbc_codes = array(), $itemcodes = array(), $no_autolink_tags = array();
 	static $disabled;
 
@@ -1531,7 +1531,8 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			array(
 				'tag' => 'url',
 				'type' => 'unparsed_content',
-				'content' => '<a href="$1" class="bbc_link" target="_blank">$1</a>',
+				//'content' => '<a href="$1" class="bbc_link" target="_blank">$1</a>',
+				'content' => !empty($modSettings['linkSecurity']) ? ('<a target="_blank" class="bbc_link checked" href="'.$scripturl.'?action=processlink;m=[__%%mid%%__];target=$1'.'</a>') : '<a href="$1" class="bbc_link" target="_blank">$1</a>',
 				'validate' => create_function('&$tag, &$data, $disabled', '
 					$data = strtr($data, array(\'<br />\' => \'\'));
 					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
@@ -1541,7 +1542,9 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			array(
 				'tag' => 'url',
 				'type' => 'unparsed_equals',
-				'before' => '<a href="$1" class="bbc_link" target="_blank">',
+				//'before' => '<a href="$1" class="bbc_link" target="_blank">',
+				//'after' => '</a>',
+				'before' => !empty($modSettings['linkSecurity']) ? ('<a target="_blank" class="bbc_link checked" href="'.$scripturl.'?action=processlink;m=[__%%mid%%__];target=$1'.'">') : '<a href="$1" class="bbc_link" target="_blank">',
 				'after' => '</a>',
 				'validate' => create_function('&$tag, &$data, $disabled', '
 					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
@@ -2369,7 +2372,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 		$message = '&nbsp;' . substr($message, 1);
 
 	// Cleanup whitespace.
-	$message = strtr($message, array('  ' => ' &nbsp;', "\r" => '', "\n" => '<br />', '<br /> ' => '<br />&nbsp;', '&#13;' => "\n"));
+	$message = strtr($message, array('  ' => ' &nbsp;', "\r" => '', "\n" => '<br />', '<br /> ' => '<br />&nbsp;', '&#13;' => "\n", '[__%%mid%%__]' => $cache_id));
 
 	/*
 	 * experimental hook... this could be used to support mods like footnotes, for example
@@ -2403,7 +2406,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
  * implements non-cacheable BBCodes, particularly the [hide] tag, but probably more at a later time.
  * this must also parse content before it goes to the post editor (e.g. when quoting a message).
  */
-function parse_bbc_stage2(&$message, $is_for_editor = false)
+function parse_bbc_stage2(&$message, $mid = 0, $is_for_editor = false)
 {
 	global $context, $txt, $modSettings;
 
@@ -2427,6 +2430,9 @@ function parse_bbc_stage2(&$message, $is_for_editor = false)
 			}
 		}
 	}
+	//if(stripos($message, '[__%%mid%%__]'))
+	//	$message = str_replace('[__%%mid%%__]', $mid, $message);
+
 	HookAPI::callHook('bbc_stage2', array(&$message, &$is_for_editor));
 }
 
@@ -4065,11 +4071,11 @@ function getCachedPost(&$message)
 	
 	if(!empty($modSettings['use_post_cache']) && !empty($message['cached_body'])) {
 		$message['body'] = &$message['cached_body'];
-		parse_bbc_stage2($message['body']);
+		parse_bbc_stage2($message['body'], $message['id_msg']);
     }
 	else {
 		$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
-		parse_bbc_stage2($message['body']);
+		parse_bbc_stage2($message['body'], $message['id_msg']);
     }
 }
 

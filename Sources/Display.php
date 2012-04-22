@@ -1323,16 +1323,16 @@ function prepareDisplayContext($reset = false)
 				array('id_msg' => 'int', 'body' => 'string', 'style' => 'string', 'lang' => 'string', 'updated' => 'int'),
 				array($message['id_msg'], $message['body'], $user_info['smiley_set_id'], $user_info['language_id'], $dateline),
 				array('id_msg', 'body', 'style', 'lang', 'updated'));
-			parse_bbc_stage2($message['body']);
+			parse_bbc_stage2($message['body'], $message['id_msg']);
 		}
 		else {
 			$message['body'] = &$message['cached_body'];
-			parse_bbc_stage2($message['body']);
+			parse_bbc_stage2($message['body'], $message['id_msg']);
         }
 	}
 	else {
 		$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
-		parse_bbc_stage2($message['body']);
+		parse_bbc_stage2($message['body'], $message['id_msg']);
     }
 
 	censorText($message['body']);
@@ -1912,5 +1912,52 @@ function QuickInTopicModeration()
 	}
 
 	redirectexit(!empty($topicGone) ? 'board=' . $board : 'topic=' . $topic . '.' . $_REQUEST['start']);
+}
+/**
+ * process a link that was posted by a user with insufficient persmissions
+ * check the user's permission and redirect to the target if he's allowed to post links
+ * otherwise just show a (non-clickable) link to the reader
+ */
+function ProcessLink()
+{
+	global $context, $boardurl;
+
+	$referrer_checked = (isset($_SERVER['HTTP_REFERER']) && substr($_SERVER['HTTP_REFERER'], 0, strlen($boardurl)) == $boardurl) ? true : false;
+	$mid = isset($_REQUEST['m']) ? $_REQUEST['m'] : 0;
+	$target = isset($_REQUEST['target']) ? $_REQUEST['target'] : '';
+	$poster = $bid = 0;
+
+	if(substr($mid, 0, 3) == 'sig') {			// a signature, but verify if the member is still in our db
+		$_p = intval(substr($mid, 3));
+		$request = smf_db_query('SELECT id_member FROM {db_prefix}members WHERE id_member = {int:id_member}', array('id_member' => $_p));
+		if(mysql_num_rows($request) > 0)
+			list($poster) = mysql_fetch_row($request);
+		mysql_free_result($request);
+		if($referrer_checked && $poster && !empty($target)) {		// check if the user still exists
+			if(isUserAllowedTo('post_links', null, $poster))
+				redirectexit($target);
+		}
+	}
+	else if ((int)$mid === 0 && !empty($target))
+		redirectexit($target);
+	else {
+		$request = smf_db_query('SELECT mem.id_member, b.id_board FROM {db_prefix}messages AS m
+	    	LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = m.id_member)
+			LEFT JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic)
+		    LEFT JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
+			WHERE id_msg = {int:id_msg}', array('id_msg' => (int)$mid));
+		if(mysql_num_rows($request) > 0)
+			list($poster, $bid) = mysql_fetch_row($request);
+		mysql_free_result($request);
+	}
+	if($referrer_checked && $poster && $bid && !empty($target)) {		// check if the user still exists
+		// it does exist, now check the permissions
+		if(isUserAllowedTo('post_links', $bid ? $bid :null, $poster))
+			redirectexit($target);
+	}
+	loadTemplate('DisplaySingle');
+	loadLanguage('Profile');
+	$context['sub_template'] = 'processlink';
+	$context['target_link'] = $target;
 }
 ?>

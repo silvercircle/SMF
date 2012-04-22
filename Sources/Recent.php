@@ -37,7 +37,7 @@ function getLastPost()
 
 	// Find it by the board - better to order by board than sort the entire messages table.
 	$request = smf_db_query('
-		SELECT ml.poster_time, ml.subject, ml.id_topic, ml.poster_name, ml.body, b.id_board,
+		SELECT ml.poster_time, ml.subject, ml.id_topic, ml.poster_name, ml.body, ml.id_msg, b.id_board,
 			ml.smileys_enabled
 		FROM {db_prefix}boards AS b
 			INNER JOIN {db_prefix}messages AS ml ON (ml.id_msg = b.id_last_msg)
@@ -67,7 +67,7 @@ function getLastPost()
 	censorText($row['body']);
 
 	$row['body'] = strip_tags(strtr(parse_bbc($row['body'], $row['smileys_enabled']), array('<br />' => '&#10;')));
-	parse_bbc_stage2($row['body']);
+	parse_bbc_stage2($row['body'], $row['id_msg']);
 	if (commonAPI::strlen($row['body']) > 128)
 		$row['body'] = commonAPI::substr($row['body'], 0, 128) . '...';
 

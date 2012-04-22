@@ -214,6 +214,8 @@ $txt['permissionname_report_any'] = 'Report posts to the moderators';
 $txt['permissionhelp_report_any'] = 'This permission adds a link to each message, allowing a user to report a post to a moderator. On reporting, all moderators on that board will receive an email with a link to the reported post and a description of the problem (as given by the reporting user).';
 $txt['permissionname_tag_users'] = 'Tag (@mention) users in posts';
 $txt['permissionhelp_tag_users'] = 'When granted, members are allowed to tag (mention) other forum members using the @name,name1.: syntax. Tagged members will be converted to profile links and, if the activity system is enabled, will be sent a notification.';
+$txt['permissionname_post_links'] = 'Post links';
+$txt['permissionhelp_post_links'] = 'This permission is needed to post clickable links. When disallowed, links will be converted to plain text in posts made by this user. The target URL will still be visible but not as a clickable link.<br><br><strong>Note:&nbsp;</strong>This permission is only used when the the <strong>Use link security</strong> feature is enabled in the BBC settings.';
 
 $txt['permissiongroup_poll'] = 'Polls';
 $txt['permissionname_poll_view'] = 'View polls';

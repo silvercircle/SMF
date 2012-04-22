@@ -517,6 +517,7 @@ $txt['enablePostHTML'] = 'Enable <em>basic</em> HTML in posts';
 $txt['autoLinkUrls'] = 'Automatically link posted URLs';
 $txt['disabledBBC'] = 'Enabled BBC tags';
 $txt['legacyBBC'] = 'Enable support for legacy BBCodes (SMF 2.x-style BB codes)';
+$txt['linkSecurity'] = 'Enable link security (please read help)';
 $txt['bbcTagsToUse'] = 'Enabled BBC tags';
 $txt['bbcTagsToUse_select'] = 'Select the tags allowed to be used';
 $txt['bbcTagsToUse_select_all'] = 'Select all tags';

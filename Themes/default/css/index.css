@@ -246,6 +246,18 @@ a.bbc_link {
 	text-decoration: none;
 	border-bottom: 1px dotted #346;
 }
+span.bbc_link.disabled {
+	font-style: italic;
+	text-decoration: underline;
+	color: blue;
+	margin-right:10px;
+}
+span.bbc_link.disabled.notice {
+	text-decoration: underline;
+	color: red;
+	margin-right:0 5px;
+	font-size:11px;
+}
 .bbc_size {
 	line-height: 1.4em;
 }

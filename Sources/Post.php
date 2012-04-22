@@ -904,7 +904,7 @@ function Post()
 
 			// Censor the message and subject.
 			censorText($form_message);
-			parse_bbc_stage2($form_message, true);
+			parse_bbc_stage2($form_message, 0, true);
 			censorText($form_subject);
 
 			// But if it's in HTML world, turn them into htmlspecialchar's so they can be edited!
@@ -2858,7 +2858,7 @@ function QuoteFast()
 				'body' => $row['body'],
 				'subject' => addcslashes($row['subject'], '"'),
 			);
-			parse_bbc_stage2($context['message']['body'], true);
+			parse_bbc_stage2($context['message']['body'], 0, true);
 			return;
 		}
 
@@ -2877,7 +2877,7 @@ function QuoteFast()
 		else
 			$lb = "\n";
 
-        parse_bbc_stage2($row['body'], true);
+        parse_bbc_stage2($row['body'], 0, true);
 		// Add a quote string on the front and end.
 		$context['quote']['xml'] = '[quote author=' . $row['poster_name'] . ' link=topic=' . $row['id_topic'] . '.msg' . (int) $_REQUEST['quote'] . '#msg' . (int) $_REQUEST['quote'] . ' date=' . $row['poster_time'] . ']' . $lb . $row['body'] . $lb . '[/quote]' . "\n\n";
 		//$context['quote']['xml'] = '[quote author=' . $row['poster_name'] . ' link=topic=' . $row['id_topic'] . '.msg' . (int) $_REQUEST['quote'] . '#msg' . (int) $_REQUEST['quote'] . ' date=' . $row['poster_time'] . ']' . $lb . $row['body'] . $lb . '[/quote]';

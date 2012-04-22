@@ -790,10 +790,108 @@ function checkSubmitOnce($action, $is_fatal = true)
 		trigger_error('checkSubmitOnce(): Invalid action \'' . $action . '\'', E_USER_WARNING);
 }
 
+// Check a specific users permission
+function isUserAllowedTo($permission, $boards = null, $uid = 0)
+{
+	global $user_profile;
+
+	if((int)$uid === 0)
+		return false;
+
+	// You're always allowed to do nothing. (unless you're a working man, MR. LAZY :P!)
+	if (empty($permission))
+		return true;
+
+	loadMemberData($uid);
+	$user = &$user_profile[$uid];
+
+	if (empty($user_profile[$uid]['additional_groups']))
+		$user['groups'] = array($user_profile[$uid]['id_group'], $user_profile[$uid]['id_post_group']);
+	else
+		$user['groups'] = array_merge(
+			array($user_profile[$uid]['id_group'], $user_profile[$uid]['id_post_group']),
+			explode(',', $user_profile[$uid]['additional_groups']));
+
+	if(in_array(1, $user_profile[$uid]['groups']))			// look, it's an admin
+		return true;
+
+	if (empty($user['permissions']))
+	{
+		// Get the general permissions.
+		$request = smf_db_query( '
+			SELECT permission, add_deny
+			FROM {db_prefix}permissions
+			WHERE id_group IN ({array_int:member_groups})
+				',
+			array(
+				'member_groups' => $user['groups'],
+				'spider_group' => !empty($modSettings['spider_group']) ? $modSettings['spider_group'] : 0,
+			)
+		);
+		$removals = array();
+		while ($row = mysql_fetch_assoc($request))
+		{
+			if (empty($row['add_deny']))
+				$removals[] = $row['permission'];
+			else
+				$user['permissions'][] = $row['permission'];
+		}
+		mysql_free_result($request);
+	}
+
+	if (!empty($modSettings['permission_enable_deny']))
+		$user['permissions'] = array_diff($user['permissions'], $removals);
+
+	if ($boards === null)
+	{
+		// Check if they can do it.
+		if (!is_array($permission) && in_array($permission, $user['permissions']))
+			return true;
+		// Search for any of a list of permissions.
+		elseif (is_array($permission) && count(array_intersect($permission, $user['permissions'])) != 0)
+			return true;
+		// You aren't allowed, by default.
+		else
+			return false;
+	}
+	elseif (!is_array($boards))
+		$boards = array($boards);
+
+	$request = smf_db_query( '
+		SELECT MIN(bp.add_deny) AS add_deny
+		FROM {db_prefix}boards AS b
+			INNER JOIN {db_prefix}board_permissions AS bp ON (bp.id_profile = b.id_profile)
+			LEFT JOIN {db_prefix}moderators AS mods ON (mods.id_board = b.id_board AND mods.id_member = {int:current_member})
+		WHERE b.id_board IN ({array_int:board_list})
+			AND bp.id_group IN ({array_int:group_list}, {int:moderator_group})
+			AND bp.permission {raw:permission_list}
+			AND (mods.id_member IS NOT NULL OR bp.id_group != {int:moderator_group})
+		GROUP BY b.id_board',
+		array(
+			'current_member' => $user['id_member'],
+			'board_list' => $boards,
+			'group_list' => $user['groups'],
+			'moderator_group' => 3,
+			'permission_list' => (is_array($permission) ? 'IN (\'' . implode('\', \'', $permission) . '\')' : ' = \'' . $permission . '\''),
+		)
+	);
+	// Make sure they can do it on all of the boards.
+	if (mysql_num_rows($request) != count($boards))
+		return false;
+
+	$result = true;
+	while ($row = mysql_fetch_assoc($request))
+		$result &= !empty($row['add_deny']);
+	mysql_free_result($request);
+
+	// If the query returned 1, they can do it... otherwise, they can't.
+	return $result;
+}
+
 // Check the user's permissions.
 function allowedTo($permission, $boards = null)
 {
-	global $user_info, $modSettings, $smcFunc;
+	global $user_info;
 
 	// You're always allowed to do nothing. (unless you're a working man, MR. LAZY :P!)
 	if (empty($permission))
