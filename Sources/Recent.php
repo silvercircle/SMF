@@ -923,7 +923,7 @@ function UnreadTopics()
 		mysql_free_result($request);
 
 		// Make sure the starting place makes sense and construct the page index.
-		$context['page_index'] = constructPageIndex($scripturl . '?action=' . $_REQUEST['action'] . ($context['showing_all_topics'] ? ';all' : '') . $context['querystring_board_limits'] . $context['querystring_sort_limits'], $_REQUEST['start'], $num_topics, $context['topics_per_page'], true);
+		$context['page_index'] = constructPageIndex($scripturl . '?action=' . $_REQUEST['action'] . ($context['showing_all_topics'] ? ';all' : '') . $context['querystring_board_limits'] . $context['querystring_sort_limits'], $_REQUEST['start'], $num_topics, $context['topics_per_page'], true, true);
 		$context['current_page'] = (int) $_REQUEST['start'] / $context['topics_per_page'];
 
 		$context['links'] = array(
@@ -1240,6 +1240,19 @@ function UnreadTopics()
 
 		// And build the array.
 		$first_posters[$row['id_topic']] = $row['id_first_member'];
+		$f_user_href = !empty($row['id_first_member']) ? URL::user($row['id_first_member'], $row['first_poster_name']) : '';
+		$l_user_href = !empty($row['id_last_member']) ? URL::user($row['id_last_member'], $row['last_poster_name']) : '';
+		$b_href = URL::board($row['id_board'], $row['bname']);
+
+		$f_post_href = URL::topic($row['id_topic'], $row['first_subject']);
+		$l_post_href = URL::topic($row['id_topic'], $row['first_subject'], 0, $row['num_replies'] == 0 ? true : false, $row['num_replies'] > 0 ? ('.msg' . $row['id_last_msg']) : '', $row['num_replies'] > 0 ? ('#msg' . $row['id_last_msg']) : '');
+
+		$t_new_href = URL::topic($row['id_topic'], $row['first_subject'], 0, false, '.msg' . $row['new_from'], '#new');
+		$t_new_href = URL::addParam($t_new_href, 'topicseen');
+
+		$topic_href = URL::topic($row['id_topic'], $row['first_subject'], 0, $row['num_replies'] == 0 ? true : false, $row['num_replies'] > 0 ? ('.msg' . $row['new_from']) : '', $row['num_replies'] > 0 ? ('#msg' . $row['new_from']) : '');
+		$topic_href = URL::addParam($topic_href, 'topicseen');
+
 		$context['topics'][$row['id_topic']] = array(
 			'id' => $row['id_topic'],
 			'first_post' => array(
@@ -1247,8 +1260,8 @@ function UnreadTopics()
 				'member' => array(
 					'name' => $row['first_poster_name'],
 					'id' => $row['id_first_member'],
-					'href' => $scripturl . '?action=profile;u=' . $row['id_first_member'],
-					'link' => !empty($row['id_first_member']) ? '<a onclick="getMcard('.$row['id_first_member'].', $(this));return(false);" href="' . $scripturl . '?action=profile;u=' . $row['id_first_member'] . '" title="' . $txt['profile_of'] . ' ' . $row['first_poster_name'] . '">' . $row['first_poster_name'] . '</a>' : $row['first_poster_name'],
+					'href' => $f_user_href,
+					'link' => !empty($row['id_first_member']) ? '<a onclick="getMcard('.$row['id_first_member'].', $(this));return(false);" href="' . $f_user_href . '" title="' . $txt['profile_of'] . ' ' . $row['first_poster_name'] . '">' . $row['first_poster_name'] . '</a>' : $row['first_poster_name'],
 
 				),
 				'time' => timeformat($row['first_poster_time']),
@@ -1257,17 +1270,16 @@ function UnreadTopics()
 				'preview' => $row['first_body'],
 				'icon' => $row['first_icon'],
 				'icon_url' => getPostIcon($row['first_icon']),
-				'href' => $scripturl . '?topic=' . $row['id_topic'] . '.0;topicseen',
-				'link' => '<a href="' . $scripturl . '?topic=' . $row['id_topic'] . '.0;topicseen">' . $row['first_subject'] . '</a>'
+				'href' => $topic_href,
+				'link' => '<a href="' . $topic_href . '">' . $row['first_subject'] . '</a>'
 			),
 			'last_post' => array(
 				'id' => $row['id_last_msg'],
 				'member' => array(
 					'name' => $row['last_poster_name'],
 					'id' => $row['id_last_member'],
-					'href' => $scripturl . '?action=profile;u=' . $row['id_last_member'],
-					//'link' => !empty($row['id_last_member']) ? '<a href="' . $scripturl . '?action=profile;u=' . $row['id_last_member'] . '">' . $row['last_poster_name'] . '</a>' : $row['last_poster_name'],
-					'link' => !empty($row['id_last_member']) ? '<a onclick="getMcard('.$row['id_last_member'].', $(this));return(false);" href="' . $scripturl . '?action=profile;u=' . $row['id_last_member'] . '">' . $row['last_poster_name'] . '</a>' : $row['last_poster_name']
+					'href' => $l_user_href,
+					'link' => !empty($row['id_last_member']) ? '<a onclick="getMcard('.$row['id_last_member'].', $(this));return(false);" href="' . $l_user_href . '">' . $row['last_poster_name'] . '</a>' : $row['last_poster_name']
 				),
 				'time' => timeformat($row['last_poster_time']),
 				'timestamp' => forum_time(true, $row['last_poster_time']),
@@ -1275,19 +1287,20 @@ function UnreadTopics()
 				'preview' => $row['last_body'],
 				'icon' => $row['last_icon'],
 				'icon_url' => getPostIcon($row['last_icon']),
-				'href' => $scripturl . '?topic=' . $row['id_topic'] . ($row['num_replies'] == 0 ? '.0' : '.msg' . $row['id_last_msg']) . ';topicseen#msg' . $row['id_last_msg'],
-				'link' => '<a href="' . $scripturl . '?topic=' . $row['id_topic'] . ($row['num_replies'] == 0 ? '.0' : '.msg' . $row['id_last_msg']) . ';topicseen#msg' . $row['id_last_msg'] . '" rel="nofollow">' . $row['last_subject'] . '</a>'
+				'href' => $l_post_href,
+				'link' => '<a href="' . $l_post_href . '" rel="nofollow">' . $row['last_subject'] . '</a>'
 			),
 			'prefix' => $row['prefix_name'] ? html_entity_decode($row['prefix_name']) : '',
 			'new_from' => $row['new_from'],
-			'new_href' => $scripturl . '?topic=' . $row['id_topic'] . '.msg' . $row['new_from'] . ';topicseen#new',
-			'href' => $scripturl . '?topic=' . $row['id_topic'] . ($row['num_replies'] == 0 ? '.0' : '.msg' . $row['new_from']) . ';topicseen' . ($row['num_replies'] == 0 ? '' : 'new'),
-			'link' => '<a href="' . $scripturl . '?topic=' . $row['id_topic'] . ($row['num_replies'] == 0 ? '.0' : '.msg' . $row['new_from']) . ';topicseen#msg' . $row['new_from'] . '" rel="nofollow">' . $row['first_subject'] . '</a>',
+			'new_href' => $t_new_href,
+			'href' => $topic_href,
+			'link' => '<a href="' . $topic_href . '" rel="nofollow">' . $row['first_subject'] . '</a>',
 			'is_sticky' => !empty($modSettings['enableStickyTopics']) && !empty($row['is_sticky']),
 			'is_locked' => !empty($row['locked']),
 			'is_poll' => $modSettings['pollMode'] == '1' && $row['id_poll'] > 0,
 			'is_hot' => $row['num_replies'] >= $modSettings['hotTopicPosts'],
 			'is_very_hot' => $row['num_replies'] >= $modSettings['hotTopicVeryPosts'],
+			'is_old' => !empty($modSettings['oldTopicDays']) ? (($context['time_now'] - $row['last_poster_time']) > ($modSettings['oldTopicDays'] * 86400)) : false,
 			'is_posted_in' => false,
 			'icon' => $row['first_icon'],
 			'icon_url' => getPostIcon($row['first_icon']),
@@ -1300,8 +1313,8 @@ function UnreadTopics()
 			'board' => array(
 				'id' => $row['id_board'],
 				'name' => $row['bname'],
-				'href' => $scripturl . '?board=' . $row['id_board'] . '.0',
-				'link' => '<a href="' . $scripturl . '?board=' . $row['id_board'] . '.0">' . $row['bname'] . '</a>'
+				'href' => $b_href,
+				'link' => '<a href="' . $b_href . '">' . $row['bname'] . '</a>'
 			)
 		);
 

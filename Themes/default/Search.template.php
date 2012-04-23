@@ -289,11 +289,7 @@ function template_results()
 
 		while ($topic = $context['get_topics']())
 		{
-			$color_class = '';
-			if ($topic['is_sticky'])
-				$color_class = 'stickybg';
-			if ($topic['is_locked'])
-				$color_class .= 'lockedbg';
+			$color_class = 'rowgradient';
 
 			echo '
 			<div class="blue_container smallpadding" style="margin-bottom:10px;">

@@ -785,6 +785,7 @@ class Topiclist {
 				'views' => comma_format($row['num_views']),
 				'approved' => $row['approved'],
 				'unapproved_posts' => $row['unapproved_posts'],
+				'is_old' => !empty($modSettings['oldTopicDays']) ? (($context['time_now'] - $row['last_poster_time']) > ($modSettings['oldTopicDays'] * 86400)) : false,
 				'is_posted_in' => false,
 				'prefix' => '',
 				'pages' => '',

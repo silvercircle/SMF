@@ -357,7 +357,6 @@ function MessageIndex()
 		while ($row = mysql_fetch_assoc($request))
 			$topic_ids[] = $row['id_topic'];
 	}
-
 	// Grab the appropriate topic information...
 	if (!$pre_query || !empty($topic_ids))
 	{
@@ -487,6 +486,7 @@ function MessageIndex()
 				'is_hot' => $row['num_replies'] >= $modSettings['hotTopicPosts'],
 				'is_very_hot' => $row['num_replies'] >= $modSettings['hotTopicVeryPosts'],
 				'is_posted_in' => false,
+				'is_old' => !empty($modSettings['oldTopicDays']) ? (($context['time_now'] - $row['last_poster_time']) > ($modSettings['oldTopicDays'] * 86400)) : false,
 				'subject' => $row['first_subject'],
 				'new' => $row['new_from'] <= $row['id_msg_modified'],
 				'new_from' => $row['new_from'],
@@ -498,7 +498,7 @@ function MessageIndex()
 				'approved' => $row['approved'],
 				'unapproved_posts' => $row['unapproved_posts'],
 			);
-			determineTopicClass($context['topics'][$row['id_topic']]);
+			//determineTopicClass($context['topics'][$row['id_topic']]);
 			
 			if(!empty($context['topics'][$row['id_topic']]['prefix']))
 				$context['topics'][$row['id_topic']]['prefix'] .= '&nbsp;';
@@ -534,10 +534,7 @@ function MessageIndex()
 				)
 			);
 			while ($row = mysql_fetch_assoc($result))
-			{
 				$context['topics'][$row['id_topic']]['is_posted_in'] = true;
-				$context['topics'][$row['id_topic']]['class'] = 'my_' . $context['topics'][$row['id_topic']]['class'];
-			}
 			mysql_free_result($result);
 		}
 	}

@@ -201,7 +201,7 @@ function getPrefixSelector($board, $id = 0, $mandatory = 0)
 // Parses some bbc before sending into the database...
 function preparsecode(&$message, $previewing = false)
 {
-	global $user_info, $context;
+	global $user_info, $context, $modSettings;
 
 	// This line makes all languages *theoretically* work even with the wrong charset ;).
 	$message = preg_replace('~&amp;#(\d{4,5}|[2-9]\d{2,4}|1[2-9]\d);~', '&#$1;', $message);

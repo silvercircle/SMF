@@ -428,26 +428,6 @@ span.xtag:hover {
 	color: #000;
 	background-color: #eedeff;
 }
-/* Sticky topics get a different background */
-.stickybg {
-	background: rgba(100, 255, 226, 0.11);
-}
-
-.stickybg2 {
-	background: rgba(100, 255, 226, 0.11);
-}
-
-/* Locked posts get a different shade, too! */
-.lockedbg {
-	background: rgba(240, 110, 20, 0.15);
-	font-style: italic;
-}
-
-.lockedbg2 {
-	background: rgba(240, 110, 20, 0.15);
-	font-style: italic;
-}
-
 /* Posts and personal messages displayed throughout the forum. */
 .post, .personalmessage {
 	line-height: 1.55em;
@@ -2483,25 +2463,6 @@ td.lastpost, div.lastpost {
 	font-size: 1.0em;
 	min-width: 160px;
 }
-
-.topic_table td.stickybg2 {
-	background-image: url(../../images/icons/quick_sticky.gif);
-	background-repeat: no-repeat;
-	background-position: 98% 4px;
-}
-
-.topic_table td.lockedbg2 {
-	background-image: url(../../images/icons/quick_lock.gif);
-	background-repeat: no-repeat;
-	background-position: 98% 4px;
-}
-
-.topic_table td.locked_sticky2 {
-	background-image: url(../../images/icons/quick_sticky_lock.gif);
-	background-repeat: no-repeat;
-	background-position: 98% 4px;
-}
-
 /* Styles for (fatal) errors.
 ------------------------------------------------- */
 

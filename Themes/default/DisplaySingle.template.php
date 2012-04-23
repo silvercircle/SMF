@@ -13,7 +13,7 @@
  */
 function template_single_post()
 {
-	global $context, $settings, $options, $txt, $scripturl, $topic;
+	global $context, $settings, $options, $txt, $scripturl, $topic, $modSettings;
 
 	echo '
 		<div class="jqmWindow" style="display:none;" id="interpostlink_helper">

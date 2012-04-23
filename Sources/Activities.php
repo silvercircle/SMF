@@ -226,7 +226,7 @@ function aStreamGet($b = 0, $xml = false, $global = false)
 			array('start' => $start, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage));
 
 		$context['act_global'] = true;
-		$context['viewall_url'] = $scripturl . '?action=astream;sa=get;all'; 
+		$context['viewall_url'] = URL::parse($scripturl . '?action=astream;sa=get;all');
 	}
 	else {
 		if(!$xml) {
@@ -245,9 +245,11 @@ function aStreamGet($b = 0, $xml = false, $global = false)
 			WHERE a.id_board = {int:id_board} AND {query_see_board}'.$pquery.' ORDER BY a.id_act DESC LIMIT {int:start}, {int:perpage}',
 			array('id_board' => $board, 'start' => $start, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage));
 		
-		$context['viewall_url'] = $scripturl . '?action=astream;sa=get;b=' . $board;
+		$context['viewall_url'] = URL::parse($scripturl . '?action=astream;sa=get;b=' . $board);
 	}
-	$context['pages'] = $total ? constructPageIndex($scripturl . '?action=astream;sa=get;all', $start, $total, $perpage) : '';
+	$pages_base = URL::parse($scripturl . '?action=astream;sa=get;all;');
+	$pages_base = URL::addParam($pages_base, 'start=%1$d', true);
+	$context['pages'] = $total ? constructPageIndex($pages_base, $start, $total, $perpage, true) : '';
 	if($xml)
 		header('Content-Type: text/xml; charset=UTF-8');
 	aStreamOutput($result);

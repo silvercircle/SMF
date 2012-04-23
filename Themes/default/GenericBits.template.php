@@ -219,59 +219,75 @@ function template_boardbit_subcat(&$board)
 
 function template_topicbit(&$topic)
 {
-	global $context, $settings, $options, $txt, $scripturl, $modSettings;
+	global $context, $settings, $options, $txt, $scripturl, $settings;
 
+	$imgsrc = $settings['images_url'].'/clipsrc.png';
+
+	$color_class = '';
+	$iconlegend = '';
 	// Is this topic pending approval, or does it have any posts pending approval?
-	if ($context['can_approve_posts'] && $topic['unapproved_posts'])
-		$color_class = !$topic['approved'] ? 'approvetbg' : 'approvebg';
-	// We start with locked and sticky topics.
-	elseif ($topic['is_sticky'] && $topic['is_locked'])
-		$color_class = 'stickybg locked_sticky';
-	// Sticky topics should get a different color, too.
-	elseif ($topic['is_sticky'])
-		$color_class = 'stickybg';
-	// Locked topics get special treatment as well.
-	elseif ($topic['is_locked'])
-		$color_class = 'lockedbg';
-	// Last, but not least: regular topics.
-	else
-		$color_class = 'rowgradient';
+	if ($context['can_approve_posts'] && isset($topic['unapproved_posts']) && !empty($topic['unapproved_posts'])) {
+		$color_class = ' altbg';
+		$iconlegend .= ('<div class="csrcwrapper16px floatleft"><img class="clipsrc unapproved" src="'.$imgsrc.'" alt="" title="'.$txt['awaiting_approval'].'" /></div>');
+	}
+	else if($topic['is_sticky'] || $topic['is_locked'])
+		$color_class = ' altbg';
+
+	if($topic['is_locked'])
+		$iconlegend .= ('<div class="csrcwrapper16px floatleft"><img class="clipsrc locked" src="'.$imgsrc.'" alt="" title="'.$txt['locked_topic'].'" /></div>');
+	if($topic['is_sticky'])
+		$iconlegend .= ('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc sticky" src="'.$imgsrc.'" alt="" title="'.$txt['sticky_topic'].'" /></div>');
+	if($topic['is_poll'])
+		$iconlegend .= ('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc poll" src="'.$imgsrc.'" alt="" title="'.$txt['poll'].'" /></div>');
+	if($topic['is_posted_in'])
+		$iconlegend .= ('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc postedin" src="'.$imgsrc.'" alt="" title="'.$txt['participation_caption'].'" /></div>');
+
+	if($topic['is_very_hot'])
+		$iconlegend .= ('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc veryhot" src="'.$imgsrc.'" alt="" title="'.$context['very_hot_topic_message'].'" /></div>');
+	else if($topic['is_hot'])
+		$iconlegend .= ('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc hot" src="'.$imgsrc.'" alt="" title="'.$context['hot_topic_message'].'" /></div>');
+
+	if($topic['is_old'])
+		$iconlegend .= ('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc old" src="'.$imgsrc.'" alt="" title="'.$context['old_topic_message'].'" /></div>');
 
 	echo '
 	<tr>
-	  <td class="icon1 ', $color_class, '">';
-		echo '
-	  <span class="small_avatar ',$topic['class'],'">';
-		if(!empty($topic['first_post']['member']['avatar'])) {
+	  <td class="icon1 rowgradient', $color_class, '">';
+		if (!empty($settings['show_user_images']) && empty($options['show_no_avatars'])) {
+
 			echo '
-		<a href="', $scripturl, '?action=profile;u=', $topic['first_post']['member']['id'], '">
-		  ', $topic['first_post']['member']['avatar'], '
-		</a>';
-		}
-		else {
-			echo '
-		<a href="', $scripturl, '?action=profile;u=', $topic['first_post']['member']['id'], '">
-		  <img src="',$settings['images_url'],'/unknown.png" alt="avatar" />
-		</a>';
-		}
+	  	<span class="small_avatar">';
+			if(!empty($topic['first_post']['member']['avatar'])) {
+				echo '
+			<a href="', URL::user($topic['first_post']['member']['id'], $topic['first_post']['member']['name']), '">
+		  	', $topic['first_post']['member']['avatar'], '
+			</a>';
+			}
+			else {
+				echo '
+			<a href="', URL::user($topic['first_post']['member']['id'], $topic['first_post']['member']['name']), '">
+		  		<img src="',$settings['images_url'],'/unknown.png" alt="avatar" />
+			</a>';
+			}
 				/*
 				 * own avatar as overlay when 
-				 * a) avatar is set
+				 * a) we have one :)
 				 * b) we have posted in this topic
 				 * c) we have NOT started the topic
 				 */
-		if($topic['is_posted_in'] && ($topic['first_post']['member']['id'] != $context['user']['id']) && isset($context['user']['avatar']['image']))
+			if($topic['is_posted_in'] && ($topic['first_post']['member']['id'] != $context['user']['id']) && isset($context['user']['avatar']['image']))
+				echo '
+			<span class="avatar_overlay">',$context['user']['avatar']['image'],'</span>';
 			echo '
-		<span class="avatar_overlay">',$context['user']['avatar']['image'],'</span>';
-		echo '</span>';
-
+			</span>';
+		}
 		$is_new = $topic['new'] && $context['user']['is_logged'];
 		echo '
 		</td>
-		<td class="icon2 ', $color_class, '">
+		<td class="icon2 rowgradient', $color_class, '">
 			<img src="', $topic['first_post']['icon_url'], '" alt="" />
 		</td>
-		<td class="subject ',$color_class,'">
+		<td class="subject rowgradient',$color_class,'">
 			<div ', (!empty($topic['quick_mod']['modify']) ? 'id="topic_' . $topic['first_post']['id'] . '" ondblclick="modify_topic(\'' . $topic['id'] . '\', \'' . $topic['first_post']['id'] . '\');"' : ''), '>
 			<span class="tpeek" data-id="'.$topic['id'].'" id="msg_' . $topic['first_post']['id'] . '">', $topic['prefix'], ($is_new ? '<strong>' : '') , $topic['first_post']['link'], (!$context['can_approve_posts'] && !$topic['approved'] ? '&nbsp;<em>(' . $txt['awaiting_approval'] . ')</em>' : ''), ($is_new ? '</strong>' : ''), '</span>';
 
@@ -280,17 +296,21 @@ function template_topicbit(&$topic)
 			echo '
 			<a href="', $topic['new_href'], '" id="newicon' . $topic['first_post']['id'] . '"><img src="', $settings['images_url'], '/new.png" alt="', $txt['new'], '" /></a>';
 
+	echo '
+			<div class="floatright">
+				<div class="floatright iconlegend_container" style="position:relative;top:-2px;opacity:0.4;">',$iconlegend,'</div>';
 	if(!empty($topic['board']['id']))
 		echo '
-			<div class="floatright tinytext"><span class="lowcontrast">',$txt['in'], ' <a href="',$topic['board']['href'],'">',$topic['board']['name'],'</a></span></div>';
+				<div class="tinytext" style="margin-top:16px;"><span class="lowcontrast">',$txt['in'], ' <a href="',$topic['board']['href'],'">',$topic['board']['name'],'</a></span></div>';
 	echo '
+		  	</div>
 			<p>', $topic['first_post']['member']['link'],', ',$topic['first_post']['time'], '
 			  <small id="pages' . $topic['first_post']['id'] . '">', $topic['pages'], '</small>
 			</p>';
 		echo '
 			</div>
 		</td>
-		<td class="stats nowrap ', $color_class, '">';
+		<td class="stats nowrap rowgradient', $color_class, '">';
 			if($topic['replies'])
 				echo '
 			<a rel="nofollow" title="',$txt['who_posted'],'" onclick="whoPosted($(this));return(false);" class="whoposted" data-topic="',$topic['id'], '" href="',$scripturl,'?action=xmlhttp;sa=whoposted;t=',$topic['id'],'" >', $topic['replies'], ' ', $txt['replies'], '</a>';
@@ -300,7 +320,7 @@ function template_topicbit(&$topic)
 			<br />
 				', $topic['views'], ' ', $txt['views'], '
 		</td>
-		<td class="lastpost ', $color_class, '">',
+		<td class="lastpost rowgradient', $color_class, '">',
 			$txt['by'], ': ', $topic['last_post']['member']['link'], '<br />
 			<a class="lp_link" title="', $txt['last_post'], '" href="', $topic['last_post']['href'], '">',$topic['last_post']['time'], '</a>
 		</td>';
@@ -309,7 +329,7 @@ function template_topicbit(&$topic)
 	if (!empty($context['can_quick_mod']))
 	{
 		echo '
-			<td class="moderation ', $color_class, '" style="text-align:center;">';
+			<td class="moderation rowgradient', $color_class, '" style="text-align:center;">';
 		if ($options['display_quick_mod'])
 			echo '
 				<input type="checkbox" name="topics[]" value="', $topic['id'], '" class="input_check cb_inline" />';

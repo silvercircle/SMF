@@ -11,22 +11,6 @@
  *
  * @version 1.0pre
  */
-define('URL_FORMAT',
-'/^(https?):\/\/'.                                         // protocol
-'(([a-z0-9$_\.\+!\*\'\(\),;\?&=-]|%[0-9a-f]{2})+'.         // username
-'(:([a-z0-9$_\.\+!\*\'\(\),;\?&=-]|%[0-9a-f]{2})+)?'.      // password
-'@)?(?#'.                                                  // auth requires @
-')((([a-z0-9][a-z0-9-]*[a-z0-9]\.)*'.                      // domain segments AND
-'[a-z][a-z0-9-]*[a-z0-9]'.                                 // top level domain  OR
-'|((\d|[1-9]\d|1\d{2}|2[0-4][0-9]|25[0-5])\.){3}'.
-'(\d|[1-9]\d|1\d{2}|2[0-4][0-9]|25[0-5])'.                 // IP address
-')(:\d+)?'.                                                // port
-')(((\/+([a-z0-9$_\.\+!\*\'\(\),;:@&=-]|%[0-9a-f]{2})*)*'. // path
-'(\?([a-z0-9$_\.\+!\*\'\(\),;:@&=-]|%[0-9a-f]{2})*)'.      // query string
-'?)?)?'.                                                   // path and query string optional
-'(#([a-z0-9$_\.\+!\*\'\(\),;:@&=-]|%[0-9a-f]{2})*)?'.      // fragment
-'$/i');
-
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
@@ -3090,9 +3074,6 @@ function determineTopicClass(&$topic_context)
 
 	if ($topic_context['is_sticky'])
 		$topic_context['class'] .= '_sticky';
-
-	// This is so old themes will still work.
-	$topic_context['extended_class'] = &$topic_context['class'];
 }
 
 // Sets up the basic theme context stuff.

@@ -77,7 +77,7 @@ function template_unread()
 			template_button_strip($mark_read, 'right');
 
 		echo '
-				<span>', $txt['pages'], ': ', $context['page_index'], '</span>
+				<div class="pagelinks floatleft">', $context['page_index'], '</div>
 			</div>';
 
 		echo '
@@ -132,7 +132,7 @@ function template_unread()
 			template_button_strip($mark_read, 'right');
 
 		echo '
-				<span>', $txt['pages'], ': ', $context['page_index'], '</span>
+				<div class="pagelinks floatleft">', $context['page_index'], '</div>
 			</div>';
 	}
 	else
@@ -147,17 +147,17 @@ function template_unread()
 
 	echo '
 		<div class="description " id="topic_icons">
-			<p class="smalltext floatleft">
+			<p class="smalltext floatleft nowrap" style="line-height:24px;">
 				', !empty($modSettings['enableParticipation']) ? '
-				<img src="' . $settings['images_url'] . '/topic/my_normal_post.gif" alt="" align="middle" /> ' . $txt['participation_caption'] . '<br />' : '', '
-				<img src="', $settings['images_url'], '/topic/normal_post.gif" alt="" align="middle" /> ', $txt['normal_topic'], '<br />
-				<img src="', $settings['images_url'], '/topic/hot_post.gif" alt="" align="middle" /> ', sprintf($txt['hot_topics'], $modSettings['hotTopicPosts']), '<br />
-				<img src="', $settings['images_url'], '/topic/veryhot_post.gif" alt="" align="middle" /> ', sprintf($txt['very_hot_topics'], $modSettings['hotTopicVeryPosts']), '
+				<img style="vertical-align:middle;" src="' . $settings['images_url'] . '/topic/my_normal_post.gif" alt="" /><span class="iconlegend"> ' . $txt['participation_caption'] . '</span><br>' : '', '
+				<img style="vertical-align:middle;" src="', $settings['images_url'], '/topic/normal_post.gif" alt="" /><span class="iconlegend"> ', $txt['normal_topic'], '</span><br>
+				<img style="vertical-align:middle;" src="', $settings['images_url'], '/topic/hot_post.gif" alt="" /><span class="iconlegend"> ', sprintf($txt['hot_topics'], $modSettings['hotTopicPosts']), '</span><br>
+				<img style="vertical-align:middle;" src="', $settings['images_url'], '/topic/veryhot_post.gif" alt="" /><span class="iconlegend"> ', sprintf($txt['very_hot_topics'], $modSettings['hotTopicVeryPosts']), '</span>
 			</p>
-			<p class="smalltext para2">
-				<img src="', $settings['images_url'], '/icons/quick_lock.gif" alt="" align="middle" /> ', $txt['locked_topic'], '<br />', ($modSettings['enableStickyTopics'] == '1' ? '
-				<img src="' . $settings['images_url'] . '/icons/quick_sticky.gif" alt="" align="middle" /> ' . $txt['sticky_topic'] . '<br />' : ''), ($modSettings['pollMode'] == '1' ? '
-				<img src="' . $settings['images_url'] . '/topic/normal_poll.gif" alt="" align="middle" /> ' . $txt['poll'] : ''), '
+			<p class="smalltext para2" style="line-height:20px;">
+				<img style="vertical-align:middle;" src="', $settings['images_url'], '/icons/quick_lock.gif" alt="" /><span class="iconlegend"> ', $txt['locked_topic'], '</span><br>', ($modSettings['enableStickyTopics'] == '1' ? '
+				<img style="vertical-align:middle;" src="' . $settings['images_url'] . '/icons/quick_sticky.gif" alt="" /><span class="iconlegend"> ' . $txt['sticky_topic'] . '</span><br>' : ''), ($modSettings['pollMode'] == '1' ? '
+				<img style="vertical-align:middle;" src="' . $settings['images_url'] . '/topic/normal_poll.gif" alt="" /><span class="iconlegend"> ' . $txt['poll'] . '</span>' : ''), '
 			</p>
 		</div>
 	</div>';
@@ -204,7 +204,7 @@ function template_replies()
 			template_button_strip($mark_read, 'right');
 
 		echo '
-				<span>', $txt['pages'], ': ', $context['page_index'], '</span>
+				<div class="pagelinks floatleft">', $context['page_index'], '</div>
 			</div>';
 
 		echo '
@@ -241,14 +241,7 @@ function template_replies()
 
 		foreach ($context['topics'] as $topic)
 		{
-			// Calculate the color class of the topic.
-			$color_class = '';
-			if (strpos($topic['class'], 'sticky') !== false)
-				$color_class = 'stickybg';
-			if (strpos($topic['class'], 'locked') !== false)
-				$color_class .= 'lockedbg';
-
-			$color_class2 = !empty($color_class) ? $color_class . '2' : '';
+			$color_class = $color_class2 = 'rowgradient';
 
 			echo '
 						<tr>
@@ -298,7 +291,7 @@ function template_replies()
 			template_button_strip($mark_read, 'right');
 
 		echo '
-				<span>', $txt['pages'], ': ', $context['page_index'], '</span>
+				<div class="pagelinks floatleft">', $context['page_index'], '</div>
 			</div>';
 	}
 	else

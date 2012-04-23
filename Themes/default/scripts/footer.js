@@ -1416,6 +1416,12 @@ jQuery(document).ready(function() {
 	$('#jsconfirm').jqm({overlay: 50, modal: true, trigger: false, center:true});
 
 	$('a.easytip').easyTooltip( {parentData: true} );
+	$('div.iconlegend_container').hover(function() {
+		$(this).css('opacity', '1.0');
+	},
+	function() {
+		$(this).css('opacity', '0.4');
+	});
 });
 
 /*

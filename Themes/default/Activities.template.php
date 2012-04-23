@@ -49,16 +49,16 @@ function template_showactivity()
 
 	if($context['act_results']) {
 	echo '
-	<div class="pagelinks">',$context['pages'],'</div>
-	<div class="framed_region smallpadding">
+	<div class="pagelinks mediummargin">',$context['pages'],'</div>
+	<div class="framed_region">
 	<ol class="commonlist notifications" style="padding:0;">
-	<li class="glass centertext">',$context['titletext'],'</li>';
+	<li class="glass centertext cleantop">',$context['titletext'],'</li>';
 	foreach($context['activities'] as $activity)
 		template_activitybit($activity);
 	echo '
 	</ol>
 	</div>
-	<div class="pagelinks">',$context['pages'],'</div>';
+	<div class="pagelinks mediummargin">',$context['pages'],'</div>';
 	}
 	else
 		echo '

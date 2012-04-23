@@ -1748,6 +1748,9 @@ function loadTheme($id_theme = 0, $initialize = true)
 	$context['inline_footer_script'] = '';
 	$context['news_item_count'] = 0;
 
+	$context['hot_topic_message'] = sprintf($txt['hot_topics'], $modSettings['hotTopicPosts']);
+	$context['very_hot_topic_message'] = sprintf($txt['very_hot_topics'], $modSettings['hotTopicVeryPosts']);
+	$context['old_topic_message'] = sprintf($txt['old_topic_message'], $modSettings['oldTopicDays']);
 	// Call load theme integration functions.
 	HookAPI::callHook('integrate_load_theme');
 

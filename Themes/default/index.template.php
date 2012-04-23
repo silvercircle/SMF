@@ -624,8 +624,8 @@ function template_sidebar_content_index()
 					<li class="smalltext"><span class="smalltext floatright"><a href="',$scripturl,'?action=logout;',$context['session_var'],'=',$context['session_id'], '">Sign out</a></span><li>
 				 </ul>
 				 <div class="clear">
-					<a href="', $scripturl, '?action=unread">', $txt['unread_since_visit'], '</a><br>
-					<a href="', $scripturl, '?action=unreadreplies">', $txt['show_unread_replies'], '</a>
+					<a href="', URL::parse($scripturl . '?action=unread">'), $txt['unread_since_visit'], '</a><br>
+					<a href="', URL::parse($scripturl . '?action=unreadreplies">'), $txt['show_unread_replies'], '</a>
 				 </div>';
 
 		echo '<div style="margin-top:3px;">';
@@ -735,7 +735,7 @@ function template_sidebar_content_index()
 	// This is the "Recent Posts" bar.
 	if (!empty($settings['number_recent_posts']) && (!empty($context['latest_posts']) || !empty($context['latest_post'])))
 	{
-		$collapser = array('bodyclass' => $widgetstyle, 'id' => 'recent_panel', 'title' => '<a href="'. $scripturl. '?action=recent">'. $txt['recent_posts']. '</a>', 'framed' => 'smallpadding');
+		$collapser = array('bodyclass' => $widgetstyle, 'id' => 'recent_panel', 'title' => '<a href="'. URL::parse($scripturl. '?action=recent') . '">' . $txt['recent_posts']. '</a>', 'framed' => 'smallpadding');
 		template_create_collapsible_container($collapser);
 		echo '
 			<div class="blue_container inset_shadow smallpadding">

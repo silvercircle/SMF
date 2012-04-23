@@ -626,24 +626,6 @@ tr.titlebg td
 }
 /* Styles for generic tables.
 ------------------------------------------------------- */
-.topic_table td.stickybg2
-{
-	background-image: url(../images/icons/quick_sticky.gif);
-	background-repeat: no-repeat;
-	background-position: 2% 4px;
-}
-.topic_table td.lockedbg2
-{
-	background-image: url(../images/icons/quick_lock.gif);
-	background-repeat: no-repeat;
-	background-position: 2% 4px;
-}
-.topic_table td.locked_sticky2
-{
-	background-image: url(../images/icons/quick_sticky_lock.gif);
-	background-repeat: no-repeat;
-	background-position: 2% 4px;
-}
 .topic_table td.lastpost
 {
 	background-image: none;

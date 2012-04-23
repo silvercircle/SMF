@@ -763,13 +763,13 @@ function template_modify_group_simple($type)
 				{
 					if (empty($modSettings['permission_enable_deny']) || $context['group']['id'] == -1)
 						echo '
-			document.getElementById("group_select_div_', $id_group, '").parentNode.className = "lockedbg";
+			document.getElementById("group_select_div_', $id_group, '").parentNode.className = "altbg";
 			document.getElementById("group_select_', $id_group, '").style.display = "";';
 					else
 						echo '
-			document.getElementById("group_select_div_on_', $id_group, '").parentNode.className = "lockedbg";
-			document.getElementById("group_select_div_off_', $id_group, '").parentNode.className = "lockedbg";
-			document.getElementById("group_select_div_deny_', $id_group, '").parentNode.className = "lockedbg";
+			document.getElementById("group_select_div_on_', $id_group, '").parentNode.className = "altbg";
+			document.getElementById("group_select_div_off_', $id_group, '").parentNode.className = "altbg";
+			document.getElementById("group_select_div_deny_', $id_group, '").parentNode.className = "altbg";
 			document.getElementById("group_select_on_', $id_group, '").style.display = "";
 			document.getElementById("group_select_off_', $id_group, '").style.display = "";
 			document.getElementById("group_select_deny_', $id_group, '").style.display = "";';

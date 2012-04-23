@@ -50,7 +50,7 @@ function template_main()
 	}
 
 	// Show the anchor for the top and for the first message. If the first message is new, say so.
-	echo '
+	echo $context['template_hooks']['display']['header'],'
 		<a id="top"></a>
 		', $context['first_new_message'] ? '<a id="new"></a>' : '';
 
@@ -144,12 +144,11 @@ function template_main()
 	 <div class="title">',$txt['share_topic'],':</div>
 	 <div id="socialshareprivacy"></div><div class="clear"></div>';
 
-	echo '<div class="clear"></div></div>';
-
-
-	echo '
-		<div>
-		</div>';
+	echo '<div class="clear"></div>'
+	,$context['template_hooks']['display']['extend_topicheader'],'
+	</div>
+	'
+	,$context['template_hooks']['display']['above_posts'];
 	// Is this topic also a poll?
 	if ($context['is_poll'])
 	{
@@ -310,7 +309,8 @@ function template_main()
 		  <input type="hidden" name="goadvanced" value="1" />
 		 </form>
 		</div>
-		<a id="lastPost"></a>';
+		<a id="lastPost"></a>
+		',$context['template_hooks']['display']['below_posts'];
 			
 	$remove_url = $scripturl . '?action=removetopic2;topic=' . $context['current_topic'] . '.0;' . $context['session_var'] . '=' . $context['session_id'];
 	$mod_buttons = array(
@@ -445,20 +445,7 @@ function template_main()
 		foreach ($context['related_topics'] as $topic)
 		{
 			// Is this topic pending approval, or does it have any posts pending approval?
-			if ($topic['board']['can_approve_posts'] && $topic['unapproved_posts'])
-				$color_class = !$topic['approved'] ? 'approvetbg' : 'approvebg';
-			// We start with locked and sticky topics.
-			elseif ($topic['is_sticky'] && $topic['is_locked'])
-				$color_class = 'stickybg locked_sticky';
-			// Sticky topics should get a different color, too.
-			elseif ($topic['is_sticky'])
-				$color_class = 'stickybg';
-			// Locked topics get special treatment as well.
-			elseif ($topic['is_locked'])
-				$color_class = 'lockedbg';
-			// Last, but not least: regular topics.
-			else
-				$color_class = 'windowbg';
+			$color_class = 'rowgradient';
 
 			// Some columns require a different shade of the color class.
 			$alternate_class = $color_class . '2';
@@ -500,6 +487,7 @@ function template_main()
 				</table>
 			</div><br />';
 	}
+	echo $context['template_hooks']['display']['footer'];
 	// Show the lower breadcrumbs.
 	theme_linktree();
 	// Show the jumpto box, or actually...let Javascript do it.

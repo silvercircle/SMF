@@ -425,30 +425,6 @@ span.xtag:hover {
 	color: #000;
 	background-color: #fff2f2;
 }
-.approvetbg, .approvetbg2 {
-	color: #000;
-	background-color: #eedeff;
-}
-/* Sticky topics get a different background */
-.stickybg {
-	background: rgba(100, 255, 226, 0.11);
-}
-
-.stickybg2 {
-	background: rgba(100, 255, 226, 0.11);
-}
-
-/* Locked posts get a different shade, too! */
-.lockedbg {
-	background: rgba(240, 110, 20, 0.15);
-	font-style: italic;
-}
-
-.lockedbg2 {
-	background: rgba(240, 110, 20, 0.15);
-	font-style: italic;
-}
-
 /* Posts and personal messages displayed throughout the forum. */
 .post, .personalmessage {
 	line-height: 1.55em;
@@ -1274,6 +1250,14 @@ ol.commonlist.category {
 	line-height: 16px;
 	background: rgb(255,255,255);
 	background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(243,243,243,1) 52%, rgba(237,237,237,1) 100%, rgba(255,255,255,1) 100%);
+	background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(243,243,243,1) 52%,rgba(237,237,237,1) 100%,rgba(255,255,255,1) 100%);
+	background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(243,243,243,1) 52%,rgba(237,237,237,1) 100%,rgba(255,255,255,1) 100%);
+	background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(243,243,243,1) 52%,rgba(237,237,237,1) 100%,rgba(255,255,255,1) 100%);
+	border-bottom:2px solid ridge;
+}
+.rowgradient.altbg {
+	background: rgb(255,255,255);
+	background: -moz-linear-gradient(top,  rgba(245,245,245,1) 0%, rgba(233,233,233,1) 52%, rgba(227,227,227,1) 100%, rgba(245,245,245,1) 100%);
 	background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(243,243,243,1) 52%,rgba(237,237,237,1) 100%,rgba(255,255,255,1) 100%);
 	background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(243,243,243,1) 52%,rgba(237,237,237,1) 100%,rgba(255,255,255,1) 100%);
 	background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(243,243,243,1) 52%,rgba(237,237,237,1) 100%,rgba(255,255,255,1) 100%);
@@ -2494,24 +2478,6 @@ td.lastpost, div.lastpost {
 	min-width: 160px;
 }
 
-.topic_table td.stickybg2 {
-	background-image: url(../images/icons/quick_sticky.gif);
-	background-repeat: no-repeat;
-	background-position: 98% 4px;
-}
-
-.topic_table td.lockedbg2 {
-	background-image: url(../images/icons/quick_lock.gif);
-	background-repeat: no-repeat;
-	background-position: 98% 4px;
-}
-
-.topic_table td.locked_sticky2 {
-	background-image: url(../images/icons/quick_sticky_lock.gif);
-	background-repeat: no-repeat;
-	background-position: 98% 4px;
-}
-
 /* Styles for (fatal) errors.
 ------------------------------------------------- */
 
@@ -3671,6 +3637,10 @@ abbr.timeago {
 .verticalclear {
 	margin: 3px 0;
 }
+.hspaced {
+	margin-left:5px;
+	margin-right:5px;
+}
 .nowrap {
 	white-space: nowrap;
 }
@@ -3883,6 +3853,46 @@ a.fnote_ref {
 	clip: rect(200px 221px 216px 205px);
 	top:-200px;
 	left:-205px;
+}
+.clipsrc.locked {
+	clip: rect(217px 17px 233px 1px);
+	top:-217px;
+	left:-1px;
+}
+.clipsrc.sticky {
+	clip: rect(217px 34px 233px 18px);
+	top:-217px;
+	left:-18px;
+}
+.clipsrc.poll {
+	clip: rect(217px 51px 233px 35px);
+	top:-217px;
+	left:-35px;
+}
+.clipsrc.postedin {
+	clip: rect(217px 68px 233px 52px);
+	top:-217px;
+	left:-52px;
+}
+.clipsrc.veryhot {
+	clip: rect(217px 85px 233px 69px);
+	top:-217px;
+	left:-69px;
+}
+.clipsrc.hot {
+	clip: rect(217px 102px 233px 86px);
+	top:-217px;
+	left:-86px;
+}
+.clipsrc.old {
+	clip: rect(217px 119px 233px 103px);
+	top:-217px;
+	left:-103px;
+}
+.clipsrc.unapproved {
+	clip: rect(217px 136px 233px 120px);
+	top:-217px;
+	left:-120px;
 }
 @media print {
 	#headerarea {

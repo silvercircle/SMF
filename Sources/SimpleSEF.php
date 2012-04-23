@@ -131,7 +131,7 @@ class URLFactory {
 		return(preg_replace('~\b' . preg_quote($this->scripturl) . '\?action=([a-zA-Z0-9]+)(.*)~', $this->boardurl . '/$1$2', $a));
 	}
 
-	public function addParam($url, $params)
+	public function addParam($url, $params, $append = false)
 	{
 		$newparam = '';
 		$_p = explode(';', trim($params, ';'));
@@ -139,9 +139,10 @@ class URLFactory {
 			$_c = explode('=', $p);
 			$newparam .= ('/' . $_c[0] . '.' . (isset($_c[1]) && !empty($_c[1]) ? $_c[1] : ''));
 		}
-		if(!empty($newparam))
-			return str_replace($this->boardurl, $this->boardurl . $newparam, $url);
-
+		if(!empty($newparam)) {
+			//return str_replace($this->boardurl, $this->boardurl . $newparam, $url);
+			return $append ? ((rtrim($url, '/') . $newparam)) : str_replace($this->boardurl, $this->boardurl . $newparam, $url);
+		}
 		return($url);
 	}
 
@@ -236,10 +237,10 @@ class URL {
 		return($a);
 	}
 
-	public static function addParam($url, $params)
+	public static function addParam($url, $params, $append = false)
 	{
 		if(self::$is_sef)
-			return(self::$impl->addParam($url, $params));
+			return(self::$impl->addParam($url, $params, $append));
 		
 		list($base, $fragment) = explode('#', $url);
 		$newparam = ';' . ltrim($params, ';');

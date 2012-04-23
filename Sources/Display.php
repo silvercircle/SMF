@@ -64,7 +64,7 @@ define('PCACHE_UPDATE_PER_VIEW', 5); // maximum number of posts to be parse-cach
 function Display()
 {
 	global $scripturl, $txt, $modSettings, $context, $settings, $memberContext;
-	global $options, $sourcedir, $user_info, $board_info, $topic, $board;
+	global $options, $sourcedir, $user_info, $user_profile, $board_info, $topic, $board;
 	global $attachments, $messages_request, $topicinfo, $language;
 
 	$context['response_prefixlen'] = strlen($txt['response_prefix']);
@@ -74,6 +74,14 @@ function Display()
 
 	$context['pcache_update_counter'] = !empty($modSettings['use_post_cache']) ? 0 : PCACHE_UPDATE_PER_VIEW + 1;
 	$context['time_cutoff_ref'] = time();
+
+	$context['template_hooks']['display'] = array(
+		'header' => '',
+	    'extend_topicheader' => '',
+		'above_posts' => '',
+		'below_posts' => '',
+		'footer' => ''
+	);
 
 	require_once($sourcedir . '/Subs-LikeSystem.php');
 	fetchNewsItems($board, $topic);
@@ -1080,7 +1088,7 @@ function Display()
 		if (!empty($posters))
 			loadMemberData($posters);
 
-		if (!loadMemberContext($context['topic_starter_id'], true))
+		if (!isset($user_profile[$context['topic_starter_id']])) // !loadMemberContext($context['topic_starter_id'], true))
 		{
 			$context['topicstarter']['name'] = $topicinfo['poster_name'];
 			$context['topicstarter']['id'] = 0;
@@ -1091,8 +1099,10 @@ function Display()
 			$context['topicstarter']['is_guest'] = true;
 			$context['topicstarter']['avatar'] = array();
 		}
-		else
+		else {
+			loadMemberContext($context['topic_starter_id']);
 			$context['topicstarter'] = &$memberContext[$context['topic_starter_id']];
+		}
 
 		$context['topicstarter']['start_time'] = timeformat($topicinfo['first_post_time']);
 
@@ -1101,8 +1111,10 @@ function Display()
 			m.smileys_enabled, m.poster_name, m.poster_email, m.approved, m.locked, c.likes_count, c.like_status, c.updated AS like_updated, l.id_user AS liked,
 			m.id_msg_modified < {int:new_from} AS is_read';
 
-		$sql_from = '
-			FROM {db_prefix}messages AS m
+		$sql_from_tables = '
+			FROM {db_prefix}messages AS m';
+
+		$sql_from_joins = '
 			LEFT JOIN {db_prefix}likes AS l ON (l.id_msg = m.id_msg AND l.ctype = 1 AND l.id_user = {int:id_user})
 			LEFT JOIN {db_prefix}like_cache AS c ON (c.id_msg = m.id_msg AND c.ctype = 1)
 			LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang}';
@@ -1115,10 +1127,10 @@ function Display()
 			'id_user' => $user_info['id']
 		);
 
-		HookAPI::callHook('integrate_messagerequest', array(&$sql_what, &$sql_from, &$sql_array));
+		HookAPI::callHook('display_messagerequest', array(&$sql_what, &$sql_from_tables, &$sql_from_joins, &$sql_array));
 
 		$messages_request = smf_db_query('
-			SELECT ' . $sql_what . ' ' . $sql_from . '
+			SELECT ' . $sql_what . ' ' . $sql_from_tables . $sql_from_joins . '
 			WHERE m.id_msg IN ({array_int:message_list})
 			ORDER BY m.id_msg' . (empty($options['view_newest_first']) ? '' : ' DESC'),
 			$sql_array
@@ -1249,7 +1261,7 @@ function Display()
 	if($context['can_autosave_draft'])
 		enqueueThemeScript('drafts', 'scripts/drafts.js', true);
 
-	HookAPI::callHook('integrate_display', array());
+	HookAPI::callHook('display_general', array());
 	
 }
 
@@ -1389,7 +1401,7 @@ function prepareDisplayContext($reset = false)
 		'postbit_below' => '',
 		'poster_details' => ''
 	);
-	HookAPI::callHook('integrate_postbit', array(&$output));
+	HookAPI::callHook('display_postbit', array(&$output));
 
 	return $output;
 }
