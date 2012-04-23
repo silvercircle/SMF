@@ -1914,18 +1914,24 @@ function QuickInTopicModeration()
 	redirectexit(!empty($topicGone) ? 'board=' . $board : 'topic=' . $topic . '.' . $_REQUEST['start']);
 }
 /**
- * process a link that was posted by a user with insufficient persmissions
- * check the user's permission and redirect to the target if he's allowed to post links
- * otherwise just show a (non-clickable) link to the reader
+ * process a link (URL BBC tag) when link security is enabled on the forum.
+ * check the posting member's permission and redirect to the target if he's allowed to post direct links
+ * otherwise just show a (non-clickable) link to the reader, so the reader can decide whether
+ * he wants to visit it.
  */
 function ProcessLink()
 {
-	global $context, $boardurl;
+	global $context, $boardurl, $modSettings;
 
 	$referrer_checked = (isset($_SERVER['HTTP_REFERER']) && substr($_SERVER['HTTP_REFERER'], 0, strlen($boardurl)) == $boardurl) ? true : false;
 	$mid = isset($_REQUEST['m']) ? $_REQUEST['m'] : 0;
 	$target = isset($_REQUEST['target']) ? $_REQUEST['target'] : '';
 	$poster = $bid = 0;
+
+	if(empty($modSettings['linkSecurity']) && !empty($target))
+		redirectexit($target);
+	else if(empty($target))
+		fatal_lang_error('invalid_or_missing_link');
 
 	if(substr($mid, 0, 3) == 'sig') {			// a signature, but verify if the member is still in our db
 		$_p = intval(substr($mid, 3));
@@ -1936,6 +1942,17 @@ function ProcessLink()
 		if($referrer_checked && $poster && !empty($target)) {		// check if the user still exists
 			if(isUserAllowedTo('post_links', null, $poster))
 				redirectexit($target);
+		}
+	}
+	else if(substr($mid, 0, 2) == 'pm') {
+		$_p = intval(substr($mid, 2));
+		$request = smf_db_query('SELECT id_member_from FROM {db_prefix}personal_messages WHERE id_pm = {int:id_pm}', array('id_pm' => $_p));
+		if(mysql_num_rows($request) > 0)
+			list($poster) = mysql_fetch_row($request);
+		mysql_free_result($request);
+		if($referrer_checked && $poster && !empty($target)) {
+			if(isUserAllowedTo('post_links', null, $poster))
+				redirectExit($target);
 		}
 	}
 	else if ((int)$mid === 0 && !empty($target))
@@ -1952,9 +1969,10 @@ function ProcessLink()
 	}
 	if($referrer_checked && $poster && $bid && !empty($target)) {		// check if the user still exists
 		// it does exist, now check the permissions
-		if(isUserAllowedTo('post_links', $bid ? $bid :null, $poster))
+		if(isUserAllowedTo('post_links', $bid, $poster))
 			redirectexit($target);
 	}
+	// all attempts failed, now output the page, presenting a plain text link
 	loadTemplate('DisplaySingle');
 	loadLanguage('Profile');
 	$context['sub_template'] = 'processlink';

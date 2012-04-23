@@ -1760,7 +1760,7 @@ function loadAdminTemplate($template_name, $fatal = true)
 	global $settings, $db_show_debug, $context, $txt, $boardurl;
 
 	$base = dirname($settings['default_theme_dir']);
-	$settings['admin_css'] = $boardurl . '/Themes/admin/admin.css';
+	$settings['admin_css'] = $boardurl . '/Themes/admin/css/admin.css';
 	$settings['admin_js'] = $boardurl . '/Themes/admin/admin.js';
 
 	if ($template_name === false)

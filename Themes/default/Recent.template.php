@@ -20,7 +20,7 @@ function template_main()
 		<h1 class="bigheader">'
 				,$txt['recent_posts'],'
 		</h1>
-		<div class="pagelinks">
+		<div class="pagelinks mediumpadding">
 			<span>',$context['page_index'], '</span>
 		</div>
 		<div class="posts_container">';
@@ -30,7 +30,7 @@ function template_main()
 
 	echo '
 		</div>
-		<div class="pagelinks">
+		<div class="pagelinks mediumpadding">
 			<span>', $context['page_index'], '</span>
 		</div>
 	</div>';

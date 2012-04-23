@@ -107,6 +107,30 @@ function legacybbc_addtags(&$codes)
 			'before' => '<span style="color: white;" class="bbc_color">',
 			'after' => '</span>',
 		),
+		array(
+			'tag' => 'iurl',
+			'type' => 'unparsed_content',
+			'content' => '<a href="$1" class="bbc_link">$1</a>',
+			'validate' => create_function('&$tag, &$data, $disabled', '
+					$data = strtr($data, array(\'<br />\' => \'\'));
+					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
+						$data = \'http://\' . $data;
+				'),
+		),
+		array(
+			'tag' => 'iurl',
+			'type' => 'unparsed_equals',
+			'before' => '<a href="$1" class="bbc_link">',
+			'after' => '</a>',
+			'validate' => create_function('&$tag, &$data, $disabled', '
+					if (substr($data, 0, 1) == \'#\')
+						$data = \'#post_\' . substr($data, 1);
+					elseif (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
+						$data = \'http://\' . $data;
+				'),
+			'disallow_children' => array('email', 'ftp', 'url', 'iurl'),
+			'disabled_after' => ' ($1)',
+		),
 	));
 }
 ?>

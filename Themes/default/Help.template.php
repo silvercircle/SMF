@@ -16,7 +16,7 @@ function template_popup() {
 
 	// Since this is a popup of its own we need to start the html, etc.
 	echo '
-		<div class="content">
+		<div class="blue_container norounded content tinytext mediumpadding">
 			', $context['help_text'], '<br />
 		</div>';
 }

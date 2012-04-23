@@ -307,70 +307,44 @@ function template_postbit_lean(&$message)
 	
 	// Show information about the poster of this message.
 	echo '
-	<div class="keyinfo">';
-				echo '<div>
-					  <div class="messageicon">
-					  <img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' id="msg_icon_' . $message['id'] . '"' : '', ' />
-					  </div>
-					  <h5 style="display:inline;" id="subject_', $message['id'], '">
-					  ',$message['subject'],'
-					  </h5>	  
-					  <span class="smalltext">&nbsp;',$message['time'], '</span>						  
-					  <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['permahref'], '" rel="nofollow">',$message['permalink'],'</a>',($context['use_share'] ? '&nbsp;&nbsp;<span style="cursor:pointer;" onclick="sharePost($(this));">Share</span>' : ''),'</span>
-					  </div>
-					  <div id="msg_', $message['id'], '_quick_mod"></div>';
+	<div class="keyinfo lean tinytext" style="line-height:19px;">';
+	if (!empty($settings['show_user_images']) && empty($options['show_no_avatars'])) {
+		if(!empty($message['member']['avatar']['image']))
+			echo '
+		<span class="small_avatar floatleft">
+		<a href="', $scripturl, '?action=profile;u=', $message['member']['id'], '">
+		', $message['member']['avatar']['image'], '
+		</a>
+		</span>';
+		else
+			echo '
+		<span class="small_avatar floatleft">
+			<a href="', $scripturl, '?action=profile;u=', $message['member']['id'], '">
+			<img src="',$settings['images_url'],'/unknown.png" alt="avatar" />
+			</a>
+		</span>';
+	}
+	echo '
+		<div>
+		  <div class="messageicon">
+		  <img src="', $message['icon_url'] . '" alt=""', $message['can_modify'] ? ' id="msg_icon_' . $message['id'] . '"' : '', ' />
+		  </div>
+		  <h5 style="display:inline;" id="subject_', $message['id'], '">
+		  ',$message['subject'],'
+		</h5>
+		  <span class="',($message['new'] ? 'permalink_new' : 'permalink_old'),'"><a onclick="getIntralink($(this),',$message['id'],');return(false);" href="', $message['permahref'], '" rel="nofollow">',$message['permalink'],'</a></span>
+		<br>',$txt['posted_by'], '&nbsp;<strong>',$message['member']['link'], '</strong>,&nbsp;',$message['time'], '
+		<div class="clear"></div>
+		</div>';
+	echo '
+		<div id="msg_', $message['id'], '_quick_mod"></div>';
 
 	// Done with the information about the poster... on to the post itself.
 	echo '
+		<div class="clear"></div>';
+	echo '
 	</div>
-	<div class="post_content lean">
-	<div class="floatright horizontal_userblock" style="text-align:center;">
-			<h4>', $message['member']['link'], '</h4>
-			<div class="smalltext" id="msg_', $message['id'], '_extra_info">';
-
-	// Show the member's primary group (like 'Administrator') if they have one.
-	if (!empty($message['member']['group']))
-		echo '
-			<div class="membergroup">', $message['member']['group'], '</div>';
-	else
-		echo '';
-
-	if (!$message['member']['is_guest'])
-	{
-		// Show avatars, images, etc.?
-		if (!empty($settings['show_user_images']) && empty($options['show_no_avatars'])) {
-			if(!empty($message['member']['avatar']['image']))
-				echo '
-							<div class="avatar floatleft">
-								<a href="', $scripturl, '?action=profile;u=', $message['member']['id'], '">
-									', $message['member']['avatar']['image'], '
-								</a>
-							</div>';
-			else
-				echo '
-							<div class="avatar">
-								<a href="', $scripturl, '?action=profile;u=', $message['member']['id'], '">
-									<img src="',$settings['images_url'],'/unknown.png" alt="avatar" />
-								</a>
-							</div>';
-		}
-	}
-	// Otherwise, show the guest's email.
-	elseif (!empty($message['member']['email']) && in_array($message['member']['show_email'], array('yes', 'yes_permission_override', 'no_through_forum')))
-		echo '
-							<li class="email"><a href="', $scripturl, '?action=emailuser;sa=email;msg=', $message['id'], '" rel="nofollow">', ($settings['use_image_buttons'] ? '<img src="' . $settings['images_url'] . '/email_sm.gif" alt="' . $txt['email'] . '" title="' . $txt['email'] . '" />' : $txt['email']), '</a></li>';
-
-	echo '<div class="clear"></div>';
-	// Show the member's custom title, if they have one.
-	if (!empty($message['member']['title']))
-		echo '
-			<li class="title">', $message['member']['title'], '</li>';
-
-	if (!empty($modSettings['onlineEnable']) && !$message['member']['is_guest'])
-		echo '<div class="centertext">', $context['can_send_pm'] ? '<a href="' . $message['member']['online']['href'] . '">' : '', $message['member']['online']['text'], $context['can_send_pm'] ? '</a>' : '', '</div>';
-
-	echo '</div>
-		</div>';
+	<div class="post_content lean">';
 
 	// Show the post itself, finally!
 	echo '

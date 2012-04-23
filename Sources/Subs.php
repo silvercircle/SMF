@@ -11,6 +11,22 @@
  *
  * @version 1.0pre
  */
+define('URL_FORMAT',
+'/^(https?):\/\/'.                                         // protocol
+'(([a-z0-9$_\.\+!\*\'\(\),;\?&=-]|%[0-9a-f]{2})+'.         // username
+'(:([a-z0-9$_\.\+!\*\'\(\),;\?&=-]|%[0-9a-f]{2})+)?'.      // password
+'@)?(?#'.                                                  // auth requires @
+')((([a-z0-9][a-z0-9-]*[a-z0-9]\.)*'.                      // domain segments AND
+'[a-z][a-z0-9-]*[a-z0-9]'.                                 // top level domain  OR
+'|((\d|[1-9]\d|1\d{2}|2[0-4][0-9]|25[0-5])\.){3}'.
+'(\d|[1-9]\d|1\d{2}|2[0-4][0-9]|25[0-5])'.                 // IP address
+')(:\d+)?'.                                                // port
+')(((\/+([a-z0-9$_\.\+!\*\'\(\),;:@&=-]|%[0-9a-f]{2})*)*'. // path
+'(\?([a-z0-9$_\.\+!\*\'\(\),;:@&=-]|%[0-9a-f]{2})*)'.      // query string
+'?)?)?'.                                                   // path and query string optional
+'(#([a-z0-9$_\.\+!\*\'\(\),;:@&=-]|%[0-9a-f]{2})*)?'.      // fragment
+'$/i');
+
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
@@ -1287,30 +1303,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'disabled_content' => '($1)',
 			),
 			array(
-				'tag' => 'iurl',
-				'type' => 'unparsed_content',
-				'content' => '<a href="$1" class="bbc_link">$1</a>',
-				'validate' => create_function('&$tag, &$data, $disabled', '
-					$data = strtr($data, array(\'<br />\' => \'\'));
-					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
-						$data = \'http://\' . $data;
-				'),
-			),
-			array(
-				'tag' => 'iurl',
-				'type' => 'unparsed_equals',
-				'before' => '<a href="$1" class="bbc_link">',
-				'after' => '</a>',
-				'validate' => create_function('&$tag, &$data, $disabled', '
-					if (substr($data, 0, 1) == \'#\')
-						$data = \'#post_\' . substr($data, 1);
-					elseif (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
-						$data = \'http://\' . $data;
-				'),
-				'disallow_children' => array('email', 'ftp', 'url', 'iurl'),
-				'disabled_after' => ' ($1)',
-			),
-			array(
 				'tag' => 'li',
 				'before' => '<li>',
 				'after' => '</li>',
@@ -1392,14 +1384,14 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'parameters' => array(
 					'author' => array('match' => '(.{1,192}?)', 'quoted' => true),
 				),
-				'before' => '<div class="quoteheader">' . $txt['quote_from'] . ': {author}</div><blockquote>',
+				'before' => '<div class="quoteheader">{author} '.$txt['said'].':</div><blockquote>',
 				'after' => '</blockquote><div class="quotefooter"></div>',
 				'block_level' => true,
 			),
 			array(
 				'tag' => 'quote',
 				'type' => 'parsed_equals',
-				'before' => '<div class="quoteheader">' . $txt['quote_from'] . ': $1</div><blockquote>',
+				'before' => '<div class="quoteheader">$1 '.$txt['said'].':</div><blockquote>',
 				'after' => '</blockquote><div class="quotefooter"></div>',
 				'quoted' => 'optional',
 				// Don't allow everything to be embedded with the author name.
@@ -1413,7 +1405,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 					'link' => array('match' => '(?:board=\d+;)?((?:topic|threadid)=[\dmsg#\./]{1,40}(?:;start=[\dmsg#\./]{1,40})?|action=profile;u=\d+)'),
 					'date' => array('match' => '(\d+)', 'validate' => 'timeformat'),
 				),
-				'before' => '<div class="quoteheader"><a href="' . $scripturl . '?{link}">' . $txt['quote_from'] . ': {author} ' . $txt['search_on'] . ' {date}</a></div><blockquote>',
+				'before' => '<div class="quoteheader"><a href="' . $scripturl . '?{link}">{author} ' . $txt['said'] . ', {date}</a></div><blockquote>',
 				'after' => '</blockquote><div class="quotefooter"></div>',
 				'block_level' => true,
 			),
@@ -1422,7 +1414,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'parameters' => array(
 					'author' => array('match' => '(.{1,192}?)'),
 				),
-				'before' => '<div class="quoteheader">' . $txt['quote_from'] . ': {author}</div><blockquote>',
+				'before' => '<div class="quoteheader">{author} '.$txt['said'].':</div><blockquote>',
 				'after' => '</blockquote><div class="quotefooter"></div>',
 				'block_level' => true,
 			),
@@ -1532,7 +1524,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'tag' => 'url',
 				'type' => 'unparsed_content',
 				//'content' => '<a href="$1" class="bbc_link" target="_blank">$1</a>',
-				'content' => !empty($modSettings['linkSecurity']) ? ('<a target="_blank" class="bbc_link checked" href="'.$scripturl.'?action=processlink;m=[__%%mid%%__];target=$1'.'</a>') : '<a href="$1" class="bbc_link" target="_blank">$1</a>',
+				'content' => !empty($modSettings['linkSecurity']) ? ('<a target="_blank" class="bbc_link checked" href="'.$scripturl.'?action=processlink;m=[__%%mid%%__];target=$1">$1</a>') : '<a href="$1" class="bbc_link" target="_blank">$1</a>',
 				'validate' => create_function('&$tag, &$data, $disabled', '
 					$data = strtr($data, array(\'<br />\' => \'\'));
 					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
@@ -1553,6 +1545,19 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'disallow_children' => array('email', 'ftp', 'url', 'iurl'),
 				'disabled_after' => ' ($1)',
 			),
+			/*
+			array(
+				'tag' => 'url',
+				'parameters' => array(
+					'link' => array('match' => '([\w\W]+\:\/\/[\w\W]+)', 'quoted' => true, 'value' => '$1'),
+					//'link' => array('match' => '(.{1,192}?)', 'quoted' => true),
+					'author' => array('match' => '(.{1,192}?)', 'quoted' => true),
+				),
+				'before' => '<a target="_blank" class="bbc_link checked" href="'.$scripturl.'?action=processlink;p={author};target={link}">',
+				'after' => '</a>',
+				'disallow_children' => array('email', 'ftp', 'url', 'iurl'),
+			),
+			*/
 		);
 
 		// Let mods add new BBC without hassle.
@@ -2372,7 +2377,9 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 		$message = '&nbsp;' . substr($message, 1);
 
 	// Cleanup whitespace.
-	$message = strtr($message, array('  ' => ' &nbsp;', "\r" => '', "\n" => '<br />', '<br /> ' => '<br />&nbsp;', '&#13;' => "\n", '[__%%mid%%__]' => $cache_id));
+	$message = strtr($message, array('  ' => ' &nbsp;', "\r" => '', "\n" => '<br />', '<br /> ' => '<br />&nbsp;', '&#13;' => "\n"));
+	if($cache_id != '')
+		$message = str_replace('[__%%mid%%__]', $cache_id, $message);
 
 	/*
 	 * experimental hook... this could be used to support mods like footnotes, for example
@@ -2430,8 +2437,8 @@ function parse_bbc_stage2(&$message, $mid = 0, $is_for_editor = false)
 			}
 		}
 	}
-	//if(stripos($message, '[__%%mid%%__]'))
-	//	$message = str_replace('[__%%mid%%__]', $mid, $message);
+	if(stripos($message, '[__%%mid%%__]'))
+		$message = str_replace('[__%%mid%%__]', $mid, $message);
 
 	HookAPI::callHook('bbc_stage2', array(&$message, &$is_for_editor));
 }

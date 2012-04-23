@@ -613,5 +613,8 @@ $helptxt['simplesef_enable'] = 'You can enable this option to generate pretty (o
 $helptxt['quickreply_help'] = '<p>You can quote additional posts by clicking the quote button below the post you want to include</p>
 	<p>Click <strong>Cancel</strong> to hide the post editor</p>
 	<p>Click <strong>Go advanced</strong> to switch to the full post editor with more features</p>';
-$helptxt['linkSecurity'] = 'When enabled, an additional permission will control whether members can post links with the <strong>[URL]</strong> BBC tag. Links posted by members with insufficient permission will not be followed directly. Clicking on such a link will redirect all reading users to a special page where the user can decide to visit the link.<br><br>Typically, you may deny this permission to new or banned users';
+$helptxt['linkSecurity'] = 'When enabled, an additional permission will control how links posted by members will behave. Links posted by members with insufficient permissions, using the <strong>[URL]</strong> BBC tag will not be followed directly. Instead, a page will explain why the link was not followed and present the target URL in plain text format (non-clickable).
+	<br>
+	<br>
+	Typically, you may want to grant link permissions to all your members except new and possibly banned ones. Also note that there are 2 permissions to control this. One general that controls how links from a member\'s signature are handled and one board permission that works like any other per board permission.';
 ?>

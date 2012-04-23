@@ -390,6 +390,7 @@ $txt['more_stats'] = '[More Stats]';
 $txt['code'] = 'Code';
 $txt['code_select'] = '[Select]';
 $txt['quote_from'] = 'Quote from';
+$txt['said'] = 'said';
 $txt['quote'] = 'Quote';
 
 $txt['merge_to_topic_id'] = 'ID of target topic';

@@ -26,8 +26,7 @@ function template_html_above()
 <html id="_S_" lang="en-US">
 <head>';
 	echo '
-	<link rel="stylesheet" type="text/css" href="', $settings['primary_css'],'" />
-	<link rel="stylesheet" type="text/css" href="', $settings['admin_css'],$context['jsver'],'" />';
+	<link rel="stylesheet" type="text/css" href="', $settings['admin_css'],'" />';
 	if ($context['right_to_left'])
 		echo '
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/rtl.css" />';

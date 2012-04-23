@@ -29,14 +29,16 @@ function template_fatal_error()
 				', $context['error_title'], '
 			</h3>
 		</div>
-		<div class="windowbg">
-			<div class="mediumpadding">', $context['error_message'], '</div>
+		<div class="blue_container cleantop">
+			<div class="mediumpadding content">', $context['error_message'], '</div>
 		</div>
 	</div>';
 
 	// Show a back button (using javascript.)
 	echo '
-	<div class="centertext"><a href="javascript:history.go(-1)">', $txt['back'], '</a></div>';
+	<div class="centertext mediummargin">
+		<input type="button" value="',$txt['back'],'" class="button_submit" onclick="javascript:history.go(-1)" />
+	</div>';
 }
 
 function template_show_file()
