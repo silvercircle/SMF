@@ -29,7 +29,7 @@ function template_postbit_normal(&$message)
 		echo $message['first_new'] ? '<a id="new"></a>' : '';
 
 	echo '
-	<div class="keyinfo std rowgradient">
+	<div class="keyinfo std gradient_darken_down">
 	<div class="floatleft" style="width:200px;text-align:center;margin-right:20px;" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">
 	<h4 class="poster">', $message['member']['link'], '</h4>
 	</div>

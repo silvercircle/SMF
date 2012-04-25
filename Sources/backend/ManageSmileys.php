@@ -117,7 +117,7 @@ function ManageSmileys()
 
 function EditSmileySettings($return_config = false)
 {
-	global $modSettings, $context, $settings, $txt, $boarddir, $sourcedir, $scripturl;
+	global $modSettings, $context, $settings, $txt, $boarddir, $sourcedir, $scripturl, $backend_subdir;
 
 	// The directories...
 	$context['smileys_dir'] = empty($modSettings['smileys_dir']) ? $boarddir . '/Smileys' : $modSettings['smileys_dir'];
@@ -151,7 +151,7 @@ function EditSmileySettings($return_config = false)
 		return $config_vars;
 
 	// Setup the basics of the settings template.
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 	$context['sub_template'] = 'show_settings';
 
 	// Finish up the form...

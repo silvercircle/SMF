@@ -3760,12 +3760,12 @@ function setupMenuContext()
 				'sub_buttons' => array(
 					'unread' => array(
 						'title' => $txt['unread_since_visit'],
-						'href' => $scripturl . '?action=unread',
+						'href' => URL::parse($scripturl . '?action=unread'),
 						'show' => $context['user']['is_logged'],
 					),
 					'replies' => array(
 						'title' => $txt['show_unread_replies'],
-						'href' => $scripturl . '?action=unreadreplies',
+						'href' => URL::parse($scripturl . '?action=unreadreplies'),
 						'show' => $context['user']['is_logged'],
 					)
 				),
@@ -4128,10 +4128,10 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 	if (($cached_news = CacheAPI::getCache($cache_key, 360)) == null) {
 		if(0 == $board && 0 == $topic)
 			$sel = ' on_index = 1 ';
+		elseif($topic)
+			$sel = ' ((topics = -1 && FIND_IN_SET({int:board}, boards)) OR FIND_IN_SET({int:topic}, topics)) ';
 		elseif($board)
 			$sel = ' (boards = "" OR FIND_IN_SET({int:board}, boards)) ';
-		elseif($topic)
-			$sel = ' (topics = "" OR FIND_IN_SET({int:topic}, topics)) ';
 
 		$gsel = '(groups = "" OR FIND_IN_SET(' . implode(', groups) != 0 OR FIND_IN_SET(', $user_info['groups']) . ', groups) != 0) AND ';
 

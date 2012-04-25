@@ -66,7 +66,7 @@ function template_boardbit(&$board)
 	if($board['act_as_cat'])
 		return template_boardbit_subcat($board);
 	echo '
-	<li id="board_', $board['id'], '" class="boardrow rowgradient">';
+	<li id="board_', $board['id'], '" class="boardrow gradient_darken_down">';
 	if(!$board['is_page']) {
 		echo'
 		<div class="info">
@@ -162,7 +162,7 @@ function template_boardbit_subcat(&$board)
 	echo '
 	<li id="board_', $board['id'], '" class="subcatrow">';
 		echo'
-		<div class="rowgradient smallpadding">
+		<div class="gradient_darken_down smallpadding">
 		<div class="info subcat">
 		 <div class="icon floatleft">
 		  <a href="', ($board['is_redirect'] || $context['user']['is_guest'] ? $board['href'] : $scripturl . '?action=unread;board=' . $board['id'] . '.0;children'), '">
@@ -252,7 +252,7 @@ function template_topicbit(&$topic)
 
 	echo '
 	<tr>
-	  <td class="icon1 rowgradient', $color_class, '">';
+	  <td class="icon1 gradient_darken_down', $color_class, '">';
 		if (!empty($settings['show_user_images']) && empty($options['show_no_avatars'])) {
 
 			echo '
@@ -284,10 +284,10 @@ function template_topicbit(&$topic)
 		$is_new = $topic['new'] && $context['user']['is_logged'];
 		echo '
 		</td>
-		<td class="icon2 rowgradient', $color_class, '">
+		<td class="icon2 gradient_darken_down', $color_class, '">
 			<img src="', $topic['first_post']['icon_url'], '" alt="" />
 		</td>
-		<td class="subject rowgradient',$color_class,'">
+		<td class="subject gradient_darken_down',$color_class,'">
 			<div ', (!empty($topic['quick_mod']['modify']) ? 'id="topic_' . $topic['first_post']['id'] . '" ondblclick="modify_topic(\'' . $topic['id'] . '\', \'' . $topic['first_post']['id'] . '\');"' : ''), '>
 			<span class="tpeek" data-id="'.$topic['id'].'" id="msg_' . $topic['first_post']['id'] . '">', $topic['prefix'], ($is_new ? '<strong>' : '') , $topic['first_post']['link'], (!$context['can_approve_posts'] && !$topic['approved'] ? '&nbsp;<em>(' . $txt['awaiting_approval'] . ')</em>' : ''), ($is_new ? '</strong>' : ''), '</span>';
 
@@ -310,7 +310,7 @@ function template_topicbit(&$topic)
 		echo '
 			</div>
 		</td>
-		<td class="stats nowrap rowgradient', $color_class, '">';
+		<td class="stats nowrap gradient_darken_down', $color_class, '">';
 			if($topic['replies'])
 				echo '
 			<a rel="nofollow" title="',$txt['who_posted'],'" onclick="whoPosted($(this));return(false);" class="whoposted" data-topic="',$topic['id'], '" href="',$scripturl,'?action=xmlhttp;sa=whoposted;t=',$topic['id'],'" >', $topic['replies'], ' ', $txt['replies'], '</a>';
@@ -320,7 +320,7 @@ function template_topicbit(&$topic)
 			<br />
 				', $topic['views'], ' ', $txt['views'], '
 		</td>
-		<td class="lastpost rowgradient', $color_class, '">',
+		<td class="lastpost gradient_darken_down', $color_class, '">',
 			$txt['by'], ': ', $topic['last_post']['member']['link'], '<br />
 			<a class="lp_link" title="', $txt['last_post'], '" href="', $topic['last_post']['href'], '">',$topic['last_post']['time'], '</a>
 		</td>';
@@ -329,7 +329,7 @@ function template_topicbit(&$topic)
 	if (!empty($context['can_quick_mod']))
 	{
 		echo '
-			<td class="moderation rowgradient', $color_class, '" style="text-align:center;">';
+			<td class="moderation gradient_darken_down', $color_class, '" style="text-align:center;">';
 		if ($options['display_quick_mod'])
 			echo '
 				<input type="checkbox" name="topics[]" value="', $topic['id'], '" class="input_check cb_inline" />';

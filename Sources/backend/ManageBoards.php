@@ -367,7 +367,7 @@ function EditCategory2()
 // Modify a specific board...
 function EditBoard()
 {
-	global $txt, $context, $cat_tree, $boards, $boardList, $sourcedir, $smcFunc, $modSettings;
+	global $txt, $context, $cat_tree, $boards, $boardList, $sourcedir, $modSettings, $backend_subdir;
 
 	loadAdminTemplate('ManageBoards');
 	require_once($sourcedir . '/Subs-Boards.php');
@@ -375,7 +375,7 @@ function EditBoard()
 
 	// For editing the profile we'll need this.
 	loadLanguage('ManagePermissions');
-	require_once($sourcedir . '/ManagePermissions.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManagePermissions.php');
 	loadPermissionProfiles();
 
 	// id_board must be a number....
@@ -746,7 +746,7 @@ function ModifyCat()
 
 function EditBoardSettings($return_config = false)
 {
-	global $context, $txt, $sourcedir, $modSettings, $scripturl, $smcFunc;
+	global $context, $txt, $sourcedir, $modSettings, $scripturl, $backend_subdir;
 
 	// Load the boards list - for the recycle bin!
 	$recycle_boards = array('');
@@ -783,8 +783,8 @@ function EditBoardSettings($return_config = false)
 		return $config_vars;
 
 	// Needed for the settings template and inline permission functions.
-	require_once($sourcedir . '/ManagePermissions.php');
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManagePermissions.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 
 	// Don't let guests have these permissions.
 	$context['post_url'] = $scripturl . '?action=admin;area=manageboards;save;sa=settings';

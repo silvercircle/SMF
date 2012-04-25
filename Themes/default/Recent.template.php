@@ -241,7 +241,7 @@ function template_replies()
 
 		foreach ($context['topics'] as $topic)
 		{
-			$color_class = $color_class2 = 'rowgradient';
+			$color_class = $color_class2 = 'gradient_darken_down';
 
 			echo '
 						<tr>

@@ -55,7 +55,7 @@ function SearchEngines()
 // This is really just the settings page.
 function ManageSearchEngineSettings($return_config = false)
 {
-	global $context, $txt, $scripturl, $sourcedir;
+	global $context, $txt, $scripturl, $sourcedir, $backend_subdir;
 
 	$config_vars = array(
 		// How much detail?
@@ -106,7 +106,7 @@ function ManageSearchEngineSettings($return_config = false)
 		$_POST['spider_group'] = 0;
 
 	// We'll want this for our easy save.
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 
 	// Setup the template.
 	$context['page_title'] = $txt['settings'];

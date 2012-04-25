@@ -115,7 +115,7 @@ function ManagePaidSubscriptions()
 // Modify which payment methods are to be used.
 function ModifySubscriptionSettings($return_config = false)
 {
-	global $context, $txt, $modSettings, $sourcedir, $smcFunc, $scripturl;
+	global $context, $txt, $modSettings, $sourcedir, $scripturl, $backend_subdir;
 
 	// If the currency is set to something different then we need to set it to other for this to work and set it back shortly.
 	$modSettings['paid_currency'] = !empty($modSettings['paid_currency_code']) ? $modSettings['paid_currency_code'] : '';
@@ -151,7 +151,7 @@ function ModifySubscriptionSettings($return_config = false)
 		return $config_vars;
 
 	// Get the settings template fired up.
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 
 	// Some important context stuff
 	$context['page_title'] = $txt['settings'];

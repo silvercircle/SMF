@@ -296,9 +296,9 @@ function MaintainTopics()
 // Find and fix all errors.
 function MaintainFindFixErrors()
 {
-	global $sourcedir;
+	global $sourcedir, $backend_subdir;
 
-	require_once($sourcedir . '/RepairBoards.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/RepairBoards.php');
 	RepairBoards();
 }
 

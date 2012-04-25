@@ -268,11 +268,11 @@ EOT;
 	<div class="clear cContainer_end"></div>
 	',$context['template_hooks']['global']['above'];
 
-	if($context['news_item_count'] && isset($context['is_board_index'])) {
+	if($context['news_item_count']) { //} && isset($context['is_board_index'])) {
 		//$collapser = array('id' => 'news_boardindex', 'title' => 'NEWS', 'bodyclass' => 'blue_container');
 		//template_create_collapsible_container($collapser);
 		echo '
-		<div class="blue_container">
+		<div class="blue_container gradient_darken_down">
 		<div class="content smallpadding inset_shadow">
 		<ol class="commonlist noshadow news">';
 		template_news_listitems();
@@ -406,7 +406,7 @@ function theme_linktree($force_show = false)
 		echo $ltree;
 		return;
 	}
-	$ltree = '<div class="navigate_section rowgradient"><ul class="linktree tinytext" id="linktree_'. (empty($shown_linktree) ? 'upper' : 'lower'). '">';
+	$ltree = '<div class="navigate_section gradient_darken_down"><ul class="linktree tinytext" id="linktree_'. (empty($shown_linktree) ? 'upper' : 'lower'). '">';
 
 	// Each tree item has a URL and name. Some may have extra_before and extra_after.
 	$tree_items = count($context['linktree']);
@@ -605,7 +605,7 @@ function template_sidebar_content_index()
 	// If the user is logged in, display stuff like their name, new messages, etc.
 	// for the logo -> <img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" />
 	echo '
-		<div class="blue_container inset_shadow smallpadding">';
+		<div class="blue_container smallpadding norounded gradient_darken_down">';
 	if ($context['user']['is_logged'])
 	{
 		echo '<div class="smalltext user">';
@@ -698,7 +698,7 @@ function template_sidebar_content_index()
 		$collapser = array('bodyclass' => $widgetstyle, 'id'=> 'stats_panel','title' => $txt['forum_stats']);
 		template_create_collapsible_container($collapser);
 		echo '
-			<div class="blue_container inset_shadow smallpadding">
+			<div class="blue_container norounded smallpadding gradient_darken_down">
 			<div class="smallpadding smalltext">
 				<dl class="common">
 				 <dt>', $txt['posts'], ': </dt><dd class="righttext">',$context['common_stats']['total_posts'], '</dd>
@@ -724,7 +724,7 @@ function template_sidebar_content_index()
 		$collapser = array('id' => 'social_panel', 'title' => 'Socialize', 'bodyclass' => $widgetstyle, 'framed' => 'smallpadding');
 		template_create_collapsible_container($collapser);
 		echo '
-		<div class="blue_container inset_shadow smallpadding">
+		<div class="blue_container norounded smallpadding gradient_darken_down">
 		<div id="socialshareprivacy"></div>
 		<div class="clear"></div>
 		</div>
@@ -738,7 +738,7 @@ function template_sidebar_content_index()
 		$collapser = array('bodyclass' => $widgetstyle, 'id' => 'recent_panel', 'title' => '<a href="'. URL::parse($scripturl. '?action=recent') . '">' . $txt['recent_posts']. '</a>', 'framed' => 'smallpadding');
 		template_create_collapsible_container($collapser);
 		echo '
-			<div class="blue_container inset_shadow smallpadding">
+			<div class="blue_container norounded smallpadding gradient_darken_down">
 			<div class="smalltext" id="recent_posts_content" style="line-height:120%;">
 				<div class="entry-title" style="display: none;">', $context['forum_name_html_safe'], ' - ', $txt['recent_posts'], '</div>
 				<div class="entry-content" style="display: none;">
@@ -787,7 +787,7 @@ function template_sidebar_content_index()
 		$collapser = array('bodyclass'=> $widgetstyle, 'id' => 'cal_panel', 'title' => '<a href="'. URL::action($scripturl . '?action=calendar') . '">'. $title . '</a>', 'framed' => 'smallpadding');
 		template_create_collapsible_container($collapser);
 		echo '
-			<div class="blue_container inset_shadow smallpadding">
+			<div class="blue_container norounded smallpadding gradient_darken_down">
 			<div class="smalltext">';
 
 		// Holidays like "Christmas", "Chanukah", and "We Love [Unknown] Day" :P.

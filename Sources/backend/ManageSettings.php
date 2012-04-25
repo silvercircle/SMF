@@ -70,7 +70,7 @@ if (!defined('SMF'))
 // This just avoids some repetition.
 function loadGeneralSettingParameters($subActions = array(), $defaultAction = '')
 {
-	global $context, $txt, $sourcedir;
+	global $context, $txt, $sourcedir, $backend_subdir;
 
 	// You need to be an admin to edit settings!
 	isAllowedTo('admin_forum');
@@ -79,7 +79,7 @@ function loadGeneralSettingParameters($subActions = array(), $defaultAction = ''
 	loadLanguage('ManageSettings');
 
 	// Will need the utility functions from here.
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 
 	$context['sub_template'] = 'show_settings';
 
@@ -434,8 +434,8 @@ function ModifyCoreFeatures($return_config = false)
 					return array(\'spider_group\' => 0, \'show_spider_online\' => 0);
 			'),
 			'on_save' => create_function('', '
-				global $sourcedir, $modSettings;
-				require_once($sourcedir . \'/ManageSearchEngines.php\');
+				global $sourcedir, $modSettings, $backend_subdir;
+				require_once($sourcedir . \'/\' . $backend_subdir . \'/ManageSearchEngines.php\');
 				recacheSpiderNames();
 			'),
 		),
@@ -2055,7 +2055,7 @@ function EditCustomProfiles()
 
 function ModifyPruningSettings($return_config = false)
 {
-	global $txt, $scripturl, $sourcedir, $context, $settings, $sc, $modSettings;
+	global $txt, $scripturl, $sourcedir, $context, $settings, $sc, $modSettings, $backend_subdir;
 
 	// Make sure we understand what's going on.
 	loadLanguage('ManageSettings');
@@ -2083,7 +2083,7 @@ function ModifyPruningSettings($return_config = false)
 		return $config_vars;
 
 	// We'll need this in a bit.
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 
 	// Saving?
 	if (isset($_GET['save']))

@@ -140,7 +140,7 @@ obExit(null, null, true);
 // The main controlling function.
 function smf_main()
 {
-	global $modSettings, $settings, $user_info, $board, $topic, $board_info, $maintenance, $sourcedir;
+	global $modSettings, $settings, $user_info, $board, $topic, $board_info, $maintenance, $sourcedir, $backend_subdir;
 
 	// Special case: session keep-alive, output a transparent pixel.
 	if (isset($_GET['action']) && $_GET['action'] == 'keepalive')
@@ -230,7 +230,7 @@ function smf_main()
 	// Here's the monstrous $_REQUEST['action'] array - $_REQUEST['action'] => array($file, $function).
 	$actionArray = array(
 		'activate' => array('Register.php', 'Activate'),
-		'admin' => array('Admin.php', 'AdminMain'),
+		'admin' => array($backend_subdir .  '/Admin.php', 'AdminMain'),
 		'announce' => array('Post.php', 'AnnounceTopic'),
 		'attachapprove' => array('ManageAttachments.php', 'ApproveAttach'),
 		'buddy' => array('Subs-Members.php', 'BuddyListToggle'),
@@ -306,7 +306,7 @@ function smf_main()
 		'viewprofile' => array('Profile.php', 'ModifyProfile'),
 		'vote' => array('Poll.php', 'Vote'),
 		'viewquery' => array('ViewQuery.php', 'ViewQuery'),
-		'viewsmfile' => array('Admin.php', 'DisplayAdminFile'),
+		'viewsmfile' => array($backend_subdir . '/Admin.php', 'DisplayAdminFile'),
 		'who' => array('Who.php', 'Who'),
 		'.xml' => array('News.php', 'ShowXmlFeed'),
 		'xmlhttp' => array('Xml.php', 'XMLhttpMain'),

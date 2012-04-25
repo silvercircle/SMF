@@ -263,10 +263,10 @@ function SetReserve()
 // This function handles registration settings, and provides a few pretty stats too while it's at it.
 function ModifyRegistrationSettings($return_config = false)
 {
-	global $txt, $context, $scripturl, $modSettings, $sourcedir;
+	global $txt, $context, $scripturl, $modSettings, $sourcedir, $backend_subdir;
 
 	// This is really quite wanting.
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 
 	$config_vars = array(
 			array('select', 'registration_method', array($txt['setting_registration_standard'], $txt['setting_registration_activate'], $txt['setting_registration_approval'], $txt['setting_registration_disabled'])),

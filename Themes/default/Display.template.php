@@ -55,7 +55,7 @@ function template_main()
 		', $context['first_new_message'] ? '<a id="new"></a>' : '';
 
 
-	echo '<div class="bmbar rowgradient">
+	echo '<div class="bmbar gradient_darken_down">
 	<div class="userbit_compact topic">
 	<div class="floatleft">
 	<span class="small_avatar">';
@@ -445,7 +445,7 @@ function template_main()
 		foreach ($context['related_topics'] as $topic)
 		{
 			// Is this topic pending approval, or does it have any posts pending approval?
-			$color_class = 'rowgradient';
+			$color_class = 'gradient_darken_down';
 
 			// Some columns require a different shade of the color class.
 			$alternate_class = $color_class . '2';

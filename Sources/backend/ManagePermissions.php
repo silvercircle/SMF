@@ -989,7 +989,7 @@ function ModifyMembergroup2()
 // Screen for modifying general permission settings.
 function GeneralPermissionSettings($return_config = false)
 {
-	global $context, $modSettings, $sourcedir, $txt, $scripturl, $smcFunc;
+	global $context, $modSettings, $sourcedir, $txt, $scripturl, $backend_subdir;
 
 	// All the setting variables
 	$config_vars = array(
@@ -1009,7 +1009,7 @@ function GeneralPermissionSettings($return_config = false)
 	$context['sub_template'] = 'show_settings';
 
 	// Needed for the inline permission functions, and the settings template.
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 
 	// Don't let guests have these permissions.
 	$context['post_url'] = $scripturl . '?action=admin;area=permissions;save;sa=settings';

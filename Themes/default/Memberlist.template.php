@@ -38,7 +38,7 @@ function template_main()
 		echo '<div><ol class="tiles" id="membertiles">';
 		foreach ($context['members'] as $member) {
 			echo '
-				<li class="rowgradient">';
+				<li class="gradient_darken_down">';
 				template_userbit_compact($member);
 				echo '
 				</li>';

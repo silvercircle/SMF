@@ -16,7 +16,7 @@ function template_main()
 	global $context, $settings, $txt, $scripturl;
 
 	echo $context['template_hooks']['boardindex']['above_boardlisting'],'
-	<div id="boardindex_table">';
+	<div id="boardindex">';
 	/* Each category in categories is made up of:
 	id, href, link, name, is_collapsed (is it collapsed?), can_collapse (is it okay if it is?),
 	new (is it new?), collapse_href (href to collapse/expand), collapse_image (up/down image),
@@ -49,7 +49,7 @@ function template_main()
 			</div>';
 		}
 		echo '
-			<div class="framed_region cleantop ', $category['is_root'] ? 'tinypadding' : 'smallpadding', ' norounded" style="',' ',$category['is_collapsed'] ? 'display:none;" ' : '', '" id="category_', $category['id'], '_boards">
+			<div class="framed_region cleantop ', $category['is_root'] ? 'root_cat' : 'normal_cat', '" style="',' ',$category['is_collapsed'] ? 'display:none;" ' : '', '" id="category_', $category['id'], '_boards">
 			<ol class="commonlist category">';
 		if(!empty($category['desc']))
 			echo '

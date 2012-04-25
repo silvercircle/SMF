@@ -65,3 +65,4 @@ function shConfig()
 $(document).ready(function() {
 	shConfig();
 });
+	

@@ -118,7 +118,7 @@ function ManageSearch()
 
 function EditSearchSettings($return_config = false)
 {
-	global $txt, $context, $scripturl, $sourcedir, $modSettings;
+	global $txt, $context, $scripturl, $sourcedir, $modSettings, $backend_subdir;
 
 	// What are we editing anyway?
 	$config_vars = array(
@@ -151,7 +151,7 @@ function EditSearchSettings($return_config = false)
 	$context['sub_template'] = 'show_settings';
 
 	// We'll need this for the settings.
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 
 	// A form was submitted.
 	if (isset($_REQUEST['save']))

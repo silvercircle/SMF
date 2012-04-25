@@ -1819,7 +1819,7 @@ function prepareServerSettingsContext(&$config_vars)
 // Helper function, it sets up the context for database settings.
 function prepareDBSettingContext(&$config_vars)
 {
-	global $txt, $helptxt, $context, $modSettings, $sourcedir;
+	global $txt, $helptxt, $context, $modSettings, $sourcedir, $backend_subdir;
 
 	loadLanguage('Help');
 
@@ -1915,7 +1915,7 @@ function prepareDBSettingContext(&$config_vars)
 	// If we have inline permissions we need to prep them.
 	if (!empty($inlinePermissions) && allowedTo('manage_permissions'))
 	{
-		require_once($sourcedir . '/ManagePermissions.php');
+		require_once($sourcedir . '/' . $backend_subdir . '/ManagePermissions.php');
 		init_inline_permissions($inlinePermissions, isset($context['permissions_excluded']) ? $context['permissions_excluded'] : array());
 	}
 
@@ -2060,7 +2060,7 @@ function saveSettings(&$config_vars)
 // Helper function for saving database settings.
 function saveDBSettings(&$config_vars)
 {
-	global $sourcedir;
+	global $sourcedir, $backend_subdir;
 
 	$inlinePermissions = array();
 	foreach ($config_vars as $var)
@@ -2125,7 +2125,7 @@ function saveDBSettings(&$config_vars)
 	// If we have inline permissions we need to save them.
 	if (!empty($inlinePermissions) && allowedTo('manage_permissions'))
 	{
-		require_once($sourcedir . '/ManagePermissions.php');
+		require_once($sourcedir . '/' . $backend_subdir . '/ManagePermissions.php');
 		save_inline_permissions($inlinePermissions);
 	}
 }

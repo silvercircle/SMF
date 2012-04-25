@@ -150,7 +150,7 @@ function ManageAttachments()
 
 function ManageAttachmentSettings($return_config = false)
 {
-	global $txt, $modSettings, $scripturl, $context, $options, $sourcedir;
+	global $txt, $modSettings, $scripturl, $context, $options, $sourcedir, $backend_subdir;
 
 	$context['valid_upload_dir'] = is_dir($modSettings['attachmentUploadDir']) && is_writable($modSettings['attachmentUploadDir']);
 
@@ -193,8 +193,8 @@ function ManageAttachmentSettings($return_config = false)
 		return $config_vars;
 
 	// These are very likely to come in handy! (i.e. without them we're doomed!)
-	require_once($sourcedir . '/ManagePermissions.php');
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManagePermissions.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 
 	// Saving settings?
 	if (isset($_GET['save']))
@@ -213,7 +213,7 @@ function ManageAttachmentSettings($return_config = false)
 
 function ManageAvatarSettings($return_config = false)
 {
-	global $txt, $context, $modSettings, $sourcedir, $scripturl;
+	global $txt, $context, $modSettings, $sourcedir, $scripturl, $backend_subdir;
 
 	// Perform a test to see if the GD module is installed.
 	$testGD = get_extension_funcs('gd');
@@ -263,8 +263,8 @@ function ManageAvatarSettings($return_config = false)
 		return $config_vars;
 
 	// We need these files for the inline permission settings, and the settings template.
-	require_once($sourcedir . '/ManagePermissions.php');
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManagePermissions.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 
 	// Saving avatar settings?
 	if (isset($_GET['save']))

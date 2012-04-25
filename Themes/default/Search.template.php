@@ -289,7 +289,7 @@ function template_results()
 
 		while ($topic = $context['get_topics']())
 		{
-			$color_class = 'rowgradient';
+			$color_class = 'gradient_darken_down';
 
 			echo '
 			<div class="blue_container smallpadding" style="margin-bottom:10px;">

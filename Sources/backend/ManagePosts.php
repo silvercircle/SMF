@@ -188,7 +188,7 @@ function SetCensor()
 // Modify all settings related to posts and posting.
 function ModifyPostSettings($return_config = false)
 {
-	global $context, $txt, $modSettings, $scripturl, $sourcedir;
+	global $context, $txt, $modSettings, $scripturl, $sourcedir, $backend_subdir;
 
 	// All the settings...
 	$config_vars = array(
@@ -224,7 +224,7 @@ function ModifyPostSettings($return_config = false)
 		return $config_vars;
 
 	// We'll want this for our easy save.
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 
 	// Setup the template.
 	$context['page_title'] = $txt['manageposts_settings'];
@@ -285,7 +285,7 @@ function ModifyPostSettings($return_config = false)
 // Bulletin Board Code...a lot of Bulletin Board Code.
 function ModifyBBCSettings($return_config = false)
 {
-	global $context, $txt, $modSettings, $scripturl, $sourcedir;
+	global $context, $txt, $modSettings, $scripturl, $sourcedir, $backend_subdir;
 
 	$config_vars = array(
 			// Main tweaks
@@ -303,7 +303,7 @@ function ModifyBBCSettings($return_config = false)
 		return $config_vars;
 
 	// Setup the template.
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 	$context['sub_template'] = 'show_settings';
 	$context['page_title'] = $txt['manageposts_bbc_settings_title'];
 
@@ -352,7 +352,7 @@ function ModifyBBCSettings($return_config = false)
 // Function for modifying topic settings. Not very exciting.
 function ModifyTopicSettings($return_config = false)
 {
-	global $context, $txt, $sourcedir, $scripturl;
+	global $context, $txt, $sourcedir, $scripturl, $backend_subdir;
 
 	// Here are all the topic settings.
 	$config_vars = array(
@@ -380,7 +380,7 @@ function ModifyTopicSettings($return_config = false)
 		return $config_vars;
 
 	// Get the settings template ready.
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 
 	// Setup the template.
 	$context['page_title'] = $txt['manageposts_topic_settings'];
@@ -419,7 +419,7 @@ function getPrefixes()
 
 function ModifyDraftSettings($return_config = false)
 {
-	global $txt, $sourcedir, $context, $scripturl;
+	global $txt, $sourcedir, $context, $scripturl, $backend_subdir;
 	$config_vars = array(
 		array('int', 'enableAutoSaveDrafts', 'subtext' => $txt['draftsave_subnote'], 'postinput' => $txt['manageposts_seconds']),
 	);
@@ -430,7 +430,7 @@ function ModifyDraftSettings($return_config = false)
 	if ($return_config)
 		return $config_vars;
 
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 
 	if (isset($_GET['save']))
 	{

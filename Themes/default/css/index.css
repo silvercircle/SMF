@@ -990,7 +990,7 @@ ul#navigation li {
 }
 #sidebar, #sbar {
 	float: right;
-	padding: 3px;
+	padding: 0 3px;
 }
 #sbtoggle {
 	float: right;
@@ -1239,29 +1239,21 @@ ol.commonlist > li:last-child {
 	border-bottom:none;
 }
 ol.commonlist.category {
-	border: 1px solid #ddd !important;
 	border-top:0 !important;
 	background-color:#f5f5f5;
 	padding-top:0;
 	margin: 0;
 }
 
-.rowgradient {
+.gradient_darken_down {
 	line-height: 16px;
-	background: rgb(255,255,255);
-	background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(243,243,243,1) 52%, rgba(237,237,237,1) 100%, rgba(255,255,255,1) 100%);
-	background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(243,243,243,1) 52%,rgba(237,237,237,1) 100%,rgba(255,255,255,1) 100%);
-	background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(243,243,243,1) 52%,rgba(237,237,237,1) 100%,rgba(255,255,255,1) 100%);
-	background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(243,243,243,1) 52%,rgba(237,237,237,1) 100%,rgba(255,255,255,1) 100%);
-	border-bottom:2px solid ridge;
+	background-image: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
+	background-image: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
+	background-image: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
+	background-image: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
 }
-.rowgradient.altbg {
-	background: rgb(255,255,255);
-	background: -moz-linear-gradient(top,  rgba(245,245,245,1) 0%, rgba(233,233,233,1) 52%, rgba(227,227,227,1) 100%, rgba(245,245,245,1) 100%);
-	background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(243,243,243,1) 52%,rgba(237,237,237,1) 100%,rgba(255,255,255,1) 100%);
-	background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(243,243,243,1) 52%,rgba(237,237,237,1) 100%,rgba(255,255,255,1) 100%);
-	background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(243,243,243,1) 52%,rgba(237,237,237,1) 100%,rgba(255,255,255,1) 100%);
-	border-bottom:2px solid ridge;
+.altbg {
+	background: rgb(242, 242, 242);
 }
 ol.commonlist.category li.boardrow {
 	padding:5px 10px;
@@ -2325,11 +2317,7 @@ tr.titlebg td {
 	min-height: 600px;
 	/*border-right: 1px solid #ddd;*/
 }
-#boardindex_table, #memberlist {
-	padding:3px;
-	margin:0 0 5px 0;
-}
-#boardindex_table .cat_bar2 img {
+.cat_bar2 img {
 	margin-top:4px;
 }
 .cat_bar h3 {
@@ -2411,7 +2399,7 @@ tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td {
 table.topic_table {
 	width: 100%;
 	border-spacing: 0;
-	background:#f2f2f2;
+	background:white;
 }
 
 table.topic_table td {
@@ -3242,14 +3230,10 @@ span.hidelink {
 	padding: 5px 1em 0 0;
 }
 .blue_container, .cContainer_body {
-	background-color: #f2f5fe;
+	background-color: #ebf4fa;
 	border: 1px solid #d5ecfa;
 	padding: 2px 4px;
 	border-radius: 3px;
-	background: -moz-linear-gradient(top, #eff7f9 72%, #deebed 100%, #827d73 100%);
-	background: -webkit-linear-gradient(top, #eff7f9 72%,#deebed 100%,#827d73 100%);
-	background: -o-linear-gradient(top, #eff7f9 72%,#deebed 100%,#827d73 100%);
-	background: -ms-linear-gradient(top, #eff7f9 72%,#deebed 100%,#827d73 100%);
 }
 .blue_container div.content, .orange_container div.content, .yellow_container div.content, .cContainer_body div.content {
 	border: 3px solid white;
@@ -3330,7 +3314,13 @@ table.cleantop {
 
 .framed_region {
 	border:1px solid #ccf;
-	background:#e2e2ea;
+	background:white;
+}
+#boardindex .framed_region {
+	padding:0 2px 2px 2px;
+}
+#boardindex .framed_region.root_cat {
+	padding:2px;
 }
 span.arrow {
 	line-height: 16px;
@@ -3585,7 +3575,7 @@ div#ajaxbusy {
 	box-shadow: 0 0 12px 0 #bbb;
 }
 .inset_shadow {
-	box-shadow: 0 0 10px 1px #ccc inset;
+	box-shadow: 0 0 5px 1px #ccc inset;
 }
 .borderless {
 	border: 0 !important;
@@ -5615,7 +5605,6 @@ ul.theme_options li
 .is_directory
 {
 	padding-left: 18px;
-	background: url(../default/images/admin/boards.gif) no-repeat;
 }
 .edit_file
 {

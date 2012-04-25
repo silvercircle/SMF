@@ -34,7 +34,7 @@ if (!defined('SMF'))
 // This function passes control through to the relevant section
 function ManageMail()
 {
-	global $context, $txt, $scripturl, $modSettings, $sourcedir;
+	global $context, $txt, $scripturl, $modSettings, $sourcedir, $backend_subdir;
 
 	// You need to be an admin to edit settings!
 	isAllowedTo('admin_forum');
@@ -43,7 +43,7 @@ function ManageMail()
 	loadLanguage('ManageMail');
 
 	// We'll need the utility functions from here.
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 
 	$context['page_title'] = $txt['mailqueue_title'];
 	$context['sub_template'] = 'show_settings';

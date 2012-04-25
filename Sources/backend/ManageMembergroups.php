@@ -343,7 +343,7 @@ function MembergroupIndex()
 // Add a membergroup.
 function AddMembergroup()
 {
-	global $context, $txt, $sourcedir, $modSettings, $smcFunc;
+	global $context, $txt, $sourcedir, $modSettings, $backend_subdir;
 
 	// A form was submitted, we can start adding.
 	if (!empty($_POST['group_name']))
@@ -389,7 +389,7 @@ function AddMembergroup()
 		if ($_POST['perm_type'] == 'predefined')
 		{
 			// Set default permission level.
-			require_once($sourcedir . '/ManagePermissions.php');
+			require_once($sourcedir . '/' . $backend_subdir . '/ManagePermissions.php');
 			setPermissionLevel($_POST['level'], $id_group, 'null');
 		}
 		// Copy or inherit the permissions!
@@ -419,7 +419,7 @@ function AddMembergroup()
 			}
 
 			// Don't allow copying of a real priviledged person!
-			require_once($sourcedir . '/ManagePermissions.php');
+			require_once($sourcedir . '/' . $backend_subdir . '/ManagePermissions.php');
 			loadIllegalPermissions();
 
 			$request = smf_db_query( '
@@ -612,7 +612,7 @@ function DeleteMembergroup()
 // Editing a membergroup.
 function EditMembergroup()
 {
-	global $context, $txt, $sourcedir, $modSettings, $smcFunc;
+	global $context, $txt, $sourcedir, $modSettings, $backend_subdir;
 
 	$_REQUEST['group'] = isset($_REQUEST['group']) && $_REQUEST['group'] > 0 ? (int) $_REQUEST['group'] : 0;
 
@@ -834,7 +834,7 @@ function EditMembergroup()
 		// Do we need to set inherited permissions?
 		if ($_POST['group_inherit'] != -2 && $_POST['group_inherit'] != $_POST['old_inherit'])
 		{
-			require_once($sourcedir . '/ManagePermissions.php');
+			require_once($sourcedir . '/' . $backend_subdir . '/ManagePermissions.php');
 			updateChildPermissions($_POST['group_inherit']);
 		}
 
@@ -1042,13 +1042,13 @@ function EditMembergroup()
 // Set general membergroup settings.
 function ModifyMembergroupsettings()
 {
-	global $context, $sourcedir, $scripturl, $modSettings, $txt;
+	global $context, $sourcedir, $scripturl, $modSettings, $txt, $backend_subdir;
 
 	$context['sub_template'] = 'show_settings';
 	$context['page_title'] = $txt['membergroups_settings'];
 
 	// Needed for the settings functions.
-	require_once($sourcedir . '/ManageServer.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManageServer.php');
 
 	// Don't allow assignment of guests.
 	$context['permissions_excluded'] = array(-1);
