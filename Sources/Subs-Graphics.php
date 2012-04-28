@@ -109,7 +109,7 @@ if (!defined('SMF'))
 
 function downloadAvatar($url, $memID, $max_width, $max_height)
 {
-	global $modSettings, $sourcedir, $smcFunc;
+	global $modSettings, $sourcedir, $backend_subdir;
 
 	$ext = !empty($modSettings['avatar_download_png']) ? 'png' : 'jpeg';
 	$destName = 'avatar_' . $memID . '_' . time() . '.' . $ext;
@@ -118,7 +118,7 @@ function downloadAvatar($url, $memID, $max_width, $max_height)
 	if (empty($memID))
 		return false;
 
-	require_once($sourcedir . '/ManageAttachments.php');
+	require_once($sourcedir . '/Subs-ManageAttachments.php');
 	removeAttachments(array('id_member' => $memID));
 
 	$id_folder = !empty($modSettings['currentAttachmentUploadDir']) ? $modSettings['currentAttachmentUploadDir'] : 1;

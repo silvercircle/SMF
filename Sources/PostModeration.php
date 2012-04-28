@@ -304,7 +304,7 @@ function UnapprovedPosts()
 // View all unapproved attachments.
 function UnapprovedAttachments()
 {
-	global $txt, $scripturl, $context, $user_info, $sourcedir, $smcFunc;
+	global $txt, $scripturl, $context, $user_info, $sourcedir, $backend_subdir;
 
 	$context['page_title'] = $txt['mc_unapproved_attachments'];
 
@@ -340,7 +340,7 @@ function UnapprovedAttachments()
 		checkSession('request');
 
 		// This will be handy.
-		require_once($sourcedir . '/ManageAttachments.php');
+		require_once($sourcedir . '/Subs-ManageAttachments.php');
 
 		// Confirm the attachments are eligible for changing!
 		$request = smf_db_query( '
@@ -532,7 +532,7 @@ function approveMessages($messages, $messageDetails, $current_view = 'replies')
 // This is a helper function - basically approve everything!
 function approveAllData()
 {
-	global $smcFunc, $sourcedir;
+	global $sourcedir, $backend_subdir;
 
 	// Start with messages and topics.
 	$request = smf_db_query( '
@@ -570,7 +570,7 @@ function approveAllData()
 
 	if (!empty($attaches))
 	{
-		require_once($sourcedir . '/ManageAttachments.php');
+		require_once($sourcedir . '/Subs-ManageAttachments.php');
 		ApproveAttachments($attaches);
 	}
 }

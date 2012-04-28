@@ -45,6 +45,7 @@ $sourcedir = dirname(__FILE__) . '/Sources';  # Path to the Sources directory.
 $cachedir = dirname(__FILE__) . '/cache';  # Path to the cache directory.
 ########## Error-Catching ##########
 # Note: You shouldn't touch these settings.
+$backend_subdir = 'backend';
 $db_last_error = 0;
 
 $ssi_db_user = '';

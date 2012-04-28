@@ -220,7 +220,7 @@ function RemoveOldTopics2()
 // Removes the passed id_topic's. (permissions are NOT checked here!)
 function removeTopics($topics, $decreasePostCount = true, $ignoreRecycling = false)
 {
-	global $sourcedir, $modSettings, $smcFunc;
+	global $sourcedir, $modSettings, $backend_subdir;
 
 	// Nothing to do?
 	if (empty($topics))
@@ -447,7 +447,7 @@ function removeTopics($topics, $decreasePostCount = true, $ignoreRecycling = fal
 	}
 
 	// Get rid of the attachment, if it exists.
-	require_once($sourcedir . '/ManageAttachments.php');
+	require_once($sourcedir . '/Subs-ManageAttachments.php');
 	$attachmentQuery = array(
 		'attachment_type' => 0,
 		'id_topic' => $topics,
@@ -566,7 +566,7 @@ function removeTopics($topics, $decreasePostCount = true, $ignoreRecycling = fal
 // Remove a specific message (including permission checks).
 function removeMessage($message, $decreasePostCount = true)
 {
-	global $board, $sourcedir, $modSettings, $user_info;
+	global $board, $sourcedir, $backend_subdir, $modSettings, $user_info;
 
 	if (empty($message) || !is_numeric($message))
 		return false;
@@ -970,7 +970,7 @@ function removeMessage($message, $decreasePostCount = true)
 		}
 
 		// Delete attachment(s) if they exist.
-		require_once($sourcedir . '/ManageAttachments.php');
+		require_once($sourcedir . '/Subs-ManageAttachments.php');
 		$attachmentQuery = array(
 			'attachment_type' => 0,
 			'id_msg' => $message,

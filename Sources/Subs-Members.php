@@ -82,7 +82,7 @@ if (!defined('SMF'))
 // Delete a group of/single member.
 function deleteMembers($users, $check_not_admin = false)
 {
-	global $sourcedir, $modSettings, $user_info, $smcFunc;
+	global $sourcedir, $modSettings, $user_info, $backend_subdir;
 
 	// Try give us a while to sort this out...
 	@set_time_limit(600);
@@ -401,7 +401,7 @@ function deleteMembers($users, $check_not_admin = false)
 	);
 	
 	// Delete avatar.
-	require_once($sourcedir . '/ManageAttachments.php');
+	require_once($sourcedir . '/Subs-ManageAttachments.php');
 	removeAttachments(array('id_member' => $users));
 
 	// It's over, no more moderation for you.

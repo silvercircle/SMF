@@ -4115,7 +4115,6 @@ function registerCSSOverrideFragment($t)
  * fetch news for the board index or a specific board or topic.
  * Look at the current user group(s) to determine whether the user
  * is supposed to see the item.
- */
 function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 {
 	global $context, $user_info;
@@ -4158,6 +4157,63 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 			$context['news_items'] = $cached_news;
 			$context['news_item_count'] = count($cached_news);
 		}
+	}
+	// we have news items to show, we need the template
+	if($context['news_item_count'])
+		loadTemplate('News');
+}
+*/
+function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
+{
+	global $context, $user_info;
+
+	$context['raw_news_items'] = array();
+	$context['news_items'] = array();
+	$context['news_item_count'] = 0;
+
+	$cache_key = 'newsitems';
+	if (($cached_news = CacheAPI::getCache($cache_key, 360)) == null) {
+
+		$result = smf_db_query('
+			SELECT * FROM {db_prefix}news');
+
+		while($row = mysql_fetch_assoc($result)) {
+			$context['raw_news_items'][] = array(
+				'id' => $row['id_news'],
+				'teaser' => !empty($row['teaser']) ? parse_bbc($row['teaser']) : '',
+				'body' => parse_bbc($row['body']),
+				'groups' => explode(',', $row['groups']),
+				'on_index' => $row['on_index'] ? true : false,
+				'topics' => explode(',', $row['topics']),
+				'boards' => explode(',', $row['boards'])
+			);
+		}
+		mysql_free_result($result);
+		if(count($context['raw_news_items']) > 0)
+			CacheAPI::putCache($cache_key, $context['raw_news_items'], 360);
+		else
+			CacheAPI::putCache($cache_key, null, 360);
+	}
+	else
+		$context['raw_news_items'] = $cached_news;
+
+	foreach($context['raw_news_items'] as &$item) {
+		if(0 == $board && 0 == $topic && !$item['on_index'])
+		    continue;
+		if($topic) {
+			if(empty($item['topics'][0]) || (!empty($item['boards'][0]) && !in_array($board, $item['boards'])))
+				continue;
+			if(!empty($item['topics'][0]) && $item['topics'][0] != -1 && !in_array($topic, $item['topics']))
+				continue;
+		}
+		if($board) {
+			if(($topic == 0 && !empty($item['topics'][0]) && $item['topics'][0] != -1 ) || (!empty($item['boards'][0]) && !in_array($board, $item['boards'])))
+			    continue;
+		}
+		if(!empty($item['groups'][0]) && !in_array($user_info['groups'], $item['groups']))
+			continue;
+		$context['news_items'][] = &$item;
+		$context['news_item_count']++;
 	}
 	// we have news items to show, we need the template
 	if($context['news_item_count'])

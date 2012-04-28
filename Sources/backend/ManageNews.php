@@ -160,6 +160,7 @@ function EditNewsItem()
 			);
 			$redirect_id = smf_db_insert_id('{db_prefix}news', 'id_news');
 		}
+		CacheAPI::putCache('newsitems', null, 360);
 		redirectexit($scripturl . '?action=admin;area=news;sa=editnewsitem;itemid='.$redirect_id);
 	}
 	if($id_item) {
@@ -206,6 +207,7 @@ function EditNews()
 		smf_db_query('DELETE FROM {db_prefix}news where id_news = {int:id_item}',
 			array('id_item' => (int)$_REQUEST['removeitem']));
 
+		CacheAPI::putCache('newsitems', null, 360);
 		logAction('news');
 		if(isset($_REQUEST['xml']))
 			obExit(false);

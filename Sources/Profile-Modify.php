@@ -2379,13 +2379,13 @@ function profileSaveGroups(&$value)
 // The avatar is incredibly complicated, what with the options... and what not.
 function profileSaveAvatarData(&$value)
 {
-	global $modSettings, $sourcedir, $smcFunc, $profile_vars, $cur_profile, $context;
+	global $modSettings, $sourcedir, $backend_subdir, $profile_vars, $cur_profile, $context;
 
 	$memID = $context['id_member'];
 	if (empty($memID) && !empty($context['password_auth_failed']))
 		return false;
 
-	require_once($sourcedir . '/ManageAttachments.php');
+	require_once($sourcedir . '/Subs-ManageAttachments.php');
 
 	// We need to know where we're going to be putting it..
 	if (!empty($modSettings['custom_avatar_enabled']))

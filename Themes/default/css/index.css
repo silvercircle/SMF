@@ -2333,6 +2333,7 @@ tr.titlebg td {
 	line-height:25px;
 	padding: 0 10px;
 	border-radius:2px 2px 0 0;
+	font-variant: small-caps;
 }
 .cContainer_header a, .cat_bar2 a, .cContainer_header h3, .cat_bar2 h3 {
 	color: #555;

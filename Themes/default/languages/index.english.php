@@ -140,7 +140,7 @@ $txt['msg_alert_none'] = 'No messages...';
 $txt['msg_alert_you_have'] = 'you have';
 $txt['msg_alert_messages'] = 'messages';
 $txt['remove_message'] = 'Remove this message';
-
+$txt['msg_alert_no_unread'] = 'There are no unread messages.';
 $txt['online_users'] = 'Users Online';
 $txt['personal_message'] = 'Personal Message';
 $txt['jump_to'] = 'Jump to';

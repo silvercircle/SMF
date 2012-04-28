@@ -137,29 +137,19 @@ function template_unread()
 	}
 	else
 		echo '
-			<h1 class="bigheader centertext">
-				', $context['showing_all_topics'] ? $txt['msg_alert_none'] : $txt['unread_topics_visit_none'], '
-			</h1>';
+			<div class="framed_region smallpadding">
+			<div class="blue_container gradient_darken_down largepadding centertext">
+			<h1>
+				', $context['showing_all_topics'] ? $txt['msg_alert_no_unread'] : $txt['unread_topics_visit_none'], '
+			</h1>
+			</div>
+			</div>';
 
 	if ($showCheckboxes)
 		echo '
 		</form>';
 
 	echo '
-		<div class="description " id="topic_icons">
-			<p class="smalltext floatleft nowrap" style="line-height:24px;">
-				', !empty($modSettings['enableParticipation']) ? '
-				<img style="vertical-align:middle;" src="' . $settings['images_url'] . '/topic/my_normal_post.gif" alt="" /><span class="iconlegend"> ' . $txt['participation_caption'] . '</span><br>' : '', '
-				<img style="vertical-align:middle;" src="', $settings['images_url'], '/topic/normal_post.gif" alt="" /><span class="iconlegend"> ', $txt['normal_topic'], '</span><br>
-				<img style="vertical-align:middle;" src="', $settings['images_url'], '/topic/hot_post.gif" alt="" /><span class="iconlegend"> ', sprintf($txt['hot_topics'], $modSettings['hotTopicPosts']), '</span><br>
-				<img style="vertical-align:middle;" src="', $settings['images_url'], '/topic/veryhot_post.gif" alt="" /><span class="iconlegend"> ', sprintf($txt['very_hot_topics'], $modSettings['hotTopicVeryPosts']), '</span>
-			</p>
-			<p class="smalltext para2" style="line-height:20px;">
-				<img style="vertical-align:middle;" src="', $settings['images_url'], '/icons/quick_lock.gif" alt="" /><span class="iconlegend"> ', $txt['locked_topic'], '</span><br>', ($modSettings['enableStickyTopics'] == '1' ? '
-				<img style="vertical-align:middle;" src="' . $settings['images_url'] . '/icons/quick_sticky.gif" alt="" /><span class="iconlegend"> ' . $txt['sticky_topic'] . '</span><br>' : ''), ($modSettings['pollMode'] == '1' ? '
-				<img style="vertical-align:middle;" src="' . $settings['images_url'] . '/topic/normal_poll.gif" alt="" /><span class="iconlegend"> ' . $txt['poll'] . '</span>' : ''), '
-			</p>
-		</div>
 	</div>';
 }
 
@@ -239,48 +229,8 @@ function template_replies()
 					</thead>
 					<tbody>';
 
-		foreach ($context['topics'] as $topic)
-		{
-			$color_class = $color_class2 = 'gradient_darken_down';
-
-			echo '
-						<tr>
-							<td class="', $color_class, ' icon1 windowbg">
-								<img src="', $settings['images_url'], '/topic/', $topic['class'], '.gif" alt="" />
-							</td>
-							<td class="', $color_class, ' icon2 windowbg">
-								<img src="', $topic['first_post']['icon_url'], '" alt="" />
-							</td>
-							<td class="subject ', $color_class2, ' windowbg2">
-								<div>
-									', $topic['is_sticky'] ? '<strong>' : '', '<span id="msg_' . $topic['first_post']['id'] . '">', $topic['first_post']['link'], '</span>', $topic['is_sticky'] ? '</strong>' : '', '
-									<a href="', $topic['new_href'], '" id="newicon', $topic['first_post']['id'], '"><img src="', $settings['images_url'], '/new.png" alt="', $txt['new'], '" /></a>
-									<p>
-										', $txt['started_by'], ' <strong>', $topic['first_post']['member']['link'], '</strong>
-										', $txt['in'], ' <em>', $topic['board']['link'], '</em>
-										<small id="pages', $topic['first_post']['id'], '">', $topic['pages'], '</small>
-									</p>
-								</div>
-							</td>
-							<td class="', $color_class, ' stats windowbg">
-								', $topic['replies'], ' ', $txt['replies'], '
-								<br />
-								', $topic['views'], ' ', $txt['views'], '
-							</td>
-							<td class="', $color_class, ' lastpost windowbg2">',
-								$txt['by'], ': ', $topic['last_post']['member']['link'], '<br />
-								<a class="lp_link" title="', $txt['last_post'], '" href="', $topic['last_post']['href'], '">',$topic['last_post']['time'], '</a>
-							</td>';
-
-			if ($showCheckboxes)
-				echo '
-							<td class="windowbg2 centertext">
-								<input type="checkbox" name="topics[]" value="', $topic['id'], '" class="input_check" />
-							</td>';
-			echo '
-						</tr>';
-		}
-
+		foreach ($context['topics'] as &$topic)
+			template_topicbit($topic);
 		echo '
 					</tbody>
 				</table>
@@ -296,10 +246,12 @@ function template_replies()
 	}
 	else
 		echo '
-			<div class="cat_bar">
-				<h3 class="catbg centertext">
+			<div class="framed_region smallpadding">
+			<div class="blue_container gradient_darken_down largepadding centertext">
+				<h1>
 					', $context['showing_all_topics'] ? $txt['msg_alert_none'] : $txt['unread_topics_visit_none'], '
-				</h3>
+				</h1>
+			</div>
 			</div>';
 
 	if ($showCheckboxes)
@@ -307,20 +259,6 @@ function template_replies()
 		</form>';
 
 	echo '
-		<div class="description flow_auto" id="topic_icons">
-			<p class="smalltext floatleft">
-				', !empty($modSettings['enableParticipation']) ? '
-				<img src="' . $settings['images_url'] . '/topic/my_normal_post.gif" alt=""  /> ' . $txt['participation_caption'] . '<br />' : '', '
-				<img src="', $settings['images_url'], '/topic/normal_post.gif" alt="" /> ', $txt['normal_topic'], '<br />
-				<img src="', $settings['images_url'], '/topic/hot_post.gif" alt="" /> ', sprintf($txt['hot_topics'], $modSettings['hotTopicPosts']), '<br />
-				<img src="', $settings['images_url'], '/topic/veryhot_post.gif" alt="" /> ', sprintf($txt['very_hot_topics'], $modSettings['hotTopicVeryPosts']), '
-			</p>
-			<p class="smalltext para2">
-				<img src="', $settings['images_url'], '/icons/quick_lock.gif" alt="" /> ', $txt['locked_topic'], '<br />', ($modSettings['enableStickyTopics'] == '1' ? '
-				<img src="' . $settings['images_url'] . '/icons/quick_sticky.gif" alt="" /> ' . $txt['sticky_topic'] . '<br />' : '') . ($modSettings['pollMode'] == '1' ? '
-				<img src="' . $settings['images_url'] . '/topic/normal_poll.gif" alt="" /> ' . $txt['poll'] : '') . '
-			</p>
-		</div>
 	</div>';
 }
 

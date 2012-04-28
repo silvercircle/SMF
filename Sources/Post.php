@@ -1300,7 +1300,7 @@ function Post()
 function Post2()
 {
 	global $board, $topic, $txt, $modSettings, $sourcedir, $context;
-	global $user_info, $board_info, $options;
+	global $user_info, $board_info, $options, $backend_subdir;
 
 	if(in_array('dr', $context['admin_features'])) {
 		require_once($sourcedir . '/Subs-Drafts.php');
@@ -1817,7 +1817,7 @@ function Post2()
 		foreach ($_POST['attach_del'] as $i => $dummy)
 			$del_temp[$i] = (int) $dummy;
 
-		require_once($sourcedir . '/ManageAttachments.php');
+		require_once($sourcedir . '/Subs-ManageAttachments.php');
 		$attachmentQuery = array(
 			'attachment_type' => 0,
 			'id_msg' => (int) $_REQUEST['msg'],

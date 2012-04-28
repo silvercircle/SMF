@@ -201,14 +201,6 @@ function template_main()
 		<div class="description">
 			<p class="floatright" id="message_index_jump_to">&nbsp;</p>';
 
-	if (!$context['no_topic_listing'] && !$context['act_as_cat'])
-		echo '
-			<p class="smalltext">
-				<img class="icon" src="' . $settings['images_url'] . '/icons/quick_lock.gif" alt="" /> ' . $txt['locked_topic'] . '<br />' . ($modSettings['enableStickyTopics'] == '1' ? '
-				<img class="icon" src="' . $settings['images_url'] . '/icons/quick_sticky.gif" alt="" /> ' . $txt['sticky_topic'] . '<br />' : '') . ($modSettings['pollMode'] == '1' ? '
-				<img class="icon" src="' . $settings['images_url'] . '/topic/normal_poll.gif" alt="" /> ' . $txt['poll'] : '') . '
-			</p>';
-
 	$context['inline_footer_script'] .= '
 	if (typeof(window.XMLHttpRequest) != "undefined")
 		aJumpTo[aJumpTo.length] = new JumpTo({

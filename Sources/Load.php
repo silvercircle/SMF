@@ -1299,8 +1299,11 @@ function detectBrowser()
 		}
 	}
 
-	$mobile_detector = new Mobile_Detect();
-	if($force_mobile || (($mobile_detector->isMobile() || $mobile_detector->isTablet()) && !$disable_mobile)) {
+	if(!isset($_SESSION['mobile_deteced'])) {
+		$mobile_detector = new Mobile_Detect();
+		$_SESSION['mobile_detected'] = ($mobile_detector->isMobile() || $mobile_detector->isTablet());
+	}
+	if($force_mobile || (($_SESSION['mobile_detected']) && !$disable_mobile)) {
 		$context['mobile'] = true;
 		define('MOBILE', true);
 		define('MOBILE_SUBDIR', '/m');

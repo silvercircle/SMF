@@ -965,17 +965,17 @@ function AdminSearchOM()
 // This function decides which log to load.
 function AdminLogs()
 {
-	global $sourcedir, $context, $txt, $scripturl;
+	global $sourcedir, $context, $txt, $scripturl, $backend_subdir;
 
 	// These are the logs they can load.
 	$log_functions = array(
 		'errorlog' => array('ManageErrors.php', 'ViewErrorLog'),
 		'adminlog' => array('Modlog.php', 'ViewModlog'),
 		'modlog' => array('Modlog.php', 'ViewModlog'),
-		'banlog' => array('ManageBans.php', 'BanLog'),
-		'spiderlog' => array('ManageSearchEngines.php', 'SpiderLogs'),
-		'tasklog' => array('ManageScheduledTasks.php', 'TaskLog'),
-		'pruning' => array('ManageSettings.php', 'ModifyPruningSettings'),
+		'banlog' => array($backend_subdir .  '/ManageBans.php', 'BanLog'),
+		'spiderlog' => array($backend_subdir . '/ManageSearchEngines.php', 'SpiderLogs'),
+		'tasklog' => array($backend_subdir . '/ManageScheduledTasks.php', 'TaskLog'),
+		'pruning' => array($backend_subdir . '/ManageSettings.php', 'ModifyPruningSettings'),
 	);
 
 	$sub_action = isset($_REQUEST['sa']) && isset($log_functions[$_REQUEST['sa']]) ? $_REQUEST['sa'] : 'errorlog';

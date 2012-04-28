@@ -85,7 +85,7 @@ $context['template_hooks']['global'] = array(
 	'footer' => ''
 );
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
-$context['jsver'] = '?v=1526';
+$context['jsver'] = '?v=1528';
 $context['jquery_version'] = '1.7.2';
 $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();
@@ -232,7 +232,7 @@ function smf_main()
 		'activate' => array('Register.php', 'Activate'),
 		'admin' => array($backend_subdir .  '/Admin.php', 'AdminMain'),
 		'announce' => array('Post.php', 'AnnounceTopic'),
-		'attachapprove' => array('ManageAttachments.php', 'ApproveAttach'),
+		'attachapprove' => array('Subs-ManageAttachments.php', 'ApproveAttach'),
 		'buddy' => array('Subs-Members.php', 'BuddyListToggle'),
 		'calendar' => array('Calendar.php', 'CalendarMain'),
 		'clock' => array('Calendar.php', 'clock'),
@@ -252,7 +252,7 @@ function smf_main()
 		'im' => array('PersonalMessage.php', 'MessageMain'),
 		'jseditor' => array('Subs-Editor.php', 'EditorMain'),
 		'jsmodify' => array('Post.php', 'JavaScriptModify'),
-		'jsoption' => array('Themes.php', 'SetJavaScript'),
+		'jsoption' => array($backend_subdir .  '/Themes.php', 'SetJavaScript'),
 		'lock' => array('LockTopic.php', 'LockTopic'),
 		'lockvoting' => array('Poll.php', 'LockVoting'),
 		'login' => array('LogInOut.php', 'Login'),
@@ -296,7 +296,7 @@ function smf_main()
 		'splittopics' => array('SplitTopics.php', 'SplitTopics'),
 		'stats' => array('Stats.php', 'DisplayStats'),
 		'sticky' => array('LockTopic.php', 'Sticky'),
-		'theme' => array('Themes.php', 'ThemesMain'),
+		'theme' => array($backend_subdir . '/Themes.php', 'ThemesMain'),
 		'trackip' => array('Profile-View.php', 'trackIP'),
 		'about:mozilla' => array('Karma.php', 'BookOfUnknown'),
 		'about:unknown' => array('Karma.php', 'BookOfUnknown'),
@@ -324,7 +324,7 @@ function smf_main()
 		// Catch the action with the theme?
 		if (!empty($settings['catch_action']))
 		{
-			require_once($sourcedir . '/Themes.php');
+			require_once($sourcedir . '/' . $backend_subdir . '/Themes.php');
 			return 'WrapAction';
 		}
 

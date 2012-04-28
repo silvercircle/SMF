@@ -2102,7 +2102,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 // !!!
 function createAttachment(&$attachmentOptions)
 {
-	global $modSettings, $sourcedir;
+	global $modSettings, $sourcedir, $backend_subdir;
 
 	require_once($sourcedir . '/Subs-Graphics.php');
 
@@ -2344,7 +2344,7 @@ function createAttachment(&$attachmentOptions)
 			if (empty($modSettings['attachment_image_reencode']) || (!reencodeImage($attachmentOptions['destination'], $size[2])))
 			{
 				// Nothing to do: not allowed or not successful re-encoding it.
-				require_once($sourcedir . '/ManageAttachments.php');
+				require_once($sourcedir . '/Subs-ManageAttachments.php');
 				removeAttachments(array(
 					'id_attach' => $attachmentOptions['id']
 				));
