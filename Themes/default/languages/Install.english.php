@@ -187,7 +187,7 @@ $txt['error_user_settings_again_match'] = 'You typed in two completely different
 $txt['error_user_settings_no_password'] = 'Your password must be at least four characters long.';
 $txt['error_user_settings_taken'] = 'Sorry, a member is already registered with that username and/or email address.<br /><br />A new account has not been created.';
 $txt['error_user_settings_query'] = 'A database error occurred while trying to create an administrator.  This error was:';
-$txt['error_subs_missing'] = 'Unable to find the Sources/Subs.php file.  Please make sure it was uploaded properly, and then try again.';
+$txt['error_subs_missing'] = 'Unable to find the Sources/lib/Subs.php file.  Please make sure it was uploaded properly, and then try again.';
 $txt['error_db_alter_priv'] = 'The database account you specified does not have permission to ALTER, CREATE, and/or DROP tables in the database; this is necessary for SMF to function properly.';
 $txt['error_versions_do_not_match'] = 'The installer has detected another version of SMF already installed with the specified information.  If you are trying to upgrade, you should use the upgrader, not the installer.<br /><br />Otherwise, you may wish to use different information, or create a backup and then delete the data currently in the database.';
 $txt['error_mod_security'] = 'The installer has detected the mod_security module is installed on your web server. Mod_security will block submitted forms even before SMF gets a say in anything. SMF has a built-in security scanner that will work more effectively than mod_security and that won\'t block submitted forms.<br /><br /><a href="http://www.simplemachines.org/redirect/mod_security">More information about disabling mod_security</a>';

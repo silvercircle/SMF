@@ -251,7 +251,7 @@ function Vote()
 			)
 		);
 
-		require_once($sourcedir . '/Subs-Auth.php');
+		require_once($sourcedir . '/lib/Subs-Auth.php');
 		$cookie_url = url_parts(!empty($modSettings['localCookies']), !empty($modSettings['globalCookies']));
 		setcookie('guest_poll_vote', $_COOKIE['guest_poll_vote'], time() + 2500000, $cookie_url[1], $cookie_url[0], 0);
 	}
@@ -365,7 +365,7 @@ function EditPoll()
 		isAllowedTo('poll_add_' . ($user_info['id'] == $pollinfo['id_member_started'] ? 'own' : 'any'));
 
 	// Do we enable guest voting?
-	require_once($sourcedir . '/Subs-Members.php');
+	require_once($sourcedir . '/lib/Subs-Members.php');
 	$groupsAllowedVote = groupsAllowedTo('poll_vote', $board);
 
 	// Want to make sure before you actually submit?  Must be a lot of options, or something.
@@ -689,7 +689,7 @@ function EditPoll2()
 	// Make sure guests are actually allowed to vote generally.
 	if ($_POST['poll_guest_vote'])
 	{
-		require_once($sourcedir . '/Subs-Members.php');
+		require_once($sourcedir . '/lib/Subs-Members.php');
 		$allowedGroups = groupsAllowedTo('poll_vote', $board);
 		if (!in_array(-1, $allowedGroups['allowed']))
 			$_POST['poll_guest_vote'] = 0;

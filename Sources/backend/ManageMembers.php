@@ -193,7 +193,7 @@ function ViewMemberlist()
 		if (!empty($_POST['delete']))
 		{
 			// Delete all the selected members.
-			require_once($sourcedir . '/Subs-Members.php');
+			require_once($sourcedir . '/lib/Subs-Members.php');
 			deleteMembers($_POST['delete'], true);
 		}
 	}
@@ -433,7 +433,7 @@ function ViewMemberlist()
 		'base_href' => $scripturl . '?action=admin;area=viewmembers' . $context['params_url'],
 		'default_sort_col' => 'user_name',
 		'get_items' => array(
-			'file' => $sourcedir . '/Subs-Members.php',
+			'file' => $sourcedir . '/lib/Subs-Members.php',
 			'function' => 'list_getMembers',
 			'params' => array(
 				isset($where) ? $where : '1=1',
@@ -441,7 +441,7 @@ function ViewMemberlist()
 			),
 		),
 		'get_count' => array(
-			'file' => $sourcedir . '/Subs-Members.php',
+			'file' => $sourcedir . '/lib/Subs-Members.php',
 			'function' => 'list_getNumMembers',
 			'params' => array(
 				isset($where) ? $where : '1=1',
@@ -619,7 +619,7 @@ function ViewMemberlist()
 	if (!allowedTo('profile_remove_any'))
 		unset($listOptions['cols']['check'], $listOptions['form'], $listOptions['additional_rows']);
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	$context['sub_template'] = 'show_list';
@@ -796,7 +796,7 @@ function MembersAwaitingActivation()
 		'base_href' => $scripturl . '?action=admin;area=viewmembers;sa=browse;type=' . $context['browse_type'] . (!empty($context['show_filter']) ? ';filter=' . $context['current_filter'] : ''),
 		'default_sort_col' => 'date_registered',
 		'get_items' => array(
-			'file' => $sourcedir . '/Subs-Members.php',
+			'file' => $sourcedir . '/lib/Subs-Members.php',
 			'function' => 'list_getMembers',
 			'params' => array(
 				'is_activated = {int:activated_status}',
@@ -805,7 +805,7 @@ function MembersAwaitingActivation()
 			),
 		),
 		'get_count' => array(
-			'file' => $sourcedir . '/Subs-Members.php',
+			'file' => $sourcedir . '/lib/Subs-Members.php',
 			'function' => 'list_getNumMembers',
 			'params' => array(
 				'is_activated = {int:activated_status}',
@@ -1012,7 +1012,7 @@ function MembersAwaitingActivation()
 		);
 
 	// Now that we have all the options, create the list.
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 }
 
@@ -1024,7 +1024,7 @@ function AdminApprove()
 	// First, check our session.
 	checkSession();
 
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// We also need to the login languages here - for emails.
 	loadLanguage('Login');
@@ -1138,7 +1138,7 @@ function AdminApprove()
 	// Maybe we're sending it off for activation?
 	elseif ($_POST['todo'] == 'require_activation')
 	{
-		require_once($sourcedir . '/Subs-Members.php');
+		require_once($sourcedir . '/lib/Subs-Members.php');
 
 		// We have to do this for each member I'm afraid.
 		foreach ($member_info as $member)
@@ -1177,7 +1177,7 @@ function AdminApprove()
 	// Are we rejecting them?
 	elseif ($_POST['todo'] == 'reject' || $_POST['todo'] == 'rejectemail')
 	{
-		require_once($sourcedir . '/Subs-Members.php');
+		require_once($sourcedir . '/lib/Subs-Members.php');
 		deleteMembers($members);
 
 		// Send email telling them they aren't welcome?
@@ -1197,7 +1197,7 @@ function AdminApprove()
 	// A simple delete?
 	elseif ($_POST['todo'] == 'delete' || $_POST['todo'] == 'deleteemail')
 	{
-		require_once($sourcedir . '/Subs-Members.php');
+		require_once($sourcedir . '/lib/Subs-Members.php');
 		deleteMembers($members);
 
 		// Send email telling them they aren't welcome?

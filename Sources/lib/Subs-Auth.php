@@ -552,7 +552,7 @@ function resetPassword($memID, $username = null)
 
 	// Language... and a required file.
 	loadLanguage('Login');
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// Get some important details.
 	$request = smf_db_query( '
@@ -616,7 +616,7 @@ function validateUsername($memID, $username)
 	if (stristr($username, $txt['guest_title']) !== false)
 		fatal_lang_error('username_reserved', true, array($txt['guest_title']));
 
-	require_once($sourcedir . '/Subs-Members.php');
+	require_once($sourcedir . '/lib/Subs-Members.php');
 	if (isReservedName($username, $memID, false))
 		fatal_error('(' . htmlspecialchars($username) . ') ' . $txt['name_in_use'], false);
 

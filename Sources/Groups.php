@@ -179,7 +179,7 @@ function GroupList()
 	$context['page_title'] = $txt['viewing_groups'];
 
 	// Making a list is not hard with this beauty.
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 
 	// Use the standard templates for showing this.
 	$listOptions = array(
@@ -460,7 +460,7 @@ function MembergroupMembers()
 		foreach ($_REQUEST['rem'] as $key => $group)
 			$_REQUEST['rem'][$key] = (int) $group;
 
-		require_once($sourcedir . '/Subs-Membergroups.php');
+		require_once($sourcedir . '/lib/Subs-Membergroups.php');
 		removeMembersFromGroups($_REQUEST['rem'], $_REQUEST['group'], true);
 	}
 	// Must be adding new members to the group...
@@ -527,7 +527,7 @@ function MembergroupMembers()
 		// Do the updates...
 		if (!empty($members))
 		{
-			require_once($sourcedir . '/Subs-Membergroups.php');
+			require_once($sourcedir . '/lib/Subs-Membergroups.php');
 			addMembersToGroup($members, $_REQUEST['group'], isset($_POST['additional']) || $context['group']['hidden'] ? 'only_additional' : 'auto', true);
 		}
 	}
@@ -741,7 +741,7 @@ function GroupRequests()
 
 			if (!empty($email_details))
 			{
-				require_once($sourcedir . '/Subs-Post.php');
+				require_once($sourcedir . '/lib/Subs-Post.php');
 
 				// They are being approved?
 				if ($_POST['req_action'] == 'approve')
@@ -809,7 +809,7 @@ function GroupRequests()
 	}
 
 	// We're going to want this for making our list.
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 
 	// This is all the information required for a group listing.
 	$listOptions = array(

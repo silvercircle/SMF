@@ -502,7 +502,7 @@ function showPosts($memID)
 	$context['posts'] = array();
 	$board_ids = array('own' => array(), 'any' => array());
 	
-	require_once($sourcedir . '/Subs-LikeSystem.php');
+	require_once($sourcedir . '/lib/Subs-LikeSystem.php');
 
 	$time_now = time();
 	if($context['is_topics']) {
@@ -1147,7 +1147,7 @@ function trackActivity($memID)
 	);
 
 	// Create the list for viewing.
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	// If this is a big forum, or a large posting user, let's limit the search.
@@ -1422,7 +1422,7 @@ function TrackIP($memID = 0)
 	ksort($context['ips']);
 
 	// Gonna want this for the list.
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 
 	// Start with the user messages.
 	$listOptions = array(
@@ -1652,7 +1652,7 @@ function trackEdits($memID)
 {
 	global $scripturl, $txt, $modSettings, $sourcedir, $context;
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 
 	// Get the names of any custom fields.
 	$request = smf_db_query( '
@@ -2034,7 +2034,7 @@ function viewWarning($memID)
 	$modSettings['warning_mute'] = !empty($modSettings['warning_mute']) ? $modSettings['warning_mute'] : 110;
 
 	// Let's use a generic list to get all the current warnings, and use the issue warnings grab-a-granny thing.
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	require_once($sourcedir . '/Profile-Actions.php');
 
 	$listOptions = array(
@@ -2102,7 +2102,7 @@ function viewWarning($memID)
 	);
 
 	// Create the list for viewing.
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	// Create some common text bits for the template.

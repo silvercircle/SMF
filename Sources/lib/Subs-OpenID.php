@@ -331,7 +331,7 @@ function smf_openID_return()
 		$_SESSION['openid_revalidate_time'] = time();
 
 		// Restore the get data.
-		require_once($sourcedir . '/Subs-Auth.php');
+		require_once($sourcedir . '/lib/Subs-Auth.php');
 		$_SESSION['openid']['saved_data'][$_GET['t']]['get']['openid_restore_post'] = $_GET['t'];
 		$query_string = construct_query_string($_SESSION['openid']['saved_data'][$_GET['t']]['get']);
 
@@ -479,7 +479,7 @@ function smf_openID_getServerInfo($openid_url)
 {
 	global $sourcedir;
 
-	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/lib/Subs-Package.php');
 
 	// Get the html and parse it for the openid variable which will tell us where to go.
 	$webdata = fetch_web_data($openid_url);

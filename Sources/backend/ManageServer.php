@@ -333,7 +333,7 @@ function ModifyCookieSettings($return_config = false)
 		if ($cookiename != $_POST['cookiename'])
 		{
 			$original_session_id = $context['session_id'];
-			include_once($sourcedir . '/Subs-Auth.php');
+			include_once($sourcedir . '/lib/Subs-Auth.php');
 
 			// Remove the old cookie.
 			setLoginCookie(-3600, 0);
@@ -532,7 +532,7 @@ function AddLanguage()
 	if (!empty($_POST['smf_add_sub']))
 	{
 		// Need fetch_web_data.
-		require_once($sourcedir . '/Subs-Package.php');
+		require_once($sourcedir . '/lib/Subs-Package.php');
 
 		$context['smf_search_term'] = htmlspecialchars(trim($_POST['smf_add']));
 
@@ -580,7 +580,7 @@ function DownloadLanguage()
 	global $context, $sourcedir, $forum_version, $boarddir, $txt, $scripturl, $modSettings;
 
 	loadLanguage('ManageSettings');
-	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/lib/Subs-Package.php');
 
 	// Clearly we need to know what to request.
 	if (!isset($_GET['did']))
@@ -930,7 +930,7 @@ function DownloadLanguage()
 		CacheAPI::putCache('known_languages_all', null, !empty($modSettings['cache_enable']) && $modSettings['cache_enable'] < 1 ? 86400 : 3600);
 	}
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	$context['default_list'] = 'lang_main_files_list';
@@ -949,7 +949,7 @@ function ModifyLanguages()
 
 		if ($_POST['def_language'] != $language)
 		{
-			require_once($sourcedir . '/Subs-Admin.php');
+			require_once($sourcedir . '/lib/Subs-Admin.php');
 			updateSettingsFile(array('language' => '\'' . $_POST['def_language'] . '\''));
 			$language = $_POST['def_language'];
 		}
@@ -1052,7 +1052,7 @@ function ModifyLanguages()
 				'class' => 'smalltext alert',
 			);
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	$context['sub_template'] = 'show_list';
@@ -1279,7 +1279,7 @@ function ModifyLanguage()
 		checkSession();
 
 		// !!! Todo: FTP Controls?
-		require_once($sourcedir . '/Subs-Package.php');
+		require_once($sourcedir . '/lib/Subs-Package.php');
 
 		// First, Make a backup?
 		if (!empty($modSettings['package_make_backups']) && (!isset($_SESSION['last_backup_for']) || $_SESSION['last_backup_for'] != $context['lang_id'] . '$$$'))
@@ -1330,7 +1330,7 @@ function ModifyLanguage()
 		// Sixth, if we deleted the default language, set us back to english?
 		if ($context['lang_id'] == $language)
 		{
-			require_once($sourcedir . '/Subs-Admin.php');
+			require_once($sourcedir . '/lib/Subs-Admin.php');
 			$language = 'english';
 			updateSettingsFile(array('language' => '\'' . $language . '\''));
 		}
@@ -2037,7 +2037,7 @@ function saveSettings(&$config_vars)
 	}
 
 	// Save the relevant settings in the Settings.php file.
-	require_once($sourcedir . '/Subs-Admin.php');
+	require_once($sourcedir . '/lib/Subs-Admin.php');
 	updateSettingsFile($new_settings);
 
 	// Now loopt through the remaining (database-based) settings.

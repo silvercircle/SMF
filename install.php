@@ -306,7 +306,7 @@ function load_database()
 	// Connect the database.
 	if (!$db_connection)
 	{
-		require_once($sourcedir . '/Subs-Db-mysql.php');
+		require_once($sourcedir . '/lib/Subs-Db-mysql.php');
 
 		if (!$db_connection)
 			$db_connection = smf_db_initiate($db_server, $db_name, $db_user, $db_passwd, array('persist' => $db_persist));
@@ -735,9 +735,9 @@ function DatabaseSettings()
 			$sourcedir = dirname(__FILE__) . '/Sources';
 
 		// Better find the database file!
-		if (!file_exists($sourcedir . '/Subs-Db-' . $db_type . '.php'))
+		if (!file_exists($sourcedir . '/lib/Subs-Db-' . $db_type . '.php'))
 		{
-			$incontext['error'] = sprintf($txt['error_db_file'], 'Subs-Db-' . $db_type . '.php');
+			$incontext['error'] = sprintf($txt['error_db_file'], 'lib/Subs-Db-' . $db_type . '.php');
 			return false;
 		}
 
@@ -746,11 +746,7 @@ function DatabaseSettings()
 		$modSettings['disableQueryCheck'] = true;
 		if (empty($smcFunc))
 			$smcFunc = array();
-		require_once($sourcedir . '/Subs-Db-' . $db_type . '.php');
-
-		// What - running PHP4? The shame!
-		if (@version_compare(PHP_VERSION, '5') == -1)
-			require_once($sourcedir . '/Subs-Compat.php');
+		require_once($sourcedir . '/lib/Subs-Db-' . $db_type . '.php');
 
 		// Attempt a connection.
 		$needsDB = !empty($databases[$db_type]['always_has_db']);
@@ -1160,10 +1156,6 @@ function AdminAccount()
 	require(dirname(__FILE__) . '/Settings.php');
 	load_database();
 
-	// Define the sha1 function, if it doesn't exist.
-	if (!function_exists('sha1') || @version_compare(PHP_VERSION, '5') == -1)
-		require_once($sourcedir . '/Subs-Compat.php');
-
 	if (!isset($_POST['username']))
 		$_POST['username'] = '';
 	if (!isset($_POST['email']))
@@ -1210,7 +1202,7 @@ function AdminAccount()
 			$incontext['error'] = $txt['error_user_settings_no_password'];
 			return false;
 		}
-		if (!file_exists($sourcedir . '/Subs.php'))
+		if (!file_exists($sourcedir . '/lib/Subs.php'))
 		{
 			$incontext['error'] = $txt['error_subs_missing'];
 			return false;
@@ -1324,11 +1316,11 @@ function DeleteInstall()
 	chdir(dirname(__FILE__));
 
 	require_once($sourcedir . '/Errors.php');
-	require_once($sourcedir . '/Subs.php');
+	require_once($sourcedir . '/lib/Subs.php');
 	require_once($sourcedir . '/CommonAPI.php');
 	require_once($sourcedir . '/Load.php');
 	require_once($sourcedir . '/Security.php');
-	require_once($sourcedir . '/Subs-Auth.php');
+	require_once($sourcedir . '/lib/Subs-Auth.php');
 
 	// Bring a warning over.
 	if (!empty($incontext['account_existed']))

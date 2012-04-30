@@ -448,7 +448,7 @@ function EditSmileySets()
 		),
 	);
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 }
 
@@ -1086,7 +1086,7 @@ function EditSmileys()
 				}',
 		);
 
-		require_once($sourcedir . '/Subs-List.php');
+		require_once($sourcedir . '/lib/Subs-List.php');
 		createList($listOptions);
 
 		// The list is the only thing to show, so make it the main template.
@@ -1356,7 +1356,7 @@ function InstallSmileySet()
 	isAllowedTo('manage_smileys');
 	checkSession('request');
 
-	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/lib/Subs-Package.php');
 
 	$name = strtok(basename(isset($_FILES['set_gz']) ? $_FILES['set_gz']['name'] : $_REQUEST['set_gz']), '.');
 	$name = preg_replace(array('/\s/', '/\.[\.]+/', '/[^\w_\.\-]/'), array('_', '.', ''), $name);
@@ -1696,7 +1696,7 @@ function EditMessageIcons()
 		),
 	);
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	// If we're adding/editing an icon we'll need a list of boards
@@ -1716,7 +1716,7 @@ function EditMessageIcons()
 			'use_permissions' => true,
 			'selected_board' => isset($context['icon']['board_id']) ? $context['icon']['board_id'] : 0,
 		);
-		require_once($sourcedir . '/Subs-MessageIndex.php');
+		require_once($sourcedir . '/lib/Subs-MessageIndex.php');
 		$context['categories'] = getBoardList($boardListOptions);
 	}
 }

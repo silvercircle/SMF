@@ -201,7 +201,7 @@ function MoveTopic2()
 	}
 
 	checkSession();
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// The destination board must be numeric.
 	$_POST['toboard'] = (int) $_POST['toboard'];
@@ -683,7 +683,7 @@ function moveTopics($topics, $toBoard)
 		foreach ($topics as $topic_id)
 			CacheAPI::putCache('topic_board-' . $topic_id, null, 120);
 
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	$updates = array_keys($fromBoards);
 	$updates[] = $toBoard;

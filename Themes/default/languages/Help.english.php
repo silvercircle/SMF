@@ -386,7 +386,11 @@ $helptxt['posts_require_captcha'] = 'This setting will force users to pass anti-
 $helptxt['enableSpellChecking'] = 'Enable spell checking. You MUST have the pspell library installed on your server and your PHP configuration set up to use the pspell library. Your server ' . (function_exists('pspell_new') ? 'DOES' : 'DOES NOT') . ' appear to have this set up.';
 $helptxt['disable_wysiwyg'] = 'This setting disallows all users from using the WYSIWYG (&quot;What You See Is What You Get&quot;) editor on the post page.';
 $helptxt['post_cache_cutoff'] = 'This setting largely depends on how busy your forum is. If threads die off quickly, you may set this to something like 10 days, otheriwse set it higher. This setting helps to preserve database space on large forums';
-$helptxt['enableUserTagging'] = 'If enabled, members can mention other members in posts, using a simple @Name1,name2: syntax.<br><br>Mentioned members are converted to user profile links and if the activity stream is enabled, they\'ll be sent a notification with a link to the post that contains their "tagged" username.<br><br>You must also grant the permission to use this feature to each user group.';
+$helptxt['enableUserTagging'] = 'If enabled, members can mention other members in posts, using a simple @Name1,name2: syntax.<br><br>
+	Mentioned members are converted to user profile links and if the activity stream is enabled, they\'ll be sent a notification
+	with a link to the post that contains their "tagged" username. So basically, this feature is only useful when you are using the activity stream on your forum.<br><br>
+	<strong>Note: </strong>This setting is only a global switch to enable or disable the feature board-wide. In order to use it,
+	you must also grant proper permissions to user groups that should be allowed to use it. You\'ll find the permission in the list of board permissions under <em>Posts->Tag (@mention) users in posts</em>.';
 $helptxt['lastActive'] = 'Set the number of minutes to show people are active in X number of minutes on the board index. Default is 15 minutes.';
 
 $helptxt['customoptions'] = 'This section defines the options that a user may choose from a drop down list. There are a few key points to note in this section:

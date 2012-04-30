@@ -3031,7 +3031,7 @@ function url_image_size($url)
 				// This probably means allow_url_fopen is off, let's try GD.
 				if ($size === false && function_exists('imagecreatefromstring'))
 				{
-					include_once($sourcedir . '/Subs-Package.php');
+					include_once($sourcedir . '/lib/Subs-Package.php');
 
 					// It's going to hate us for doing this, but another request...
 					$image = @imagecreatefromstring(fetch_web_data($url));

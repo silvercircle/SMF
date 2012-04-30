@@ -57,15 +57,15 @@ function removeAttachments($condition, $query_type = '', $return_affected_messag
 
 // Get all the attachment names and id_msg's.
 	$request = smf_db_query('
-SELECT
-a.id_folder, a.filename, a.file_hash, a.attachment_type, a.id_attach, a.id_member' . ($query_type == 'messages' ? ', m.id_msg' : ', a.id_msg') . ',
-thumb.id_folder AS thumb_folder, IFNULL(thumb.id_attach, 0) AS id_thumb, thumb.filename AS thumb_filename, thumb.file_hash AS thumb_file_hash, thumb_parent.id_attach AS id_parent
-FROM {db_prefix}attachments AS a' . ($query_type == 'members' ? '
-INNER JOIN {db_prefix}members AS mem ON (mem.id_member = a.id_member)' : ($query_type == 'messages' ? '
-INNER JOIN {db_prefix}messages AS m ON (m.id_msg = a.id_msg)' : '')) . '
-LEFT JOIN {db_prefix}attachments AS thumb ON (thumb.id_attach = a.id_thumb)
-LEFT JOIN {db_prefix}attachments AS thumb_parent ON (thumb.attachment_type = {int:thumb_attachment_type} AND thumb_parent.id_thumb = a.id_attach)
-WHERE ' . $condition,
+		SELECT
+			a.id_folder, a.filename, a.file_hash, a.attachment_type, a.id_attach, a.id_member' . ($query_type == 'messages' ? ', m.id_msg' : ', a.id_msg') . ',
+			thumb.id_folder AS thumb_folder, IFNULL(thumb.id_attach, 0) AS id_thumb, thumb.filename AS thumb_filename, thumb.file_hash AS thumb_file_hash, thumb_parent.id_attach AS id_parent
+			FROM {db_prefix}attachments AS a' . ($query_type == 'members' ? '
+			INNER JOIN {db_prefix}members AS mem ON (mem.id_member = a.id_member)' : ($query_type == 'messages' ? '
+			INNER JOIN {db_prefix}messages AS m ON (m.id_msg = a.id_msg)' : '')) . '
+			LEFT JOIN {db_prefix}attachments AS thumb ON (thumb.id_attach = a.id_thumb)
+			LEFT JOIN {db_prefix}attachments AS thumb_parent ON (thumb.attachment_type = {int:thumb_attachment_type} AND thumb_parent.id_thumb = a.id_attach)
+			WHERE ' . $condition,
 		$query_parameter
 	);
 	while ($row = mysql_fetch_assoc($request)) {
@@ -99,9 +99,9 @@ WHERE ' . $condition,
 	$parents = array_diff($parents, $attach);
 	if (!empty($parents))
 		smf_db_query('
-UPDATE {db_prefix}attachments
-SET id_thumb = {int:no_thumb}
-WHERE id_attach IN ({array_int:parent_attachments})',
+			UPDATE {db_prefix}attachments
+			SET id_thumb = {int:no_thumb}
+			WHERE id_attach IN ({array_int:parent_attachments})',
 			array(
 				'parent_attachments' => $parents,
 				'no_thumb' => 0,
@@ -110,8 +110,8 @@ WHERE id_attach IN ({array_int:parent_attachments})',
 
 	if (!empty($attach))
 		smf_db_query('
-DELETE FROM {db_prefix}attachments
-WHERE id_attach IN ({array_int:attachment_list})',
+			DELETE FROM {db_prefix}attachments
+			WHERE id_attach IN ({array_int:attachment_list})',
 			array(
 				'attachment_list' => $attach,
 			)

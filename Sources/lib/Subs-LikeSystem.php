@@ -150,7 +150,7 @@ function GiveLike($mid)
 				$update_mode = true;
 
 				if($modSettings['astream_active']) {
-					require_once($sourcedir . '/Subs-Activities.php');
+					require_once($sourcedir . '/lib/Subs-Activities.php');
 					aStreamAdd($uid, ACT_LIKE,
 							array('member_name' => $context['user']['name'],
 							  'topic_title' => $topic_title),

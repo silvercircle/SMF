@@ -104,7 +104,7 @@ if (!defined('SMF'))
 
 global $sourcedir;
 
-require_once($sourcedir . '/Subs-ManageAttachments.php');
+require_once($sourcedir . '/lib/Subs-ManageAttachments.php');
 
 // The main attachment management function.
 function ManageAttachments()
@@ -481,7 +481,7 @@ function BrowseFiles()
 	);
 
 	// Create the list.
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 }
 
@@ -1569,7 +1569,7 @@ function ManageAttachmentPaths()
 		),
 	);
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	// Fix up our template.

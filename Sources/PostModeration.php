@@ -340,7 +340,7 @@ function UnapprovedAttachments()
 		checkSession('request');
 
 		// This will be handy.
-		require_once($sourcedir . '/Subs-ManageAttachments.php');
+		require_once($sourcedir . '/lib/Subs-ManageAttachments.php');
 
 		// Confirm the attachments are eligible for changing!
 		$request = smf_db_query( '
@@ -465,7 +465,7 @@ function ApproveMessage()
 
 	$_REQUEST['msg'] = (int) $_REQUEST['msg'];
 
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	isAllowedTo('approve_posts');
 
@@ -508,7 +508,7 @@ function approveMessages($messages, $messageDetails, $current_view = 'replies')
 {
 	global $sourcedir;
 
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 	if ($current_view == 'topics')
 	{
 		approveTopics($messages);
@@ -550,7 +550,7 @@ function approveAllData()
 
 	if (!empty($msgs))
 	{
-		require_once($sourcedir . '/Subs-Post.php');
+		require_once($sourcedir . '/lib/Subs-Post.php');
 		approvePosts($msgs);
 	}
 
@@ -570,7 +570,7 @@ function approveAllData()
 
 	if (!empty($attaches))
 	{
-		require_once($sourcedir . '/Subs-ManageAttachments.php');
+		require_once($sourcedir . '/lib/Subs-ManageAttachments.php');
 		ApproveAttachments($attaches);
 	}
 }

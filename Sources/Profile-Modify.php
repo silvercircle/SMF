@@ -277,7 +277,7 @@ function loadProfileFields($force_reload = false)
 				// Do they need to revalidate? If so schedule the function!
 				if ($isValid === true && !empty($modSettings[\'send_validation_onChange\']) && !allowedTo(\'moderate_forum\'))
 				{
-					require_once($sourcedir . \'/Subs-Members.php\');
+					require_once($sourcedir . \'/lib/Subs-Members.php\');
 					$profile_vars[\'validation_code\'] = generateValidationCode();
 					$profile_vars[\'is_activated\'] = 2;
 					$context[\'profile_execute_on_save\'][] = \'profileSendActivation\';
@@ -420,7 +420,7 @@ function loadProfileFields($force_reload = false)
 				if (allowedTo(\'admin_forum\'))
 				{
 					// We\'ll need this...
-					require_once($sourcedir . \'/Subs-Auth.php\');
+					require_once($sourcedir . \'/lib/Subs-Auth.php\');
 
 					// Maybe they are trying to change their password as well?
 					$resetPassword = true;
@@ -461,7 +461,7 @@ function loadProfileFields($force_reload = false)
 					return \'bad_new_password\';
 
 				// Let\'s get the validation function into play...
-				require_once($sourcedir . \'/Subs-Auth.php\');
+				require_once($sourcedir . \'/lib/Subs-Auth.php\');
 				$passwordErrors = validatePassword($value, $cur_profile[\'member_name\'], array($cur_profile[\'real_name\'], $user_info[\'username\'], $user_info[\'name\'], $user_info[\'email\']));
 
 				// Were there errors?
@@ -546,7 +546,7 @@ function loadProfileFields($force_reload = false)
 					return \'name_too_long\';
 				elseif ($cur_profile[\'real_name\'] != $value)
 				{
-					require_once($sourcedir . \'/Subs-Members.php\');
+					require_once($sourcedir . \'/lib/Subs-Members.php\');
 					if (isReservedName($value, $context[\'id_member\']))
 						return \'name_taken\';
 				}
@@ -1690,7 +1690,7 @@ function authentication($memID, $saving = false)
 			// Is it valid?
 			else
 			{
-				require_once($sourcedir . '/Subs-Auth.php');
+				require_once($sourcedir . '/lib/Subs-Auth.php');
 				$passwordErrors = validatePassword($_POST['passwrd1'], $cur_profile['member_name'], array($cur_profile['real_name'], $cur_profile['email_address']));
 
 				// Were there errors?
@@ -1719,7 +1719,7 @@ function authentication($memID, $saving = false)
 		// Not right yet!
 		elseif ($_POST['authenticate'] == 'openid' && !empty($_POST['openid_identifier']))
 		{
-			require_once($sourcedir . '/Subs-OpenID.php');
+			require_once($sourcedir . '/lib/Subs-OpenID.php');
 			$_POST['openid_identifier'] = smf_openID_canonize($_POST['openid_identifier']);
 
 			if (smf_openid_member_exists($_POST['openid_identifier']))
@@ -1751,7 +1751,7 @@ function notification($memID)
 	global $txt, $scripturl, $user_profile, $context, $modSettings, $sourcedir;
 
 	// Gonna want this for the list.
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	loadTemplate('GenericBits');
 	// Fine, start with the board list.
 	$listOptions = array(
@@ -2385,7 +2385,7 @@ function profileSaveAvatarData(&$value)
 	if (empty($memID) && !empty($context['password_auth_failed']))
 		return false;
 
-	require_once($sourcedir . '/Subs-ManageAttachments.php');
+	require_once($sourcedir . '/lib/Subs-ManageAttachments.php');
 
 	// We need to know where we're going to be putting it..
 	if (!empty($modSettings['custom_avatar_enabled']))
@@ -2414,7 +2414,7 @@ function profileSaveAvatarData(&$value)
 		if (!is_writable($uploadDir))
 			fatal_lang_error('attachments_no_write', 'critical');
 
-		require_once($sourcedir . '/Subs-Package.php');
+		require_once($sourcedir . '/lib/Subs-Package.php');
 
 		$url = parse_url($_POST['userpicpersonal']);
 		$contents = fetch_web_data('http://' . $url['host'] . (empty($url['port']) ? '' : ':' . $url['port']) . str_replace(' ', '%20', trim($url['path'])));
@@ -2483,7 +2483,7 @@ function profileSaveAvatarData(&$value)
 					return 'bad_avatar';
 				elseif ($modSettings['avatar_action_too_large'] == 'option_download_and_resize')
 				{
-					require_once($sourcedir . '/Subs-Graphics.php');
+					require_once($sourcedir . '/lib/Subs-Graphics.php');
 					if (downloadAvatar($profile_vars['avatar'], $memID, $modSettings['avatar_max_width_external'], $modSettings['avatar_max_height_external']))
 					{
 						$profile_vars['avatar'] = '';
@@ -2526,7 +2526,7 @@ function profileSaveAvatarData(&$value)
 					// Attempt to chmod it.
 					@chmod($uploadDir . '/avatar_tmp_' . $memID, 0644);
 
-					require_once($sourcedir . '/Subs-Graphics.php');
+					require_once($sourcedir . '/lib/Subs-Graphics.php');
 					if (!downloadAvatar($uploadDir . '/avatar_tmp_' . $memID, $memID, $modSettings['avatar_max_width_upload'], $modSettings['avatar_max_height_upload']))
 						return 'bad_avatar';
 
@@ -2541,7 +2541,7 @@ function profileSaveAvatarData(&$value)
 			elseif (is_array($sizes))
 			{
 				// Now try to find an infection.
-				require_once($sourcedir . '/Subs-Graphics.php');
+				require_once($sourcedir . '/lib/Subs-Graphics.php');
 				if (!checkImageContents($_FILES['attachment']['tmp_name'], !empty($modSettings['avatar_paranoid'])))
 				{
 					// It's bad. Try to re-encode the contents?
@@ -2625,7 +2625,7 @@ function profileValidateSignature(&$value)
 {
 	global $sourcedir, $modSettings, $smcFunc, $txt;
 
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// Admins can do whatever they hell they want!
 	if (!allowedTo('admin_forum'))
@@ -2835,7 +2835,7 @@ function profileReloadUser()
 	// Log them back in - using the verify password as they must have matched and this one doesn't get changed by anyone!
 	if (isset($_POST['passwrd2']) && $_POST['passwrd2'] != '')
 	{
-		require_once($sourcedir . '/Subs-Auth.php');
+		require_once($sourcedir . '/lib/Subs-Auth.php');
 		setLoginCookie(60 * $modSettings['cookieTime'], $context['id_member'], sha1(sha1(strtolower($cur_profile['member_name']) . un_htmlspecialchars($_POST['passwrd2'])) . $cur_profile['password_salt']));
 	}
 
@@ -2848,7 +2848,7 @@ function profileSendActivation()
 {
 	global $sourcedir, $profile_vars, $txt, $context, $scripturl, $smcFunc, $cookiename, $cur_profile, $language, $modSettings;
 
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// Shouldn't happen but just in case.
 	if (empty($profile_vars['email_address']))
@@ -3141,7 +3141,7 @@ function groupMembership2($profile_vars, $post_errors, $memID)
 		);
 
 		// Send an email to all group moderators etc.
-		require_once($sourcedir . '/Subs-Post.php');
+		require_once($sourcedir . '/lib/Subs-Post.php');
 
 		// Do we have any group moderators?
 		$request = smf_db_query( '
@@ -3160,7 +3160,7 @@ function groupMembership2($profile_vars, $post_errors, $memID)
 		// Otherwise this is the backup!
 		if (empty($moderators))
 		{
-			require_once($sourcedir . '/Subs-Members.php');
+			require_once($sourcedir . '/lib/Subs-Members.php');
 			$moderators = membersAllowedTo('manage_membergroups');
 		}
 

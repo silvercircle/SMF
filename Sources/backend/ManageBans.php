@@ -331,7 +331,7 @@ function BanList()
 		),
 	);
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	$context['sub_template'] = 'show_list';
@@ -1270,7 +1270,7 @@ function BanBrowseTriggers()
 	}
 
 	// Create the list.
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	// The list is the only thing to show, so make it the default sub template.
@@ -1476,7 +1476,7 @@ function BanLog()
 		),
 	);
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	$context['page_title'] = $txt['ban_log'];

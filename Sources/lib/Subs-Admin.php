@@ -405,7 +405,7 @@ function emailAdmins($template, $replacements = array(), $additional_recipients 
 	global $smcFunc, $sourcedir, $language, $modSettings;
 
 	// We certainly want this.
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// Load all groups which are effectively admins.
 	$request = smf_db_query( '

@@ -455,8 +455,8 @@ function smf_db_error($db_string, $connection = null)
 		if (!empty($fix_tables))
 		{
 			// Subs-Admin.php for updateSettingsFile(), Subs-Post.php for sendmail().
-			require_once($sourcedir . '/Subs-Admin.php');
-			require_once($sourcedir . '/Subs-Post.php');
+			require_once($sourcedir . '/lib/Subs-Admin.php');
+			require_once($sourcedir . '/lib/Subs-Post.php');
 
 			// Make a note of the REPAIR...
 			CacheAPI::putCache('db_last_error', time(), 600);

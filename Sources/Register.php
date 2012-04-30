@@ -172,7 +172,7 @@ function Register($reg_errors = array())
 	// Generate a visual verification code to make sure the user is no bot.
 	if (!empty($modSettings['reg_verification']))
 	{
-		require_once($sourcedir . '/Subs-Editor.php');
+		require_once($sourcedir . '/lib/Subs-Editor.php');
 		$verificationOptions = array(
 			'id' => 'register',
 		);
@@ -249,7 +249,7 @@ function Register2($verifiedOpenID = false)
 		// Check whether the visual verification code was entered correctly.
 		if (!empty($modSettings['reg_verification']))
 		{
-			require_once($sourcedir . '/Subs-Editor.php');
+			require_once($sourcedir . '/lib/Subs-Editor.php');
 			$verificationOptions = array(
 				'id' => 'register',
 			);
@@ -299,7 +299,7 @@ function Register2($verifiedOpenID = false)
 		$_POST['secret_answer'] = md5($_POST['secret_answer']);
 
 	// Needed for isReservedName() and registerMember().
-	require_once($sourcedir . '/Subs-Members.php');
+	require_once($sourcedir . '/lib/Subs-Members.php');
 
 	// Validation... even if we're not a mall.
 	if (isset($_POST['real_name']) && (!empty($modSettings['allow_editDisplayName']) || allowedTo('moderate_forum')))
@@ -450,7 +450,7 @@ function Register2($verifiedOpenID = false)
 			if (!in_array($k, array('sc', 'sesc', $context['session_var'], 'passwrd1', 'passwrd2', 'regSubmit')))
 				$save_variables[$k] = $v;
 
-		require_once($sourcedir . '/Subs-OpenID.php');
+		require_once($sourcedir . '/lib/Subs-OpenID.php');
 		smf_openID_validate($_POST['openid_identifier'], false, $save_variables);
 	}
 	// If we've come from OpenID set up some default stuff.
@@ -592,7 +592,7 @@ function Activate()
 	// Resend the password, but only if the account wasn't activated yet.
 	if (!empty($_REQUEST['sa']) && $_REQUEST['sa'] == 'resend' && ($row['is_activated'] == 0 || $row['is_activated'] == 2) && (!isset($_REQUEST['code']) || $_REQUEST['code'] == ''))
 	{
-		require_once($sourcedir . '/Subs-Post.php');
+		require_once($sourcedir . '/lib/Subs-Post.php');
 
 		$replacements = array(
 			'REALNAME' => $row['real_name'],
@@ -645,11 +645,11 @@ function Activate()
 	if (!isset($_POST['new_email']))
 	{
 		$actid = 0;
-		require_once($sourcedir . '/Subs-Post.php');
+		require_once($sourcedir . '/lib/Subs-Post.php');
 
 		// add to the activity stream
 		if($modSettings['astream_active']) {
-			require_once($sourcedir . '/Subs-Activities.php');
+			require_once($sourcedir . '/lib/Subs-Activities.php');
 			$actid = aStreamAdd($row['id_member'], ACT_NEWMEMBER,
 						array('member_name' => $row['member_name']),
 						0, 0, 0, $row['id_member']);
@@ -779,7 +779,7 @@ function VerificationCode()
 	// If we have GD, try the nice code.
 	elseif (empty($_REQUEST['format']))
 	{
-		require_once($sourcedir . '/Subs-Graphics.php');
+		require_once($sourcedir . '/lib/Subs-Graphics.php');
 
 		if (in_array('gd', get_loaded_extensions()) && !showCodeImage($code))
 			header('HTTP/1.1 400 Bad Request');
@@ -804,7 +804,7 @@ function VerificationCode()
 
 	elseif ($_REQUEST['format'] === '.wav')
 	{
-		require_once($sourcedir . '/Subs-Sound.php');
+		require_once($sourcedir . '/lib/Subs-Sound.php');
 
 		if (!createWaveFile($code))
 			header('HTTP/1.1 400 Bad Request');
@@ -841,7 +841,7 @@ function RegisterCheckUsername()
 		$context['valid_username'] = false;
 	else
 	{
-		require_once($sourcedir . '/Subs-Members.php');
+		require_once($sourcedir . '/lib/Subs-Members.php');
 		$context['valid_username'] &= isReservedName($context['checked_username'], 0, false, false) ? 0 : 1;
 	}
 }

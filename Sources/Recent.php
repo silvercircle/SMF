@@ -89,7 +89,7 @@ function RecentPosts()
 {
 	global $sourcedir, $txt, $scripturl, $user_info, $context, $modSettings, $board, $memberContext;
 
-	require_once($sourcedir . '/Subs-LikeSystem.php');
+	require_once($sourcedir . '/lib/Subs-LikeSystem.php');
 	$context['time_now'] = time();
 
 	$context['need_synhlt'] = true;
@@ -859,7 +859,7 @@ function UnreadTopics()
 		if ($num_topics == 0)
 		{
 			// Mark the boards as read if there are no unread topics!
-			require_once($sourcedir . '/Subs-Boards.php');
+			require_once($sourcedir . '/lib/Subs-Boards.php');
 			markBoardsRead(empty($boards) ? $board : $boards);
 
 			$context['topics'] = array();
@@ -944,7 +944,7 @@ function UnreadTopics()
 			if ($context['showing_all_topics'])
 			{
 				// Since there are no unread topics, mark the boards as read!
-				require_once($sourcedir . '/Subs-Boards.php');
+				require_once($sourcedir . '/lib/Subs-Boards.php');
 				markBoardsRead(empty($boards) ? $board : $boards);
 			}
 

@@ -62,7 +62,7 @@ class commonAPI {
 		if(function_exists('mb_strtolower'))
 			return mb_strtolower($string, 'UTF-8');
 
-		require_once($sourcedir . '/Subs-Charset.php');
+		require_once($sourcedir . '/lib/Subs-Charset.php');
 		return utf8_strtolower($string);
 	}
 
@@ -73,7 +73,7 @@ class commonAPI {
 		if(function_exists('mb_strtoupper'))
 			return mb_strtoupper($string, 'UTF-8');
 
-		require_once($sourcedir . '/Subs-Charset.php');
+		require_once($sourcedir . '/lib/Subs-Charset.php');
 		return utf8_strtoupper($string);
 	}
 
@@ -724,6 +724,7 @@ class Topiclist {
 
 	private $topiclist = array();
 	private $users_to_load = array();
+	private $topic_ids = array();
 
 	function __construct($request, $total_items) {
 
@@ -732,6 +733,8 @@ class Topiclist {
 		while ($row = mysql_fetch_assoc($request))
 		{
 			censorText($row['subject']);
+
+			$this->topic_ids[] = $row['id_topic'];
 
 			$f_post_mem_href = !empty($row['id_member']) ? URL::user($row['id_member'], $row['first_member_name']) : '';
 			$t_href = URL::topic($row['id_topic'], $row['subject'], 0);
@@ -785,7 +788,7 @@ class Topiclist {
 				'views' => comma_format($row['num_views']),
 				'approved' => $row['approved'],
 				'unapproved_posts' => $row['unapproved_posts'],
-				'is_old' => !empty($modSettings['oldTopicDays']) ? (($context['time_now'] - $row['last_poster_time']) > ($modSettings['oldTopicDays'] * 86400)) : false,
+				'is_old' => !empty($modSettings['oldTopicDays']) ? (($context['time_now'] - $row['last_post_time']) > ($modSettings['oldTopicDays'] * 86400)) : false,
 				'is_posted_in' => false,
 				'prefix' => '',
 				'pages' => '',
@@ -804,7 +807,7 @@ class Topiclist {
 					'href' => ''
 				)
 			);
-			determineTopicClass($this->topiclist[$row['id_topic']]);
+			//determineTopicClass($this->topiclist[$row['id_topic']]);
 			if(!empty($row['id_member']) && $row['id_member'] != $user_info['id'])
 				$this->users_to_load[$row['id_member']] = $row['id_member'];
 		}
@@ -813,6 +816,28 @@ class Topiclist {
 			if(!isset($memberContext[$topic['id_member_started']]))
 				loadMemberContext($topic['id_member_started']);
 			$topic['first_post']['member']['avatar'] = &$memberContext[$topic['id_member_started']]['avatar']['image'];
+		}
+
+		// figure out whether we have posted in a topic (but only if we are not the topic starter)
+		if (!empty($modSettings['enableParticipation']) && !$user_info['is_guest'] && !empty($this->topic_ids))
+		{
+			$result = smf_db_query( '
+				SELECT id_topic
+				FROM {db_prefix}messages
+				WHERE id_topic IN ({array_int:topic_list})
+					AND id_member = {int:current_member}
+				GROUP BY id_topic
+				LIMIT ' . count($this->topic_ids),
+				array(
+					'current_member' => $user_info['id'],
+					'topic_list' => $this->topic_ids,
+				)
+			);
+			while ($row = mysql_fetch_assoc($result)) {
+				if($this->topiclist[$row['id_topic']]['first_post']['member']['id'] != $user_info['id'])
+					$this->topiclist[$row['id_topic']]['is_posted_in'] = true;
+			}
+			mysql_free_result($result);
 		}
 	}
 

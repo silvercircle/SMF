@@ -39,7 +39,7 @@ function ModifyProfile($post_errors = array())
 
 	//$context['sef_full_rewrite'] = true;
 
-	require_once($sourcedir . '/Subs-Menu.php');
+	require_once($sourcedir . '/lib/Subs-Menu.php');
 
 	// Did we get the user by name...
 	if (isset($_REQUEST['user']))
@@ -529,7 +529,7 @@ function ModifyProfile($post_errors = array())
 			// If we're using OpenID try to revalidate.
 			if (!empty($user_settings['openid_uri']))
 			{
-				require_once($sourcedir . '/Subs-OpenID.php');
+				require_once($sourcedir . '/lib/Subs-OpenID.php');
 				smf_openID_revalidate();
 			}
 			else

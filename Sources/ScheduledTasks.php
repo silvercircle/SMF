@@ -314,7 +314,7 @@ function scheduled_approval_notification()
 	mysql_free_result($request);
 
 	// Get the mailing stuff.
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 	// Need the below for loadLanguage to work!
 	loadEssentialThemeData();
 
@@ -479,7 +479,7 @@ function scheduled_daily_maintenance()
 	// Regenerate the Diffie-Hellman keys if OpenID is enabled.
 	if (!empty($modSettings['enableOpenID']))
 	{
-		require_once($sourcedir . '/Subs-OpenID.php');
+		require_once($sourcedir . '/lib/Subs-OpenID.php');
 		smf_openID_setup_DH(true);
 	}
 	elseif (!empty($modSettings['dh_keys']))
@@ -559,7 +559,7 @@ function scheduled_daily_digest()
 	global $is_weekly, $txt, $mbname, $scripturl, $sourcedir, $context, $modSettings;
 
 	// We'll want this...
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 	loadEssentialThemeData();
 
 	$is_weekly = !empty($is_weekly) ? 1 : 0;
@@ -986,7 +986,7 @@ function ReduceMailQueue($number = false, $override_limit = false, $force_send =
 		return false;
 
 	if (!empty($modSettings['mail_type']) && $modSettings['smtp_host'] != '')
-		require_once($sourcedir . '/Subs-Post.php');
+		require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// Send each email, yea!
 	$failed_emails = array();
@@ -1240,7 +1240,7 @@ function loadEssentialThemeData()
 	if (!function_exists('loadLanguage'))
 	{
 		require_once($sourcedir . '/Load.php');
-		require_once($sourcedir . '/Subs.php');
+		require_once($sourcedir . '/lib/Subs.php');
 	}
 
 	loadLanguage('index+Modifications');
@@ -1273,7 +1273,7 @@ function scheduled_fetchSMfiles()
 	mysql_free_result($request);
 
 	// We're gonna need fetch_web_data() to pull this off.
-	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/lib/Subs-Package.php');
 
 	// Just in case we run into a problem.
 	loadEssentialThemeData();
@@ -1317,7 +1317,7 @@ function scheduled_birthdayemails()
 	loadEssentialThemeData();
 
 	// Going to need this to send the emails.
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	$greeting = isset($modSettings['birthday_email']) ? $modSettings['birthday_email'] : 'happy_birthday';
 
@@ -1635,7 +1635,7 @@ function scheduled_paid_subscriptions()
 		// If this is the first one load the important bits.
 		if (empty($subs_reminded))
 		{
-			require_once($sourcedir . '/Subs-Post.php');
+			require_once($sourcedir . '/lib/Subs-Post.php');
 			// Need the below for loadLanguage to work!
 			loadEssentialThemeData();
 		}

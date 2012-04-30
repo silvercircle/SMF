@@ -118,7 +118,7 @@ function downloadAvatar($url, $memID, $max_width, $max_height)
 	if (empty($memID))
 		return false;
 
-	require_once($sourcedir . '/Subs-ManageAttachments.php');
+	require_once($sourcedir . '/lib/Subs-ManageAttachments.php');
 	removeAttachments(array('id_member' => $memID));
 
 	$id_folder = !empty($modSettings['currentAttachmentUploadDir']) ? $modSettings['currentAttachmentUploadDir'] : 1;
@@ -322,7 +322,7 @@ function resizeImageFile($source, $destination, $max_width, $max_height, $prefer
 		'15' => 'wbmp'
 	);
 
-	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/lib/Subs-Package.php');
 	@ini_set('memory_limit', '90M');
 
 	$success = false;

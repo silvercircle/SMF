@@ -213,7 +213,7 @@ function MessageIndex()
 	$context['can_moderate_forum'] = allowedTo('moderate_forum');
 	$context['can_approve_posts'] = allowedTo('approve_posts');
 
-	require_once($sourcedir . '/Subs-BoardIndex.php');
+	require_once($sourcedir . '/lib/Subs-BoardIndex.php');
 	$boardIndexOptions = array(
 		'include_categories' => false,
 		'base_level' => $board_info['child_level'] + 1,
@@ -533,8 +533,10 @@ function MessageIndex()
 					'topic_list' => $topic_ids,
 				)
 			);
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = mysql_fetch_assoc($result)) {
+				if($context['topics'][$row['id_topic']]['first_post']['member']['id'] != $user_info['id'])
 				$context['topics'][$row['id_topic']]['is_posted_in'] = true;
+			}
 			mysql_free_result($result);
 		}
 	}
@@ -578,7 +580,7 @@ function MessageIndex()
 		// Find the boards/cateogories they can move their topic to.
 		if ($options['display_quick_mod'] && $context['can_move'] && !empty($context['topics']))
 		{
-			require_once($sourcedir . '/Subs-MessageIndex.php');
+			require_once($sourcedir . '/lib/Subs-MessageIndex.php');
 			$boardListOptions = array(
 				'excluded_boards' => array($board),
 				'not_redirection' => true,
@@ -627,7 +629,7 @@ function QuickModeration()
 		$_SESSION['topicseen_cache'] = array();
 
 	// This is going to be needed to send off the notifications and for updateLastMessages().
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// Remember the last board they moved things to.
 	if (isset($_REQUEST['move_to']))

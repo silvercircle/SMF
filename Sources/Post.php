@@ -96,7 +96,7 @@ function Post()
 	$context['can_tag_users'] = allowedTo('tag_users');
 
 	if(in_array('dr', $context['admin_features'])) {
-		require_once($sourcedir . '/Subs-Drafts.php');
+		require_once($sourcedir . '/lib/Subs-Drafts.php');
 		$context['have_drafts'] = true;
 		enqueueThemeScript('drafts', 'scripts/drafts.js', true);
 	}
@@ -115,7 +115,7 @@ function Post()
 	if (empty($board) && !$context['make_event'])
 		fatal_lang_error('no_board', false);
 
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	if (isset($_REQUEST['xml']))
 	{
@@ -252,7 +252,7 @@ function Post()
 		else
 			isAllowedTo('poll_add_any');
 
-		require_once($sourcedir . '/Subs-Members.php');
+		require_once($sourcedir . '/lib/Subs-Members.php');
 		$allowedVoteGroups = groupsAllowedTo('poll_vote', $board);
 
 		// Set up the poll options.
@@ -355,7 +355,7 @@ function Post()
 				fatal_lang_error('cannot_post_new', 'user');
 
 			// Load a list of boards for this event in the context.
-			require_once($sourcedir . '/Subs-MessageIndex.php');
+			require_once($sourcedir . '/lib/Subs-MessageIndex.php');
 			$boardListOptions = array(
 				'included_boards' => in_array(0, $boards) ? null : $boards,
 				'not_redirection' => true,
@@ -457,7 +457,7 @@ function Post()
 					$context['post_error']['long_name'] = true;
 				else
 				{
-					require_once($sourcedir . '/Subs-Members.php');
+					require_once($sourcedir . '/lib/Subs-Members.php');
 					if (isReservedName(htmlspecialchars($_REQUEST['guestname']), 0, true, false))
 						$context['post_error']['bad_name'] = true;
 				}
@@ -1176,7 +1176,7 @@ function Post()
 	$context['message'] = str_replace(array('"', '<', '>', '&nbsp;'), array('&quot;', '&lt;', '&gt;', ' '), $form_message);
 
 	// Needed for the editor and message icons.
-	require_once($sourcedir . '/Subs-Editor.php');
+	require_once($sourcedir . '/lib/Subs-Editor.php');
 
 	// Now create the editor.
 	
@@ -1271,7 +1271,7 @@ function Post()
 	$context['require_verification'] = !$user_info['is_mod'] && !$user_info['is_admin'] && !empty($modSettings['posts_require_captcha']) && ($user_info['posts'] < $modSettings['posts_require_captcha'] || ($user_info['is_guest'] && $modSettings['posts_require_captcha'] == -1));
 	if ($context['require_verification'])
 	{
-		require_once($sourcedir . '/Subs-Editor.php');
+		require_once($sourcedir . '/lib/Subs-Editor.php');
 		$verificationOptions = array(
 			'id' => 'post',
 		);
@@ -1303,7 +1303,7 @@ function Post2()
 	global $user_info, $board_info, $options, $backend_subdir;
 
 	if(in_array('dr', $context['admin_features'])) {
-		require_once($sourcedir . '/Subs-Drafts.php');
+		require_once($sourcedir . '/lib/Subs-Drafts.php');
 		enqueueThemeScript('drafts', 'scripts/drafts.js', true);
 		$context['have_drafts'] = true;
 	}
@@ -1326,7 +1326,7 @@ function Post2()
 	// If we came from WYSIWYG then turn it back into BBC regardless.
 	if (!empty($_REQUEST['message_mode']) && isset($_REQUEST['message']))
 	{
-		require_once($sourcedir . '/Subs-Editor.php');
+		require_once($sourcedir . '/lib/Subs-Editor.php');
 
 		$_REQUEST['message'] = html_to_bbc($_REQUEST['message']);
 
@@ -1354,7 +1354,7 @@ function Post2()
 	// Wrong verification code?
 	if (!$user_info['is_admin'] && !$user_info['is_mod'] && !empty($modSettings['posts_require_captcha']) && ($user_info['posts'] < $modSettings['posts_require_captcha'] || ($user_info['is_guest'] && $modSettings['posts_require_captcha'] == -1)))
 	{
-		require_once($sourcedir . '/Subs-Editor.php');
+		require_once($sourcedir . '/lib/Subs-Editor.php');
 		$verificationOptions = array(
 			'id' => 'post',
 		);
@@ -1363,7 +1363,7 @@ function Post2()
 			$post_errors = array_merge($post_errors, $context['require_verification']);
 	}
 
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 	loadLanguage('Post');
 
 	// If this isn't a new topic load the topic info that we need.
@@ -1717,7 +1717,7 @@ function Post2()
 	if ($posterIsGuest)
 	{
 		// If user is a guest, make sure the chosen name isn't taken.
-		require_once($sourcedir . '/Subs-Members.php');
+		require_once($sourcedir . '/lib/Subs-Members.php');
 		if (isReservedName($_POST['guestname'], 0, true, false) && (!isset($row['poster_name']) || $_POST['guestname'] != $row['poster_name']))
 			$post_errors[] = 'bad_name';
 	}
@@ -1790,7 +1790,7 @@ function Post2()
 		// Make sure guests are actually allowed to vote generally.
 		if ($_POST['poll_guest_vote'])
 		{
-			require_once($sourcedir . '/Subs-Members.php');
+			require_once($sourcedir . '/lib/Subs-Members.php');
 			$allowedVoteGroups = groupsAllowedTo('poll_vote', $board);
 			if (!in_array(-1, $allowedVoteGroups['allowed']))
 				$_POST['poll_guest_vote'] = 0;
@@ -1817,7 +1817,7 @@ function Post2()
 		foreach ($_POST['attach_del'] as $i => $dummy)
 			$del_temp[$i] = (int) $dummy;
 
-		require_once($sourcedir . '/Subs-ManageAttachments.php');
+		require_once($sourcedir . '/lib/Subs-ManageAttachments.php');
 		$attachmentQuery = array(
 			'attachment_type' => 0,
 			'id_msg' => (int) $_REQUEST['msg'],
@@ -2149,7 +2149,7 @@ function Post2()
 	// Editing or posting an event?
 	if (isset($_POST['calendar']) && (!isset($_REQUEST['eventid']) || $_REQUEST['eventid'] == -1))
 	{
-		require_once($sourcedir . '/Subs-Calendar.php');
+		require_once($sourcedir . '/lib/Subs-Calendar.php');
 
 		// Make sure they can link an event to this post.
 		canLinkEvent();
@@ -2170,7 +2170,7 @@ function Post2()
 		$_REQUEST['eventid'] = (int) $_REQUEST['eventid'];
 
 		// Validate the post...
-		require_once($sourcedir . '/Subs-Calendar.php');
+		require_once($sourcedir . '/lib/Subs-Calendar.php');
 		validateEventPost();
 
 		// If you're not allowed to edit any events, you have to be the poster.
@@ -2495,7 +2495,7 @@ function AnnouncementSend()
 	$message = trim(un_htmlspecialchars(strip_tags(strtr(parse_bbc($message, false, $id_msg), array('<br />' => "\n", '</div>' => "\n", '</li>' => "\n", '&#91;' => '[', '&#93;' => ']')))));
 
 	// We need this in order to be able send emails.
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// Select the email addresses for this batch.
 	$request = smf_db_query( '
@@ -2579,7 +2579,7 @@ function notifyMembersBoard(&$topicData)
 	global $txt, $scripturl, $language, $user_info;
 	global $modSettings, $sourcedir;
 
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// Do we have one or lots of topics?
 	if (isset($topicData['body']))
@@ -2786,7 +2786,7 @@ function QuoteFast()
 	if (!isset($_REQUEST['xml']))
 		loadTemplate('Post');
 
-	include_once($sourcedir . '/Subs-Post.php');
+	include_once($sourcedir . '/lib/Subs-Post.php');
 
 	$moderate_boards = boardsAllowedTo('moderate_board');
 
@@ -2869,7 +2869,7 @@ function QuoteFast()
 		// Make the body HTML if need be.
 		if (!empty($_REQUEST['mode']))
 		{
-			require_once($sourcedir . '/Subs-Editor.php');
+			require_once($sourcedir . '/lib/Subs-Editor.php');
 			$row['body'] = strtr($row['body'], array('&lt;' => '#smlt#', '&gt;' => '#smgt#', '&amp;' => '#smamp#'));
 			$row['body'] = bbc_to_html($row['body']);
 			$lb = '<br />';
@@ -2915,7 +2915,7 @@ function JavaScriptModify()
 		obExit(false);
 
 	checkSession('get');
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// Assume the first message if no message ID was given.
 	$request = smf_db_query( '

@@ -116,7 +116,7 @@ function SendTopic()
 	spamProtection('sendtopc');
 
 	// This is needed for sendmail().
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// Trim the names..
 	$_POST['y_name'] = trim($_POST['y_name']);
@@ -233,7 +233,7 @@ function CustomEmail()
 	// Are we actually sending it?
 	if (isset($_POST['send']) && isset($_POST['email_body']))
 	{
-		require_once($sourcedir . '/Subs-Post.php');
+		require_once($sourcedir . '/lib/Subs-Post.php');
 
 		checkSession();
 
@@ -331,7 +331,7 @@ function ReportToModerator()
 	$context['require_verification'] = $user_info['is_guest'] && !empty($modSettings['guests_report_require_captcha']);
 	if ($context['require_verification'])
 	{
-		require_once($sourcedir . '/Subs-Editor.php');
+		require_once($sourcedir . '/lib/Subs-Editor.php');
 		$verificationOptions = array(
 			'id' => 'report',
 		);
@@ -365,7 +365,7 @@ function ReportToModerator2()
 	// Make sure they aren't spamming.
 	spamProtection('reporttm');
 
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// No errors, yet.
 	$post_errors = array();
@@ -396,7 +396,7 @@ function ReportToModerator2()
 	// Could they get the right verification code?
 	if ($user_info['is_guest'] && !empty($modSettings['guests_report_require_captcha']))
 	{
-		require_once($sourcedir . '/Subs-Editor.php');
+		require_once($sourcedir . '/lib/Subs-Editor.php');
 		$verificationOptions = array(
 			'id' => 'report',
 		);
@@ -442,7 +442,7 @@ function ReportToModerator2()
 	$subject = un_htmlspecialchars($message['subject']);
 
 	// Get a list of members with the moderate_board permission.
-	require_once($sourcedir . '/Subs-Members.php');
+	require_once($sourcedir . '/lib/Subs-Members.php');
 	$moderators = membersAllowedTo('moderate_board', $board);
 
 	$request = smf_db_query( '

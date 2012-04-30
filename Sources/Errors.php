@@ -303,7 +303,7 @@ function setup_fatal_error_context($error_message)
 	if (SMF == 'SSI')
 	{
 		if (!empty($ssi_on_error_method) && $ssi_on_error_method !== true && is_callable($ssi_on_error_method))
-			$ssi_on_error_method();
+			call_user_func($ssi_on_error_method);
 		elseif (empty($ssi_on_error_method) || $ssi_on_error_method !== true)
 			loadSubTemplate('fatal_error');
 
@@ -350,7 +350,7 @@ function show_db_error($loadavg = false)
 
 		if ($db_last_error < time() - 3600 * 24 * 3 && empty($maintenance) && !empty($db_error_send))
 		{
-			require_once($sourcedir . '/Subs-Admin.php');
+			require_once($sourcedir . '/lib/Subs-Admin.php');
 
 			// Avoid writing to the Settings.php file if at all possible; use shared memory instead.
 			CacheAPI::putCache('db_last_error', time(), 600);

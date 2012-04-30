@@ -1296,7 +1296,7 @@ function ThemeInstall()
 	isAllowedTo('admin_forum');
 	checkSession('request');
 
-	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/lib/Subs-Package.php');
 
 	loadTemplate('Themes');
 
@@ -1437,7 +1437,7 @@ function ThemeInstall()
 		if (!is_writable($boarddir . '/Themes'))
 			fatal_lang_error('theme_install_write_error', 'critical');
 
-		require_once($sourcedir . '/Subs-Package.php');
+		require_once($sourcedir . '/lib/Subs-Package.php');
 
 		// Set the default settings...
 		$theme_name = strtok(basename(isset($_FILES['theme_gz']) ? $_FILES['theme_gz']['name'] : $_REQUEST['theme_gz']), '.');

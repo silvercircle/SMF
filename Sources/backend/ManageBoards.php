@@ -118,7 +118,7 @@ function ManageBoardsMain()
 
 	loadAdminTemplate('ManageBoards');
 
-	require_once($sourcedir . '/Subs-Boards.php');
+	require_once($sourcedir . '/lib/Subs-Boards.php');
 
 	if (isset($_REQUEST['sa']) && $_REQUEST['sa'] == 'move' && in_array($_REQUEST['move_to'], array('child', 'before', 'after', 'top')))
 	{
@@ -236,7 +236,7 @@ function EditCategory()
 	global $txt, $context, $cat_tree, $boardList, $boards, $sourcedir;
 
 	loadAdminTemplate('ManageBoards');
-	require_once($sourcedir . '/Subs-Boards.php');
+	require_once($sourcedir . '/lib/Subs-Boards.php');
 	getBoardTree();
 
 	// id_cat must be a number.... if it exists.
@@ -317,7 +317,7 @@ function EditCategory2()
 
 	checkSession();
 
-	require_once($sourcedir . '/Subs-Categories.php');
+	require_once($sourcedir . '/lib/Subs-Categories.php');
 
 	$_POST['cat'] = (int) $_POST['cat'];
 
@@ -370,7 +370,7 @@ function EditBoard()
 	global $txt, $context, $cat_tree, $boards, $boardList, $sourcedir, $modSettings, $backend_subdir;
 
 	loadAdminTemplate('ManageBoards');
-	require_once($sourcedir . '/Subs-Boards.php');
+	require_once($sourcedir . '/lib/Subs-Boards.php');
 	getBoardTree();
 
 	// For editing the profile we'll need this.
@@ -574,7 +574,7 @@ function EditBoard2()
 
 	checkSession();
 
-	require_once($sourcedir . '/Subs-Boards.php');
+	require_once($sourcedir . '/lib/Subs-Boards.php');
 
 	$_POST['boardid'] = (int) $_POST['boardid'];
 
@@ -711,7 +711,7 @@ function ModifyCat()
 	global $cat_tree, $boardList, $boards, $sourcedir, $smcFunc;
 
 	// Get some information about the boards and the cats.
-	require_once($sourcedir . '/Subs-Boards.php');
+	require_once($sourcedir . '/lib/Subs-Boards.php');
 	getBoardTree();
 
 	// Allowed sub-actions...

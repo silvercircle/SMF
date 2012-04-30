@@ -83,7 +83,7 @@ function Display()
 		'footer' => ''
 	);
 
-	require_once($sourcedir . '/Subs-LikeSystem.php');
+	require_once($sourcedir . '/lib/Subs-LikeSystem.php');
 	fetchNewsItems($board, $topic);
 	// What are you gonna display if these are empty?!
 	if (empty($topic))
@@ -245,7 +245,7 @@ function Display()
 		
 	// Added by Related Topics
 	if (isset($modSettings['have_related_topics']) && $modSettings['have_related_topics'] && !empty($modSettings['relatedTopicsEnabled'])) {
-		require_once($sourcedir . '/Subs-Related.php');
+		require_once($sourcedir . '/lib/Subs-Related.php');
 		loadRelated($topic);
 	}
 	
@@ -416,7 +416,7 @@ function Display()
 	$context['require_verification'] = !$user_info['is_mod'] && !$user_info['is_admin'] && !empty($modSettings['posts_require_captcha']) && ($user_info['posts'] < $modSettings['posts_require_captcha'] || ($user_info['is_guest'] && $modSettings['posts_require_captcha'] == -1));
 	if ($context['require_verification'])
 	{
-		require_once($sourcedir . '/Subs-Editor.php');
+		require_once($sourcedir . '/lib/Subs-Editor.php');
 		$verificationOptions = array(
 			'id' => 'post',
 		);
@@ -1680,7 +1680,7 @@ function loadAttachmentContext($id_msg)
 				{
 					$filename = getAttachmentFilename($attachment['filename'], $attachment['id_attach'], $attachment['id_folder']);
 
-					require_once($sourcedir . '/Subs-Graphics.php');
+					require_once($sourcedir . '/lib/Subs-Graphics.php');
 					if (createThumbnail($filename, $modSettings['attachmentThumbWidth'], $modSettings['attachmentThumbHeight']))
 					{
 						// So what folder are we putting this image in?
@@ -1744,7 +1744,7 @@ function loadAttachmentContext($id_msg)
 							// Do we need to remove an old thumbnail?
 							if (!empty($old_id_thumb))
 							{
-								require_once($sourcedir . '/Subs-ManageAttachments.php');
+								require_once($sourcedir . '/lib/Subs-ManageAttachments.php');
 								removeAttachments(array('id_attach' => $old_id_thumb), '', false, false);
 							}
 						}

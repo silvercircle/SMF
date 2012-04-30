@@ -80,7 +80,7 @@ function PlushSearch1()
 	$context['require_verification'] = $user_info['is_guest'] && !empty($modSettings['search_enable_captcha']) && empty($_SESSION['ss_vv_passed']);
 	if ($context['require_verification'])
 	{
-		require_once($sourcedir . '/Subs-Editor.php');
+		require_once($sourcedir . '/lib/Subs-Editor.php');
 		$verificationOptions = array(
 			'id' => 'search',
 		);
@@ -314,7 +314,7 @@ function PlushSearch2()
 	isAllowedTo('search_posts');
 
 	require_once($sourcedir . '/Display.php');
-	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/lib/Subs-Package.php');
 
 	// Search has a special database set.
 	db_extend('search');
@@ -790,7 +790,7 @@ function PlushSearch2()
 			$context['search_errors']['need_verification_code'] = true;
 		else
 		{
-			require_once($sourcedir . '/Subs-Editor.php');
+			require_once($sourcedir . '/lib/Subs-Editor.php');
 			$verificationOptions = array(
 				'id' => 'search',
 			);
@@ -1820,7 +1820,7 @@ function prepareSearchContext($reset = false)
 		// If we've found a message we can move, and we don't already have it, load the destinations.
 		if ($options['display_quick_mod'] && !isset($context['move_to_boards']) && $context['can_move'])
 		{
-			require_once($sourcedir . '/Subs-MessageIndex.php');
+			require_once($sourcedir . '/lib/Subs-MessageIndex.php');
 			$boardListOptions = array(
 				'use_permissions' => true,
 				'not_redirection' => true,

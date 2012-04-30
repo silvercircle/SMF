@@ -119,8 +119,8 @@ function SplitTopics()
 	// Load up the "dependencies" - the template, getMsgMemberID(), and sendNotifications().
 	if (!isset($_REQUEST['xml']))
 		loadTemplate('SplitTopics');
-	require_once($sourcedir . '/Subs-Boards.php');
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Boards.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	$subActions = array(
 		'selectTopics' => 'SplitSelectTopics',
@@ -1542,7 +1542,7 @@ function MergeExecute($topics = array())
 	list($id_board) = mysql_fetch_row($request);
 	mysql_free_result($request);
 
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// Update all the statistics.
 	updateStats('topic');

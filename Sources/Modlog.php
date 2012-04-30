@@ -156,7 +156,7 @@ function ViewModlog()
 		}
 	}
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 
 	// This is all the information required for a watched user listing.
 	$listOptions = array(

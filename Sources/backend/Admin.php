@@ -56,7 +56,7 @@ function AdminMain()
 
 	$context['robot_no_index'] = true;
 
-	require_once($sourcedir . '/Subs-Menu.php');
+	require_once($sourcedir . '/lib/Subs-Menu.php');
 	
 	// Some preferences.
 	$context['admin_preferences'] = !empty($options['admin_preferences']) ? unserialize($options['admin_preferences']) : array();
@@ -538,7 +538,7 @@ function AdminHome()
 	isAllowedTo(array('admin_forum', 'manage_permissions', 'moderate_forum', 'manage_membergroups', 'manage_bans', 'send_mail', 'edit_news', 'manage_boards', 'manage_smileys', 'manage_attachments'));
 
 	// Find all of this forum's administrators...
-	require_once($sourcedir . '/Subs-Membergroups.php');
+	require_once($sourcedir . '/lib/Subs-Membergroups.php');
 	if (listMembergroupMembers_Href($context['administrators'], 1, 32) && allowedTo('manage_membergroups'))
 	{
 		// Add a 'more'-link if there are more than 32.
@@ -560,7 +560,7 @@ function AdminHome()
 	$context['forum_version'] = $forum_version;
 
 	// Get a list of current server versions.
-	require_once($sourcedir . '/Subs-Admin.php');
+	require_once($sourcedir . '/lib/Subs-Admin.php');
 	$checkFor = array(
 		'gd',
 		'db_server',
@@ -714,7 +714,7 @@ function AdminSearch()
 		$context['admin_preferences']['sb'] = $context['search_type'];
 
 		// Update the preferences.
-		require_once($sourcedir . '/Subs-Admin.php');
+		require_once($sourcedir . '/lib/Subs-Admin.php');
 		updateAdminPreferences();
 	}
 
@@ -896,7 +896,7 @@ function AdminSearchOM()
 	$postVars = implode('&', $postVars);
 
 	// Get the results from the doc site.
-	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/lib/Subs-Package.php');
 	$search_results = fetch_web_data($context['doc_scripturl'] . '?action=search2&xml', $postVars);
 
 	// If we didn't get any xml back we are in trouble - perhaps the doc site is overloaded?

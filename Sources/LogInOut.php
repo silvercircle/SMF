@@ -87,7 +87,7 @@ function Login2()
 	global $cookiename, $maintenance, $modSettings, $context, $sc, $sourcedir;
 
 	// Load cookie authentication stuff.
-	require_once($sourcedir . '/Subs-Auth.php');
+	require_once($sourcedir . '/lib/Subs-Auth.php');
 
 	if (isset($_GET['sa']) && $_GET['sa'] == 'salt' && !$user_info['is_guest'])
 	{
@@ -165,7 +165,7 @@ function Login2()
 
 	if (!empty($_POST['openid_identifier']) && !empty($modSettings['enableOpenID']))
 	{
-		require_once($sourcedir . '/Subs-OpenID.php');
+		require_once($sourcedir . '/lib/Subs-OpenID.php');
 		if (($open_id = smf_openID_validate($_POST['openid_identifier'])) !== 'no_data')
 			return $open_id;
 	}
@@ -453,7 +453,7 @@ function DoLogin()
 	global $cookiename, $maintenance, $modSettings, $context, $sourcedir;
 
 	// Load cookie authentication stuff.
-	require_once($sourcedir . '/Subs-Auth.php');
+	require_once($sourcedir . '/lib/Subs-Auth.php');
 
 	// Call login integration functions.
 	HookAPI::callHook('integrate_login', array($user_settings['member_name'], isset($_POST['hash_passwrd']) && strlen($_POST['hash_passwrd']) == 40 ? $_POST['hash_passwrd'] : null, $modSettings['cookieTime']));
@@ -531,7 +531,7 @@ function Logout($internal = false, $redirect = true)
 	if (!$internal)
 		checkSession('get');
 
-	require_once($sourcedir . '/Subs-Auth.php');
+	require_once($sourcedir . '/lib/Subs-Auth.php');
 
 	if (isset($_SESSION['pack_ftp']))
 		$_SESSION['pack_ftp'] = null;
@@ -644,7 +644,7 @@ function validatePasswordFlood($id_member, $password_flood_value = false, $was_c
 	// As this is only brute protection, we allow 5 attempts every 10 seconds.
 
 	// Destroy any session or cookie data about this member, as they validated wrong.
-	require_once($sourcedir . '/Subs-Auth.php');
+	require_once($sourcedir . '/lib/Subs-Auth.php');
 	setLoginCookie(-3600, 0);
 
 	if (isset($_SESSION['login_' . $cookiename]))

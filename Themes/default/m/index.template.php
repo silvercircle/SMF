@@ -32,7 +32,7 @@ function template_html_above()
 <head>';
 	echo '
 	<meta name="viewport" content="width=device-width;
-		initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />	<link rel="stylesheet" type="text/css" href="', $settings['primary_css'],'" />';
+		initial-scale=1.0; maximum-scale=2.0; user-scalable=1;" />	<link rel="stylesheet" type="text/css" href="', $settings['primary_css'],'" />';
 	if ($context['right_to_left'])
 		echo '
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/rtl.css" />';

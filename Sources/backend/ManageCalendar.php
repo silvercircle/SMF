@@ -68,7 +68,7 @@ function ModifyHolidays()
 			$_REQUEST['holiday'][$id] = (int) $id;
 
 		// Now the IDs are "safe" do the delete...
-		require_once($sourcedir . '/Subs-Calendar.php');
+		require_once($sourcedir . '/lib/Subs-Calendar.php');
 		removeHolidays($_REQUEST['holiday']);
 	}
 
@@ -79,11 +79,11 @@ function ModifyHolidays()
 		'base_href' => $scripturl . '?action=admin;area=managecalendar;sa=holidays',
 		'default_sort_col' => 'name',
 		'get_items' => array(
-			'file' => $sourcedir . '/Subs-Calendar.php',
+			'file' => $sourcedir . '/lib/Subs-Calendar.php',
 			'function' => 'list_getHolidays',
 		),
 		'get_count' => array(
-			'file' => $sourcedir . '/Subs-Calendar.php',
+			'file' => $sourcedir . '/lib/Subs-Calendar.php',
 			'function' => 'list_getNumHolidays',
 		),
 		'no_items_label' => $txt['holidays_no_entries'],
@@ -156,7 +156,7 @@ function ModifyHolidays()
 		),
 	);
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	$context['page_title'] = $txt['manage_holidays'];

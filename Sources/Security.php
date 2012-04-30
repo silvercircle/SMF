@@ -115,7 +115,7 @@ function validateSession()
 	if (!empty($db_no_admin_security) || (!empty($_SESSION['admin_time']) && $_SESSION['admin_time'] + $refreshTime >= time()))
 		return;
 
-	require_once($sourcedir . '/Subs-Auth.php');
+	require_once($sourcedir . '/lib/Subs-Auth.php');
 
 	// Hashed password, ahoy!
 	if (isset($_POST['admin_hash_pass']) && strlen($_POST['admin_hash_pass']) == 40)
@@ -147,7 +147,7 @@ function validateSession()
 	// OpenID?
 	if (!empty($user_settings['openid_uri']))
 	{
-		require_once($sourcedir . '/Subs-OpenID.php');
+		require_once($sourcedir . '/lib/Subs-OpenID.php');
 		smf_openID_revalidate();
 
 		$_SESSION['admin_time'] = time();
@@ -360,7 +360,7 @@ function is_not_banned($forceCheck = false)
 		// My mistake. Next time better.
 		if (!isset($_SESSION['ban']['cannot_access']))
 		{
-			require_once($sourcedir . '/Subs-Auth.php');
+			require_once($sourcedir . '/lib/Subs-Auth.php');
 			$cookie_url = url_parts(!empty($modSettings['localCookies']), !empty($modSettings['globalCookies']));
 			setcookie($cookiename . '_', '', time() - 3600, $cookie_url[1], $cookie_url[0], 0);
 		}
@@ -400,7 +400,7 @@ function is_not_banned($forceCheck = false)
 		);
 
 		// A goodbye present.
-		require_once($sourcedir . '/Subs-Auth.php');
+		require_once($sourcedir . '/lib/Subs-Auth.php');
 		$cookie_url = url_parts(!empty($modSettings['localCookies']), !empty($modSettings['globalCookies']));
 		setcookie($cookiename . '_', implode(',', $_SESSION['ban']['cannot_access']['ids']), time() + 3153600, $cookie_url[1], $cookie_url[0], 0);
 
@@ -526,7 +526,7 @@ function banPermissions()
 		$user_info['mod_cache'] = $_SESSION['mc'];
 	else
 	{
-		require_once($sourcedir . '/Subs-Auth.php');
+		require_once($sourcedir . '/lib/Subs-Auth.php');
 		rebuildModCache();
 	}
 

@@ -683,7 +683,7 @@ function SMStats()
 		die();
 
 	// Get some server versions.
-	require_once($sourcedir . '/Subs-Admin.php');
+	require_once($sourcedir . '/lib/Subs-Admin.php');
 	$checkFor = array(
 		'php',
 		'db_server',

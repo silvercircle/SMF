@@ -736,7 +736,7 @@ function create_chmod_control($chmodFiles = array(), $chmodOptions = array(), $r
 		}
 
 		// Create the list for display.
-		require_once($sourcedir . '/Subs-List.php');
+		require_once($sourcedir . '/lib/Subs-List.php');
 		createList($listOptions);
 
 		// If we just restored permissions then whereever we are, we are now done and dusted.
@@ -1188,12 +1188,12 @@ function parsePackageInfo(&$packageXML, $testing_only = true, $method = 'install
 		}
 		elseif ($actionType == 'error')
 		{
-			$return[] = array(
+			$return = array(
 				'type' => 'error',
 			);
 		}
 
-		$this_action = &$return[];
+		$this_action = &$return;
 		$this_action = array(
 			'type' => $actionType,
 			'filename' => $action->fetch('@name'),

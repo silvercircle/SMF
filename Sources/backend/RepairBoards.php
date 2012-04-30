@@ -96,7 +96,7 @@ function RepairBoards()
 		$context['error_search'] = false;
 		$context['to_fix'] = isset($_SESSION['repairboards_to_fix']) ? $_SESSION['repairboards_to_fix'] : array();
 
-		require_once($sourcedir . '/Subs-Boards.php');
+		require_once($sourcedir . '/lib/Subs-Boards.php');
 
 		// Get the MySQL version for future reference.
 		$mysql_version = mysql_get_server_info($db_connection);

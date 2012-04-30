@@ -27,7 +27,7 @@ function aStreamDispatch()
 		else
 			obExit(false);
 	}
-	require_once($sourcedir . '/Subs-Activities.php');
+	require_once($sourcedir . '/lib/Subs-Activities.php');
 	$sub_actions = array(
 		'get' => array('function' => 'aStreamGetStream'),
 		'add' => array('function' => 'aStreamAdd'),
@@ -322,7 +322,7 @@ function showActivitiesProfile($memID)
   	global $context, $user_info, $sourcedir, $user_profile, $txt, $modSettings, $options;
 
 	$context['user']['is_owner'] = $memID == $user_info['id'];
-	require_once($sourcedir . '/Subs-Activities.php');
+	require_once($sourcedir . '/lib/Subs-Activities.php');
 	loadTemplate('Activities');
 	loadLanguage('Activities');
 

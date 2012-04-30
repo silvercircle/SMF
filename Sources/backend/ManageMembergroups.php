@@ -119,7 +119,7 @@ function MembergroupIndex()
 		'base_href' => $scripturl . '?action=admin;area=membergroups' . (isset($_REQUEST['sort2']) ? ';sort2=' . urlencode($_REQUEST['sort2']) : ''),
 		'default_sort_col' => 'name',
 		'get_items' => array(
-			'file' => $sourcedir . '/Subs-Membergroups.php',
+			'file' => $sourcedir . '/lib/Subs-Membergroups.php',
 			'function' => 'list_getMembergroups',
 			'params' => array(
 				'regular',
@@ -226,7 +226,7 @@ function MembergroupIndex()
 		),
 	);
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	// The second list shows the post count based groups.
@@ -240,7 +240,7 @@ function MembergroupIndex()
 			'desc' => 'desc2',
 		),
 		'get_items' => array(
-			'file' => $sourcedir . '/Subs-Membergroups.php',
+			'file' => $sourcedir . '/lib/Subs-Membergroups.php',
 			'function' => 'list_getMembergroups',
 			'params' => array(
 				'post_count',
@@ -602,7 +602,7 @@ function DeleteMembergroup()
 
 	checkSession('get');
 
-	require_once($sourcedir . '/Subs-Membergroups.php');
+	require_once($sourcedir . '/lib/Subs-Membergroups.php');
 	deleteMembergroups((int) $_REQUEST['group']);
 
 	// Go back to the membergroup index.
@@ -644,7 +644,7 @@ function EditMembergroup()
 	{
 		checkSession();
 
-		require_once($sourcedir . '/Subs-Membergroups.php');
+		require_once($sourcedir . '/lib/Subs-Membergroups.php');
 		deleteMembergroups($_REQUEST['group']);
 
 		redirectexit('action=admin;area=membergroups;');

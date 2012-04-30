@@ -42,7 +42,7 @@ function RemoveTopic2()
 	checkSession('get');
 
 	// This file needs to be included for sendNotifications().
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// Trying to fool us around, are we?
 	if (empty($topic))
@@ -259,7 +259,7 @@ function removeTopics($topics, $decreasePostCount = true, $ignoreRecycling = fal
 	// Recycle topics that aren't in the recycle board...
 	// Added by Related Topics
 	if(isset($modSettings['have_related_topics']) && $modSettings['have_related_topics']) {
-		require_once($sourcedir . '/Subs-Related.php');
+		require_once($sourcedir . '/lib/Subs-Related.php');
 		relatedRemoveTopics($topics);
 	}
 	// Related Topics END	
@@ -447,7 +447,7 @@ function removeTopics($topics, $decreasePostCount = true, $ignoreRecycling = fal
 	}
 
 	// Get rid of the attachment, if it exists.
-	require_once($sourcedir . '/Subs-ManageAttachments.php');
+	require_once($sourcedir . '/lib/Subs-ManageAttachments.php');
 	$attachmentQuery = array(
 		'attachment_type' => 0,
 		'id_topic' => $topics,
@@ -492,7 +492,7 @@ function removeTopics($topics, $decreasePostCount = true, $ignoreRecycling = fal
 			);
 	}
 
-	require_once($sourcedir . '/Subs-Activities.php');
+	require_once($sourcedir . '/lib/Subs-Activities.php');
 	aStreamRemoveByTopic($topics);
 	// Delete anything related to the topic.
 	smf_db_query( '
@@ -556,7 +556,7 @@ function removeTopics($topics, $decreasePostCount = true, $ignoreRecycling = fal
 		'calendar_updated' => time(),
 	));
 
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 	$updates = array();
 	foreach ($adjustBoards as $stats)
 		$updates[] = $stats['id_board'];
@@ -942,8 +942,8 @@ function removeMessage($message, $decreasePostCount = true)
 	// Only remove posts if they're not recycled.
 	if (!$recycle)
 	{
-		require_once($sourcedir . '/Subs-LikeSystem.php');
-		require_once($sourcedir . '/Subs-Activities.php');
+		require_once($sourcedir . '/lib/Subs-LikeSystem.php');
+		require_once($sourcedir . '/lib/Subs-Activities.php');
 		// Remove the message + maybe its cached version
 		smf_db_query( '
 			DELETE m.*, c.* FROM {db_prefix}messages AS m LEFT JOIN {db_prefix}messages_cache AS c ON (c.id_msg = m.id_msg)
@@ -970,7 +970,7 @@ function removeMessage($message, $decreasePostCount = true)
 		}
 
 		// Delete attachment(s) if they exist.
-		require_once($sourcedir . '/Subs-ManageAttachments.php');
+		require_once($sourcedir . '/lib/Subs-ManageAttachments.php');
 		$attachmentQuery = array(
 			'attachment_type' => 0,
 			'id_msg' => $message,
@@ -993,7 +993,7 @@ function removeMessage($message, $decreasePostCount = true)
 	));
 
 	// And now to update the last message of each board we messed with.
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 	if ($recycle)
 		updateLastMessages(array($row['id_board'], $modSettings['recycle_board']));
 	else
@@ -1455,7 +1455,7 @@ function mergePosts($msgs = array(), $from_topic, $target_topic)
 	);
 
 	// Need it to update some stats.
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// Update stats.
 	updateStats('topic');

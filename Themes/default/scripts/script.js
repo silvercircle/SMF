@@ -1084,10 +1084,13 @@ function setTextSize(_s)
       allowFuture: true
     },
     inWords: function(distanceMillis) {
+	  if(guest_time_offset != 0)
+	  	this.settings.allowFuture = false;
+	  distanceMillis -= (guest_time_offset * 60 * 1000 * 60);
       var $l = this.settings.strings;
       var prefix = $l.prefixAgo;
       var suffix = $l.suffixAgo;
-      if (this.settings.allowFuture) {
+		if (this.settings.allowFuture) {
         if (distanceMillis < 0) {
           prefix = $l.prefixFromNow;
           suffix = $l.suffixFromNow;

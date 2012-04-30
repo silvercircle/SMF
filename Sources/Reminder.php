@@ -135,10 +135,10 @@ function RemindPick()
 	if (empty($row['secret_question']) || (isset($_POST['reminder_type']) && $_POST['reminder_type'] == 'email'))
 	{
 		// Randomly generate a new password, with only alpha numeric characters that is a max length of 10 chars.
-		require_once($sourcedir . '/Subs-Members.php');
+		require_once($sourcedir . '/lib/Subs-Members.php');
 		$password = generateValidationCode();
 
-		require_once($sourcedir . '/Subs-Post.php');
+		require_once($sourcedir . '/lib/Subs-Post.php');
 		$replacements = array(
 			'REALNAME' => $row['real_name'],
 			'REMINDLINK' => $scripturl . '?action=reminder;sa=setpassword;u=' . $row['id_member'] . ';code=' . $password,
@@ -238,7 +238,7 @@ function setPassword2()
 	mysql_free_result($request);
 
 	// Is the password actually valid?
-	require_once($sourcedir . '/Subs-Auth.php');
+	require_once($sourcedir . '/lib/Subs-Auth.php');
 	$passwordError = validatePassword($_POST['passwrd1'], $username, array($email));
 
 	// What - it's not?
@@ -371,7 +371,7 @@ function SecretAnswer2()
 		fatal_lang_error('passwords_dont_match', false);
 
 	// Make sure they have a strong enough password.
-	require_once($sourcedir . '/Subs-Auth.php');
+	require_once($sourcedir . '/lib/Subs-Auth.php');
 	$passwordError = validatePassword($_POST['passwrd1'], $row['member_name'], array($row['email_address']));
 
 	// Invalid?

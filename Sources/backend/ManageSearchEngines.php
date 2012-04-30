@@ -294,7 +294,7 @@ function ViewSpiders()
 		),
 	);
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	$context['sub_template'] = 'show_list';
@@ -572,7 +572,7 @@ function SpiderLogs()
 		),
 	);
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	// Now determine the actions of the URLs.
@@ -780,7 +780,7 @@ function SpiderStats()
 		),
 	);
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	$context['sub_template'] = 'show_list';

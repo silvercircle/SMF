@@ -401,7 +401,7 @@ function deleteMembers($users, $check_not_admin = false)
 	);
 	
 	// Delete avatar.
-	require_once($sourcedir . '/Subs-ManageAttachments.php');
+	require_once($sourcedir . '/lib/Subs-ManageAttachments.php');
 	removeAttachments(array('id_member' => $users));
 
 	// It's over, no more moderation for you.
@@ -479,8 +479,8 @@ function registerMember(&$regOptions, $return_errors = false)
 	loadLanguage('Login');
 
 	// We'll need some external functions.
-	require_once($sourcedir . '/Subs-Auth.php');
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Auth.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// Put any errors in here.
 	$reg_errors = array();

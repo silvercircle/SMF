@@ -1915,7 +1915,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 
 		// todo supporting code for related topics mod (should go away - the mod is not included)
 		if(isset($modSettings['have_related_topics']) && $modSettings['have_related_topics']) {
-			require_once($sourcedir . '/Subs-Related.php');
+			require_once($sourcedir . '/lib/Subs-Related.php');
 			relatedUpdateTopics($topicOptions['id']);
 		}
 
@@ -2104,7 +2104,7 @@ function createAttachment(&$attachmentOptions)
 {
 	global $modSettings, $sourcedir, $backend_subdir;
 
-	require_once($sourcedir . '/Subs-Graphics.php');
+	require_once($sourcedir . '/lib/Subs-Graphics.php');
 
 	// We need to know where this thing is going.
 	if (!empty($modSettings['currentAttachmentUploadDir']))
@@ -2217,7 +2217,7 @@ function createAttachment(&$attachmentOptions)
 		// Soon to be too big - warn the admins...
 		elseif (!isset($modSettings['attachment_full_notified']) && $modSettings['attachmentDirSizeLimit'] > 4000 && $attachmentOptions['size'] + $dirSize > ($modSettings['attachmentDirSizeLimit'] - 2000) * 1024)
 		{
-			require_once($sourcedir . '/Subs-Admin.php');
+			require_once($sourcedir . '/lib/Subs-Admin.php');
 			emailAdmins('admin_attachments_full');
 			updateSettings(array('attachment_full_notified' => 1));
 		}
@@ -2344,7 +2344,7 @@ function createAttachment(&$attachmentOptions)
 			if (empty($modSettings['attachment_image_reencode']) || (!reencodeImage($attachmentOptions['destination'], $size[2])))
 			{
 				// Nothing to do: not allowed or not successful re-encoding it.
-				require_once($sourcedir . '/Subs-ManageAttachments.php');
+				require_once($sourcedir . '/lib/Subs-ManageAttachments.php');
 				removeAttachments(array(
 					'id_attach' => $attachmentOptions['id']
 				));
@@ -2668,7 +2668,7 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 			updateStats('subject', $topicOptions['id'], $msgOptions['subject']);
 			// Added by Related Topics
 			if(isset($modSettings['have_related_topics']) && $modSettings['have_related_topics']) {
-				require_once($sourcedir . '/Subs-Related.php');
+				require_once($sourcedir . '/lib/Subs-Related.php');
 				relatedUpdateTopics($topicOptions['id']);
 			}
 			// Related Topics END

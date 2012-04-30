@@ -709,11 +709,11 @@ function ConvertUtf8()
 	updateSettings(array('global_character_set' => 'UTF-8', 'previousCharacterSet' => (empty($translation_tables[$_POST['src_charset']])) ? $charsets[$_POST['src_charset']] : $translation_tables[$_POST['src_charset']]));
 
 	// Store it in Settings.php too because it's needed before db connection.
-	require_once($sourcedir . '/Subs-Admin.php');
+	require_once($sourcedir . '/lib/Subs-Admin.php');
 	updateSettingsFile(array('db_character_set' => '\'utf8\''));
 
 	// The conversion might have messed up some serialized strings. Fix them!
-	require_once($sourcedir . '/Subs-Charset.php');
+	require_once($sourcedir . '/lib/Subs-Charset.php');
 	fix_serialized_columns();
 
 	redirectexit('action=admin;area=maintain;done=convertutf8');
@@ -905,7 +905,7 @@ function ConvertEntities()
 	}
 
 	// Make sure all serialized strings are all right.
-	require_once($sourcedir . '/Subs-Charset.php');
+	require_once($sourcedir . '/lib/Subs-Charset.php');
 	fix_serialized_columns();
 
 	// If we're here, we must be done.
@@ -1465,7 +1465,7 @@ function VersionDetail()
 	isAllowedTo('admin_forum');
 
 	// Call the function that'll get all the version info we need.
-	require_once($sourcedir . '/Subs-Admin.php');
+	require_once($sourcedir . '/lib/Subs-Admin.php');
 	$versionOptions = array(
 		'include_ssi' => true,
 		'include_subscriptions' => true,
@@ -1497,7 +1497,7 @@ function MaintainReattributePosts()
 	checkSession();
 
 	// Find the member.
-	require_once($sourcedir . '/Subs-Auth.php');
+	require_once($sourcedir . '/lib/Subs-Auth.php');
 	$members = findMembers($_POST['to']);
 
 	if (empty($members))
@@ -1510,7 +1510,7 @@ function MaintainReattributePosts()
 	$membername = $_POST['type'] == 'name' ? $_POST['from_name'] : '';
 
 	// Now call the reattribute function.
-	require_once($sourcedir . '/Subs-Members.php');
+	require_once($sourcedir . '/lib/Subs-Members.php');
 	reattributePosts($memID, $email, $membername, !empty($_POST['posts']));
 
 	$context['maintenance_finished'] = $txt['maintain_reattribute_posts'];
@@ -1591,7 +1591,7 @@ function MaintainPurgeInactiveMembers()
 		}
 		mysql_free_result($request);
 
-		require_once($sourcedir . '/Subs-Members.php');
+		require_once($sourcedir . '/lib/Subs-Members.php');
 		deleteMembers($members);
 	}
 

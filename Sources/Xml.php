@@ -52,7 +52,7 @@ function GetJumpTo()
 	global $context, $sourcedir;
 
 	// Find the boards/cateogories they can see.
-	require_once($sourcedir . '/Subs-MessageIndex.php');
+	require_once($sourcedir . '/lib/Subs-MessageIndex.php');
 	$boardListOptions = array(
 		'use_permissions' => true,
 		'selected_board' => isset($context['current_board']) ? $context['current_board'] : 0,
@@ -74,7 +74,7 @@ function ListMessageIcons()
 {
 	global $context, $sourcedir, $board;
 
-	require_once($sourcedir . '/Subs-Editor.php');
+	require_once($sourcedir . '/lib/Subs-Editor.php');
 	$context['icons'] = getMessageIcons($board);
 	$context['id_msg'] = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
 	$context['id_topic'] = isset($_REQUEST['t']) ? (int)$_REQUEST['t'] : 0;
@@ -119,7 +119,7 @@ function HandleLikeRequest()
 	
 	$mid = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
 	
-	require_once($sourcedir . '/Subs-LikeSystem.php');
+	require_once($sourcedir . '/lib/Subs-LikeSystem.php');
 	GiveLike($mid);
 }
 	
@@ -293,7 +293,7 @@ function GetSidebarContent()		// unused at the moment
 	$context['canonical_url'] = $scripturl;
 
 	// Get the user online list.
-	require_once($sourcedir . '/Subs-MembersOnline.php');
+	require_once($sourcedir . '/lib/Subs-MembersOnline.php');
 	$membersOnlineOptions = array(
 		'show_hidden' => allowedTo('moderate_forum'),
 		'sort' => 'log_time',
@@ -305,7 +305,7 @@ function GetSidebarContent()		// unused at the moment
 
 	// Are we showing all membergroups on the board index?
 	if (!empty($settings['show_group_key']))
-		$context['membergroups'] = cache_quick_get('membergroup_list', 'Subs-Membergroups.php', 'cache_getMembergroupList', array());
+		$context['membergroups'] = cache_quick_get('membergroup_list', 'lib/Subs-Membergroups.php', 'cache_getMembergroupList', array());
 
 	// Track most online statistics? (Subs-MembersOnline.php)
 	if (!empty($modSettings['trackStats']))
@@ -317,7 +317,7 @@ function GetSidebarContent()		// unused at the moment
 		$latestPostOptions = array(
 			'number_posts' => $settings['number_recent_posts'],
 		);
-		$context['latest_posts'] = cache_quick_get('boardindex-latest_posts:' . md5($user_info['query_wanna_see_board'] . $user_info['language']), 'Subs-Recent.php', 'cache_getLastPosts', array($latestPostOptions));
+		$context['latest_posts'] = cache_quick_get('boardindex-latest_posts:' . md5($user_info['query_wanna_see_board'] . $user_info['language']), 'lib/Subs-Recent.php', 'cache_getLastPosts', array($latestPostOptions));
 	}
 
 	$settings['display_recent_bar'] = !empty($settings['number_recent_posts']) ? $settings['number_recent_posts'] : 0;
@@ -336,7 +336,7 @@ function GetSidebarContent()		// unused at the moment
 			'include_events' => $modSettings['cal_showevents'] > 1,
 			'num_days_shown' => empty($modSettings['cal_days_for_index']) || $modSettings['cal_days_for_index'] < 1 ? 1 : $modSettings['cal_days_for_index'],
 		);
-		$context += cache_quick_get('calendar_index_offset_' . ($user_info['time_offset'] + $modSettings['time_offset']), 'Subs-Calendar.php', 'cache_getRecentEvents', array($eventOptions));
+		$context += cache_quick_get('calendar_index_offset_' . ($user_info['time_offset'] + $modSettings['time_offset']), 'lib/Subs-Calendar.php', 'cache_getRecentEvents', array($eventOptions));
 
 		// Whether one or multiple days are shown on the board index.
 		$context['calendar_only_today'] = $modSettings['cal_days_for_index'] == 1;

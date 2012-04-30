@@ -267,7 +267,7 @@ function ScheduledTasks()
 		),
 	);
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	$context['sub_template'] = 'view_scheduled_tasks';
@@ -502,7 +502,7 @@ function TaskLog()
 		),
 	);
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
 	$context['sub_template'] = 'show_list';

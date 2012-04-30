@@ -65,7 +65,7 @@ function Packages()
 	isAllowedTo('admin_forum');
 
 	// Load all the basic stuff.
-	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/lib/Subs-Package.php');
 	loadLanguage('Packages');
 	loadAdminTemplate('Packages');
 
@@ -135,7 +135,7 @@ function PackageInstallTest()
 	// Do we have an existing id, for uninstalls and the like.
 	$context['install_id'] = isset($_REQUEST['pid']) ? (int) $_REQUEST['pid'] : 0;
 
-	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/lib/Subs-Package.php');
 
 	// Load up the package FTP information?
 	create_chmod_control();
@@ -352,7 +352,7 @@ function PackageInstallTest()
 
 			if (!empty($action['parse_bbc']))
 			{
-				require_once($sourcedir . '/Subs-Post.php');
+				require_once($sourcedir . '/lib/Subs-Post.php');
 				preparsecode($context['package_readme']);
 				$context['package_readme'] = parse_bbc($context['package_readme']);
 			}
@@ -708,7 +708,7 @@ function PackageInstall()
 	// If this is an uninstall, we'll have an id.
 	$context['install_id'] = isset($_REQUEST['pid']) ? (int) $_REQUEST['pid'] : 0;
 
-	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/lib/Subs-Package.php');
 
 	// !!! TODO: Perhaps do it in steps, if necessary?
 
@@ -1113,7 +1113,7 @@ function PackageList()
 {
 	global $txt, $scripturl, $boarddir, $context, $sourcedir;
 
-	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/lib/Subs-Package.php');
 
 	// No package?  Show him or her the door.
 	if (!isset($_REQUEST['package']) || $_REQUEST['package'] == '')
@@ -1141,7 +1141,7 @@ function ExamineFile()
 {
 	global $txt, $scripturl, $boarddir, $context, $sourcedir;
 
-	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/lib/Subs-Package.php');
 
 	// No package?  Show him or her the door.
 	if (!isset($_REQUEST['package']) || $_REQUEST['package'] == '')
@@ -1210,7 +1210,7 @@ function FlushInstall()
 	// Always check the session.
 	checkSession('get');
 
-	include_once($sourcedir . '/Subs-Package.php');
+	include_once($sourcedir . '/lib/Subs-Package.php');
 
 	// Record when we last did this.
 	package_put_contents($boarddir . '/Packages/installed.list', time());
@@ -1459,7 +1459,7 @@ function ViewOperations()
 		fatal_lang_error('operation_invalid', 'general');
 
 	// Load the required file.
-	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/lib/Subs-Package.php');
 
 	// Uninstalling the mod?
 	$reverse = isset($_REQUEST['reverse']) ? true : false;

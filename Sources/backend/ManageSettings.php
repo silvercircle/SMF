@@ -1418,7 +1418,7 @@ function ShowCustomProfiles()
 			updateSettings($changes);
 	}
 
-	require_once($sourcedir . '/Subs-List.php');
+	require_once($sourcedir . '/lib/Subs-List.php');
 
 	$listOptions = array(
 		'id' => 'standard_profile_fields',

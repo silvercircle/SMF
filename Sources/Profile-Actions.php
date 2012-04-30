@@ -44,7 +44,7 @@ function activateAccount($memID)
 		// If we are approving the deletion of an account, we do something special ;)
 		if ($user_profile[$memID]['is_activated'] == 4)
 		{
-			require_once($sourcedir . '/Subs-Members.php');
+			require_once($sourcedir . '/lib/Subs-Members.php');
 			deleteMembers($context['id_member']);
 			redirectexit();
 		}
@@ -161,7 +161,7 @@ function issueWarning($memID)
 			// Send the PM?
 			else
 			{
-				require_once($sourcedir . '/Subs-Post.php');
+				require_once($sourcedir . '/lib/Subs-Post.php');
 				$from = array(
 					'id' => 0,
 					'name' => $context['forum_name'],
@@ -452,7 +452,7 @@ function deleteAccount2($profile_vars, $post_errors, $memID)
 	}
 
 	// This file is needed for the deleteMembers function.
-	require_once($sourcedir . '/Subs-Members.php');
+	require_once($sourcedir . '/lib/Subs-Members.php');
 
 	// Do you have permission to delete others profiles, or is that your profile you wanna delete?
 	if ($memID != $user_info['id'])

@@ -119,7 +119,7 @@ function EditNewsItem()
 {
 	global $txt, $context, $sourcedir, $scripturl;
 
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 	$id_item = isset($_REQUEST['itemid']) ? (int)$_REQUEST['itemid'] : '0';
 
 	if(isset($_GET['save'])) {
@@ -198,7 +198,7 @@ function EditNews()
 {
 	global $txt, $context, $sourcedir;
 
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	if (!empty($_REQUEST['removeitem']) && (int)$_REQUEST['removeitem'] > 0)
 	{
@@ -367,7 +367,7 @@ function ComposeMailing()
 		$toClean[] = 'exclude_members';
 	if (!empty($toClean))
 	{
-		require_once($sourcedir . '/Subs-Auth.php');
+		require_once($sourcedir . '/lib/Subs-Auth.php');
 		foreach ($toClean as $type)
 		{
 			// Remove the quotes.
@@ -603,7 +603,7 @@ function SendMailing($clean_only = false)
 	if ($clean_only)
 		return;
 
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	// Save the message and its subject in $context
 	$context['subject'] = htmlspecialchars($_POST['subject']);

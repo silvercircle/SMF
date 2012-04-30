@@ -107,11 +107,11 @@ loadEssentialData();
 // Are we going to be mimic'ing SSI at this point?
 if (isset($_GET['ssi']))
 {
-	require_once($sourcedir . '/Subs.php');
+	require_once($sourcedir . '/lib/Subs.php');
 	require_once($sourcedir . '/Errors.php');
 	require_once($sourcedir . '/Load.php');
 	require_once($sourcedir . '/Security.php');
-	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/lib/Subs-Package.php');
 
 	loadUserSettings();
 	loadPermissions();
@@ -119,7 +119,7 @@ if (isset($_GET['ssi']))
 
 // All the non-SSI stuff.
 if (!function_exists('ip2range'))
-	require_once($sourcedir . '/Subs.php');
+	require_once($sourcedir . '/lib/Subs.php');
 
 if (!function_exists('un_htmlspecialchars'))
 {
@@ -779,19 +779,15 @@ function loadEssentialData()
 	if (empty($smcFunc))
 		$smcFunc = array();
 
-	// Check we don't need some compatibility.
-	if (@version_compare(PHP_VERSION, '5') == -1)
-		require_once($sourcedir . '/Subs-Compat.php');
-
 	// Initialize everything...
 	initialize_inputs();
 
 	// Get the database going!
 	if (empty($db_type))
 		$db_type = 'mysql';
-	if (file_exists($sourcedir . '/Subs-Db-' . $db_type . '.php'))
+	if (file_exists($sourcedir . '/lib/Subs-Db-' . $db_type . '.php'))
 	{
-		require_once($sourcedir . '/Subs-Db-' . $db_type . '.php');
+		require_once($sourcedir . '/lib/Subs-Db-' . $db_type . '.php');
 
 		// Make the connection...
 		$db_connection = smf_db_initiate($db_server, $db_name, $db_user, $db_passwd, array('non_fatal' => true));
@@ -823,7 +819,7 @@ function loadEssentialData()
 	}
 	else
 	{
-		return throw_error('Cannot find ' . $sourcedir . '/Subs-Db-' . $db_type . '.php' . '. Please check you have uploaded all source files and have the correct paths set.');
+		return throw_error('Cannot find ' . $sourcedir . '/lib/Subs-Db-' . $db_type . '.php' . '. Please check you have uploaded all source files and have the correct paths set.');
 	}
 
 	// If they don't have the file, they're going to get a warning anyway so we won't need to clean request vars.
@@ -922,7 +918,7 @@ function WelcomeLogin()
 	// Check for some key files - one template, one language, and a new and an old source file.
 	$check = @file_exists($boarddir . '/Themes/default/index.template.php')
 		&& @file_exists($sourcedir . '/QueryString.php')
-		&& @file_exists($sourcedir . '/Subs-Db-' . $db_type . '.php')
+		&& @file_exists($sourcedir . '/lib/Subs-Db-' . $db_type . '.php')
 		&& @file_exists(dirname(__FILE__) . '/upgrade_2-0_' . $db_type . '.sql');
 
 	// Need legacy scripts?
@@ -1959,7 +1955,7 @@ function cli_scheduled_fetchSMfiles()
 	$smcFunc['db_free_result']($request);
 
 	// We're gonna need fetch_web_data() to pull this off.
-	require_once($sourcedir . '/Subs-Package.php');
+	require_once($sourcedir . '/lib/Subs-Package.php');
 
 	foreach ($js_files as $ID_FILE => $file)
 	{

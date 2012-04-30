@@ -57,7 +57,7 @@ if ((empty($cachedir) || !file_exists($cachedir)) && file_exists($boarddir . '/c
 // And important includes.
 require_once($sourcedir . '/CommonAPI.php');
 require_once($sourcedir . '/QueryString.php');
-require_once($sourcedir . '/Subs.php');
+require_once($sourcedir . '/lib/Subs.php');
 require_once($sourcedir . '/Errors.php');
 require_once($sourcedir . '/Load.php');
 require_once($sourcedir . '/Security.php');
@@ -195,14 +195,14 @@ function smf_main()
 		// Don't even try it, sonny.
 		else
 		{
-			require_once($sourcedir . '/Subs-Auth.php');
+			require_once($sourcedir . '/lib/Subs-Auth.php');
 			return 'InMaintenance';
 		}
 	}
 	// If guest access is off, a guest can only do one of the very few following actions.
 	elseif (empty($modSettings['allow_guestAccess']) && $user_info['is_guest'] && (!isset($_REQUEST['action']) || !in_array($_REQUEST['action'], array('coppa', 'login', 'login2', 'register', 'register2', 'reminder', 'activate', 'help', 'smstats', 'mailq', 'verificationcode', 'openidreturn'))))
 	{
-		require_once($sourcedir . '/Subs-Auth.php');
+		require_once($sourcedir . '/lib/Subs-Auth.php');
 		return 'KickGuest';
 	}
 	elseif (empty($_REQUEST['action']))
@@ -232,8 +232,8 @@ function smf_main()
 		'activate' => array('Register.php', 'Activate'),
 		'admin' => array($backend_subdir .  '/Admin.php', 'AdminMain'),
 		'announce' => array('Post.php', 'AnnounceTopic'),
-		'attachapprove' => array('Subs-ManageAttachments.php', 'ApproveAttach'),
-		'buddy' => array('Subs-Members.php', 'BuddyListToggle'),
+		'attachapprove' => array('lib/Subs-ManageAttachments.php', 'ApproveAttach'),
+		'buddy' => array('lib/Subs-Members.php', 'BuddyListToggle'),
 		'calendar' => array('Calendar.php', 'CalendarMain'),
 		'clock' => array('Calendar.php', 'clock'),
 		'collapse' => array('BoardIndex.php', 'CollapseCategory'),
@@ -245,12 +245,12 @@ function smf_main()
 		'editpoll' => array('Poll.php', 'EditPoll'),
 		'editpoll2' => array('Poll.php', 'EditPoll2'),
 		'emailuser' => array('SendTopic.php', 'EmailUser'),
-		'findmember' => array('Subs-Auth.php', 'JSMembers'),
+		'findmember' => array('lib/Subs-Auth.php', 'JSMembers'),
 		'groups' => array('Groups.php', 'Groups'),
 		'help' => array('Help.php', 'ShowHelp'),
 		'helpadmin' => array('Help.php', 'ShowAdminHelp'),
 		'im' => array('PersonalMessage.php', 'MessageMain'),
-		'jseditor' => array('Subs-Editor.php', 'EditorMain'),
+		'jseditor' => array('lib/Subs-Editor.php', 'EditorMain'),
 		'jsmodify' => array('Post.php', 'JavaScriptModify'),
 		'jsoption' => array($backend_subdir .  '/Themes.php', 'SetJavaScript'),
 		'lock' => array('LockTopic.php', 'LockTopic'),
@@ -258,7 +258,7 @@ function smf_main()
 		'login' => array('LogInOut.php', 'Login'),
 		'login2' => array('LogInOut.php', 'Login2'),
 		'logout' => array('LogInOut.php', 'Logout'),
-		'markasread' => array('Subs-Boards.php', 'MarkRead'),
+		'markasread' => array('lib/Subs-Boards.php', 'MarkRead'),
 		'mergetopics' => array('SplitTopics.php', 'MergeTopics'),
 		'mlist' => array('Memberlist.php', 'Memberlist'),
 		'moderate' => array('ModerationCenter.php', 'ModerationMain'),
@@ -268,7 +268,7 @@ function smf_main()
 		'movetopic2' => array('MoveTopic.php', 'MoveTopic2'),
 		'notify' => array('Notify.php', 'Notify'),
 		'notifyboard' => array('Notify.php', 'BoardNotify'),
-		'openidreturn' => array('Subs-OpenID.php', 'smf_openID_return'),
+		'openidreturn' => array('lib/Subs-OpenID.php', 'smf_openID_return'),
 		'pm' => array('PersonalMessage.php', 'MessageMain'),
 		'post' => array('Post.php', 'Post'),
 		'post2' => array('Post.php', 'Post2'),
@@ -280,19 +280,18 @@ function smf_main()
 		'recent' => array('Recent.php', 'RecentPosts'),
 		'register' => array('Register.php', 'Register'),
 		'register2' => array('Register.php', 'Register2'),		
-		'related' => array('Subs-Related.php', 'Related'),
+		'related' => array('lib/Subs-Related.php', 'Related'),
 		'reminder' => array('Reminder.php', 'RemindMe'),
 		'removepoll' => array('Poll.php', 'RemovePoll'),
 		'removetopic2' => array('RemoveTopic.php', 'RemoveTopic2'),
 		'reporttm' => array('SendTopic.php', 'ReportToModerator'),
-		'requestmembers' => array('Subs-Auth.php', 'RequestMembers'),
+		'requestmembers' => array('lib/Subs-Auth.php', 'RequestMembers'),
 		'restoretopic' => array('RemoveTopic.php', 'RestoreTopic'),
 		'search' => array('Search.php', 'PlushSearch1'),
 		'search2' => array('Search.php', 'PlushSearch2'),
 		'sendtopic' => array('SendTopic.php', 'EmailUser'),
 		'smstats' => array('Stats.php', 'SMStats'),
-		'suggest' => array('Subs-Editor.php', 'AutoSuggestHandler'),
-		'spellcheck' => array('Subs-Post.php', 'SpellCheck'),
+		'suggest' => array('lib/Subs-Editor.php', 'AutoSuggestHandler'),
 		'splittopics' => array('SplitTopics.php', 'SplitTopics'),
 		'stats' => array('Stats.php', 'DisplayStats'),
 		'sticky' => array('LockTopic.php', 'Sticky'),

@@ -892,7 +892,7 @@ function loadPermissions()
 	{
 		if (!isset($_SESSION['mc']) || $_SESSION['mc']['time'] <= $modSettings['settings_updated'])
 		{
-			require_once($sourcedir . '/Subs-Auth.php');
+			require_once($sourcedir . '/lib/Subs-Auth.php');
 			rebuildModCache();
 		}
 		else
@@ -1299,7 +1299,7 @@ function detectBrowser()
 		}
 	}
 
-	if(!isset($_SESSION['mobile_deteced'])) {
+	if(!isset($_SESSION['mobile_detected'])) {
 		$mobile_detector = new Mobile_Detect();
 		$_SESSION['mobile_detected'] = ($mobile_detector->isMobile() || $mobile_detector->isTablet());
 	}
@@ -2242,7 +2242,7 @@ function template_include($filename, $once = false)
 </html>';
 		else
 		{
-			require_once($sourcedir . '/Subs-Package.php');
+			require_once($sourcedir . '/lib/Subs-Package.php');
 
 			$error = fetch_web_data($boardurl . strtr($filename, array($boarddir => '', strtr($boarddir, '\\', '/') => '')));
 			if (empty($error))
@@ -2512,7 +2512,7 @@ function loadDatabase()
 	$db_type = 'mysql';
 
 	// Load the file for the database.
-	require_once($sourcedir . '/Subs-Db-' . $db_type . '.php');
+	require_once($sourcedir . '/lib/Subs-Db-' . $db_type . '.php');
 
 	// If we are in SSI try them first, but don't worry if it doesn't work, we have the normal username and password we can use.
 	if (SMF == 'SSI' && !empty($ssi_db_user) && !empty($ssi_db_passwd))

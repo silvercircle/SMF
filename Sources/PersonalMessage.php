@@ -108,7 +108,7 @@ function MessageMain()
 	isAllowedTo('pm_read');
 
 	// This file contains the basic functions for sending a PM.
-	require_once($sourcedir . '/Subs-Post.php');
+	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	loadLanguage('PersonalMessage');
 	loadTemplate('PersonalMessage');
@@ -387,7 +387,7 @@ function messageIndexBar($area)
 		);
 	}
 
-	require_once($sourcedir . '/Subs-Menu.php');
+	require_once($sourcedir . '/lib/Subs-Menu.php');
 
 	// What page is this, again?
 	$current_page = $scripturl . '?action=pm' . (!empty($_REQUEST['sa']) ? ';sa=' . $_REQUEST['sa'] : '') . (!empty($context['folder']) ? ';f=' . $context['folder'] : '') . (!empty($context['current_label_id']) ? ';l=' . $context['current_label_id'] : '');
@@ -1743,7 +1743,7 @@ function MessagePost()
 	$modSettings['disable_wysiwyg'] = !empty($modSettings['disable_wysiwyg']) || empty($modSettings['enableBBC']);
 
 	// Needed for the WYSIWYG editor.
-	require_once($sourcedir . '/Subs-Editor.php');
+	require_once($sourcedir . '/lib/Subs-Editor.php');
 
 	// Now create the editor.
 	$editorOptions = array(
@@ -1891,7 +1891,7 @@ function messagePostError($error_types, $named_recipients, $recipient_ids = arra
 	}
 
 	// We need to load the editor once more.
-	require_once($sourcedir . '/Subs-Editor.php');
+	require_once($sourcedir . '/lib/Subs-Editor.php');
 
 	// Create it...
 	$editorOptions = array(
@@ -1911,7 +1911,7 @@ function messagePostError($error_types, $named_recipients, $recipient_ids = arra
 	$context['require_verification'] = !$user_info['is_admin'] && !empty($modSettings['pm_posts_verification']) && $user_info['posts'] < $modSettings['pm_posts_verification'];
 	if ($context['require_verification'])
 	{
-		require_once($sourcedir . '/Subs-Editor.php');
+		require_once($sourcedir . '/lib/Subs-Editor.php');
 		$verificationOptions = array(
 			'id' => 'pm',
 		);
@@ -1936,7 +1936,7 @@ function MessagePost2()
 	global $user_info, $modSettings, $scripturl, $smcFunc;
 
 	isAllowedTo('pm_send');
-	require_once($sourcedir . '/Subs-Auth.php');
+	require_once($sourcedir . '/lib/Subs-Auth.php');
 
 	loadLanguage('PersonalMessage', '', false);
 
@@ -1968,7 +1968,7 @@ function MessagePost2()
 	// If we came from WYSIWYG then turn it back into BBC regardless.
 	if (!empty($_POST['message_mode']) && isset($_POST['message']))
 	{
-		require_once($sourcedir . '/Subs-Editor.php');
+		require_once($sourcedir . '/lib/Subs-Editor.php');
 		$_POST['message'] = html_to_bbc($_POST['message']);
 
 		// We need to unhtml it now as it gets done shortly.
@@ -2104,7 +2104,7 @@ function MessagePost2()
 	// Wrong verification code?
 	if (!$user_info['is_admin'] && !empty($modSettings['pm_posts_verification']) && $user_info['posts'] < $modSettings['pm_posts_verification'])
 	{
-		require_once($sourcedir . '/Subs-Editor.php');
+		require_once($sourcedir . '/lib/Subs-Editor.php');
 		$verificationOptions = array(
 			'id' => 'pm',
 		);

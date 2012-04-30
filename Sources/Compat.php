@@ -55,12 +55,12 @@ $smcFunc += array(
 	'strtolower' => (function_exists('mb_strtolower') ? create_function('$string', '
 		return mb_strtolower($string, \'UTF-8\');') : create_function('$string', '
 		global $sourcedir;
-		require_once($sourcedir . \'/Subs-Charset.php\');
+		require_once($sourcedir . \'/lib/Subs-Charset.php\');
 		return utf8_strtolower($string);')),
 	'strtoupper' => (function_exists('mb_strtoupper') ? create_function('$string', '
 		return mb_strtoupper($string, \'UTF-8\');') : create_function('$string', '
 		global $sourcedir;
-		require_once($sourcedir . \'/Subs-Charset.php\');
+		require_once($sourcedir . \'/lib/Subs-Charset.php\');
 		return utf8_strtoupper($string);')),
 	'truncate' => create_function('$string, $length', (empty($modSettings['disableEntityCheck']) ? '
 		global $smcFunc;
