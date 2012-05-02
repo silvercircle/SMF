@@ -216,6 +216,8 @@ $txt['permissionname_tag_users'] = 'Tag (@mention) users in posts';
 $txt['permissionhelp_tag_users'] = 'When granted, members are allowed to tag (mention) other forum members using the @name,name1.: syntax. Tagged members will be converted to profile links and, if the activity system is enabled, will be sent a notification.';
 $txt['permissionname_post_links'] = 'Post links';
 $txt['permissionhelp_post_links'] = 'This permission is needed to post clickable links. When disallowed, links will be converted to plain text in posts made by this user. The target URL will still be visible but not as a clickable link.<br><br><strong>Note:&nbsp;</strong>This permission is only used when the the <strong>Use link security</strong> feature is enabled in the BBC settings.';
+$txt['permissionname_can_dismiss_news'] = 'Can dismiss news items';
+$txt['permissionhelp_can_dismiss_news'] = 'Allow members to dismiss (hide) news items and board notices. Note that a mandatory news items cannot be dismissed at all, regardless of this permission setting unless you are an administrator.';
 
 $txt['permissiongroup_poll'] = 'Polls';
 $txt['permissionname_poll_view'] = 'View polls';

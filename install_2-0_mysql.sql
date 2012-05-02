@@ -1254,6 +1254,7 @@ CREATE TABLE {$db_prefix}members (
   pm_receive_from tinyint(4) unsigned NOT NULL default '1',
   likes_received int(4) unsigned NOT NULL default '0',
   likes_given int(4) unsigned NOT NULL default '0',
+  meta mediumtext NOT NULL,
   PRIMARY KEY (id_member),
   KEY member_name (member_name),
   KEY real_name (real_name),
@@ -2173,6 +2174,7 @@ CREATE TABLE {$db_prefix}news (
 	topics varchar(100) NOT NULL default '',
 	groups varchar(50) NOT NULL default '',
 	on_index tinyint(2) NOT NULL default '0',
+	can_dismiss tinyint(2) NOT NULL default '1',
 	PRIMARY KEY (id_news)
 ) ENGINE=MyISAM;
 

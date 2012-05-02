@@ -312,7 +312,8 @@ function smf_main()
 		'like' => array('LikeSystem.php', 'LikeDispatch'),
 		'tags' => array('Tagging.php', 'TagsMain'),
 		'astream' => array('Activities.php', 'aStreamDispatch'),
-		'processlink' => array('Display.php', 'ProcessLink')
+		'processlink' => array('Display.php', 'ProcessLink'),
+		'dismissnews' => array('Profile-Actions.php', 'DismissNews')
 	);
 	// Allow modifying $actionArray easily.
 	HookAPI::callHook('integrate_actions', array(&$actionArray));

@@ -289,6 +289,17 @@ function ModifyProfile($post_errors = array())
 						'any' => array('manage_membergroups'),
 					),
 				),
+				'boardnews' => array(
+					'label' => $txt['menu_boardnews'],
+					'file' => 'Profile-Modify.php',
+					'function' => 'profileManageBoardNews',
+					'enabled' => $context['user']['is_owner'],
+					'sc' => 'post',
+					'permission' => array(
+						'own' => array('profile_view_own'),
+						'any' => array(),
+					),
+				),
 			),
 		),
 		'profile_action' => array(

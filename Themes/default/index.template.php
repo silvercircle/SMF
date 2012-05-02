@@ -337,12 +337,10 @@ EOT;
 	',$context['template_hooks']['global']['above'];
 
 	if($context['news_item_count']) { //} && isset($context['is_board_index'])) {
-		//$collapser = array('id' => 'news_boardindex', 'title' => 'NEWS', 'bodyclass' => 'blue_container');
-		//template_create_collapsible_container($collapser);
 		echo '
-		<div class="blue_container gradient_darken_down">
+		<div class="blue_container gradient_darken_down" id="newsitem_container">
 		<div class="content smallpadding inset_shadow">
-		<ol class="commonlist noshadow news">';
+		<ol class="commonlist noshadow news" id="newsitem_list">';
 		template_news_listitems();
 		echo '
 		</ol>

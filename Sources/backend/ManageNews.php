@@ -144,18 +144,18 @@ function EditNewsItem()
 		if(isset($_POST['id']) && !empty($_POST['id'])) {		// modify existing
 			smf_db_query('
 				UPDATE {db_prefix}news SET body = {string:body}, teaser = {string:teaser}, groups = {string:groups}, boards = {string:boards},
-					topics = {string:topics}, on_index = {int:onindex} WHERE id_news = {int:idnews}',
+					topics = {string:topics}, on_index = {int:onindex}, can_dismiss = {int:can_dismiss} WHERE id_news = {int:idnews}',
 
 			array('body' => $body, 'teaser' => $teaser, 'topics' => $_POST['showtopics'], 'boards' => $_POST['showboards'],
-				'groups' => $_POST['showgroups'], 'idnews' => $_POST['id'], 'onindex' => $_POST['showindex']));
+				'groups' => $_POST['showgroups'], 'idnews' => $_POST['id'], 'onindex' => $_POST['showindex'], 'can_dismiss' => $_POST['mandatory'] ? 0 : 1));
 
 			$redirect_id = $_POST['id'];
 		}
 		else {													// add new
 			smf_db_insert('insert',
 				'{db_prefix}news',
-				array('body' => 'string', 'boards' => 'string', 'topics' => 'string', 'groups' => 'string', 'on_index' => 'int'),
-				array($_POST['body'], $_POST['showboards'], $_POST['showtopics'], $_POST['showgroups'], $_POST['showindex']),
+				array('body' => 'string', 'boards' => 'string', 'topics' => 'string', 'groups' => 'string', 'on_index' => 'int', 'can_dismiss' => 'int'),
+				array($_POST['body'], $_POST['showboards'], $_POST['showtopics'], $_POST['showgroups'], $_POST['showindex'], $_POST['mandatory'] ? 0 : 1),
 				array('id_news')
 			);
 			$redirect_id = smf_db_insert_id('{db_prefix}news', 'id_news');
@@ -176,7 +176,8 @@ function EditNewsItem()
 				'boards' => $row['boards'],
 				'topics' => $row['topics'],
 				'on_index' => $row['on_index'],
-				'groups' => $row['groups']
+				'groups' => $row['groups'],
+				'can_dismiss' => $row['can_dismiss']
 			);
 			if(!empty($context['news_item']['teaser']))
 				$context['news_item']['body'] = $context['news_item']['teaser'] . '[more]' . $context['news_item']['body'];
@@ -225,7 +226,8 @@ function EditNews()
 			'body' => $row['body'],
 			'boards' => $row['boards'],
 			'topic' => $row['topics'],
-			'groups' => $row['groups']
+			'groups' => $row['groups'],
+			'can_dismiss' => $row['can_dismiss']
 		);
 		if(!empty($context['news_items'][$n]['teaser']))
 			$context['news_items'][$n]['body'] = $context['news_items'][$n]['teaser'] . '[more]' . $context['news_items'][$n]['body'];

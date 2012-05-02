@@ -32,6 +32,8 @@ function template_edit_news_item()
 	 <dl class="settings mediumpadding">
 	 <dt>{$txt['newsitem_show_boardindex']}</dt>
 	 <dd><input type="checkbox" name="showindex" value="1" class="input_check"{$h($context['news_item']['on_index'], 'checked="checked"', '')} /></dd>
+	 <dt>{$txt['newsitem_is_mandatory']}</dt>
+	 <dd><input type="checkbox" name="mandatory" value="1" class="input_check"{$h(!$context['news_item']['can_dismiss'], 'checked="checked"', '')} /></dd>
 	 <dt>{$txt['newsitem_show_boards']}</dt>
 	 <dd><input type="text" size="40" name="showboards" value="{$context['news_item']['boards']}" /></dd>
 	 <dt>{$txt['newsitem_show_topics']}</dt>

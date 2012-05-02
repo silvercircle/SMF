@@ -3212,12 +3212,6 @@ function setupThemeContext($forceload = false)
 		'latest_member' => $context['common_stats']['latest_member'],
 	);
 
-	if (empty($settings['theme_version']))
-		$context['html_headers'] .= '
-	<script type="text/javascript"><!-- // --><![CDATA[
-		var smf_scripturl = "' . $scripturl . '";
-	// ]]></script>';
-
 	if (!isset($context['page_title']))
 		$context['page_title'] = '';
 
@@ -4115,7 +4109,8 @@ function registerCSSOverrideFragment($t)
  * fetch news for the board index or a specific board or topic.
  * Look at the current user group(s) to determine whether the user
  * is supposed to see the item.
-function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
+ */
+function __fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 {
 	global $context, $user_info;
 
@@ -4123,46 +4118,33 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 	$context['news_item_count'] = 0;
 	$sel = '';
 
-	$cache_key = 'news:board_'.trim($board).'_topic_'.trim($topic).'_groups_'.join(':',$user_info['groups']);
-	if (($cached_news = CacheAPI::getCache($cache_key, 360)) == null) {
-		if(0 == $board && 0 == $topic)
-			$sel = ' on_index = 1 ';
-		elseif($topic)
-			$sel = ' ((topics = -1 && FIND_IN_SET({int:board}, boards)) OR FIND_IN_SET({int:topic}, topics)) ';
-		elseif($board)
-			$sel = ' (boards = "" OR FIND_IN_SET({int:board}, boards)) ';
+	if(0 == $board && 0 == $topic)
+		$sel = ' on_index = 1 ';
+	elseif($topic)
+		$sel = ' ((topics = -1 && FIND_IN_SET({int:board}, boards)) OR FIND_IN_SET({int:topic}, topics)) ';
+	elseif($board)
+		$sel = ' (boards = "" OR FIND_IN_SET({int:board}, boards)) ';
 
-		$gsel = '(groups = "" OR FIND_IN_SET(' . implode(', groups) != 0 OR FIND_IN_SET(', $user_info['groups']) . ', groups) != 0) AND ';
+	$gsel = '(groups = "" OR FIND_IN_SET(' . implode(', groups) != 0 OR FIND_IN_SET(', $user_info['groups']) . ', groups) != 0) AND ';
 
-		$result = smf_db_query('
-			SELECT id_news, teaser, body FROM {db_prefix}news WHERE ' . $gsel . $sel,
-			array('board' => (int)$board, 'topic' => (int)$topic, 'group' => (int)$user_info['groups']));
+	$result = smf_db_query('
+		SELECT id_news, teaser, body FROM {db_prefix}news WHERE ' . $gsel . $sel,
+		array('board' => (int)$board, 'topic' => (int)$topic, 'group' => (int)$user_info['groups']));
 
-		while($row = mysql_fetch_assoc($result)) {
-			$context['news_item_count']++;
-			$context['news_items'][] = array(
-				'id' => $row['id_news'],
-				'teaser' => !empty($row['teaser']) ? parse_bbc($row['teaser']) : '',
-				'body' => parse_bbc($row['body']),
-			);
-		}
-		mysql_free_result($result);
-		if($context['news_item_count'])
-			CacheAPI::putCache($cache_key, $context['news_items'], 360);
-		else
-			CacheAPI::putCache($cache_key, 'none', 360);
+	while($row = mysql_fetch_assoc($result)) {
+		$context['news_item_count']++;
+		$context['news_items'][] = array(
+			'id' => $row['id_news'],
+			'teaser' => !empty($row['teaser']) ? parse_bbc($row['teaser']) : '',
+			'body' => parse_bbc($row['body']),
+		);
 	}
-	else {
-		if($cached_news !== 'none') {
-			$context['news_items'] = $cached_news;
-			$context['news_item_count'] = count($cached_news);
-		}
-	}
+	mysql_free_result($result);
 	// we have news items to show, we need the template
 	if($context['news_item_count'])
 		loadTemplate('News');
 }
-*/
+
 function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 {
 	global $context, $user_info;
@@ -4170,6 +4152,10 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 	$context['raw_news_items'] = array();
 	$context['news_items'] = array();
 	$context['news_item_count'] = 0;
+
+	$context['can_dismiss_news'] = allowedTo('dismiss_news_item');
+	$dismissed_items = $user_info['meta']['dismissed_news_items'];
+	$dismissed_item_count = count($dismissed_items);
 
 	$cache_key = 'newsitems';
 	if (($cached_news = CacheAPI::getCache($cache_key, 360)) == null) {
@@ -4184,6 +4170,7 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 				'body' => parse_bbc($row['body']),
 				'groups' => explode(',', $row['groups']),
 				'on_index' => $row['on_index'] ? true : false,
+				'can_dismiss' => $row['can_dismiss'],
 				'topics' => explode(',', $row['topics']),
 				'boards' => explode(',', $row['boards'])
 			);
@@ -4212,6 +4199,12 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 		}
 		if(!empty($item['groups'][0]) && !in_array($user_info['groups'], $item['groups']))
 			continue;
+		if($context['can_dismiss_news'] && $item['can_dismiss'] && $dismissed_item_count && in_array($item['id'], $dismissed_items))
+			continue;
+
+		parse_bbc_stage2($item['body']);
+		if(!empty($item['teaser']))
+			parse_bbc_stage2($item['teaser']);
 		$context['news_items'][] = &$item;
 		$context['news_item_count']++;
 	}

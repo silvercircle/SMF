@@ -60,7 +60,7 @@ if (substr($sourcedir, 0, 1) == '.' && substr($sourcedir, 1, 1) != '.')
 // Load the important includes.
 require_once($sourcedir . '/CommonAPI.php');
 require_once($sourcedir . '/QueryString.php');
-require_once($sourcedir . '/lib/lib/Subs.php');
+require_once($sourcedir . '/lib/Subs.php');
 require_once($sourcedir . '/Errors.php');
 require_once($sourcedir . '/Load.php');
 require_once($sourcedir . '/Security.php');

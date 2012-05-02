@@ -258,10 +258,10 @@ function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_l
 		$output = $txt['you_like_it'];
 	else if($total_likes > 4) {
 		$output = vsprintf($like_template[5], $results);
-		$output .= ('<a class="likedpost" onclick="getLikes('.$mid.');return(false);" rel="nofollow" href="'.$scripturl.'?action=like;sa=getlikes;;m='.$mid.'">'. ($total_likes - $count).$txt['like_others']);
+		$output .= ('<a class="likedpost" onclick="getLikes('.$mid.');return(false);" rel="nofollow" href="'.$scripturl.'?action=like;sa=getlikes;m='.$mid.'">'. ($total_likes - $count).$txt['like_others']);
 	}
 	else
-		$output = vsprintf($like_template[$count], $results);
+		$output = vsprintf($like_template[$count], $results) . '&nbsp;<a class="likedpost" onclick="getLikes('.$mid.');return(false);" rel="nofollow" href="'.$scripturl.'?action=like;sa=getlikes;m='.$mid.'">[...]</a>';
 	return($output);
 }
 

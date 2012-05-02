@@ -3037,4 +3037,44 @@ function template_showDrafts()
 			<span>', $txt['pages'], ': ', $context['page_index'], '</span>
 		</div>';
 }
+
+function template_manage_boardnews()
+{
+	global $context, $txt;
+
+	echo '
+	<div class="cat_bar2">
+		<h3>',$txt['dismissed_news_items'],'</h3>
+	</div>
+	<div class="orange_container cleantop norounded gradient_darken_down mediumpadding">
+	',$txt['dismissed_news_item_explain'],'
+	</div>
+	<br>';
+	if($context['have_items']) {
+		echo '
+	<div class="blue_container norounded gradient_darken_down mediumpadding">
+		<div class="content">
+			<ol class="commonlist news">';
+		foreach($context['dismissed_items'] as &$item) {
+			echo '
+				<li>'
+				,$item['body'],'
+				</li>';
+		}
+		echo '
+			</ol>
+		</div>
+	</div>';
+	}
+	else
+		echo '
+	<div class="red_container norounded gradient_darken_down mediumpadding centertext">
+	<strong>',$txt['no_dismissed_news_items'],'</strong>
+	</div>';
+
+	echo '
+	<div class="centertext">
+	',$context['reactivate_link'],'
+	</div>';
+}
 ?>

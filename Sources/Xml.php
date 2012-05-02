@@ -38,7 +38,7 @@ function XMLhttpMain()
 		'whoposted' => array('function' => 'WhoPosted'),
 		'prefix' => array('function' => 'InlinePrefixActions'),
 		'collapse' => array('function' => 'AjaxCollapseCategory'),
-		'sidebar' => array('function' => 'GetSidebarContent')
+		'sidebar' => array('function' => 'GetSidebarContent'),
 	);
 	if (!isset($_REQUEST['sa'], $sub_actions[$_REQUEST['sa']]))
 		fatal_lang_error('no_access', false);

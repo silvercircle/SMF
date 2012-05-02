@@ -274,7 +274,7 @@ function showPosts($memID)
 
 	// Set the page title
 	$context['page_title'] = $txt['showPosts'] . ' - ' . $user_profile[$memID]['real_name'];
-	$context['pageindex_multiplier'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
+	$context['pageindex_multiplier'] = commonAPI::getMessagesPerPage();
 
 	// Is the load average too high to allow searching just now?
 	if (!empty($context['load_average']) && !empty($modSettings['loadavg_show_posts']) && $context['load_average'] >= $modSettings['loadavg_show_posts'])
@@ -508,7 +508,7 @@ function showPosts($memID)
 	if($context['is_topics']) {
 		loadTemplate('GenericBits');
 		$context['topics_per_page'] = empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) ? $options['topics_per_page'] : $modSettings['defaultMaxTopics'];
-		$context['messages_per_page'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
+		$context['messages_per_page'] = commonAPI::getMessagesPerPage();
 		if(count($topicids)) {
 			loadMemberContext($memID, true);
 			while ($row = mysql_fetch_assoc($request)) {

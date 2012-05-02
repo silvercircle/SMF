@@ -275,7 +275,7 @@ function SplitSelectTopics()
 	$context['sub_template'] = isset($_REQUEST['xml']) ? 'split' : 'select';
 
 	// Are we using a custom messages per page?
-	$context['messages_per_page'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
+	$context['messages_per_page'] = commonAPI::getMessagesPerPage();
 
 	// Get the message ID's from before the move.
 	if (isset($_REQUEST['xml']))

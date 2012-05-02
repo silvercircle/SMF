@@ -1214,7 +1214,7 @@ function UnreadTopics()
 
 		// Decide how many pages the topic should have.
 		$topic_length = $row['num_replies'] + 1;
-		$messages_per_page = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
+		$messages_per_page = commonAPI::getMessagesPerPage();
 		if ($topic_length > $messages_per_page)
 		{
 			$tmppages = array();

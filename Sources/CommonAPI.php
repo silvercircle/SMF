@@ -129,6 +129,13 @@ class commonAPI {
 			return false;
 		}
 	}
+
+	public static function getMessagesPerPage()
+	{
+		global $modSettings, $options;
+
+		return(empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) ? $options['messages_per_page'] : $modSettings['defaultMaxMessages']);
+	}
 }
 
 /**
@@ -159,6 +166,7 @@ class HookAPI {
 			self::$addonsdir = rtrim($GLOBALS['addonsdir'], '/\\ ') . '/';
 		else
 			self::$addonsdir = $boarddir . 'addons/';
+
 	}
 
 	/**

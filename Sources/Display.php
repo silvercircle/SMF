@@ -97,7 +97,7 @@ function Display()
 		die;
 	}
 	// How much are we sticking on each page?
-	$context['messages_per_page'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
+	$context['messages_per_page'] = commonAPI::getMessagesPerPage();
 	$context['page_number'] = isset($_REQUEST['start']) ? $_REQUEST['start'] / $context['messages_per_page'] : 0;
 
 	// Let's do some work on what to search index.

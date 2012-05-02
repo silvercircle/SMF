@@ -34,14 +34,14 @@ function template_getlikes()
 		 ',$txt['members_who_liked'],'
 		</h1>
 	</div>
-	<div class="mediummargin content">
+	<div class="blue_container norounded gradient_darken_down">
 	<ol class="commonlist">';
 
 	foreach($context['likes'] as $like) {
 		echo '
 		<li>
 		<div class="floatright smalltext">', $like['dateline'], '</div>';
-		template_userbit_compact($like['member']);
+		template_userbit_compact2($like['member']);
 		echo '
 		<div class="clear"></div>
 		</li>';

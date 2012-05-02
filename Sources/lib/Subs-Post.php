@@ -1184,7 +1184,7 @@ function sendpm($recipients, $subject, $message, $store_outbox = false, $from = 
 	$id_pm = smf_db_insert_id('{db_prefix}personal_messages', 'id_pm');
 
 	if($modSettings['astream_active']) {
-		require_once($sourcedir . '/Subs-Activities.php');
+		require_once($sourcedir . '/lib/Subs-Activities.php');
 		$id_act = aStreamAdd($from['id'], ACT_PM,
 					   array('member_name' => $from['username']),
 					   0, 0, $id_pm, $from['id'], ACT_PLEVEL_PRIVATE);
@@ -1923,7 +1923,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		HookAPI::callHook('integrate_create_topic', array($msgOptions, $topicOptions, $posterOptions));
 		// record the activity
 		if($modSettings['astream_active'] && !$context['no_astream']) {
-			require_once($sourcedir . '/Subs-Activities.php');
+			require_once($sourcedir . '/lib/Subs-Activities.php');
 			aStreamAdd($posterOptions['id'], ACT_NEWTOPIC,
 				   		array('member_name' => $posterOptions['real_name'], 'topic_title' => $msgOptions['subject']),
 				   		$topicOptions['board'], $topicOptions['id'], $msgOptions['id'], $posterOptions['id']);
@@ -1961,7 +1961,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 
 		if($modSettings['astream_active'] && !$context['no_astream']) {
 			// add to activity stream, but do not notify when we reply to our own topic
-			require_once($sourcedir . '/Subs-Activities.php');
+			require_once($sourcedir . '/lib/Subs-Activities.php');
 			aStreamAdd($posterOptions['id'], ACT_REPLIED,
 				   		array('member_name' => $posterOptions['real_name'], 'topic_title' => $msgOptions['subject']),
 				   		$topicOptions['board'], $topicOptions['id'], $msg_to_update, $topicOptions['id_member_started'], 0, $posterOptions['id'] == $topicOptions['id_member_started'] ? true : false);
@@ -2682,7 +2682,7 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 
 	// record in activity stream
 	if($modSettings['astream_active'] && !$context['no_astream']) {
-		require_once($sourcedir . '/Subs-Activities.php');
+		require_once($sourcedir . '/lib/Subs-Activities.php');
 		aStreamAdd($user_info['id'], ACT_MODIFY_POST,
 					   array('member_name' => $user_info['name'], 'topic_title' => $msgOptions['subject']),
 					   $topicOptions['board'], $topicOptions['id'], $msgOptions['id'], $msgOptions['id_owner']);
@@ -3280,7 +3280,7 @@ function adminNotify($type, $memberID, $member_name = null, $actid = 0, $atype =
 	}
 	mysql_free_result($request);
 	if((int)$actid > 0 && $atype && $modSettings['astream_active'] && count($notify_users)) {
-		require_once($sourcedir . '/Subs-Activities.php');
+		require_once($sourcedir . '/lib/Subs-Activities.php');
 		aStreamAddNotification($notify_users, $actid, $atype);
 	}
 
@@ -3446,7 +3446,7 @@ function notifyTaggedUsers(&$members, $postOptions)
 	
 	$to_notify = !is_array($members) ? array($members) : $members;
 	if($modSettings['astream_active'] && count($to_notify) > 0 && isset($postOptions['id_topic']) && isset($postOptions['id_message']) && $postOptions['id_topic'] && $postOptions['id_message']) {
-		require_once($sourcedir . '/Subs-Activities.php');
+		require_once($sourcedir . '/lib/Subs-Activities.php');
 		$id_act = aStreamAdd($user_info['id'], ACT_USERTAGGED,
 				array('member_name' => $user_info['name']),
 				0, $postOptions['id_topic'], $postOptions['id_message'], $user_info['id'], ACT_PLEVEL_PRIVATE);

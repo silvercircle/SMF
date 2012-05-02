@@ -1523,6 +1523,10 @@ div.userbit_compact h2 {
 div.userbit_compact_textpart {
 	margin-left: 62px;
 }
+div.userbit_compact_textpart.small {
+	margin-left: 32px;
+	line-height:15px;
+}
 .post_content {
 	margin-left: 220px;
 	padding-bottom:5px;

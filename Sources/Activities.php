@@ -333,7 +333,7 @@ function showActivitiesProfile($memID)
 		return(showActivitiesProfileSettings($memID));
 	
 	$context['page_title'] = $txt['showActivities'] . ' - ' . $user_profile[$memID]['real_name'];
-	$context['pageindex_multiplier'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
+	$context['pageindex_multiplier'] = commonAPI::getMessagesPerPage();
 	$context['act_results'] = 0;
 	$context['rich_output'] = true;
 

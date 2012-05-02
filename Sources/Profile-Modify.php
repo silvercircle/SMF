@@ -1912,7 +1912,7 @@ function list_getTopicNotifications($start, $items_per_page, $sort, $memID)
 {
 	global $user_info, $modSettings, $options, $context;
 
-	$context['pageindex_multiplier'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
+	$context['pageindex_multiplier'] = commonAPI::getMessagesPerPage();
 	// All the topics with notification on...
 	$request = smf_db_query( '
 		SELECT
@@ -3256,4 +3256,59 @@ function groupMembership2($profile_vars, $post_errors, $memID)
 	return $changeType;
 }
 
+/**
+ * @param $memID  int member's ID
+ *
+ * grab a list of news items that were dismissed previously. Dismissed news item ids are
+ * stored in the member's meta array.
+ *
+ * TODO: implement paging(?) - are we ever going to have that many board notices?
+ */
+function profileManageBoardNews($memID)
+{
+	global $context, $user_info, $scripturl, $txt;
+	$context['sub_template'] = 'manage_boardnews';
+
+	$start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
+
+	if(isset($_REQUEST['sa']) && $_REQUEST['sa'] === 'reactivateall' && $user_info['id'] == $memID) {
+		unset($user_info['meta']['dismissed_news_items']);
+		updateMemberData($memID, array('meta' => @serialize($user_info['meta'])));
+		redirectexit('action=profile;area=boardnews;u=' . $memID);
+	}
+	$context['items_per_page'] = commonAPI::getMessagesPerPage();
+	$context['dismissed_items'] = array();
+
+	if(!isset($user_info['meta']['dismissed_news_items']))
+		$user_info['meta']['dismissed_news_items'] = array();
+
+	if(count($user_info['meta']['dismissed_news_items'])) {
+		$request = smf_db_query('SELECT * FROM {db_prefix}news WHERE id_news IN({array_int:ids}) LIMIT {int:start}, {int:perpage}',
+			array('ids' => $user_info['meta']['dismissed_news_items'], 'start' => $start, 'perpage' => $context['items_per_page']));
+
+		while($row = mysql_fetch_assoc($request)) {
+			$groups_allowed = explode(',', $row['groups']);
+
+			if(!empty($groups_allowed[0]) && !in_array($user_info['groups'], $groups_allowed))
+				continue;
+
+			$context['dismissed_items'][$row['id_news']] = array(
+				'id' => $row['id_news'],
+				'teaser' => !empty($row['teaser']) ? parse_bbc($row['teaser']) : '',
+				'body' => parse_bbc($row['body']),
+				'groups' => explode(',', $row['groups']),
+				'on_index' => $row['on_index'] ? true : false,
+				'can_dismiss' => $row['can_dismiss'],
+				'topics' => explode(',', $row['topics']),
+				'boards' => explode(',', $row['boards'])
+			);
+			parse_bbc_stage2($context['dismissed_items'][$row['id_news']]['body']);
+			if(!empty($context['dismissed_items'][$row['id_news']]['teaser']))
+				parse_bbc_stage2($context['dismissed_items'][$row['id_news']]['teaser']);
+		}
+		mysql_free_result($request);
+	}
+	$context['have_items'] = count($context['dismissed_items']);
+	$context['reactivate_link'] = $context['have_items'] ? '<a href="' . $scripturl . '?action=profile;area=boardnews;sa=reactivateall;u=' . $memID . '">' . $txt['news_items_reactivate'] . '</a>' : '';
+}
 ?>

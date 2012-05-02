@@ -789,4 +789,43 @@ function subscriptions($memID)
 		$context['sub_template'] = 'user_subscription';
 }
 
+function DismissNews()
+{
+	global $context, $user_info, $txt;
+	loadTemplate('News');
+
+	$id = isset($_REQUEST['id']) ? (int)$_REQUEST['id'] : 0;
+	$xml = isset($_REQUEST['xml']) ? true : false;
+
+	$context['sub_template'] = 'dismiss_handler' . ($xml ? '_xml' : '');
+	$effective_id = 0;
+
+	if($id) {
+		$result = smf_db_query('SELECT id_news, can_dismiss FROM {db_prefix}news WHERE id_news = {int:id}',
+			array('id' => $id));
+
+		if(mysql_num_rows($result) > 0)
+			list($effective_id, $can_dismiss_item) = mysql_fetch_row($result);
+		mysql_free_result($result);
+
+		if(!empty($effective_id)) {
+			$context['raw_item_id'] = $effective_id;
+			if($user_info['is_admin'] || (allowedTo('can_dismiss_news') && $can_dismiss_item != 0)) {
+				$context['item_to_dismiss'] = json_encode(array('id' => $effective_id));
+				if(!isset($user_info['meta']['dismissed_news_items'][$effective_id])) {
+					$user_info['meta']['dismissed_news_items'][$effective_id] = 1;
+					updateMemberData($user_info['id'], array('meta' => @serialize($user_info['meta'])));
+				}
+				if($xml)
+					$context['template_layers'] = array();
+				return;
+			}
+		}
+	}
+	loadLanguage('Errors');
+	if(isset($_REQUEST['xml']))
+		AjaxErrorMsg($txt['no_access']);
+	else
+		fatal_lang_error('no_access');
+}
 ?>

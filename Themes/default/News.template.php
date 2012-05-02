@@ -1,13 +1,70 @@
 <?php
 function template_news_listitems()
 {
-	global $context;
+	global $context, $scripturl;
+
+	echo <<<EOT
+
+	<script>
+	// <![CDATA[
+	function dismissNews(id) {
+		sendRequest('action=dismissnews;id=' + id, null);
+	}
+	// ]]>
+	</script>
+EOT;
 
 	foreach($context['news_items'] as &$item) {
 		echo '
-		<li>'
-		,$item['body'],'
+		<li id="newsitem_',$item['id'],'">';
+		if($item['can_dismiss'] && $context['can_dismiss_news'])
+			echo '
+		<div class="floatright">
+		<a onclick="dismissNews(',$item['id'],');return(false);" href="',$scripturl, '?action=dismissnews;id=' . $item['id'], '">X</a>
+		</div>';
+		echo
+		 $item['body'],'
 		</li>';
 	}
+}
+
+function template_dismiss_handler_xml()
+{
+	global $context;
+
+	echo '<', '?xml version="1.0" encoding="UTF-8"?', '>
+ <document>
+ 	<response open="private_handler" fn="_h_dismiss_news_item" />
+ 	<content>
+ 		<![CDATA[
+ 		',$context['item_to_dismiss'],'
+		]]>
+ 	</content>';
+	echo <<<EOT
+
+	<handler>
+ 	<![CDATA[
+	function _h_dismiss_news_item(content)
+	{
+		var result = $.parseJSON(content);
+		var id = parseInt(result['id']) || 0;
+		if(id > 0) {
+	        if($('li#newsitem_' + id).length)
+	        	$('li#newsitem_' + id).remove();
+	        if($('#newsitem_list').children('li').length == 0)
+	        	$('#newsitem_container').remove();
+		}
+	}
+	]]>
+	</handler>
+EOT;
+echo '
+</document>';
+}
+
+function template_dismiss_handler()
+{
+	global $context;
+	echo 'foobar';
 }
 ?>

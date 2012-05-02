@@ -183,6 +183,7 @@ $txt['groupMembership_info'] = 'In this section of your profile you can change w
 $txt['ignoreboards'] = 'Ignore Boards Options';
 $txt['ignoreboards_info'] = 'This page lets you ignore particular boards.  When a board is ignored, the new post indicator will not show up on the board index.  New posts will not show up using the "unread post" search link (when searching it will not look in those boards) however, ignored boards will still appear on the board index and upon entering will show which topics have new posts.  When using the "unread replies" link, new posts in an ignored board will still be shown.';
 $txt['pmprefs'] = 'Personal Messaging';
+$txt['menu_boardnews'] = 'Board news and notices';
 
 $txt['profileAction'] = 'Actions';
 $txt['deleteAccount'] = 'Delete this account';
@@ -492,4 +493,8 @@ $txt['inactive_link_title'] = 'Inactive link';
 $txt['inactive_link_explain'] = 'The link you just clicked was posted by a member with insufficient permissions to post direct links. Typically, only new members or members who were banned have such restricted permissions. To protect our member\'s privacy and to take countermeasures against common forum spammers, such links are not immediately followed when you click them.
 	<br><br>
 	If you want to follow the link anyway, you can find it below. Note that you\'ll have to copy and paste the link into your browser\'s address bar';
+$txt['dismissed_news_items'] = 'Dismissed board notices';
+$txt['dismissed_news_item_explain'] = 'Board notices you have previously dismissed can be reviewed on this page. If you wish to re-activate them to make them appear in their assigned location(s), use the link at the bottom of this page.';
+$txt['no_dismissed_news_items'] = 'You have no dismissed board notices';
+$txt['news_items_reactivate'] = 'Reactivate all dismissed board notices';
 ?>

@@ -55,7 +55,7 @@ function prepareTopicArray($topic_ids)
 	if (empty($topic_ids))
 		return false;
 	
-	$context['messages_per_page'] = empty($modSettings['disableCustomPerPage']) && !empty($options['messages_per_page']) ? $options['messages_per_page'] : $modSettings['defaultMaxMessages'];
+	$context['messages_per_page'] = commonAPI::getMessagesPerPage();
 
 	$result = smf_db_query('
 		SELECT
@@ -271,7 +271,7 @@ function initRelated()
 	{
 		$indexType = ucwords($modSettings['relatedIndex']);
 		$class = 'RelatedTopics' . $indexType;
-		loadClassFile('Subs-Related' . $indexType . '.php');
+		loadClassFile('lib/Subs-Related' . $indexType . '.php');
 		$context['relatedClass'][] = new $class;
 	}
 

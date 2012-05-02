@@ -388,4 +388,51 @@ function template_userbit_compact(&$member)
 	</div>
 	</div>';
 }
+/**
+ * @param $member  array (member info)
+ *
+ * same as above, but slightly smaller
+ */
+function template_userbit_compact2(&$member)
+{
+	global $settings, $txt;
+	$loc = array();
+
+	echo '
+	<div class="userbit_compact">
+	<div class="floatleft">
+	<span class="small_avatar">';
+	if(!empty($member['avatar']['image'])) {
+		echo '
+	<img class="twentyfour" src="', $member['avatar']['href'], '" alt="avatar" />';
+	}
+	else {
+		echo '
+	<img class="twentyfour" src="',$settings['images_url'],'/unknown.png" alt="avatar" />';
+	}
+	echo '
+	</span>
+	</div>
+	<div class="userbit_compact_textpart small">
+	<h2>', $member['link'],'</h2>
+	',$member['group'], '<br>';
+
+	if(!empty($member['gender']['name']))
+		$loc[0] = $member['gender']['name'];
+
+	if(isset($member['birth_date']) && !empty($member['birth_date'])) {
+		$l = idate('Y', time()) - intval($member['birth_date']);
+		if($l < 100)
+			$loc[1] = $l;
+	}
+	if(!empty($member['location']))
+		$loc[2] = ' '.$txt['ufrom'].' '.$member['location'];
+	if(!empty($loc))
+		echo implode(', ', $loc), '&nbsp;|&nbsp;';
+
+	echo
+	$member['posts'], ' ', $txt['posts'], ' ', $txt['and'], ' ', $member['liked'], ' ',$txt['likes'],'
+	</div>
+	</div>';
+}
 ?>
