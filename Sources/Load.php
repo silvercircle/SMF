@@ -276,23 +276,22 @@ function loadUserSettings()
 	}
 
 	// Only load this stuff if the user isn't a guest.
+	$_reload = $_to_cache = false;
 	if ($id_member != 0)
 	{
-		$_reload = false;
 		// do we have a notification to dismiss (mark as seen) with this request? (we can only mark one per request, but that should be sufficient)
 		if(isset($_REQUEST['nmdismiss']) && (int)$_REQUEST['nmdismiss'] > 0) {
 			smf_db_query('UPDATE {db_prefix}log_notifications SET unread = 0 WHERE id_member = {int:id_user} AND id_act = {int:idact}',
 				array('id_user' => $id_member, 'idact' => (int)$_REQUEST['nmdismiss']));
-			$_reload = true;
+			$_reload = $_to_cache = true;
 		}
 		// Is the member data cached?
-		if ($modSettings['cache_enable'] < 2 || ($user_settings = CacheAPI::getCache('user_settings-' . $id_member, 180)) == null || $_reload)
+		if ($modSettings['cache_enable'] < 2 || ($user_settings = CacheAPI::getCache('user_settings-' . $id_member, 600)) == null)
 		{
 			$request = smf_db_query( '
-				SELECT mem.*, IFNULL(a.id_attach, 0) AS id_attach, a.filename, a.attachment_type, count(n.id_member) AS notify_count
+				SELECT mem.*, IFNULL(a.id_attach, 0) AS id_attach, a.filename, a.attachment_type
 				FROM {db_prefix}members AS mem
 					LEFT JOIN {db_prefix}attachments AS a ON (a.id_member = {int:id_member})
-					LEFT JOIN {db_prefix}log_notifications AS n ON (n.id_member = mem.id_member AND n.unread = 1)
 				WHERE mem.id_member = {int:id_member}
 				LIMIT 1',
 				array(
@@ -302,8 +301,6 @@ function loadUserSettings()
 			$user_settings = mysql_fetch_assoc($request);
 			mysql_free_result($request);
 
-			if ($modSettings['cache_enable'] >= 2)
-				CacheAPI::putCache('user_settings-' . $id_member, $user_settings, 180);
 		}
 
 		// Did we find 'im?  If not, junk it.
@@ -453,7 +450,6 @@ function loadUserSettings()
 		'warning' => isset($user_settings['warning']) ? $user_settings['warning'] : 0,
 		'likesgiven' => isset($user_settings['likes_given']) ? $user_settings['likes_given'] : 0,
 		'likesreceived' => isset($user_settings['likes_received']) ? $user_settings['likes_received'] : 0,
-		'notify_count' => isset($user_settings['notify_count']) ? $user_settings['notify_count'] : 0,
 		'permissions' => array(),
 		'act_optout' => isset($user_settings['act_optout']) ? $user_settings['act_optout'] : '',
 		'notify_optout' => isset($user_settings['notify_optout']) ? $user_settings['notify_optout'] : '',
@@ -504,6 +500,36 @@ function loadUserSettings()
 	// Ok I guess they don't want to see all the boards
 	else
 		$user_info['query_wanna_see_board'] = '(' . $user_info['query_see_board'] . ' AND b.id_board NOT IN (' . implode(',', $user_info['ignoreboards']) . '))';
+
+	/*
+	 * figure out unread notifications
+	 * 
+	 * the reason why this is here in an extra query is that we need query_see_board.
+	 * e.g. when a user gets a notification for a topic that has been moved to a board he
+	 * is not permitted to access, we want to filter out the notifications.
+	 */
+	if($id_member != 0 && (!isset($user_settings['notify_count']) || $_reload)) {		// this is actually cached, unless $user_settings was re-fetched from the db.
+		$_to_cache = true;
+		$request = smf_db_query('
+					SELECT COUNT(n.id_act) AS notify_count FROM {db_prefix}log_notifications AS n
+						LEFT JOIN {db_prefix}log_activities AS a ON (a.id_act = n.id_act)
+						LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
+						WHERE n.id_member = {int:id_member} AND n.unread = 1 AND ({query_see_board} OR a.id_board = 0)',
+			array('id_member' => $id_member));
+
+		if(mysql_num_rows($request) > 0) {
+			list($unread) = mysql_fetch_row($request);
+			$user_settings['notify_count'] = $unread;
+		}
+		else
+			$user_settings['notify_count'] = 0;
+
+		mysql_free_result($request);
+	}
+	if ($modSettings['cache_enable'] >= 2 && $id_member != 0 && $_to_cache)
+		CacheAPI::putCache('user_settings-' . $id_member, $user_settings, 600);
+
+	$user_info['notify_count'] = isset($user_settings['notify_count']) ? $user_settings['notify_count'] : 0;
 }
 
 // Check for moderators and see if they have access to the board.

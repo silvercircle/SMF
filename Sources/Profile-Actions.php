@@ -813,7 +813,7 @@ function DismissNews()
 			if($user_info['is_admin'] || (allowedTo('can_dismiss_news') && $can_dismiss_item != 0)) {
 				$context['item_to_dismiss'] = json_encode(array('id' => $effective_id));
 				if(!isset($user_info['meta']['dismissed_news_items'][$effective_id])) {
-					$user_info['meta']['dismissed_news_items'][$effective_id] = 1;
+					$user_info['meta']['dismissed_news_items'][$effective_id] = $effective_id;
 					updateMemberData($user_info['id'], array('meta' => @serialize($user_info['meta'])));
 				}
 				if($xml)

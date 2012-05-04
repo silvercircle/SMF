@@ -16,7 +16,7 @@ EOT;
 
 	foreach($context['news_items'] as &$item) {
 		echo '
-		<li id="newsitem_',$item['id'],'">';
+		<li class="visible" id="newsitem_',$item['id'],'">';
 		if($item['can_dismiss'] && $context['can_dismiss_news'])
 			echo '
 		<div class="floatright">
@@ -48,11 +48,13 @@ function template_dismiss_handler_xml()
 	{
 		var result = $.parseJSON(content);
 		var id = parseInt(result['id']) || 0;
-		if(id > 0) {
-	        if($('li#newsitem_' + id).length)
-	        	$('li#newsitem_' + id).remove();
-	        if($('#newsitem_list').children('li').length == 0)
-	        	$('#newsitem_container').remove();
+		if(id) {
+	        if($('li#newsitem_' + id).length) {
+	        	$('li#newsitem_' + id).fadeOut();
+	        	$('li#newsitem_' + id).removeClass('visible');
+	        }
+	        if($('#newsitem_list').children('li.visible').length == 0)
+	        	$('#newsitem_container').fadeOut();
 		}
 	}
 	]]>

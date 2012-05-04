@@ -181,7 +181,7 @@ $txt['notification_info'] = 'SMF allows you to be notified of replies to posts, 
 $txt['groupmembership'] = 'Group Membership';
 $txt['groupMembership_info'] = 'In this section of your profile you can change which groups you belong to.';
 $txt['ignoreboards'] = 'Ignore Boards Options';
-$txt['ignoreboards_info'] = 'This page lets you ignore particular boards.  When a board is ignored, the new post indicator will not show up on the board index.  New posts will not show up using the "unread post" search link (when searching it will not look in those boards) however, ignored boards will still appear on the board index and upon entering will show which topics have new posts.  When using the "unread replies" link, new posts in an ignored board will still be shown.';
+$txt['ignoreboards_info'] = '<h3>This page lets you ignore particular boards</h3>Ignored boards are hidden from the board index and child board displays. Additionally, the new post indicator will also ignore such boards.<br><br>New posts in ignored boards will not show up using the <strong>unread post</strong> search link (when searching it will not look in those boards). When using the <strong>unread replies</strong> link, new posts in an ignored board will still be shown.<br><br>However, you can still visit ignored boards by making them temporarily visible. A small and unobtrusive warning will appear at the bottom of any board listing whenever one ore more boards were hidden because of their ignore state.';
 $txt['pmprefs'] = 'Personal Messaging';
 $txt['menu_boardnews'] = 'Board news and notices';
 

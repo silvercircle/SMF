@@ -23,7 +23,7 @@ function template_main()
 		echo '
 	<div class="smalltext">', $context['description'], '</div>';
 
-	if (!empty($context['boards']) && (!empty($options['show_children']) || $context['start'] == 0))
+	if (count($context['boards']) && (!empty($options['show_children']) || $context['start'] == 0))
 	{
 		$collapser = array('id' => $context['current_board'] . '_childboards',
 			'title' => $txt['parent_boards'], 'bodyclass' => 'generic_container');
@@ -33,14 +33,34 @@ function template_main()
 		echo '<div class="framed_region smallpadding"><ol id="board_', $context['current_board'], '_children" class="commonlist category">';
 
 		$context['alternate'] = 1;
-		foreach ($context['boards'] as &$board)
-			template_boardbit($board);
+		foreach ($context['boards'] as &$board) {
+			if(!$board['ignored'])
+				template_boardbit($board);
+		}
 		echo '
 			</ol>
 			</div>
 			</div>
 			';
 	}
+	if($context['hidden_boards']['hidden_count']) {
+		echo '
+			<br>
+			<span id="show_hidden_boards" class="red_container tinytext"><strong>',sprintf($context['hidden_boards']['notice'], $context['hidden_boards']['hidden_count'], '<a onclick="$(\'div#hidden_boards\').fadeIn();$(\'span#show_hidden_boards\').hide();return(false);" href="!#">'),'</strong></span>
+			<div class="category" id="hidden_boards" style="display:none;">
+				<div class="framed_region cleantop root_cat" id="category_0">
+					<ol class="commonlist category">';
+		foreach ($context['hidden_boards']['boards'] as &$board) {
+			if($board['ignored'])
+				template_boardbit($board);
+		}
+		echo '
+					</ol>
+				</div>
+			</div>
+			<div class="cContainer_end"></div>';
+	}
+
 	if(!$context['act_as_cat']) {
 	
 	$normal_buttons = array(

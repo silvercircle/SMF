@@ -89,7 +89,7 @@ function template_boardbit(&$board)
 			else
 				echo '
 		  <img class="clipsrc _off" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="', $txt['old_posts'], '" title="', $txt['old_posts'], '" />';
-			if($board['new'] || $board['children_new'])
+			if($board['new'] || !empty($board['children_new']))
 				echo '
 		  <img style="position:absolute;bottom:-4px;right:-3px;" src="',$settings['images_url'], '/new.png" />';
 		}

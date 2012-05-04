@@ -80,11 +80,14 @@ function getBoardIndex($boardIndexOptions)
 	else
 		$this_category = array();
 
+	$total_ignored_boards = 0;
+
 	// Run through the categories and boards (or only boards)....
 	while ($row_board = mysql_fetch_assoc($result_boards))
 	{
 		// Perhaps we are ignoring this board?
 		$ignoreThisBoard = in_array($row_board['id_board'], $user_info['ignoreboards']);
+		$total_ignored_boards += ($ignoreThisBoard ? 1 : 0);
 		$row_board['is_read'] = !empty($row_board['is_read']) || $ignoreThisBoard ? '1' : '0';
 
 		if ($boardIndexOptions['include_categories'])
@@ -154,7 +157,8 @@ function getBoardIndex($boardIndexOptions)
 					'can_approve_posts' => !empty($user_info['mod_cache']['ap']) && ($user_info['mod_cache']['ap'] == array(0) || in_array($row_board['id_board'], $user_info['mod_cache']['ap'])),
 					'href' => $href,
 					'link' => '<a href="' . $href . '">' . $row_board['board_name'] . '</a>',
-					'act_as_cat' => $row_board['allow_topics'] ? false : true
+					'act_as_cat' => $row_board['allow_topics'] ? false : true,
+					'ignored' => $ignoreThisBoard
 				);
 			}
 			if (!empty($row_board['id_moderator']))
@@ -192,7 +196,8 @@ function getBoardIndex($boardIndexOptions)
 				'can_approve_posts' => !empty($user_info['mod_cache']['ap']) && ($user_info['mod_cache']['ap'] == array(0) || in_array($row_board['id_board'], $user_info['mod_cache']['ap'])),
 				'href' => $href,
 				'link' => '<a href="' . $href . '">' . $row_board['board_name'] . '</a>',
-				'act_as_cat' => $row_board['allow_topics'] ? false : true
+				'act_as_cat' => $row_board['allow_topics'] ? false : true,
+				'ignored' => $ignoreThisBoard
 			);
 
 			// Counting child board posts is... slow :/.
@@ -319,7 +324,49 @@ function getBoardIndex($boardIndexOptions)
 	if (!empty($boardIndexOptions['set_latest_post']) && !empty($latest_post['ref']))
 		$context['latest_post'] = $latest_post['ref'];
 
+	$hidden_boards = $visible_boards = 0;
+
+	$context['hidden_boards']['id'] = $context['hidden_boards']['is_collapsed'] = 0;
+
+	// only run this if we actually have some boards on the ignore list to save cycles.
+	if($total_ignored_boards) {
+		if($boardIndexOptions['include_categories']) {
+			foreach($categories as $cat_key => &$cat)
+				$hidden_boards += hideHiddenBoards($cat['boards']);
+		}
+		else if(count($this_category))
+			$hidden_boards += hideHiddenBoards($this_category);
+	}
+
+	$context['hidden_boards']['hidden_count'] = $hidden_boards;
+	$context['hidden_boards']['visible_count'] = $visible_boards;
+	$context['hidden_boards']['notice'] = $txt[$context['hidden_boards']['hidden_count'] > 1 ? 'hidden_boards_notice_many' : 'hidden_boards_notice_one'];
 	return $boardIndexOptions['include_categories'] ? $categories : $this_category;
 }
 
+function hideHiddenBoards(&$boardlist)
+{
+	global $context;
+	$_hidden = 0;
+
+	foreach($boardlist as $key => &$board) {
+		if($board['ignored']) {
+			$context['hidden_boards']['boards'][$key] = &$board;
+			$_hidden++;
+			if(isset($board['children']))
+				$_hidden += count($board['children']);
+			unset($boardlist[$key]);
+		}
+		else if(isset($board['children'])) {
+			foreach($board['children'] as $ckey => &$child) {
+				if($child['ignored']) {
+					$context['hidden_boards']['boards'][$ckey] = &$child;
+					$_hidden++;
+					unset($board['children'][$ckey]);
+				}
+			}
+		}
+	}
+	return $_hidden;
+}
 ?>

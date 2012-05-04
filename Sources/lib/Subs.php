@@ -4153,8 +4153,8 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 	$context['news_items'] = array();
 	$context['news_item_count'] = 0;
 
-	$context['can_dismiss_news'] = allowedTo('dismiss_news_item');
-	$dismissed_items = $user_info['meta']['dismissed_news_items'];
+	$context['can_dismiss_news'] = (!$user_info['is_guest'] && allowedTo('can_dismiss_news'));
+	$dismissed_items = isset($user_info['meta']['dismissed_news_items']) ? $user_info['meta']['dismissed_news_items'] : array();
 	$dismissed_item_count = count($dismissed_items);
 
 	$cache_key = 'newsitems';
@@ -4199,7 +4199,7 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 		}
 		if(!empty($item['groups'][0]) && !in_array($user_info['groups'], $item['groups']))
 			continue;
-		if($context['can_dismiss_news'] && $item['can_dismiss'] && $dismissed_item_count && in_array($item['id'], $dismissed_items))
+		if($context['can_dismiss_news'] && $item['can_dismiss'] && $dismissed_item_count && isset($dismissed_items[$item['id']]))
 			continue;
 
 		parse_bbc_stage2($item['body']);

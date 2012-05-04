@@ -188,6 +188,7 @@ function EditNewsItem()
 	else {
 		$context['news_item']['id'] = $context['news_item']['on_index'] = 0;
 		$context['news_item']['body'] = $context['news_item']['boards'] = $context['news_item']['topics'] = $context['news_item']['groups'] = '';
+		$context['news_item']['can_dismiss'] = 1;
 	}
 	$context['sub_template'] = 'edit_news_item';
 	$context['page_title'] = $txt['admin_edit_news'];

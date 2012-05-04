@@ -1121,7 +1121,7 @@ function template_edit_options()
 	// Have we some description?
 	if ($context['page_desc'])
 		echo '
-			<div class="orange_container cleantop mediumpadding">', $context['page_desc'], '</div><br>';
+			<div class="orange_container cleantop norunded mediumpadding gradient_darken_down">', $context['page_desc'], '</div><br>';
 
 	echo '
 			<div class="blue_container">
@@ -1818,10 +1818,10 @@ function template_ignoreboards()
 	<form action="', $scripturl, '?action=profile;area=ignoreboards;save" method="post" accept-charset="UTF-8" name="creator" id="creator">
 		<div class="cat_bar2">
 			<h3>
-				<span class="ie6_header floatleft">', $txt['profile'], '</span>
+				<span class="ie6_header floatleft">', $txt['ignoreboards'], '</span>
 			</h3>
 		</div>
-		<div class="orange_container cleantop">', $txt['ignoreboards_info'], '</div>
+		<div class="orange_container smalltext cleantop norounded gradient_darken_down mediumpadding">', $txt['ignoreboards_info'], '</div>
 		<br>
 		<div class="blue_container">
 			<div class="content flow_hidden">
@@ -3069,7 +3069,7 @@ function template_manage_boardnews()
 	else
 		echo '
 	<div class="red_container norounded gradient_darken_down mediumpadding centertext">
-	<strong>',$txt['no_dismissed_news_items'],'</strong>
+		<strong>',$txt['no_dismissed_news_items'],'</strong>
 	</div>';
 
 	echo '

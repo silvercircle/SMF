@@ -78,6 +78,7 @@ function template_html_above()
 	var t2 = document.createElement('SCRIPT');
 	var _cname = '{$cookiename}';
 	var _mqcname = '{$context['multiquote_cookiename']}';
+	var guest_time_offset = 0;
 	t2.type = "text/javascript";
 	t2.async = true;
 	t2.src = '{$settings['default_theme_url']}/scripts/footer.js{$context['jsver']}';
