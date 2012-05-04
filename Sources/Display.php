@@ -1242,10 +1242,6 @@ function Display()
 	$context['can_restore_topic'] &= !empty($modSettings['recycle_enable']) && $modSettings['recycle_board'] == $board && !empty($topicinfo['id_previous_board']);
 	$context['can_restore_msg'] &= !empty($modSettings['recycle_enable']) && $modSettings['recycle_board'] == $board && !empty($topicinfo['id_previous_topic']);
 
-	$context['can_see_hidden_level1'] = allowedTo('see_hidden1');
-	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
-	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
-
 	// Load up the "double post" sequencing magic.
 	if (!empty($options['display_quick_reply']))
 	{

@@ -331,20 +331,21 @@ function getBoardIndex($boardIndexOptions)
 	// only run this if we actually have some boards on the ignore list to save cycles.
 	if($total_ignored_boards) {
 		if($boardIndexOptions['include_categories']) {
-			foreach($categories as $cat_key => &$cat)
-				$hidden_boards += hideHiddenBoards($cat['boards']);
+			foreach($categories as &$cat)
+				$hidden_boards += hideIgnoredBoards($cat['boards']);
 		}
 		else if(count($this_category))
-			$hidden_boards += hideHiddenBoards($this_category);
+			$hidden_boards += hideIgnoredBoards($this_category);
+		$context['hidden_boards']['notice'] = $txt[$hidden_boards > 1 ? 'hidden_boards_notice_many' : 'hidden_boards_notice_one'];
+		$context['hidden_boards']['setup_notice'] = sprintf($txt['hidden_boards_setup_notice'], $scripturl . '?action=profile;area=ignoreboards');
 	}
 
 	$context['hidden_boards']['hidden_count'] = $hidden_boards;
 	$context['hidden_boards']['visible_count'] = $visible_boards;
-	$context['hidden_boards']['notice'] = $txt[$context['hidden_boards']['hidden_count'] > 1 ? 'hidden_boards_notice_many' : 'hidden_boards_notice_one'];
 	return $boardIndexOptions['include_categories'] ? $categories : $this_category;
 }
 
-function hideHiddenBoards(&$boardlist)
+function hideIgnoredBoards(&$boardlist)
 {
 	global $context;
 	$_hidden = 0;

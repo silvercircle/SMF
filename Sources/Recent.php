@@ -58,10 +58,6 @@ function getLastPost()
 
 	$board = $row['id_board'];
 
-	$context['can_see_hidden_level1'] = allowedTo('see_hidden1');
-	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
-	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
-
 	// Censor the subject and post...
 	censorText($row['subject']);
 	censorText($row['body']);

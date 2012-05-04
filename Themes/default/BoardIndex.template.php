@@ -66,7 +66,7 @@ function template_main()
 	}
 	if($context['hidden_boards']['hidden_count']) {
 		echo '
-			<span id="show_hidden_boards" class="red_container tinytext"><strong>',sprintf($context['hidden_boards']['notice'], $context['hidden_boards']['hidden_count'],'<a onclick="$(\'div#category_0\').fadeIn();$(\'span#show_hidden_boards\').hide();return(false);" href="!#">'), '</strong></span>
+			<div id="show_hidden_boards" class="orange_container norounded gradient_darken_down tinytext"><span class="floatright">',$context['hidden_boards']['setup_notice'],'</span><strong>',sprintf($context['hidden_boards']['notice'], $context['hidden_boards']['hidden_count'],'<a onclick="$(\'div#category_0\').fadeIn();return(false);" href="!#">'), '</strong></div>
 			<div class="category" id="category_', $context['hidden_boards']['id'], '" style="display:none;">
 				<div class="framed_region cleantop root_cat" id="category_', $context['hidden_boards']['id'], '_boards">
 					<ol class="commonlist category">';

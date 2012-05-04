@@ -820,5 +820,6 @@ $txt['clear_cookies'] = 'Clear all cookies';
 $txt['clear_cookies_warning'] = '<h1 class=\\\'bigheader secondary\\\'><strong>Clear all stored cookies</strong></h1><div class=\\\'tinytext\\\'>By clicking yes, all primary cookies set by this site will be cleared from your browser\\\'s memory. As a result you may loose some preferences and will be logged out (but youll be able to re-login at any time).<br><br>Click <strong>no</strong> to keep all cookies in their present state.</div>';
 $txt['link_disabled'] = '[link disabled (no permission)]';
 $txt['hidden_boards_notice_one'] = '%d board is hidden from display, because you are ignoring it. %sClick to view</a>.';
-$txt['hidden_boards_notice_many'] = '%d boards are hidden from display, because you are ignoring them. %sClick to view</a>.';
+$txt['hidden_boards_notice_many'] = '%d boards are hidden from display, because you are ignoring them. %sClick to view</a>';
+$txt['hidden_boards_setup_notice'] = '<a href="%s">Set up board ignore options</a>';
 ?>

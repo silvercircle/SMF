@@ -90,9 +90,6 @@ function Post()
 	loadLanguage('Tagging');
 	$context['tagging_ui'] = '';
 
-	$context['can_see_hidden_level1'] = allowedTo('see_hidden1');
-	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
-	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
 	$context['can_tag_users'] = allowedTo('tag_users');
 
 	if(in_array('dr', $context['admin_features'])) {
@@ -2816,10 +2813,6 @@ function QuoteFast()
 	mysql_free_result($request);
 
     $board = $row['id_board'];
-
-	$context['can_see_hidden_level1'] = allowedTo('see_hidden1');
-	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
-	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
 
 	// quick modify, attempt to find existing drafts and load them
 	if(!$context['close_window'] && isset($_REQUEST['modify']) && !$user_info['is_guest'] && in_array('dr', $context['admin_features']) && allowedTo('drafts_allow', $row['id_board']) && !empty($options['use_drafts'])) {

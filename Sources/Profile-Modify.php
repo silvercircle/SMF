@@ -3302,9 +3302,6 @@ function profileManageBoardNews($memID)
 				'topics' => explode(',', $row['topics']),
 				'boards' => explode(',', $row['boards'])
 			);
-			parse_bbc_stage2($context['dismissed_items'][$row['id_news']]['body']);
-			if(!empty($context['dismissed_items'][$row['id_news']]['teaser']))
-				parse_bbc_stage2($context['dismissed_items'][$row['id_news']]['teaser']);
 		}
 		mysql_free_result($request);
 	}

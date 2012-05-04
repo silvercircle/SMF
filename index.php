@@ -140,7 +140,7 @@ obExit(null, null, true);
 // The main controlling function.
 function smf_main()
 {
-	global $modSettings, $settings, $user_info, $board, $topic, $board_info, $maintenance, $sourcedir, $backend_subdir;
+	global $context, $modSettings, $settings, $user_info, $board, $topic, $board_info, $maintenance, $sourcedir, $backend_subdir;
 
 	// Special case: session keep-alive, output a transparent pixel.
 	if (isset($_GET['action']) && $_GET['action'] == 'keepalive')
@@ -167,6 +167,10 @@ function smf_main()
 
 	// Check if the user should be disallowed access.
 	is_not_banned();
+
+	$context['can_see_hidden_level1'] = allowedTo('see_hidden1');
+	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
+	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
 
 	// If we are in a topic and don't have permission to approve it then duck out now.
 	if (!empty($topic) && empty($board_info['cur_topic_approved']) && !allowedTo('approve_posts') && ($user_info['id'] != $board_info['cur_topic_starter'] || $user_info['is_guest']))

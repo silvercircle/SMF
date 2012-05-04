@@ -1507,8 +1507,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			array(
 				'tag' => 'url',
 				'type' => 'unparsed_content',
-				//'content' => '<a href="$1" class="bbc_link" target="_blank">$1</a>',
-				'content' => !empty($modSettings['linkSecurity']) ? ('<a target="_blank" class="bbc_link checked" href="'.$scripturl.'?action=processlink;m=[__%%mid%%__];target=$1">$1</a>') : '<a href="$1" class="bbc_link" target="_blank">$1</a>',
+				'content' => '<a href="$1" class="bbc_link" target="_blank">$1</a>',
 				'validate' => create_function('&$tag, &$data, $disabled', '
 					$data = strtr($data, array(\'<br />\' => \'\'));
 					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
@@ -1518,9 +1517,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			array(
 				'tag' => 'url',
 				'type' => 'unparsed_equals',
-				//'before' => '<a href="$1" class="bbc_link" target="_blank">',
-				//'after' => '</a>',
-				'before' => !empty($modSettings['linkSecurity']) ? ('<a target="_blank" class="bbc_link checked" href="'.$scripturl.'?action=processlink;m=[__%%mid%%__];target=$1'.'">') : '<a href="$1" class="bbc_link" target="_blank">',
+				'before' => '<a href="$1" class="bbc_link" target="_blank">',
 				'after' => '</a>',
 				'validate' => create_function('&$tag, &$data, $disabled', '
 					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
@@ -1529,19 +1526,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'disallow_children' => array('email', 'ftp', 'url', 'iurl'),
 				'disabled_after' => ' ($1)',
 			),
-			/*
-			array(
-				'tag' => 'url',
-				'parameters' => array(
-					'link' => array('match' => '([\w\W]+\:\/\/[\w\W]+)', 'quoted' => true, 'value' => '$1'),
-					//'link' => array('match' => '(.{1,192}?)', 'quoted' => true),
-					'author' => array('match' => '(.{1,192}?)', 'quoted' => true),
-				),
-				'before' => '<a target="_blank" class="bbc_link checked" href="'.$scripturl.'?action=processlink;p={author};target={link}">',
-				'after' => '</a>',
-				'disallow_children' => array('email', 'ftp', 'url', 'iurl'),
-			),
-			*/
 		);
 
 		// Let mods add new BBC without hassle.
@@ -2362,8 +2346,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 
 	// Cleanup whitespace.
 	$message = strtr($message, array('  ' => ' &nbsp;', "\r" => '', "\n" => '<br />', '<br /> ' => '<br />&nbsp;', '&#13;' => "\n"));
-	if($cache_id != '')
-		$message = str_replace('[__%%mid%%__]', $cache_id, $message);
 
 	/*
 	 * experimental hook... this could be used to support mods like footnotes, for example
@@ -2421,9 +2403,6 @@ function parse_bbc_stage2(&$message, $mid = 0, $is_for_editor = false)
 			}
 		}
 	}
-	if(stripos($message, '[__%%mid%%__]'))
-		$message = str_replace('[__%%mid%%__]', $mid, $message);
-
 	HookAPI::callHook('bbc_stage2', array(&$message, &$is_for_editor));
 }
 
@@ -4202,9 +4181,6 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 		if($context['can_dismiss_news'] && $item['can_dismiss'] && $dismissed_item_count && isset($dismissed_items[$item['id']]))
 			continue;
 
-		parse_bbc_stage2($item['body']);
-		if(!empty($item['teaser']))
-			parse_bbc_stage2($item['teaser']);
 		$context['news_items'][] = &$item;
 		$context['news_item_count']++;
 	}
