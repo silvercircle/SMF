@@ -1,8 +1,6 @@
 <?php
 function template_news_listitems()
 {
-	global $context, $scripturl;
-
 	echo <<<EOT
 
 	<script>
@@ -13,6 +11,21 @@ function template_news_listitems()
 	// ]]>
 	</script>
 EOT;
+
+	echo '
+	<div class="blue_container gradient_darken_down" id="newsitem_container">
+		<div class="content smallpadding inset_shadow">
+			<ol class="commonlist noshadow news" id="newsitem_list">';
+	template_news_listitem();
+	echo '
+			</ol>
+		</div>
+	</div>
+	<div class="cContainer_end"></div>';
+}
+function template_news_listitem()
+{
+	global $context, $scripturl;
 
 	foreach($context['news_items'] as &$item) {
 		echo '

@@ -96,15 +96,15 @@ function template_main()
 		<tr>
 			<td>
 			<div>
-				<div style="left:-25px;margin-right:-25px;" class="csrcwrapper24px"><img class="clipsrc _off" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" />
+				<div style="left:-25px;margin-right:-25px;" class="csrcwrapper24px"><img class="clipsrc _off" src="', $settings['images_url'], '/clipsrc.png" alt="" />
 			    <img alt="" style="position:absolute;bottom:-4px;right:-28px;" src="',$settings['images_url'], '/new.png" />
 				</div>
 			</div>
 			</td>
 			<td class="nowrap smalltext" style="padding-left:28px;">', $txt['new_posts'], '</td>
-			<td><div class="csrcwrapper24px"><img class="clipsrc _off" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['old_posts'], '</td>
-			<td><div class="csrcwrapper24px"><img class="clipsrc _redirect" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['redirect_board'], '</td>
-			<td><div class="csrcwrapper24px"><img class="clipsrc _page" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['a_page'], '</td>
+			<td><div class="csrcwrapper24px"><img class="clipsrc _off" src="', $settings['images_url'], '/clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['old_posts'], '</td>
+			<td><div class="csrcwrapper24px"><img class="clipsrc _redirect" src="', $settings['images_url'], '/clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['redirect_board'], '</td>
+			<td><div class="csrcwrapper24px"><img class="clipsrc _page" src="', $settings['images_url'], '/clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['a_page'], '</td>
 		</tr>
 		</table>
 	</div>';
@@ -119,9 +119,9 @@ function template_main()
 	<div id="posting_icons" class="flow_hidden">
 		<table>
 		<tr>
-			<td><div class="csrcwrapper24px"><img class="clipsrc _off" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['old_posts'], '</td>
-			<td><div class="csrcwrapper24px"><img class="clipsrc _redirect" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['redirect_board'], '</td>
-			<td><div class="csrcwrapper24px"><img class="clipsrc _page" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['a_page'], '</td>
+			<td><div class="csrcwrapper24px"><img class="clipsrc _off" src="', $settings['images_url'], '/clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['old_posts'], '</td>
+			<td><div class="csrcwrapper24px"><img class="clipsrc _redirect" src="', $settings['images_url'], '/clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['redirect_board'], '</td>
+			<td><div class="csrcwrapper24px"><img class="clipsrc _page" src="', $settings['images_url'], '/clipsrc.png" alt="" /></div></td><td class="nowrap smalltext" style="padding-left:28px;">', $txt['a_page'], '</td>
 		</tr>
 		</table>
 	</div>';

@@ -1700,7 +1700,17 @@ function loadTheme($id_theme = 0, $initialize = true)
 		// Do this to keep things easier in the templates.
 		$context['theme_variant'] = '_' . $context['theme_variant'];
 		$context['theme_variant_url'] = $context['theme_variant'] . '/';
+		$context['clip_image_src'] = $settings['images_url'] . '/' . $settings['clip_image_src'][$context['theme_variant']];
+		$context['sprite_image_src'] = $settings['images_url'] . '/' . $settings['sprite_image_src'][$context['theme_variant']];
 	}
+	/*
+	if(!empty($context['theme_variant']) && $context['theme_variant'] != '_default') {
+		if(!empty($settings['base_theme_dir']))
+			$settings['template_dirs'][] = $settings['base_theme_dir'] . '/variants/' . $context['theme_variant'];
+		else
+			$settings['template_dirs'][] = $settings['default_theme_dir'] . '/variants/' . $context['theme_variant'];
+	}
+    */
 
 	// Allow overriding the board wide time/number formats.
 	if (empty($user_settings['time_format']) && !empty($txt['time_format']))

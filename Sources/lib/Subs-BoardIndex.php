@@ -102,7 +102,7 @@ function getBoardIndex($boardIndexOptions)
 					'is_collapsed' => isset($row_board['can_collapse']) && $row_board['can_collapse'] == 1 && $row_board['is_collapsed'] > 0,
 					'can_collapse' => isset($row_board['can_collapse']) && $row_board['can_collapse'] == 1,
 					'collapse_href' => isset($row_board['can_collapse']) ? $scripturl . '?action=collapse;c=' . $row_board['id_cat'] . ';sa=' . ($row_board['is_collapsed'] > 0 ? 'expand;' : 'collapse;') . $context['session_var'] . '=' . $context['session_id'] . '#c' . $row_board['id_cat'] : '',
-					'collapse_image' => isset($row_board['can_collapse']) ? '<img class="clipsrc '.($row_board['is_collapsed'] ? ' _expand' : '_collapse').'" src="' . $settings['images_url'] . '/' . $context['theme_variant_url'] . 'clipsrc.png" alt="-" />' : '',
+					'collapse_image' => isset($row_board['can_collapse']) ? '<img class="clipsrc '.($row_board['is_collapsed'] ? ' _expand' : '_collapse').'" src="' . $settings['images_url'] . '/clipsrc.png" alt="-" />' : '',
 					'href' => $scripturl . '#c' . $row_board['id_cat'],
 					'boards' => array(),
 					'is_root' => $row_board['cat_name'][0] === '!' ? true : false,
@@ -345,6 +345,14 @@ function getBoardIndex($boardIndexOptions)
 	return $boardIndexOptions['include_categories'] ? $categories : $this_category;
 }
 
+/**
+ * move hidden boards into a separate pseudo category to hide them from normal
+ * board list display.
+ *
+ * @param $boardlist	array of boards (either a $category['boards'] or normal list
+ * 						when categories are unwanted.
+ * @return int			number of boards that are hidden in this list of boards
+ */
 function hideIgnoredBoards(&$boardlist)
 {
 	global $context;

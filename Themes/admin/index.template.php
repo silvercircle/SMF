@@ -274,20 +274,6 @@ EOT;
 	<div class="clear cContainer_end"></div>
 	',$context['template_hooks']['global']['above'];
 
-	if($context['news_item_count'] && isset($context['is_board_index'])) {
-		//$collapser = array('id' => 'news_boardindex', 'title' => 'NEWS', 'bodyclass' => 'blue_container');
-		//template_create_collapsible_container($collapser);
-		echo '
-		<div class="blue_container">
-		<div class="content smallpadding inset_shadow">
-		<ol class="commonlist noshadow news">';
-		template_news_listitems();
-		echo '
-		</ol>
-		</div>
-		</div>
-		<div class="cContainer_end"></div>';
-	}
 	echo '<aside>
 		  <div id="sidebar" style="width:260px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
 	if($sidebar_allowed && is_callable($context['sidebar_context_output']))

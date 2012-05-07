@@ -22,7 +22,7 @@ function template_board_children(&$board)
 	{
 		if (!$child['is_redirect']) {
 			$child['link'] = '<h4 class="childlink"><a data-tip="tip_b_'.$child['id'].'" href="' . $child['href'] . '" class="boardlink easytip">' . $child['name'] . '</a></h4>';
-			$child['img'] = '<div class="csrcwrapper16px" style="left:-12px;margin-bottom:-16px;"><img class="clipsrc '.($child['new'] ? '_child_new' : '_child_old').'" src="' . $settings['images_url'] . '/'. $context['theme_variant_url'] . 'theme/sprite.png" alt="*" title="*" /></div>';
+			$child['img'] = '<div class="csrcwrapper16px" style="left:-12px;margin-bottom:-16px;"><img class="clipsrc '.($child['new'] ? '_child_new' : '_child_old').'" src="' . $context['sprite_image_src'] . '" alt="*" title="*" /></div>';
 			$child['tip'] = '<div id="tip_b_'.$child['id'].'" style="display:none;">' . (!empty($child['description']) ? $child['description'] . '<br>' : '') . ($child['new'] ? $txt['new_posts'] : $txt['old_posts']) . ' (' . $txt['board_topics'] . ': ' . comma_format($child['topics']) . ', ' . $txt['posts'] . ': ' . comma_format($child['posts']) . ')' . '</div>';
 		}
 		else {
@@ -76,7 +76,7 @@ function template_boardbit(&$board)
 
 		if(!empty($board['boardicon'])) {
 			echo '
-		  <img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'boards/',$board['boardicon'],'.png" alt="', $txt['new_posts'], '" title="', $txt['new_posts'], '" />';
+		  <img src="', $settings['images_url'], '/boards/',$board['boardicon'],'.png" alt="', $txt['new_posts'], '" title="', $txt['new_posts'], '" />';
 			if($board['new'] || $board['children_new'])
 				echo '<img style="position:absolute;bottom:-4px;right:-3px;" src="',$settings['images_url'], '/new.png" />';
 		}
@@ -84,11 +84,11 @@ function template_boardbit(&$board)
 		// If the board or children is new, show an indicator.
 			if ($board['is_redirect'])
 				echo '
-		  <img class="clipsrc _redirect" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="*" title="*" />';
+		  <img class="clipsrc _redirect" src="', $context['clip_image_src'], '" alt="*" title="*" />';
 		// No new posts at all! The agony!!
 			else
 				echo '
-		  <img class="clipsrc _off" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="', $txt['old_posts'], '" title="', $txt['old_posts'], '" />';
+		  <img class="clipsrc _off" src="', $context['clip_image_src'], '" alt="', $txt['old_posts'], '" title="', $txt['old_posts'], '" />';
 			if($board['new'] || !empty($board['children_new']))
 				echo '
 		  <img style="position:absolute;bottom:-4px;right:-3px;" src="',$settings['images_url'], '/new.png" />';
@@ -134,7 +134,7 @@ function template_boardbit(&$board)
 		echo '
 		<div class="info fullwidth">
 	 	<div class="icon floatleft">
-	  	<div class="csrcwrapper24px"><img class="clipsrc _page" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="*" title="*" /></div>
+	  	<div class="csrcwrapper24px"><img class="clipsrc _page" src="', $context['clip_image_src'], '" alt="*" title="*" /></div>
 	 	</div>
 		<div style="padding-left:32px;">
 		<h3><a class="boardlink" href="',URL::topic(intval(substr($board['redirect'], 1)), $board['name'], 0),'">',$board['name'],'</a></h3>
@@ -170,14 +170,14 @@ function template_boardbit_subcat(&$board)
 
 		if(!empty($board['boardicon'])) {
 			echo '
-		  <img src="', $settings['images_url'], '/', $context['theme_variant_url'], 'boards/',$board['boardicon'],'.png" alt="', $txt['new_posts'], '" title="', $txt['new_posts'], '" />';
+		  <img src="', $settings['images_url'], '/boards/',$board['boardicon'],'.png" alt="', $txt['new_posts'], '" title="', $txt['new_posts'], '" />';
 			if($board['new'] || $board['children_new'])
 				echo '<img style="position:absolute;bottom:-4px;right:-3px;" src="',$settings['images_url'], '/new.png" />';
 		}
 		else {
 		// If the board or children is new, show an indicator.
 			echo '
-		  <img class="clipsrc _subcat" src="', $settings['images_url'], '/', $context['theme_variant_url'], 'clipsrc.png" alt="', $txt['old_posts'], '" title="', $txt['old_posts'], '" />';
+		  <img class="clipsrc _subcat" src="', $settings['images_url'], '/clipsrc.png" alt="', $txt['old_posts'], '" title="', $txt['old_posts'], '" />';
 		 	if($board['new'] || $board['children_new'])
 			echo '
 		  <img style="position:absolute;bottom:-4px;right:-3px;" src="',$settings['images_url'], '/new.png" />';
@@ -252,7 +252,7 @@ function template_topicbit(&$topic)
 
 	echo '
 	<tr>
-	  <td class="icon1 gradient_darken_down', $color_class, '">';
+	  <td class="icon1 topicrow gradient_darken_down', $color_class, '">';
 		if (!empty($settings['show_user_images']) && empty($options['show_no_avatars'])) {
 
 			echo '
@@ -284,10 +284,10 @@ function template_topicbit(&$topic)
 		$is_new = $topic['new'] && $context['user']['is_logged'];
 		echo '
 		</td>
-		<td class="icon2 gradient_darken_down', $color_class, '">
+		<td class="icon2 topicrow gradient_darken_down', $color_class, '">
 			<img src="', $topic['first_post']['icon_url'], '" alt="" />
 		</td>
-		<td class="subject gradient_darken_down',$color_class,'">
+		<td class="subject topicrow gradient_darken_down',$color_class,'">
 			<div ', (!empty($topic['quick_mod']['modify']) ? 'id="topic_' . $topic['first_post']['id'] . '" ondblclick="modify_topic(\'' . $topic['id'] . '\', \'' . $topic['first_post']['id'] . '\');"' : ''), '>
 			<span class="tpeek" data-id="'.$topic['id'].'" id="msg_' . $topic['first_post']['id'] . '">', $topic['prefix'], ($is_new ? '<strong>' : '') , $topic['first_post']['link'], (!$context['can_approve_posts'] && !$topic['approved'] ? '&nbsp;<em>(' . $txt['awaiting_approval'] . ')</em>' : ''), ($is_new ? '</strong>' : ''), '</span>';
 
@@ -310,7 +310,7 @@ function template_topicbit(&$topic)
 		echo '
 			</div>
 		</td>
-		<td class="stats nowrap gradient_darken_down', $color_class, '">';
+		<td class="stats nowrap topicrow gradient_darken_down', $color_class, '">';
 			if($topic['replies'])
 				echo '
 			<a rel="nofollow" title="',$txt['who_posted'],'" onclick="whoPosted($(this));return(false);" class="whoposted" data-topic="',$topic['id'], '" href="',$scripturl,'?action=xmlhttp;sa=whoposted;t=',$topic['id'],'" >', $topic['replies'], ' ', $txt['replies'], '</a>';
@@ -320,7 +320,7 @@ function template_topicbit(&$topic)
 			<br />
 				', $topic['views'], ' ', $txt['views'], '
 		</td>
-		<td class="lastpost gradient_darken_down', $color_class, '">',
+		<td class="lastpost topicrow gradient_darken_down', $color_class, '">',
 			$txt['by'], ': ', $topic['last_post']['member']['link'], '<br />
 			<a class="lp_link" title="', $txt['last_post'], '" href="', $topic['last_post']['href'], '">',$topic['last_post']['time'], '</a>
 		</td>';
@@ -329,7 +329,7 @@ function template_topicbit(&$topic)
 	if (!empty($context['can_quick_mod']))
 	{
 		echo '
-			<td class="moderation gradient_darken_down', $color_class, '" style="text-align:center;">';
+			<td class="moderation topicrow gradient_darken_down', $color_class, '" style="text-align:center;">';
 		if ($options['display_quick_mod'])
 			echo '
 				<input type="checkbox" name="topics[]" value="', $topic['id'], '" class="input_check cb_inline" />';

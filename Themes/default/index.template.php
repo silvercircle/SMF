@@ -11,6 +11,22 @@
  *
  * @version 1.0pre
  */
+function template_init()
+{
+	global $settings, $context;
+
+	$settings['theme_variants'] = array('default', 'lightweight');
+	$settings['clip_image_src'] = array(
+		'_default' => 'clipsrc.png',
+	    '_lightweight' => 'clipsrc.png',
+		'_dark' => 'clipsrc_dark.png'
+	);
+	$settings['sprite_image_src'] = array(
+		'_default' => 'theme/sprite.png',
+		'_lightweight' => 'theme/sprite.png',
+		'_dark' => 'theme/sprite.png'
+	);
+}
 function template_html_above()
 {
 	global $context, $settings, $options, $scripturl, $txt, $modSettings, $cookiename, $user_info;
@@ -336,18 +352,8 @@ EOT;
 	<div class="clear cContainer_end"></div>
 	',$context['template_hooks']['global']['above'];
 
-	if($context['news_item_count']) { //} && isset($context['is_board_index'])) {
-		echo '
-		<div class="blue_container gradient_darken_down" id="newsitem_container">
-		<div class="content smallpadding inset_shadow">
-		<ol class="commonlist noshadow news" id="newsitem_list">';
+	if($context['news_item_count'])
 		template_news_listitems();
-		echo '
-		</ol>
-		</div>
-		</div>
-		<div class="cContainer_end"></div>';
-	}
 	echo '<aside>
 		  <div id="sidebar" style="width:260px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
 		if($sidebar_allowed && is_callable($context['sidebar_context_output']))
