@@ -82,7 +82,8 @@ $context['template_hooks']['global'] = array(
 	'above' => '',
 	'sidebar_top' => '',
 	'sidebar_bottom' => '',
-	'footer' => ''
+	'footer' => '',
+	'header' => ''
 );
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
 $context['jsver'] = '?v=1528';

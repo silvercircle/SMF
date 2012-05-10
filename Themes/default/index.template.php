@@ -18,7 +18,7 @@ function template_init()
 	$settings['theme_variants'] = array('default', 'lightweight');
 	$settings['clip_image_src'] = array(
 		'_default' => 'clipsrc.png',
-	    '_lightweight' => 'clipsrc.png',
+	    '_lightweight' => 'clipsrc_l.png',
 		'_dark' => 'clipsrc_dark.png'
 	);
 	$settings['sprite_image_src'] = array(
@@ -243,7 +243,8 @@ function template_body_above()
 	<header>
 	<div id="header">
 	<div id="upper_section" class="smalltext">
-		<div class="floatleft" style="overflow:hidden;max-height:87px;"><img src="',$settings['images_url'],'/logo.png" alt="logo" /></div>
+		<div class="floatleft" style="overflow:hidden;max-height:90px;"><img src="',$settings['images_url'],'/logo.png" alt="logo" /></div>
+		',$context['template_hooks']['global']['header'],'
 		<div class="clear"></div>
 	</div>
 		<div class="notibar">

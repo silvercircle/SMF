@@ -230,10 +230,10 @@ blockquote.bbc_standard_quote, blockquote.bbc_alternate_quote {
 	margin: 0 10px 0.8em 10px;
 	overflow: auto;
 	border: 1px solid #ddd;
-	border-left: 3px solid #a88;
+	border-left: 3px solid #b99;
 }
 blockquote.bbc_standard_quote {
-	background-color: #f5f5f5;
+	background-color: #fafafa;
 }
 
 blockquote.bbc_alternate_quote {
@@ -772,20 +772,23 @@ div.dropselect_content.left {
 div.dropselect_content.right {
 	right:0;
 }
-#main_menu, #mcard .title_bar {
+#mcard .title_bar {
 	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;
 }
 #main_menu {
+	background: #afafaf url(../images/clipsrc.png) 0 -99px repeat-x;
 	padding: 0 0.5em;
 	font-size: 11px;
-	text-shadow: 2px 2px 4px black;
+	font-weight:bold;
+	text-shadow: 1px 1px 0 #ddd;
+	padding-left:30px;
 }
 .dropmenu, .dropmenu ul {
 	list-style: none;
 	line-height: 1em;
 	padding: 0;
 	margin: 0;
-	background-color: #404040;
+	background-color: #afafaf;
 }
 .dropmenu {
 	padding: 0 0.5em;
@@ -796,7 +799,7 @@ div.dropselect_content.right {
 }
 
 .dropmenu li a {
-	color: white;
+	color: black;
 	text-decoration: none;
 }
 
@@ -822,7 +825,7 @@ div.dropselect_content.right {
 	display: none;
 	position: absolute;
 	top: 24px;
-	background-color: #404040;
+	background-color: #afafaf;
 	padding: 0;
 	width: 20em;
 	box-shadow: 1px 3px 10px 1px #888;
@@ -847,7 +850,7 @@ div.dropselect_content.right {
 	margin: -1.8em 0 0 13em;
 }
 .dropmenu li.active {
-	background-color: #eaeaea; /*#D0D1E6;*/
+	background-color: white;
 }
 .dropmenu li.active > a {
 	color: black;
@@ -1074,15 +1077,14 @@ h3, h4 {
 	font-size:0.9em;
 }
 #upper_section {
-	height: 65px;
-	max-height: 65px;
-	min-height: 65px;
+	height: 67px;
+	max-height: 67px;
+	min-height: 67px;
 	font-size: 12px;
-	border-bottom:2px solid #516679;
-	background: #516679 url(../images/upper_bg.png) 225px 12px no-repeat;
+	background:#bbbbc5 url(../images/upper_bg.png) 225px 12px no-repeat;
 }
 .notibar {
-	background: #516679;
+	background:#bbbbc5 url(../images/upper_bg.png) 225px 3px no-repeat;
 	height: 24px;
 	line-height: 24px;
 	font-size: 10px;
@@ -1091,13 +1093,14 @@ h3, h4 {
 .notibar.right {
 	float: right;
 	width: 500px;
-	background: #404040;
+	background: #d6d6d6;
 }
 .notibar a {
-	color: white !important;
+	color: black !important;
+	text-shadow: 1px 1px 0 white;
 }
 .notibar_intro {
-	background: transparent url(../images/clipsrc.png) 0 -32px no-repeat;
+	background: transparent url(../images/clipsrc_l.png) 0 -32px no-repeat;
 	line-height: 24px;
 	float: right;
 	height: 24px;
@@ -1463,17 +1466,17 @@ div#whoisviewing {
 	width: auto;
 	/*background-color: #f5f5f5;*/
 	padding:0;
-	background: #ececec;
-	background: -moz-linear-gradient(left,  #ececec 1%, #ffffff 33%);
+	background: white;
+	/*background: -moz-linear-gradient(left,  #ececec 1%, #ffffff 33%);
 	background: -webkit-gradient(linear, left top, right top, color-stop(1%,#ececec), color-stop(33%,#ffffff));
 	background: -webkit-linear-gradient(left,  #ececec 1%,#ffffff 33%);
 	background: -o-linear-gradient(left,  #ececec 1%,#ffffff 33%);
 	background: -ms-linear-gradient(left,  #ececec 1%,#ffffff 33%);
-	background: linear-gradient(left,  #ececec 1%,#ffffff 33%);
+	background: linear-gradient(left,  #ececec 1%,#ffffff 33%);*/
 	/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ececec', endColorstr='#ffffff',GradientType=1 );*/
 	margin-bottom:10px;
 	border:1px solid #ddd;
-	box-shadow: 0 0 5px 0 #ccc;
+	box-shadow: 0 0 3px 0 #ddd;
 }
 .post_wrapper.approval, .approval .post_content {
 	background-color: rgb(250, 233, 216);
@@ -1492,7 +1495,7 @@ div.ignoringpost {
 	padding: 3px 10px 2px 10px;
 	clear: both;
 	font-size: 11px;
-	background-color:#eaeaea;
+	background-color:#f2f2f2;
 }
 .post_bottom.mq {
 	background: #edd !important;
@@ -1531,8 +1534,6 @@ div.userbit_compact_textpart.small {
 .post_content {
 	margin-left: 220px;
 	padding-bottom:5px;
-	background-color:#fcfcfc;
-	border:1px dotted #ddd;
 	border-radius:4px;
 	margin-bottom:5px;
 }
@@ -1572,7 +1573,6 @@ h4.poster {
 	font-size: 110%;
 	padding: 1px 3px;
 	line-height:26px;
-	font-weight:bold;
 }
 
 .poster h4 a {
@@ -1682,7 +1682,7 @@ h4.poster {
 	box-sizing: content-box;
 }
 .keyinfo a {
-	color:#009999;
+	color:#888;
 }
 .horizontal_userblock {
 	padding: 3px 10px;
@@ -2298,12 +2298,11 @@ tr.titlebg td {
 	padding: 4px 4px 4px 4px;
 	position: relative;
 	background-color: #e2e2e2;
-	background: -moz-linear-gradient(left,  #ddd 1%, #f2f2f2 80%);
-	background: -webkit-gradient(linear, left top, right top, color-stop(1%,#ddd), color-stop(80%,#f2f2f2));
-	background: -webkit-linear-gradient(left,  #ddd 1%,#f2f2f2 80%);
-	background: -o-linear-gradient(left,  #ddd 1%,#f2f2f2 80%);
-	background: -ms-linear-gradient(left,  #ddd 1%,#f2f2f2 80%);
-	background: linear-gradient(left,  #ddd 1%,#f2f2f2 80%);
+	background: -moz-linear-gradient(left,  #ddd 1%, white 80%);
+	background: -webkit-linear-gradient(left,  #ddd 1%,white 80%);
+	background: -o-linear-gradient(left,  #ddd 1%,white 80%);
+	background: -ms-linear-gradient(left,  #ddd 1%,white 80%);
+	background: linear-gradient(left,  #ddd 1%,white 80%);
 	border: 1px solid #ccc;
 	border-right: 0;
 	right: -2px;
@@ -2383,7 +2382,6 @@ li.cat_desc > h3 {
 #main_admsection {
 	min-height: 600px;
 	border: 1px solid #ddd;
-	background-color: #f2f2f2;
 	padding: 5px;
 	overflow: hidden;
 }
@@ -3312,7 +3310,6 @@ table.cleantop {
 
 .flat_container {
 	border: 1px solid #ddd;
-	background-color: #f2f2f2;
 	padding: 2px 4px;
 }
 
@@ -3354,10 +3351,9 @@ a.navPages, .pagelinks span.current, .pagelinks span.prefix {
 	white-space:nowrap;
 	padding:0 4px;
 	font-size: 11px;
-	border: 1px solid #A6C5D9;
+	border: 1px solid #ddd;
 	cursor: pointer;
-	/*background: #f2f2f2 url(../images/clipsrc.png) 0 -139px repeat-x;*/
-	background:#eee;
+	background:#f2f2f2;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;

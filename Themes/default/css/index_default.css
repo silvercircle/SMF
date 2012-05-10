@@ -1074,15 +1074,14 @@ h3, h4 {
 	font-size:0.9em;
 }
 #upper_section {
-	height: 65px;
-	max-height: 65px;
-	min-height: 65px;
+	height: 67px;
+	max-height: 67px;
+	min-height: 67px;
 	font-size: 12px;
-	border-bottom:2px solid #516679;
 	background: #516679 url(../images/upper_bg.png) 225px 12px no-repeat;
 }
 .notibar {
-	background: #516679;
+	background: #516679 url(../images/upper_bg.png) 225px 3px no-repeat;
 	height: 24px;
 	line-height: 24px;
 	font-size: 10px;
