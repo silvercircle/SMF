@@ -1726,23 +1726,35 @@ ul.buttonlist li a.active {
 	font-weight: bold;
 }
 ul.buttonlist li a, span.button {
-	font-size: 10px !important;
+	font-size: 11px !important;
 	text-shadow: 1px 1px 1px #fff;
 	float: left;
-	height:20px !important;
-	line-height:18px !important;
+	height:21px !important;
+	line-height:19px !important;
 	text-decoration: none;
 	padding: 0 6px 1px 6px;
 	color: #777;
-	font-weight:bold;
-	border: 1px solid #A6C5D9;
-	border-radius: 2px;
+	border: 1px solid #ccc;
 	cursor: pointer;
-	background: #f2f2f2 url(../images/clipsrc.png) 0 -139px repeat-x;
+	background: #f2f2f2;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	font-family:Tahoma,sans-serif;
+}
+span.button.default {
+	background: #4685cc;
+	color:white;
+	text-shadow: none;
+	border:1px solid white;
+	outline: 1px solid #4685cc;
+}
+span.button.default:hover {
+	background: #336195;
+}
+span.button.centered {
+	display:inline-block;
+	float:none;
 }
 input[type=button], .button_submit, .button_reset {
 	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;
@@ -5082,7 +5094,7 @@ div.ppt {
 	background-color:white;
 }
 .jqmWindow_container {
-	background-color: #eaeaea;
+	background-color: white;
 }
 .jqmOverlay, #pagedimmer { opacity:0.5;background-color: #888; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";}
 

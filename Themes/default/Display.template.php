@@ -28,7 +28,7 @@ function template_main()
 		<dt><strong>',$txt['quick_post_link_full'],'</strong></dt><dd><input size="78" type="text" id="interpostlink_helper_content_full" value="" /></dd>
 		</dl>
 		</div>
-		<div class="centertext smalltext smallpadding"><input type="button" class="button_submit" onclick="$(\'#interpostlink_helper\').css(\'position\',\'static\');$(\'#interpostlink_helper\').hide();setDimmed(0);" value="',$txt['quick_post_link_dismiss'],'" /></div>
+		<div class="centertext smalltext smallpadding"><span class="button default centered" onclick="$(\'#interpostlink_helper\').css(\'position\',\'static\');$(\'#interpostlink_helper\').hide();setDimmed(0);">',$txt['quick_post_link_dismiss'],'</span></div>
 		</div>
 		</div>
 		<div id="share_bar" style="display:none;position:absolute;right:0;white-space:nowrap;width:auto;">
