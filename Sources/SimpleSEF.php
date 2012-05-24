@@ -593,7 +593,8 @@ class SimpleSEF {
             $temp = ob_get_contents();
 
             ob_end_clean();
-            ob_start(!empty($modSettings['enableCompressedOutput']) ? 'ob_gzhandler' : '');
+            if(!empty($modSettings['enableCompressedOutput']))
+				ob_start('ob_gzhandler');
             ob_start(array('SimpleSEF', 'ob_simplesef'));
 
             echo $temp;
@@ -684,9 +685,9 @@ class SimpleSEF {
      * @global string $sourcedir
      */
     public static function ModifySimpleSEFSettings() {
-        global $txt, $context, $sourcedir;
+        global $txt, $context, $sourcedir, $backend_subdir;
 
-        require_once($sourcedir . '/ManageSettings.php');
+        require_once($sourcedir . '/' . $backend_subdir . '/ManageSettings.php');
 
         $context['page_title'] = $txt['simplesef'];
 

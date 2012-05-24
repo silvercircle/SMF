@@ -1863,6 +1863,11 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	// Insert a new topic (if the topicID was left empty.)
 	if ($new_topic)
 	{
+		if(!isset($topicOptions['topic_prefix']))
+			$topicOptions['topic_prefix'] = 0;
+		if(!isset($topicOptions['topic_layout']))
+			$topicOptions['topic_layout'] = 0;
+
 		smf_db_insert('',
 			'{db_prefix}topics',
 			array(

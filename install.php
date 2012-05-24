@@ -621,7 +621,7 @@ function CheckFilesWritable()
 
 function DatabaseSettings()
 {
-	global $txt, $databases, $incontext, $smcFunc;
+	global $txt, $databases, $incontext;
 
 	$incontext['sub_template'] = 'database_settings';
 	$incontext['page_title'] = $txt['db_settings'];
@@ -744,8 +744,6 @@ function DatabaseSettings()
 		// Now include it for database functions!
 		define('SMF', 1);
 		$modSettings['disableQueryCheck'] = true;
-		if (empty($smcFunc))
-			$smcFunc = array();
 		require_once($sourcedir . '/lib/Subs-Db-' . $db_type . '.php');
 
 		// Attempt a connection.
@@ -907,7 +905,7 @@ function ForumSettings()
 // Step one: Do the SQL thang.
 function DatabasePopulation()
 {
-	global $txt, $db_connection, $smcFunc, $databases, $modSettings, $db_type, $db_prefix, $incontext, $db_name, $boardurl;
+	global $txt, $db_connection, $databases, $modSettings, $db_type, $db_prefix, $incontext, $db_name, $boardurl;
 
 	$incontext['sub_template'] = 'populate_database';
 	$incontext['page_title'] = $txt['db_populate'];
@@ -932,9 +930,9 @@ function DatabasePopulation()
 	$modSettings = array();
 	if ($result !== false)
 	{
-		while ($row = $smcFunc['db_fetch_assoc']($result))
+		while ($row = mysql_fetch_assoc($result))
 			$modSettings[$row['variable']] = $row['value'];
-		$smcFunc['db_free_result']($result);
+		mysql_free_result($result);
 
 		// Do they match?  If so, this is just a refresh so charge on!
 		if (!isset($modSettings['smfVersion']) || $modSettings['smfVersion'] != $GLOBALS['current_smf_version'])
@@ -1078,7 +1076,7 @@ function DatabasePopulation()
 
 		if (!empty($rows))
 		{
-			$smcFunc['db_insert']('replace',
+			smf_db_insert('replace',
 				$db_prefix . 'settings',
 				array('variable' => 'string-255', 'value' => 'string-65534'),
 				$rows,
@@ -1909,7 +1907,7 @@ function template_install_above()
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta name="robots" content="noindex" />
 		<title>', $txt['smf_installer'], '</title>
-		<link rel="stylesheet" type="text/css" href="Themes/default/css/index.css?fin20" />
+		<link rel="stylesheet" type="text/css" href="Themes/default/css/index_default.css?fin20" />
 		<link rel="stylesheet" type="text/css" href="Themes/default/css/install.css?fin20" />
 		<script type="text/javascript" src="Themes/default/scripts/script.js"></script>
 	</head>
