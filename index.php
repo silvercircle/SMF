@@ -51,8 +51,8 @@ if(!isset($db_cache_api))
 if(!isset($db_no_admin_security))
 	$db_no_admin_security = 0;
 // Make absolutely sure the cache directory is defined.
-if ((empty($cachedir) || !file_exists($cachedir)) && file_exists($boarddir . '/cache'))
-	$cachedir = $boarddir . '/cache';
+//if ((empty($cachedir) || !file_exists($cachedir)) && file_exists($boarddir . '/cache'))
+//	$cachedir = $boarddir . '/cache';
 
 // And important includes.
 require_once($sourcedir . '/CommonAPI.php');
@@ -61,8 +61,6 @@ require_once($sourcedir . '/lib/Subs.php');
 require_once($sourcedir . '/Errors.php');
 require_once($sourcedir . '/Load.php');
 require_once($sourcedir . '/Security.php');
-//require_once($sourcedir . '/contrib/PiwikTracker.php');
-//PiwikTracker::$URL = 'http://piwik.miranda.or.at/';
 // If $maintenance is set specifically to 2, then we're upgrading or something.
 if (!empty($maintenance) && $maintenance == 2)
 	db_fatal_error();
@@ -86,10 +84,11 @@ $context['template_hooks']['global'] = array(
 	'header' => ''
 );
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
-$context['jsver'] = '?v=1542';
+$context['jsver'] = '?v=1544';
 $context['jquery_version'] = '1.7.2';
 $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();
+$context['additional_admin_errors'] = '';
 
 // Seed the random generator.
 if (empty($modSettings['rand_seed']) || mt_rand(1, 250) == 69)
@@ -131,7 +130,6 @@ if (isset($_GET['openid_restore_post']) && !empty($_SESSION['openid']['saved_dat
 
 //HookAPI::removeAll('LegacyBBC');
 //HookAPI::addHook('integrate_postbit', 'LegacyBBC', 'main.php', 'foo');
-
 // What function shall we execute? (done like this for memory's sake.)
 call_user_func(smf_main());
 
@@ -158,6 +156,7 @@ function smf_main()
 
 	// Load the current user's permissions.
 	loadPermissions();
+	$context['additional_admin_errors'] .= CacheAPI::verifyFileCache();
 
 	// Attachments don't require the entire theme to be loaded.
 	if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'dlattach' && (!empty($modSettings['allow_guestAccess']) && $user_info['is_guest']))

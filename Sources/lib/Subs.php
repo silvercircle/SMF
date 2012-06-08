@@ -3246,12 +3246,12 @@ function template_header()
 					unset($securityFiles[$i]);
 			}
 
-			if (!empty($securityFiles) || (!empty($modSettings['cache_enable']) && !is_writable($cachedir)))
+			if (!empty($securityFiles))
 			{
 				echo '
 		<div class="errorbox">
 			<p class="alert">!!</p>
-			<h3>', empty($securityFiles) ? $txt['cache_writable_head'] : $txt['security_risk'], '</h3>
+			<h3>', $txt['security_risk'], '</h3>
 			<p>';
 
 				foreach ($securityFiles as $securityFile)
@@ -3263,11 +3263,6 @@ function template_header()
 						echo '
 				', sprintf($txt['not_removed_extra'], $securityFile, substr($securityFile, 0, -1)), '<br />';
 				}
-
-				if (!empty($modSettings['cache_enable']) && !is_writable($cachedir))
-					echo '
-				<strong>', $txt['cache_writable'], '</strong><br />';
-
 				echo '
 			</p>
 		</div>';

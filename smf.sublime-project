@@ -1,0 +1,10 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+			"folder_exclude_patterns": [".idea", "attachments", "extra_resources", "nbproject", "Packages", "Smileys", "useravs"],
+			"file_exclude_patterns": [".*"]
+		}
+	]
+}

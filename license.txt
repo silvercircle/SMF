@@ -1,7 +1,7 @@
 @name      EosAlpha BBS
 copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
 
-This software is a derived product, based on:
+This software is a derived product, based on Simple Machines Forum.
 
 Copyright © 2011 Simple Machines.  All rights reserved.
 

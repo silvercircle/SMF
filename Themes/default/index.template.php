@@ -353,6 +353,8 @@ EOT;
 	<div class="clear cContainer_end"></div>
 	',$context['template_hooks']['global']['above'];
 
+	echo $context['additional_admin_errors'];
+	
 	if($context['news_item_count'])
 		template_news_listitems();
 	echo '<aside>

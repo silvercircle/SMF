@@ -126,12 +126,12 @@ if (!defined('SMF'))
 // Load the $modSettings array.
 function reloadSettings()
 {
-	global $modSettings, $sourcedir, $boardurl;
+	global $modSettings, $sourcedir, $boardurl, $cachedir;
 
 	//todo: the $_REQUEST[] thing should go away, it is only for debugging
 	$no_hooks = ((isset($GLOBALS['g_disable_all_hooks']) && $GLOBALS['g_disable_all_hooks'] === true) || isset($_REQUEST['nohooks']));
 
-	CacheAPI::init($GLOBALS['db_cache_api'], md5($boardurl . filemtime($sourcedir . '/Load.php')) . '-SMF-', $GLOBALS['db_cache_memcached']);
+	CacheAPI::init($GLOBALS['db_cache_api'], md5($boardurl . filemtime($sourcedir . '/Load.php')) . '-SMF-', $GLOBALS['db_cache_memcached'], $cachedir);
 
 	// Most database systems have not set UTF-8 as their default input charset.
 	smf_db_query('

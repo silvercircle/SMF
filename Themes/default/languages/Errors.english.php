@@ -406,4 +406,6 @@ $txt['error_invalid_dir'] = 'The directory you entered is invalid.';
 
 $txt['error_sqlite_optimizing'] = 'Sqlite is optimizing the database, the forum can not be accessed until it has finished.  Please try refreshing this page momentarily.';
 $txt['invalid_or_missing_link'] = 'The URI is invalid or missing, cannot redirect.';
+$txt['file_cache_config_error'] = '<h3>File cache configuration invalid</h3>The file cache directory is either undefined, does not exist or is not writable. The file cache has therefore been disabled. Note thta this can have a serious impact on the board\'s performance';
+$txt['file_cache_config_path'] = 'Configured cache directory currently is: %s';
 ?>

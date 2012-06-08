@@ -1845,7 +1845,7 @@ function list_getProfileEdits($start, $items_per_page, $sort, $memID)
 function showPermissions($memID)
 {
 	global $txt, $board;
-	global $user_profile, $context, $sourcedir;
+	global $user_profile, $context, $sourcedir, $backend_subdir;
 
 	// Verify if the user has sufficient permissions.
 	isAllowedTo('manage_permissions');
@@ -1855,7 +1855,7 @@ function showPermissions($memID)
 	loadAdminTemplate('ManageMembers');
 
 	// Load all the permission profiles.
-	require_once($sourcedir . '/ManagePermissions.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManagePermissions.php');
 	loadPermissionProfiles();
 
 	$context['member']['id'] = $memID;

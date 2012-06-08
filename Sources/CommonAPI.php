@@ -293,6 +293,7 @@ class cacheAPI {
 	private static $mcached_server;
 	private static $basekey = '';
 	private static $memcached = 0;
+	private static $cachedir = '';
 
 	private static $cache_hits = array();
 	private static $cache_count = 0;
@@ -346,10 +347,11 @@ class cacheAPI {
 			self::getMemcacheServer($level - 1);
 	}
 
-	public static function init($desired, $basekey, $memcached_hosts)
+	public static function init($desired, $basekey, $memcached_hosts, $cachedir)
 	{
 		self::$basekey = $basekey;
 		self::$memcached_hosts = $memcached_hosts;
+		self::$cachedir = $cachedir;
 
 		if($desired == 'apc' && function_exists('apc_store'))
 		    self::$API = 1;
@@ -367,6 +369,28 @@ class cacheAPI {
 		// check for possible cache configuration errors
 		//if(((self::$API == 4 || self::$API == 5) && empty(self::$memcached_hosts)) || self::$API == -1)
 		//	log_error(sprintf('cacheInit: desired caching system unsupported or not available (desired = %s, memcached hosts = %s', $desired, self::$memcached_hosts));
+	}
+
+	public static function verifyFileCache()
+	{
+		global $user_info, $txt;
+
+		$msg = '';
+		// if we have file caching, make absolutely sure the folder exists and is writeable
+		// if not, throw a warning (for admins only)
+		if(0 == self::$API && (empty(self::$cachedir) || !file_exists(self::$cachedir) || !is_writable(self::$cachedir) )) {
+			self::$API = -1;
+			if($user_info['is_admin']) {
+				loadLanguage('Errors');
+				$msg = '
+				<div class="errorbox">
+					'.$txt['file_cache_config_error'].'<br><br>
+					'.sprintf($txt['file_cache_config_path'], empty(self::$cachedir) ? 'Empty value' : self::$cachedir).'
+				</div>
+				';
+			}
+		}
+		return($msg);
 	}
 
 	public static function disable()
