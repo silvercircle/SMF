@@ -683,6 +683,9 @@ class Mobile_Detect {
 		'GenericBrowser' => 'NokiaBrowser|OviBrowser'
 	);
 
+	/**
+	 * Construct and init this instance.
+	 */
 	function __construct(){
 
 		// Merge all rules together.
@@ -718,11 +721,20 @@ class Mobile_Detect {
 
 	}
 
+	/**
+	 * Get detection rules.
+	 */
 	public function getRules()
 	{
 		return $this->detectionRules;
 	}
 
+	/**
+	 * Magic method to route the checks
+	 * 
+	 * @param string $name
+	 * @param array $arguments
+	 */
 	public function __call($name, $arguments)
 	{
 
@@ -731,6 +743,11 @@ class Mobile_Detect {
 
 	}
 
+	/**
+	 * Run the checks
+	 * 
+	 * @param string $key
+	 */
 	private function _detect($key='')
 	{
 
@@ -795,10 +812,7 @@ class Mobile_Detect {
 		}
 
 		return false;
-
 	}
-
-
 }
 
 class Topiclist {
