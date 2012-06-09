@@ -149,13 +149,14 @@ class HookAPI {
 	private static $addonsdir;
 
 	/**
-	 * @param $the_hooks	string - serialized array of hooks
-	 *
-	 * initialize the hooks
-	 * this must be called immediately after loading modSettings[] from the database
+	 * Initialize the hooks.
+	 * This must be called immediately after loading modSettings[] from the database
 	 * 
 	 * also: sets the addons base directory. It must exist, be writeable and be a directory.
 	 * If any check fails, it falls back to the default hardcoded sub-folder ($boarddir/addons).
+	 * 
+	 * @param $the_hooks string - serialized array of hooks
+	 *
 	 */
 	public static function setHooks(&$the_hooks)
 	{
@@ -170,15 +171,15 @@ class HookAPI {
 	}
 
 	/**
-	 *
+	 * 
+	 * This function is typically called from the install procedure of an addon.
+	 * It adds one file/function to a named hook.
+	 * 
 	 * @param type $hook     string - the name of the hook
 	 * @param type $product  string - a product name. This also defines the sub-folder in which the files of the addons must be
 	 * @param string $file   string - the file to include
 	 * @param type $function string - a function name to call
 	 * @return type			 bool   - true if all ok, false if the file or function could not be found.
-	 * 
-	 * this function is typicalle called from the install procedure of an addon. It adds one file/function
-	 * to a named hook.
 	 */
 	public static function addHook($hook, $product, $file, $function)
 	{
@@ -209,7 +210,12 @@ class HookAPI {
 		return(true);
 	}
 
-	// Process functions of an integration hook.
+	/**
+	 * Process functions of an integration hook.
+	 * 
+	 * @param string $hook
+	 * @param array $parameters = array()
+	 */
 	public static function callHook($hook, $parameters = array())
 	{
 		$results = array();
@@ -224,11 +230,13 @@ class HookAPI {
 		return $results;
 	}
 
-	/*
-	 * special case - hooks that work on the output buffer - they
+	/**
+	 * Integrate the output buffer hooks.
+	 * 
+	 * It's a special case - hooks that work on the output buffer - they
 	 * must be called via ob_start() and therefore need their own method.
 	 * 
-	 * all functions registered under the integrate_buffer hook will run here
+	 * All functions registered under the integrate_buffer hook will run here.
 	 */
 	public static function integrateOB()
 	{
@@ -241,6 +249,15 @@ class HookAPI {
 		}
 	}
 
+	/**
+	 * Remove a registered hook (if found).
+	 * It removes it from the database and updates the currently loaded hooks.
+	 * 
+	 * @param string $hook - the name of the hook
+	 * @param type $product  string - the product name.
+	 * @param string $file   string - the file to include
+	 * @param type $function string - a function name to call
+	 */
 	public static function removeHook($hook, $product, $file, $function)
 	{
 		$ref = array('p' => $product, 'f' => $file, 'c' => $function);
@@ -260,11 +277,11 @@ class HookAPI {
 	}
 
 	/**
-	 * @static
-	 * @param $product		string
-	 *
-	 * remove all hooks related to the product given in $product
+	 * Remove all hooks related to the product given in $product
 	 * product name is CASE SENSITIVE
+	 * 
+	 * @static
+	 * @param $product string - the product name.
 	 */
 	public static function removeAll($product)
 	{
@@ -323,9 +340,9 @@ class cacheAPI {
 	}
 
 	/**
+	 * Get server for the OLD memcache implementation
+	 * 
 	 * @param int $level	caching level
-	 *
-	 * get server for the OLD memcache implementation
 	 */
 	private static function getMemcacheServer($level = 3)
 	{
@@ -347,6 +364,14 @@ class cacheAPI {
 			self::getMemcacheServer($level - 1);
 	}
 
+	/**
+	 * Initialization for the cache.
+	 * 
+	 * @param string $desired - the given cache implementation library
+	 * @param unknown_type $basekey
+	 * @param array $memcached_hosts - array of memcached hosts, if passed
+	 * @param string $cachedir - cache directory
+	 */
 	public static function init($desired, $basekey, $memcached_hosts, $cachedir)
 	{
 		self::$basekey = $basekey;
@@ -371,6 +396,11 @@ class cacheAPI {
 		//	log_error(sprintf('cacheInit: desired caching system unsupported or not available (desired = %s, memcached hosts = %s', $desired, self::$memcached_hosts));
 	}
 
+	/**
+	 * Verify if filesystem cache directory is set
+	 * 
+	 * @return string - message (warning or empty if all went fine)
+	 */
 	public static function verifyFileCache()
 	{
 		global $user_info, $txt;
@@ -393,11 +423,17 @@ class cacheAPI {
 		return($msg);
 	}
 
+	/**
+	 * Disable cache.
+	 */
 	public static function disable()
 	{
 		self::$API = -1;
 	}
 
+	/**
+	 * Get the active cache engine.
+	 */
 	public static function getEngine()
 	{
 		global $txt;
@@ -409,6 +445,12 @@ class cacheAPI {
 			return($engines[(int)self::$API]);
 	}
 
+	/**
+	 * Get a cached value.
+	 * 
+	 * @param string $key
+	 * @param int $ttl = 120
+	 */
 	public static function getCache($key, $ttl = 120)
 	{
 		global $db_show_debug, $cachedir;
@@ -476,6 +518,13 @@ class cacheAPI {
 			return @unserialize($value);
 	}
 
+	/**
+	 * Store a value in cache.
+	 * 
+	 * @param string $key
+	 * @param mixed $value
+	 * @param int $ttl = 120
+	 */
 	public static function putCache($key, $value, $ttl = 120)
 	{
 		global $db_show_debug, $cachedir;
