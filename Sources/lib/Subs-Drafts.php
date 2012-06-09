@@ -11,6 +11,10 @@
  *
  * @version 1.0pre
  */
+
+/**
+ * Save a new draft, or update an existing draft.
+ */
 function saveDraft()
 {
 	global $smcFunc, $topic, $board, $user_info, $options;
@@ -108,7 +112,11 @@ function saveDraft()
 	return smf_db_insert_id('{db_prefix}drafts');
 }
 
-// Output a block of XML that contains the details of our draft
+/**
+ * Output a block of XML that contains the details of our draft.
+ * 
+ * @param int $draft
+ */
 function draftXmlReturn($draft)
 {
 	if (empty($draft))
@@ -123,6 +131,14 @@ function draftXmlReturn($draft)
 	obExit(false);
 }
 
+/**
+ * Get a draft contents, other draft details.
+ * 
+ * @param int $id_member
+ * @param int $id_board
+ * @param int $id_topic
+ * @param int $id_msg = 0
+ */
 function getDraft($id_member, $id_board, $id_topic, $id_msg = 0)
 {
 	global $context;
