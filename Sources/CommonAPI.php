@@ -314,6 +314,7 @@ class cacheAPI {
 
 	private static $cache_hits = array();
 	private static $cache_count = 0;
+	private static $want_debug = false;
 
 	private static $memcached_hosts = '';
 	/**
@@ -374,9 +375,12 @@ class cacheAPI {
 	 */
 	public static function init($desired, $basekey, $memcached_hosts, $cachedir)
 	{
+		global $db_show_debug;
+
 		self::$basekey = $basekey;
 		self::$memcached_hosts = $memcached_hosts;
 		self::$cachedir = $cachedir;
+		self::$want_debug = (isset($db_show_debug) && $db_show_debug === true ? true : false);
 
 		if($desired == 'apc' && function_exists('apc_store'))
 		    self::$API = 1;
@@ -390,10 +394,6 @@ class cacheAPI {
 			self::$API = 5;
 		elseif($desired == 'file')
 			self::$API = 0;
-
-		// check for possible cache configuration errors
-		//if(((self::$API == 4 || self::$API == 5) && empty(self::$memcached_hosts)) || self::$API == -1)
-		//	log_error(sprintf('cacheInit: desired caching system unsupported or not available (desired = %s, memcached hosts = %s', $desired, self::$memcached_hosts));
 	}
 
 	/**
@@ -453,13 +453,11 @@ class cacheAPI {
 	 */
 	public static function getCache($key, $ttl = 120)
 	{
-		global $db_show_debug, $cachedir;
-
 		if(-1 == self::$API)
 			return(null);
 
 		self::$cache_count++;
-		if (isset($db_show_debug) && $db_show_debug === true) {
+		if (self::$want_debug) {
 			self::$cache_hits[self::$cache_count] = array('k' => $key, 'd' => 'get');
 			$st = microtime();
 		}
@@ -496,11 +494,11 @@ class cacheAPI {
 				break;
 
 			case 0:
-				if (file_exists($cachedir . '/data_' . $key . '.php') && filesize($cachedir . '/data_' . $key . '.php') > 10) {
-					require($cachedir . '/data_' . $key . '.php');
+				if (file_exists(self::$cachedir . '/data_' . $key . '.php') && filesize(self::$cachedir . '/data_' . $key . '.php') > 10) {
+					require(self::$cachedir . '/data_' . $key . '.php');
 					if (!empty($expired) && isset($value))
 					{
-						@unlink($cachedir . '/data_' . $key . '.php');
+						@unlink(self::$cachedir . '/data_' . $key . '.php');
 						unset($value);
 					}
 				}
@@ -527,13 +525,11 @@ class cacheAPI {
 	 */
 	public static function putCache($key, $value, $ttl = 120)
 	{
-		global $db_show_debug, $cachedir;
-
 		if(-1 == self::$API)
 			return;
 
 		self::$cache_count++;
-		if (isset($db_show_debug) && $db_show_debug === true) {
+		if (self::$want_debug) {
 			self::$cache_hits[self::$cache_count] = array('k' => $key, 'd' => 'put', 's' => $value === null ? 0 : strlen(serialize($value)));
 			$st = microtime();
 		}
@@ -578,10 +574,10 @@ class cacheAPI {
 
 			case 0:
 				if ($value === null)
-					@unlink($cachedir . '/data_' . $key . '.php');
+					@unlink(self::$cachedir . '/data_' . $key . '.php');
 				else {
 					$cache_data = '<' . '?' . 'php if (!defined(\'SMF\')) die; if (' . (time() + $ttl) . ' < time()) $expired = true; else{$expired = false; $value = \'' . addcslashes($value, '\\\'') . '\';}' . '?' . '>';
-					$fh = @fopen($cachedir . '/data_' . $key . '.php', 'w');
+					$fh = @fopen(self::$cachedir . '/data_' . $key . '.php', 'w');
 					if ($fh)
 					{
 						// Write the file.
@@ -594,7 +590,7 @@ class cacheAPI {
 						// Check that the cache write was successful; all the data should be written
 						// If it fails due to low diskspace, remove the cache file
 						if ($cache_bytes != strlen($cache_data))
-							@unlink($cachedir . '/data_' . $key . '.php');
+							@unlink(self::$cachedir . '/data_' . $key . '.php');
 					}
 				}
 				break;
