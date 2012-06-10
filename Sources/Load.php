@@ -104,18 +104,6 @@ if (!defined('SMF'))
 		- use the databaseSession_lifetime setting for garbage collection.
 		- set by loadSession().
 
-	void CacheAPI::putCache(string key, mixed value, int ttl = 120)
-		- puts value in the cache under key for ttl seconds.
-		- may "miss" so shouldn't be depended on, and may go to any of many
-		  various caching servers.
-		- supports ZPS, and memcached.
-
-	mixed CacheAPI::getCache(string key, int ttl = 120)
-		- gets the value from the cache specified by key, so long as it is not
-		  older than ttl seconds.
-		- may often "miss", so shouldn't be depended on.
-		- supports the same as CacheAPI::putCache().
-
 	void get_memcached_server(int recursion_level = 3)
 		- used by CacheAPI::getCache() and CacheAPI::putCache().
 		- attempts to connect to a random server in the cache_memcached

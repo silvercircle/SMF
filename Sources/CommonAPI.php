@@ -189,7 +189,7 @@ class HookAPI {
 			foreach(self::$hooks[$hook] as $current_hook) {
 				if($current_hook == $ref) {
 					log_error(sprintf('HookAPI: duplicate hook installation detected in hook %s (product: %s, function: %s, file: %s', $hook, $ref['p'], $ref['c'], $ref['f']));
-					return;
+					return false;
 				}
 			}
 		}
@@ -197,17 +197,17 @@ class HookAPI {
 		$file = self::$addonsdir . $ref['p'] . '/' . $ref['f'];
 		if(!file_exists($file)) {
 			log_error(sprintf('HookAPI: missing hook file while installing into hook %s (product: %s, function: %s, file: %s', $hook, $ref['p'], $ref['c'], $ref['f']));
-			return(false);
+			return false;
 		}
 		@include_once($file);
 		if(!is_callable($ref['c'])) {
 			log_error(sprintf('HookAPI: missing function while installing into hook %s (product: %s, function: %s, file: %s', $hook, $ref['p'], $ref['c'], $ref['f']));
-			return(false);
+			return false;
 		}
 		self::$hooks[$hook][] = array('p' => $product, 'f' => $file, 'c' => trim($function));
 		$change_array = array('integration_hooks' => serialize(self::$hooks));
 		updateSettings($change_array, true);
-		return(true);
+		return true;
 	}
 
 	/**
@@ -304,6 +304,24 @@ class HookAPI {
 	}
 }
 
+/**
+ * caching system
+ * 
+ * This class allows caching of arbitrary values as serialized arrays
+ * it's mostly used to store results of database queries to improve performance and
+ * reduce the number of queries.
+ *
+ * supported caching backends are:
+ * 
+ * - xcache
+ * - APC
+ * - Zend cache 
+ * - memcached (both the old and new implementationms)
+ * - file system caching
+ * 
+ * TODO: database cache backend (unsure)?
+ */
+
 class cacheAPI {
 
 	private static $API = -1;
@@ -369,9 +387,9 @@ class cacheAPI {
 	 * Initialization for the cache.
 	 * 
 	 * @param string $desired - the given cache implementation library
-	 * @param unknown_type $basekey
+	 * @param string $basekey unique cache id (md5 hashed board url + source file time stamp)
 	 * @param array $memcached_hosts - array of memcached hosts, if passed
-	 * @param string $cachedir - cache directory
+	 * @param string $cachedir - cache directory (relevant for file caching only)
 	 */
 	public static function init($desired, $basekey, $memcached_hosts, $cachedir)
 	{
@@ -397,7 +415,7 @@ class cacheAPI {
 	}
 
 	/**
-	 * Verify if filesystem cache directory is set
+	 * Verify if filesystem cache directory is set and valid (must exist and allow write access)
 	 * 
 	 * @return string - message (warning or empty if all went fine)
 	 */
@@ -433,16 +451,14 @@ class cacheAPI {
 
 	/**
 	 * Get the active cache engine.
+	 * only needed for admin backend
 	 */
 	public static function getEngine()
 	{
 		global $txt;
 		$engines = array('Filesystem cache', 'APC', 'Xcache', 'Zend', 'Memcached', 'New PECL Memcached');
 
-		if(-1 == self::$API)
-			return($txt['caching_disabled']);
-		else
-			return($engines[(int)self::$API]);
+		return(-1 == self::$API ? $txt['caching_disabled'] : $engines[(int)self::$API]);
 	}
 
 	/**
@@ -811,6 +827,9 @@ class Mobile_Detect {
 	}
 }
 
+/**
+ * build a list of topics from a database request
+ */
 class Topiclist {
 
 	private $topiclist = array();

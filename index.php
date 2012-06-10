@@ -61,11 +61,13 @@ require_once($sourcedir . '/lib/Subs.php');
 require_once($sourcedir . '/Errors.php');
 require_once($sourcedir . '/Load.php');
 require_once($sourcedir . '/Security.php');
+require_once($sourcedir . '/EoSTwig.php');
+
 // If $maintenance is set specifically to 2, then we're upgrading or something.
 if (!empty($maintenance) && $maintenance == 2)
 	db_fatal_error();
 
-// Create a variable to store some SMF specific functions in.
+// Create a variable to store some SMF specific functions in. (unused in EoS, but kept for compatibility)
 $smcFunc = array();
 
 // Initate the database connection and define some database functions to use.
@@ -317,7 +319,8 @@ function smf_main()
 		'tags' => array('Tagging.php', 'TagsMain'),
 		'astream' => array('Activities.php', 'aStreamDispatch'),
 		'processlink' => array('Display.php', 'ProcessLink'),
-		'dismissnews' => array('Profile-Actions.php', 'DismissNews')
+		'dismissnews' => array('Profile-Actions.php', 'DismissNews'),
+		'twigtest' => array('EoSTwig.php', 'TwigTest')
 	);
 	// Allow modifying $actionArray easily.
 	HookAPI::callHook('integrate_actions', array(&$actionArray));

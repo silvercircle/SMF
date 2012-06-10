@@ -2675,6 +2675,9 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 	global $context, $modSettings;
 	static $header_done = false, $footer_done = false, $level = 0, $has_fatal_error = false;
 
+	if(isset($context['twig_template']))
+		return EoS_Twig::obExit($header, $do_footer, $from_index, $from_fatal_error);
+	
 	// Attempt to prevent a recursive loop.
 	++$level;
 	if ($level > 1 && !$from_fatal_error && !$has_fatal_error)
