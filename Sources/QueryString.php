@@ -445,7 +445,7 @@ function ob_sessrewrite($buffer)
 	
 	/* TODO: tidy support as a debugging option to generate prettified output */
 	/* right now, only tidy twig templates and only do it for the admin (tidy can be slow) */
-	if(!isset($_REQUEST['xml']) && class_exists('Tidy') && isset($context['twig_template']) && $user_info['is_admin']) {
+	if(0 && !isset($_REQUEST['xml']) && class_exists('Tidy') && isset($context['twig_template']) && $user_info['is_admin']) {
 		$tidy = new Tidy;
 
 		$tidy_config = array(

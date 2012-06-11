@@ -285,35 +285,6 @@ function template_body_above()
 	// Custom banners and shoutboxes should be placed here, before the linktree.
 
 	theme_linktree();
-	if(isset($context['need_pager_script_fragment'])) {
-		$pager_entry_script = <<<EOT
-	jQuery(document).ready(function() {
-		$('.pagelinks .prefix').click(function() {
-			if($('#directpager').length <= 0) {
-				$(this).attr('data-save', $(this).html());
-				$(this).html('<form action="' + $(this).attr('data-urltemplate') + '" id="directpager" method="post">{$txt["page_go_to"]}<input name="directpager_pagenr" id="directpager_pagenr" size=3 /></form>');
-				$('#directpager_pagenr').focus();
-			}
-			$('#directpager').submit(function() {
-
-				var newstart = (parseInt($('#directpager_pagenr').val()) - 1) * parseInt($(this).parent().attr('data-perpage'));
-				if(newstart < 0)
-					newstart = 0;
-				$(this).attr('action', $(this).attr('action').replace(/\[\[PAGE\]\]/g, newstart));
-				$(this).submit();
-				return(false);
-			});
-		});
-
-		$('.pagelinks .prefix').live('mouseleave',function(event) {
-			$(this).html($(this).attr('data-save'));
-		});
-		return;
-	});
-EOT;
-		registerFooterScriptFragment('pager_entry', $pager_entry_script);
-
-	}
 	$sidebar_allowed = isset($context['show_sidebar']);			// todo: make this more flexible and define a set of pages where the sidebar can show up
 	$sidebar_vis = (isset($_COOKIE['smf_sidebar_disabled']) && $_COOKIE['smf_sidebar_disabled'] == 1) ? false : true;
 	if($sidebar_allowed)
@@ -383,7 +354,33 @@ function template_body_below()
   	<script type="text/javascript">
 	// <![CDATA[
 	';
+	if(isset($context['need_pager_script_fragment']))
+		echo <<<EOT
 
+	jQuery(document).ready(function() {
+		$('.pagelinks .prefix').click(function() {
+			if($('#directpager').length <= 0) {
+				$(this).attr('data-save', $(this).html());
+				$(this).html('<form action="' + $(this).attr('data-urltemplate') + '" id="directpager" method="post">{$txt["page_go_to"]}<input name="directpager_pagenr" id="directpager_pagenr" size=3 /></form>');
+				$('#directpager_pagenr').focus();
+			}
+			$('#directpager').submit(function() {
+
+				var newstart = (parseInt($('#directpager_pagenr').val()) - 1) * parseInt($(this).parent().attr('data-perpage'));
+				if(newstart < 0)
+					newstart = 0;
+				$(this).attr('action', $(this).attr('action').replace(/\[\[PAGE\]\]/g, newstart));
+				$(this).submit();
+				return(false);
+			});
+		});
+
+		$('.pagelinks .prefix').live('mouseleave',function(event) {
+			$(this).html($(this).attr('data-save'));
+		});
+		return;
+	});
+EOT;
 	if(isset($context['need_synhlt']))  // include syntax highlighter js when needed. 
 		echo '
 	var t3 = document.createElement(\'SCRIPT\');

@@ -20,6 +20,7 @@ class EoS_Twig {
 	private static $_twig_environment;
 	private static $_twig_loader_instance;
 	private static $_the_template;
+	private static $_template_name = '';
 
 	public static function init($sourcedir, $themedir, $boarddir)
 	{
@@ -32,12 +33,53 @@ class EoS_Twig {
 
 	public static function loadTemplate($_template_name)
 	{
-		self::$_the_template = self::$_twig_environment->loadTemplate($_template_name . '.twig');
+		self::$_template_name = $_template_name . '.twig';
 	}
 
+	/**
+	 * output all enqued scripts
+	 * used as custom template function
+	 */
+	public static function footer_scripts()
+	{
+		global $context, $settings;
+
+		if(!empty($context['theme_scripts'])) {
+			foreach($context['theme_scripts'] as $type => $script) {
+				if($script['footer'])
+					echo '
+		<script type="text/javascript" src="',($script['default'] ? $settings['default_theme_url'] : $settings['theme_url']) . '/' . $script['name'] . $context['jsver'], '"></script>';
+			}
+		}
+		if(!empty($context['inline_footer_script']))
+			echo '
+		<script type="text/javascript">
+		<!-- // --><![CDATA[
+		',$context['inline_footer_script'],'
+
+		';
+		if(isset($context['footer_script_fragments'])) {
+			foreach($context['footer_script_fragments'] as $this_script)
+				echo $this_script;
+		}
+		echo '
+		// ]]>
+		</script>
+		';
+	}
+
+	/**
+	 * does absolutely nothing
+	 * used as dummy for custom callback functions
+	 */
+	public static function dummy() {}
+	/**
+	 * set up the template context and output the template
+	 */
 	public static function Display()
 	{
 		global $context, $settings, $modSettings, $options, $txt, $scripturl, $user_info, $cookiename;
+		global $forum_copyright, $forum_version, $time_start, $db_count;
 
 		$settings['theme_variants'] = array('default', 'lightweight');
 		$settings['clip_image_src'] = array(
@@ -51,8 +93,30 @@ class EoS_Twig {
 			'_dark' => 'theme/sprite.png'
 		);
 
-		$context['test_value_twig'] = 'foobar';
-		$context['test_value_twig1'] = 'foobar more';
+  		$context['template_time_now'] = forum_time(false);
+  		$context['template_timezone'] = date_default_timezone_get();
+		$context['template_time_now_formatted'] = strftime($modSettings['time_format'], $context['template_time_now']);
+		$context['template_allow_rss'] = (!empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']));
+		$context['template_copyright'] = sprintf($forum_copyright, $forum_version);
+  		$context['inline_footer_script'] .= $txt['jquery_timeago_loc'];
+		$context['show_load_time'] = !empty($modSettings['timeLoadPageEnable']);
+		$context['load_time'] = round(array_sum(explode(' ', microtime())) - array_sum(explode(' ', $time_start)), 3);
+		$context['load_queries'] = $db_count;
+
+		if (isset($settings['use_default_images']) && $settings['use_default_images'] == 'defaults' && isset($settings['default_template']))
+		{
+			$settings['theme_url'] = $settings['actual_theme_url'];
+			$settings['images_url'] = $settings['actual_images_url'];
+			$settings['theme_dir'] = $settings['actual_theme_dir'];
+		}
+
+  		if(isset($modSettings['embed_GA']) && $modSettings['embed_GA'] && ($context['user']['is_guest'] || (empty($options['disable_analytics']) ? 1 : !$options['disable_analytics'])))
+  			$context['want_GA_embedded'] = true;
+
+		self::$_twig_environment->addFunction('sidebar_callback', new Twig_Function_Function(is_callable($context['sidebar_context_output']) ? $context['sidebar_context_output'] : 'EoS_Twig::dummy'));
+		self::$_twig_environment->addFunction('output_footer_scripts', new Twig_Function_Function('EoS_Twig::footer_scripts'));
+		self::$_twig_environment->addFunction('url_action', new Twig_Function_Function('URL::action'));
+		self::$_the_template = self::$_twig_environment->loadTemplate(self::$_template_name);
 		self::$_the_template->display(array('C' => &$context,
 								 		'T' => &$txt,
 								 		'S' => &$settings,
@@ -60,11 +124,13 @@ class EoS_Twig {
 								 		'M' => &$modSettings,
 								 		'U' => &$user_info,
 								 		'SCRIPTURL' => $scripturl,
-								 		'COOKIENAME' => $cookiename
+								 		'COOKIENAME' => $cookiename,
+								 		'_COOKIE' => &$_COOKIE
 								 	  ));
 	}
 
 	// Ends execution.  Takes care of template loading and remembering the previous URL.
+	// this is for twig templates ONLY
 	public static function obExit($header = null, $do_footer = null, $from_index = false, $from_fatal_error = false)
 	{
 		global $context, $modSettings;
@@ -150,18 +216,6 @@ class EoS_Twig {
 	public static function template_footer()
 	{
 		global $context, $settings, $modSettings, $time_start, $db_count;
-
-		// Show the load time?  (only makes sense for the footer.)
-		$context['show_load_time'] = !empty($modSettings['timeLoadPageEnable']);
-		$context['load_time'] = round(array_sum(explode(' ', microtime())) - array_sum(explode(' ', $time_start)), 3);
-		$context['load_queries'] = $db_count;
-
-		if (isset($settings['use_default_images']) && $settings['use_default_images'] == 'defaults' && isset($settings['default_template']))
-		{
-			$settings['theme_url'] = $settings['actual_theme_url'];
-			$settings['images_url'] = $settings['actual_images_url'];
-			$settings['theme_dir'] = $settings['actual_theme_dir'];
-		}
 	}
 
 	public static function template_header()
