@@ -30,14 +30,14 @@ class EoS_Twig {
 		self::$_twig_environment = new Twig_Environment(self::$_twig_loader_instance, array('strict_variables' => true, 'cache' => $boarddir . 'template_cache', 'auto_reload' => true, 'autoescape' => false));
 	}	
 
-	public static function &loadTemplate($_template_name)
+	public static function loadTemplate($_template_name)
 	{
 		self::$_the_template = self::$_twig_environment->loadTemplate($_template_name);
 	}
 
 	public static function Display()
 	{
-		global $context, $settings, $modSettings, $options, $txt, $scripturl, $user_info;
+		global $context, $settings, $modSettings, $options, $txt, $scripturl, $user_info, $cookiename;
 
 		/*$twig_globals = array('c' => &$context, 
 							's' => &$settings, 
@@ -69,7 +69,8 @@ class EoS_Twig {
 								 		'O' => &$options,
 								 		'M' => &$modSettings,
 								 		'U' => &$user_info,
-								 		'SCRIPTURL' => $scripturl
+								 		'SCRIPTURL' => $scripturl,
+								 		'COOKIENAME' => $cookiename
 								 	  ));
 	}
 

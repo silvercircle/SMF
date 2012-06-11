@@ -442,6 +442,24 @@ function ob_sessrewrite($buffer)
 {
 	global $scripturl, $modSettings, $context;
 
+	
+	/* TODO: tidy support as a debugging option to generate prettified output
+	if(!isset($_REQUEST['xml']) && class_exists('Tidy')) {
+		$tidy = new Tidy;
+
+		$tidy_config = array(
+           'indent'         => true,
+           'output-html'   => isset($_REQUEST['xml']) ? false : true,
+           'output-xml'   => isset($_REQUEST['xml']) ? true : false,
+           'wrap'           => 0,
+           'merge-divs' => false,
+           'merge-spans' => false);
+
+		//$tidy->parseString($buffer, $tidy_config, 'utf8');
+		//$tidy->cleanRepair();
+		//$buffer = $tidy;
+	}
+	*/
 	// If $scripturl is set to nothing, or the SID is not defined (SSI?) just quit.
 	if ($scripturl == '' || !defined('SID'))
 		return $buffer;
