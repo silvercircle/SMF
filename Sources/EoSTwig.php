@@ -32,21 +32,13 @@ class EoS_Twig {
 
 	public static function loadTemplate($_template_name)
 	{
-		self::$_the_template = self::$_twig_environment->loadTemplate($_template_name);
+		self::$_the_template = self::$_twig_environment->loadTemplate($_template_name . '.twig');
 	}
 
 	public static function Display()
 	{
 		global $context, $settings, $modSettings, $options, $txt, $scripturl, $user_info, $cookiename;
 
-		/*$twig_globals = array('c' => &$context, 
-							's' => &$settings, 
-							'm' => &$modSettings, 
-							't' => &$txt, 
-							'scripturl' => $scripturl,
-							'u' => $user_info
-						);
-		*/
 		$settings['theme_variants'] = array('default', 'lightweight');
 		$settings['clip_image_src'] = array(
 			'_default' => 'clipsrc.png',
@@ -61,9 +53,7 @@ class EoS_Twig {
 
 		$context['test_value_twig'] = 'foobar';
 		$context['test_value_twig1'] = 'foobar more';
-		//self::$_twig_environment->addGlobal('G', $twig_globals);
-		self::$_the_template->display(array('pageTitle' => 'Twig output test',
-								 		'C' => &$context,
+		self::$_the_template->display(array('C' => &$context,
 								 		'T' => &$txt,
 								 		'S' => &$settings,
 								 		'O' => &$options,
@@ -271,7 +261,7 @@ function TwigTest()
 
 	EoS_Twig::init($sourcedir, $settings['theme_dir'], $boarddir);
 
-	$_the_template = &EoS_Twig::loadTemplate('twigtest.html');
+	$_the_template = &EoS_Twig::loadTemplate('twigtest');
 
 	$context['twig_template'] = true;
 }

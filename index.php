@@ -91,6 +91,7 @@ $context['jquery_version'] = '1.7.2';
 $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();
 $context['additional_admin_errors'] = '';
+$context['ltree_done'] = '';
 
 // Seed the random generator.
 if (empty($modSettings['rand_seed']) || mt_rand(1, 250) == 69)

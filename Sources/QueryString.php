@@ -440,26 +440,24 @@ function JavaScriptEscape($string)
 // Rewrite URLs to include the session ID.
 function ob_sessrewrite($buffer)
 {
-	global $scripturl, $modSettings, $context;
+	global $scripturl, $modSettings, $context, $user_info;
 
 	
-	/* TODO: tidy support as a debugging option to generate prettified output
-	if(!isset($_REQUEST['xml']) && class_exists('Tidy')) {
+	/* TODO: tidy support as a debugging option to generate prettified output */
+	/* right now, only tidy twig templates and only do it for the admin (tidy can be slow) */
+	if(!isset($_REQUEST['xml']) && class_exists('Tidy') && isset($context['twig_template']) && $user_info['is_admin']) {
 		$tidy = new Tidy;
 
 		$tidy_config = array(
            'indent'         => true,
-           'output-html'   => isset($_REQUEST['xml']) ? false : true,
-           'output-xml'   => isset($_REQUEST['xml']) ? true : false,
+           'output-html'   => true,
            'wrap'           => 0,
            'merge-divs' => false,
            'merge-spans' => false);
 
-		//$tidy->parseString($buffer, $tidy_config, 'utf8');
-		//$tidy->cleanRepair();
-		//$buffer = $tidy;
+		$tidy->parseString($buffer, $tidy_config, 'utf8');
+		$buffer = $tidy;
 	}
-	*/
 	// If $scripturl is set to nothing, or the SID is not defined (SSI?) just quit.
 	if ($scripturl == '' || !defined('SID'))
 		return $buffer;

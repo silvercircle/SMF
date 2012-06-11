@@ -751,7 +751,6 @@ function loadBoard()
 			)),
 			array_reverse($board_info['parent_boards']),
 			array(array(
-				//'url' => $scripturl . '?board=' . $board . ($stored_topicstart > 0 ? '.'. $stored_topicstart : '.0'),
 				'url' => URL::board($board, $board_info['name'], ($stored_topicstart > 0 ? $stored_topicstart : 0), false),
 				'name' => $board_info['name'] . ($stored_topicstart > 0 ? ' ['. ($stored_topicstart / $topics_per_page + 1) . ']' : ''),
 			))
