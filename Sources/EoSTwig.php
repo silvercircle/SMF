@@ -76,6 +76,45 @@ class EoS_Twig {
 	/**
 	 * set up the template context and output the template
 	 */
+
+	public static function button_strip($button_strip, $direction = 'top', $strip_options = array())
+	{
+		global $context, $txt;
+
+		if (!is_array($strip_options))
+			$strip_options = array();
+
+		// List the buttons in reverse order for RTL languages.
+		if ($context['right_to_left'])
+			$button_strip = array_reverse($button_strip, true);
+
+		// Create the buttons...
+		$buttons = array();
+		foreach ($button_strip as $key => $value)
+		{
+			if (!isset($value['test']) || !empty($context[$value['test']]))
+				$buttons[] = '
+					<li><a' . (isset($value['id']) ? ' id="button_strip_' . $value['id'] . '"' : '') . ' class="button_strip_' . $key . (isset($value['active']) ? ' active' : '') . '" href="' . $value['url'] . '"' . (isset($value['custom']) ? ' ' . $value['custom'] : '') . '><span>' . $txt[$value['text']] . '</span></a></li>';
+		}
+
+		// No buttons? No button strip either.
+		if (empty($buttons))
+			return;
+
+		// Make the last one, as easy as possible.
+		$buttons[count($buttons) - 1] = str_replace('<span>', '<span class="last">', $buttons[count($buttons) - 1]);
+
+		if(!isset($strip_options['class']))
+			$strip_options['class'] = 'buttonlist';
+
+		echo '
+			<div class="',$strip_options['class'], !empty($direction) ? ' float' . $direction : '', '"', (empty($buttons) ? ' style="display: none;"' : ''), (!empty($strip_options['id']) ? ' id="' . $strip_options['id'] . '"': ''), '>
+				<ul class="',$strip_options['class'],'">',
+					implode('', $buttons), '
+				</ul>
+			</div>';
+	}
+
 	public static function Display()
 	{
 		global $context, $settings, $modSettings, $options, $txt, $scripturl, $user_info, $cookiename;
@@ -110,14 +149,31 @@ class EoS_Twig {
 			$settings['theme_dir'] = $settings['actual_theme_dir'];
 		}
 
+		if (isset($context['show_who'])) {
+		    $bracketList = array();
+		    if ($context['show_buddies'])
+		      $bracketList[] = comma_format($context['num_buddies']) . ' ' . ($context['num_buddies'] == 1 ? $txt['buddy'] : $txt['buddies']);
+		    if (!empty($context['num_spiders']))
+		      $bracketList[] = comma_format($context['num_spiders']) . ' ' . ($context['num_spiders'] == 1 ? $txt['spider'] : $txt['spiders']);
+		    if (!empty($context['num_users_hidden']))
+		      $bracketList[] = comma_format($context['num_users_hidden']) . ' ' . $txt['hidden'];
+
+    		if (!empty($bracketList))
+      			$context['show_who_formatted'] = ' (' . implode(', ', $bracketList) . ')';
+		}
   		if(isset($modSettings['embed_GA']) && $modSettings['embed_GA'] && ($context['user']['is_guest'] || (empty($options['disable_analytics']) ? 1 : !$options['disable_analytics'])))
   			$context['want_GA_embedded'] = true;
 
 		self::$_twig_environment->addFunction('sidebar_callback', new Twig_Function_Function(is_callable($context['sidebar_context_output']) ? $context['sidebar_context_output'] : 'EoS_Twig::dummy'));
 		self::$_twig_environment->addFunction('output_footer_scripts', new Twig_Function_Function('EoS_Twig::footer_scripts'));
 		self::$_twig_environment->addFunction('url_action', new Twig_Function_Function('URL::action'));
-		self::$_the_template = self::$_twig_environment->loadTemplate(self::$_template_name);
-		self::$_the_template->display(array('C' => &$context,
+		self::$_twig_environment->addFunction('sprintf', new Twig_Function_Function('sprintf'));
+		self::$_twig_environment->addFunction('implode', new Twig_Function_Function('implode'));
+		self::$_twig_environment->addFunction('button_strip', new Twig_Function_Function('EoS_Twig::button_strip'));
+		self::$_twig_environment->addFunction('comma_format', new Twig_Function_Function('comma_format'));
+		self::$_twig_environment->addFunction('timeformat', new Twig_Function_Function('timeformat'));
+
+		$twig_context = array('C' => &$context,
 								 		'T' => &$txt,
 								 		'S' => &$settings,
 								 		'O' => &$options,
@@ -126,7 +182,10 @@ class EoS_Twig {
 								 		'SCRIPTURL' => $scripturl,
 								 		'COOKIENAME' => $cookiename,
 								 		'_COOKIE' => &$_COOKIE
-								 	  ));
+							);
+
+		self::$_the_template = self::$_twig_environment->loadTemplate(self::$_template_name);
+		self::$_the_template->display($twig_context);
 	}
 
 	// Ends execution.  Takes care of template loading and remembering the previous URL.

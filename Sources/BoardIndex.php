@@ -31,11 +31,18 @@ if (!defined('SMF'))
 // Show the board index!
 function BoardIndex()
 {
-	global $txt, $user_info, $sourcedir, $modSettings, $context, $settings, $scripturl, $boardurl;
+	global $txt, $user_info, $sourcedir, $modSettings, $context, $settings, $scripturl, $boardurl, $boarddir;
 
+	if(1 || $user_info['is_admin']) {
+		EoS_Twig::init($sourcedir, $settings['theme_dir'], $boarddir);
+		$_the_template = &EoS_Twig::loadTemplate('boardindex');
+		$context['twig_template'] = true;
+	}
 	// For wireless, we use the Wireless template...
-	loadTemplate('BoardIndex');
-	loadTemplate('GenericBits');
+	else {
+		loadTemplate('BoardIndex');
+		loadTemplate('GenericBits');
+	}
 
 	$context['is_board_index'] = true;
 	$context['sidebar_context_output'] = 'template_sidebar_content_index';

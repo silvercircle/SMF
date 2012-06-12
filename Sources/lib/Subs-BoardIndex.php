@@ -160,6 +160,8 @@ function getBoardIndex($boardIndexOptions)
 					'act_as_cat' => $row_board['allow_topics'] ? false : true,
 					'ignored' => $ignoreThisBoard
 				);
+				$this_category[$row_board['id_board']]['page_link'] = $this_category[$row_board['id_board']]['is_page'] ? URL::topic(intval(substr($this_category[$row_board['id_board']]['redirect'], 1)), $this_category[$row_board['id_board']]['name'], 0) : '';
+
 			}
 			if (!empty($row_board['id_moderator']))
 			{
@@ -199,6 +201,8 @@ function getBoardIndex($boardIndexOptions)
 				'act_as_cat' => $row_board['allow_topics'] ? false : true,
 				'ignored' => $ignoreThisBoard
 			);
+
+			$this_category[$row_board['id_parent']]['children'][$row_board['id_board']]['page_link'] = $this_category[$row_board['id_parent']]['children'][$row_board['id_board']]['is_page'] ? URL::topic(intval(substr($this_category[$row_board['id_parent']]['children'][$row_board['id_board']]['redirect'], 1)), $this_category[$row_board['id_parent']]['children'][$row_board['id_board']]['name'], 0) : '';
 
 			// Counting child board posts is... slow :/.
 			if (!empty($boardIndexOptions['countChildPosts']) && !$row_board['is_redirect'])

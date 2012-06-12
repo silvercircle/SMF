@@ -1,0 +1,156 @@
+{% macro boardbit(board, _c) %}
+{% set post_icons_in_last_post = not (_c.O.post_icons_index is defined and _c.O.post_icons_index > 0) %}
+{% if board.act_as_cat %}
+	{{ _self.boardbit_subcat(board, _c) }}
+{% else %}	
+	<li id="board_{{ board.id }}" class="boardrow gradient_darken_down">
+	{% if board.is_page is empty %}
+		<div class="info">
+		<div class="icon floatleft">
+		  <a href="{{ board.is_redirect or _c.C.user.is_guest ? board.href : _c.SCRIPTURL ~ '?action=unread;board=' ~ board.id ~ '.0;children' }}">
+		  <div class="csrcwrapper24px">
+		  {% if board.boardicon is not empty %}
+		  	<img src="{{ _c.S.images_url }}/boards/{{ board.boardicon }}.png" alt="{{ _c.T.new_posts }}" title="{{ _c.T.new_posts }}" />
+				{% if board.new > 0 or board.children_new > 0 %}
+					<img style="position:absolute;bottom:-4px;right:-3px;" src="{{ _c.S.images_url }}/new.png" />
+				{% endif %}
+			{% else %}
+				{% if board.is_redirect %}
+		  		<img class="clipsrc _redirect" src="{{ _c.C.clip_image_src }}" alt="*" title="*" />
+				{% else %}
+		  		<img class="clipsrc _off" src="{{ _c.C.clip_image_src }}" alt="{{ _c.T.old_posts }}" title="{{ _c.T.old_posts }}" />
+		  	{% endif %}
+				{% if board.new > 0 or board.children_new > 0 %}
+		  		<img style="position:absolute;bottom:-4px;right:-3px;" src="{{ _c.S.images_url }}/new.png" />
+		  	{% endif %}
+			{% endif %}
+			</div>
+		  </a>
+		</div>
+		<div style="padding-left:32px;">
+		  <a class="brd_rsslink" href="{{ _c.SCRIPTURL ~ '?action=.xml;type=rss;board=' ~ board.id }}">&nbsp;</a>
+		  {% if board.moderators is not empty %}
+		  	<span onclick="brdModeratorsPopup($(this));" class="brd_moderators" title="{{ _c.T.moderated_by }}"><span class="brd_moderators_chld" style="display:none;">{{ _c.T.moderated_by }}: {{ implode(', ', board.link_moderators) }}</span></span>
+		  {% endif %}
+		  <h3>
+		   	<a class="boardlink easytip" data-tip="tip_b_{{ board.id }}" href="{{ board.href }}" id="b{{ board.id }}">{{ board.name }}</a>
+		  </h3>
+		  <div style="display:none;" id="tip_b_{{ board.id }}">{{ board.description }}</div>
+			{% if board.can_approve_posts and (board.unapproved_posts or board.unapproved_topics) %}
+		  	<a href="{{ _c.SCRIPTURL ~ '?action=moderate;area=postmod;sa=' ~ (board.unapproved_topics > 0 ? 'topics' : 'posts') ~ ';brd=' ~ board.id ~ ';' ~ C.session_var ~ '=' ~ C.session_id }}" title="{{ sprintf(_c.T.unapproved_posts, board.unapproved_topics, board.unapproved_posts) }}" class="moderation_link">(!)</a>
+		  {% endif %}
+		 	<div class="tinytext">{{ board.posts }} <span class="lowcontrast">{{ _c.T.posts }} {{ _c.T.in }}</span> {{ board.topics }} <span class="lowcontrast">{{ _c.T.topics }}</span></div>
+			<div class="lastpost tinytext lowcontrast">
+			{% if board.last_post.id is not empty %}
+				{{ post_icons_in_last_post ? '' : '<img src="' ~ board.first_post.icon_url ~ '" alt="icon" />' }}
+				{{ board.last_post.prefix }}{{ board.last_post.topiclink }}<br />
+				<a class="lp_link" title="{{ _c.T.last_post }}" href="{{ board.last_post.href }}">{{ board.last_post.time }}</a>
+				<span class="tinytext lowcontrast" {{ post_icons_in_last_post ? '' : 'style="padding-left:20px;"' }}>{{ _c.T.last_post }}&nbsp;{{ _c.T.by }}&nbsp;</span>{{ board.last_post.member.link }}
+			{% else %}
+				{{ _c.T.not_applicable }}
+			{% endif %}
+		</div>
+		</div>
+		</div>
+	{% else %}
+		<div class="info fullwidth">
+	 	<div class="icon floatleft">
+	  	<div class="csrcwrapper24px"><img class="clipsrc _page" src="{{ _c.C.clip_image_src }}" alt="*" title="*" /></div>
+	 	</div>
+		<div style="padding-left:32px;">
+			<h3><a class="boardlink" href="{{ board.page_link }}">{{ board.name }}</a></h3>
+	   	<div class="tinytext lowcontrast">{{ board.description }}</div>
+	  </div>
+	  </div>
+	{% endif %}
+	{# Show the "Child Boards: ". (there's a link_children but we're going to bold the new ones...) #}
+	{% if board.children is not empty %}
+		{{ _self.board_children(board, _c) }}
+	{% else %}
+		<div></div>
+	{% endif %}
+ <div class="clear_left"></div>
+</li>
+{% endif %}
+{% endmacro %}
+
+{% macro boardbit_subcat(board, _c) %}
+	<li id="board_'{{ board.id }}" class="subcatrow">
+		<div class="gradient_darken_down smallpadding">
+		<div class="info subcat">
+		 <div class="icon floatleft">
+		  <a href="{{ board.is_redirect or _c.C.user.is_guest ? board.href : _c.SCRIPTURL ~ '?action=unread;board=' ~ board.id ~ '.0;children' }}">
+		  <div class="csrcwrapper24px">
+		{% if board.boardicon is not empty %}
+			echo '
+		  <img src="', $settings['images_url'], '/boards/',$board['boardicon'],'.png" alt="', $txt['new_posts'], '" title="', $txt['new_posts'], '" />
+			{% if board.new > 0 or board.children_new > 0 %}
+				<img style="position:absolute;bottom:-4px;right:-3px;" src="{{ _c.S.images_url }}/new.png" />
+			{% endif %}
+		{% else %}
+		  <img class="clipsrc _subcat" src="{{ _c.S.images_url }}/clipsrc.png" alt="{{ _c.T.old_posts }}" title="{{ _c.T.old_posts }}" />
+		 	{% if board.new or board.children_new %}
+		  	<img style="position:absolute;bottom:-4px;right:-3px;" src="{{ _c.S.images_url }}/new.png" />
+		  {% endif %}
+		{% endif %}
+		</div>
+		</a>
+		</div>
+		<div style="padding-left:32px;">
+	  <h3 class="subcatlink"><a class="boardlink" href="{{ board.href }}" id="b{{ board.id }}">{{ board.name }}</a></h3>
+		{% if board.can_approve_posts and (board.unapproved_posts or board.unapproved_topics) %}
+		  <a href="{{ _c.SCRIPTURL }}?action=moderate;area=postmod;sa={{ board.unapproved_topics > 0 ? 'topics' : 'posts' }};brd={{ board.id }};{{ _c.C.session_var }}={{ _c.C.session_id }}" title="{{ sprintf(_c.T.unapproved_posts, board.unapproved_topics, board.unapproved_posts) }}" class="moderation_link">(!)</a>
+		{% endif %}
+	 	<div class="tinytext lowcontrast">{{ board.description }}</div>
+		</div>
+		</div>
+		{% if board.children is not empty %}
+			{{ _self.board_children(board, _c) }}
+		{% else %}
+			<div></div>
+		{% endif %}
+
+		{% if board.last_post.id is not empty %}
+			<div class="tinytext nowrap righttext" style="position:static;max-width:auto;">
+			<a class="lp_link" title="{{ _c.T.last_post }}" href="{{ board.last_post.href }}">{{ board.last_post.time }}</a><span class="tinytext lowcontrast">{{ _c.T.last_post }} in: </span>{{ board.last_post.prefix }}{{ board.last_post.topiclink }}
+			&nbsp;<span class="tinytext lowcontrast">{{ _c.T.by }}&nbsp;</span>{{ board.last_post.member.link }}&nbsp;
+		</div>
+		{% endif %}
+	 <div class="clear_left"></div>
+	 </div>
+	</li>
+{% endmacro %}
+
+{% macro board_children(board, _c) %}
+	<div class="td_children" id="board_{{ board.id }}_children">
+	<table>
+	<tr>
+  {% set n = 0 %}
+  {% set columns = _c.M.tidy_child_display_columns %}
+  {% set width = 100 / columns %}
+	{% for child in board.children %}
+		{% if child.is_redirect == 0 %}
+			{% set link = '<h4 class="childlink"><a data-tip="tip_b_' ~ child.id ~ '" href="' ~ child.href ~ '" class="boardlink easytip">' ~ child.name ~ '</a></h4>' %}
+			{% set img = '<div class="csrcwrapper16px" style="left:-12px;margin-bottom:-16px;"><img class="clipsrc ' ~ (child.new ? '_child_new' : '_child_old') ~ '" src="' ~ _c.C.sprite_image_src ~ '" alt="*" title="*" /></div>' %}
+			{% set tip = '<div id="tip_b_' ~ child.id ~ '" style="display:none;">' ~ (child.description is not empty ? child.description ~ '<br>' : '') ~ (child.new ? _c.T.new_posts : _c.T.old_posts) ~ ' (' ~ _c.T.board_topics ~ ': ' ~ comma_format(child.topics) ~ ', ' ~ _c.T.posts ~ ': ' ~ comma_format(child.posts) ~ ')' ~ '</div>' %}
+		{% else %}
+			{% set link = '<a class="boardlink" href="' ~ child.href ~ '" title="' ~ comma_format(child.posts) ~ ' ' ~ _c.T.redirects ~ '"><h4>' ~ child.name ~ '</h4></a>&nbsp;<span class="tinytext lowcontrast">(' ~ child.description ~ ')</span>' %}
+			{% set img = '' %}
+			{% set tip = '' %}
+		{% endif %}
+
+		{% if child.can_approve_posts and (child.unapproved_posts or child.unapproved_topics) %}
+			{% set link = link ~ ' <a href="' ~ _c.SCRIPTURL ~ '?action=moderate;area=postmod;sa=' ~ (child.unapproved_topics > 0 ? 'topics' : 'posts') ~ ';brd=' ~ child.id ~ ';' ~ _c.C.session_var ~ '=' ~ _c.C.session_id ~ '" title="' ~ sprintf(_c.T.unapproved_posts, child.unapproved_topics, child.unapproved_posts) ~ '" class="moderation_link">(!)</a>' %}
+		{% endif %}
+
+	  <td style="width: {{ width }}%;" class="tinytext"><div style="padding-left:12px;">{{ img }}{{ link }}</div>{{ tip }}</td>
+	  {% if n >= columns %}
+		  {% set n = 0 %}
+		  </tr><tr>
+	  {% endif %}
+	  {% set n = n + 1 %}
+	{% endfor %}
+  </tr>
+	</table>
+	</div>
+{% endmacro %}

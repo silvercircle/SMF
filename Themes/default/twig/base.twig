@@ -260,7 +260,7 @@
   {{ C.additional_admin_errors }}
   
   {% if C.news_item_count %}
-    {% include "news_items" %}
+    {# {% include "news_items" %} #}
   {% endif %}
   <aside>
     <div id="sidebar" style="width:260px;display:{{ sidebar_allowed ? 'inline' : 'none' }};">
@@ -279,10 +279,6 @@
 
     {% block content %}
     {% endblock %}
-
-    {% if U.is_admin %}
-    I am admin
-    {% endif %}
 
   <div class="clear"></div>
   </div></div></div>
