@@ -21,13 +21,16 @@ class EoS_Twig {
 	private static $_twig_loader_instance;
 	private static $_the_template;
 	private static $_template_name = '';
+	private static $_template_blocks = array();
 
-	public static function init($sourcedir, $themedir, $boarddir)
+	public static function init()
 	{
+		global $sourcedir, $settings, $boarddir;
+
 		@require_once($sourcedir . '/lib/Twig/lib/Twig/Autoloader.php');
 		Twig_Autoloader::register();
 
-		self::$_twig_loader_instance = new Twig_Loader_Filesystem($themedir . '/twig');
+		self::$_twig_loader_instance = new Twig_Loader_Filesystem($settings['theme_dir'] . '/twig');
 		self::$_twig_environment = new Twig_Environment(self::$_twig_loader_instance, array('strict_variables' => true, 'cache' => $boarddir . 'template_cache', 'auto_reload' => true, 'autoescape' => false));
 	}	
 
@@ -36,6 +39,10 @@ class EoS_Twig {
 		self::$_template_name = $_template_name . '.twig';
 	}
 
+	public static function setBlocks(&$_blocks)
+	{
+		self::$_template_blocks = !is_array($_blocks) ? array($_blocks) : $_blocks;
+	}
 	/**
 	 * output all enqued scripts
 	 * used as custom template function
@@ -173,19 +180,12 @@ class EoS_Twig {
 		self::$_twig_environment->addFunction('comma_format', new Twig_Function_Function('comma_format'));
 		self::$_twig_environment->addFunction('timeformat', new Twig_Function_Function('timeformat'));
 
-		$twig_context = array('C' => &$context,
-								 		'T' => &$txt,
-								 		'S' => &$settings,
-								 		'O' => &$options,
-								 		'M' => &$modSettings,
-								 		'U' => &$user_info,
-								 		'SCRIPTURL' => $scripturl,
-								 		'COOKIENAME' => $cookiename,
-								 		'_COOKIE' => &$_COOKIE
-							);
+		$twig_context = array('C' => &$context, 'T' => &$txt, 'S' => &$settings, 'O' => &$options,
+								 		'M' => &$modSettings, 'U' => &$user_info, 'SCRIPTURL' => $scripturl, 'COOKIENAME' => $cookiename,
+								 		'_COOKIE' => &$_COOKIE);
 
 		self::$_the_template = self::$_twig_environment->loadTemplate(self::$_template_name);
-		self::$_the_template->display($twig_context);
+		self::$_the_template->display($twig_context, self::$_template_blocks);
 	}
 
 	// Ends execution.  Takes care of template loading and remembering the previous URL.

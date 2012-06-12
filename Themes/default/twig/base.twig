@@ -1,3 +1,4 @@
+{% use "notices.twig" %}
 <!DOCTYPE html >
 <html id="_S_" lang="en-US">
   <head>
@@ -30,7 +31,7 @@
       var smf_charset = 'UTF-8';
       var sSessionId = '{{ C.session_id }}';
       var sSessionVar = '{{ C.session_var }}';
-      var disableDynamicTime = {{ O.disable_dynatime is defined and O.disable_dynatime is not empty ? 0 : 1}};
+      var disableDynamicTime = {{ O.disable_dynatime is defined and O.disable_dynatime is not empty ? 0 : 1 }};
       var textSizeUnit = 'pt';
       var textSizeStep = 1;
       var textSizeMax = 16;
@@ -260,7 +261,9 @@
   {{ C.additional_admin_errors }}
   
   {% if C.news_item_count %}
-    {# {% include "news_items" %} #}
+    {% block list_notices %}
+      {{ parent() }}
+    {% endblock %}
   {% endif %}
   <aside>
     <div id="sidebar" style="width:260px;display:{{ sidebar_allowed ? 'inline' : 'none' }};">

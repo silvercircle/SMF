@@ -12,7 +12,7 @@
       {% if category.can_collapse %}
         <div class="csrcwrapper16px floatright"><a onclick="catCollapse($(this));return(false);" data-id="{{ category.id }}" class="collapse floatright" href="{{ category.collapse_href }}">{{ category.collapse_image }}</a></div>
       {% endif %}
-      {% if C.user.is_guest == 0 and category.new is not empty %}
+      {% if C.user.is_guest == 0 and category.new > 0 %}
         <a class="unreadlink" href="{{ SCRIPTURL }}?action=unread;c={{ category.id }}">{{ T.view_unread_category }}</a>
       {% endif %}
       <h3>
