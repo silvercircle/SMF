@@ -126,6 +126,20 @@ function BoardIndex()
 		'above_boardlisting' => '',
 		'below_boardlisting' => ''
 	);
+
+	if (isset($context['show_who'])) {
+	    $bracketList = array();
+	    if ($context['show_buddies'])
+	      $bracketList[] = comma_format($context['num_buddies']) . ' ' . ($context['num_buddies'] == 1 ? $txt['buddy'] : $txt['buddies']);
+	    if (!empty($context['num_spiders']))
+	      $bracketList[] = comma_format($context['num_spiders']) . ' ' . ($context['num_spiders'] == 1 ? $txt['spider'] : $txt['spiders']);
+	    if (!empty($context['num_users_hidden']))
+	      $bracketList[] = comma_format($context['num_users_hidden']) . ' ' . $txt['hidden'];
+
+		if (!empty($bracketList))
+  			$context['show_who_formatted'] = ' (' . implode(', ', $bracketList) . ')';
+	}
+	
 	HookAPI::callHook('integrate_boardindex', array());
 	fetchNewsItems(0, 0);
 }

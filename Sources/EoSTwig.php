@@ -34,17 +34,34 @@ class EoS_Twig {
 		self::$_twig_environment = new Twig_Environment(self::$_twig_loader_instance, array('strict_variables' => true, 'cache' => $boarddir . 'template_cache', 'auto_reload' => true, 'autoescape' => false));
 	}	
 
+	/**
+	 * @static
+	 * @param string - $_template_name the desired template name that should be loaded
+	 * 		  without file name extension and path information.
+	 *
+	 * The template is not immediately loaded, this functionm merely remembers the template
+	 * name. The template must be loaded *after* the full context has been setup and this
+	 * happens in Display().
+	 */
 	public static function loadTemplate($_template_name)
 	{
 		self::$_template_name = $_template_name . '.twig';
 	}
 
-	public static function setBlocks(&$_blocks)
+	/**
+	 * @static
+	 * @param $_blocks array() of block names to display.
+	 *
+	 * Smaller templates may be combined in form of blocks into a single (larger)
+	 * template files. This function allows to specify a list of blocks that should
+	 * be rendered instead of the entire template.
+	 */
+	public static function setBlocks($_blocks)
 	{
 		self::$_template_blocks = !is_array($_blocks) ? array($_blocks) : $_blocks;
 	}
 	/**
-	 * output all enqued scripts
+	 * output all enqued footer scripts.
 	 * used as custom template function
 	 */
 	public static function footer_scripts()
@@ -80,10 +97,16 @@ class EoS_Twig {
 	 * used as dummy for custom callback functions
 	 */
 	public static function dummy() {}
-	/**
-	 * set up the template context and output the template
-	 */
 
+	/**
+	 * @static
+	 * @param array $button_strip
+	 * @param string $direction
+	 * @param array $strip_options
+	 * @return mixed
+	 *
+	 * Render a button strip. TODO: this should be converted into a template.
+	 */
 	public static function button_strip($button_strip, $direction = 'top', $strip_options = array())
 	{
 		global $context, $txt;
@@ -122,10 +145,25 @@ class EoS_Twig {
 			</div>';
 	}
 
+	/**
+	 * @static
+	 * set up the template context, load and display the template
+	 * this does everything needed to get our ouput
+	 */
 	public static function Display()
 	{
 		global $context, $settings, $modSettings, $options, $txt, $scripturl, $user_info, $cookiename;
 		global $forum_copyright, $forum_version, $time_start, $db_count;
+
+		$functions = array(
+				'output_footer_scripts' => 'EoS_Twig::footer_scripts',
+				'url_action' => 'URL::action',
+				'sprintf' => 'sprintf',
+				'implode' => 'implode',
+				'button_strip' => 'EoS_Twig::button_strip',
+				'comma_format' => 'comma_format',
+				'timeformat' => 'timeformat'
+			);
 
 		$settings['theme_variants'] = array('default', 'lightweight');
 		$settings['clip_image_src'] = array(
@@ -156,36 +194,27 @@ class EoS_Twig {
 			$settings['theme_dir'] = $settings['actual_theme_dir'];
 		}
 
-		if (isset($context['show_who'])) {
-		    $bracketList = array();
-		    if ($context['show_buddies'])
-		      $bracketList[] = comma_format($context['num_buddies']) . ' ' . ($context['num_buddies'] == 1 ? $txt['buddy'] : $txt['buddies']);
-		    if (!empty($context['num_spiders']))
-		      $bracketList[] = comma_format($context['num_spiders']) . ' ' . ($context['num_spiders'] == 1 ? $txt['spider'] : $txt['spiders']);
-		    if (!empty($context['num_users_hidden']))
-		      $bracketList[] = comma_format($context['num_users_hidden']) . ' ' . $txt['hidden'];
-
-    		if (!empty($bracketList))
-      			$context['show_who_formatted'] = ' (' . implode(', ', $bracketList) . ')';
-		}
   		if(isset($modSettings['embed_GA']) && $modSettings['embed_GA'] && ($context['user']['is_guest'] || (empty($options['disable_analytics']) ? 1 : !$options['disable_analytics'])))
   			$context['want_GA_embedded'] = true;
 
+  		/*
+  		 * set up functions
+  		 */
 		self::$_twig_environment->addFunction('sidebar_callback', new Twig_Function_Function(is_callable($context['sidebar_context_output']) ? $context['sidebar_context_output'] : 'EoS_Twig::dummy'));
-		self::$_twig_environment->addFunction('output_footer_scripts', new Twig_Function_Function('EoS_Twig::footer_scripts'));
-		self::$_twig_environment->addFunction('url_action', new Twig_Function_Function('URL::action'));
-		self::$_twig_environment->addFunction('sprintf', new Twig_Function_Function('sprintf'));
-		self::$_twig_environment->addFunction('implode', new Twig_Function_Function('implode'));
-		self::$_twig_environment->addFunction('button_strip', new Twig_Function_Function('EoS_Twig::button_strip'));
-		self::$_twig_environment->addFunction('comma_format', new Twig_Function_Function('comma_format'));
-		self::$_twig_environment->addFunction('timeformat', new Twig_Function_Function('timeformat'));
+  		foreach($functions as $fn => $name)
+  			self::$_twig_environment->addFunction($fn, new Twig_Function_Function($name));
 
 		$twig_context = array('C' => &$context, 'T' => &$txt, 'S' => &$settings, 'O' => &$options,
 								 		'M' => &$modSettings, 'U' => &$user_info, 'SCRIPTURL' => $scripturl, 'COOKIENAME' => $cookiename,
 								 		'_COOKIE' => &$_COOKIE);
 
 		self::$_the_template = self::$_twig_environment->loadTemplate(self::$_template_name);
-		self::$_the_template->display($twig_context, self::$_template_blocks);
+		if(!empty(self::$_template_blocks)) {
+			foreach(self::$_template_blocks as $block)
+				self::$_the_template->displayBlock($block, $twig_context);
+		}
+		else
+			self::$_the_template->display($twig_context, self::$_template_blocks);
 	}
 
 	// Ends execution.  Takes care of template loading and remembering the previous URL.
@@ -288,11 +317,7 @@ class EoS_Twig {
 		{
 			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 			header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-
-			// Are we debugging the template/html content?
-			if (!isset($_REQUEST['xml']) && isset($_GET['debug']) && !$context['browser']['is_ie'] && !WIRELESS)
-				header('Content-Type: application/xhtml+xml');
-			elseif (!isset($_REQUEST['xml']) && !WIRELESS)
+			if(!isset($_REQUEST['xml']) && !WIRELESS)
 				header('Content-Type: text/html; charset=UTF-8');
 		}
 
@@ -300,63 +325,60 @@ class EoS_Twig {
 
 		$checked_securityFiles = false;
 		$showed_banned = false;
-		foreach ($context['template_layers'] as $layer)
+
+		if (self::$_template_name == 'boardindex.twig' && allowedTo('admin_forum') && !$user_info['is_guest'] && !$checked_securityFiles)
 		{
-			// May seem contrived, but this is done in case the body and main layer aren't there...
-			if (in_array($layer, array('body', 'main')) && allowedTo('admin_forum') && !$user_info['is_guest'] && !$checked_securityFiles)
+			$checked_securityFiles = true;
+			$securityFiles = array('install.php', 'upgrade.php', 'repair_settings.php', 'Settings.php~', 'Settings_bak.php~');
+			foreach ($securityFiles as $i => $securityFile)
 			{
-				$checked_securityFiles = true;
-				$securityFiles = array('install.php', 'webinstall.php', 'upgrade.php', 'convert.php', 'repair_paths.php', 'repair_settings.php', 'Settings.php~', 'Settings_bak.php~');
-				foreach ($securityFiles as $i => $securityFile)
-				{
-					if (!file_exists($boarddir . '/' . $securityFile))
-						unset($securityFiles[$i]);
-				}
-
-				if (!empty($securityFiles))
-				{
-					echo '
-			<div class="errorbox">
-				<p class="alert">!!</p>
-				<h3>', $txt['security_risk'], '</h3>
-				<p>';
-
-					foreach ($securityFiles as $securityFile)
-					{
-						echo '
-					', $txt['not_removed'], '<strong>', $securityFile, '</strong>!<br />';
-
-						if ($securityFile == 'Settings.php~' || $securityFile == 'Settings_bak.php~')
-							echo '
-					', sprintf($txt['not_removed_extra'], $securityFile, substr($securityFile, 0, -1)), '<br />';
-					}
-					echo '
-				</p>
-			</div>';
-				}
+				if (!file_exists($boarddir . '/' . $securityFile))
+					unset($securityFiles[$i]);
 			}
-			// If the user is banned from posting inform them of it.
-			elseif (in_array($layer, array('main', 'body')) && isset($_SESSION['ban']['cannot_post']) && !$showed_banned)
+
+			if (!empty($securityFiles))
 			{
-				$showed_banned = true;
-				echo '
-					<div class="windowbg alert" style="margin: 2ex; padding: 2ex; border: 2px dashed red;">
-						', sprintf($txt['you_are_post_banned'], $user_info['is_guest'] ? $txt['guest_title'] : $user_info['name']);
+				$context['additional_admin_errors'] .= '
+		<div class="errorbox">
+			<p class="alert">!!</p>
+			<h3>' . $txt['security_risk'] . '</h3>
+			<p>';
 
-				if (!empty($_SESSION['ban']['cannot_post']['reason']))
-					echo '
-						<div style="padding-left: 4ex; padding-top: 1ex;">', $_SESSION['ban']['cannot_post']['reason'], '</div>';
+				foreach ($securityFiles as $securityFile)
+				{
+					$context['additional_admin_errors'] .=  '
+				'. $txt['not_removed']. '<strong>'. $securityFile. '</strong>!<br />';
 
-				if (!empty($_SESSION['ban']['expire_time']))
-					echo '
-						<div>', sprintf($txt['your_ban_expires'], timeformat($_SESSION['ban']['expire_time'], false)), '</div>';
-				else
-					echo '
-						<div>', $txt['your_ban_expires_never'], '</div>';
-
-				echo '
-					</div>';
+					if ($securityFile == 'Settings.php~' || $securityFile == 'Settings_bak.php~')
+						$context['additional_admin_errors'] .= '
+				'. sprintf($txt['not_removed_extra']. $securityFile. substr($securityFile, 0, -1)). '<br />';
+				}
+				$context['additional_admin_errors'] .= '
+			</p>
+		</div>';
 			}
+		}
+		// If the user is banned from posting inform them of it.
+		elseif (self::$_template_name == 'boardindex.twig' && isset($_SESSION['ban']['cannot_post']) && !$showed_banned)
+		{
+			$showed_banned = true;
+			echo '
+				<div class="windowbg alert" style="margin: 2ex; padding: 2ex; border: 2px dashed red;">
+					', sprintf($txt['you_are_post_banned'], $user_info['is_guest'] ? $txt['guest_title'] : $user_info['name']);
+
+			if (!empty($_SESSION['ban']['cannot_post']['reason']))
+				echo '
+					<div style="padding-left: 4ex; padding-top: 1ex;">', $_SESSION['ban']['cannot_post']['reason'], '</div>';
+
+			if (!empty($_SESSION['ban']['expire_time']))
+				echo '
+					<div>', sprintf($txt['your_ban_expires'], timeformat($_SESSION['ban']['expire_time'], false)), '</div>';
+			else
+				echo '
+					<div>', $txt['your_ban_expires_never'], '</div>';
+
+			echo '
+				</div>';
 		}
 
 		if (isset($settings['use_default_images']) && $settings['use_default_images'] == 'defaults' && isset($settings['default_template']))
@@ -366,16 +388,5 @@ class EoS_Twig {
 			$settings['theme_dir'] = $settings['default_theme_dir'];
 		}
 	}
-}
-
-function TwigTest()
-{
-	global $context, $sourcedir, $settings, $boarddir;
-
-	EoS_Twig::init($sourcedir, $settings['theme_dir'], $boarddir);
-
-	$_the_template = &EoS_Twig::loadTemplate('twigtest');
-
-	$context['twig_template'] = true;
 }
 ?>

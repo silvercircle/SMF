@@ -13,7 +13,7 @@
         <li class="visible" id="newsitem_{{ item.id }}">
         {% if item.can_dismiss and C.can_dismiss_news %}
           <div class="floatright">
-            <a onclick="dismissNews('{{ item.id }}');return(false);" href="{{ SCRIPTURL }}?action=dismissnews;id='{{ item.id }}">X</a>
+            <a onclick="dismissNews('{{ item.id }}');return(false);" href="{{ SCRIPTURL }}?action=dismissnews;id={{ item.id }}">X</a>
           </div>
         {% endif %}
         {{ item.body }}
@@ -25,6 +25,10 @@
 <div class="cContainer_end"></div>
 {% endblock list_notices %}
 
+{# xml response for action=dismissnews 
+ # content will have the item id to remove, <handler> is the script that does
+ # DOM manipulation #}
+ 
 {% block dismiss_handler %}
 <?xml version="1.0" encoding="UTF-8" ?>
 <document>
@@ -41,12 +45,12 @@
     var result = $.parseJSON(content);
     var id = parseInt(result['id']) || 0;
     if(id) {
-          if($('li#newsitem_' + id).length) {
-            $('li#newsitem_' + id).fadeOut();
-            $('li#newsitem_' + id).removeClass('visible');
-          }
-          if($('#newsitem_list').children('li.visible').length == 0)
-            $('#newsitem_container').fadeOut();
+      if($('li#newsitem_' + id).length) {
+        $('li#newsitem_' + id).fadeOut();
+        $('li#newsitem_' + id).removeClass('visible');
+      }
+      if($('#newsitem_list').children('li.visible').length == 0)
+        $('#newsitem_container').fadeOut();
     }
   }
   ]]>

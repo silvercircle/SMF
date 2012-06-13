@@ -92,6 +92,7 @@ $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();
 $context['additional_admin_errors'] = '';
 $context['ltree_done'] = '';
+$context['sidebar_context_output'] = '';
 
 // Seed the random generator.
 if (empty($modSettings['rand_seed']) || mt_rand(1, 250) == 69)
@@ -320,8 +321,7 @@ function smf_main()
 		'tags' => array('Tagging.php', 'TagsMain'),
 		'astream' => array('Activities.php', 'aStreamDispatch'),
 		'processlink' => array('Display.php', 'ProcessLink'),
-		'dismissnews' => array('Profile-Actions.php', 'DismissNews'),
-		'twigtest' => array('EoSTwig.php', 'TwigTest')
+		'dismissnews' => array('Profile-Actions.php', 'DismissNews')
 	);
 	// Allow modifying $actionArray easily.
 	HookAPI::callHook('integrate_actions', array(&$actionArray));

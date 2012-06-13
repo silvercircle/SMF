@@ -3223,10 +3223,7 @@ function template_header()
 		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 
-		// Are we debugging the template/html content?
-		if (!isset($_REQUEST['xml']) && isset($_GET['debug']) && !$context['browser']['is_ie'] && !WIRELESS)
-			header('Content-Type: application/xhtml+xml');
-		elseif (!isset($_REQUEST['xml']) && !WIRELESS)
+		if(!isset($_REQUEST['xml']) && !WIRELESS)
 			header('Content-Type: text/html; charset=UTF-8');
 	}
 

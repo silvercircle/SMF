@@ -68,6 +68,9 @@ function Who()
 	// Load the 'Who' template.
 	loadTemplate('Who');
 	loadLanguage('Who');
+	EoS_Twig::init();
+	EoS_Twig::loadTemplate('who');
+	$context['twig_template'] = true;
 
 	// Sort out... the column sorting.
 	$sort_methods = array(
