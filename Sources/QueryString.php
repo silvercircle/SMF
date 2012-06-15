@@ -442,10 +442,12 @@ function ob_sessrewrite($buffer)
 {
 	global $scripturl, $modSettings, $context, $user_info;
 
-	
-	/* TODO: tidy support as a debugging option to generate prettified output */
-	/* right now, only tidy twig templates and only do it for the admin (tidy can be slow) */
-	if(0 && !isset($_REQUEST['xml']) && class_exists('Tidy') && isset($context['twig_template']) && $user_info['is_admin']) {
+	/*
+	 * tidy support as a debugging option to generate prettified output 
+	 * right now, tidy twig templates and only do it for the admin when 'tidyup' is set in the request string (tidy can be slow) 
+	 * pretty HTML output helps with debugging templates
+	 */
+	if(isset($_REQUEST['tidyup']) && !isset($_REQUEST['xml']) && class_exists('Tidy') && isset($context['twig_template']) && $user_info['is_admin']) {
 		$tidy = new Tidy;
 
 		$tidy_config = array(

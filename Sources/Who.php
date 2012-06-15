@@ -66,12 +66,11 @@ function Who()
 		fatal_lang_error('who_off', false);
 
 	// Load the 'Who' template.
-	loadTemplate('Who');
+	//loadTemplate('Who');
 	loadLanguage('Who');
 	EoS_Twig::init();
 	EoS_Twig::loadTemplate('who');
 	$context['twig_template'] = true;
-
 	// Sort out... the column sorting.
 	$sort_methods = array(
 		'user' => 'mem.real_name',
@@ -736,10 +735,20 @@ function Credits($in_admin = false)
 		),
 	);
 
+	foreach($context['credits'] as &$credit) {
+		foreach($credit['groups'] as &$group) {
+			if(count($group['members']) > 2)
+				$group['last_peep'] = array_pop($group['members']);
+		}
+	}
 	if (!$in_admin)
 	{
-		loadTemplate('Who');
-		$context['sub_template'] = 'credits';
+		//loadTemplate('Who');
+		EoS_Twig::init();
+		EoS_Twig::loadTemplate('credits');
+		$context['twig_template'] = true;
+
+		//$context['sub_template'] = 'credits';
 		$context['robot_no_index'] = true;
 		$context['page_title'] = $txt['credits'];
 	}

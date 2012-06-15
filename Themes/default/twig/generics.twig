@@ -1,2 +1,22 @@
 {% macro button_strip(buttons, direction, options) %}
 {% endmacro %}
+{% macro collapser(_c, id, title, widgetstyle) %}
+{%set state = _c._COOKIE.SF_collapsed is defined ? array_search(id, explode(',', _c._COOKIE.SF_collapsed)) : false %}
+
+{% set headerclass = 'cContainer_header' %}
+{% set headerstyle = '' %}
+<div class="{{ headerclass }}" {{ headerstyle }}>
+  <div class="csrcwrapper16px floatright"><img onclick="cContainer($(this));" class="cContainer_c clipsrc {{ state ? '_expand' : '_collapse' }}" id="{{ id }}" src="{{ _c.S.images_url }}/clipsrc.png" alt="*" /></div>
+    <h3>{{ title }}</h3>
+  </div>
+  {% set bodyclass = 'cContainer_body' %}
+  {% set bodystyle = '' %}
+  <div id="{{ id }}_body" class="{{ bodyclass }}" {{ bodystyle }}>
+  <script>
+  // <![CDATA[
+
+    $("#{{ id }}_body").css("display", "{{ state ? 'none' : 'normal' }}");
+
+  // ]]>  
+  </script>
+{% endmacro %}

@@ -25,13 +25,15 @@ class EoS_Twig {
 
 	public static function init()
 	{
-		global $sourcedir, $settings, $boarddir;
+		global $sourcedir, $settings, $boarddir;	
 
 		@require_once($sourcedir . '/lib/Twig/lib/Twig/Autoloader.php');
 		Twig_Autoloader::register();
 
 		self::$_twig_loader_instance = new Twig_Loader_Filesystem($settings['theme_dir'] . '/twig');
-		self::$_twig_environment = new Twig_Environment(self::$_twig_loader_instance, array('strict_variables' => true, 'cache' => $boarddir . 'template_cache', 'auto_reload' => true, 'autoescape' => false));
+		self::$_twig_environment = new Twig_Environment(self::$_twig_loader_instance, 
+			array('strict_variables' => true, 
+				  'cache' => $boarddir . 'template_cache', 'auto_reload' => true, 'autoescape' => false));
 	}	
 
 	/**
@@ -158,8 +160,12 @@ class EoS_Twig {
 		$functions = array(
 				'output_footer_scripts' => 'EoS_Twig::footer_scripts',
 				'url_action' => 'URL::action',
+				'url_user' => 'URL::user',
+				'url_parse' => 'URL::parse',
+				'array_search' => 'array_search',
 				'sprintf' => 'sprintf',
 				'implode' => 'implode',
+				'explode' => 'explode',
 				'button_strip' => 'EoS_Twig::button_strip',
 				'comma_format' => 'comma_format',
 				'timeformat' => 'timeformat'
@@ -200,7 +206,6 @@ class EoS_Twig {
   		/*
   		 * set up functions
   		 */
-		self::$_twig_environment->addFunction('sidebar_callback', new Twig_Function_Function(is_callable($context['sidebar_context_output']) ? $context['sidebar_context_output'] : 'EoS_Twig::dummy'));
   		foreach($functions as $fn => $name)
   			self::$_twig_environment->addFunction($fn, new Twig_Function_Function($name));
 

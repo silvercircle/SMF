@@ -38,7 +38,6 @@ function BoardIndex()
 		EoS_Twig::loadTemplate('boardindex');
 		$context['twig_template'] = true;
 	}
-	// For wireless, we use the Wireless template...
 	else {
 		loadTemplate('BoardIndex');
 		loadTemplate('GenericBits');
@@ -46,6 +45,7 @@ function BoardIndex()
 
 	$context['is_board_index'] = true;
 	$context['sidebar_context_output'] = 'template_sidebar_content_index';
+	$context['sidebar_template'] = 'sidebar_on_index.twig';
 	$context['show_sidebar'] = true;
 	// Set a canonical URL for this page.
 	$context['canonical_url'] = $scripturl;

@@ -268,7 +268,7 @@
   <aside>
     <div id="sidebar" style="width:260px;display:{{ sidebar_allowed ? 'inline' : 'none' }};">
     {% if sidebar_allowed %}
-      {{ sidebar_callback() }}
+      {% include C.sidebar_template %}
     {% endif %}
   </div>
   </aside>
@@ -374,5 +374,8 @@
   </noscript>
   </div>
   {{ output_footer_scripts() }}
+  {# output additional scripts defined by the template #}
+  {% block footerscripts %}
+  {% endblock footerscripts %}
   </body>
 </html>
