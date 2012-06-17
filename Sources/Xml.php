@@ -102,12 +102,26 @@ function GetMcard()
 	$uid = intval($_REQUEST['u']);
 
 	if(allowedTo('profile_view_any') && $uid) {
-		loadTemplate('MemberCard');
+		//loadTemplate('MemberCard');
+		EoS_Twig::init();
+		EoS_Twig::loadTemplate('membercard');
 		loadMemberData($uid, false, 'profile');
 		loadMemberContext($uid);
 		loadLanguage('Profile');
 		loadLanguage('Like');
 		$context['member'] = $memberContext[$uid];
+
+    	if(!empty($context['member']['gender']['name']))
+      		$context['member']['loc'][0] = $context['member']['gender']['image'] . $context['member']['gender']['name'];
+      
+    	if(isset($context['member']['birth_date']) && !empty($context['member']['birth_date'])) {
+      		$l = idate('Y', time()) - intval($context['member']['birth_date']);
+      		if($l < 100)
+        		$context['member']['loc'][1] = $l;
+    	}
+    	
+    	if(!empty($context['member']['location']))
+      		$context['member']['loc'][2] = 'from ' . $context['member']['location'];
 	}
 	else
 		AjaxErrorMsg($txt['no_access'], $txt['error_occured']);

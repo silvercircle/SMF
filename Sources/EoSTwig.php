@@ -25,7 +25,7 @@ class EoS_Twig {
 
 	public static function init()
 	{
-		global $sourcedir, $settings, $boarddir;	
+		global $sourcedir, $settings, $boarddir, $context;
 
 		@require_once($sourcedir . '/lib/Twig/lib/Twig/Autoloader.php');
 		Twig_Autoloader::register();
@@ -34,6 +34,8 @@ class EoS_Twig {
 		self::$_twig_environment = new Twig_Environment(self::$_twig_loader_instance, 
 			array('strict_variables' => true, 
 				  'cache' => $boarddir . 'template_cache', 'auto_reload' => true, 'autoescape' => false));
+
+		$context['twig_template'] = true;
 	}	
 
 	/**

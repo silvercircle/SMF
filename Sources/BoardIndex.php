@@ -33,18 +33,12 @@ function BoardIndex()
 {
 	global $txt, $user_info, $sourcedir, $modSettings, $context, $settings, $scripturl, $boardurl, $boarddir;
 
-	if(1 || $user_info['is_admin']) {
-		EoS_Twig::init();
-		EoS_Twig::loadTemplate('boardindex');
-		$context['twig_template'] = true;
-	}
-	else {
-		loadTemplate('BoardIndex');
-		loadTemplate('GenericBits');
-	}
+	EoS_Twig::init();
+	EoS_Twig::loadTemplate('boardindex');
+	//loadTemplate('BoardIndex');
+	//loadTemplate('GenericBits');
 
 	$context['is_board_index'] = true;
-	$context['sidebar_context_output'] = 'template_sidebar_content_index';
 	$context['sidebar_template'] = 'sidebar_on_index.twig';
 	$context['show_sidebar'] = true;
 	// Set a canonical URL for this page.

@@ -1117,7 +1117,8 @@ function setTextSize(_s)
         hours < 24 && substitute($l.hours, Math.round(hours)) ||
         hours < 48 && substitute($l.day, 1) ||
         days < 30 && substitute($l.days, Math.floor(days)) ||
-        days < 60 && substitute($l.month, 1) ||
+        days < 60 && substitute($l.weeks, Math.round(days / 7)) ||
+        //days < 60 && substitute($l.month, 1) ||
         days < 365 && substitute($l.months, Math.floor(days / 30)) ||
         years < 2 && substitute($l.year, 1) ||
         substitute($l.years, Math.floor(years));

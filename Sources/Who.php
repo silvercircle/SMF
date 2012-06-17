@@ -70,7 +70,6 @@ function Who()
 	loadLanguage('Who');
 	EoS_Twig::init();
 	EoS_Twig::loadTemplate('who');
-	$context['twig_template'] = true;
 	// Sort out... the column sorting.
 	$sort_methods = array(
 		'user' => 'mem.real_name',
@@ -746,7 +745,6 @@ function Credits($in_admin = false)
 		//loadTemplate('Who');
 		EoS_Twig::init();
 		EoS_Twig::loadTemplate('credits');
-		$context['twig_template'] = true;
 
 		//$context['sub_template'] = 'credits';
 		$context['robot_no_index'] = true;

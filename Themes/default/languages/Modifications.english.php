@@ -16,6 +16,7 @@ $txt['jquery_timeago_loc'] = '
 		hours: "about %d hours",
 		day: "a day",
 		days: "%d days",
+		weeks: "%d weeks",
 		month: "about a month",
 		months: "%d months",
 		year: "about a year",

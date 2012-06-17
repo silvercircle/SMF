@@ -1,3 +1,19 @@
+{##
+ * @name      EosAlpha BBS
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
+ * Simple Machines Forum (SMF)
+ * copyright: 2011 Simple Machines (http://www.simplemachines.org)
+ * license:   BSD, See included LICENSE.TXT for terms and conditions.
+ *
+ * @version 1.0pre
+ *
+ * this is what index.template was in SMF. All pages that display a "full
+ * page" must extend this skeleton template. It outputs header / footer
+ * and includes the content block.
+ #}
 {% use "notices.twig" %}
 <!DOCTYPE html >
 <html id="_S_" lang="en-US">
@@ -373,9 +389,10 @@
     <div style="width:0px;height:0px;"><img src="http://piwik.miranda.or.at/piwik.php?idsite=1" style="border:0" alt="" /></div>
   </noscript>
   </div>
+  {# output additional scripts defined in the code #}
   {{ output_footer_scripts() }}
-  {# output additional scripts defined by the template #}
   {% block footerscripts %}
+  {# output additional scripts defined in the template #}
   {% endblock footerscripts %}
   </body>
 </html>

@@ -92,7 +92,6 @@ $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();
 $context['additional_admin_errors'] = '';
 $context['ltree_done'] = '';
-$context['sidebar_context_output'] = '';
 
 // Seed the random generator.
 if (empty($modSettings['rand_seed']) || mt_rand(1, 250) == 69)
