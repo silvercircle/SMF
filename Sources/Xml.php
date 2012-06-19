@@ -246,9 +246,9 @@ function WhoPosted()
 		mysql_free_result($result);
 		
 		if($b) {
-			loadTemplate('MessageIndex');
-			$context['sub_template'] = 'ajaxresponse_whoposted';
-			$context['template_layers'] = array();		// ouput "plain", no header etc.
+			EoS_Twig::init();
+			EoS_Twig::loadTemplate('xml_blocks');
+			EoS_Twig::setBlocks(array('who_posted_xml'));
 			
 			$result = smf_db_query( '
 				SELECT mem.real_name, m.id_member, count(m.id_member) AS count FROM {db_prefix}messages AS m

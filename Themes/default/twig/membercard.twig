@@ -15,12 +15,12 @@
         <tr>
           <td style="vertical-align:top;text-align:center;">
             <div style="position:relative;top:-26px;margin-bottom:-26px;">
-            {% if member.avatar.image is defined %}
+            {% if member.avatar.image is defined and member.avatar.image is not empty %}
               {{ member.avatar.image }}
             {% else %}
               <img class="avatar" src="{{ S.images_url }}/unknown.png" alt="avatar" />
             {% endif %}
-            </div>',
+            </div>
             {{ member.group_stars }}
             <br />
             <br />

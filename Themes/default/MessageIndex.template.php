@@ -284,37 +284,4 @@ function template_main()
 	}
 	';
 }
-
-function template_ajaxresponse_whoposted()
-{
-	global $context, $txt;
-
-	echo '<', '?xml version="1.0" encoding="UTF-8"?', '>
-<document>
- <response open="default_overlay" width="auto" offset="-150" />
- <content>
- <![CDATA[
-';
-	echo '
-		<div class="title_bar">
-			<h1>',$txt['who_posted'],'</h1>
-		</div>';
-	
-	echo '
-		<div class="blue_container mediumpadding mediummargin" style="width:200px;">
-		<dl class="common">
-			<dt class="red_container lefttext"><strong>&nbsp;&nbsp;',$txt['who_member'],'&nbsp;&nbsp;</strong></dt>
-			<dd class="red_container righttext"><strong>&nbsp;&nbsp;',$txt['posts'],'&nbsp;&nbsp;</strong></dd>';
-			
-	foreach($context['posters'] as $poster)	{
-		echo '
-			<dt class="lefttext">',$poster['real_name'], '</dt>
-			<dd class="righttext">',$poster['count'], '</dd>';
-	}
-	echo '</dl>
-	</div>
-	]]>
- </content>
-</document>';
-}
 ?>

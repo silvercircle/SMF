@@ -13,7 +13,6 @@
  * side bar template for the board index
  #}
 {% set widgetstyle = 'framed_region cleantop tinypadding' %}
-{% import "generics.twig" as generics %}
 {{ C.template_hooks.global.sidebar_top }}
 <script>
 // <![CDATA[
@@ -25,7 +24,7 @@
 <div class="blue_container smallpadding norounded gradient_darken_down">
 {% if C.user.is_logged %}
   <div class="smalltext user">
-  {% if C.user.avatar is defined %}
+  {% if C.user.avatar.image is defined and C.user.avatar.image is not empty %}
     <div class="avatar floatleft">{{ C.user.avatar.image }}</div>
   {% else %}
     <div class="avatar floatleft"><img src="{{ S.images_url }}/unknown.png" alt="avatar" /></div>

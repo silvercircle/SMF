@@ -170,7 +170,8 @@ class EoS_Twig {
 				'explode' => 'explode',
 				'button_strip' => 'EoS_Twig::button_strip',
 				'comma_format' => 'comma_format',
-				'timeformat' => 'timeformat'
+				'timeformat' => 'timeformat',
+				'JavaScriptEscape' => 'JavaScriptEscape'
 			);
 
 		$settings['theme_variants'] = array('default', 'lightweight');

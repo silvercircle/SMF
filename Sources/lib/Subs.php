@@ -2912,58 +2912,6 @@ function trackStats($stats = array())
 	return true;
 }
 
-// Make sure the user isn't posting over and over again.
-function spamProtection($error_type)
-{
-	global $modSettings, $user_info;
-
-	// Certain types take less/more time.
-	$timeOverrides = array(
-		'login' => 2,
-		'register' => 2,
-		'sendtopc' => $modSettings['spamWaitTime'] * 4,
-		'sendmail' => $modSettings['spamWaitTime'] * 5,
-		'reporttm' => $modSettings['spamWaitTime'] * 4,
-		'search' => !empty($modSettings['search_floodcontrol_time']) ? $modSettings['search_floodcontrol_time'] : 1,
-	);
-
-	// Moderators are free...
-	if (!allowedTo('moderate_board'))
-		$timeLimit = isset($timeOverrides[$error_type]) ? $timeOverrides[$error_type] : $modSettings['spamWaitTime'];
-	else
-		$timeLimit = 2;
-
-	// Delete old entries...
-	smf_db_query( '
-		DELETE FROM {db_prefix}log_floodcontrol
-		WHERE log_time < {int:log_time}
-			AND log_type = {string:log_type}',
-		array(
-			'log_time' => time() - $timeLimit,
-			'log_type' => $error_type,
-		)
-	);
-
-	// Add a new entry, deleting the old if necessary.
-	smf_db_insert('replace',
-		'{db_prefix}log_floodcontrol',
-		array('ip' => 'string-16', 'log_time' => 'int', 'log_type' => 'string'),
-		array($user_info['ip'], time(), $error_type),
-		array('ip', 'log_type')
-	);
-
-	// If affected is 0 or 2, it was there already.
-	if (smf_db_affected_rows() != 1)
-	{
-		// Spammer!  You only have to wait a *few* seconds!
-		fatal_lang_error($error_type . 'WaitTime_broken', false, array($timeLimit));
-		return true;
-	}
-
-	// They haven't posted within the limit.
-	return false;
-}
-
 // Get the size of a specified image with better error handling.
 function url_image_size($url)
 {

@@ -20,7 +20,7 @@
 				{% else %}
 		  		<img class="clipsrc _off" src="{{ _c.C.clip_image_src }}" alt="{{ _c.T.old_posts }}" title="{{ _c.T.old_posts }}" />
 		  	{% endif %}
-				{% if board.new > 0 or board.children_new > 0 %}
+				{% if board.new > 0 or (board.children_new is defined and board.children_new > 0) %}
 		  		<img style="position:absolute;bottom:-4px;right:-3px;" src="{{ _c.S.images_url }}/new.png" />
 		  	{% endif %}
 			{% endif %}
@@ -29,7 +29,7 @@
 		</div>
 		<div style="padding-left:32px;">
 		  <a class="brd_rsslink" href="{{ _c.SCRIPTURL ~ '?action=.xml;type=rss;board=' ~ board.id }}">&nbsp;</a>
-		  {% if board.moderators is not empty %}
+		  {% if board.moderators is defined %}
 		  	<span onclick="brdModeratorsPopup($(this));" class="brd_moderators" title="{{ _c.T.moderated_by }}"><span class="brd_moderators_chld" style="display:none;">{{ _c.T.moderated_by }}: {{ implode(', ', board.link_moderators) }}</span></span>
 		  {% endif %}
 		  <h3>
@@ -64,7 +64,7 @@
 	  </div>
 	{% endif %}
 	{# Show the "Child Boards: ". (there's a link_children but we're going to bold the new ones...) #}
-	{% if board.children is not empty %}
+	{% if board.children is defined and board.children is not empty %}
 		{{ _self.board_children(board, _c) }}
 	{% else %}
 		<div></div>

@@ -89,7 +89,6 @@ function ShowAdminHelp()
 	Eos_Twig::init();
 	Eos_Twig::loadTemplate('xml_blocks');
 	EoS_Twig::setBlocks(array('help_popup'));
-	$context['twig_template'] = true;
 	// Set the page title to something relevant.
 	$context['page_title'] = $context['forum_name'] . ' - ' . $txt['help'];
 
