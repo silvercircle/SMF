@@ -147,7 +147,7 @@
     {% endif %}
     {# Present a canonical url for search engines to prevent duplicate content in their indices. #}
     {% if C.canonical_url is defined %}
-      <link rel="canonical" href="{{ C.canonical_url }}" data-href="{{ C.share_url is not empty ? C.share_url : '' }}" />
+      <link rel="canonical" href="{{ C.canonical_url }}" data-href="{{ C.share_url is defined and C.share_url is not empty ? C.share_url : '' }}" />
     {% endif %}
     {# Show all the relative links, such as help, search, contents, and the like. #}
     <link rel="search" href="{{ SCRIPTURL }}?action=search" />

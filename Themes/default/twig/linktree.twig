@@ -4,8 +4,8 @@
   return; #}
 
 {% if C.ltree_done is not empty %}
-  {# $ltree = str_ireplace('linktree_upper', 'linktree_lower', $ltree); #}
-  {{ C.ltree_done }}
+  {% set ltree_done = str_ireplace('linktree_upper', 'linktree_lower', C.ltree_done) %}
+  {{ ltree_done }}
 {% else %}
 
 {% set ltree_done = '<div class="navigate_section gradient_darken_down"><ul class="linktree tinytext" id="linktree_upper">' %}

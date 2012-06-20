@@ -22,6 +22,7 @@ class EoS_Twig {
 	private static $_the_template;
 	private static $_template_name = '';
 	private static $_template_blocks = array();
+	private static $_theme_support;
 
 	public static function init()
 	{
@@ -29,6 +30,13 @@ class EoS_Twig {
 
 		@require_once($sourcedir . '/lib/Twig/lib/Twig/Autoloader.php');
 		Twig_Autoloader::register();
+
+		if(file_exists($settings['theme_dir'] . '/theme_support.php')) {
+			@require_once($settings['theme_dir'] . '/theme_support.php');
+			self::$_theme_support = new EoS_Twig_Template_Support();
+		}
+		else
+			self::$_theme_support = new _EoS_Twig_Template_Support();
 
 		self::$_twig_loader_instance = new Twig_Loader_Filesystem($settings['theme_dir'] . '/twig');
 		self::$_twig_environment = new Twig_Environment(self::$_twig_loader_instance, 
@@ -65,42 +73,19 @@ class EoS_Twig {
 		self::$_template_blocks = !is_array($_blocks) ? array($_blocks) : $_blocks;
 	}
 	/**
+	 * does absolutely nothing
+	 * used as dummy for custom callback functions
+	 */
+	public static function dummy() {}
+
+	/**
 	 * output all enqued footer scripts.
 	 * used as custom template function
 	 */
 	public static function footer_scripts()
 	{
-		global $context, $settings;
-
-		if(!empty($context['theme_scripts'])) {
-			foreach($context['theme_scripts'] as $type => $script) {
-				if($script['footer'])
-					echo '
-		<script type="text/javascript" src="',($script['default'] ? $settings['default_theme_url'] : $settings['theme_url']) . '/' . $script['name'] . $context['jsver'], '"></script>';
-			}
-		}
-		if(!empty($context['inline_footer_script']))
-			echo '
-		<script type="text/javascript">
-		<!-- // --><![CDATA[
-		',$context['inline_footer_script'],'
-
-		';
-		if(isset($context['footer_script_fragments'])) {
-			foreach($context['footer_script_fragments'] as $this_script)
-				echo $this_script;
-		}
-		echo '
-		// ]]>
-		</script>
-		';
+		self::$_theme_support->footer_scripts();
 	}
-
-	/**
-	 * does absolutely nothing
-	 * used as dummy for custom callback functions
-	 */
-	public static function dummy() {}
 
 	/**
 	 * @static
@@ -113,40 +98,7 @@ class EoS_Twig {
 	 */
 	public static function button_strip($button_strip, $direction = 'top', $strip_options = array())
 	{
-		global $context, $txt;
-
-		if (!is_array($strip_options))
-			$strip_options = array();
-
-		// List the buttons in reverse order for RTL languages.
-		if ($context['right_to_left'])
-			$button_strip = array_reverse($button_strip, true);
-
-		// Create the buttons...
-		$buttons = array();
-		foreach ($button_strip as $key => $value)
-		{
-			if (!isset($value['test']) || !empty($context[$value['test']]))
-				$buttons[] = '
-					<li><a' . (isset($value['id']) ? ' id="button_strip_' . $value['id'] . '"' : '') . ' class="button_strip_' . $key . (isset($value['active']) ? ' active' : '') . '" href="' . $value['url'] . '"' . (isset($value['custom']) ? ' ' . $value['custom'] : '') . '><span>' . $txt[$value['text']] . '</span></a></li>';
-		}
-
-		// No buttons? No button strip either.
-		if (empty($buttons))
-			return;
-
-		// Make the last one, as easy as possible.
-		$buttons[count($buttons) - 1] = str_replace('<span>', '<span class="last">', $buttons[count($buttons) - 1]);
-
-		if(!isset($strip_options['class']))
-			$strip_options['class'] = 'buttonlist';
-
-		echo '
-			<div class="',$strip_options['class'], !empty($direction) ? ' float' . $direction : '', '"', (empty($buttons) ? ' style="display: none;"' : ''), (!empty($strip_options['id']) ? ' id="' . $strip_options['id'] . '"': ''), '>
-				<ul class="',$strip_options['class'],'">',
-					implode('', $buttons), '
-				</ul>
-			</div>';
+		self::$_theme_support->button_strip($button_strip, $direction, $strip_options);
 	}
 
 	/**
@@ -156,65 +108,15 @@ class EoS_Twig {
 	 */
 	public static function Display()
 	{
-		global $context, $settings, $modSettings, $options, $txt, $scripturl, $user_info, $cookiename;
-		global $forum_copyright, $forum_version, $time_start, $db_count;
-
-		$functions = array(
-				'output_footer_scripts' => 'EoS_Twig::footer_scripts',
-				'url_action' => 'URL::action',
-				'url_user' => 'URL::user',
-				'url_parse' => 'URL::parse',
-				'array_search' => 'array_search',
-				'sprintf' => 'sprintf',
-				'implode' => 'implode',
-				'explode' => 'explode',
-				'button_strip' => 'EoS_Twig::button_strip',
-				'comma_format' => 'comma_format',
-				'timeformat' => 'timeformat',
-				'JavaScriptEscape' => 'JavaScriptEscape'
-			);
-
-		$settings['theme_variants'] = array('default', 'lightweight');
-		$settings['clip_image_src'] = array(
-			'_default' => 'clipsrc.png',
-		    '_lightweight' => 'clipsrc_l.png',
-			'_dark' => 'clipsrc_dark.png'
-		);
-		$settings['sprite_image_src'] = array(
-			'_default' => 'theme/sprite.png',
-			'_lightweight' => 'theme/sprite.png',
-			'_dark' => 'theme/sprite.png'
-		);
-
-  		$context['template_time_now'] = forum_time(false);
-  		$context['template_timezone'] = date_default_timezone_get();
-		$context['template_time_now_formatted'] = strftime($modSettings['time_format'], $context['template_time_now']);
-		$context['template_allow_rss'] = (!empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']));
-		$context['template_copyright'] = sprintf($forum_copyright, $forum_version);
-  		$context['inline_footer_script'] .= $txt['jquery_timeago_loc'];
-		$context['show_load_time'] = !empty($modSettings['timeLoadPageEnable']);
-		$context['load_time'] = round(array_sum(explode(' ', microtime())) - array_sum(explode(' ', $time_start)), 3);
-		$context['load_queries'] = $db_count;
-
-		if (isset($settings['use_default_images']) && $settings['use_default_images'] == 'defaults' && isset($settings['default_template']))
-		{
-			$settings['theme_url'] = $settings['actual_theme_url'];
-			$settings['images_url'] = $settings['actual_images_url'];
-			$settings['theme_dir'] = $settings['actual_theme_dir'];
-		}
-
-  		if(isset($modSettings['embed_GA']) && $modSettings['embed_GA'] && ($context['user']['is_guest'] || (empty($options['disable_analytics']) ? 1 : !$options['disable_analytics'])))
-  			$context['want_GA_embedded'] = true;
-
   		/*
   		 * set up functions
   		 */
-  		foreach($functions as $fn => $name)
+		$_fns = self::$_theme_support->getFunctions();
+  		foreach($_fns as $fn => $name)
   			self::$_twig_environment->addFunction($fn, new Twig_Function_Function($name));
 
-		$twig_context = array('C' => &$context, 'T' => &$txt, 'S' => &$settings, 'O' => &$options,
-								 		'M' => &$modSettings, 'U' => &$user_info, 'SCRIPTURL' => $scripturl, 'COOKIENAME' => $cookiename,
-								 		'_COOKIE' => &$_COOKIE);
+		$twig_context = array();
+  		self::$_theme_support->setupContext($twig_context);
 
 		self::$_the_template = self::$_twig_environment->loadTemplate(self::$_template_name);
 		if(!empty(self::$_template_blocks)) {
@@ -222,7 +124,7 @@ class EoS_Twig {
 				self::$_the_template->displayBlock($block, $twig_context);
 		}
 		else
-			self::$_the_template->display($twig_context, self::$_template_blocks);
+			self::$_the_template->display($twig_context);
 	}
 
 	// Ends execution.  Takes care of template loading and remembering the previous URL.
@@ -395,6 +297,174 @@ class EoS_Twig {
 			$settings['images_url'] = $settings['default_images_url'];
 			$settings['theme_dir'] = $settings['default_theme_dir'];
 		}
+	}
+}
+
+/**
+ * this class provides default implementations for some php functions
+ * needed in templates (e.g. button_strip() and similar)
+ *
+ * custom theme developers who want to provide their own
+ * theme_support.php can (or better, *must*) extend this class 
+ * to provide their own php functions accessible to twig templates
+ * and define template overrides and/or sub-templates.
+ */
+class _EoS_Twig_Template_Support {
+	
+	protected $_functions = array();
+	protected $_template_overrides = array();
+	protected $_subtemplates = array();
+
+	public function __construct() 
+	{
+		/*
+		 * PHP functions that must be available in Twig templates as {{ function() }}
+		 * format is: 'name_known_to_twig' => 'valid PHP callable'
+		 */
+		$this->_functions = array(
+				'output_footer_scripts' => 'EoS_Twig::footer_scripts',
+				'url_action' => 'URL::action',
+				'url_user' => 'URL::user',
+				'url_parse' => 'URL::parse',
+				'array_search' => 'array_search',
+				'sprintf' => 'sprintf',
+				'implode' => 'implode',
+				'explode' => 'explode',
+				'str_repeat' => 'str_repeat',
+				'str_ireplace' => 'str_ireplace',
+				'button_strip' => 'EoS_Twig::button_strip',
+				'comma_format' => 'comma_format',
+				'timeformat' => 'timeformat',
+				'JavaScriptEscape' => 'JavaScriptEscape'
+			);
+	}
+
+	/**
+	 * @param array $button_strip
+	 * @param string $direction
+	 * @param array $strip_options
+	 * @return mixed
+	 *
+	 * Render a button strip. TODO: this should be converted into a template.
+	 */
+	public function button_strip($button_strip, $direction = 'top', $strip_options = array())
+	{
+		global $context, $txt;
+
+		if (!is_array($strip_options))
+			$strip_options = array();
+
+		// List the buttons in reverse order for RTL languages.
+		if ($context['right_to_left'])
+			$button_strip = array_reverse($button_strip, true);
+
+		// Create the buttons...
+		$buttons = array();
+		foreach ($button_strip as $key => $value)
+		{
+			if (!isset($value['test']) || !empty($context[$value['test']]))
+				$buttons[] = '
+					<li><a' . (isset($value['id']) ? ' id="button_strip_' . $value['id'] . '"' : '') . ' class="button_strip_' . $key . (isset($value['active']) ? ' active' : '') . '" href="' . $value['url'] . '"' . (isset($value['custom']) ? ' ' . $value['custom'] : '') . '><span>' . $txt[$value['text']] . '</span></a></li>';
+		}
+
+		// No buttons? No button strip either.
+		if (empty($buttons))
+			return;
+
+		// Make the last one, as easy as possible.
+		$buttons[count($buttons) - 1] = str_replace('<span>', '<span class="last">', $buttons[count($buttons) - 1]);
+
+		if(!isset($strip_options['class']))
+			$strip_options['class'] = 'buttonlist';
+
+		echo '
+			<div class="',$strip_options['class'], !empty($direction) ? ' float' . $direction : '', '"', (empty($buttons) ? ' style="display: none;"' : ''), (!empty($strip_options['id']) ? ' id="' . $strip_options['id'] . '"': ''), '>
+				<ul class="',$strip_options['class'],'">',
+					implode('', $buttons), '
+				</ul>
+			</div>';
+	}
+
+	/**
+	 * output all enqued footer scripts.
+	 * used as custom template function
+	 */
+	public function footer_scripts()
+	{
+		global $context, $settings;
+
+		if(!empty($context['theme_scripts'])) {
+			foreach($context['theme_scripts'] as $type => $script) {
+				if($script['footer'])
+					echo '
+		<script type="text/javascript" src="',($script['default'] ? $settings['default_theme_url'] : $settings['theme_url']) . '/' . $script['name'] . $context['jsver'], '"></script>';
+			}
+		}
+		if(!empty($context['inline_footer_script']))
+			echo '
+		<script type="text/javascript">
+		<!-- // --><![CDATA[
+		',$context['inline_footer_script'],'
+
+		';
+		if(isset($context['footer_script_fragments'])) {
+			foreach($context['footer_script_fragments'] as $this_script)
+				echo $this_script;
+		}
+		echo '
+		// ]]>
+		</script>
+		';
+	}
+
+	public function getFunctions()
+	{
+		return $this->_functions;
+	}
+
+	public function setupContext(array &$_ctx)
+	{
+		global $context, $settings, $modSettings, $options, $txt, $scripturl, $user_info, $cookiename;
+		global $forum_copyright, $forum_version, $time_start, $db_count;
+
+
+		$settings['theme_variants'] = array('default', 'lightweight');
+		$settings['clip_image_src'] = array(
+			'_default' => 'clipsrc.png',
+		    '_lightweight' => 'clipsrc_l.png',
+			'_dark' => 'clipsrc_dark.png'
+		);
+		$settings['sprite_image_src'] = array(
+			'_default' => 'theme/sprite.png',
+			'_lightweight' => 'theme/sprite.png',
+			'_dark' => 'theme/sprite.png'
+		);
+
+  		$context['template_time_now'] = forum_time(false);
+  		$context['template_timezone'] = date_default_timezone_get();
+		$context['template_time_now_formatted'] = strftime($modSettings['time_format'], $context['template_time_now']);
+		$context['template_allow_rss'] = (!empty($modSettings['xmlnews_enable']) && (!empty($modSettings['allow_guestAccess']) || $context['user']['is_logged']));
+		$context['template_copyright'] = sprintf($forum_copyright, $forum_version);
+  		$context['inline_footer_script'] .= $txt['jquery_timeago_loc'];
+		$context['show_load_time'] = !empty($modSettings['timeLoadPageEnable']);
+		$context['load_time'] = round(array_sum(explode(' ', microtime())) - array_sum(explode(' ', $time_start)), 3);
+		$context['load_queries'] = $db_count;
+
+		if (isset($settings['use_default_images']) && $settings['use_default_images'] == 'defaults' && isset($settings['default_template']))
+		{
+			$settings['theme_url'] = $settings['actual_theme_url'];
+			$settings['images_url'] = $settings['actual_images_url'];
+			$settings['theme_dir'] = $settings['actual_theme_dir'];
+		}
+
+  		if(isset($modSettings['embed_GA']) && $modSettings['embed_GA'] && ($context['user']['is_guest'] || (empty($options['disable_analytics']) ? 1 : !$options['disable_analytics'])))
+  			$context['want_GA_embedded'] = true;
+
+		// make all important variables/arrays available in Twig templates
+		$_ctx = array('C' => &$context, 'T' => &$txt, 'S' => &$settings, 'O' => &$options,
+		  			 		  'M' => &$modSettings, 'U' => &$user_info, 'SCRIPTURL' => $scripturl, 'COOKIENAME' => $cookiename,
+							  '_COOKIE' => &$_COOKIE
+		);
 	}
 }
 ?>

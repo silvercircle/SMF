@@ -20,3 +20,110 @@
   // ]]>  
   </script>
 {% endmacro %}
+
+{% macro topicbit(topic, _c) %}
+  {% set imgsrc = _c.S.images_url ~ '/clipsrc.png' %}
+  {% set color_class = '' %}
+  {% set iconlegend = '' %}
+
+  {# Is this topic pending approval, or does it have any posts pending approval? #}
+  {% if _c.C.can_approve_posts and topic.unapproved_posts is defined and topic.unapproved_posts > 0 %}
+    {% set color_class = ' altbg' %}
+    {% set iconlegend = iconlegend ~ ('<div class="csrcwrapper16px floatleft"><img class="clipsrc unapproved" src="' ~ imgsrc ~ '" alt="" title="' ~ _c.T.awaiting_approval ~ '" /></div>') %}
+  {% elseif topic.is_sticky or topic.is_locked %}
+    {% set color_class = ' altbg' %}
+  {% endif %}
+
+  {% if topic.is_locked %}
+    {% set iconlegend = iconlegend ~ ('<div class="csrcwrapper16px floatleft"><img class="clipsrc locked" src="' ~ imgsrc ~ '" alt="" title="' ~ _c.T.locked_topic ~ '" /></div>') %}
+  {% endif %}    
+  {% if topic.is_sticky %}
+    {% set iconlegend = iconlegend ~ ('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc sticky" src="' ~ imgsrc ~ '" alt="" title="' ~ _c.T.sticky_topic ~ '" /></div>') %}
+  {% endif %}
+  {% if topic.is_poll %}
+    {% set iconlegend = iconlegend ~ ('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc poll" src="' ~ imgsrc ~ '" alt="" title="' ~ _c.T.poll ~ '" /></div>') %}
+  {% endif %}
+  {% if topic.is_posted_in %}
+    {% set iconlegend = iconlegend ~ ('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc postedin" src="' ~ imgsrc ~ '" alt="" title="' ~ _c.T.participation_caption ~ '" /></div>') %}
+  {% endif %}
+
+  {% if topic.is_very_hot %}
+    {% set iconlegend = iconlegend ~ ('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc veryhot" src="' ~ imgsrc ~ '" alt="" title="' ~ _c.C.very_hot_topic_message ~ '" /></div>') %}
+  {% elseif topic.is_hot %}
+    {% set iconlegend = iconlegend ~ ('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc hot" src="' ~ imgsrc ~ '" alt="" title="' ~ _c.C.hot_topic_message ~ '" /></div>') %}
+  {% endif %}
+
+  {% if topic.is_old %}
+    {% set iconlegend = iconlegend ~ ('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc old" src="' ~ imgsrc ~ '" alt="" title="' ~ _c.C.old_topic_message ~ '" /></div>') %}
+  {% endif %}
+  <tr>
+    <td class="icon1 topicrow gradient_darken_down{{ color_class }}">
+    {% if _c.S.show_user_images is not empty and _c.O.show_no_avatars == 0 %}
+      <span class="small_avatar">
+      {% if topic.first_post.member.avatar is defined and topic.first_post.member.avatar is not empty %}
+        <a href="{{ url_user(topic.first_post.member.id, topic.first_post.member.name) }}">
+        {{ topic.first_post.member.avatar }}
+        </a>
+      {% else %}
+        <a href="{{ url_user(topic.first_post.member.id, topic.first_post.member.name) }}">
+        <img src="{{ _c.S.images_url }}/unknown.png" alt="avatar" />
+        </a>
+      {% endif %}
+        {# 
+         * own avatar as overlay when 
+         * a) we have one :)
+         * b) we have posted in this topic
+         * c) we have NOT started the topic
+         */
+         #}
+      {% if topic.is_posted_in and topic.first_post.member.id != _c.C.user.id and _c.C.user.avatar.image is defined and _c.C.user.avatar.image is not empty %}
+        <span class="avatar_overlay">{{ _c.C.user.avatar.image }}</span>
+      {% endif %}
+      </span>
+    {% endif %}
+    {% set is_new = topic.new and _c.C.user.is_logged %}
+    </td>
+    <td class="icon2 topicrow gradient_darken_down{{ color_class }}">
+      <img src="{{ topic.first_post.icon_url }}" alt="" />
+    </td>
+    <td class="subject topicrow gradient_darken_down{{ color_class }}">
+      <div {{ topic.quick_mod.modify is not empty ? 'id="topic_' ~ topic.first_post.id ~ '" ondblclick="modify_topic(\'' ~ topic.id ~ '\', \'' ~ topic.first_post.id ~ '\');"' : '' }}>
+      <span class="tpeek" data-id="{{ topic.id }}" id="msg_{{ topic.first_post.id }}">{{ topic.prefix }}{{ is_new ? '<strong>' : '' }}{{ topic.first_post.link }}{{ _c.C.can_approve_posts and topic.approved == 0 ? '&nbsp;<em>(' ~ _c.T.awaiting_approval ~ ')</em>' : '' }}{{ is_new ? '</strong>' : '' }}</span>
+      {% if is_new %}
+        <a href="{{ topic.new_href }}" id="newicon{{ topic.first_post.id }}"><img src="{{ _c.S.images_url }}/new.png" alt="{{ _c.T.new }}" /></a>
+      {% endif %}
+      <div class="floatright">
+        <div class="floatright iconlegend_container" style="position:relative;top:-2px;opacity:0.4;">{{ iconlegend }}</div>
+        {% if topic.board.id is defined and topic.board.id %}
+          <div class="tinytext" style="margin-top:16px;"><span class="lowcontrast">{{ _c.T.in }} <a href="{{ topic.board.href }}">{{ topic.board.name }}</a></span></div>
+        {% endif %}
+      </div>
+      <p>
+        {{ topic.first_post.member.link }}, {{ topic.first_post.time }}
+        <small id="pages{{ topic.first_post.id }}">{{ topic.pages }}</small>
+      </p>
+      </div>
+    </td>
+    <td class="stats nowrap topicrow gradient_darken_down{{ color_class }}">
+      {% if topic.replies %}
+        <a rel="nofollow" title="{{ _c.T.who_posted }}" onclick="whoPosted($(this));return(false);" class="whoposted" data-topic="{{ topic.id }}" href="{{ _c.SCRIPTURL }}?action=xmlhttp;sa=whoposted;t={{ topic.id }}">{{ topic.replies }} {{ _c.T.replies }}</a>
+      {% else %}
+        {{ topic.replies }} {{ _c.T.replies }}
+      {% endif %}
+      <br />
+      {{ topic.views }} {{ _c.T.views }}
+    </td>
+    <td class="lastpost topicrow gradient_darken_down{{ color_class }}">
+      {{ _c.T.by }}: {{ topic.last_post.member.link }}<br />
+      <a class="lp_link" title="{{ _c.T.last_post }}" href="{{ topic.last_post.href }}">{{ topic.last_post.time }}</a>
+    </td>
+
+    {% if _c.C.can_quick_mod is not empty %}
+      <td class="moderation topicrow gradient_darken_down{{ color_class }}" style="text-align:center;">
+        {% if _c.O.display_quick_mod %}
+          <input type="checkbox" name="topics[]" value="{{ topic.id }}" class="input_check cb_inline" />
+        {% endif %}
+      </td>
+    {% endif %}
+    </tr>
+{% endmacro %}
