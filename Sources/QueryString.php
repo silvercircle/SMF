@@ -440,7 +440,7 @@ function JavaScriptEscape($string)
 // Rewrite URLs to include the session ID.
 function ob_sessrewrite($buffer)
 {
-	global $scripturl, $modSettings, $context, $user_info;
+	global $scripturl, $modSettings, $context, $user_info, $txt, $time_start, $db_count;
 
 	/*
 	 * tidy support as a debugging option to generate prettified output 
@@ -472,8 +472,13 @@ function ob_sessrewrite($buffer)
 	elseif (isset($_GET['debug']))
 		$buffer = preg_replace('/(?<!<link rel="canonical" href=)"' . preg_quote($scripturl, '/') . '\\??/', '"' . $scripturl . '?debug;', $buffer);
 
+	$context['load_time'] = round(array_sum(explode(' ', microtime())) - array_sum(explode(' ', $time_start)), 3);
+	$context['load_queries'] = $db_count;
+
 	if(!empty($modSettings['simplesef_enable']))
 		$buffer = isset($context['sef_full_rewrite']) ? SimpleSEF::ob_simplesef($buffer) : SimpleSEF::ob_simplesef_light($buffer);
+
+	$buffer = str_replace('@%%__loadtime__%%@', $context['load_time'] . 's CPU, ' . $context['load_queries'] . ' ' . $txt['queries'] . SimpleSEF::getPerfData(), $buffer);
 	return $buffer;
 }
 

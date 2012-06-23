@@ -61,7 +61,7 @@ require_once($sourcedir . '/lib/Subs.php');
 require_once($sourcedir . '/Errors.php');
 require_once($sourcedir . '/Load.php');
 require_once($sourcedir . '/Security.php');
-require_once($sourcedir . '/EoSTwig.php');
+require_once($sourcedir . '/EosSmarty.php');
 
 // If $maintenance is set specifically to 2, then we're upgrading or something.
 if (!empty($maintenance) && $maintenance == 2)
@@ -165,8 +165,10 @@ function smf_main()
 	if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'dlattach' && (!empty($modSettings['allow_guestAccess']) && $user_info['is_guest']))
 		detectBrowser();
 	// Load the current theme.  (note that ?theme=1 will also work, may be used for guest theming.)
-	else
+	else {
 		loadTheme();
+		EoS_Smarty::init();
+	}
 
 	// Check if the user should be disallowed access.
 	is_not_banned();
@@ -320,7 +322,8 @@ function smf_main()
 		'tags' => array('Tagging.php', 'TagsMain'),
 		'astream' => array('Activities.php', 'aStreamDispatch'),
 		'processlink' => array('Display.php', 'ProcessLink'),
-		'dismissnews' => array('Profile-Actions.php', 'DismissNews')
+		'dismissnews' => array('Profile-Actions.php', 'DismissNews'),
+		'smartytest' => array('EosSmarty.php', 'TestSmarty')
 	);
 	// Allow modifying $actionArray easily.
 	HookAPI::callHook('integrate_actions', array(&$actionArray));

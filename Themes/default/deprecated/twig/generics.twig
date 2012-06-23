@@ -88,7 +88,7 @@
     </td>
     <td class="subject topicrow gradient_darken_down{{ color_class }}">
       <div {{ topic.quick_mod.modify is not empty ? 'id="topic_' ~ topic.first_post.id ~ '" ondblclick="modify_topic(\'' ~ topic.id ~ '\', \'' ~ topic.first_post.id ~ '\');"' : '' }}>
-      <span class="tpeek" data-id="{{ topic.id }}" id="msg_{{ topic.first_post.id }}">{{ topic.prefix }}{{ is_new ? '<strong>' : '' }}{{ topic.first_post.link }}{{ _c.C.can_approve_posts and topic.approved == 0 ? '&nbsp;<em>(' ~ _c.T.awaiting_approval ~ ')</em>' : '' }}{{ is_new ? '</strong>' : '' }}</span>
+      <span class="topiclink tpeek" data-id="{{ topic.id }}" id="msg_{{ topic.first_post.id }}">{{ topic.prefix }}{{ is_new ? '<strong>' : '' }}{{ topic.first_post.link }}{{ _c.C.can_approve_posts and topic.approved == 0 ? '&nbsp;<em>(' ~ _c.T.awaiting_approval ~ ')</em>' : '' }}{{ is_new ? '</strong>' : '' }}</span>
       {% if is_new %}
         <a href="{{ topic.new_href }}" id="newicon{{ topic.first_post.id }}"><img src="{{ _c.S.images_url }}/new.png" alt="{{ _c.T.new }}" /></a>
       {% endif %}
@@ -126,4 +126,69 @@
       </td>
     {% endif %}
     </tr>
+{% endmacro %}
+
+{% macro quickbuttons(message, _c) %}
+  <ul class="floatright plainbuttonlist">
+  {% set imgsrc = _c.S.images_url ~ '/clipsrc.png' %}
+
+  {% if message.can_approve %}
+    <li><a href="{{ _c.SCRIPTURL }}?action=moderate;area=postmod;sa=approve;topic={{ _c.C.current_topic }}.{{ _c.C.start }};msg={{ message.id }};{{ _c.C.session_var }}={{ _c.C.session_id }}">
+      <div class="csrcwrapper16px"><img class="clipsrc approve" src="{{ imgsrc }}" alt="{{ _c.T.approve }}" title="{{ _c.T.approve }}" /></div>
+    </a></li>
+  {% endif %}
+  {% if _c.C.can_quote %}
+    <li>
+      <a rel="nofollow" onclick="return oQuickReply.quote({{ message.id }});" href="{{ _c.SCRIPTURL }}?action=post;quote={{ message.id }};topic={{ _c.C.current_topic }}.{{ _c.C.start }};last_msg={{ _c.C.topic_last_message }}">
+        <div class="csrcwrapper16px"><img class="clipsrc reply" src="{{ imgsrc }}" alt="{{ _c.T.quote }}" title="{{ _c.T.quote }}" /></div>
+      </a></li>
+      <li id="mquote_{{ message.id }}"><a rel="nofollow" href="javascript:void(0);" onclick="return oQuickReply.addForMultiQuote({{ message.id }});">
+        <div class="csrcwrapper16px"><img class="clipsrc mquote_add" src="{{ imgsrc }}" alt="{{ _c.T.add_mq }}" title="{{ _c.T.add_mq }}" /></div>
+      </a></li>
+  {% endif %}
+  {% if message.can_modify %}
+    <li><a rel="nofollow" onclick="oQuickModify.modifyMsg('{{ message.id }}');return(false);" href="{{ _c.SCRIPTURL }}?action=post;msg={{ message.id }};topic={{ _c.C.current_topic }}.{{ _c.C.start }}">
+      <div class="csrcwrapper16px"><img class="clipsrc modify" src="{{ imgsrc }}" alt="{{ _c.T.modify }}" title="{{ _c.T.modify }}" /></div>
+    </a></li>
+  {% endif %}
+  {% if message.can_remove %}
+    <li><a rel="nofollow" href="{{ _c.SCRIPTURL }}?action=deletemsg;topic={{ _c.C.current_topic }}.{{ _c.C.start }};msg={{ message.id }};{{ _c.C.session_var }}={{ _c.C.session_id }}" onclick="return Eos_Confirm('', '{{ _c.T.remove_message }}?', $(this).attr('href'));">
+      <div class="csrcwrapper16px"><img class="clipsrc remove" src="{{ imgsrc }}" alt="{{ _c.T.remove }}" title="{{ _c.T.remove }}" /></div>
+    </a></li>
+  {% endif %}
+  {% if message.can_unapprove %}
+    <li class="approve_button"><a href="{{ _c.SCRIPTURL }}?action=moderate;area=postmod;sa=unapprove;topic={{ _c.C.current_topic }}.{{ _c.C.start }};msg={{ message.id }};{{ _c.C.session_var }}={{ _c.C.session_id }}">
+      <div class="csrcwrapper16px"><img class="clipsrc unapprove" src="{{ imgsrc }}" alt="{{ _c.T.unapprove }}" title="{{ _c.T.unapprove }}" /></div>
+    </a></li>
+  {% endif %}
+  {% if _c.C.can_split and _c.C.real_num_replies %}
+    <li><a rel="nofollow" href="{{ _c.SCRIPTURL }}?action=splittopics;topic={{ _c.C.current_topic }}.0;at={{ message.id }}">
+      <div class="csrcwrapper16px"><img class="clipsrc split" src="{{ imgsrc }}" alt="{{ _c.T.split }}" title="{{ _c.T.split }}" /></div>
+    </a></li>
+  {% endif %}
+  {% if _c.C.can_restore_msg %}
+    <li><a rel="nofollow" href="{{ _c.SCRIPTURL }}?action=restoretopic;msgs={{ message.id }};{{ _c.C.session_var }}={{ _c.C.session_id }}">{{ _c.T.restore_message }}</a></li>
+  {% endif %}
+  {% if _c.O.display_quick_mod and message.can_remove %}
+    <li class="inline_mod_check" style="display: none;" id="in_topic_mod_check_{{ message.id }}"></li>
+  {% endif %}
+  </ul>
+  {% if _c.C.can_report_moderator %}
+    <a href="{{ _c.SCRIPTURL }}?action=reporttm;topic={{ _c.C.current_topic }}.{{ message.counter }};msg={{ message.id }}">
+      <div class="csrcwrapper16px floatleft padded"><img class="clipsrc reporttm" src="{{ imgsrc }}" alt="{{ _c.T.report }}" title="{{ _c.T.report }}" /></div>
+    </a>
+  {% endif %}
+  {% if _c.C.can_issue_warning and message.is_message_author == 0 and message.member.is_guest == 0 %}
+    <a href="{{ _c.SCRIPTURL }}?action=profile;area=issuewarning;u={{ message.member.id }};msg={{ message.id }}">
+      <div class="csrcwrapper16px floatleft padded"><img class="clipsrc warning" src="{{ imgsrc }}" alt="_c.T.issue_warning }}" title="{{ _c.T.issue_warning }}" /></div>
+    </a>
+  {% endif %}
+  {% if _c.C.can_moderate_forum and message.member.ip is not empty %}
+    <a href="{{ _c.SCRIPTURL }}?action={{ message.member.is_guest ? 'trackip' : 'profile;area=tracking;sa=ip;u=' ~ message.member.id ~ ';searchip=' ~ message.member.ip }}">
+      <div class="csrcwrapper16px floatleft padded"><img class="clipsrc network" src="{{ imgsrc }}" alt="{{ message.member.ip }}" title="{{ message.member.ip }}" /></div>
+    </a>
+  {% elseif message.can_see_ip %}
+    <a href="{{ _c.SCRIPTURL }}?action=helpadmin;help=see_member_ip" onclick="return reqWin(this.href);" class="help">{{ message.member.ip }}</a>
+  {% endif %}
+  <div class="clear"></div>
 {% endmacro %}

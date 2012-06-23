@@ -11,39 +11,41 @@
  *
  * @version 1.0pre
  */
+class EoS_Smarty {
+	private static $_template_names = array();
+	private static $_smartyInstance;
+	private static $_configInstance;
+	private static $_is_BoardIndex = false;
+	private static $_is_Active = false;
 
-/**
- * Twig template engine playground (very, very experimental)
- */
-
-class EoS_Twig {
-	private static $_twig_environment;
-	private static $_twig_loader_instance;
-	private static $_the_template;
-	private static $_template_name = '';
-	private static $_template_blocks = array();
-	private static $_theme_support;
-
+	/**
+	 * init smarty engine and custom theme support object
+	 * TODO: #) allow multiple template dirs (for theme inheritance - easy)
+	 *       #) 
+	 */
 	public static function init()
 	{
 		global $sourcedir, $settings, $boarddir, $context;
 
-		@require_once($sourcedir . '/lib/Twig/lib/Twig/Autoloader.php');
-		Twig_Autoloader::register();
+		@require_once($sourcedir . '/lib/Smarty/Smarty.class.php');
+		self::$_smartyInstance = new Smarty();
+		self::$_smartyInstance->caching = 0;		// this is *STATIC* caching of generated pages, we don't want (or even need) this for a forum...
 
 		if(file_exists($settings['theme_dir'] . '/theme_support.php')) {
-			@require_once($settings['theme_dir'] . '/theme_support.php');
-			self::$_theme_support = new EoS_Twig_Template_Support();
+			require_once($settings['theme_dir'] . '/theme_support.php');
+			self::$_configInstance = theme_support_autoload(self::$_smartyInstance);
+			//self::$_configInstance = new EoS_Smarty_Template_Support(self::$_smartyInstance);
 		}
 		else
-			self::$_theme_support = new _EoS_Twig_Template_Support();
+			self::$_configInstance = new _EoS_Smarty_Template_Support(self::$_smartyInstance);
 
-		self::$_twig_loader_instance = new Twig_Loader_Filesystem($settings['theme_dir'] . '/twig');
-		self::$_twig_environment = new Twig_Environment(self::$_twig_loader_instance, 
-			array('strict_variables' => true, 
-				  'cache' => $boarddir . 'template_cache', 'auto_reload' => true, 'autoescape' => false));
-
-		$context['twig_template'] = true;
+		self::$_smartyInstance->setTemplateDir($settings['theme_dir'] . '/tpl');
+		self::$_smartyInstance->setCompileDir($boarddir . 'template_cache');		// TODO: make this customizable
+		self::$_smartyInstance->setCacheDir($boarddir . 'template_cache');
+		/*
+		 * this hook could be used to re-configure smarty (for example, add additional template dir(s)).
+		 */
+		HookAPI::callHook('smarty_init', array(&self::$_smartyInstance, &self::$_configInstance));
 	}	
 
 	/**
@@ -57,50 +59,33 @@ class EoS_Twig {
 	 */
 	public static function loadTemplate($_template_name)
 	{
-		self::$_template_name = $_template_name . '.twig';
+		self::$_template_names[] = $_template_name . '.tpl';
+		if($_template_name === 'boardindex')
+			self::$_is_BoardIndex = true;
+
+		self::$_is_Active = true;			// set us active, so we can rule in obExit()
 	}
 
-	/**
-	 * @static
-	 * @param $_blocks array() of block names to display.
-	 *
-	 * Smaller templates may be combined in form of blocks into a single (larger)
-	 * template files. This function allows to specify a list of blocks that should
-	 * be rendered instead of the entire template.
-	 */
-	public static function setBlocks($_blocks)
-	{
-		self::$_template_blocks = !is_array($_blocks) ? array($_blocks) : $_blocks;
-	}
 	/**
 	 * does absolutely nothing
 	 * used as dummy for custom callback functions
 	 */
 	public static function dummy() {}
 
+	public static function isActive() { return self::$_is_Active; }
 	/**
 	 * output all enqued footer scripts.
 	 * used as custom template function
 	 */
 	public static function footer_scripts()
 	{
-		self::$_theme_support->footer_scripts();
+		self::$_configInstance->footer_scripts();
 	}
 
-	/**
-	 * @static
-	 * @param array $button_strip
-	 * @param string $direction
-	 * @param array $strip_options
-	 * @return mixed
-	 *
-	 * Render a button strip. TODO: this should be converted into a template.
-	 */
-	public static function button_strip($button_strip, $direction = 'top', $strip_options = array())
+	public static function &getConfigInstance()
 	{
-		self::$_theme_support->button_strip($button_strip, $direction, $strip_options);
+		return self::$_configInstance;
 	}
-
 	/**
 	 * @static
 	 * set up the template context, load and display the template
@@ -108,23 +93,9 @@ class EoS_Twig {
 	 */
 	public static function Display()
 	{
-  		/*
-  		 * set up functions
-  		 */
-		$_fns = self::$_theme_support->getFunctions();
-  		foreach($_fns as $fn => $name)
-  			self::$_twig_environment->addFunction($fn, new Twig_Function_Function($name));
-
-		$twig_context = array();
-  		self::$_theme_support->setupContext($twig_context);
-
-		self::$_the_template = self::$_twig_environment->loadTemplate(self::$_template_name);
-		if(!empty(self::$_template_blocks)) {
-			foreach(self::$_template_blocks as $block)
-				self::$_the_template->displayBlock($block, $twig_context);
-		}
-		else
-			self::$_the_template->display($twig_context);
+  		self::$_configInstance->setupContext();
+  		foreach(self::$_template_names as $the_template)
+			self::$_smartyInstance->display($the_template);
 	}
 
 	// Ends execution.  Takes care of template loading and remembering the previous URL.
@@ -180,12 +151,11 @@ class EoS_Twig {
 			if (!empty($context['insert_after_template']) && !isset($_REQUEST['xml']))
 				echo $context['insert_after_template'];
 
-			EoS_Twig::Display();
+			self::Display();
 			// Just so we don't get caught in an endless loop of errors from the footer...
 			if (!$footer_done)
 			{
 				$footer_done = true;
-				self::template_footer();
 
 				// (since this is just debugging... it's okay that it's after </html>.)
 				if (!isset($_REQUEST['xml']))
@@ -211,11 +181,6 @@ class EoS_Twig {
 			exit;
 	}
 
-	public static function template_footer()
-	{
-		global $context, $settings, $modSettings, $time_start, $db_count;
-	}
-
 	public static function template_header()
 	{
 		global $txt, $modSettings, $context, $settings, $user_info, $boarddir, $cachedir;
@@ -236,7 +201,7 @@ class EoS_Twig {
 		$checked_securityFiles = false;
 		$showed_banned = false;
 
-		if (self::$_template_name == 'boardindex.twig' && allowedTo('admin_forum') && !$user_info['is_guest'] && !$checked_securityFiles)
+		if (self::$_is_BoardIndex && allowedTo('admin_forum') && !$user_info['is_guest'] && !$checked_securityFiles)
 		{
 			$checked_securityFiles = true;
 			$securityFiles = array('install.php', 'upgrade.php', 'repair_settings.php', 'Settings.php~', 'Settings_bak.php~');
@@ -269,7 +234,7 @@ class EoS_Twig {
 			}
 		}
 		// If the user is banned from posting inform them of it.
-		elseif (self::$_template_name == 'boardindex.twig' && isset($_SESSION['ban']['cannot_post']) && !$showed_banned)
+		elseif (self::$_is_BoardIndex && isset($_SESSION['ban']['cannot_post']) && !$showed_banned)
 		{
 			$showed_banned = true;
 			echo '
@@ -301,42 +266,40 @@ class EoS_Twig {
 }
 
 /**
- * this class provides default implementations for some php functions
- * needed in templates (e.g. button_strip() and similar)
+ * this class is the base for the smarty template support class.
+ * Theme authors can inherit from it to provide their own 
  *
- * custom theme developers who want to provide their own
- * theme_support.php can (or better, *must*) extend this class 
- * to provide their own php functions accessible to twig templates
- * and define template overrides and/or sub-templates.
+ * particularly it allows to:
+ *
+ * #) customize postbit behavior by modifiying the default _postbitClasses
+ *    array
+ * #) implement and/or override theme functions (e.g. button_strip()). All
+ *    public functions of this class are available in smarty templates through
+ *    the $SUPPORT object.
+ * #) implement smarty plugins through $this->_smarty_instance
+ * #) extend setupContext() to implement own theme extensions.
+ *
+ * for template developers, this object is exposed to the template
+ * engine via the $SUPPORT variable. 
  */
-class _EoS_Twig_Template_Support {
+class _EoS_Smarty_Template_Support {
 	
-	protected $_functions = array();
 	protected $_template_overrides = array();
 	protected $_subtemplates = array();
+	protected $_smarty_instance;
+	protected $_postbitClasses = array();
 
-	public function __construct() 
+	public function __construct(Smarty $smarty_instance) 
 	{
-		/*
-		 * PHP functions that must be available in Twig templates as {{ function() }}
-		 * format is: 'name_known_to_twig' => 'valid PHP callable'
-		 */
-		$this->_functions = array(
-				'output_footer_scripts' => 'EoS_Twig::footer_scripts',
-				'url_action' => 'URL::action',
-				'url_user' => 'URL::user',
-				'url_parse' => 'URL::parse',
-				'array_search' => 'array_search',
-				'sprintf' => 'sprintf',
-				'implode' => 'implode',
-				'explode' => 'explode',
-				'str_repeat' => 'str_repeat',
-				'str_ireplace' => 'str_ireplace',
-				'button_strip' => 'EoS_Twig::button_strip',
-				'comma_format' => 'comma_format',
-				'timeformat' => 'timeformat',
-				'JavaScriptEscape' => 'JavaScriptEscape'
-			);
+		$this->_smarty_instance = $smarty_instance;
+  		$this->_smarty_instance->assignByRef('SUPPORT', $this);
+
+  		$this->_postbitClasses = array(
+  			'normal' => 'n',
+  			'commentstyle' => 'c',
+  			'article' => 'a',
+  			'lean' => 'l'
+  			);
 	}
 
 	/**
@@ -347,7 +310,7 @@ class _EoS_Twig_Template_Support {
 	 *
 	 * Render a button strip. TODO: this should be converted into a template.
 	 */
-	public function button_strip($button_strip, $direction = 'top', $strip_options = array())
+	public function button_strip(array $button_strip, $direction = 'top', $strip_options = array())
 	{
 		global $context, $txt;
 
@@ -416,16 +379,37 @@ class _EoS_Twig_Template_Support {
 		</script>
 		';
 	}
-
-	public function getFunctions()
+	/*
+	 * some common functions that should be available in templates
+	 */
+	public function getMessage()
 	{
-		return $this->_functions;
+		return prepareDisplayContext();
 	}
-
-	public function setupContext(array &$_ctx)
+	public function url_user($id, $name)
+	{
+		return URL::user($id, $name);
+	}
+	public function url_parse($uri)
+	{
+		return URL::parse($uri);
+	}
+	public function url_action($action)
+	{
+		return URL::action($action);
+	}
+	public function JavaScriptEscape($string)
+	{
+		return JavaScriptEscape($string);
+	}
+	public function getPostbitClasses()
+	{
+		return $this->_postbitClasses;
+	}
+	public function setupContext()
 	{
 		global $context, $settings, $modSettings, $options, $txt, $scripturl, $user_info, $cookiename;
-		global $forum_copyright, $forum_version, $time_start, $db_count;
+		global $forum_copyright, $forum_version;
 
 
 		$settings['theme_variants'] = array('default', 'lightweight');
@@ -447,8 +431,6 @@ class _EoS_Twig_Template_Support {
 		$context['template_copyright'] = sprintf($forum_copyright, $forum_version);
   		$context['inline_footer_script'] .= $txt['jquery_timeago_loc'];
 		$context['show_load_time'] = !empty($modSettings['timeLoadPageEnable']);
-		$context['load_time'] = round(array_sum(explode(' ', microtime())) - array_sum(explode(' ', $time_start)), 3);
-		$context['load_queries'] = $db_count;
 
 		if (isset($settings['use_default_images']) && $settings['use_default_images'] == 'defaults' && isset($settings['default_template']))
 		{
@@ -460,11 +442,30 @@ class _EoS_Twig_Template_Support {
   		if(isset($modSettings['embed_GA']) && $modSettings['embed_GA'] && ($context['user']['is_guest'] || (empty($options['disable_analytics']) ? 1 : !$options['disable_analytics'])))
   			$context['want_GA_embedded'] = true;
 
-		// make all important variables/arrays available in Twig templates
-		$_ctx = array('C' => &$context, 'T' => &$txt, 'S' => &$settings, 'O' => &$options,
-		  			 		  'M' => &$modSettings, 'U' => &$user_info, 'SCRIPTURL' => $scripturl, 'COOKIENAME' => $cookiename,
-							  '_COOKIE' => &$_COOKIE
-		);
+  		$this->_smarty_instance->assignByRef('C', $context);
+  		$this->_smarty_instance->assignByRef('T', $txt);
+  		$this->_smarty_instance->assignByRef('M', $modSettings);
+  		$this->_smarty_instance->assignByRef('S', $settings);
+  		$this->_smarty_instance->assignByRef('O', $options);
+  		$this->_smarty_instance->assignByRef('U', $user_info);
+  		$this->_smarty_instance->assignByRef('SCRIPTURL', $scripturl);
+  		$this->_smarty_instance->assignByRef('COOKIENAME', $cookiename);
+  		$this->_smarty_instance->assignByRef('_COOKIE', $_COOKIE);
+
+  		/*
+  		 * hook to extend theme context initialization.
+  		 */
+  		HookAPI::callHook('smarty_init_context', array(&$this));
 	}
+}
+
+function TestSmarty()
+{
+	global $context;
+	EoS_Smarty::init();
+	EoS_Smarty::loadTemplate('test');
+
+	$context['footpl'] = 'foo.tpl';
+	$context['testvar'] = array('foo' => 'foofoofoobar');
 }
 ?>

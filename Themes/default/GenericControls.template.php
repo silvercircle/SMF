@@ -14,6 +14,7 @@
 // This function displays all the stuff you get with a richedit box - BBC, smileys etc.
 function template_control_richedit($editor_id, $smileyContainer = null, $bbcContainer = null)
 {
+	return;
 	global $context, $settings, $options, $txt, $modSettings, $scripturl;
 
 	$editor_context = &$context['controls']['richedit'][$editor_id];

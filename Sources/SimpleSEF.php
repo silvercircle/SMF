@@ -264,6 +264,7 @@ class SimpleSEF {
      * @var Tracks the added queries used during execution
      */
     private static $queryCount = 0;
+    private static $_count = 0;		// replacement count
     /**
      * @var array Tracks benchmarking information
      */
@@ -452,12 +453,19 @@ class SimpleSEF {
 
 		self::benchmark('buffer');
 
+  		/*
   		if (!empty($context['show_load_time']))
       		$buffer = preg_replace('~(.*[s]\sCPU,\s.*queries\.)~', '$1' . sprintf(' OB_rewrite_fast: %d', $count) . ' (' . round(self::$benchMark['total'], 3) . $txt['seconds_with'] . self::$queryCount . $txt['queries'].')', $buffer);
-
-  		//self::log('SimpleSEF rewrote ' . $count . ' urls in ' . self::$benchMark['total'] . ' seconds');
+		*/
+      	self::$_count = $count;
 
   		return $buffer;
+	}
+	public static function getPerfData()
+	{
+		global $txt;
+		
+		return(sprintf(' OB_rewrite_fast: %d', self::$_count) . ' (' . round(self::$benchMark['total'], 3) . $txt['seconds_with'] . self::$queryCount . $txt['queries'] . ')');
 	}
     /**
      * Implements integrate_buffer
@@ -536,12 +544,11 @@ class SimpleSEF {
 
         self::benchmark('buffer');
 
+        /*
         if (!empty($context['show_load_time']))
             $buffer = preg_replace('~(.*[s]\sCPU,\s.*queries\.)~', '$1' . sprintf('SimpleSEF: %d replacements', $count) . ' ' . round(self::$benchMark['total'], 3) . $txt['seconds_with'] . self::$queryCount . $txt['queries'], $buffer);
-			//$buffer = preg_replace('~(.*[s]\sCPU,\s.*queries\.)~', '$1 foo', $buffer);
-
-        //self::log('SimpleSEF rewrote ' . $count . ' urls in ' . self::$benchMark['total'] . ' seconds');
-
+		*/
+        self::$_count = $count;
         // I think we're done
         return $buffer;
     }
@@ -1475,3 +1482,4 @@ class SimpleSEF {
     }
 
 }
+?>

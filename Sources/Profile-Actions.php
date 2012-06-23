@@ -792,13 +792,9 @@ function subscriptions($memID)
 function DismissNews()
 {
 	global $context, $user_info, $txt;
-	//loadTemplate('News');
-
-	EoS_Twig::init();
-	EoS_Twig::loadTemplate('notices');
-	EoS_Twig::setBlocks(array('dismiss_handler'));
-	$context['twig_template'] = true;
-
+	EoS_Smarty::loadTemplate('xml_blocks');
+	$context['template_functions'] = array('dismiss_newsitem');
+	
 	$id = isset($_REQUEST['id']) ? (int)$_REQUEST['id'] : 0;
 	$xml = isset($_REQUEST['xml']) ? true : false;
 

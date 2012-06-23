@@ -103,8 +103,7 @@ function GetMcard()
 
 	if(allowedTo('profile_view_any') && $uid) {
 		//loadTemplate('MemberCard');
-		EoS_Twig::init();
-		EoS_Twig::loadTemplate('membercard');
+		EoS_Smarty::loadTemplate('membercard');
 		loadMemberData($uid, false, 'profile');
 		loadMemberContext($uid);
 		loadLanguage('Profile');
@@ -246,10 +245,6 @@ function WhoPosted()
 		mysql_free_result($result);
 		
 		if($b) {
-			EoS_Twig::init();
-			EoS_Twig::loadTemplate('xml_blocks');
-			EoS_Twig::setBlocks(array('who_posted_xml'));
-			
 			$result = smf_db_query( '
 				SELECT mem.real_name, m.id_member, count(m.id_member) AS count FROM {db_prefix}messages AS m
 					LEFT JOIN {db_prefix}members AS mem ON mem.id_member = m.id_member WHERE m.id_topic = {int:topic} 
@@ -259,6 +254,8 @@ function WhoPosted()
 				$context['posters'][] = $row;
 
 			mysql_free_result($result);
+			EoS_Smarty::loadTemplate('xml_blocks');
+			$context['template_functions'] = array('who_posted_xml');
 		}
 	}
 }

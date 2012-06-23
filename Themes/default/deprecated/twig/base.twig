@@ -29,7 +29,6 @@
     {% else %}
     <script type="text/javascript" src="{{ S.default_theme_url }}/scripts/min/jquery.js?v=162"></script>
     {% endif %}
-
     <script type="text/javascript" src="{{ S.default_theme_url }}/scripts/script.js{{ C.jsver }}"></script>
     {% if C.theme_scripts is not empty %}
       {% for script in C.theme_scripts %}
@@ -169,7 +168,7 @@
     {# Output any remaining HTML headers. (from mods, maybe?) #}
     {{ C.html_headers }}
     <style>
-      #main_content_section {max-width: {{ C.content_width is defined ? O.content_width : '95%' }};}
+      #main_content_section {max-width: {{ O.content_width is defined ? O.content_width : '95%' }};}
       {% if C.css_overrides is defined and C.css_overrides|length %}
       {% for css in C.css_overrides %}
       {{ css }}
@@ -177,7 +176,7 @@
       {% endif %}
     </style>
   </head>
-  <body>
+  <body onload="$('#content_section').show();">
   {% set alerts = U.notify_count > 0 ? U.notify_count : '' %}
   {% set scope = 0 %}
   {% set search_label = T.search_all_boards %}
@@ -329,11 +328,11 @@
   });
   {% endif %}
   {% if C.need_synhlt is defined %}
-    var t3 = document.createElement(\'SCRIPT\');
+    var t3 = document.createElement('SCRIPT');
     t3.type = "text/javascript";
     t3.async = true;
     t3.src = "{{ S.theme_url }}/scripts/shlt.js?ver=1.1.0";
-    anchor.parentNode.insertBefore(t3, anchor);';
+    anchor.parentNode.insertBefore(t3, anchor);
   {% endif %}
 
   {% if C.want_GA_embedded is defined %}
@@ -355,7 +354,8 @@
   <div class="clear" id="footer_section">
   {# Show the load time? #}
   {% if C.show_load_time is not empty %}
-    {% set loadtime = C.load_time ~ 's CPU, ' ~ C.load_queries ~ T.queries %}
+    {# {% set loadtime = C.load_time ~ 's CPU, ' ~ C.load_queries ~ T.queries %} #}
+    {% set loadtime = '@%%__loadtime__%%@' %}
   {% else %}
     {% set loadtime = '' %}
   {% endif %}

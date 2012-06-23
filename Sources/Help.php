@@ -86,9 +86,9 @@ function ShowAdminHelp()
 	if (isset($_GET['help']) && substr($_GET['help'], 0, 14) == 'permissionhelp')
 		loadLanguage('ManagePermissions');
 
-	Eos_Twig::init();
-	Eos_Twig::loadTemplate('xml_blocks');
-	EoS_Twig::setBlocks(array('help_popup'));
+	Eos_Smarty::loadTemplate('xml_blocks');
+	$context['template_functions'] = array('help_popup');
+	
 	// Set the page title to something relevant.
 	$context['page_title'] = $context['forum_name'] . ' - ' . $txt['help'];
 

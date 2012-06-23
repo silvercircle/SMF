@@ -40,12 +40,12 @@ function template_board_children(&$board)
 			);
 	}
 	echo '
-	<div class="td_children" id="board_', $board['id'], '_children">
-		<table>
+	<div class="td_children" id="board_', $board['id'], '_children"><div class="floatleft lowcontrast">&#9492;</div>
+		<table style="display:table;margin-left:12px;width:99%;">
 		  <tr>';
 		  $n = 0;
 		  $columns = $modSettings['tidy_child_display_columns'];
-		  $width = 100 / $columns;
+		  $width = 100 / $columns -1;
 		  foreach($children as &$child) {
 			  echo '<td style="width:',$width,'%;" class="tinytext"><div style="padding-left:12px;">',$child['img'],$child['link'],'</div>',$child['tip'],'</td>';
 			  if(++$n >= $columns) {

@@ -2675,8 +2675,8 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 	global $context, $modSettings;
 	static $header_done = false, $footer_done = false, $level = 0, $has_fatal_error = false;
 
-	if(isset($context['twig_template']))
-		return EoS_Twig::obExit($header, $do_footer, $from_index, $from_fatal_error);
+	if(EoS_Smarty::isActive())
+		return EoS_Smarty::obExit($header, $do_footer, $from_index, $from_fatal_error);
 	
 	// Attempt to prevent a recursive loop.
 	++$level;
@@ -3267,12 +3267,10 @@ function theme_copyright($get_it = false)
 
 function template_footer()
 {
-	global $context, $settings, $modSettings, $time_start, $db_count;
+	global $context, $settings, $modSettings;
 
 	// Show the load time?  (only makes sense for the footer.)
 	$context['show_load_time'] = !empty($modSettings['timeLoadPageEnable']);
-	$context['load_time'] = round(array_sum(explode(' ', microtime())) - array_sum(explode(' ', $time_start)), 3);
-	$context['load_queries'] = $db_count;
 
 	if (isset($settings['use_default_images']) && $settings['use_default_images'] == 'defaults' && isset($settings['default_template']))
 	{

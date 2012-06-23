@@ -68,8 +68,7 @@ function Who()
 	// Load the 'Who' template.
 	//loadTemplate('Who');
 	loadLanguage('Who');
-	EoS_Twig::init();
-	EoS_Twig::loadTemplate('who');
+	EoS_Smarty::loadTemplate('who');
 	// Sort out... the column sorting.
 	$sort_methods = array(
 		'user' => 'mem.real_name',
@@ -742,11 +741,9 @@ function Credits($in_admin = false)
 	}
 	if (!$in_admin)
 	{
-		//loadTemplate('Who');
-		EoS_Twig::init();
-		EoS_Twig::loadTemplate('credits');
+		loadTemplate('Who');
 
-		//$context['sub_template'] = 'credits';
+		$context['sub_template'] = 'credits';
 		$context['robot_no_index'] = true;
 		$context['page_title'] = $txt['credits'];
 	}

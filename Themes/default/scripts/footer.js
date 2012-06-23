@@ -9,6 +9,7 @@
 	Version: 3.1.3
 ------------------------------------------------------------------------- */
 
+
 (function($) {
 	$.prettyPhoto = {version: '3.1.3'};
 	
@@ -1296,7 +1297,6 @@ jQuery(document).ready(function() {
 	// this kills the pure CSS hover effect from the dropdown menus so they will
 	// only react on DOM events.
 	$('html > head').append('<style>#menu_nav li:hover ul { display: none; }</style>');
-
 	// pull down menu handlers
 	jQuery('#menu_nav ul').hover(function() {
 	}, function() {
@@ -1395,12 +1395,13 @@ jQuery(document).ready(function() {
 			$(this).find('a[class=tpeek]:first').remove();			
 	});
 	// convert all time stamps to relative 
+	
 	if(!disableDynamicTime)
 		$('abbr.timeago').timeago();
 		
 	if($('#socialshareprivacy'))
     	$('#socialshareprivacy').socialSharePrivacy();
-
+	
 	$('div.spoiler.head').click(function() {
         var content = $(this).next();
 		if(content.css('display') != 'none')

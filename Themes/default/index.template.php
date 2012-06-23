@@ -33,8 +33,7 @@ function template_html_above()
 
 	$h = 'HDC';
 	// Show right to left and the character set for ease of translating.
-	echo '
-<!DOCTYPE html ', $context['right_to_left'] ? ' dir="rtl"' : '', '>
+	echo '<!DOCTYPE html ', $context['right_to_left'] ? ' dir="rtl"' : '', '>
 <html id="_S_" lang="en-US">
 <head>';
 	echo '
@@ -413,7 +412,8 @@ EOT;
 	
 	// Show the load time?
 	if ($context['show_load_time'])
-		$loadtime = $context['load_time']. 's CPU, '.$context['load_queries'] . $txt['queries'];
+		$loadtime = '@%%__loadtime__%%@';
+		//$loadtime = $context['load_time']. 's CPU, '.$context['load_queries'] . $txt['queries'];
 		
 	$time_now = forum_time(false);
 	$tz = date_default_timezone_get();

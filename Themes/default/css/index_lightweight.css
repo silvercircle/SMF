@@ -1,19 +1,34 @@
+/*@import url(http://fonts.googleapis.com/css?family=Ubuntu:500,500italic,700,700italic&subset=latin,cyrillic-ext,greek-ext,greek,latin-ext,cyrillic);*/
+@font-face {
+    font-family: 'Cuprum';
+    src: url('../fonts/Cuprum/Cuprum-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Cuprum';
+    src: url('../fonts/Cuprum/Cuprum-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
 body {
 	background: #D0D1E6;
-	font-family: "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
+	font-family: "Ubuntu", "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
 	font-size: 10pt;
 	margin: 0;
 	padding: 0;
 }
 a:link, a:visited {
-	color: #637d96;
+	color: #839da6;
 	text-decoration: none;
 }
 a.important {
 	color: #c78844;
 }
 a:hover {
-	text-decoration: underline;
+	color:#aa7d88;
 }
 table {
 	empty-cells: show;
@@ -488,7 +503,9 @@ ol.tiles li img.avatar {
 	font-size: 0.85em;
 	padding-top:0 5px;
 }
-
+.signature {
+	overflow: hidden;
+}
 .custom_fields_above_signature {
 	width: 98%;
 	clear: right;
@@ -778,9 +795,9 @@ div.dropselect_content.right {
 #main_menu {
 	background: #afafaf url(../images/clipsrc.png) 0 -99px repeat-x;
 	padding: 0 0.5em;
-	font-size: 11px;
-	font-weight:bold;
-	text-shadow: 1px 1px 0 #ddd;
+	font-size: 13px;
+	font-family: "Cuprum", "Tahoma", "Arial", sans-serif;	
+	text-shadow: 1px 1px 2px #ddd;
 	padding-left:30px;
 }
 .dropmenu, .dropmenu ul {
@@ -1496,6 +1513,7 @@ div.ignoringpost {
 	clear: both;
 	font-size: 11px;
 	background-color:#f2f2f2;
+	opacity:0.5;
 }
 .post_bottom.mq {
 	background: #edd !important;
@@ -2338,13 +2356,15 @@ tr.titlebg td {
 .cContainer_header, .cat_bar2, .cat_bar {
 	margin-bottom: 0;
 	border:0;
-	border-bottom:2px solid #ddd;
-	background:#f2f2f2;
+	border-bottom:2px solid #ccc;
+	background:#ddd;
 	height:25px !important;
 	line-height:25px;
 	padding: 0 10px;
 	border-radius:2px 2px 0 0;
-	font-variant: small-caps;
+	font-family: "Cuprum", "Segoe UI", "Tahoma", "Arial", sans-serif;	
+	/*font-variant: small-caps;*/
+
 }
 .cContainer_header a, .cat_bar2 a, .cContainer_header h3, .cat_bar2 h3 {
 	color: #555;
@@ -2434,13 +2454,14 @@ table.topic_table td {
 	width: 100%;
 	font-size: 1.0em;
 }
-.topic_table td.subject a, a.boardlink {
+a.boardlink, span.topiclink a {
+	color:#666;
+	font-size: 1.1em;
+	font-family: "Cuprum", "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;	
+}
+a.child_boardlink {
 	color:#666;
 }
-.topic_table span.tpeek {
-	font-size: 1.1em;
-}
-
 .topic_table span.tpeek > a.tpeek {
 	font-size: 11px;
 }
@@ -3465,15 +3486,16 @@ tbody.divider tr {
 
 div.td_children {
 	font-size: 12px;
-	padding: 0 0 0 32px;
 	margin-top: 3px;
-	list-style: none;
 	background: transparent;
+	padding-left:32px;
 }
 
 div.td_children table {
-	width: 100%;
 	border: 0;
+	background:#f5f5f5;
+	padding:1px 3px;
+	border:1px dotted #ddd;
 }
 
 div.td_children td {

@@ -11,8 +11,8 @@
 {% set ltree_done = '<div class="navigate_section gradient_darken_down"><ul class="linktree tinytext" id="linktree_upper">' %}
 
 {# Each tree item has a URL and name. Some may have extra_before and extra_after. #}
-{% set item_count = C.linktree|length %}
-{% for tree_item in C.linktree %}
+{% set item_count = C['linktree']|length %}
+{% for tree_item in C['linktree'] %}
   {% if loop.index0 == item_count - 1 %}
     {% set ltree_done = ltree_done ~ '<li class="last">' %}
   {% else %}

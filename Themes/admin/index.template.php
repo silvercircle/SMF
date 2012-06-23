@@ -319,7 +319,7 @@ function template_body_below()
 
 	// Show the load time?
 	if ($context['show_load_time'])
-		$loadtime = $context['load_time']. 's CPU, '.$context['load_queries'] . $txt['queries'];
+		$loadtime = '@%%__loadtime__%%@';
 
 	$time_now = forum_time(false);
 	$tz = date_default_timezone_get();

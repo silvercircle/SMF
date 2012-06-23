@@ -49,11 +49,9 @@ function MessageIndex()
 
 	fetchNewsItems($board, 0);
 
-	//loadTemplate('MessageIndex');
-	//loadTemplate('GenericBits');
-	EoS_Twig::init();
-	EoS_Twig::loadTemplate('messageindex');
-	
+	loadTemplate('MessageIndex');
+	loadTemplate('GenericBits');
+
 	$context['act_as_cat'] = $board_info['allow_topics'] ? false : true;
 	$context['name'] = $board_info['name'];
 	$context['description'] = $board_info['description'];

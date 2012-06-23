@@ -82,7 +82,6 @@ function Display()
 		'below_posts' => '',
 		'footer' => ''
 	);
-
 	require_once($sourcedir . '/lib/Subs-LikeSystem.php');
 	fetchNewsItems($board, $topic);
 	// What are you gonna display if these are empty?!
@@ -894,7 +893,8 @@ function Display()
 		);
 		list($id_member, $approved) = mysql_fetch_row($request);
 		mysql_free_result($request);
-		loadTemplate('DisplaySingle');
+		EoS_Smarty::loadTemplate('topic_singlepost');
+		//loadTemplate('DisplaySingle');
 		$context['sub_template'] = isset($_REQUEST['xml']) ? 'single_post_xml' : 'single_post';
 		if(isset($_REQUEST['xml'])) {
 			$context['template_layers'] = array();
@@ -1015,12 +1015,17 @@ function Display()
 	// the first post
 	// topic.id_layout meanings: bit 0-6 > layout id, bit 7 > first post sticky on every page.
 	// don't blame me for using bit magic here. I'm a C guy and a 8bits can store more than just one bool :P
+	
 	$layout = (int)($topicinfo['id_layout'] & 0x7f);
-
-	// set defaults...
+	$postbit_classes = &EoS_Smarty::getConfigInstance()->getPostbitClasses();
+		// set defaults...
 	$context['postbit_callbacks'] = array(
 		'firstpost' => 'template_postbit_normal',
 		'post' => 'template_postbit_normal'
+	);
+	$context['postbit_template_class'] = array(
+		'firstpost' => $postbit_classes['normal'],
+		'post' => $postbit_classes['normal']
 	);
 	if($topicinfo['id_layout']) {
 		$this_start = isset($_REQUEST['perma']) ? 0 : (int)$_REQUEST['start'];
@@ -1029,17 +1034,33 @@ function Display()
 				array_unshift($messages, intval($topicinfo['id_first_msg']));
 			$context['postbit_callbacks']['firstpost'] = ($layout == 0 ? 'template_postbit_normal' : ($layout == 2 ? 'template_postbit_clean' : 'template_postbit_lean'));
 			$context['postbit_callbacks']['post'] = ($layout == 2 ? 'template_postbit_comment' : 'template_postbit_normal');
+
+			$context['postbit_template_class']['firstpost'] = ($layout == 0 ? $postbit_classes['normal'] : ($layout == 2 ? $postbit_classes['article'] : $postbit_classes['lean']));
+			$context['postbit_template_class']['post'] = ($layout == 2 ? $postbit_classes['comment'] : $postbit_classes['normal']);
 		}
 		elseif($layout) {
 			$context['postbit_callbacks']['firstpost'] = ($layout == 0 || $this_start != 0 ? 'template_postbit_normal' : ($layout == 2 ? 'template_postbit_clean' : 'template_postbit_lean'));
 			$context['postbit_callbacks']['post'] = ($layout == 2 ? 'template_postbit_comment' : 'template_postbit_normal');
+
+			$context['postbit_template_class']['firstpost'] = ($layout == 0 || $this_start != 0 ? $postbit_classes['normal'] : ($layout == 2 ? $postbit_classes['article'] : $postbit_classes['lean']));
+			$context['postbit_template_class']['post'] = ($layout == 2 ? $postbit_classes['comment'] : $postbit_classes['normal']);
 		}
 	}
 	// now we know which display template we need
 	if(!isset($_REQUEST['perma']))
-		loadTemplate($layout > 1 ? 'DisplayPage' : 'Display');
-	loadTemplate('Postbit');
-
+		EoS_Smarty::loadTemplate($layout > 1 ? 'topic_page' : 'topic');
+	/*
+	if($user_info['is_admin']) {
+		EoS_Smarty::init();
+		if(!isset($_REQUEST['perma']))
+			EoS_Smarty::loadTemplate($layout > 1 ? 'topic_page' : 'topic');
+	}
+	else {
+		if(!isset($_REQUEST['perma']))
+			loadTemplate($layout > 1 ? 'DisplayPage' : 'Display');
+		loadTemplate('Postbit');
+	}
+	*/
 	// If there _are_ messages here... (probably an error otherwise :!)
 	if (!empty($messages))
 	{
@@ -1257,8 +1278,46 @@ function Display()
 	if($context['can_autosave_draft'])
 		enqueueThemeScript('drafts', 'scripts/drafts.js', true);
 
+	if(EoS_Smarty::isActive()) {
+		if(isset($context['poll'])) {
+		    $context['poll_buttons'] = array(
+		      'vote' => array('test' => 'allow_return_vote', 'text' => 'poll_return_vote', 'image' => 'poll_options.gif', 'lang' => true, 'url' => $scripturl . '?topic=' . $context['current_topic'] . '.' . $context['start']),
+		      'results' => array('test' => 'show_view_results_button', 'text' => 'poll_results', 'image' => 'poll_results.gif', 'lang' => true, 'url' => $scripturl . '?topic=' . $context['current_topic'] . '.' . $context['start'] . ';viewresults'),
+		      'change_vote' => array('test' => 'allow_change_vote', 'text' => 'poll_change_vote', 'image' => 'poll_change_vote.gif', 'lang' => true, 'url' => $scripturl . '?action=vote;topic=' . $context['current_topic'] . '.' . $context['start'] . ';poll=' . $context['poll']['id'] . ';' . $context['session_var'] . '=' . $context['session_id']),
+		      'lock' => array('test' => 'allow_lock_poll', 'text' => (!$context['poll']['is_locked'] ? 'poll_lock' : 'poll_unlock'), 'image' => 'poll_lock.gif', 'lang' => true, 'url' => $scripturl . '?action=lockvoting;topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
+		      'edit' => array('test' => 'allow_edit_poll', 'text' => 'poll_edit', 'image' => 'poll_edit.gif', 'lang' => true, 'url' => $scripturl . '?action=editpoll;topic=' . $context['current_topic'] . '.' . $context['start']),
+		      'remove_poll' => array('test' => 'can_remove_poll', 'text' => 'poll_remove', 'image' => 'admin_remove_poll.gif', 'lang' => true, 'custom' => 'onclick="return Eos_Confirm(\'\', \'' . $txt['poll_remove_warn'] . '\', $(this).attr(\'href\'));"', 'url' => $scripturl . '?action=removepoll;topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
+		    );
+		}
+  		$context['normal_buttons'] = array(
+    		'reply' => array('test' => 'can_reply', 'text' => 'reply', 'custom' => 'onclick="return oQuickReply.quote(0);" ', 'image' => 'reply.gif', 'lang' => true, 'url' => $scripturl . '?action=post;topic=' . $context['current_topic'] . '.' . $context['start'] . ';last_msg=' . $context['topic_last_message'], 'active' => true),
+    		'add_poll' => array('test' => 'can_add_poll', 'text' => 'add_poll', 'image' => 'add_poll.gif', 'lang' => true, 'url' => $scripturl . '?action=editpoll;add;topic=' . $context['current_topic'] . '.' . $context['start']),
+    		'mark_unread' => array('test' => 'can_mark_unread', 'text' => 'mark_unread', 'image' => 'markunread.gif', 'lang' => true, 'url' => $scripturl . '?action=markasread;sa=topic;t=' . $context['mark_unread_time'] . ';topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
+  		);
+  		HookAPI::callHook('integrate_display_buttons', array(&$context['normal_buttons']));
+    
+  		$remove_url = $scripturl . '?action=removetopic2;topic=' . $context['current_topic'] . '.0;' . $context['session_var'] . '=' . $context['session_id'];
+  		$context['mod_buttons'] = array(
+    		'move' => array('test' => 'can_move', 'text' => 'move_topic', 'image' => 'admin_move.gif', 'lang' => true, 'url' => $scripturl . '?action=movetopic;topic=' . $context['current_topic'] . '.0'),
+    		'delete' => array('test' => 'can_delete', 'text' => 'remove_topic', 'image' => 'admin_rem.gif', 'lang' => true, 'custom' => 'onclick="return Eos_Confirm(\'\',\'' . $txt['are_sure_remove_topic'] . '\',\''.$remove_url.'\');"', 'url' => $remove_url),
+    		'lock' => array('test' => 'can_lock', 'text' => empty($context['is_locked']) ? 'set_lock' : 'set_unlock', 'image' => 'admin_lock.gif', 'lang' => true, 'url' => $scripturl . '?action=lock;topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
+    		'sticky' => array('test' => 'can_sticky', 'text' => empty($context['is_sticky']) ? 'set_sticky' : 'set_nonsticky', 'image' => 'admin_sticky.gif', 'lang' => true, 'url' => $scripturl . '?action=sticky;topic=' . $context['current_topic'] . '.' . $context['start'] . ';' . $context['session_var'] . '=' . $context['session_id']),
+    		'merge' => array('test' => 'can_merge', 'text' => 'merge', 'image' => 'merge.gif', 'lang' => true, 'url' => $scripturl . '?action=mergetopics;board=' . $context['current_board'] . '.0;from=' . $context['current_topic']),
+    		'calendar' => array('test' => 'calendar_post', 'text' => 'calendar_link', 'image' => 'linktocal.gif', 'lang' => true, 'url' => $scripturl . '?action=post;calendar;msg=' . $context['topic_first_message'] . ';topic=' . $context['current_topic'] . '.0'),
+  		);
+  		// Restore topic. eh?  No monkey business.
+  		if ($context['can_restore_topic'])
+    		$context['mod_buttons'][] = array('text' => 'restore_topic', 'image' => '', 'lang' => true, 'url' => $scripturl . '?action=restoretopic;topics=' . $context['current_topic'] . ';' . $context['session_var'] . '=' . $context['session_id']);
+  		// Allow adding new mod buttons easily.
+  		HookAPI::callHook('integrate_mod_buttons', array(&$context['mod_buttons']));
+
+  		$context['message_ids'] = $messages;
+  		$context['perma_request'] = isset($_REQUEST['perma']) ? true : false;
+
+  		$context['mod_buttons_style'] = array('id' => 'moderationbuttons_strip', 'class' => 'plainbuttonlist');
+		$context['full_members_viewing_list'] = empty($context['view_members_list']) ? '0 ' . $txt['members'] : implode(', ', $context['view_members_list']) . ((empty($context['view_num_hidden']) || $context['can_moderate_forum']) ? '' : ' (+ ' . $context['view_num_hidden'] . ' ' . $txt['hidden'] . ')');
+	}
 	HookAPI::callHook('display_general', array());
-	
 }
 
 // Callback for the message display.
@@ -1268,6 +1327,7 @@ function prepareDisplayContext($reset = false)
 	global $memberContext, $context, $messages_request;
 	static $counter = null;
 	static $seqnr = 0;
+	static $output = array();
 
 	// If the query returned false, bail.
 	if ($messages_request == false)
@@ -1380,6 +1440,7 @@ function prepareDisplayContext($reset = false)
 		'like_updated' => $message['like_updated'],
 		'id_member' => $message['id_member'],
 		'postbit_callback' => $message['approved'] ? ($message['id_msg'] == $context['first_message'] ? $context['postbit_callbacks']['firstpost'] : $context['postbit_callbacks']['post']) : 'template_postbit_comment',
+		'postbit_template_class' => $message['approved'] ? ($message['id_msg'] == $context['first_message'] ? $context['postbit_template_class']['firstpost'] : $context['postbit_template_class']['post']) : 'c',
 		'mq_marked' => in_array($message['id_msg'], $context['multiquote_posts'])
 	);
 
@@ -1398,7 +1459,14 @@ function prepareDisplayContext($reset = false)
 		'poster_details' => ''
 	);
 	HookAPI::callHook('display_postbit', array(&$output));
-
+	if(isset($output['member']['can_see_warning']) && !empty($output['member']['can_see_warning'])) {
+		$output['member']['warning_status_desc'] = isset($output['member']['warning_status']) ? $txt['user_warn_' . $output['member']['warning_status']] : '';
+		$output['member']['warning_status_desc1'] = isset($output['member']['warning_status']) ? $txt['warn_' . $output['member']['warning_status']] : '';
+	}
+	$output['member']['allow_show_email'] = $output['member']['is_guest'] ? (!empty($output['member']['email']) && in_array($output['member']['show_email'], array('yes', 'yes_permission_override', 'no_through_forum'))) : false;
+	//$context['current_message'] = &$output;
+	if($output['can_remove'])
+		$context['removableMessageIDs'][] = $output['id'];
 	return $output;
 }
 

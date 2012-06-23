@@ -33,13 +33,13 @@ function BoardIndex()
 {
 	global $txt, $user_info, $sourcedir, $modSettings, $context, $settings, $scripturl, $boardurl, $boarddir;
 
-	EoS_Twig::init();
-	EoS_Twig::loadTemplate('boardindex');
+	EoS_Smarty::loadTemplate('boardindex');
 	//loadTemplate('BoardIndex');
-	//loadTemplate('GenericBits');
+	//	loadTemplate('GenericBits');
 
 	$context['is_board_index'] = true;
-	$context['sidebar_template'] = 'sidebar_on_index.twig';
+	$context['sidebar_template'] = 'sidebars/sidebar_on_index.tpl';
+	$context['sidebar_context_output'] = 'template_sidebar_content_index';
 	$context['show_sidebar'] = true;
 	// Set a canonical URL for this page.
 	$context['canonical_url'] = $scripturl;
@@ -134,6 +134,10 @@ function BoardIndex()
   			$context['show_who_formatted'] = ' (' . implode(', ', $bracketList) . ')';
 	}
 	
+	$context['mark_read_button'] = array(
+		'markread' => array('text' => 'mark_as_read', 'image' => 'markread.gif', 'lang' => true, 'url' => $scripturl . '?action=markasread;sa=all;' . $context['session_var'] . '=' . $context['session_id'])
+	);
+
 	HookAPI::callHook('integrate_boardindex', array());
 	fetchNewsItems(0, 0);
 }
