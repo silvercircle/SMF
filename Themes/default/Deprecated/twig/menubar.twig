@@ -1,0 +1,36 @@
+<div id="main_menu">
+<ul class="dropmenu" id="menu_nav">
+{% for act, mainbutton in C.menu_buttons %}
+  {% set has_subitems = mainbutton.sub_buttons is not empty %}
+  <li class="{{ mainbutton.active_button is not empty ? 'active' : '' }}" id="button_{{ act }}">
+    <a class="firstlevel" href="{{ mainbutton.href }}" {{ mainbutton.target is defined ? 'target="{{ mainbutton.target }}"' : '' }}>
+      <span class="{{ mainbutton.is_last is defined ? 'last ' : '' }}firstlevel">{{ mainbutton.title }}</span>
+    </a>
+    {% if has_subitems %}
+      <span onclick="onMenuArrowClick($(this));" style="display:inline-block;" id="_{{ act }}" class="m_downarrow">&nbsp;</span>
+      <ul>
+      {% for sub_button in mainbutton.sub_buttons %}
+      <li>
+        <a href="{{ sub_button.href }}" {{ sub_button.target is defined ? 'target="{{ sub_button_target }}"' : '' }}>
+          <span class="{{ sub_button.is_last is defined ? 'last' : '' }}">{{ sub_button.title }}{{ sub_button.sub_buttons is defined ? '...' : '' }}</span>
+        </a>
+      {# 3rd level menus :) #}
+      {% if sub_button.sub_buttons is defined %}
+      <ul>
+      {% for sub_sub_button in sub_button.sub_buttons %}
+        <li>
+          <a href="{{ sub_sub_button.href }}" {{ sub_sub_button.target is defined ? 'target="{{ sub_sub_button.target }}"' : '' }}>
+            <span class="{{ sub_sub_button.is_last is defined ? 'last' : '' }}">{{ sub_sub_button.title }}</span>
+          </a>
+        </li>
+      {% endfor %}
+      </ul>
+      {% endif %}
+      </li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  </li>
+{% endfor %}
+</ul><div class="clear"></div>
+</div>

@@ -1,0 +1,23 @@
+{# render a activity (or notification) item #}
+{% macro activitybit(a, _c) %}
+  {% if a.member is defined %}
+	  <li class="{{ a.unread ? 'unread' : 'read' }}" id="_nn_{{ a.id_act }}" data-id="{{ a.id_act }}">
+      <div class="floatleft" style="margin-right:10px;">
+      <span class="small_avatar">
+      {% if a.member.avatar.image is defined %} 
+        <img class="twentyfour" src="a.member.avatar.href }}" alt="avatar" />
+      {% else %}
+        <img class="twentyfour" src="{{ _c.S.images_url }}/unknown.png" alt="avatar" />
+      {% endif %}
+      </span>
+      </div>
+      {{ a.formatted_result }}<br>
+      {{ a.dateline }}
+      <div class="clear"></div>
+    </li>
+  {% else %}
+    <li class="{{ a.unread ? 'unread' : 'read' }}" id="_nn_{{ a.id_act }}" data-id="{{ a.id_act }}">
+      {{ a.formatted_result }}
+    </li>
+  {% endif %}
+{% endmacro %}
