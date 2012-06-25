@@ -1,6 +1,6 @@
 {$ID = $message.id}
 {if $message.is_ignored}
-  <div onclick="$(\"div.post_wrapper[data-mid={$ID}]\").show();return(false);" class="orange_container ignoringpost mediummargin">
+  <div onclick="$('div.post_wrapper[data-mid={$ID}]').show();return(false);" class="orange_container ignoringpost norounded">
       {$T.ignoring_user}&nbsp;
       {$T.show_ignore_user_post}
    </div>
@@ -101,40 +101,8 @@
 </article>
 </div>
 {if !empty($message.attachment)}
-  <div id="msg_{$ID}_footer" class="attachments smalltext">
-    <ol class="post_attachments">
-    {$last_approved_state = 1}
-    {foreach from=$message.attachment item=attachment}
-      <li>
-      {if $attachment.is_approved != $last_approved_state}
-        {$last_approved_state = 0}
-        <fieldset>
-          <legend>{$T.attach_awaiting_approve}
-          {if $C.can_approve}
-            &nbsp;[<a href="{$SCRIPTURL}?action=attachapprove;sa=all;mid={$ID};{$C.session_var}={$C.session_id}">{$T.approve_all}</a>]
-          {/if}
-          </legend>
-      {/if}
-      {if $attachment.is_image}
-        {if $attachment.thumbnail.has_thumb}
-          <a rel="prettyPhoto[gallery]" href="{$attachment.href};image" id="link_{$attachment.id}" class="attach_thumb"><img src="{$attachment.thumbnail.href}" alt="" id="thumb_{$attachment.id}" /></a>
-        {else}
-          <img src="{$attachment.href};image" alt="" width="{$attachment.width}" height="{$attachment.height}"/>
-        {/if}
-      {/if}
-      <a href="{$attachment.href}">{$attachment.name}</a><br>
-      {if $attachment.is_approved == 0 and $C.can_approve}
-        [<a href="{$SCRIPTURL}?action=attachapprove;sa=approve;aid={$attachment.id};{$C.session_var}={$C.session_id}">{$T.approve}</a>]&nbsp;|&nbsp;[<a href="{$SCRIPTURL}?action=attachapprove;sa=reject;aid={$attachment.id};{$C.session_var}={$C.session_id}">{$T.delete}</a>]
-      {/if}
-      {$attachment.size}{($attachment.is_image) ? (', '|cat:$attachment.real_width|cat:'x'|cat:$attachment.real_height|cat:'<br>'|cat:$T.attach_viewed) : ('<br>'|cat:$T.attach_downloaded|cat:' '|cat:$attachment.downloads|cat:' '|cat:$T.attach_times|cat:'.<br>')}
-      </li>
-    {/foreach}
-    {if $last_approved_state == 0}
-      </fieldset>
-    {/if}
-    </ol>
-  </div>
-{/if} {* attachments *}
+{include 'postbits/attachments.tpl'}
+{/if}
 <div class="moderatorbar">
 {if !empty($message.member.custom_fields)}
   {$shown = false}
@@ -175,8 +143,9 @@
 </div>
 <div class="post_bottom{($message.mq_marked) ? ' mq' : ''}">
   <div class="reportlinks lefttext">
-    {call quickbuttons m=$message}
+    {call quickbuttons}
   </div>
 </div>
-</div>
+{$SUPPORT->displayHook('postbit_below')}
 {$message.template_hook.postbit_below}
+</div>

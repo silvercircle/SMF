@@ -143,7 +143,7 @@
     {/if}
     {* Present a canonical url for search engines to prevent duplicate content in their indices. *}
     {if isset($C.canonical_url)}
-      <link rel="canonical" href="{$C.canonical_url}" data-href="{($C.share_url) ? $C.share_url : ''}" />
+      <link rel="canonical" href="{$C.canonical_url}" data-href="{(!empty($C.share_url)) ? $C.share_url : ''}" />
     {/if}
     {* Show all the relative links, such as help, search, contents, and the like. *}
     <link rel="search" href="{$SCRIPTURL}?action=search" />
@@ -195,11 +195,7 @@
   <div id="wrap" style="max-width: {($S.forum_width == 0)  ? '3000px;' : $S.forum_width};">
   <header>
   <div id="header">
-  <div id="upper_section" class="smalltext">
-    <div class="floatleft" style="overflow:hidden;max-height:90px;"><img src="{$S.images_url}/logo.png" alt="logo" /></div>
-    {$C.template_hooks.global.header}
-    <div class="clear"></div>
-  </div>
+    {include 'header.tpl'}
     <div class="notibar">
       <div class="notibar right">
       <div class="floatright">
@@ -347,28 +343,13 @@
   </script>
   {$C.template_hooks.global.footer}
   <footer>
-  <div class="clear" id="footer_section">
   {* Show the load time? *}
   {if !empty($C.show_load_time)}
     {$loadtime = '@%%__loadtime__%%@'}
   {else}
     {$loadtime = ''}
   {/if}
-  <div class="righttext floatright">{$loadtime}<br>
-    <a onclick="Eos_Confirm('', '{$T.clear_cookies_warning}', Clear_Cookies);" href="#">{$T.clear_cookies}</a> | {$T.forum_time}{$C.template_time_now_formatted} {$C.template_timezone}</div>
-  <div class="copyright">
-    <span>{$C.template_copyright}</span>
-  </div>
-  <div>
-    <a id="button_xhtml" href="http://validator.w3.org/check?uri=referer" target="_blank" class="new_win" title="Valid HTML"><span>HTML</span></a> |
-    {($C.template_allow_rss) ? ('<a id="button_rss" href="'|cat:$SCRIPTURL|cat:'?action=.xml;type=rss" class="new_win"><span>'|cat:$T.rss|cat:'</span></a>') : ''}
-  {if $C.mobile}
-    | <a href="{$SCRIPTURL}?mobile=0">Full version</a>
-  {else}
-    | <a href="{$SCRIPTURL}?mobile=1">Mobile</a>
-  {/if}
-  </div>
-  </div>
+  {include 'footer.tpl'}
   </footer>
   <script src="http://piwik.miranda.or.at/piwik.js"></script>
   <script>

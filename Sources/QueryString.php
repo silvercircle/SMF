@@ -472,13 +472,15 @@ function ob_sessrewrite($buffer)
 	elseif (isset($_GET['debug']))
 		$buffer = preg_replace('/(?<!<link rel="canonical" href=)"' . preg_quote($scripturl, '/') . '\\??/', '"' . $scripturl . '?debug;', $buffer);
 
-	$context['load_time'] = round(array_sum(explode(' ', microtime())) - array_sum(explode(' ', $time_start)), 3);
+	$now = microtime();
+	$context['load_time'] = round(array_sum(explode(' ', $now)) - array_sum(explode(' ', $time_start)), 3);
 	$context['load_queries'] = $db_count;
+	$context['template_benchmark_time'] = round(array_sum(explode(' ', $now)) - array_sum(explode(' ', $context['template_benchmark'])), 3);
 
 	if(!empty($modSettings['simplesef_enable']))
 		$buffer = isset($context['sef_full_rewrite']) ? SimpleSEF::ob_simplesef($buffer) : SimpleSEF::ob_simplesef_light($buffer);
 
-	$buffer = str_replace('@%%__loadtime__%%@', $context['load_time'] . 's CPU, ' . $context['load_queries'] . ' ' . $txt['queries'] . SimpleSEF::getPerfData(), $buffer);
+	$buffer = str_replace('@%%__loadtime__%%@', $context['load_time'] . 's CPU (' . $context['template_benchmark_time'] . 's template), ' . $context['load_queries'] . ' ' . $txt['queries'] . SimpleSEF::getPerfData(), $buffer);
 	return $buffer;
 }
 

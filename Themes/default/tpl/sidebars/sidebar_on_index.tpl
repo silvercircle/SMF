@@ -14,6 +14,7 @@
  *}
 {$widgetstyle = 'framed_region cleantop tinypadding'}
 {$C.template_hooks.global.sidebar_top}
+{$SUPPORT->displayHook('sidebar_top')}
 <script>
 // <![CDATA[
   sidebar_content_loaded = 1;
@@ -120,7 +121,7 @@
   <div class="cContainer_end"></div>
 {/if}
 {* social panel in the side bar *}
-{if $C.user.is_guest or ((!empty($O.use_share_bar)) ? 1 : !$O.use_share_bar)}
+{if $C.user.is_guest or ((empty($O.use_share_bar)) ? 1 : !$O.use_share_bar)}
   {call collapser id='social_panel' title='Socialize' widgetstyle=$widgetstyle}
   <div class="blue_container norounded smallpadding gradient_darken_down">
     <div id="socialshareprivacy"></div>
@@ -189,3 +190,4 @@
     <div class="cContainer_end"></div>
 {/if}
 {$C.template_hooks.global.sidebar_bottom}
+{$SUPPORT->displayHook('sidebar_bottom')}

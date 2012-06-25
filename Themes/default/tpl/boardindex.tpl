@@ -17,6 +17,7 @@
 {block 'content'}
   {include 'boardbits.tpl'}
   {$C.template_hooks.boardindex.above_boardlisting}
+  {$SUPPORT->displayHook('above_index')}
   <div id="boardindex">
   {foreach from=$C.categories item=category}
   {if !empty($category.boards)}
@@ -100,6 +101,8 @@
     </div>
   {/if}
   {* here goes the info center *}
+  {$C.template_hooks.boardindex.below_boardlisting}
+  {$SUPPORT->displayHook('below_index')}
   <div class="clear_left"></div>
   {if isset($C.show_who)}
     <div class="cat_bar2">
@@ -132,5 +135,4 @@
       </div>
     </div>
   {/if}
-  {$C.template_hooks.boardindex.below_boardlisting}
 {/block}

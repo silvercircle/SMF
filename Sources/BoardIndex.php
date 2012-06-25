@@ -36,6 +36,7 @@ function BoardIndex()
 	EoS_Smarty::loadTemplate('boardindex');
 	//loadTemplate('BoardIndex');
 	//	loadTemplate('GenericBits');
+	//EoS_Smarty::getConfigInstance()->registerHookTemplate('above_index', 'overrides/foo');
 
 	$context['is_board_index'] = true;
 	$context['sidebar_template'] = 'sidebars/sidebar_on_index.tpl';
@@ -120,7 +121,6 @@ function BoardIndex()
 		'above_boardlisting' => '',
 		'below_boardlisting' => ''
 	);
-
 	if (isset($context['show_who'])) {
 	    $bracketList = array();
 	    if ($context['show_buddies'])

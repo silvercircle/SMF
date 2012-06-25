@@ -539,7 +539,7 @@ $txt['quickmod_confirm'] = 'Are you sure you want to do this?';
 $txt['spell_check'] = 'Spell Check';
 
 $txt['quick_reply'] = 'Quick Reply';
-$txt['quick_reply_warning'] = 'Warning: this topic is currently locked! Only admins and moderators can reply.';
+$txt['quick_reply_warning'] = '<strong>Warning</strong>: this topic is currently locked! Only admins and moderators can reply.';
 $txt['quick_reply_verification'] = 'After submitting your post you will be directed to the regular post page to verify your post %1$s.';
 $txt['quick_reply_verification_guests'] = '(required for all guests)';
 $txt['quick_reply_verification_posts'] = '(required for all users with less than %1$d posts)';
@@ -664,7 +664,7 @@ $txt['preview_title'] = 'Preview post';
 $txt['preview_fetch'] = 'Fetching preview...';
 $txt['preview_new'] = 'New message';
 $txt['error_while_submitting'] = 'The following error or errors occurred while posting this message:';
-$txt['error_old_topic'] = 'Warning: this topic has not been posted in for at least %1$d days.<br />Unless you\'re sure you want to reply, please consider starting a new topic.';
+$txt['error_old_topic'] = '<strong>Warning</strong>: this topic has not been posted in for at least %1$d days. Unless you\'re sure you want to reply, please consider starting a new topic.';
 $txt['old_topic_message'] = 'Old topic (no posts within the last %d days)';
 
 $txt['split_selected_posts'] = 'Selected posts';

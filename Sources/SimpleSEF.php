@@ -465,7 +465,7 @@ class SimpleSEF {
 	{
 		global $txt;
 		
-		return(sprintf(' OB_rewrite_fast: %d', self::$_count) . ' (' . round(self::$benchMark['total'], 3) . $txt['seconds_with'] . self::$queryCount . $txt['queries'] . ')');
+		return(sprintf(' URL rewrites: %d', self::$_count) . ' (' . round(self::$benchMark['total'], 3) . 's CPU, ' . self::$queryCount . $txt['queries'] . ')');
 	}
     /**
      * Implements integrate_buffer

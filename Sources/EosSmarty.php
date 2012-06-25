@@ -22,6 +22,9 @@ class EoS_Smarty {
 	 * init smarty engine and custom theme support object
 	 * TODO: #) allow multiple template dirs (for theme inheritance - easy)
 	 *       #) 
+	 *
+	 * this is called once from index.php when ALL other initializations
+	 * are complete.
 	 */
 	public static function init()
 	{
@@ -34,7 +37,6 @@ class EoS_Smarty {
 		if(file_exists($settings['theme_dir'] . '/theme_support.php')) {
 			require_once($settings['theme_dir'] . '/theme_support.php');
 			self::$_configInstance = theme_support_autoload(self::$_smartyInstance);
-			//self::$_configInstance = new EoS_Smarty_Template_Support(self::$_smartyInstance);
 		}
 		else
 			self::$_configInstance = new _EoS_Smarty_Template_Support(self::$_smartyInstance);
@@ -86,6 +88,10 @@ class EoS_Smarty {
 	{
 		return self::$_configInstance;
 	}
+	public static function &getSmartyInstance()
+	{
+		return self::$_smartyInstance;
+	}
 	/**
 	 * @static
 	 * set up the template context, load and display the template
@@ -93,6 +99,9 @@ class EoS_Smarty {
 	 */
 	public static function Display()
 	{
+		global $context;
+		
+  		$context['template_benchmark'] = microtime();
   		self::$_configInstance->setupContext();
   		foreach(self::$_template_names as $the_template)
 			self::$_smartyInstance->display($the_template);
@@ -288,6 +297,7 @@ class _EoS_Smarty_Template_Support {
 	protected $_subtemplates = array();
 	protected $_smarty_instance;
 	protected $_postbitClasses = array();
+	protected $_hook_templates = array();
 
 	public function __construct(Smarty $smarty_instance) 
 	{
@@ -382,10 +392,17 @@ class _EoS_Smarty_Template_Support {
 	/*
 	 * some common functions that should be available in templates
 	 */
+	
+	/*
+	 * used in topic display as template function. fetch and prepare the next message from the database result
+	 */
 	public function getMessage()
 	{
-		return prepareDisplayContext();
+		prepareDisplayContext();
 	}
+	/*
+	 * make the url generation api available to templates
+	 */
 	public function url_user($id, $name)
 	{
 		return URL::user($id, $name);
@@ -442,6 +459,9 @@ class _EoS_Smarty_Template_Support {
   		if(isset($modSettings['embed_GA']) && $modSettings['embed_GA'] && ($context['user']['is_guest'] || (empty($options['disable_analytics']) ? 1 : !$options['disable_analytics'])))
   			$context['want_GA_embedded'] = true;
 
+  		/*
+  		 * globals that must be available to all templates by default
+  		 */
   		$this->_smarty_instance->assignByRef('C', $context);
   		$this->_smarty_instance->assignByRef('T', $txt);
   		$this->_smarty_instance->assignByRef('M', $modSettings);
@@ -456,6 +476,32 @@ class _EoS_Smarty_Template_Support {
   		 * hook to extend theme context initialization.
   		 */
   		HookAPI::callHook('smarty_init_context', array(&$this));
+	}
+
+	/**
+	 * @static
+	 * @param $position - string. indicates where the template fragment 
+	 *        should go.
+	 * @param $template_name a template file name. must be relative to the
+	 *        one of the configured template directories.
+	 */
+	public function registerHookTemplate($position, $template_name)
+	{
+		$this->_hook_templates[$position][] = $template_name . '.tpl';
+	}
+	/**
+	 * @static
+	 * @param $position - string. 
+	 * 
+	 * output all chained template fragments for the given position.
+	 * example (in a template file): {$SUPPORT->displayHook('above_index')}
+	 */
+	public function displayHook($position)
+	{
+		if(isset($this->_hook_templates[$position])) {
+			foreach($this->_hook_templates[$position] as $the_template)
+				$this->_smarty_instance->display($the_template);
+		}
 	}
 }
 

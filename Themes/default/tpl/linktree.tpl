@@ -11,7 +11,7 @@
 
 {* Each tree item has a URL and name. Some may have extra_before and extra_after. *}
 {$item_count = count($C.linktree)}
-{foreach from=$C.linktree item=tree_item}
+{foreach $C.linktree as $tree_item}
   {if $smarty.foreach.tree_item.index == item_count - 1}
     {$ltree_done = $ltree_done|cat:'<li class="last">'}
   {else}
@@ -32,7 +32,7 @@
     {$ltree_done = $ltree_done|cat:$tree_item.extra_after}
   {/if}
   {* Don't show a separator for the last one. *}
-  {if $smarty.foreach.tree_item.index != $item_count - 1}
+  {if $tree_item@index != $item_count - 1}
     {$ltree_done = $ltree_done|cat:' &rarr;'}
   {/if}
   {$ltree_done = $ltree_done|cat:'</li>'}

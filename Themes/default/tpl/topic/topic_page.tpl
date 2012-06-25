@@ -124,7 +124,7 @@
   <form data-alt="{$SCRIPTURL}?action=post;msg=%id_msg%;topic={$topic}.{$C.start}" action="{$SCRIPTURL}?action=quickmod2;topic={$topic}.{$C.start}" method="post" accept-charset="UTF-8" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave('{$C.session_id}', '{$C.session_var}') : false">
   {* Get all the messages... *}
   {foreach from=$C.message_ids item=msg}
-    {$message = $SUPPORT->getMessage()}
+    {$SUPPORT->getMessage()}
     {include 'postbits/postbit_'|cat:$message.postbit_template_class|cat:'.tpl'}
     {if $message.id == $C.first_message}
       {if !empty($C.use_share)}
@@ -173,59 +173,7 @@
   </div>
 {/if}
 {if $C.can_reply and !empty($O.display_quick_reply)}
-  <a id="quickreply"></a>
-  <div class="clear"></div>
-  <div style="display:none;overflow:hidden;" id="quickreplybox">
-    <div class="cat_bar">
-      <strong>{$T.post_reply}</strong>&nbsp;&nbsp;<a href="{$SCRIPTURL}?action=helpadmin;help=quickreply_help" onclick="return reqWin(this.href);" class="help tinytext">{$T.post_reply_help}</a>
-    </div>
-    <div class="flat_container mediumpadding">
-      <input type="hidden" name="_qr_board" value="{$C.current_board}" />
-      <input type="hidden" name="topic" value="{$topic}" />
-      <input type="hidden" name="subject" value="{$C.response_prefix}{$C.subject}" />
-      <input type="hidden" name="icon" value="xx" />
-      <input type="hidden" name="from_qr" value="1" />
-      <input type="hidden" name="notify" value="{($C.is_marked_notify or !empty($O.auto_notify)) ? '1' : '0' }}" />
-      <input type="hidden" name="not_approved" value="{!$C.can_reply_approved}" />
-      <input type="hidden" name="goback" value="{(empty($O.return_to_post)) ? '0' : '1' }}" />
-      <input type="hidden" name="last_msg" value="{$C.topic_last_message}" />
-      <input type="hidden" name="{$C.session_var}" value="{$C.session_id}" />
-      <input type="hidden" name="seqnum" value="{$C.form_sequence_number}" />
-      {* Guests just need more. *}
-      {if $C.user.is_guest}
-        <strong>{$T.name}:</strong> <input type="text" name="guestname" value="{$C.name}" size="25" class="input_text" tabindex="{$tabindex++}" />
-        <strong>{$T.email}:</strong> <input type="text" name="email" value="{$C.email}" size="25" class="input_text" tabindex="{$tabindex++}" />
-        <br>
-      {/if}
-      {* Is visual verification enabled? *}
-      {if $C.require_verification}
-        <strong>{$T.verification}:</strong>
-        {include 'visual_verification.tpl'}  {$SUPPORT->template_control_verification($C.visual_verification_id, 'quick_reply')}
-        <br>
-      {/if}
-      {if !empty($C.user.avatar.image)}
-        <div class="floatleft blue_container smallpadding avatar">
-          {$C.user.avatar.image}
-        </div>
-      {/if}
-      <div class="quickReplyContent" style="margin-left:150px;">
-        {($C.is_locked) ? ('<div class="red_container tinytext">'|cat:$T.quick_reply_warning|cat:'</div>') : '' }
-        {($C.oldTopicError) ? "<div class=\"red_container tinytext\">{$T.error_old_topic|sprintf:$M.oldTopicDays}</div>" : ''}
-        {($C.can_reply_approved) ? '' : "<em>{$T.wait_for_approval}</em>"}
-        {(!$C.can_reply_approved and $C.require_verification) ? '<br>' : ''}
-        <textarea id="quickReplyMessage" style="width:99%;" rows="18" name="message" tabindex="{$tabindex++}"></textarea>
-        {if $C.automerge}
-          <input type="checkbox" name="want_automerge" id="want_automerge" checked="checked" value="1" />{$T.want_automerge}
-        {/if}
-      </div>
-      <div class="righttext padding">
-        <input type="submit" name="post" value="{$T.post}" onclick="return submitThisOnce(this);" accesskey="s" tabindex="{$tabindex++}" class="button_submit" />
-        <input type="submit" name="preview" value="{$T.go_advanced}" onclick="return submitThisOnce(this);" accesskey="p" tabindex="{$tabindex++}" class="button_submit" />
-        <input type="submit" name="cancel" value="Cancel" onclick="return(oQuickReply.cancel());" accesskey="p" tabindex="{$tabindex++}" class="button_submit" />
-      </div>
-    </div>
-    <br>
-  </div>
+  {include 'topic/quickreply.tpl'}
 {/if} {* quick reply *}
 <div class="pagesection bottom">
   {$SUPPORT->button_strip($C.normal_buttons, 'right')}
@@ -235,12 +183,12 @@
   <div class="pagelinks floatleft">{$C.page_index} {($M.topbottomEnable) ? ($C.menu_separator|cat:' &nbsp;&nbsp;<a href="#top"><strong>'|cat:$T.go_up|cat:'</strong></a>') : ''}</div>
   <div class="nextlinks_bottom">{$C.previous_next}</div>
 </div>
-{include 'linktree.tpl'}
+{include '../linktree.tpl'}
 <div id="moderationbuttons">
   {$SUPPORT->button_strip($C.mod_buttons, 'bottom', $C.mod_buttons_style)}
 </div>
 <div class="plainbox" id="display_jump_to">&nbsp;</div>
 {/block}  
 {block footerscripts}
-{include 'topic_js.tpl'}
+{include 'topic/topic_js.tpl'}
 {/block}

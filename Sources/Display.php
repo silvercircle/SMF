@@ -57,13 +57,14 @@ if (!defined('SMF'))
 		- in-topic quick moderation.
 
 */
+$output = array();
 
 define('PCACHE_UPDATE_PER_VIEW', 5); // maximum number of posts to be parse-cached during a single topic page display. TODO: make that an admin panel setting?
 
 // The central part of the board - topic display.
 function Display()
 {
-	global $scripturl, $txt, $modSettings, $context, $settings, $memberContext;
+	global $scripturl, $txt, $modSettings, $context, $settings, $memberContext, $output;
 	global $options, $sourcedir, $user_info, $user_profile, $board_info, $topic, $board;
 	global $attachments, $messages_request, $topicinfo, $language;
 
@@ -82,6 +83,7 @@ function Display()
 		'below_posts' => '',
 		'footer' => ''
 	);
+	//EoS_Smarty::getConfigInstance()->registerHookTemplate('postbit_below', 'overrides/foo');
 	require_once($sourcedir . '/lib/Subs-LikeSystem.php');
 	fetchNewsItems($board, $topic);
 	// What are you gonna display if these are empty?!
@@ -543,8 +545,11 @@ function Display()
 			$_REQUEST['start'] = 0;
 		}
 		// They aren't using it, but the *option* is there, at least.
-		else
+		else {
+			if(!isset($context['page_index']))
+				$context['page_index'] = '';
 			$context['page_index'] .= '&nbsp;<a href="' . $scripturl . '?topic=' . $topic . '.0;all">' . $txt['all'] . '</a> ';
+		}
 	}
 
 	// Build the link tree.
@@ -893,7 +898,7 @@ function Display()
 		);
 		list($id_member, $approved) = mysql_fetch_row($request);
 		mysql_free_result($request);
-		EoS_Smarty::loadTemplate('topic_singlepost');
+		EoS_Smarty::loadTemplate('topic/topic_singlepost');
 		//loadTemplate('DisplaySingle');
 		$context['sub_template'] = isset($_REQUEST['xml']) ? 'single_post_xml' : 'single_post';
 		if(isset($_REQUEST['xml'])) {
@@ -1036,19 +1041,19 @@ function Display()
 			$context['postbit_callbacks']['post'] = ($layout == 2 ? 'template_postbit_comment' : 'template_postbit_normal');
 
 			$context['postbit_template_class']['firstpost'] = ($layout == 0 ? $postbit_classes['normal'] : ($layout == 2 ? $postbit_classes['article'] : $postbit_classes['lean']));
-			$context['postbit_template_class']['post'] = ($layout == 2 ? $postbit_classes['comment'] : $postbit_classes['normal']);
+			$context['postbit_template_class']['post'] = ($layout == 2 ? $postbit_classes['commentstyle'] : $postbit_classes['normal']);
 		}
 		elseif($layout) {
 			$context['postbit_callbacks']['firstpost'] = ($layout == 0 || $this_start != 0 ? 'template_postbit_normal' : ($layout == 2 ? 'template_postbit_clean' : 'template_postbit_lean'));
 			$context['postbit_callbacks']['post'] = ($layout == 2 ? 'template_postbit_comment' : 'template_postbit_normal');
 
 			$context['postbit_template_class']['firstpost'] = ($layout == 0 || $this_start != 0 ? $postbit_classes['normal'] : ($layout == 2 ? $postbit_classes['article'] : $postbit_classes['lean']));
-			$context['postbit_template_class']['post'] = ($layout == 2 ? $postbit_classes['comment'] : $postbit_classes['normal']);
+			$context['postbit_template_class']['post'] = ($layout == 2 ? $postbit_classes['commentstyle'] : $postbit_classes['normal']);
 		}
 	}
 	// now we know which display template we need
 	if(!isset($_REQUEST['perma']))
-		EoS_Smarty::loadTemplate($layout > 1 ? 'topic_page' : 'topic');
+		EoS_Smarty::loadTemplate($layout > 1 ? 'topic/topic_page' : 'topic/topic');
 	/*
 	if($user_info['is_admin']) {
 		EoS_Smarty::init();
@@ -1318,16 +1323,21 @@ function Display()
 		$context['full_members_viewing_list'] = empty($context['view_members_list']) ? '0 ' . $txt['members'] : implode(', ', $context['view_members_list']) . ((empty($context['view_num_hidden']) || $context['can_moderate_forum']) ? '' : ' (+ ' . $context['view_num_hidden'] . ' ' . $txt['hidden'] . ')');
 	}
 	HookAPI::callHook('display_general', array());
+	/*
+	 * $message is always available in templates as global variable
+	 * prepareDisplayContext() just repopulates it and is called from
+	 * the topic display template via $SUPPORT object callback.
+	 */
+	EoS_Smarty::getSmartyInstance()->assignByRef('message', $output);
 }
 
 // Callback for the message display.
 function prepareDisplayContext($reset = false)
 {
-	global $txt, $modSettings, $options, $user_info;
+	global $txt, $modSettings, $options, $user_info, $output;
 	global $memberContext, $context, $messages_request;
 	static $counter = null;
 	static $seqnr = 0;
-	static $output = array();
 
 	// If the query returned false, bail.
 	if ($messages_request == false)
@@ -1467,7 +1477,7 @@ function prepareDisplayContext($reset = false)
 	//$context['current_message'] = &$output;
 	if($output['can_remove'])
 		$context['removableMessageIDs'][] = $output['id'];
-	return $output;
+	//return $output;
 }
 
 // Download an attachment.

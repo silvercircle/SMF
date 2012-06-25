@@ -741,9 +741,8 @@ function Credits($in_admin = false)
 	}
 	if (!$in_admin)
 	{
-		loadTemplate('Who');
+		EoS_Smarty::loadTemplate('credits');
 
-		$context['sub_template'] = 'credits';
 		$context['robot_no_index'] = true;
 		$context['page_title'] = $txt['credits'];
 	}

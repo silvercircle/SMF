@@ -1,4 +1,6 @@
 /*@import url(http://fonts.googleapis.com/css?family=Ubuntu:500,500italic,700,700italic&subset=latin,cyrillic-ext,greek-ext,greek,latin-ext,cyrillic);*/
+@import url(http://fonts.googleapis.com/css?family=Cuprum:400,400italic,700,700italic&subset=latin,latin-ext,cyrillic);
+/*
 @font-face {
     font-family: 'Cuprum';
     src: url('../fonts/Cuprum/Cuprum-Regular.ttf') format('truetype');
@@ -12,7 +14,7 @@
     font-weight: bold;
     font-style: normal;
 }
-
+*/
 body {
 	background: #D0D1E6;
 	font-family: "Ubuntu", "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
@@ -3790,7 +3792,7 @@ a.fnote_ref {
 	left: -59px;
 }
 .clipsrc._subcat {
-	clip: rect(31px 130px 55px 107px);
+	clip: rect(31px 129px 55px 106px);
 	left: -106px;
 	top: -31px;
 }

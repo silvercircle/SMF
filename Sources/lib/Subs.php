@@ -2696,6 +2696,7 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 	if ($do_footer === null)
 		$do_footer = $do_header;
 
+	$context['template_benchmark'] = microtime();
 	// Has the template/header been done yet?
 	if ($do_header)
 	{
@@ -3100,12 +3101,6 @@ function setupThemeContext($forceload = false)
 
 	if (empty($settings['theme_version']))
 		$context['show_vBlogin'] = $context['show_quick_login'];
-
-	// This is here because old index templates might still use it.
-	$context['show_news'] = !empty($settings['enable_news']);
-
-	// This is done to allow theme authors to customize it as they want.
-	$context['show_pm_popup'] = $context['user']['popup_messages'] && !empty($options['popup_messages']) && (!isset($_REQUEST['action']) || $_REQUEST['action'] != 'pm');
 
 	// Resize avatars the fancy, but non-GD requiring way.
 	if ($modSettings['avatar_action_too_large'] == 'option_js_resize' && (!empty($modSettings['avatar_max_width_external']) || !empty($modSettings['avatar_max_height_external'])))
