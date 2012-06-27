@@ -86,12 +86,11 @@ $context['template_hooks']['global'] = array(
 	'header' => ''
 );
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
-$context['jsver'] = '?v=1545';
+$context['jsver'] = '?v=1546';
 $context['jquery_version'] = '1.7.2';
 $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();
 $context['additional_admin_errors'] = '';
-$context['ltree_done'] = '';
 
 // Seed the random generator.
 if (empty($modSettings['rand_seed']) || mt_rand(1, 250) == 69)
@@ -131,9 +130,6 @@ if (isset($_GET['openid_restore_post']) && !empty($_SESSION['openid']['saved_dat
 	unset($_SESSION['openid']['saved_data'][$_GET['openid_restore_post']]);
 }
 
-//HookAPI::removeAll('LegacyBBC');
-//HookAPI::addHook('integrate_postbit', 'LegacyBBC', 'main.php', 'foo');
-// What function shall we execute? (done like this for memory's sake.)
 call_user_func(smf_main());
 
 // Call obExit specially; we're coming from the main area ;).
@@ -169,7 +165,8 @@ function smf_main()
 		loadTheme();
 		EoS_Smarty::init();
 	}
-
+	//EoS_Plugin_Loader::install('myplugin');
+	//HookApi::clearAllHooks();
 	// Check if the user should be disallowed access.
 	is_not_banned();
 

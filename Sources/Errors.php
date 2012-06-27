@@ -296,8 +296,7 @@ function setup_fatal_error_context($error_message)
 	if (empty($context['page_title']))
 		$context['page_title'] = $context['error_title'];
 
-	loadTemplate('Errors');
-	$context['sub_template'] = 'fatal_error';
+	EoS_Smarty::loadTemplate('errors');
 
 	// If this is SSI, what do they want us to do?
 	if (SMF == 'SSI')

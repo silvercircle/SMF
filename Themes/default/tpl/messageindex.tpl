@@ -72,7 +72,7 @@
           <th scope="col" colspan="2" class="first_th glass cleantop" style="width:8%;">&nbsp;</th>
           <th scope="col" class="lefttext nowrap glass cleantop">{$C.subject_sort_header}</th>
           <th scope="col" class="nowrap glass cleantop">{$C.views_sort_header}</th>
-          <th scope="col" class="centertext nowrap glass cleantop">{$C.lastpost_sort_header}</a></th>
+          <th scope="col" class="centertext nowrap glass cleantop">{$C.lastpost_sort_header}</th>
           {* Show a "select all" box for quick moderation? *}
           {if !empty($C.can_quick_mod)}
             <th scope="col" class="glass cleantop last_th" style="width:24px;"><input type="checkbox" class="input_check cb_invertall" /></th>

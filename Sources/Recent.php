@@ -90,8 +90,8 @@ function RecentPosts()
 
 	$context['need_synhlt'] = true;
 	//$context['hide_all_hidden'] = true;
-    loadTemplate('Recent');
-	loadTemplate('PostbitExtra');
+    EoS_Smarty::loadTemplate('recent');
+    $context['template_functions'] = 'recentposts';
 	$context['messages_per_page'] = $modSettings['defaultMaxMessages'];
 	$context['page_number'] = isset($_REQUEST['start']) ? $_REQUEST['start'] / $context['messages_per_page'] : 0;
 	$context['page_title'] = $txt['recent_posts'] . ((int) $context['page_number'] > 0 ? ' - ' . $txt['page'] . ' ' . ($context['page_number'] + 1) : '');
@@ -702,9 +702,8 @@ function UnreadTopics()
 	else
 		$txt['unread_topics_visit_none'] = strtr($txt['unread_topics_visit_none'], array('?action=unread;all' => '?action=unread;all' . sprintf($context['querystring_board_limits'], 0) . $context['querystring_sort_limits']));
 
-	loadTemplate('Recent');
-	loadTemplate('GenericBits');
-	$context['sub_template'] = $_REQUEST['action'] == 'unread' ? 'unread' : 'replies';
+	EoS_Smarty::loadTemplate('recent');
+	$context['template_functions'] = array($_REQUEST['action'] == 'unread' ? 'unread_topics' : 'unread_replies');
 
 	$is_topics = $_REQUEST['action'] == 'unread';
 
@@ -1354,5 +1353,25 @@ function UnreadTopics()
 	$context['can_approve_posts'] = allowedTo('approve_posts');
 	$context['querystring_board_limits'] = sprintf($context['querystring_board_limits'], $_REQUEST['start']);
 	$context['topics_to_mark'] = implode('-', $topic_ids);
+
+	$context['mark_read_buttons'] = '';
+
+  	if($settings['show_mark_read']) {
+    	$context['mark_read_buttons'] = array(
+      		'markread' => array('text' => !empty($context['no_board_limits']) ? 'mark_as_read' : 'mark_read_short', 'image' => 'markread.gif', 'lang' => true, 'url' => $scripturl . '?action=markasread;sa=' . (!empty($context['no_board_limits']) ? 'all' : 'board' . $context['querystring_board_limits']) . ';' . $context['session_var'] . '=' . $context['session_id']),
+    	);
+
+    	if (!empty($options['display_quick_mod']))
+      		$context['mark_read_buttons']['markselectread'] = array(
+        		'text' => 'quick_mod_markread',
+        		'image' => 'markselectedread.gif',
+        		'lang' => true,
+        		'url' => 'javascript:document.quickModForm.submit();',
+      		);
+	}
+
+	$context['subject_sort_header'] = URL::parse('<a href="' . $scripturl . '?action=unread' . ($context['showing_all_topics'] ? ';all' : '') . $context['querystring_board_limits'] . ';sort=subject' . ($context['sort_by'] == 'subject' && $context['sort_direction'] == 'up' ? ';desc' : '') . '">' . $txt['subject'] . ($context['sort_by'] == 'subject' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '') . '</a>');
+	$context['views_sort_header'] = URL::parse('<a href="' . $scripturl . '?action=unread' . ($context['showing_all_topics'] ? ';all' : '') . $context['querystring_board_limits'] . ';sort=replies' . ($context['sort_by'] == 'replies' && $context['sort_direction'] == 'up' ? ';desc' : '') . '">' . $txt['replies'] . ($context['sort_by'] == 'replies' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '') . '</a>');
+	$context['lastpost_sort_header'] = URL::parse('<a href="' . $scripturl . '?action=unread' . ($context['showing_all_topics'] ? ';all' : '') . $context['querystring_board_limits'] . ';sort=last_post' . ($context['sort_by'] == 'last_post' && $context['sort_direction'] == 'up' ? ';desc' : '') . '">' . $txt['last_post'] . ($context['sort_by'] == 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '') .'</a>');
 }
 ?>

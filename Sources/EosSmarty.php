@@ -278,7 +278,7 @@ class EoS_Smarty {
  * this class is the base for the smarty template support class.
  * Theme authors can inherit from it to provide their own 
  *
- * particularly it allows to:
+ * particularly, it allows to:
  *
  * #) customize postbit behavior by modifiying the default _postbitClasses
  *    array
@@ -493,7 +493,7 @@ class _EoS_Smarty_Template_Support {
 	 * @static
 	 * @param $position - string. 
 	 * 
-	 * output all chained template fragments for the given position.
+	 * output all chained template fragments for the given hook position.
 	 * example (in a template file): {$SUPPORT->displayHook('above_index')}
 	 */
 	public function displayHook($position)

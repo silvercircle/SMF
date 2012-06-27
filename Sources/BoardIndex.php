@@ -34,9 +34,6 @@ function BoardIndex()
 	global $txt, $user_info, $sourcedir, $modSettings, $context, $settings, $scripturl, $boardurl, $boarddir;
 
 	EoS_Smarty::loadTemplate('boardindex');
-	//loadTemplate('BoardIndex');
-	//	loadTemplate('GenericBits');
-	//EoS_Smarty::getConfigInstance()->registerHookTemplate('above_index', 'overrides/foo');
 
 	$context['is_board_index'] = true;
 	$context['sidebar_template'] = 'sidebars/sidebar_on_index.tpl';

@@ -154,7 +154,7 @@ function TopicPeek()
 		
 	if($tid) {
 		global $memberContext;
-		loadTemplate('TopicPreview');
+		EoS_Smarty::loadTemplate('topic/preview');
 		loadLanguage('index');
 		loadLanguage('Errors');
 		$result = smf_db_query( '

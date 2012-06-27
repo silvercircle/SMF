@@ -82,7 +82,7 @@ function MoveTopic()
 	//else
 		//$boards = boardsAllowedTo('move_any');
 
-	loadTemplate('MoveTopic');
+	EoS_Smarty::loadTemplate('topic/movetopic');
 
 	// Get a list of boards this moderator can move to.
 	$request = smf_db_query('

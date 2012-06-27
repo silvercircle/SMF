@@ -167,7 +167,6 @@ class HookAPI {
 			self::$addonsdir = rtrim($GLOBALS['addonsdir'], '/\\ ') . '/';
 		else
 			self::$addonsdir = $boarddir . 'addons/';
-
 	}
 
 	/**
@@ -204,7 +203,7 @@ class HookAPI {
 			log_error(sprintf('HookAPI: missing function while installing into hook %s (product: %s, function: %s, file: %s', $hook, $ref['p'], $ref['c'], $ref['f']));
 			return false;
 		}
-		self::$hooks[$hook][] = array('p' => $product, 'f' => $file, 'c' => trim($function));
+		self::$hooks[$hook][] = array('p' => $product, 'f' => $ref['f'], 'c' => trim($function));
 		$change_array = array('integration_hooks' => serialize(self::$hooks));
 		updateSettings($change_array, true);
 		return true;
@@ -301,6 +300,13 @@ class HookAPI {
 			$change_array = array('integration_hooks' => serialize(self::$hooks));
 			updateSettings($change_array, true);
 		}
+	}
+
+	public static function getAddonsDir() { return self::$addonsdir; }
+	public static function clearAllHooks()
+	{
+		$change_array = array('integration_hooks' => '');
+		updateSettings($change_array, true);
 	}
 }
 
@@ -953,6 +959,38 @@ class Topiclist {
 
 	public function &getResult() {
 		return $this->topiclist;
+	}
+}
+
+class EoS_Plugin
+{
+	public function __construct() {}
+
+	public function installHooks()
+	{
+		foreach($this->installableHooks as $hookName => $theHook)
+			HookAPI::addHook($hookName, $this->productShortName, $theHook['file'], $theHook['callable']);
+			//var_dump($theHook);
+	}
+
+	public function removeHooks()
+	{
+		HookAPI::removeAll($this->productShortName);
+	}
+}
+
+/* this has no business here, should go to packages */
+class EoS_Plugin_Loader
+{
+	public static function install($product)
+	{
+		$pluginMain = HookAPI::getAddonsDir() . $product . '/main.php';
+		require_once($pluginMain);
+		$autoloader = $product . '_autoloader';
+
+		$pluginInstance = $autoloader();
+
+		$pluginInstance->installHooks();
 	}
 }
 ?>

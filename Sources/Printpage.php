@@ -56,8 +56,7 @@ function PrintTopic()
 	mysql_free_result($request);
 
 	// Lets "output" all that info.
-	loadTemplate('Printpage');
-	$context['template_layers'] = array('print');
+	EoS_Smarty::loadTemplate('topic/printpage');
 	$context['board_name'] = $board_info['name'];
 	$context['category_name'] = $board_info['cat']['name'];
 	$context['poster_name'] = $row['poster_name'];
@@ -103,5 +102,4 @@ function PrintTopic()
 	// Set a canonical URL for this page.
 	$context['canonical_url'] = $scripturl . '?topic=' . $topic . '.0';
 }
-
 ?>

@@ -14,6 +14,7 @@
  *}
 {extends 'base.tpl'}
 {block content}
+{include 'postbits/bits.tpl'}
 {$tabindex = $C.tabindex}
 {$topic = $C.current_topic}
 <div class="jqmWindow" style="display:none;" id="interpostlink_helper">
@@ -50,7 +51,8 @@
       {* Get all the messages... *}
       {foreach from=$C.message_ids item=msg}
         {$SUPPORT->getMessage()}
-        {include 'postbits/postbit_'|cat:$message.postbit_template_class|cat:'.tpl'}
+        {call 'postbit_'|cat:$message.postbit_template_class}
+        {*{include 'postbits/postbit_'|cat:$message.postbit_template_class|cat:'.tpl'}*}
       {/foreach}
     </div>
     <input type="hidden" name="goadvanced" value="1" />

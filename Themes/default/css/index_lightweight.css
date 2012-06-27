@@ -17,7 +17,7 @@
 */
 body {
 	background: #D0D1E6;
-	font-family: "Ubuntu", "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
+	font-family: "Trebuchet MS", "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
 	font-size: 10pt;
 	margin: 0;
 	padding: 0;
@@ -807,7 +807,7 @@ div.dropselect_content.right {
 	line-height: 1em;
 	padding: 0;
 	margin: 0;
-	background-color: #afafaf;
+	background-color: #f2f2f2;
 }
 .dropmenu {
 	padding: 0 0.5em;
@@ -844,7 +844,7 @@ div.dropselect_content.right {
 	display: none;
 	position: absolute;
 	top: 24px;
-	background-color: #afafaf;
+	background-color: #f2f2f2;
 	padding: 0;
 	width: 20em;
 	box-shadow: 1px 3px 10px 1px #888;
@@ -1342,7 +1342,7 @@ ol.category > li > div.info {
 	line-height: 110%;
 	padding-right:310px;
 	position:relative;
-	min-height:30px;
+	min-height:36px;
 }
 ol.category > li > div.info.fullwidth {
 	padding-right:0;
@@ -2370,7 +2370,7 @@ tr.titlebg td {
 }
 .cContainer_header a, .cat_bar2 a, .cContainer_header h3, .cat_bar2 h3 {
 	color: #555;
-	font-weight:bold;
+	font-weight:700;
 	text-shadow:1px 1px 1px white;
 	font-size:1.05em;
 }
@@ -2459,7 +2459,8 @@ table.topic_table td {
 a.boardlink, span.topiclink a {
 	color:#666;
 	font-size: 1.1em;
-	font-family: "Cuprum", "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;	
+	font-family: "Cuprum", "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
+	font-weight:normal;
 }
 a.child_boardlink {
 	color:#666;

@@ -7,7 +7,7 @@
   {$C.ltree_done = 'linktree_upper'|str_ireplace:'linktree_lower':$C.ltree_done}
   {$C.ltree_done}
 {else}
-{$ltree_done = '<div class="navigate_section gradient_darken_down"><ul class="linktree tinytext" id="linktree_upper">'}
+  {$ltree_done = '<div class="navigate_section gradient_darken_down"><ul class="linktree tinytext" id="linktree_upper">'}
 
 {* Each tree item has a URL and name. Some may have extra_before and extra_after. *}
 {$item_count = count($C.linktree)}
