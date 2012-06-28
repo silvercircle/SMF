@@ -14,7 +14,7 @@
   {$ID = $message.id}
   {$imgsrc = $S.images_url|cat:'/clipsrc.png'}
   <div class="post_wrapper" data-mid="{$ID}">
-  {if $C.is_display_std}
+  {if !empty($C.is_display_std)}
     {$message.can_quote = $C.can_quote}
     {$message.can_reply = $C.can_reply}
     {$message.can_delete = $message.can_remove}
@@ -25,15 +25,15 @@
   {if !empty($C.first_message) and $message['id'] != $C.first_message}
     <a id="msg{$ID}"></a>{($message.first_new) ? '<a id="new"></a>' : ''}
   {/if}
-  <div class="keyinfo">
-    <div class="messageicon">
+  <div class="cContainer_header">
+    <div class="messageicon floatleft">
       <img src="{$message.icon_url}" alt="" />
     </div>
-    <h5 style="display:inline;" id="subject_{$ID}">
+    <h3 style="display:inline;" id="subject_{$ID}">
       {$message.subject}
-    </h5>
+    </h3>
     <span class="smalltext">&nbsp;{$message.time}</span>
-    <span class="permalink_old"><a href="{$message.permahref}" rel="nofollow">{$message.permalink}</a></span>
+    <span class="tinytext permalink_old"><a href="{$message.permahref}" rel="nofollow">{$message.permalink}</a></span>
     <div id="msg_{$ID}_quick_mod"></div>
   </div>
   <div class="post_content lean">

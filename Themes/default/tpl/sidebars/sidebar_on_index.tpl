@@ -20,10 +20,11 @@
   sidebar_content_loaded = 1;
 // ]]>
 </script>
-{call collapser id='user_panel' title='User panel' widgetstyle=$widgetstyle}
+{call collapser id='user_panel' title='User panel' widgetstyle='framed_region cleantop tinypadding'}
 {* If the user is logged in, display stuff like their name, new messages, etc. *}
-<div class="blue_container smallpadding norounded gradient_darken_down">
+<div class="blue_container norounded gradient_darken_down nopadding">
 {if $C.user.is_logged}
+  <div class="smallpadding">
   <div class="smalltext user">
   {if !empty($C.user.avatar.image)}
     <div class="avatar floatleft">{$C.user.avatar.image}</div>
@@ -34,11 +35,10 @@
     <li class="greeting"><a href="{$SUPPORT->url_user($C.user.id, $C.user.name)}">{$C.user.name}</a></li>
     <li class="smalltext">{$U.posts} {$T.posts}<li>
     <li class="smalltext">{$U.likesreceived} {$T.likes}<li>
-    <li class="smalltext"><span class="smalltext floatright"><a href="{$SCRIPTURL}?action=logout;{$C.session_var}={$C.session_id}">Sign out</a></span><li>
+    <li class="floatright smalltext"><a href="{$SCRIPTURL}?action=logout;{$C.session_var}={$C.session_id}">Sign out</a></li>
   </ul>
-  <div class="clear">
-    <a href="{$SUPPORT->url_parse($SCRIPTURL|cat:'?action=unread')}">{$T.unread_since_visit}</a><br>
-    <a href="{$SUPPORT->url_parse($SCRIPTURL|cat:'?action=unreadreplies')}">{$T.show_unread_replies}</a>
+
+  <div class="clear"></div>
   </div>
   <div style="margin-top:3px;">
   {* Is the forum in maintenance mode? *}

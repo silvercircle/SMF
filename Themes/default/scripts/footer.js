@@ -1296,9 +1296,9 @@ jQuery(document).ready(function() {
 	
 	// this kills the pure CSS hover effect from the dropdown menus so they will
 	// only react on DOM events.
-	$('html > head').append('<style>#menu_nav li:hover ul { display: none; }</style>');
+	$('html > head').append('<style>.menu li:hover ul { display: none; }</style>');
 	// pull down menu handlers
-	jQuery('#menu_nav ul').hover(function() {
+	jQuery('.menu ul').hover(function() {
 	}, function() {
 		jQuery(this).hide();
 	});
@@ -1307,7 +1307,7 @@ jQuery(document).ready(function() {
 		jQuery('#menu_nav ul').hide();
 		menu_active = false;
 	});
-	jQuery('#menu_nav li').hover(function() {
+	jQuery('.menu li').hover(function() {
 		if (menu_active) {
 			jQuery(this).children('ul').show();
 		}
@@ -1383,7 +1383,7 @@ jQuery(document).ready(function() {
 	$('span.tpeek').hover(
 		function() {
 			$('#tpeekresult').remove();
-			$(this).append('<a style="display:none;" href="#" onclick="firePreview(' + $(this).attr('data-id') +', $(this)); return(false);" class="tpeek">Preview topic</a>');
+			$(this).append('<a style="display:none;-lineheight:100%;" href="#" onclick="firePreview(' + $(this).attr('data-id') +', $(this)); return(false);" class="tpeek">Preview topic</a>');
 			$(this).children('a[class=tpeek]:first').fadeIn();
 		},
 		function() {
@@ -1443,10 +1443,10 @@ function getNotifications(el)
 function getAStream(el)
 {
 	var _el = el.children('a:first');
-	if(_el.attr('data-board') == 'all')
+	if(el.attr('data-board') == 'all')
 		sendRequest('action=astream;sa=get;all;xml', null);
 	else
-		sendRequest('action=astream;sa=get;b=' + parseInt(_el.attr('data-board')) + ';xml', null);
+		sendRequest('action=astream;sa=get;b=' + parseInt(el.attr('data-board')) + ';xml', null);
 }
 function getMcard(uid)
 {

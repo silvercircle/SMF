@@ -221,7 +221,7 @@ function template_body_above()
 	$alerts = $user_info['notify_count'] > 0 ? $user_info['notify_count'] : '';
 	$scope = 0;
 	$search_label = $txt['search_all_boards'];
-	$astream_link = '<a rel="nofollow" data-board="all" href="'.$scripturl . '?action=astream;sa=get;all">Recent activity</a>';
+	$astream_link = '<a rel="nofollow" data-board="all" href="'.$scripturl . '?action=astream;sa=get;all"><span>View recent activity</span></a>';
 
 	if (isset($context['current_topic']) && $context['current_topic']) {
 		$search_label = $txt['search_topic'];
@@ -231,7 +231,7 @@ function template_body_above()
 	elseif (isset($context['current_board'])) {
 		$search_label = $txt['search_board'];
 		$scope = 1;
-		$astream_link = '<a data-board="'.$context['current_board'].'" href="'.$scripturl . '?action=astream;sa=get;b=' . $context['current_board']. '">Recent activity</a>';
+		$astream_link = '<a data-board="'.$context['current_board'].'" href="'.$scripturl . '?action=astream;sa=get;b=' . $context['current_board']. '"><span>View recent activity</span></a>';
 	}
 	echo '
 	<div id="__t_script" style="display:none;"></div>
@@ -253,16 +253,58 @@ function template_body_above()
 			<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
 			<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
 			</div>
-			<div class="floatright" style="position:relative;">';
-			if($modSettings['astream_active']) {
-				echo '
-			<span onclick="getAStream($(this));return(false);" class="button notify">',$astream_link,'</span>';
-			if(!$context['user']['is_guest'])
-				echo '
-			<span id="notification_anchor" onclick="getNotifications($(this));return(false);" class="button notify"><a>Your notifications</a></span><span style="',($alerts > 0 ? '':'display:none;'),'position:relative;top:-14px;right:14px;" id="alerts">',$alerts,'</span><div id="notification_target" style="display:inline;position:relative;"></div>';
-			}
-			echo '
-			</div>
+      		<div id="notification_target" class="floatright"><a style="',($alerts > 0 ? '' : 'display:none; '),'position:relative;top:-12px;right:12px;z-index:9999;" id="alerts">',$alerts, '</a></div>
+      		<div class="floatright nowrap">
+  				<ul class="dropmenu menu" id="menu_content">';
+  					if(!$context['user']['is_guest'])
+  						echo '
+				    <li id="button_profile">
+				        <a href="',URL::parse($scripturl . '?action=profile'),'" class="firstlevel compact">',$txt['your_profile'],'</a>
+				        &nbsp;&nbsp;<span onclick="onMenuArrowClick($(this));" style="display:inline-block;" id="_profile" class="m_downarrow compact">&nbsp;</span>
+				        <ul style="z-index:9000;">
+				          <li>
+				            <a href="',URL::parse($scripturl . '?action=profile;area=forumprofile'),'"><span>',$txt['forumprofile'],'</span></a>
+				          </li>
+				          <li>
+				            <a href="',URL::parse($scripturl . '?action=profile;area=account'),'"><span>',$txt['account'],'</span></a>
+				          </li>
+				          <li>
+				            <a href="',URL::parse($scripturl . '?action=pm'),'"><span>',$txt['pm_menu_read'],'</span></a>
+				          </li>
+				          <li>
+				            <a href="',URL::parse($scripturl . '?action=pm;sa=send'),'"><span>',$txt['pm_menu_send'],'</span></a>
+				          </li>
+				        </ul>
+				    </li>';
+				    echo '
+				    <li id="button_stream">
+      					<a class="firstlevel compact" href="',URL::parse($scripturl . '/whatsnew'),'">What\'s new</a>
+      					&nbsp;&nbsp;<span onclick="onMenuArrowClick($(this));" style="display:inline-block;" id="_stream" class="m_downarrow compact">&nbsp;</span>
+      					<ul style="z-index:9000;">';
+        				if($modSettings['astream_active'])
+        					echo '
+        				<li>'
+          				, $astream_link,'
+          				</li>';
+        				if(!$context['user']['is_guest']) 
+        					echo '
+        				<li>
+          					<a href="',URL::parse($scripturl . '?action=unread'),'"><span>',$txt['unread_since_visit'],'</span></a>
+        				</li>
+        				<li>
+          					<a href="',URL::parse($scripturl . '?action=unreadreplies'),'"><span>',$txt['show_unread_replies'],'</span></a>
+        				</li>';
+        				echo '
+      					</ul>
+    				</li>
+    			<li id="button_notification">';
+      			if(!$context['user']['is_guest'] && $modSettings['astream_active']) 
+      				echo '
+      				<a class="firstlevel compact" id="notification_anchor" onclick="getNotifications($(this));return(false);">Your notifications</a>';
+      			echo '
+    			</li>
+  			</ul>
+      		</div>
 			</div>
 			<div class="notibar_intro"></div>
 		</div>

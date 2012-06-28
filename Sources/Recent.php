@@ -1374,4 +1374,95 @@ function UnreadTopics()
 	$context['views_sort_header'] = URL::parse('<a href="' . $scripturl . '?action=unread' . ($context['showing_all_topics'] ? ';all' : '') . $context['querystring_board_limits'] . ';sort=replies' . ($context['sort_by'] == 'replies' && $context['sort_direction'] == 'up' ? ';desc' : '') . '">' . $txt['replies'] . ($context['sort_by'] == 'replies' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '') . '</a>');
 	$context['lastpost_sort_header'] = URL::parse('<a href="' . $scripturl . '?action=unread' . ($context['showing_all_topics'] ? ';all' : '') . $context['querystring_board_limits'] . ';sort=last_post' . ($context['sort_by'] == 'last_post' && $context['sort_direction'] == 'up' ? ';desc' : '') . '">' . $txt['last_post'] . ($context['sort_by'] == 'last_post' ? ' <img src="' . $settings['images_url'] . '/sort_' . $context['sort_direction'] . '.gif" alt="" />' : '') .'</a>');
 }
+
+/**
+  * fetch new threads (all of them, read status doesn't matter)
+  *
+  * todo: respect ignored boards
+  */
+function WhatsNew()
+{
+	global $context, $modSettings, $txt, $user_info, $scripturl;
+
+	$cutoff_days = !empty($modSettings['whatsNewCutoffDays']) ? $modSettings['whatsNewCutoffDays'] : 30;
+
+	$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
+	$context['topics_per_page'] = empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) ? $options['topics_per_page'] : $modSettings['defaultMaxTopics'];
+
+	// find the first post that is newer than our cutoff time...
+	$request = smf_db_query('SELECT m.id_msg from {db_prefix}messages AS m 
+			LEFT JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic) 
+			LEFT JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board) 
+			WHERE {query_see_board} AND m.approved = 1 AND m.poster_time > unix_timestamp(now()) - ({int:days_cutoff} * 86400) limit 1',
+		array('days_cutoff' => $cutoff_days));
+
+	EoS_Smarty::loadTemplate('recent');
+	$context['template_functions'] = 'unread_topics';
+
+	$context['can_approve_posts'] = allowedTo('approve_posts');
+
+	$context['page_title'] = $context['page_header'] = sprintf($txt['whatsnew_title'], $cutoff_days);
+	$context['subject_sort_header'] = $txt['subject'];
+	$context['views_sort_header'] = $txt['views'];
+	$context['lastpost_sort_header'] = $txt['last_post'];
+	$context['querystring_board_limits'] = '';
+
+	$context['linktree'][] = array(
+		'url' => URL::parse($scripturl . '?action=whatsnew'),
+		'name' => $context['page_title']
+	);
+
+	if(0 == mysql_num_rows($request)) {
+		mysql_free_result($request);
+		return;
+	}
+	list($first_msg) = mysql_fetch_row($request);
+
+	mysql_free_result($request);
+	$request = smf_db_query('SELECT DISTINCT(t.id_topic), COUNT(t.id_topic) FROM smf_topics AS t 
+			LEFT JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
+			WHERE {query_see_board} AND t.id_last_msg >= {int:first_msg} limit 1',
+		array('first_msg' => $first_msg));
+
+	list($id, $count) = mysql_fetch_row($request);
+
+	mysql_free_result($request);
+	
+	$total = $count;
+	$base_url = URL::parse($scripturl . '?action=whatsnew');
+	$context['page_index'] = constructPageIndex($base_url . ';start=%1$d', $start, $total, $context['topics_per_page'], true);
+
+	$topic_ids = array();
+
+	$request = smf_db_query('SELECT DISTINCT t.id_topic FROM {db_prefix}topics AS t
+			LEFT JOIN {db_prefix}boards AS b ON(b.id_board = t.id_board)
+			WHERE {query_see_board} AND t.id_last_msg >= {int:first_msg} ORDER BY t.id_last_msg DESC LIMIT {int:start}, {int:perpage}',
+		array('first_msg' => $first_msg, 'start' => $start, 'perpage' => $context['topics_per_page']));
+
+	while($row = mysql_fetch_assoc($request))
+		$topic_ids[] = $row['id_topic'];
+
+	mysql_free_result($request);
+
+	$request = smf_db_query('SELECT	t.id_topic, IFNULL(lt.id_msg, IFNULL(lmr.id_msg, -1)) + 1 AS new_from, b.id_board, b.name AS board_name, t.num_replies, t.locked, t.num_views, t.is_sticky, t.approved, t.unapproved_posts, t.id_first_msg, t.id_last_msg,
+				ms.subject, ml.subject AS last_subject, ms.id_member, IFNULL(mem.real_name, ms.poster_name) AS first_member_name, ms.poster_time AS first_poster_time, ms.icon AS first_icon,
+				ml.id_msg_modified, ml.poster_time, ml.id_member AS id_member_updated,
+				IFNULL(mem2.real_name, ml.poster_name) AS last_real_name, ml.poster_time AS last_post_time
+				FROM {db_prefix}topics AS t 
+				INNER JOIN {db_prefix}messages AS ms ON (ms.id_msg = t.id_first_msg)
+				INNER JOIN {db_prefix}messages AS ml ON (ml.id_msg = t.id_last_msg)
+				LEFT JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
+				LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = ms.id_member)
+				LEFT JOIN {db_prefix}members AS mem2 ON (mem2.id_member = ml.id_member)
+				LEFT JOIN {db_prefix}log_topics AS lt ON (lt.id_topic = t.id_topic AND lt.id_member = {int:current_member})
+				LEFT JOIN {db_prefix}log_mark_read AS lmr ON (lmr.id_board = t.id_board AND lmr.id_member = {int:current_member})
+				LEFT JOIN {db_prefix}prefixes AS p ON (p.id_prefix = t.id_prefix)
+				WHERE {query_see_board} AND t.id_topic IN({array_int:topic_ids}) ORDER BY t.id_last_msg DESC',
+			array('start' => $start, 'perpage' => $context['topics_per_page'], 'first_msg' => $first_msg, 'current_member' => $user_info['id'], 'topic_ids' => $topic_ids));
+	
+	$topiclist = new Topiclist($request, $total, true);
+	mysql_free_result($request);
+	$context['showing_all_topics'] = true;
+	$context['topics'] = $topiclist->getResult();
+}
 ?>

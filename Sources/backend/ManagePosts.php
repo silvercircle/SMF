@@ -373,7 +373,7 @@ function ModifyTopicSettings($return_config = false)
 			array('int', 'enableAllMessages', 'postinput' => $txt['manageposts_posts'], 'subtext' => $txt['enableAllMessages_zero']),
 			array('check', 'disableCustomPerPage'),
 			array('check', 'enablePreviousNext'),
-
+			array('int', 'whatsNewCutoffDays', 'postinput' => $txt['manageposts_days']),
 	);
 
 	if ($return_config)

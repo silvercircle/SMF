@@ -11,6 +11,9 @@
  *
  * @version 1.0pre
  */
+if (!defined('SMF'))
+	die('No access.');
+
 class EoS_Smarty {
 	private static $_template_names = array();
 	private static $_smartyInstance;
@@ -41,11 +44,22 @@ class EoS_Smarty {
 		else
 			self::$_configInstance = new _EoS_Smarty_Template_Support(self::$_smartyInstance);
 
-		self::$_smartyInstance->setTemplateDir($settings['theme_dir'] . '/tpl');
+		$firstdir = 0;
+		if(MOBILE) {
+			self::$_smartyInstance->setTemplateDir($settings['default_theme_dir'] . '/m');
+			$firstdir++;
+		}
+		foreach($settings['template_dirs'] as $dir) {
+			if(!$firstdir)
+				self::$_smartyInstance->setTemplateDir($dir . '/tpl');
+			else
+				self::$_smartyInstance->addTemplateDir($dir . '/tpl');
+			$firstdir++;
+		}
 		self::$_smartyInstance->setCompileDir($boarddir . 'template_cache');		// TODO: make this customizable
-		self::$_smartyInstance->setCacheDir($boarddir . 'template_cache');
 		/*
-		 * this hook could be used to re-configure smarty (for example, add additional template dir(s)).
+		 * this hook could be used to re-configure smarty (for example, add additional template dir(s)),
+		 * or register hook template fragments via $_configInstance->registerTemplateHook()
 		 */
 		HookAPI::callHook('smarty_init', array(&self::$_smartyInstance, &self::$_configInstance));
 	}	

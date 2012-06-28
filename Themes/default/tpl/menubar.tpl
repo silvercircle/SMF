@@ -1,5 +1,5 @@
 <div id="main_menu">
-<ul class="dropmenu" id="menu_nav">
+<ul class="dropmenu menu" id="menu_nav">
 {foreach from=$C.menu_buttons key=act item=mainbutton}
   {$has_subitems = !empty($mainbutton.sub_buttons)}
   <li class="{(!empty($mainbutton.active_button)) ? 'active' : ''}" id="button_{$act}">

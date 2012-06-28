@@ -795,11 +795,12 @@ div.dropselect_content.right {
 	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;
 }
 #main_menu {
-	background: #afafaf url(../images/clipsrc.png) 0 -99px repeat-x;
+	/*background: #afafaf url(../images/clipsrc.png) 0 -99px repeat-x;*/
+	background:#222;
 	padding: 0 0.5em;
 	font-size: 13px;
 	font-family: "Cuprum", "Tahoma", "Arial", sans-serif;	
-	text-shadow: 1px 1px 2px #ddd;
+	text-shadow: 1px 1px 5px #ddd;
 	padding-left:30px;
 }
 .dropmenu, .dropmenu ul {
@@ -818,10 +819,12 @@ div.dropselect_content.right {
 }
 
 .dropmenu li a {
-	color: black;
+	color: #eee;
 	text-decoration: none;
 }
-
+.dropmenu.highcontrast li a {
+	color: #777;
+}
 .dropmenu a span {
 	display: block;
 	padding: 0 6px;
@@ -831,7 +834,14 @@ div.dropselect_content.right {
 	height:26px;
 	line-height:26px;
 }
-
+.dropmenu li a.firstlevel.compact {
+	height:24px;
+	line-height: 24px;
+	font-weight: normal;
+	font-size:11px;
+	font-weight:bold;
+	color:black;
+}
 .dropmenu > li {
 	float: left;
 	padding: 0;
@@ -857,6 +867,7 @@ div.dropselect_content.right {
 
 .dropmenu li li a {
 	display: block !important;
+	color:black;
 }
 
 .dropmenu li li a span {
@@ -904,12 +915,21 @@ div.dropselect_content.right {
 	background-color: #98AABA;
 }
 
+div.menuline {
+	border-top: 1px solid orange;
+	border-bottom: 2px solid orange;
+	padding-top:2px;
+}
 span.m_downarrow {
 	padding: 2px 4px 2px 0;
 	width: 14px;
 	margin-left: -8px;
 	height: 22px;
 	background: transparent url(../images/theme/sprite.png) 0 9px no-repeat;
+}
+span.m_downarrow.compact {
+	height:20px;
+	background: transparent url(../images/theme/sprite.png) 0 7px no-repeat;
 }
 a.prefix {
 	font-size:11px;
@@ -1106,8 +1126,7 @@ h3, h4 {
 	background:#bbbbc5 url(../images/upper_bg.png) 225px 3px no-repeat;
 	height: 24px;
 	line-height: 24px;
-	font-size: 10px;
-	font-family: Verdana;
+	font-size: 11px;
 }
 .notibar.right {
 	float: right;
@@ -1116,7 +1135,6 @@ h3, h4 {
 }
 .notibar a {
 	color: black !important;
-	text-shadow: 1px 1px 0 white;
 }
 .notibar_intro {
 	background: transparent url(../images/clipsrc_l.png) 0 -32px no-repeat;
@@ -1832,8 +1850,8 @@ span.button.notify a {
 #alerts {
 	background-color: #ff9933;
 	font-weight: bold;
-	color: white;
-	padding: 2px 5px 3px 5px;
+	color: white !important;
+	padding: 0 5px 0 5px;
 	border-radius: 2px;
 	line-height: 100%;
 }
@@ -2358,8 +2376,8 @@ tr.titlebg td {
 .cContainer_header, .cat_bar2, .cat_bar {
 	margin-bottom: 0;
 	border:0;
-	border-bottom:2px solid #ccc;
-	background:#ddd;
+	border-bottom:1px solid orange;
+	background:#666;
 	height:25px !important;
 	line-height:25px;
 	padding: 0 10px;
@@ -2369,9 +2387,9 @@ tr.titlebg td {
 
 }
 .cContainer_header a, .cat_bar2 a, .cContainer_header h3, .cat_bar2 h3 {
-	color: #555;
-	font-weight:700;
-	text-shadow:1px 1px 1px white;
+	color: #eee;
+	font-weight:normal;
+	/*text-shadow:1px 1px 1px white;*/
 	font-size:1.05em;
 }
 .cContainer_header img {
@@ -2461,6 +2479,7 @@ a.boardlink, span.topiclink a {
 	font-size: 1.1em;
 	font-family: "Cuprum", "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
 	font-weight:normal;
+	line-height:130%;
 }
 a.child_boardlink {
 	color:#666;

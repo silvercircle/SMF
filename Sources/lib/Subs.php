@@ -3751,6 +3751,7 @@ function setupMenuContext()
 					),
 				),
 			),
+			/*
 			'profile' => array(
 				'title' => $txt['profile'],
 				'href' => URL::parse('?action=profile'),
@@ -3792,7 +3793,7 @@ function setupMenuContext()
 					),
 				),
 			),
-			
+			*/
 			'tags' => array(
 				'title' => $txt['smftags_menu'],
 				'href' => URL::parse('?action=tags'),

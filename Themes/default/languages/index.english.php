@@ -675,7 +675,7 @@ $txt['modify_cancel'] = 'Cancel';
 $txt['mark_read_short'] = 'Mark Read';
 
 $txt['pm_short'] = 'My Messages';
-$txt['pm_menu_read'] = 'Read your messages';
+$txt['pm_menu_read'] = 'Read my messages';
 $txt['pm_menu_send'] = 'Send a message';
 
 $txt['hello_member_ndt'] = 'Hello';
@@ -822,4 +822,7 @@ $txt['link_disabled'] = '[link disabled (no permission)]';
 $txt['hidden_boards_notice_one'] = '%d board is hidden from display, because you are ignoring it. %sClick to view</a>.';
 $txt['hidden_boards_notice_many'] = '%d boards are hidden from display, because you are ignoring them. %sClick to view</a>';
 $txt['hidden_boards_setup_notice'] = '<a href="%s">Set up board ignore options</a>';
+$txt['whatsnew_title'] = "Showing new or updated topics from the last %d days.";
+$txt['your_profile'] = 'Your profile';
+$txt['show_my_subscriptions'] = 'Show my subscribed topics';
 ?>

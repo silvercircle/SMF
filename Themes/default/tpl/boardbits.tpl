@@ -1,3 +1,5 @@
+{* board bits list one board row, either on board index itself, or on the child forums
+ * on the message index*}
 {function boardbit}
 {if $board.act_as_cat}
   {call boardbit_subcat board=$board}
@@ -9,18 +11,18 @@
       <a href="{($board.is_redirect or $C.user.is_guest) ? $board.href : ($SCRIPTURL|cat:'?action=unread;board='|cat:$board.id|cat:'.0;children')}">
       <div class="csrcwrapper24px">
       {if !empty($board.boardicon)}
-        <img src="{$S.images_url}/boards/{$board.boardicon}.png" alt="{$T.new_posts}" title="{$T.new_posts}" />
+        <img src="{$S.images_url}/boards/{$board.boardicon}.png" alt="*" />
         {if $board.new > 0 or $board.children_new > 0}
-          <img style="position:absolute;bottom:-4px;right:-3px;" src="{$S.images_url}/new.png" />
+          <img style="position:absolute;bottom:-4px;right:-3px;" src="{$S.images_url}/new.png" alt="{$T.new_posts}" title="{$T.new_posts}" />
         {/if}
       {else}
         {if $board.is_redirect}
           <img class="clipsrc _redirect" src="{$C.clip_image_src}" alt="*" title="*" />
         {else}
-          <img class="clipsrc _off" src="{$C.clip_image_src}" alt="{$T.old_posts}" title="{$T.old_posts}" />
+          <img class="clipsrc _off" src="{$C.clip_image_src}" alt="*" />
         {/if}
         {if $board.new > 0 or !empty($board.children_new)}
-          <img style="position:absolute;bottom:-4px;right:-3px;" src="{$S.images_url}/new.png" />
+          <img style="position:absolute;bottom:-4px;right:-3px;" src="{$S.images_url}/new.png" alt="{$T.new_posts}" title="{$T.new_posts}" />
         {/if}
       {/if}
       </div>
@@ -81,14 +83,14 @@
       <a href="{($board.is_redirect or $C.user.is_guest) ? $board.href : ($SCRIPTURL|cat:'?action=unread;board='|cat:$board.id|cat:'.0;children')}">
       <div class="csrcwrapper24px">
     {if !empty($board.boardicon)}
-      <img src="{$S.images_url}/boards/{$board.boardicon}.png" alt="$T.new_posts }" title="$T.new_posts}" />
+      <img src="{$S.images_url}/boards/{$board.boardicon}.png" alt="*" />
       {if $board.new > 0 or !empty($board.children_new)}
-        <img style="position:absolute;bottom:-4px;right:-3px;" src="{$S.images_url}/new.png" />
+        <img style="position:absolute;bottom:-4px;right:-3px;" src="{$S.images_url}/new.png" alt="{$T.new_posts}" title="{$T.new_posts}" />
       {/if}
     {else}
-      <img class="clipsrc _subcat" src="{$S.images_url}/clipsrc.png" alt="{$T.old_posts}" title="{$T.old_posts}" />
+      <img class="clipsrc _subcat" src="{$S.images_url}/clipsrc.png" alt="*" />
       {if $board.new or !empty($board.children_new)}
-        <img style="position:absolute;bottom:-4px;right:-3px;" src="{$S.images_url}/new.png" />
+        <img style="position:absolute;bottom:-4px;right:-3px;" src="{$S.images_url}/new.png" alt="{$T.new_posts}" title="{$T.new_posts}" />
       {/if}
     {/if}
     </div>
@@ -120,11 +122,11 @@
 {/function}
 
 {function board_children}
-  <div class="td_children" id="board_{$board.id}_children"><div class="floatleft lowcontrast">&#9492;</div>
-  <table style="display:table;margin-left:12px;width:99%;">
+  <div class="td_children" id="board_{$board.id}_children"><div style="margin-top:-4px;margin-left:-5x;">&#9492;</div>
+  <table style="display:table;margin-left:12px;margin-top:-14px;width:99%;">
   <tr>
-  {$n = 1}
   {$columns = $M.tidy_child_display_columns}
+  {$n = 1}
   {$width = 100 / $columns}
   {foreach from=$board.children item=child}
     {if $child.is_redirect == 0}

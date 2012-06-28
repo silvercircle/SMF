@@ -16,6 +16,60 @@
  *}
 <!DOCTYPE html >
 {include 'generics.tpl'}
+
+{function contentmenu}
+  <ul class="dropmenu menu" id="menu_content">
+    {if empty($C.user.is_guest)}
+    <li id="button_profile">
+        <a href="{$SUPPORT->url_parse($SCRIPTURL|cat:'?action=profile')}" class="firstlevel compact">{$T.your_profile}</a>
+        &nbsp;&nbsp;<span onclick="onMenuArrowClick($(this));" style="display:inline-block;" id="_profile" class="m_downarrow compact">&nbsp;</span>
+        <ul style="z-index:9000;">
+          <li>
+            <a href="{$SUPPORT->url_parse($SCRIPTURL|cat:'?action=profile;area=forumprofile')}"><span>{$T.forumprofile}</span></a>
+          </li>
+          <li>
+            <a href="{$SUPPORT->url_parse($SCRIPTURL|cat:'?action=profile;area=account')}"><span>{$T.account}</span></a>
+          </li>
+          <li>
+            <a href="{$SUPPORT->url_parse($SCRIPTURL|cat:'?action=pm')}"><span>{$T.pm_menu_read}</span></a>
+          </li>
+          <li>
+            <a href="{$SUPPORT->url_parse($SCRIPTURL|cat:'?action=pm;sa=send')}"><span>{$T.pm_menu_send}</span></a>
+          </li>
+        </ul>
+    </li>
+    {/if}
+    <li id="button_stream">
+      <a class="firstlevel compact" href="{$SUPPORT->url_parse($SCRIPTURL|cat:'/whatsnew')}">
+        What's new
+      </a>
+      &nbsp;&nbsp;<span onclick="onMenuArrowClick($(this));" style="display:inline-block;" id="_stream" class="m_downarrow compact">&nbsp;</span>
+      <ul style="z-index:9000;">
+        {if $M.astream_active}
+        <li>
+          {$astream_link}
+        </li>
+        {/if}
+        {if !$C.user.is_guest}
+        <li>
+          <a href="{$SUPPORT->url_parse($SCRIPTURL|cat:'?action=unread')}"><span>{$T.unread_since_visit}</span></a>
+        </li>
+        <li>
+          <a href="{$SUPPORT->url_parse($SCRIPTURL|cat:'?action=unreadreplies')}"><span>{$T.show_unread_replies}</span></a>
+        </li>
+        <li>
+          <a href="{$SUPPORT->url_parse($SCRIPTURL|cat:'?action=profile;area=subscriptions')}"><span>{$T.show_my_subscriptions}</span></a>
+        </li>
+        {/if}
+      </ul>
+    </li>
+    <li id="button_notification">
+      {if !$C.user.is_guest and $M.astream_active}
+      <a class="firstlevel compact" id="notification_anchor" onclick="getNotifications($(this));return(false);">Your notifications</a>
+      {/if}
+    </li>
+  </ul>
+{/function}
 {$collapsed_containers = (!empty($_COOKIE.SF_collapsed)) ? (","|explode:$_COOKIE.SF_collapsed) : array()}
 <html id="_S_" lang="en-US">
   <head>
@@ -177,7 +231,7 @@
   {$alerts = ($U.notify_count > 0) ? $U.notify_count : ''}
   {$scope = 0}
   {$search_label = $T.search_all_boards}
-  {$astream_link = '<a rel="nofollow" data-board="all" href="'|cat:$SCRIPTURL|cat:'?action=astream;sa=get;all">Recent activity</a>'}
+  {$astream_link = '<a rel="nofollow" onclick="getAStream($(this));return(false);" data-board="all" href="'|cat:$SCRIPTURL|cat:'?action=astream;sa=get;all"><span>View recent activity</span></a>'}
 
   {if isset($C.current_topic)}
     {$search_label = $T.search_topic}
@@ -186,7 +240,7 @@
   {* If we're on a certain board, limit it to this board ;). *}
     {$search_label = $T.search_board}
     {$scope = 1}
-    {$astream_link = '<a data-board="'|cat:$C.current_board|cat:'" href="'|cat:$SCRIPTURL|cat:'?action=astream;sa=get;b='|cat:$C.current_board|cat:'">Recent activity</a>'}
+    {$astream_link = '<a data-board="'|cat:$C.current_board|cat:'" href="'|cat:$SCRIPTURL|cat:'?action=astream;sa=get;b='|cat:$C.current_board|cat:'"><span>View recent activity</span></a>'}
   {/if}
   <div id="__t_script" style="display:none;"></div>
   <div id="jsconfirm" style="width:450px;" class="jqmWindow"><div class="jqmWindow_container"><div class="glass jsconfirm title"></div><div class="jsconfirm content blue_container norounded smallpadding mediummargin tinytext"></div><div class="floatright mediummargin"><span class="button default" id="c_yes">Yes</span><span class="button" id="c_no">No</span><span class="button" id="c_ok">Ok</span></div><div class="clear"></div></div></div>
@@ -203,13 +257,9 @@
       <span title="{$T.font_increase}" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
       <span title="{$T.font_decrease}" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
       </div>
-      <div class="floatright" style="position:relative;">
-      {if $M.astream_active}
-        <span onclick="getAStream($(this));return(false);" class="button notify">{$astream_link}</span>
-        {if !$C.user.is_guest}
-          <span id="notification_anchor" onclick="getNotifications($(this));return(false);" class="button notify"><a>Your notifications</a></span><span style="{($alerts > 0) ? '' : 'display:none; '}position:relative;top:-14px;right:14px;" id="alerts">{$alerts}</span><div id="notification_target" style="display:inline;position:relative;"></div>
-        {/if}
-      {/if}
+      <div id="notification_target" class="floatright"><a style="{($alerts > 0) ? '' : 'display:none; '}position:relative;top:-12px;right:12px;z-index:9999;" id="alerts">{$alerts}</a></div>
+      <div class="floatright nowrap">
+        {call contentmenu}
       </div>
       </div>
       <div class="notibar_intro"></div>
