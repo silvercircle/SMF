@@ -1393,7 +1393,7 @@ function WhatsNew()
 	$request = smf_db_query('SELECT m.id_msg from {db_prefix}messages AS m 
 			LEFT JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic) 
 			LEFT JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board) 
-			WHERE {query_see_board} AND m.approved = 1 AND m.poster_time > unix_timestamp(now()) - ({int:days_cutoff} * 86400) limit 1',
+			WHERE {query_wanna_see_board} AND m.approved = 1 AND m.poster_time > unix_timestamp(now()) - ({int:days_cutoff} * 86400) limit 1',
 		array('days_cutoff' => $cutoff_days));
 
 	EoS_Smarty::loadTemplate('recent');
@@ -1421,7 +1421,7 @@ function WhatsNew()
 	mysql_free_result($request);
 	$request = smf_db_query('SELECT DISTINCT(t.id_topic), COUNT(t.id_topic) FROM smf_topics AS t 
 			LEFT JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
-			WHERE {query_see_board} AND t.id_last_msg >= {int:first_msg} limit 1',
+			WHERE {query_wanna_see_board} AND t.id_last_msg >= {int:first_msg} limit 1',
 		array('first_msg' => $first_msg));
 
 	list($id, $count) = mysql_fetch_row($request);
@@ -1436,7 +1436,7 @@ function WhatsNew()
 
 	$request = smf_db_query('SELECT DISTINCT t.id_topic FROM {db_prefix}topics AS t
 			LEFT JOIN {db_prefix}boards AS b ON(b.id_board = t.id_board)
-			WHERE {query_see_board} AND t.id_last_msg >= {int:first_msg} ORDER BY t.id_last_msg DESC LIMIT {int:start}, {int:perpage}',
+			WHERE {query_wanna_see_board} AND t.id_last_msg >= {int:first_msg} ORDER BY t.id_last_msg DESC LIMIT {int:start}, {int:perpage}',
 		array('first_msg' => $first_msg, 'start' => $start, 'perpage' => $context['topics_per_page']));
 
 	while($row = mysql_fetch_assoc($request))
@@ -1457,7 +1457,7 @@ function WhatsNew()
 				LEFT JOIN {db_prefix}log_topics AS lt ON (lt.id_topic = t.id_topic AND lt.id_member = {int:current_member})
 				LEFT JOIN {db_prefix}log_mark_read AS lmr ON (lmr.id_board = t.id_board AND lmr.id_member = {int:current_member})
 				LEFT JOIN {db_prefix}prefixes AS p ON (p.id_prefix = t.id_prefix)
-				WHERE {query_see_board} AND t.id_topic IN({array_int:topic_ids}) ORDER BY t.id_last_msg DESC',
+				WHERE t.id_topic IN({array_int:topic_ids}) ORDER BY t.id_last_msg DESC',
 			array('start' => $start, 'perpage' => $context['topics_per_page'], 'first_msg' => $first_msg, 'current_member' => $user_info['id'], 'topic_ids' => $topic_ids));
 	
 	$topiclist = new Topiclist($request, $total, true);

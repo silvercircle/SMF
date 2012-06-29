@@ -57,7 +57,7 @@
   </div>
   {* Otherwise they're a guest - this time ask them to either register or login - lazy bums...*}
 {else}
-  <div class="smalltext">
+  <div class="smalltext mediumpadding">
   <script type="text/javascript" src="{$S.default_theme_url}/scripts/min/sha1.js{$C.jsver}"></script>
   <div>
     <form id="guest_form" action="{$SCRIPTURL}?action=login2" method="post" accept-charset="UTF-8" {(empty($C.disable_login_hasing)) ? " onsubmit=\"hashLoginPassword(this, '{$C.session_id}');\" " : ''}>

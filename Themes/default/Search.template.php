@@ -144,40 +144,10 @@ function template_main()
 			echo '
 		<fieldset class="flow_hidden">
 			<div>
-				<div class="flow_auto" id="searchBoardsExpand">
-					<ul class="ignoreboards floatleft">';
+				<div class="flow_auto" id="searchBoardsExpand">';
 
-	$i = 0;
-	$limit = ceil($context['num_boards'] / 2);
-	foreach ($context['categories'] as $category)
-	{
+		template_boardlisting('brd');
 		echo '
-			<li class="category">
-			<a href="javascript:void(0);" onclick="selectBoards([', implode(', ', $category['child_ids']), ']); return false;">', $category['name'], '</a>
-			<ul>';
-
-		foreach ($category['boards'] as $board)
-		{
-			if ($i == $limit)
-				echo '
-				</ul>
-			 	 </li>
-				</ul>
-				<ul class="ignoreboards floatright">
-				 <li class="category">
-				<ul>';
-			echo '
-				 <li class="board" style="margin-', $context['right_to_left'] ? 'right' : 'left', ': ', $board['child_level'], 'em;">
-				  <label for="brd', $board['id'], '"><input type="checkbox" id="brd', $board['id'], '" name="brd[', $board['id'], ']" value="', $board['id'], '"', $board['selected'] ? ' checked="checked"' : '', ' class="input_check" /> ', $board['name'], '</label>
-				 </li>';
-			$i ++;
-		}
-		echo '
-				</ul>
-				</li>';
-	}
-	echo '
-		</ul>
 		</div>
 		<br class="clear" />';
 

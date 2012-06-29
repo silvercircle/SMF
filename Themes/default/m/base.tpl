@@ -19,6 +19,7 @@
 {$collapsed_containers = (!empty($_COOKIE.SF_collapsed)) ? (","|explode:$_COOKIE.SF_collapsed) : array()}
 <html id="_S_" lang="en-US">
   <head>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=2.0; user-scalable=1;" />
     <link rel="stylesheet" type="text/css" href="{$S.primary_css}" />
     {if $C.right_to_left > 0}
       <link rel="stylesheet" type="text/css" href="{$S.theme_url}/css/rtl.css" />
@@ -165,7 +166,6 @@
     {* Output any remaining HTML headers. (from mods, maybe?) *}
     {$C.html_headers}
     <style>
-      #main_content_section { max-width: {(!empty($O.content_width)) ? $O.content_width : '95%'}; }
       {if isset($C.css_overrides)}
       {foreach from=$C.css_overrides item=css}
       {$css}
@@ -177,6 +177,7 @@
   {$alerts = ($U.notify_count > 0) ? $U.notify_count : ''}
   {$scope = 0}
   {$search_label = $T.search_all_boards}
+  {$astream_link = '<a rel="nofollow" data-board="all" href="'|cat:$SCRIPTURL|cat:'?action=astream;sa=get;all">Recent activity</a>'}
 
   {if isset($C.current_topic)}
     {$search_label = $T.search_topic}
@@ -185,50 +186,18 @@
   {* If we're on a certain board, limit it to this board ;). *}
     {$search_label = $T.search_board}
     {$scope = 1}
+    {$astream_link = '<a data-board="'|cat:$C.current_board|cat:'" href="'|cat:$SCRIPTURL|cat:'?action=astream;sa=get;b='|cat:$C.current_board|cat:'">Recent activity</a>'}
   {/if}
   <div id="__t_script" style="display:none;"></div>
   <div id="jsconfirm" style="width:450px;" class="jqmWindow"><div class="jqmWindow_container"><div class="glass jsconfirm title"></div><div class="jsconfirm content blue_container norounded smallpadding mediummargin tinytext"></div><div class="floatright mediummargin"><span class="button default" id="c_yes">Yes</span><span class="button" id="c_no">No</span><span class="button" id="c_ok">Ok</span></div><div class="clear"></div></div></div>
   <div id="ajaxbusy" style="display:none;"><img src="{$S.images_url}/ajax-loader.gif" alt="loader" /></div>
   <div id="mcard" style="display:none;"><div onclick="mcardClose();" id="mcard_close">X</div><div id="mcard_inner"></div></div>
-  <div id="wrap" style="max-width: {($S.forum_width == 0)  ? '3000px;' : $S.forum_width};">
+  <div id="wrap" style="width:100%;">
   <header>
   <div id="header">
     {include 'header.tpl'}
-    <div class="notibar">
-      <div class="notibar right">
-      <div class="floatright">
-      <span id="curfontsize"></span>
-      <span title="{$T.font_increase}" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
-      <span title="{$T.font_decrease}" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
-      </div>
-      {if $M.astream_active}
-        <div id="notification_target" class="floatright"><a style="{($alerts > 0) ? '' : 'display:none; '}position:relative;top:-12px;right:12px;z-index:9999;" id="alerts">{$alerts}</a></div>
-      {/if}
-      <div class="floatright nowrap">
-        <ul class="dropmenu menu" id="menu_content">
-        {foreach $C.usermenu_buttons as $key => $button}
-          <li id="button_{$key}">
-            {(isset($button.link)) ? $button.link : ("<a class=\"firstlevel compact\" href=\"{$button.href}\">{$button.title}</a>")}
-          {if !empty($button.sub_buttons)}
-            &nbsp;&nbsp;<span onclick="onMenuArrowClick($(this));" style="display:inline-block;" id="_{$key}" class="m_downarrow compact">&nbsp;</span>
-            <ul style="z-index:9000;">
-              {foreach $button.sub_buttons as $sbutton}
-              <li>
-                {(isset($sbutton.link)) ? $sbutton.link : ("<a class=\"firstlevel compact\" href=\"{$sbutton.href}\">{$sbutton.title}</a>")}
-              </li>
-              {/foreach}
-            </ul>
-          {/if}
-          </li>
-        {/foreach}
-        </ul>
-      </div>
-      </div>
-      <div class="notibar_intro"></div>
-    </div>
   <nav>
   {* Show the menu here, according to the menu sub template. *}
-  {include file="menubar.tpl"}
   </nav>
   <script>
     // <![CDATA[
@@ -241,43 +210,7 @@
   <div id="content_section">
   <div id="main_content_section">
   {include file = "linktree.tpl"}
-  {$sidebar_allowed = !empty($C.show_sidebar)}
-  {$sidebar_vis = (!empty($_COOKIE.smf_sidebar_disabled)) ? false : true}
-  {if $sidebar_allowed}
-    <div onclick="sbToggle($(this));" id="sbtoggle" class="{($sidebar_vis) ? 'collapse' : 'expand'}">&nbsp;</div>
-  {/if}
   {* Show the navigation tree. *}
-  <div style="position:relative;">
-    <form onmouseout="return false;" onsubmit="submitSearchBox();" class="floatright" id="search_form" action="{$SCRIPTURL}?action=search2" method="post" accept-charset="UTF-8">
-      <div id="adv_search" style="width:246px;padding:0;" class="smalltext">
-        <input style="width:215px;padding-left:26px;margin:0;" onclick="var s_event = arguments[0] || window.event;openAdvSearch(s_event);return(false);" type="text" onfocus="if(!this._haschanged) { this.value='' } ;this._haschanged=true;" name="search" value="{$search_label}" class="searchfield" />
-        <br><br><h3 class="bbc_head l2">{$T.search_by_member}</h3>
-        <div style="text-align:center;margin-bottom:10px;">
-          <input style="width:90%;" class="input_text" type="text" name="userspec" id="userspec" value="*" />
-        </div>
-        <input class="input_check floatleft" type="checkbox" name="show_complete" id="show_complete" value="1" />&nbsp;<h3 class="bbc_head l2" style="margin-left:0;">{$T.search_show_complete_messages}</h3><br class="clear">
-        {if $scope == 2}
-        <div style="padding-left:20px;"><input type="radio" name="type" id="i_topic" class="input_radio" checked="checked" />{$T.search_topic}<br>
-            <input type="radio" name="type" id="i_board" class="input_radio" />{$T.search_board}<br>
-            <input type="radio" name="type" id="i_site" class="input_radio" />{$T.search_all_boards}
-            <input type="hidden" id="s_topic" name="topic" value="{$C.current_topic}" />
-            <input type="hidden" id="s_board" name="brd[{$C.current_board}]" value="{$C.current_board}" />
-        </div>
-        {elseif $scope == 1}
-        <div style="padding-left:20px;"><input name="type" type="radio" id="i_board" checked="checked" class="input_radio" />{$T.search_board}<br />
-            <input type="radio" name="type" id="i_site" class="input_radio" />{$T.search_all_boards}
-            <input type="hidden" id="s_board" name="brd[{$C.current_board}]" value="{$C.current_board}" />
-        </div>
-        {/if}
-          <input style="width:100%;margin:10px 0;" type="submit" name="submit" value="Search now" class="button_submit" />
-          {$url = $SCRIPTURL|cat:'?action=search'}
-          <div class="centertext"><a href="{$SUPPORT->url_action($url)}" >{$T.search_advanced}</a></div>
-        </div>
-        <noscript>
-        <input style="margin:0;" type="submit" name="submit" value="{$T.go}" class="button_submit" />
-        </noscript>
-    </form>
-  </div>
   <div class="clear cContainer_end"></div>
   {$C.template_hooks.global.above}
   {$C.additional_admin_errors}
@@ -285,22 +218,9 @@
   {if $C.news_item_count}
     {include file="notices_list.tpl"}
   {/if}
-  <aside>
-    <div id="sidebar" style="width:260px;display:{($sidebar_allowed) ? 'inline' : 'none'};">
-    {if $sidebar_allowed}
-      {include $C.sidebar_template}
-    {/if}
-  </div>
-  </aside>
-  <div id="container" style="margin-right:{($sidebar_allowed) ? '270px' : '0'};">
-  <script>
-  // <![CDATA[
-    $("#sidebar").css("display", {($sidebar_vis and $sidebar_allowed) ? '"inline"' : '"none"'});
-    $("#container").css("margin-right", {($sidebar_vis and $sidebar_allowed) ? 'sideBarWidth + 20 + "px"' : '"0"'});
-  // ]]>
-  </script>
-    {block 'content'}
-    {/block}
+  <div id="container">
+  {block 'content'}
+  {/block}
   <div class="clear"></div>
   </div></div></div>
   {* Show the "Powered by" and "Valid" logos, as well as the copyright. Remember, the copyright must be somewhere! *}

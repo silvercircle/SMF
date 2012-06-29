@@ -431,6 +431,17 @@ function selectRadioByName(oRadioGroup, sName)
 	return false;
 }
 
+function invertAll(oInvertCheckbox, oForm, sMask, bIgnoreDisabled)
+{
+	for (var i = 0; i < oForm.length; i++)
+	{
+		if (!('name' in oForm[i]) || (typeof(sMask) == 'string' && oForm[i].name.substr(0, sMask.length) != sMask && oForm[i].id.substr(0, sMask.length) != sMask))
+			continue;
+
+		if (!oForm[i].disabled || (typeof(bIgnoreDisabled) == 'boolean' && bIgnoreDisabled))
+			oForm[i].checked = oInvertCheckbox.checked;
+	}
+}
 // Keep the session alive - always!
 var lastKeepAliveCheck = new Date().getTime();
 function smf_sessionKeepAlive()

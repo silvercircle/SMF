@@ -263,7 +263,7 @@ $txt['hot_topics'] = 'Hot Topic (More than %1$d replies)';
 $txt['very_hot_topics'] = 'Very Hot Topic (More than %1$d replies)';
 $txt['locked_topic'] = 'Locked Topic';
 $txt['normal_topic'] = 'Normal Topic';
-$txt['participation_caption'] = 'Topic you have posted in';
+$txt['participation_caption'] = 'You have participated in this topic';
 
 $txt['go_caps'] = 'GO';
 
@@ -825,4 +825,6 @@ $txt['hidden_boards_setup_notice'] = '<a href="%s">Set up board ignore options</
 $txt['whatsnew_title'] = "Showing new or updated topics from the last %d days.";
 $txt['your_profile'] = 'Your profile';
 $txt['show_my_subscriptions'] = 'Show my subscribed topics';
+$txt['whatsnew_menu'] = 'What\'s new';
+$txt['view_recent_activity'] = 'View recent activity';
 ?>

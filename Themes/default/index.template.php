@@ -221,7 +221,6 @@ function template_body_above()
 	$alerts = $user_info['notify_count'] > 0 ? $user_info['notify_count'] : '';
 	$scope = 0;
 	$search_label = $txt['search_all_boards'];
-	$astream_link = '<a rel="nofollow" data-board="all" href="'.$scripturl . '?action=astream;sa=get;all"><span>View recent activity</span></a>';
 
 	if (isset($context['current_topic']) && $context['current_topic']) {
 		$search_label = $txt['search_topic'];
@@ -231,7 +230,6 @@ function template_body_above()
 	elseif (isset($context['current_board'])) {
 		$search_label = $txt['search_board'];
 		$scope = 1;
-		$astream_link = '<a data-board="'.$context['current_board'].'" href="'.$scripturl . '?action=astream;sa=get;b=' . $context['current_board']. '"><span>View recent activity</span></a>';
 	}
 	echo '
 	<div id="__t_script" style="display:none;"></div>
@@ -256,54 +254,28 @@ function template_body_above()
       		<div id="notification_target" class="floatright"><a style="',($alerts > 0 ? '' : 'display:none; '),'position:relative;top:-12px;right:12px;z-index:9999;" id="alerts">',$alerts, '</a></div>
       		<div class="floatright nowrap">
   				<ul class="dropmenu menu" id="menu_content">';
-  					if(!$context['user']['is_guest'])
-  						echo '
-				    <li id="button_profile">
-				        <a href="',URL::parse($scripturl . '?action=profile'),'" class="firstlevel compact">',$txt['your_profile'],'</a>
-				        &nbsp;&nbsp;<span onclick="onMenuArrowClick($(this));" style="display:inline-block;" id="_profile" class="m_downarrow compact">&nbsp;</span>
-				        <ul style="z-index:9000;">
-				          <li>
-				            <a href="',URL::parse($scripturl . '?action=profile;area=forumprofile'),'"><span>',$txt['forumprofile'],'</span></a>
-				          </li>
-				          <li>
-				            <a href="',URL::parse($scripturl . '?action=profile;area=account'),'"><span>',$txt['account'],'</span></a>
-				          </li>
-				          <li>
-				            <a href="',URL::parse($scripturl . '?action=pm'),'"><span>',$txt['pm_menu_read'],'</span></a>
-				          </li>
-				          <li>
-				            <a href="',URL::parse($scripturl . '?action=pm;sa=send'),'"><span>',$txt['pm_menu_send'],'</span></a>
-				          </li>
-				        </ul>
-				    </li>';
-				    echo '
-				    <li id="button_stream">
-      					<a class="firstlevel compact" href="',URL::parse($scripturl . '/whatsnew'),'">What\'s new</a>
-      					&nbsp;&nbsp;<span onclick="onMenuArrowClick($(this));" style="display:inline-block;" id="_stream" class="m_downarrow compact">&nbsp;</span>
-      					<ul style="z-index:9000;">';
-        				if($modSettings['astream_active'])
-        					echo '
-        				<li>'
-          				, $astream_link,'
-          				</li>';
-        				if(!$context['user']['is_guest']) 
-        					echo '
-        				<li>
-          					<a href="',URL::parse($scripturl . '?action=unread'),'"><span>',$txt['unread_since_visit'],'</span></a>
-        				</li>
-        				<li>
-          					<a href="',URL::parse($scripturl . '?action=unreadreplies'),'"><span>',$txt['show_unread_replies'],'</span></a>
-        				</li>';
-        				echo '
-      					</ul>
-    				</li>
-    			<li id="button_notification">';
-      			if(!$context['user']['is_guest'] && $modSettings['astream_active']) 
-      				echo '
-      				<a class="firstlevel compact" id="notification_anchor" onclick="getNotifications($(this));return(false);">Your notifications</a>';
-      			echo '
-    			</li>
-  			</ul>
+  				foreach($context['usermenu_buttons'] as $key => $button) {
+          			echo '
+          			<li id="button_',$key,'">',
+           			isset($button['link']) ? $button['link'] : ('<a class="firstlevel compact" href="'.$button['href'].'">'.$button['title'].'</a>');
+          			if(!empty($button['sub_buttons'])) {
+          				echo '
+            		&nbsp;&nbsp;<span onclick="onMenuArrowClick($(this));" style="display:inline-block;" id="_',$key,'" class="m_downarrow compact">&nbsp;</span>
+            		<ul style="z-index:9000;">';
+              			foreach($button['sub_buttons'] as $sbutton) {
+              				echo '
+              			<li>',
+                		isset($sbutton['link']) ? $sbutton['link'] : ('<a class="firstlevel compact" href="'.$sbutton['href'].'">'.$sbutton['title'].'</a>'),'
+              			</li>';
+              			}
+              		echo '
+            		</ul>';
+          			}
+          			echo '
+          			</li>';
+				}
+  				echo '
+  				</ul>
       		</div>
 			</div>
 			<div class="notibar_intro"></div>
@@ -1067,5 +1039,51 @@ function template_footer_scripts()
 	// ]]>
 	</script>
 	';
+}
+
+function template_boardlisting($prefix)
+{
+	global $context, $txt;
+
+	$i = 0;
+	$limit = ceil($context['num_boards'] / 2);
+	$nextcolumn = false;
+	echo '
+	<div class="boardlisting left">
+		<ul>';
+	foreach ($context['categories'] as $category) {
+		if(count($category['boards']) > $limit)
+			$nextcolumn = true;
+		if ($nextcolumn) {
+			echo '
+				</ul>
+				</div>
+				<div class="boardlisting right">
+					<ul>';
+
+		}
+		echo '
+					<li class="category">
+						<strong><a href="javascript:void(0);" onclick="selectBoards([', implode(', ', $category['child_ids']), ']); return false;">', $category['name'], '</a></strong>
+					</li>';
+
+		if(++$i >= $limit)
+			$nextcolumn = true;
+
+		foreach ($category['boards'] as $board) {
+			echo '
+							<li class="board">
+								<label for="',$prefix,$board['id'], '"><input type="checkbox" id="',$prefix,$board['id'], '" name="',$prefix,'[',$board['id'], ']" value="', $board['id'], '"', $board['selected'] ? ' checked="checked"' : '', ' class="input_check" /> ',
+								($board['child_level'] > 0 ? '<span class="smalltext">&#9492;&nbsp;' . str_repeat('-', $board['child_level']) : '<strong>'),$board['name'], $board['child_level'] == 0 ? '</strong>' : '</span>',
+								'</label>
+							</li>';
+
+			if(++$i >= $limit)
+				$nextcolumn = true;
+		}
+	}
+	echo '
+				</ul>
+			</div>';
 }
 ?>

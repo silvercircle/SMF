@@ -3853,9 +3853,6 @@ function setupMenuContext()
 				'is_last' => !$context['right_to_left'],
 			)
 		);
-		// Allow editing menu buttons easily.
-		HookAPI::callHook('integrate_menu_buttons', array(&$buttons));
-
 		// Now we put the buttons in the context so the theme can use them.
 		$menu_buttons = array();
 		foreach ($buttons as $act => $button)
@@ -3896,7 +3893,86 @@ function setupMenuContext()
 			CacheAPI::putCache('menu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], $menu_buttons, $cacheTime);
 	}
 
+	if(isset($context['current_board']))
+		$astream_link = '<a onclick="getAStream($(this));return(false);" rel="nofollow" data-board="'.$context['current_board'].'" href="'.$scripturl . '?action=astream;sa=get;all"><span>View recent activity</span></a>';
+	else
+		$astream_link = '<a onclick="getAStream($(this));return(false);" rel="nofollow" data-board="all" href="'.$scripturl . '?action=astream;sa=get;all"><span>View recent activity</span></a>';
+
+	if (($context['usermenu_buttons'] = CacheAPI::getCache('usermenu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], $cacheTime)) === null || time() - $cacheTime <= $modSettings['settings_updated'])
+	{
+
+		if(!$user_info['is_guest']) {
+			$context['usermenu_buttons']['profile'] = array(
+				'title' => $txt['your_profile'],
+				'href' => URL::parse($scripturl . '?action=profile'),
+				'sub_buttons' => array(
+					'forumprofile' => array(
+						'href' => URL::parse($scripturl . '?action=profile;area=forumprofile'),
+						'title' => $txt['forumprofile']
+					),
+					'account' => array(
+						'href' => URL::parse($scripturl . '?action=profile;area=account'),
+						'title' => $txt['account']
+					),
+					'pm_read' => array(
+						'href' => URL::parse($scripturl . '?action=pm'),
+						'title' => $txt['pm_menu_read']
+					),
+					'pm_send' => array(
+						'href' => URL::parse($scripturl . '?action=pm;sa=send'),
+						'title' => $txt['pm_menu_send']
+					)
+				)
+			);
+		}
+		$context['usermenu_buttons']['whatsnew'] = array(
+			'title' => $txt['whatsnew_menu'],
+			'href' => URL::parse($scripturl . '?action=whatsnew'),
+		);
+
+		if($modSettings['astream_active']) {
+			$context['usermenu_buttons']['whatsnew']['sub_buttons']['getastream'] = array(
+				'title' => $txt['view_recent_activity'],
+				'link' => $astream_link
+			);
+		}
+
+		if(!$user_info['is_guest']) {
+			$context['usermenu_buttons']['whatsnew']['sub_buttons']['unread'] = array(
+				'title' => $txt['unread_since_visit'],
+				'href' => URL::parse($scripturl . '?action=unread')
+			);
+			$context['usermenu_buttons']['whatsnew']['sub_buttons']['unread_replies'] = array(
+					'title' => $txt['show_unread_replies'],
+					'href' => URL::parse($scripturl . '?action=unreadreplies')
+			);
+			$context['usermenu_buttons']['whatsnew']['sub_buttons']['subscriptions'] = array(
+					'title' => $txt['show_my_subscriptions'],
+					'href' => URL::parse($scripturl . '?action=profile;area=notification')
+			);
+
+			if($modSettings['astream_active'])
+				$context['usermenu_buttons']['notifications'] = array(
+					'title' => 'Your notifications',
+					'link' => '<a class="firstlevel compact" rel="nofollow" onclick="getNotifications($(this));return(false);" href="'.URL::parse($scripturl . '?action=astream;sa=notifications;view=all').'">Your notifications</a>'
+				);
+		}
+
+		if (!empty($modSettings['cache_enable']) && $modSettings['cache_enable'] >= 2)
+			CacheAPI::putCache('usermenu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], $context['usermenu_buttons'], $cacheTime);
+	}
 	$context['menu_buttons'] = $menu_buttons;
+
+	if($modSettings['astream_active']) {
+		$context['usermenu_buttons']['whatsnew']['sub_buttons']['getastream'] = array(
+			'title' => $txt['view_recent_activity'],
+			'link' => $astream_link
+		);
+	}
+
+	// Allow editing menu buttons easily.
+	HookAPI::callHook('menu_buttons', array(&$context['menu_buttons'], &$context['usermenu_buttons']));
+
 
 	// Logging out requires the session id in the url.
 	if (isset($context['menu_buttons']['logout']))
