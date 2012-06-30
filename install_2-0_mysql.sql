@@ -1366,6 +1366,7 @@ CREATE TABLE {$db_prefix}likes (
   id_receiver mediumint(8) NOT NULL default '0',
   updated int(4) unsigned NOT NULL default '0',
   ctype tinyint(2) NOT NULL default '0',
+  rtype tinyint(2) NOT NULL default '1',
   PRIMARY KEY  (id_like),
   UNIQUE KEY id (id_msg,id_user,ctype),
   KEY ordering (id_msg,updated)
@@ -1378,7 +1379,7 @@ CREATE TABLE {$db_prefix}likes (
 CREATE TABLE {$db_prefix}like_cache (
 	id_msg int(10) unsigned NOT NULL default '0',
   	likes_count int(4) NOT NULL default '0',
-  	like_status varchar(255) NOT NULL default '',
+  	like_status text NOT NULL default '',
   	updated int(4) NOT NULL default '0',
   	ctype tinyint(2) NOT NULL default '0',
   	PRIMARY KEY (id_msg, ctype)
@@ -1951,7 +1952,7 @@ VALUES ('use_post_cache', '0'),
 INSERT INTO {$db_prefix}activity_types
 	(id_type, id_desc, formatter, f_neutral, f_you, f_your, f_you_your)
 VALUES 
-	(1, 'like_given', 'actfmt_default', 1, 2, 3, 3),
+	(1, 'like_given', 'actfmt_rating', 1, 2, 3, 3),
 	(2, 'new_topic', 'actfmt_default', 4, 5, 5, 5),
 	(3, 'new_reply', 'actfmt_default', 6, 7, 8, 9),
 	(4, 'modify_post', 'actfmt_default', 1, 2, 3, 4),

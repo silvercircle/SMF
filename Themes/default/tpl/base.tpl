@@ -23,7 +23,9 @@
     {if $C.right_to_left > 0}
       <link rel="stylesheet" type="text/css" href="{$S.theme_url}/css/rtl.css" />
     {/if}
-
+    {if isset($C.need_synhlt)}
+      <link rel="stylesheet" type="text/css" href="{$S.default_theme_url}/css/shlt.css" />
+    {/if}    
     {if $M.jQueryFromGoogleCDN}
       <script type="text/javascript" src="{($C.is_https) ? 'https://' : 'http://'}ajax.googleapis.com/ajax/libs/jquery/{$C.jquery_version}/jquery.min.js"></script>
     {else}
@@ -202,10 +204,10 @@
       <span title="{$T.font_decrease}" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
       </div>
       {if $M.astream_active}
-        <div id="notification_target" class="floatright"><a style="{($alerts > 0) ? '' : 'display:none; '}position:relative;top:-12px;right:12px;z-index:9999;" id="alerts">{$alerts}</a></div>
+        <div class="floatright"><a style="{($alerts > 0) ? '' : 'display:none; '}position:relative;top:-12px;right:12px;z-index:9999;" id="alerts">{$alerts}</a></div>
       {/if}
-      <div class="floatright nowrap">
-        <ul class="dropmenu menu" id="menu_content">
+      <div class="floatright nowrap" id="notification_target">
+        <ul class="dropmenu menu" id="content_menu">
         {foreach $C.usermenu_buttons as $key => $button}
           <li id="button_{$key}">
             {(isset($button.link)) ? $button.link : ("<a class=\"firstlevel compact\" href=\"{$button.href}\">{$button.title}</a>")}
@@ -214,7 +216,7 @@
             <ul style="z-index:9000;">
               {foreach $button.sub_buttons as $sbutton}
               <li>
-                {(isset($sbutton.link)) ? $sbutton.link : ("<a class=\"firstlevel compact\" href=\"{$sbutton.href}\">{$sbutton.title}</a>")}
+                {(isset($sbutton.link)) ? $sbutton.link : ("<a href=\"{$sbutton.href}\"><span>{$sbutton.title}</span></a>")}
               </li>
               {/foreach}
             </ul>
@@ -281,7 +283,6 @@
   <div class="clear cContainer_end"></div>
   {$C.template_hooks.global.above}
   {$C.additional_admin_errors}
-  
   {if $C.news_item_count}
     {include file="notices_list.tpl"}
   {/if}

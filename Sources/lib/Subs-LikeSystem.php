@@ -37,13 +37,16 @@ function GiveLike($mid)
 		$repair = isset($_REQUEST['repair']) && $user_info['is_admin'] ? true : false;
 		$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
 		$update_mode = false;
-		
+		$like_type = ((isset($_REQUEST['r']) && (int)$_REQUEST['r'] > 0) ? $_REQUEST['r'] : '1');
+
+		if(!isset($modSettings['ratings'][$like_type]))
+			AjaxErrorMsg($txt['unknown_rating_type'], $is_xmlreq);
 		if($user_info['is_guest'])
 			AjaxErrorMsg($txt['no_like_for_guests'], $is_xmlreq);
 
 		/* check for dupes */
 		$request = smf_db_query( '
-			SELECT COUNT(id_msg) as count, id_user
+			SELECT COUNT(id_msg) as count, rtype, id_user
 				FROM {db_prefix}likes AS l WHERE l.id_msg = {int:id_message} AND l.id_user = {int:id_user} AND l.ctype = {int:ctype} LIMIT 1',
 				array('id_message' => $mid, 'id_user' => $uid, 'ctype' => $content_type));
 				
@@ -51,7 +54,8 @@ function GiveLike($mid)
 		mysql_free_result($request);
 		
 		$c = intval($count[0]);
-		$like_owner = intval($count[1]);
+		$r = $like_type;
+		$like_owner = intval($count[2]);
 
 		if($c > 0 && !$remove_it && !$repair)		// duplicate like (but not when removing it)
 			AjaxErrorMsg($txt['like_verify_error'], $is_xmlreq);
@@ -77,12 +81,17 @@ function GiveLike($mid)
 		 * the likes for a post.
 		 * it may go away at a later time.
 		 */
+		EoS_Smarty::loadTemplate('xml_blocks');
+		$context['template_functions'] = 'rating_response';
+		CreateLikeBar();
+		$context['ratings_output']['mid'] = $mid;
+
 		if($repair) {
 			if(!$user_info['is_admin'])
 				obExit(false);
 			$total = LikesUpdate($mid);
 			$output = '';
-			LikesGenerateOutput($total['status'], $output, $total['count'], $mid, $c > 0 ? true : false);
+			LikesGenerateOutput($total['status'], $output, $total['count'], $mid, $c > 0 ? $r : 0);
 			// fix like stats for the like_giver and like_receiver. This might be a very slow query, but
 			// since this feature will most likely go away, right now I do not care.
 			smf_db_query('UPDATE {db_prefix}members AS m
@@ -91,8 +100,10 @@ function GiveLike($mid)
 				WHERE m.id_member = {int:owner} OR m.id_member = {int:receiver}', array('owner' => $like_owner, 'receiver' => $like_receiver));
 			invalidateMemberData(array($like_owner, $like_receiver));
 			if($is_xmlreq) {
-				echo $output;
-				obExit(false);
+				$context['ratings_output']['output'] = $output;
+				$context['ratings_output']['likebar'] = '';
+				$context['postratings'] = json_encode($context['ratings_output']);
+				return;
 			}
 			else
 				redirectexit();
@@ -125,6 +136,7 @@ function GiveLike($mid)
 					WHERE a.id_member = {int:id_member} AND a.id_type = 1 AND a.id_content = {int:id_content}',
 					array('id_member' => $uid, 'id_content' => $mid));
 
+				$context['ratings_output']['likebar'] = $context['like_bar'];
 			}
 		}
 		else {
@@ -137,8 +149,8 @@ function GiveLike($mid)
 			}
 			if(($like_receiver && !$memberContext[$like_receiver]['is_banned']) || $like_receiver == 0) {  // posts by guests can be liked
 				smf_db_query( '
-					INSERT INTO {db_prefix}likes(id_msg, id_user, id_receiver, updated, ctype) values({int:id_message}, {int:id_user}, {int:id_receiver}, {int:updated}, {int:ctype})',
-					array('id_message' => $mid, 'id_user' => $uid, 'id_receiver' => $like_receiver, 'updated' => time(), 'ctype' => $content_type));
+					INSERT INTO {db_prefix}likes(id_msg, id_user, id_receiver, updated, ctype, rtype) values({int:id_message}, {int:id_user}, {int:id_receiver}, {int:updated}, {int:ctype}, {int:rtype})',
+					array('id_message' => $mid, 'id_user' => $uid, 'id_receiver' => $like_receiver, 'updated' => time(), 'ctype' => $content_type, 'rtype' => $like_type));
 					
 				if($like_receiver)
 					smf_db_query( 'UPDATE {db_prefix}members SET likes_received = likes_received + 1 WHERE id_member = {int:id_member}',
@@ -147,59 +159,60 @@ function GiveLike($mid)
 				smf_db_query( 'UPDATE {db_prefix}members SET likes_given = likes_given + 1 WHERE id_member = {int:uid}',
 					array('uid' => $uid));
 					
-				$update_mode = true;
+				$update_mode = $like_type;
 
 				if($modSettings['astream_active']) {
 					require_once($sourcedir . '/lib/Subs-Activities.php');
 					aStreamAdd($uid, ACT_LIKE,
 							array('member_name' => $context['user']['name'],
-							  'topic_title' => $topic_title),
+							  'topic_title' => $topic_title,
+							  'rating_type' => $modSettings['ratings'][$like_type]['text']),
 							$id_board, $id_topic, $mid, $like_receiver);
 				}
 			}
+
 			else
 				AjaxErrorMsg($txt['like_cannot_like'], $is_xmlreq);
-				
+		
+			$context['ratings_output']['likebar'] = '<a rel="nofollow" class="givelike" data-fn="remove" href="#" data-id="'.$mid.'">'.$txt['unlike_label'].'</a>';
 		}
+		if($user_info['is_admin'])
+			$context['ratings_output']['likebar'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$mid.'">Repair ratings</a>';
 		$total = LikesUpdate($mid);
 		$output = '';
 		LikesGenerateOutput($total['status'], $output, $total['count'], $mid, $update_mode);
-		echo $output;
+		$context['ratings_output']['output'] = $output;
+		$context['postratings'] = json_encode($context['ratings_output']);
 	}
-	obExit(false, false, false);
 }
 
 function LikesUpdate($mid)
 {
+	global $modSettings;
+
 	$count = 0;
 	$likers = array();
 	$content_type = 1;
 
 	$request = smf_db_query( '
-		SELECT l.id_msg AS like_message, l.id_user AS like_user, m.real_name AS member_name FROM {db_prefix}likes AS l
+		SELECT l.id_msg AS like_message, l.id_user AS like_user, l.rtype, m.real_name AS member_name FROM {db_prefix}likes AS l
 			LEFT JOIN {db_prefix}members AS m on m.id_member = l.id_user WHERE l.id_msg = {int:id_message}
-				AND l.ctype = {int:ctype} AND m.id_member <> 0 ORDER BY l.updated DESC LIMIT 4',
+				AND l.ctype = {int:ctype} AND m.id_member <> 0 ORDER BY l.updated DESC',
 				array('id_message' => $mid, 'ctype' => $content_type));
 
 	while ($row = mysql_fetch_assoc($request)) {
-		if(empty($row['member_name']))
+		$rtype = $row['rtype'];
+		if(empty($row['member_name']) || !isset($modSettings['ratings'][$rtype]))
 			continue;
-		$likers[$row['like_user']] = $row['member_name'];
+		if(!isset($likers[$rtype]['count']))
+			$likers[$rtype]['count'] = 0;
+		$likers[$rtype]['count']++;
+		if(!isset($likers[$rtype]['members']))
+			$likers[$rtype]['members'][0] = array('name' => $row['member_name'], 'id' => $row['like_user']);
 		$count++;
-		if($count > 3)
-			break;
 	}
 	mysql_free_result($request);
-
-	$request = smf_db_query( '
-		SELECT COUNT(id_msg) as count
-			FROM {db_prefix}likes AS l WHERE l.id_msg = {int:id_msg} AND l.ctype = {int:ctype}',
-			array('id_msg' => $mid, 'ctype' => $content_type));
-
-	$count = mysql_fetch_row($request);
-	mysql_free_result($request);
-	$totalcount = $count[0];
-
+	$totalcount = $count;
 	smf_db_query( '
 		INSERT INTO {db_prefix}like_cache(id_msg, likes_count, like_status, updated, ctype) VALUES({int:id_msg}, {int:total}, {string:like_status}, {int:updated}, {int:ctype})
 			ON DUPLICATE KEY UPDATE updated = {int:updated}, likes_count = {int:total}, like_status = {string:like_status}',
@@ -215,6 +228,28 @@ function LikesUpdate($mid)
  * store it in $output
  * $have_liked indicates that the current user has liked the post.
  */
+
+function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_liked)
+{
+	global $txt, $modSettings;
+	$parts = array();
+
+	if(is_array($like_status)) {
+		foreach($like_status as $key => $the_like) {
+			if(isset($modSettings['ratings'][$key]) && isset($the_like['members'])) {
+				$parts[$key] = '<span data-rtype="'.$key.'" class="number">' . $the_like['count'] . '</span>&nbsp;' . $modSettings['ratings'][$key]['text'] . '&nbsp;';
+				if($the_like['count'] > 1)
+					$parts[$key] .= ($key == $have_liked ? sprintf($the_like['count'] > 2 ? $txt['you_and_others'] : $txt['you_and_other'], $the_like['count'] - 1) : '(<a rel="nofollow" onclick="getMcard('.$the_like['members'][0]['id'].', $(this));return(false);" class="mcard" href="'.URL::user($the_like['members'][0]['id'], $the_like['members'][0]['name']) .'">'.$the_like['members'][0]['name'].'</a>&nbsp;' . sprintf($the_like['count'] > 2 ? $txt['and_others'] : $txt['and_other'], $the_like['count'] - 1));
+				else
+					$parts[$key] .= ($key == $have_liked ? $txt['rated_you'] : '(<a rel="nofollow" onclick="getMcard('.$the_like['members'][0]['id'].', $(this));return(false);" class="mcard" href="'.URL::user($the_like['members'][0]['id'], $the_like['members'][0]['name']) .'">'.$the_like['members'][0]['name'].'</a>)');
+			}
+		}
+	}
+
+	if(!empty($parts))
+		$output = '<span class="ratings" data-mid="'.$mid.'"><span class="title">Ratings:</span> ' . implode(' | ', $parts) . '</span>';
+}
+/*
 
 function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_liked)
 {
@@ -244,10 +279,6 @@ function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_l
 	if($count == 0)
 		return($output);
 
-	/*
-	 * we have liked it but our entry is too old to be in the top 4, so move
-	 * it to the front and remove the oldest - we always want our own like in the first position
-	 */
 	if($have_liked && !isset($results[0])) {
 		array_pop($results);
 		$results[0] = $txt['you_liker'];
@@ -264,7 +295,16 @@ function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_l
 		$output = vsprintf($like_template[$count], $results) . '&nbsp;<a class="likedpost" onclick="getLikes('.$mid.');return(false);" rel="nofollow" href="'.$scripturl.'?action=like;sa=getlikes;m='.$mid.'">[...]</a>';
 	return($output);
 }
+*/
 
+function CreateLikeBar()
+{
+	global $context, $modSettings;
+
+	$context['like_bar'] = '';
+	foreach($modSettings['ratings'] as $key => $rating)
+		$context['like_bar'] .= '<a rel="nofollow" class="givelike" data-fn="give" href="#" data-rtype="'.$key.'">'.$rating['text'].'</a>&nbsp;&nbsp;&nbsp;';
+}
 /*
  * $row[] is supposed to hold all the relevant data for a post
  * populates all like-related fields and generates the like links
@@ -272,18 +312,21 @@ function LikesGenerateOutput($like_status, &$output, $total_likes, $mid, $have_l
  */
 function AddLikeBar(&$row, $can_give_like, $now)
 {
-	global $user_info, $txt;
+	global $user_info, $txt, $context, $modSettings;
 	
 	$row['likers'] = '';
 
-	$have_liked_it = (int)$row['liked'] > 0 ? true : false;
+	if(!isset($context['like_bar']))
+		CreateLikeBar();
+
+	$have_liked_it = (int)$row['liked'] > 0 ? $row['liked'] : false;
 
 	if($can_give_like) {
 		if($have_liked_it)
 			$row['likelink'] = '<a rel="nofollow" class="givelike" data-fn="remove" href="#" data-id="'.$row['id'].'">'.$txt['unlike_label'].'</a>';
 		else if(!$user_info['is_guest']) {
 			if($row['id_member'] != $user_info['id'])
-				$row['likelink'] = '<a rel="nofollow" class="givelike" data-fn="give" href="#" data-id="'.$row['id'].'">'.$txt['like_label'].'</a>';
+				$row['likelink'] = $context['like_bar'];
 			else
 				$row['likelink'] = '&nbsp;';
 		}
@@ -293,8 +336,9 @@ function AddLikeBar(&$row, $can_give_like, $now)
 
 	// todo: admin gets a "repair likes" link (just a debugging tool, will probably go away...)
 	if($user_info['is_admin'])
-		$row['likelink'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$row['id'].'">Repair Likes</a>';
-		
+		$row['likelink'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$row['id'].'">Repair ratings</a>';
+
+	$row['likelink'] = '<span data-likebarid="'.$row['id'].'">'. $row['likelink'] . '</span>';
 	if($row['likes_count'] > 0)
 		LikesGenerateOutput(unserialize($row['like_status']), $row['likers'], $row['likes_count'], $row['id'], $have_liked_it);
 }

@@ -21,8 +21,8 @@
       <table class="table_grid">
         <thead>
           <tr>
-            <th scope="col" class="centertext glass"><a href="{$SCRIPTURL}?action=who;start={$C.start};show={$C.show_by};sort=user{($C.sort_direction != 'down' and $C.sort_by == 'user') ? '' : ';asc'}" rel="nofollow">{$T.who_user} {($C.sort_by == 'user') ? '<img src="{$S.images_url}/sort_{$C.sort_direction}.gif" alt="" />' : ''}</a></th>
-            <th scope="col" class="centertext glass"><a href="{$SCRIPTURL}?action=who;start={$C.start};show={$C.show_by};sort=time{($C.sort_direction == 'down' and $C.sort_by == 'time') ? ';asc' : ''}" rel="nofollow">{$T.who_time} {($C.sort_by == 'time') ? '<img src="{$S.images_url}/sort_{$C.sort_direction}.gif" alt="" />' : ''}</a></th>
+            <th scope="col" class="centertext glass"><a href="{$SCRIPTURL}?action=who;start={$C.start};show={$C.show_by};sort=user{($C.sort_direction != 'down' and $C.sort_by == 'user') ? '' : ';asc'}" rel="nofollow">{$T.who_user} {($C.sort_by == 'user') ? "<img src=\"{$S.images_url}/sort_{$C.sort_direction}.gif\" alt=\"\" />" : ''}</a></th>
+            <th scope="col" class="centertext glass"><a href="{$SCRIPTURL}?action=who;start={$C.start};show={$C.show_by};sort=time{($C.sort_direction == 'down' and $C.sort_by == 'time') ? ';asc' : ''}" rel="nofollow">{$T.who_time} {($C.sort_by == 'time') ? "<img src=\"{$S.images_url}/sort_{$C.sort_direction}.gif\" alt=\"\" />" : ''}</a></th>
             <th scope="col" class="centertext glass">{$T.who_action}</th>
           </tr>
         </thead>

@@ -267,14 +267,13 @@ function showPosts($memID)
 			),
 			'attach' => array(
 			),
-			'likes' => array(
-			)
 		),
 	);
 
 	// Set the page title
 	$context['page_title'] = $txt['showPosts'] . ' - ' . $user_profile[$memID]['real_name'];
 	$context['pageindex_multiplier'] = commonAPI::getMessagesPerPage();
+	$context['can_approve_posts'] = false;
 
 	// Is the load average too high to allow searching just now?
 	if (!empty($context['load_average']) && !empty($modSettings['loadavg_show_posts']) && $context['load_average'] >= $modSettings['loadavg_show_posts'])
@@ -417,7 +416,7 @@ function showPosts($memID)
 	$topicids = array();
 	if ($context['is_topics'])
 	{
-		$context['postbit_callback'] = 'template_topicbit_generic';
+		$context['postbit_callback'] = 'template_topicbit';
 		$prereq = smf_db_query('
 			SELECT t.id_topic FROM {db_prefix}topics AS t
 			LEFT JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
@@ -442,8 +441,8 @@ function showPosts($memID)
 			$request = smf_db_query( '
 				SELECT
 					b.id_board, b.name AS bname, t.id_member_started, t.id_first_msg, t.id_last_msg, t.id_prefix, t.is_sticky, t.locked, t.num_views, t.num_replies, t.id_poll,
-					t.approved, m.id_member, m.subject AS first_subject, m.poster_time, m.id_topic, m.id_msg, m.icon,
-					m2.poster_name AS last_member_name, m2.id_member AS last_id_member, m2.poster_time AS last_poster_time,
+					t.approved, t.unapproved_posts, m.id_member, m.subject AS first_subject, m.poster_time, m.id_topic, m.id_msg, m.icon,
+					m2.poster_name AS last_member_name, m2.id_member AS last_id_member, m2.poster_time AS last_post_time,
 					IFNULL(meml.real_name, m2.poster_name) AS last_display_name, m2.subject AS last_subject, m2.icon AS last_icon,
 					p.name AS prefix_name
 				FROM {db_prefix}topics AS t
@@ -467,7 +466,7 @@ function showPosts($memID)
 			SELECT
 				b.id_board, b.name AS bname, c.id_cat, c.name AS cname, m.id_topic, m.id_msg,
 				t.id_member_started, t.id_first_msg, t.id_last_msg, m.body, m.smileys_enabled, m.id_member, m.icon,
-				m.subject, m.poster_time, m.approved, mc.body AS cached_body, c1.likes_count, c1.like_status, c1.updated AS like_updated, l.id_user AS liked,
+				m.subject, m.poster_time, m.approved, mc.body AS cached_body, c1.likes_count, c1.like_status, c1.updated AS like_updated, l.rtype AS liked,
 				m2.id_member AS id_first_member, m2.subject AS first_subject, m2.poster_time AS time_started,
 				IFNULL(mem2.real_name, m2.poster_name) AS first_poster_name
 			FROM {db_prefix}messages AS m
@@ -559,8 +558,8 @@ function showPosts($memID)
 							'href' => $l_post_mem_href,
 							'link' => !empty($row['last_id_member']) ? '<a onclick="getMcard('.$row['last_id_member'].', $(this));return(false);" href="' . $l_post_mem_href . '">' . $row['last_display_name'] . '</a>' : $row['last_display_name']
 						),
-						'time' => timeformat($row['last_poster_time']),
-						'timestamp' => forum_time(true, $row['last_poster_time']),
+						'time' => timeformat($row['last_post_time']),
+						'timestamp' => forum_time(true, $row['last_post_time']),
 						'subject' => $row['last_subject'],
 						'icon' => $row['last_icon'],
 						'icon_url' => getPostIcon($row['last_icon']),
@@ -578,6 +577,9 @@ function showPosts($memID)
 					'replies' => $row['num_replies'],
 					'prefix' => $row['prefix_name'] ? '<a href="' . $scripturl . '?board=' . $board . ';prefix=' . $row['id_prefix'] . '" class="prefix">'.(html_entity_decode($row['prefix_name']) . '</a>') : '',
 					'pages' => $pages,
+					'approved' => $row['approved'],
+					'unapproved_posts' => $row['unapproved_posts'],
+					'is_old' => !empty($modSettings['oldTopicDays']) ? (($context['time_now'] - $row['last_post_time']) > ($modSettings['oldTopicDays'] * 86400)) : false,
 				);
 				determineTopicClass($context['topics'][$row['id_topic']]);
 			}

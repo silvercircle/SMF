@@ -206,6 +206,11 @@ function reloadSettings()
 	
 	$modSettings['hidden_content_no_view_msg'] = @unserialize($modSettings['hidden_content_no_view']);
 	
+	$modSettings['ratings'] = array(
+		'1' => array('desc' => 'like', 'text' => '<strong><span style="color:green;">Like It</span></strong>', 'rawtext' => 'Like It'),
+		'2' => array('desc' => 'dislike', 'text' => '<strong><span style="color:red;">Dislike</span></strong>', 'rawtext' => 'Don\'t Like It'),
+		'3' => array('desc' => 'useful', 'text' => '<strong><span style="color:orange;">Useful</span></strong>', 'rawtext' => 'Useful')
+	);
 	require_once($sourcedir . '/SimpleSEF.php');
 	URL::init($boardurl);
 

@@ -217,7 +217,7 @@ function template_notifications_xml()
 	';
 	if($context['act_results']) {
 		echo '
-	<ol id="notifylist" class="commonlist notifications">';
+	<ol id="notifylist" class="commonlist notifications" style="max-height:400px;overflow:auto;">';
 	foreach($context['activities'] as $activity)
 		template_activitybit($activity);
 	echo '
@@ -244,6 +244,7 @@ function template_notifications_xml()
 	</div>';
 	echo '
 	</div>
+	<div class="clear"></div>
 	';
 	template_notifications_scripts();
 	echo '
@@ -254,18 +255,14 @@ echo <<<EOT
  <![CDATA[
 	function _h_notify_popup(content)
 	{
-	var wrapper = $('<div id="notify_wrapper" class="popup_wrapper"></div>');
+	var wrapper = $('<div id="notify_wrapper" class="popup_wrapper" style="float:right;position:relative;margin-right:20px;"></div>');
 	wrapper.html(content);
-	$('#notification_target').append(wrapper);
+	$('#notification_target').after(wrapper);
 	$('div.inlinePopup abbr.timeago').timeago();
 	$('#notificationsBody').live('mouseleave',function(event) {
 		$('#notify_wrapper').remove();
 	});
 	return;
-	}
-	function test_handler()
-	{
-	alert('test');
 	}
  ]]>
  </handler>

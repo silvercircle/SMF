@@ -41,6 +41,9 @@ function template_html_above()
 	if ($context['right_to_left'])
 		echo '
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/rtl.css" />';
+    if(isset($context['need_synhlt']))
+    	echo '
+    <link rel="stylesheet" type="text/css" href="',$settings['default_theme_url'],'/css/shlt.css" />';
 
 	// Here comes the JavaScript bits!
 	if(!empty($modSettings['jQueryFromGoogleCDN']))
@@ -251,8 +254,8 @@ function template_body_above()
 			<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
 			<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
 			</div>
-      		<div id="notification_target" class="floatright"><a style="',($alerts > 0 ? '' : 'display:none; '),'position:relative;top:-12px;right:12px;z-index:9999;" id="alerts">',$alerts, '</a></div>
-      		<div class="floatright nowrap">
+      		<div class="floatright"><a style="',($alerts > 0 ? '' : 'display:none; '),'position:relative;top:-12px;right:12px;z-index:9999;" id="alerts">',$alerts, '</a></div>
+      		<div class="floatright nowrap" id="notification_target">
   				<ul class="dropmenu menu" id="menu_content">';
   				foreach($context['usermenu_buttons'] as $key => $button) {
           			echo '
@@ -265,7 +268,7 @@ function template_body_above()
               			foreach($button['sub_buttons'] as $sbutton) {
               				echo '
               			<li>',
-                		isset($sbutton['link']) ? $sbutton['link'] : ('<a class="firstlevel compact" href="'.$sbutton['href'].'">'.$sbutton['title'].'</a>'),'
+                		isset($sbutton['link']) ? $sbutton['link'] : ('<a href="'.$sbutton['href'].'"><span>'.$sbutton['title'].'</span></a>'),'
               			</li>';
               			}
               		echo '

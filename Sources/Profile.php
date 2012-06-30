@@ -378,6 +378,10 @@ function ModifyProfile($post_errors = array())
 		unset($profile_areas['info']['areas']['activities']['subsections']['settings']);
 	}
 
+	if(!$context['user']['is_owner'] && !allowedTo('can_view_ratings')) {
+		unset($profile_areas['info']['areas']['showposts']['subsections']['likes']);
+		unset($profile_areas['info']['areas']['showposts']['subsections']['likesout']);
+	}
 	// Let them modify profile areas easily.
 	HookAPI::callHook('integrate_profile_areas', array(&$profile_areas));
 

@@ -150,6 +150,36 @@ function aStreamAddNotification(&$users, $id_act, $id_type)
 /**
  * @param $params (array with relevant stream entry data)
  *
+ * ratings need a special formatter to "anonymize" rating activities
+ * for members who do not have the permission to view detailed ratings.
+ */
+function actfmt_rating(&$params)
+{
+	global $user_info, $txt, $context;
+
+	if(!isset($context['can_view_ratings']))
+		$context['can_view_ratings'] = allowedTo('can_view_ratings');
+
+	$key = $params['f_neutral'];
+	if((int)$params['id_member'] === (int)$user_info['id'] && $params['id_owner'] && (int)$params['id_owner'] === (int)$user_info['id'])
+		$key = $params['f_you_your'];
+	else if((int)$params['id_member'] === (int)$user_info['id'])
+		$key = $params['f_you'];
+	else if($params['id_owner'] && (int)$params['id_owner'] === (int)$user_info['id'])
+	    $key = $params['f_your'];
+
+	$_k = 'acfmt_' . $params['id_desc'] . '_' . trim($key) . ($context['can_view_ratings'] ? '' : '_a');
+	if(isset($txt[$_k]))
+		return(_vsprintf($txt[$_k], $params));
+	else {
+		$_s = sprintf($txt['activity_missing_format'], $params['id_type']);
+		log_error($_s);
+		return($_s);
+	}
+}
+/**
+ * @param $params (array with relevant stream entry data)
+ *
  * standard formatter for activity stream entries. Gets the formatting string from the language
  * file. format must be: acfmt_activity_id_x (where x is the subtype)
  *

@@ -132,7 +132,7 @@
     {if $child.is_redirect == 0}
       {$link = "<h4 class=\"childlink\"><a data-tip=\"tip_b_{$child.id}\" href=\"{$child.href}\" class=\"child_boardlink easytip\">{$child.name}</a></h4>"}
       {$img = "<div class=\"csrcwrapper16px\" style=\"left:-12px;margin-bottom:-16px;\"><img class=\"clipsrc {($child.new) ? '_child_new' : '_child_old'}\" src=\"{$C.sprite_image_src}\" alt=\"\" /></div>"}
-      {$tip = "<div id=\"tip_b_{$child.id}\" style=\"display:none;\">{(!empty($child.description)) ? ($child.description|cat:'<br>') : ''}{($child.new) ? $T.new_posts : $T.old_posts} (' {$T.board_topics}': {$child.topics|comma_format}, {$T.posts}: {$child.posts|comma_format})</div>"}
+      {$tip = "<div id=\"tip_b_{$child.id}\" style=\"display:none;\">{(!empty($child.description)) ? ($child.description|cat:'<br>') : ''}{($child.new) ? $T.new_posts : $T.old_posts} ({$T.board_topics}: {$child.topics|comma_format}, {$T.posts}: {$child.posts|comma_format})</div>"}
     {else}
       {$link = "<a class=\"child_boardlink\" href=\"{$child.href}\" title=\"{$child.posts|comma_format} {$T.redirects}\"><h4>{$child.name}</h4></a>&nbsp;<span class=\"tinytext lowcontrast\">({$child.description})</span>"}
       {$img = ''}

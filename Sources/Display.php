@@ -1134,7 +1134,7 @@ function Display()
 
 		$sql_what = '
 			m.id_msg, m.icon, m.subject, m.poster_time, m.poster_ip, m.id_member, m.modified_time, m.modified_name, m.body, mc.body AS cached_body,
-			m.smileys_enabled, m.poster_name, m.poster_email, m.approved, m.locked, c.likes_count, c.like_status, c.updated AS like_updated, l.id_user AS liked,
+			m.smileys_enabled, m.poster_name, m.poster_email, m.approved, m.locked, c.likes_count, c.like_status, c.updated AS like_updated, l.rtype AS liked,
 			m.id_msg_modified < {int:new_from} AS is_read';
 
 		$sql_from_tables = '

@@ -1292,6 +1292,31 @@ function setBusy(mode)
 
 var menu_active = false;
 
+function giveLike(_el)
+{
+	var r, mid;
+	switch(_el.attr('data-fn')) {
+		case 'give':
+			r = parseInt(_el.attr('data-rtype'));
+			mid = parseInt(_el.parent().attr('data-likebarid'));
+			if(mid > 0 && r > 0)
+				sendRequest('action=xmlhttp;sa=givelike;m=' + mid + ';r=' + r, null);
+		    break;
+		case 'remove':
+			mid = parseInt(_el.attr('data-id'));
+			if(mid > 0)
+				sendRequest('action=xmlhttp;sa=givelike;remove=1;m=' + mid, null);
+		    break;
+		case 'repair':
+			mid = parseInt(_el.attr('data-id'));
+			if(mid > 0)
+				sendRequest('action=xmlhttp;sa=givelike;repair=1;m=' + mid, null);
+			break;
+		default:
+			break;
+	}
+	return(false);
+}
 jQuery(document).ready(function() {
 	
 	// this kills the pure CSS hover effect from the dropdown menus so they will
@@ -1335,22 +1360,7 @@ jQuery(document).ready(function() {
 		return(false);
 	});
 	$('.givelike').click(function() {
-		var mid = parseInt($(this).attr('data-id'));
-		if(mid > 0) {
-			switch($(this).attr('data-fn')) {
-				case 'give':
-					sendRequest('action=xmlhttp;sa=givelike;m=' + mid, $(this));
-				    break;
-				case 'remove':
-					sendRequest('action=xmlhttp;sa=givelike;remove=1;m=' + mid, $(this));
-				    break;
-				case 'repair':
-					sendRequest('action=xmlhttp;sa=givelike;repair=1;m=' + mid, $(this));
-					break;
-				default:
-					break;
-			}
-		}
+		giveLike($(this));
 		return(false);
 	});
 	$('table.table_grid td .input_check, table.topic_table td .input_check').change(function() {
@@ -1680,19 +1690,6 @@ function response(ele, responseText)
 {
 	try {
 		setBusy(0);
-		if(ele.attr('class') == 'givelike') {
-			var id = '#likers_msg_' + ele.attr('data-id');
-			$(id).html(responseText);
-			if(ele.attr('data-fn') == 'give') {
-				ele.attr('data-fn', 'remove');
-				ele.html(smf_unlikelabel);
-			}
-			else if(ele.attr('data-fn') == 'remove'){
-				ele.attr('data-fn', 'give');
-				ele.html(smf_likelabel);
-			}
-			return;
-		}
 		if(ele.attr('id') == 'addtag') {
 			$('#addtag').before(responseText);
 			return;

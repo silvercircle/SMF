@@ -13,9 +13,22 @@
  *
  * implements UI features for the content - liking system.
  */
+function FixLikes()
+{
+	global $sourcedir;
+
+	require_once($sourcedir . '/lib/Subs-LikeSystem.php');
+
+	$result = smf_db_query('SELECT id_msg FROM {db_prefix}messages');
+	while($row = mysql_fetch_assoc($result))
+		LikesUpdate($row['id_msg']);
+
+	mysql_free_result($result);
+}
+
 function LikeDispatch()
 {
-	global $context, $board, $memberContext, $txt;
+	global $context, $board, $memberContext, $txt, $user_info;
 
 	$xml = isset($_REQUEST['xml']) ? true : false;
 	$action = isset($_REQUEST['sa']) ? $_REQUEST['sa'] : '';
@@ -24,6 +37,10 @@ function LikeDispatch()
 	$ctype = isset($_REQUEST['ctype']) ? $_REQUEST['ctype'] : 1;		// default to content type = 1 (post)
 	$mid = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
 
+	if($user_info['is_admin'] && $action === 'fixlikes') {
+		FixLikes();
+		return;
+	}
 	if($mid) {
 		if(!isset($board) || !$board) {
 			$request = smf_db_query('SELECT m.id_topic, t.id_board FROM {db_prefix}messages AS m
@@ -77,6 +94,9 @@ function LikesByUser($memID)
 {
 	global $context, $user_info, $scripturl, $memberContext, $txt, $modSettings, $options;
 	
+	if($memID != $user_info['id'])
+		isAllowedTo('can_view_ratings');
+
 	// let us use the same value as for topics per page here.
 	$perpage = empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) ? $options['topics_per_page'] : $modSettings['defaultMaxTopics'];
 	$out = $_GET['sa'] === 'likesout';			// display likes *given* instead of received ones
@@ -104,7 +124,7 @@ function LikesByUser($memID)
 	mysql_free_result($request);
 
 	$request = smf_db_query('
-		SELECT m.subject, m.id_topic, l.id_user, l.id_receiver, l.updated, l.id_msg, mfirst.subject AS first_subject, SUBSTRING(m.body, 1, 150) AS body FROM {db_prefix}likes AS l
+		SELECT m.subject, m.id_topic, l.id_user, l.id_receiver, l.updated, l.id_msg, l.rtype, mfirst.subject AS first_subject, SUBSTRING(m.body, 1, 150) AS body FROM {db_prefix}likes AS l
 			INNER JOIN {db_prefix}messages AS m ON (m.id_msg = l.id_msg)
 			INNER JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic)
 			INNER JOIN {db_prefix}messages AS mfirst ON (mfirst.id_msg = t.id_first_msg)
@@ -138,6 +158,7 @@ function LikesByUser($memID)
 				'subject' => $row['subject'],
 				'id' => $row['id_msg']
 			),
+			'rtype' => $row['rtype'],
 			'teaser' => strip_tags(preg_replace('~[[\/\!]*?[^\[\]]*?]~si', '', $row['body'])) . '...',
 			'morelink' => URL::parse('?msg=' . $row['id_msg'] . ';perma')
 		);
@@ -146,9 +167,9 @@ function LikesByUser($memID)
 	foreach($context['likes'] as &$like) {
 		loadMemberContext($like['id_user']);
 		$like['member'] = &$memberContext[$like['id_user']];
-		$like['text'] = $out ? ($is_owner ? sprintf($txt['liked_a_post'], $is_owner ? $txt['you_liker'] : $memberContext[$memID]['name'], $memberContext[$like['id_user']]['link'], $like['post']['href'], $like['topic']['link']) : sprintf($txt['liked_a_post'], $is_owner ? $txt['you_liker'] : $memberContext[$memID]['name'], $memberContext[$like['id_user']]['link'], $like['post']['href'], $like['topic']['link'])) :
-				($is_owner ? sprintf($txt['liked_your_post'], $like['id_user'] == $user_info['id'] ? $txt['you_liker'] : $like['member']['link'], $like['post']['href'], $like['topic']['link']) :
-				sprintf($txt['liked_a_post'], $like['id_user'] == $user_info['id'] ? $txt['you_liker'] : $like['member']['link'], $memberContext[$memID]['name'], $like['post']['href'], $like['topic']['link']));
+		$like['text'] = $out ? ($is_owner ? sprintf($txt['liked_a_post'], $is_owner ? $txt['you_liker'] : $memberContext[$memID]['name'], $memberContext[$like['id_user']]['link'], $like['post']['href'], $like['topic']['link'], $modSettings['ratings'][$like['rtype']]['text']) : sprintf($txt['liked_a_post'], $is_owner ? $txt['you_liker'] : $memberContext[$memID]['name'], $memberContext[$like['id_user']]['link'], $like['post']['href'], $like['topic']['link'], $modSettings['ratings'][$like['rtype']]['text'])) :
+				($is_owner ? sprintf($txt['liked_your_post'], $like['id_user'] == $user_info['id'] ? $txt['you_liker'] : $like['member']['link'], $like['post']['href'], $like['topic']['link'], $modSettings['ratings'][$like['rtype']]['text']) :
+				sprintf($txt['liked_a_post'], $like['id_user'] == $user_info['id'] ? $txt['you_liker'] : $like['member']['link'], $memberContext[$memID]['name'], $like['post']['href'], $like['topic']['link'], $modSettings['ratings'][$like['rtype']]['text']));
 	}
 	mysql_free_result($request);
 	$context['sub_template'] = 'showlikes';

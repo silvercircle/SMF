@@ -72,7 +72,34 @@
   </handler>
 </document>
 {/function}
+{function rating_response}
+<document>
+  <response open="private_handler" fn="_h_ratings_return" />
+  <content>
+    <![CDATA[
+    {$C.postratings}
+    ]]>
+  </content>
+  <handler>
+  <![CDATA[
+  function _h_ratings_return(content)
+  {
+    result = $.parseJSON(content);
+    if(result['mid'] > 0) {
+      $('span#likers_msg_' + result['mid']).html(result['output']);
+      if(result['likebar'].length > 0)
+        $('span[data-likebarid="' + result['mid'] + '"]').html(result['likebar']);
+    }
 
+    $('.givelike').click(function() {
+      giveLike($(this));
+      return(false);
+    });
+  }
+  ]]>
+  </handler>
+</document>
+{/function}
 {foreach from=$C.template_functions item=fn}
 {call name=$fn}
 {/foreach}

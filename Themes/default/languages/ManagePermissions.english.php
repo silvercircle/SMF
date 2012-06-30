@@ -218,6 +218,8 @@ $txt['permissionname_post_links'] = 'Post links';
 $txt['permissionhelp_post_links'] = 'This permission is needed to post clickable links. When disallowed, links will be converted to plain text in posts made by this user. The target URL will still be visible but not as a clickable link.<br><br><strong>Note:&nbsp;</strong>This permission is only used when the the <strong>Use link security</strong> feature is enabled in the BBC settings.';
 $txt['permissionname_can_dismiss_news'] = 'Can dismiss news items';
 $txt['permissionhelp_can_dismiss_news'] = 'Allow members to dismiss (hide) news items and board notices. Note that a mandatory news items cannot be dismissed at all, regardless of this permission setting unless you are an administrator.';
+$txt['permissionname_can_view_ratings'] = 'Can see detailed ratings';
+$txt['permissionhelp_can_view_ratings'] = 'Allow members to view detailed post rating reports and see given and received ratings in the member profile of other members.';
 
 $txt['permissiongroup_poll'] = 'Polls';
 $txt['permissionname_poll_view'] = 'View polls';
@@ -352,10 +354,10 @@ $txt['auto_approve_topics'] = 'Post new topics, without requiring approval';
 $txt['auto_approve_replies'] = 'Post replies to topics, without requiring approval';
 $txt['auto_approve_attachments'] = 'Post attachments, without requiring approval';
 
-$txt['permissiongroup_like'] = 'Like system';
-$txt['permissiongroup_simple_like'] = 'Like system';
-$txt['permissionname_like_see'] = "See likes on posts";
-$txt['permissionname_like_give'] = "Gives likes on posts";
+$txt['permissiongroup_like'] = 'Rating system';
+$txt['permissiongroup_simple_like'] = 'Rating system';
+$txt['permissionname_like_see'] = "See ratings below posts";
+$txt['permissionname_like_give'] = "Use the post ratings system";
 $txt['permissiongroup_share'] = 'Enable share links';
 $txt['permissiongroup_simple_share'] = 'Enable share links';
 $txt['permissionname_use_share'] = "Use social media share bar";

@@ -24,7 +24,7 @@
       {if $attachment.is_approved == 0 and $C.can_approve}
         [<a href="{$SCRIPTURL}?action=attachapprove;sa=approve;aid={$attachment.id};{$C.session_var}={$C.session_id}">{$T.approve}</a>]&nbsp;|&nbsp;[<a href="{$SCRIPTURL}?action=attachapprove;sa=reject;aid={$attachment.id};{$C.session_var}={$C.session_id}">{$T.delete}</a>]
       {/if}
-      {$attachment.size}{($attachment.is_image) ? (', '|cat:$attachment.real_width|cat:'x'|cat:$attachment.real_height|cat:'<br>'|cat:$T.attach_viewed) : ('<br>'|cat:$T.attach_downloaded|cat:' '|cat:$attachment.downloads|cat:' '|cat:$T.attach_times|cat:'.<br>')}
+      {$attachment.size}{($attachment.is_image) ? (', '|cat:$attachment.real_width|cat:'x'|cat:$attachment.real_height|cat:'<br>'|cat:$T.attach_viewed|cat:': '|cat:$attachment.downloads|cat:' '|cat:$T.attach_times) : ('<br>'|cat:$T.attach_downloaded|cat:' '|cat:$attachment.downloads|cat:' '|cat:$T.attach_times|cat:'.<br>')}
       </li>
     {/foreach}
     {if $last_approved_state == 0}
@@ -392,7 +392,7 @@
 {if $message.likes_count > 0 or !empty($message.likelink)}
   <div class="likebar">
     <div class="floatright">{$message.likelink}</div>
-    <span id="likers_msg_{$ID}">{$message.likers }}</span>
+    <span id="likers_msg_{$ID}">{$message.likers}</span>
     <div class="clear_right"></div>
   </div>
 {/if}

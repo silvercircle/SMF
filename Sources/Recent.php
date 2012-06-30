@@ -309,7 +309,7 @@ function RecentPosts()
 	$request = smf_db_query( '
 		SELECT
 			m.id_msg, m.subject, m.smileys_enabled, m.poster_time, m.body, m.icon, m.id_topic, t.id_board, b.id_cat, mc.body AS cached_body,
-			b.name AS bname, c.name AS cname, t.num_replies, m.id_member, m2.id_member AS id_first_member, lc.likes_count, lc.like_status, lc.updated AS like_updated, l.id_user AS liked,
+			b.name AS bname, c.name AS cname, t.num_replies, m.id_member, m2.id_member AS id_first_member, lc.likes_count, lc.like_status, lc.updated AS like_updated, l.rtype AS liked,
 			IFNULL(mem2.real_name, m2.poster_name) AS first_poster_name, t.id_first_msg, m2.subject AS first_subject, m2.poster_time AS time_started,
 			IFNULL(mem.real_name, m.poster_name) AS poster_name, t.id_last_msg
 		FROM {db_prefix}messages AS m

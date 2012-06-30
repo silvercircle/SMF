@@ -34,6 +34,7 @@ CREATE TABLE {$db_prefix}likes (
   id_receiver mediumint(8) NOT NULL default '0',
   updated int(4) unsigned NOT NULL default '0',
   ctype tinyint(2) NOT NULL default '0',
+  rtype tinyint(2) NOT NULL default '1',
   PRIMARY KEY  (id_like),
   UNIQUE KEY id (id_msg,id_user,ctype),
   KEY ordering (id_msg,updated)
@@ -49,7 +50,7 @@ CREATE TABLE {$db_prefix}likes (
 CREATE TABLE {$db_prefix}like_cache (
 	id_msg int(10) unsigned NOT NULL default '0',
   	likes_count int(4) unsigned NOT NULL default '0',
-  	like_status varchar(255) NOT NULL default '',
+  	like_status text NOT NULL default '',
   	updated int(4) NOT NULL default '0',
   	ctype tinyint(2) NOT NULL default '0',
   	PRIMARY KEY (id_msg, ctype)

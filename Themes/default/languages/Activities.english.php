@@ -47,9 +47,13 @@ $txt['activity_missing_callback'] = 'Invalid or missing formatter callback for a
  * seen event for the notification.
  */
 
-$txt['acfmt_like_given_1'] = '<a href="@URL_MEMBER@">%member_name$s</a> liked <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
-$txt['acfmt_like_given_2'] = 'You liked <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
-$txt['acfmt_like_given_3'] = '<a href="@URL_MEMBER@">%member_name$s</a> liked <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s@NM@#msg%id_content$s">your post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
+$txt['acfmt_like_given_1_a'] = '<a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">A post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a> has been rated with <strong>%rating_type$s</strong>';
+$txt['acfmt_like_given_2_a'] = 'You rated <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> with <strong>%rating_type$s</strong> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
+$txt['acfmt_like_given_3_a'] = '<a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s@NM@#msg%id_content$s">Your post</a> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a> has been rated with <strong>%rating_type$s</strong>';
+
+$txt['acfmt_like_given_1'] = '<a href="@URL_MEMBER@">%member_name$s</a> rated <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> with <strong>%rating_type$s</strong> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
+$txt['acfmt_like_given_2'] = 'You rated <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s#msg%id_content$s">a post</a> with <strong>%rating_type$s</strong> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
+$txt['acfmt_like_given_3'] = '<a href="@URL_MEMBER@">%member_name$s</a> rated <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s@NM@#msg%id_content$s">your post</a> with <strong>%rating_type$s</strong> in <a href="@SCRIPTURL@?topic=%id_topic$s">%topic_title$s</a>';
 
 $txt['acfmt_new_topic_4'] = '<a href="@URL_MEMBER@">%member_name$s</a> posted a <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s">new topic</a> in <a href="@SCRIPTURL@?board=%id_board$s">%board_name$s</a>';
 $txt['acfmt_new_topic_5'] = 'You posted a <a href="@SCRIPTURL@?topic=%id_topic$s">new topic</a> in <a href="@SCRIPTURL@?board=%id_board$s">%board_name$s</a>';

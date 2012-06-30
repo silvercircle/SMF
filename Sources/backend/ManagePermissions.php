@@ -1499,6 +1499,7 @@ function loadAllPermissions($loadType = 'classic')
 			'drafts_autosave_allow' => array(false, 'drafts', 'drafts'),
 			'post_links' => array(false, 'general', 'general'),
 			'can_dismiss_news' => array(false, 'general', 'general'),
+			'can_view_ratings' => array(false, 'general', 'general')
 		),
 		'board' => array(
 			'moderate_board' => array(false, 'general_board', 'moderate'),
