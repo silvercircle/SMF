@@ -846,6 +846,9 @@ class Topiclist {
 
 		global $context, $txt, $user_info, $scripturl, $options, $memberContext, $modSettings;
 
+		if(!isset($context['pageindex_multiplier']))
+			$context['pageindex_multiplier'] = commonAPI::getMessagesPerPage();
+
 		while ($row = mysql_fetch_assoc($request))
 		{
 			censorText($row['subject']);

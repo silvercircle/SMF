@@ -440,8 +440,7 @@ function JavaScriptEscape($string)
 // Rewrite URLs to include the session ID.
 function ob_sessrewrite($buffer)
 {
-	global $scripturl, $modSettings, $context, $user_info, $txt, $time_start, $db_count;
-
+	global $scripturl, $modSettings, $context, $user_info, $txt, $time_start, $db_count, $boardurl;
 	/*
 	 * tidy support as a debugging option to generate prettified output 
 	 * right now, tidy twig templates and only do it for the admin when 'tidyup' is set in the request string (tidy can be slow) 
@@ -464,8 +463,7 @@ function ob_sessrewrite($buffer)
 	if ($scripturl == '' || !defined('SID'))
 		return $buffer;
 
-	// Do nothing if the session is cookied, or they are a crawler - guests are caught by redirectexit().  This doesn't work below PHP 4.3.0, because it makes the output buffer bigger.
-	// !!! smflib
+	// rewrite urls with PHPSESSID, but only if the session isn't cookied and NOT for spiders
 	if (empty($_COOKIE) && SID != '' && empty($context['browser']['possibly_robot']))
 		$buffer = preg_replace('/"' . preg_quote($scripturl, '/') . '(?!\?' . preg_quote(SID, '/') . ')\\??/', '"' . $scripturl . '?' . SID . '&amp;', $buffer);
 	// Debugging templates, are we?

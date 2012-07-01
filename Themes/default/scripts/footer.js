@@ -1433,6 +1433,10 @@ jQuery(document).ready(function() {
 	function() {
 		$(this).css('opacity', '0.4');
 	});
+	$('span.ratings span.number').click(function() {
+		sendRequest('action=like;sa=getlikes;m=' + parseInt($(this).parent().attr('data-mid'))  + ';r=' + parseInt($(this).attr('data-rtype')), null);
+		return(false);
+	});
 });
 
 /*
@@ -1608,7 +1612,7 @@ function sendRequest(request, anchor_element)
 	if(_is_locked)
 		return;
 		
-	request = request + ';' + sSessionVar + '='	+ sSessionId + ';xml';
+	request = request + ';' + sSessionVar + '='	+ sSessionId + ';xml' + sSID;
 	var sUrl = smf_prepareScriptUrl(smf_scripturl) + request;
 	setBusy(1);
 	if(anchor_element == null)

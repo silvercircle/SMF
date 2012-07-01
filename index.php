@@ -86,7 +86,7 @@ $context['template_hooks']['global'] = array(
 	'header' => ''
 );
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
-$context['jsver'] = '?v=1551';
+$context['jsver'] = '?v=1552';
 $context['jquery_version'] = '1.7.2';
 $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();
@@ -165,9 +165,14 @@ function smf_main()
 		loadTheme();
 		EoS_Smarty::init();
 	}
-	//EoS_Plugin_Loader::install('myplugin');
+	//EoS_Plugin_Loader::install('fnotes');
 	//HookApi::clearAllHooks();
 	// Check if the user should be disallowed access.
+	URL::setSID();
+	array_unshift($context['linktree'], array(
+		'url' => URL::home(),
+		'name' => $context['forum_name_html_safe']
+	));
 	is_not_banned();
 
 	$context['can_see_hidden_level1'] = allowedTo('see_hidden1');

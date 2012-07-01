@@ -428,9 +428,9 @@ function showActivitiesProfileSettings($memID)
 			if(!empty($t['longdesc_not']) && (!isset($_REQUEST['not_check_' . $_id]) || empty($_REQUEST['not_check_' . $_id])))
 				$new_not_optout[] = $_id;
 		}
-		if(count(array_unique($new_act_optout)) > 0)
+		//if(count(array_unique($new_act_optout)) > 0)
 			$update_array['act_optout'] = implode(',', array_unique($new_act_optout));
-		if(count(array_unique($new_not_optout)) > 0)
+		//if(count(array_unique($new_not_optout)) > 0)
 			$update_array['notify_optout'] = implode(',', array_unique($new_not_optout));
 
 		if(count($update_array))

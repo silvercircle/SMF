@@ -11,9 +11,11 @@
  *
  * @version 1.0pre
  *
- * This specific module is based on SimpleSEF for SMF 2.0, (C) by Matt Zuba.
+ * class SimpleSEF is based on SimpleSEF for SMF 2.0, (C) by Matt Zuba and 
+ * licensed under the terms of the MPL version 1.1.
  * See license note below.
  */
+
 /* * **** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1
  *
@@ -57,6 +59,7 @@ class URLFactory {
 	private $suffix;
 	private $topics_base;
 	private $profile_base;
+	private $sid = '';
 
 	public function __construct($b)
 	{
@@ -71,6 +74,23 @@ class URLFactory {
 		$this->profile_base = $this->boardurl . '/profile/';
 	}
 
+	/**
+	 * for uncookied sessions with SEF URLs active, we need to know the SID (PHPSESSID), 
+	 * because generated SEF URLs are ignored in ob_sessrewrite().
+	 */
+	public function setSID()
+	{
+		global $context;
+		// 1) session is not cookied, 2) SID is defined and (hopefully) valid, and 3) visitor is NOT a spider
+		if (empty($_COOKIE) && SID != '' && empty($context['browser']['possibly_robot'])) {
+			$this->sid = '/' . strtr(SID, '=', '.');
+			$this->topics_base = $this->boardurl . $this->sid . $this->topics_fragment;
+		}
+	}
+	public function haveSID()
+	{
+		return !empty($this->sid) ? true : false;
+	}
 	/**
 	 * @static
 	 * @param $topicid				our topic id
@@ -101,7 +121,7 @@ class URLFactory {
 		$_id = (int)$id;
 		if(!isset($this->usernames[$_id]))
 			$this->usernames[$_id] = SimpleSEF::encode($name);
-		return($this->profile_base . $this->usernames[$_id] . $this->sep . $_id);
+		return($this->profile_base . $this->usernames[$_id] . $this->sep . $_id . $this->sid);
 	}
 
 	/**
@@ -116,19 +136,19 @@ class URLFactory {
 		$_id = (int)$id;
 		if(!isset($this->boardnames[$_id]))
 			$this->boardnames[$_id] = SimpleSEF::encode($boardname);
-		return($this->boardurl . '/' . $this->boardnames[$_id] . '.' . trim($id) . ($start > 0 || $force_start ? ('-' . $start) : ''));
+		return($this->boardurl . $this->sid . '/' . $this->boardnames[$_id] . '.' . trim($id) . ($start > 0 || $force_start ? ('-' . $start) : ''));
 	}
 
 	public function home()
 	{
-		return($this->boardurl . '/');
+		return($this->boardurl . $this->sid);
 	}
 
 	public function action($a)
 	{
 		if(stripos($a, '=admin') !== false)
 			return($a);
-		return(preg_replace('~\b' . preg_quote($this->scripturl) . '\?action=([a-zA-Z0-9]+)(.*)~', $this->boardurl . '/$1$2', $a));
+		return(preg_replace('~\b' . preg_quote($this->scripturl) . '\?action=([a-zA-Z0-9]+)(.*)~', $this->boardurl . '/$1$2', $a) . $this->sid);
 	}
 
 	public function addParam($url, $params, $append = false)
@@ -143,7 +163,7 @@ class URLFactory {
 			//return str_replace($this->boardurl, $this->boardurl . $newparam, $url);
 			return $append ? ((rtrim($url, '/') . $newparam)) : str_replace($this->boardurl, $this->boardurl . $newparam, $url);
 		}
-		return($url);
+		return($url . $this->sid);
 	}
 
 	/**
@@ -171,7 +191,7 @@ class URLFactory {
 			}
 			$url = str_replace(array_keys($replacements), array_values($replacements), $url);
 		}
-		return(trim($url));
+		return(rtrim(trim($url), '/') . $this->sid);
 	}
 }
 
@@ -196,7 +216,17 @@ class URL {
 		self::$boardurl = rtrim($b, '/');
 		self::$scripturl = 	self::$boardurl . '/index.php';
 	}
-	
+
+	public static function setSID()	
+	{
+		if(self::$is_sef)
+			self::$impl->setSID();
+	}
+	public static function haveSID()
+	{
+		return self::$is_sef ? self::$impl->haveSID() : false;
+	}
+
 	public static function topic($topicid, $topicname, $start = 0, $force_start = true, $msgfragment = '', $a = '')
 	{
 		if(self::$is_sef)

@@ -108,6 +108,10 @@ function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $
 	// to the notifications table.
 	if($id_act && $id_owner && in_array($atype, $act_must_notify) && !$dont_notify)
 		aStreamAddNotification($id_owner, $id_act, $atype);
+
+	$data = array('id_member' => $id_member, 'type' => $atype, 'params' => $params, 'board' => $id_board, 'topic' => $id_topic,
+				'content_id' => $id_content, 'id_owner' => $id_owner, 'plevel' => $priv_level, 'event_id' => $id_act);
+	HookAPI::callHook('astream_event_added', array(&$data));
 	return($id_act);
 }
 

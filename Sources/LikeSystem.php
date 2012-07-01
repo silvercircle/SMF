@@ -28,7 +28,7 @@ function FixLikes()
 
 function LikeDispatch()
 {
-	global $context, $board, $memberContext, $txt, $user_info;
+	global $context, $board, $memberContext, $txt, $user_info, $modSettings;
 
 	$xml = isset($_REQUEST['xml']) ? true : false;
 	$action = isset($_REQUEST['sa']) ? $_REQUEST['sa'] : '';
@@ -36,6 +36,11 @@ function LikeDispatch()
 		$action = 'getlikes';
 	$ctype = isset($_REQUEST['ctype']) ? $_REQUEST['ctype'] : 1;		// default to content type = 1 (post)
 	$mid = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
+	$rtype = isset($_REQUEST['r']) ? (int)$_REQUEST['r'] : 0;
+
+	loadLanguage('Like');
+	if(!isset($modSettings['ratings'][$rtype]))
+		AjaxErrorMsg($txt['unknown_rating_type']);
 
 	if($user_info['is_admin'] && $action === 'fixlikes') {
 		FixLikes();
@@ -55,30 +60,26 @@ function LikeDispatch()
 		if(!$allowed)
 			AjaxErrorMsg($txt['no_access'], 'Permission error');
 
-		$start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
+		$start = 0;
 		$users = array();
 		if($action === 'getlikes') {
-			$request = smf_db_query('
-				SELECT l.id_msg, l.id_user, l.updated, l.id_receiver FROM {db_prefix}likes AS l WHERE l.id_msg = {int:idmsg} AND l.ctype = {int:ctype}
-					ORDER BY l.updated DESC LIMIT {int:start}, 20',
-				array('idmsg' => $mid, 'ctype' => $ctype, 'start' => $start)); // todo: paging and limit per page should be configurable
+			$request = smf_db_query('SELECT l.id_msg, l.id_user, l.updated, l.id_receiver, m.real_name
+					FROM {db_prefix}likes AS l LEFT JOIN {db_prefix}members AS m ON (m.id_member = l.id_user) 
+					WHERE l.id_msg = {int:idmsg} AND l.ctype = {int:ctype} AND l.rtype = {int:rtype}
+					ORDER BY l.updated DESC LIMIT {int:start}, 500',
+				array('idmsg' => $mid, 'ctype' => $ctype, 'start' => $start, 'rtype' => $rtype)); // todo: paging and limit per page should be configurable
 
 			while($row = mysql_fetch_assoc($request)) {
 				$row['dateline'] = timeformat($row['updated']);
+				$row['memberlink'] = '<a href="' . URL::user($row['id_user'], $row['real_name']) . '">' . $row['real_name'] . '</a>';
 				$users[] = $row['id_user'];
 				$context['likes'][$row['id_user']] = $row;
 			}
 			mysql_free_result($request);
-			loadMemberData($users);
-			foreach($users as $user) {
-				loadMemberContext($user);
-				$context['likes'][$user]['member'] = &$memberContext[$user];
-			}
 		}
-		loadLanguage('Like');
-		loadTemplate('LikeSystem');
-		loadTemplate('GenericBits');
-		$context['sub_template'] = 'getlikes';
+		EoS_Smarty::loadTemplate('xml_blocks');
+		$context['template_functions'] = 'getlikes_by_type';
+		$context['rating_title'] = sprintf($txt['members_who_rated_with'], $modSettings['ratings'][$rtype]['text']);
 		if($xml)
 			$context['xml'] = true;
 	}

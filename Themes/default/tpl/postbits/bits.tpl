@@ -85,12 +85,6 @@
     {elseif $M.karmaMode == '2'}
       <li class="karma">{$M.karmaLabel} +{$message.member.karma.good}/-{$message.member.karma.bad}</li>
     {/if}
-    {if $message.member.karma.allow}
-      <li class="karma_allow">
-        <a href="{$SCRIPTURL}?action=modifykarma;sa=applaud;uid={$message.member.id};topic={$C.current_topic}.{$C.start};m={$ID};{$C.session_var}={$C.session_id}">{$M.karmaApplaudLabel}</a>
-        <a href="{$SCRIPTURL}?action=modifykarma;sa=smite;uid={$message.member.id};topic={$C.current_topic}.{$C.start};m={$ID};{$C.session_var}={$C.session_id}">{$M.karmaSmiteLabel}</a>
-      </li>
-    {/if}
     {if !empty($message.member.blurb)}
       <li class="blurb">{$message.member.blurb}</li>
     {/if}
@@ -160,7 +154,7 @@
 {/if}
 {$message.template_hook.before_sig}
 {if !empty($message.member.signature) and empty($O.show_no_signatures) and $C.signature_enabled}
-  <div class="signature" id="msg_{$ID}_signature">{$message.member.signature}</div>
+  <div class="signature" id="msg_{$ID}_signature">__<br>{$message.member.signature}</div>
 {/if}
 {$message.template_hook.after_sig}
 {if $message.likes_count > 0 or !empty($message.likelink)}

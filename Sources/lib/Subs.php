@@ -764,6 +764,8 @@ function timeformat($log_time, $show_today = false, $offset_type = false)
 	else
 		$time = $log_time;
 
+	$time += $user_info['guest_tzoffset'];
+
 	// We can't have a negative date (on Windows, at least.)
 	if ($log_time < 0)
 		$log_time = 0;
@@ -3659,7 +3661,7 @@ function setupMenuContext()
 	$cacheTime = $modSettings['lastActive'] * 60;
 
 	// All the buttons we can possible want and then some, try pulling the final list of buttons from cache first.
-	if (($menu_buttons = CacheAPI::getCache('menu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], $cacheTime)) === null || time() - $cacheTime <= $modSettings['settings_updated'])
+	if (($menu_buttons = CacheAPI::getCache('menu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], $cacheTime)) === null || time() - $cacheTime <= $modSettings['settings_updated'] || URL::haveSID())
 	{
 		$buttons = array(
 			'home' => array(
@@ -3751,49 +3753,6 @@ function setupMenuContext()
 					),
 				),
 			),
-			/*
-			'profile' => array(
-				'title' => $txt['profile'],
-				'href' => URL::parse('?action=profile'),
-				'show' => $context['allow_edit_profile'],
-				'sub_buttons' => array(
-					'summary' => array(
-						'title' => $txt['summary'],
-						'href' => URL::parse('?action=profile'),
-						'show' => true,
-					),
-					'account' => array(
-						'title' => $txt['account'],
-						'href' => URL::parse('?action=profile;area=account'),
-						'show' => allowedTo(array('profile_identity_any', 'profile_identity_own', 'manage_membergroups')),
-					),
-					'profile' => array(
-						'title' => $txt['forumprofile'],
-						'href' => URL::parse('?action=profile;area=forumprofile'),
-						'show' => allowedTo(array('profile_extra_any', 'profile_extra_own')),
-						'is_last' => true,
-					),
-				),
-			),
-			'pm' => array(
-				'title' => $txt['pm_short'],
-				'href' => URL::parse('?action=pm'),
-				'show' => $context['allow_pm'],
-				'sub_buttons' => array(
-					'pm_read' => array(
-						'title' => $txt['pm_menu_read'],
-						'href' => URL::parse('?action=pm'),
-						'show' => allowedTo('pm_read'),
-					),
-					'pm_send' => array(
-						'title' => $txt['pm_menu_send'],
-						'href' => URL::parse('?action=pm;sa=send'),
-						'show' => allowedTo('pm_send'),
-						'is_last' => true,
-					),
-				),
-			),
-			*/
 			'tags' => array(
 				'title' => $txt['smftags_menu'],
 				'href' => URL::parse('?action=tags'),
@@ -3889,7 +3848,7 @@ function setupMenuContext()
 				$menu_buttons[$act] = $button;
 			}
 
-		if (!empty($modSettings['cache_enable']) && $modSettings['cache_enable'] >= 2)
+		if (!empty($modSettings['cache_enable']) && $modSettings['cache_enable'] >= 2 && !URL::haveSID())
 			CacheAPI::putCache('menu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], $menu_buttons, $cacheTime);
 	}
 
@@ -3898,7 +3857,7 @@ function setupMenuContext()
 	else
 		$astream_link = '<a onclick="getAStream($(this));return(false);" rel="nofollow" data-board="all" href="'.$scripturl . '?action=astream;sa=get;all"><span>View recent activity</span></a>';
 
-	if (($context['usermenu_buttons'] = CacheAPI::getCache('usermenu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], $cacheTime)) === null || time() - $cacheTime <= $modSettings['settings_updated'])
+	if (($context['usermenu_buttons'] = CacheAPI::getCache('usermenu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], $cacheTime)) === null || time() - $cacheTime <= $modSettings['settings_updated'] || URL::haveSID())
 	{
 
 		if(!$user_info['is_guest']) {
@@ -3958,7 +3917,7 @@ function setupMenuContext()
 				);
 		}
 
-		if (!empty($modSettings['cache_enable']) && $modSettings['cache_enable'] >= 2)
+		if (!empty($modSettings['cache_enable']) && $modSettings['cache_enable'] >= 2 && !URL::haveSID())
 			CacheAPI::putCache('usermenu_buttons-' . implode('_', $user_info['groups']) . '-' . $user_info['language'], $context['usermenu_buttons'], $cacheTime);
 	}
 	$context['menu_buttons'] = $menu_buttons;

@@ -39,6 +39,7 @@ function XMLhttpMain()
 		'prefix' => array('function' => 'InlinePrefixActions'),
 		'collapse' => array('function' => 'AjaxCollapseCategory'),
 		'sidebar' => array('function' => 'GetSidebarContent'),
+		'tzoffset' => array('function' => 'SetGuestTZOffset')
 	);
 	if (!isset($_REQUEST['sa'], $sub_actions[$_REQUEST['sa']]))
 		fatal_lang_error('no_access', false);
@@ -46,6 +47,14 @@ function XMLhttpMain()
 	$sub_actions[$_REQUEST['sa']]['function']();
 }
 
+function SetGuestTZOffset()
+{
+	global $user_info;
+
+	if($user_info['is_guest'] && isset($_REQUEST['o']))
+		$_SESSION['tzoffset'] = $_REQUEST['o'] * 3600;
+	die;
+}
 // Get a list of boards and categories used for the jumpto dropdown.
 function GetJumpTo()
 {

@@ -63,6 +63,7 @@ function template_html_above()
 	';
 		}
 	}
+	$sSID = SID != '' ? '&' . SID  : '';
 	echo <<<EOT
 
 	<script type="text/javascript">
@@ -75,6 +76,7 @@ function template_html_above()
 	var smf_charset = 'UTF-8';
 	var sSessionId = '{$context['session_id']}';
 	var sSessionVar = '{$context['session_var']}';
+	var sSID = '{$sSID}';
 	var disableDynamicTime = {$h(empty($options['disable_dynatime']), 0, 1)};
 	var textSizeUnit = 'pt';
 	var textSizeStep = 1;
@@ -103,7 +105,7 @@ function template_html_above()
 	{$h(!empty($context['meta_keywords']), '<meta name="keywords" content="' . $context['meta_keywords'] . '" />', '')}
 	<title>{$context['page_title_html_safe']}</title>
 EOT;
-	if($user_info['is_guest'])
+	if($user_info['is_guest'] && !empty($user_info['guest_need_tzoffset']))
 		echo <<<EOT
 
 	<script type="text/javascript">

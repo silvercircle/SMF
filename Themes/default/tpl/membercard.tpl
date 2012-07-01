@@ -60,9 +60,9 @@
           </td>
         </tr>
       </table>
-      <div class="cat_bar">
+      <div class="glass">
         {$url = "?action=profile;u="|cat:$member.id}
-        <div style="position:absolute;bottom:3px;right:8px;"><a href="{$SUPPORT->url_parse($url)}">{$T.view_full_profile}</a>
+        <div class="floatright"><a href="{$SUPPORT->url_parse($url)}">{$T.view_full_profile}</a>
         </div>
         <div class="clear"></div>
       </div>

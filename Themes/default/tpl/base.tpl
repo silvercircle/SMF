@@ -49,6 +49,7 @@
       var smf_charset = 'UTF-8';
       var sSessionId = '{$C.session_id}';
       var sSessionVar = '{$C.session_var}';
+      var sSID = '{$SID}';
       var disableDynamicTime = {(empty($O.disable_dynatime)) ? 0 : 1};
       var textSizeUnit = 'pt';
       var textSizeStep = 1;
@@ -79,7 +80,7 @@
     {/if}
     <title>{$C.page_title_html_safe}</title>
 
-    {if $U.is_guest}
+    {if $U.is_guest && !empty($U.guest_need_tzoffset)}
     <script type="text/javascript">
     // <![CDATA[
       function calculate_time_zone() {
@@ -135,7 +136,8 @@
         mins = (mins < 10) ? "0"+mins : mins;
         return display_hours+":"+mins;
       }
-        guest_time_offset = calculate_time_zone();
+      guest_time_offset = calculate_time_zone();
+      sendXMLDocument(smf_prepareScriptUrl(smf_scripturl) + 'action=xmlhttp;sa=tzoffset;o=' + guest_time_offset + ';xml', '', function() {});
     // ]]>
     </script>
     {/if}

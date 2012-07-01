@@ -485,6 +485,7 @@ class _EoS_Smarty_Template_Support {
   		$this->_smarty_instance->assignByRef('SCRIPTURL', $scripturl);
   		$this->_smarty_instance->assignByRef('COOKIENAME', $cookiename);
   		$this->_smarty_instance->assignByRef('_COOKIE', $_COOKIE);
+  		$this->_smarty_instance->assign('SID', SID != '' ? '&' . SID : '');
 
   		/*
   		 * hook to extend theme context initialization.

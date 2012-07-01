@@ -18,7 +18,7 @@ $txt['like_no_permission'] = 'You have no permission to use the like system';
 $txt['like_cannot_like'] = 'This post cannot be liked';
 $txt['like_verify_error'] = 'Verification error';
 $txt['members_who_liked'] = 'Members who liked this post:';
-
+$txt['members_who_rated_with'] = 'Members who rated this message with %s';
 $txt['liked_your_post'] = '%s rated <a href="%s">your post</a> in %s with %s.';
 $txt['liked_a_post'] = '%s rated %s\'s <a href="%s">post</a> in %s with %s.';
 ?>

@@ -207,9 +207,9 @@ function reloadSettings()
 	$modSettings['hidden_content_no_view_msg'] = @unserialize($modSettings['hidden_content_no_view']);
 	
 	$modSettings['ratings'] = array(
-		'1' => array('desc' => 'like', 'text' => '<strong><span style="color:green;">Like It</span></strong>', 'rawtext' => 'Like It'),
-		'2' => array('desc' => 'dislike', 'text' => '<strong><span style="color:red;">Dislike</span></strong>', 'rawtext' => 'Don\'t Like It'),
-		'3' => array('desc' => 'useful', 'text' => '<strong><span style="color:orange;">Useful</span></strong>', 'rawtext' => 'Useful')
+		'1' => array('desc' => 'like', 'text' => '<strong><span style="color:green;">Like It</span></strong>', 'rawtext' => 'Like It', 'points' => 0),
+		'2' => array('desc' => 'dislike', 'text' => '<strong><span style="color:red;">Dislike</span></strong>', 'rawtext' => 'Don\'t Like It', 'points' => 0),
+		'3' => array('desc' => 'useful', 'text' => '<strong><span style="color:orange;">Useful</span></strong>', 'rawtext' => 'Useful', 'points' => 0)
 	);
 	require_once($sourcedir . '/SimpleSEF.php');
 	URL::init($boardurl);
@@ -448,6 +448,10 @@ function loadUserSettings()
 		'notify_optout' => isset($user_settings['notify_optout']) ? $user_settings['notify_optout'] : '',
 		'meta' => !empty($user_settings['meta']) ? @unserialize($user_settings['meta']) : array()
 	);
+	
+	$user_info['guest_tzoffset'] = ($user_info['is_guest'] && isset($_SESSION['tzoffset']) ? $_SESSION['tzoffset'] : 0);
+	$user_info['guest_need_tzoffset'] = $user_info['is_guest'] && !isset($_SESSION['tzoffset']); // don't have it yet, embed the js to determine tz offset for *guests only*
+
 	$user_info['groups'] = array_unique($user_info['groups']);
 	// Make sure that the last item in the ignore boards array is valid.  If the list was too long it could have an ending comma that could cause problems.
 	if (!empty($user_info['ignoreboards']) && empty($user_info['ignoreboards'][$tmp = count($user_info['ignoreboards']) - 1]))
@@ -1607,11 +1611,12 @@ function loadTheme($id_theme = 0, $initialize = true)
 	// Detect the browser. This is separated out because it's also used in attachment downloads
 	detectBrowser();
 	// Set the top level linktree up.
+	/*
 	array_unshift($context['linktree'], array(
-		'url' => URL::home(),		//$scripturl
+		'url' => URL::home(),
 		'name' => $context['forum_name_html_safe']
 	));
-
+	*/
 	// This allows sticking some HTML on the page output - useful for controls.
 	$context['insert_after_template'] = '';
 

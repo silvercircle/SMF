@@ -90,9 +90,13 @@
       if(result['likebar'].length > 0)
         $('span[data-likebarid="' + result['mid'] + '"]').html(result['likebar']);
     }
-
+    // refresh event handlers for changed content
     $('.givelike').click(function() {
       giveLike($(this));
+      return(false);
+    });
+    $('span.ratings span.number').click(function() {
+      sendRequest('action=like;sa=getlikes;m=' + parseInt($(this).parent().attr('data-mid'))  + ';r=' + parseInt($(this).attr('data-rtype')), null);
       return(false);
     });
   }
@@ -100,6 +104,35 @@
   </handler>
 </document>
 {/function}
+
+{function getlikes_by_type}
+<document>
+  <response open="default_overlay" width="350" offset="-150" />
+  <content>
+    <![CDATA[ <!-- > -->
+    <div class="flat_container">
+    {if !empty($C.likes)}
+    <div class="glass centertext" style="font-size:1.1em;">
+      {$C.rating_title}
+    </div>
+    <ol class="commonlist">
+      {foreach $C.likes as $like}
+      <li>
+        <span class="floatright">{$like.dateline}</span>
+        <strong>{$like.memberlink}</strong>
+        <br>
+        Ratings: +0/0/-0
+      </li>
+      {/foreach}
+    </ol>
+    {else}
+    {/if}
+    </div>
+    ]]>
+  </content>
+</document>
+{/function}
+
 {foreach from=$C.template_functions item=fn}
 {call name=$fn}
 {/foreach}
