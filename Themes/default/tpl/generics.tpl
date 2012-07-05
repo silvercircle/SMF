@@ -19,7 +19,7 @@
 {/function}
 {function quickbuttons}
   <ul class="floatright plainbuttonlist">
-  {$imgsrc = $S.images_url|cat:'/clipsrc.png'}
+  {$imgsrc = $C.clip_image_src}
   {$ID = $message.id}
   {if $message.can_approve}
     <li><a href="{$SCRIPTURL}?action=moderate;area=postmod;sa=approve;topic={$C.current_topic}.{$C.start};msg={$ID};{$C.session_var}={$C.session_id}">
@@ -82,7 +82,7 @@
   <div class="clear"></div>
 {/function}
 {function topicbit}
-  {$imgsrc = $S.images_url|cat:'/clipsrc.png'}
+  {$imgsrc = $C.clip_image_src}
   {$color_class = ''}
   {$iconlegend = ''}
 

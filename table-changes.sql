@@ -170,6 +170,13 @@ CREATE TABLE {$db_prefix}news (
 	PRIMARY KEY (id_news)
 ) ENGINE=MyISAM;
 
+CREATE TABLE {$db_prefix}log_online_today (
+  id_member mediumint(8) unsigned NOT NULL default '0',
+  name VARCHAR(255) NOT NULL default '',
+  is_hidden tinyint(2) NOT NULL default '0',
+  PRIMARY KEY (id_member)
+) ENGINE=MyISAM;
+
 # now the changes to stock smf 2 tables
 
 # this can be used to prevent a post from being cached (unimplemented as of now)

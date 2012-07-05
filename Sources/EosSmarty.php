@@ -37,12 +37,10 @@ class EoS_Smarty {
 		self::$_smartyInstance = new Smarty();
 		self::$_smartyInstance->caching = 0;		// this is *STATIC* caching of generated pages, we don't want (or even need) this for a forum...
 
-		if(file_exists($settings['theme_dir'] . '/theme_support.php')) {
-			require_once($settings['theme_dir'] . '/theme_support.php');
+		if(is_callable('theme_support_autoload'))	// theme_support.php (if present) was previously loaded in loadTheme().
 			self::$_configInstance = theme_support_autoload(self::$_smartyInstance);
-		}
 		else
-			self::$_configInstance = new _EoS_Smarty_Template_Support(self::$_smartyInstance);
+			self::$_configInstance = new EoS_Smarty_Template_Support(self::$_smartyInstance);
 
 		$firstdir = 0;
 		if(MOBILE) {
@@ -82,6 +80,16 @@ class EoS_Smarty {
 		self::$_is_Active = true;			// set us active, so we can rule in obExit()
 	}
 
+	/**
+	 * @static
+	 * @param string - $_dir. The template directory to add
+	 *
+	 * add a new template directory 
+	 */
+	public static function addTemplateDir($_dir)
+	{
+		self::$_smartyInstance->addTemplateDir($_dir);
+	}
 	/**
 	 * does absolutely nothing
 	 * used as dummy for custom callback functions
@@ -305,7 +313,7 @@ class EoS_Smarty {
  * for template developers, this object is exposed to the template
  * engine via the $SUPPORT variable. 
  */
-class _EoS_Smarty_Template_Support {
+class EoS_Smarty_Template_Support {
 	
 	protected $_template_overrides = array();
 	protected $_subtemplates = array();
@@ -325,7 +333,6 @@ class _EoS_Smarty_Template_Support {
   			'lean' => 'l'
   			);
 	}
-
 	/**
 	 * @param array $button_strip
 	 * @param string $direction
@@ -441,19 +448,6 @@ class _EoS_Smarty_Template_Support {
 	{
 		global $context, $settings, $modSettings, $options, $txt, $scripturl, $user_info, $cookiename;
 		global $forum_copyright, $forum_version;
-
-
-		$settings['theme_variants'] = array('default', 'lightweight');
-		$settings['clip_image_src'] = array(
-			'_default' => 'clipsrc.png',
-		    '_lightweight' => 'clipsrc_l.png',
-			'_dark' => 'clipsrc_dark.png'
-		);
-		$settings['sprite_image_src'] = array(
-			'_default' => 'theme/sprite.png',
-			'_lightweight' => 'theme/sprite.png',
-			'_dark' => 'theme/sprite.png'
-		);
 
   		$context['template_time_now'] = forum_time(false);
   		$context['template_timezone'] = date_default_timezone_get();

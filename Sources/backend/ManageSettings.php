@@ -578,6 +578,8 @@ function ModifyBasicSettings($return_config = false)
 		'',
 			// Who's online?
 			array('check', 'who_enabled'),
+			array('check', 'who_track_daily_visitors'),
+			array('check', 'who_track_team'),
 			array('int', 'lastActive'),
 		'',
 			// Statistics.

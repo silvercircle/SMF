@@ -68,7 +68,7 @@ function aStreamGetNotifications()
 	$context['get_notifications'] = true;
 	$context['rich_output'] = true;		// todo: this indicates whether we want simple or rich activity bits (rich = with avatar and possibly other member data)
 
-	$where = 'WHERE n.id_member = {int:id_member} AND ({query_see_board} OR a.id_board = 0) ';
+	$where = 'WHERE n.id_member = {int:id_member} AND ' . (!empty($user_info['ignoreusers']) ? 'a.id_member NOT IN({array_int:ignoredusers}) AND ' : '')  . ' ({query_wanna_see_board} OR a.id_board = 0) ';
 	if($view != 'all') {
 		$where .= ' AND n.unread = 1 ';
 		$context['view_all'] = false;
@@ -81,7 +81,7 @@ function aStreamGetNotifications()
 		LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
 		LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board) '.
 		$where . 'ORDER BY n.id_act DESC LIMIT {int:start}, 20',
-		array('id_member' => $user_info['id'], 'start' => $start));
+		array('id_member' => $user_info['id'], 'start' => $start, 'ignoredusers' => $user_info['ignoreusers']));
 
 	aStreamOutput($result, true);
 
@@ -207,23 +207,27 @@ function aStreamGet($b = 0, $xml = false, $global = false)
 		if(strlen($filterby))
 			$pquery .= ' AND a.id_type IN({string:filter})';
 	}
+	$uquery = '';
+	if(isset($_REQUEST['u']) && (int)$_REQUEST['u'] > 0)
+		$uquery .= 'a.id_member = {int:id_user} AND ';
+	else
+		$uquery = (!empty($user_info['ignoreusers']) ? 'a.id_member NOT IN({array_int:ignoredusers}) AND ' : '');
 
 	if($global) {
 		if(!$xml) {
 			$result = smf_db_query('SELECT COUNT(a.id_act) FROM {db_prefix}log_activities AS a
 				LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
-				WHERE ({query_see_board} OR a.id_board = 0)'.$pquery,
-				array('start' => 0, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage));
+				WHERE ' . $uquery . ' ({query_wanna_see_board} OR a.id_board = 0)'.$pquery,
+				array('start' => 0, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage, 'ignoredusers' => $user_info['ignoreusers']));
 			
 			list($total) = mysql_fetch_row($result);
 			mysql_free_result($result);
 		}
-		$result = smf_db_query('
-			SELECT a.*, t.*, b.name AS board_name FROM {db_prefix}log_activities AS a
+		$result = smf_db_query('SELECT a.*, t.*, b.name AS board_name FROM {db_prefix}log_activities AS a
 			LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
 			LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
-			WHERE ({query_see_board} OR a.id_board = 0)'.$pquery.' ORDER BY a.id_act DESC LIMIT {int:start}, {int:perpage}',
-			array('start' => $start, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage));
+			WHERE ' . $uquery . ' ({query_wanna_see_board} OR a.id_board = 0)'.$pquery.' ORDER BY a.id_act DESC LIMIT {int:start}, {int:perpage}',
+			array('start' => $start, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage, 'ignoredusers' => $user_info['ignoreusers']));
 
 		$context['act_global'] = true;
 		$context['viewall_url'] = URL::parse($scripturl . '?action=astream;sa=get;all');
@@ -232,17 +236,16 @@ function aStreamGet($b = 0, $xml = false, $global = false)
 		if(!$xml) {
 			$result = smf_db_query('SELECT COUNT(a.id_act) FROM {db_prefix}log_activities AS a
 				LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
-				WHERE a.id_board = {int:id_board} AND {query_see_board} '.$pquery,
+				WHERE ' . $uquery . ' a.id_board = {int:id_board} AND {query_wanna_see_board} '.$pquery,
 				array('id_board' => $board, 'start' => 0, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage));
 
 			list($total) = mysql_fetch_row($result);
 			mysql_free_result($result);
 		}
-		$result = smf_db_query('
-			SELECT a.*, t.*, b.name AS board_name FROM {db_prefix}log_activities AS a
+		$result = smf_db_query('SELECT a.*, t.*, b.name AS board_name FROM {db_prefix}log_activities AS a
 			LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
 			LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
-			WHERE a.id_board = {int:id_board} AND {query_see_board}'.$pquery.' ORDER BY a.id_act DESC LIMIT {int:start}, {int:perpage}',
+			WHERE ' . $uquery . ' a.id_board = {int:id_board} AND {query_wanna_see_board}'.$pquery.' ORDER BY a.id_act DESC LIMIT {int:start}, {int:perpage}',
 			array('id_board' => $board, 'start' => $start, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage));
 		
 		$context['viewall_url'] = URL::parse($scripturl . '?action=astream;sa=get;b=' . $board);

@@ -418,7 +418,8 @@ $helptxt['astream_expire_days'] = 'Specify the number of days to keep activity s
 
 
 $helptxt['who_enabled'] = 'This option allows you to turn on or off the ability for users to see who is browsing the forum and what they are doing.';
-
+$helptxt['who_track_team'] = 'If enabled, members of the forum team who are currently online will be displayed in the side bar. This feature requires the <strong>Who is online list</strong>.';
+$helptxt['who_track_daily_visitors'] = 'If enabled, members who have been online today will be remembered and displayed at the bottom of the Who is online list. This list restes daily at 00:00 forum time.';
 $helptxt['recycle_enable'] = '&quot;Recycles&quot; deleted topics and posts to the specified board.';
 
 $helptxt['enableReportPM'] = 'This option allows your users to report personal messages they receive to the administration team. This may be useful in helping to track down any abuse of the personal messaging system.';

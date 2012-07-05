@@ -3539,7 +3539,7 @@ div.ppt {
 	background-color:white;
 }
 .jqmWindow_container {
-	background-color: #eaeaea;
+	background-color: white;
 }
 .jqmOverlay, #pagedimmer { opacity:0.5;background-color: #888; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";}
 

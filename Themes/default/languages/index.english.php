@@ -172,7 +172,7 @@ $txt['location'] = 'Location';
 $txt['gender'] = 'Gender';
 $txt['date_registered'] = 'Date Registered';
 
-$txt['recent_view'] = 'View recent content.';
+$txt['recent_view'] = 'Show all recent posts';
 $txt['recent_updated'] = 'is the most recently updated topic';
 
 $txt['male'] = 'Male';
@@ -314,10 +314,12 @@ $txt['maintain_mode_on'] = 'Remember, this forum is in \'Maintenance Mode\'.';
 $txt['read'] = 'Read';
 $txt['times'] = 'times';
 
-$txt['forum_stats'] = 'Forum Stats';
+$txt['forum_stats'] = 'Forum info';
 $txt['latest_member'] = 'Latest Member';
 $txt['total_cats'] = 'Total Categories';
 $txt['latest_post'] = 'Latest Post';
+$txt['team_members_online'] = 'Team members online';
+$txt['stats_header'] = 'Statistics';
 
 $txt['you_have'] = 'You\'ve got';
 $txt['click'] = 'Click';
@@ -384,7 +386,7 @@ $txt['your_pms'] = 'Your Personal Messages';
 
 $txt['kilobyte'] = 'kB';
 
-$txt['more_stats'] = '[More Stats]';
+$txt['more_stats'] = 'Show detailed statistics';
 
 // Use numeric entities in the below three strings.
 $txt['code'] = 'Code';
@@ -582,8 +584,8 @@ $txt['guests'] = 'Guests';
 $txt['user'] = 'User';
 $txt['users'] = 'Users';
 $txt['hidden'] = 'Hidden';
-$txt['buddy'] = 'Buddy';
-$txt['buddies'] = 'Buddies';
+$txt['buddy'] = 'Friend';
+$txt['buddies'] = 'Friends';
 $txt['most_online_ever'] = 'Most Online Ever';
 $txt['most_online_today'] = 'Most Online Today';
 

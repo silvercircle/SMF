@@ -133,6 +133,10 @@
         {$T.most_online_today}: <strong>{$M.mostOnlineToday|comma_format}</strong>.
         {$T.most_online_ever}: {$M.mostOnline|comma_format} ({$M.mostDate|timeformat})
       </div>
+      {if !empty($C.online_today)}
+        <h1 class="bigheader secondary">The following members were online today</h1>
+        {', '|implode:$C.online_today}
+      {/if} 
     </div>
   {/if}
 {/block}

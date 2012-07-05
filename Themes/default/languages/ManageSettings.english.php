@@ -83,6 +83,8 @@ $txt['disableHostnameLookup'] = 'Disable hostname lookups';
 $txt['disableAllHooks'] = 'Disable all hooks';
 $txt['jQueryFromGoogleCDN'] = 'Load jQuery from Google\'s network';
 $txt['who_enabled'] = 'Enable who\'s online list';
+$txt['who_track_daily_visitors'] = 'Display members who have been online today (Who is online list must be enabled)';
+$txt['who_track_team'] = 'Display online team members in the side bar (Who is online list must be enabled)';
 $txt['make_email_viewable'] = 'Allow viewable email addresses';
 $txt['meta_keywords'] = 'Meta keywords associated with forum<div class="smalltext">For search engines. Leave blank for default.</div>';
 

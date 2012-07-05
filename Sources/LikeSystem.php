@@ -42,6 +42,9 @@ function LikeDispatch()
 	if(!isset($modSettings['ratings'][$rtype]))
 		AjaxErrorMsg($txt['unknown_rating_type']);
 
+	if($modSettings['ratings'][$rtype]['points'] && !allowedTo('can_view_ratings'))
+		AjaxErrorMsg($txt['no_access']);
+
 	if($user_info['is_admin'] && $action === 'fixlikes') {
 		FixLikes();
 		return;

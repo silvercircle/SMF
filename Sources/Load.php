@@ -214,6 +214,7 @@ function reloadSettings()
 	require_once($sourcedir . '/SimpleSEF.php');
 	URL::init($boardurl);
 
+	$modSettings['online_today'] = @unserialize($modSettings['log_online_today']);
 	// Integration is cool.
 	if (defined('INTEGRATION_SETTINGS'))
 	{
@@ -282,13 +283,14 @@ function loadUserSettings()
 		if ($modSettings['cache_enable'] < 2 || ($user_settings = CacheAPI::getCache('user_settings-' . $id_member, 600)) == null)
 		{
 			$request = smf_db_query( '
-				SELECT mem.*, IFNULL(a.id_attach, 0) AS id_attach, a.filename, a.attachment_type
+				SELECT mem.*, IFNULL(a.id_attach, 0) AS id_attach, a.filename, a.attachment_type, mg.online_color
 				FROM {db_prefix}members AS mem
 					LEFT JOIN {db_prefix}attachments AS a ON (a.id_member = {int:id_member})
+					LEFT JOIN {db_prefix}membergroups AS mg ON (mg.id_group = CASE WHEN mem.id_group = {int:reg_mem_group} THEN mem.id_post_group ELSE mem.id_group END)
 				WHERE mem.id_member = {int:id_member}
 				LIMIT 1',
 				array(
-					'id_member' => $id_member,
+					'id_member' => $id_member, 'reg_mem_group' => 0
 				)
 			);
 			$user_settings = mysql_fetch_assoc($request);
@@ -383,6 +385,8 @@ function loadUserSettings()
 
 		// This is a logged in user, so definitely not a spider.
 		$user_info['possibly_robot'] = false;
+		$user_info['show_online'] = $user_settings['show_online'];
+
 	}
 	// If the user is a guest, initialize all the critical user settings.
 	else
@@ -448,7 +452,6 @@ function loadUserSettings()
 		'notify_optout' => isset($user_settings['notify_optout']) ? $user_settings['notify_optout'] : '',
 		'meta' => !empty($user_settings['meta']) ? @unserialize($user_settings['meta']) : array()
 	);
-	
 	$user_info['guest_tzoffset'] = ($user_info['is_guest'] && isset($_SESSION['tzoffset']) ? $_SESSION['tzoffset'] : 0);
 	$user_info['guest_need_tzoffset'] = $user_info['is_guest'] && !isset($_SESSION['tzoffset']); // don't have it yet, embed the js to determine tz offset for *guests only*
 
@@ -511,8 +514,8 @@ function loadUserSettings()
 					SELECT COUNT(n.id_act) AS notify_count FROM {db_prefix}log_notifications AS n
 						LEFT JOIN {db_prefix}log_activities AS a ON (a.id_act = n.id_act)
 						LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
-						WHERE n.id_member = {int:id_member} AND n.unread = 1 AND ({query_see_board} OR a.id_board = 0)',
-			array('id_member' => $id_member));
+						WHERE n.id_member = {int:id_member} AND n.unread = 1 AND ' . (!empty($user_info['ignoreusers']) ? 'a.id_member NOT IN({array_int:ignoredusers}) AND ' : '') . ' ({query_wanna_see_board} OR a.id_board = 0)',
+			array('id_member' => $id_member, 'ignoredusers' => $user_info['ignoreusers']));
 
 		if(mysql_num_rows($request) > 0) {
 			list($unread) = mysql_fetch_row($request);
@@ -527,6 +530,16 @@ function loadUserSettings()
 		CacheAPI::putCache('user_settings-' . $id_member, $user_settings, 600);
 
 	$user_info['notify_count'] = isset($user_settings['notify_count']) ? $user_settings['notify_count'] : 0;
+
+	// record the user in the list of users who were online today. todo: there should be an option for this feature.
+	if(!empty($modSettings['who_track_daily_visitors']) && $user_info['id'] > 0 && !isset($modSettings['online_today'][$user_info['id']])) {
+		$modSettings['online_today'][$user_info['id']] = array(
+			'name' => $user_info['name'],
+			'show_online' => $user_info['show_online'],
+			'link' => !empty($user_settings['online_color']) ? '<a href="' . URL::user($user_info['id'], $user_info['name']) . '" style="color: ' . $user_settings['online_color'] . ';">' . $user_info['name'] . '</a>' : '<a href="' . URL::user($user_info['id'], $user_info['name']) . '">' . $user_info['name'] . '</a>'
+		);
+		updateSettings(array('log_online_today' => @serialize($modSettings['online_today'])));
+	}
 }
 
 // Check for moderators and see if they have access to the board.
@@ -1668,6 +1681,9 @@ function loadTheme($id_theme = 0, $initialize = true)
 			$context['template_layers'] = array('html', 'body');
 	}
 
+	if(file_exists($settings['theme_dir'] . '/theme_support.php'))
+		require_once($settings['theme_dir'] . '/theme_support.php');
+
 	// Initialize the theme.
 	loadSubTemplate('init', 'ignore');
 
@@ -1682,24 +1698,22 @@ function loadTheme($id_theme = 0, $initialize = true)
 	// We allow theme variants, because we're cool.
 	$context['theme_variant'] = '';
 	$context['theme_variant_url'] = '';
-	if (!empty($settings['theme_variants']))
-	{
-		// Overriding - for previews and that ilk.
-		if (!empty($_REQUEST['variant']))
-			$_SESSION['id_variant'] = $_REQUEST['variant'];
-		// User selection?
-		if (empty($settings['disable_user_variant']) || allowedTo('admin_forum'))
-			$context['theme_variant'] = !empty($_SESSION['id_variant']) ? $_SESSION['id_variant'] : (!empty($options['theme_variant']) ? $options['theme_variant'] : '');
-		// If not a user variant, select the default.
-		if ($context['theme_variant'] == '' || !in_array($context['theme_variant'], $settings['theme_variants']))
-			$context['theme_variant'] = !empty($settings['default_variant']) && in_array($settings['default_variant'], $settings['theme_variants']) ? $settings['default_variant'] : $settings['theme_variants'][0];
+	if(empty($settings['theme_variants']))
+		$settings['theme_variants'] = array('default');
 
-		// Do this to keep things easier in the templates.
-		$context['theme_variant'] = '_' . $context['theme_variant'];
-		$context['theme_variant_url'] = $context['theme_variant'] . '/';
-		$context['clip_image_src'] = $settings['images_url'] . '/' . $settings['clip_image_src'][$context['theme_variant']];
-		$context['sprite_image_src'] = $settings['images_url'] . '/' . $settings['sprite_image_src'][$context['theme_variant']];
-	}
+	// Overriding - for previews and that ilk.
+	if (!empty($_REQUEST['variant']))
+		$_SESSION['id_variant'] = $_REQUEST['variant'];
+	// User selection?
+	if (empty($settings['disable_user_variant']) || allowedTo('admin_forum'))
+		$context['theme_variant'] = !empty($_SESSION['id_variant']) ? $_SESSION['id_variant'] : (!empty($options['theme_variant']) ? $options['theme_variant'] : '');
+	// If not a user variant, select the default.
+	if ($context['theme_variant'] == '' || !in_array($context['theme_variant'], $settings['theme_variants']))
+		$context['theme_variant'] = !empty($settings['default_variant']) && in_array($settings['default_variant'], $settings['theme_variants']) ? $settings['default_variant'] : $settings['theme_variants'][0];
+
+	// Do this to keep things easier in the templates.
+	$context['theme_variant'] = '_' . $context['theme_variant'];
+	$context['theme_variant_url'] = $context['theme_variant'] . '/';
 	/*
 	if(!empty($context['theme_variant']) && $context['theme_variant'] != '_default') {
 		if(!empty($settings['base_theme_dir']))

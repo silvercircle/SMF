@@ -1947,6 +1947,8 @@ VALUES ('use_post_cache', '0'),
     ('simplesef_useractions', 'profile,pm'),
 	('simplesef_strip_chars', '&quot,&amp,&lt,&gt,`,~,!,@,#,$,%,^,&,*,(,),-,_,=,+,[,{,],},;,:,\',",",/,?,\,|'),
 	('whatsNewCutoffDays', '30'),
+	('who_track_daily_visitors', '1'),
+	('who_track_team'),
 	('embed_GA', '0');
 
 INSERT INTO {$db_prefix}activity_types
@@ -2179,6 +2181,13 @@ CREATE TABLE {$db_prefix}news (
 	on_index tinyint(2) NOT NULL default '0',
 	can_dismiss tinyint(2) NOT NULL default '1',
 	PRIMARY KEY (id_news)
+) ENGINE=MyISAM;
+
+CREATE TABLE {$db_prefix}log_online_today (
+	id_member mediumint(8) unsigned NOT NULL default '0',
+	name VARCHAR(255) NOT NULL default '',
+	is_hidden tinyint(2) NOT NULL default '0',
+	PRIMARY KEY (id_member)
 ) ENGINE=MyISAM;
 
 #

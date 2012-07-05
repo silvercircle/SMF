@@ -12,6 +12,23 @@
  * @version 1.0pre
  */
 
+function template_init()
+{
+	global $settings, $context;
+
+	$settings['theme_variants'] = array('default', 'lightweight');
+	$settings['clip_image_src'] = array(
+		'_default' => 'clipsrc.png',
+	    '_lightweight' => 'clipsrc_l.png',
+		'_dark' => 'clipsrc_dark.png'
+	);
+	$settings['sprite_image_src'] = array(
+		'_default' => 'theme/sprite.png',
+		'_lightweight' => 'theme/sprite.png',
+		'_dark' => 'theme/sprite.png'
+	);
+}
+
 /*
  * special index template for admin backend
  */

@@ -440,11 +440,11 @@ function JavaScriptEscape($string)
 // Rewrite URLs to include the session ID.
 function ob_sessrewrite($buffer)
 {
-	global $scripturl, $modSettings, $context, $user_info, $txt, $time_start, $db_count, $boardurl;
+	global $scripturl, $modSettings, $context, $user_info, $txt, $time_start, $db_count;
 	/*
 	 * tidy support as a debugging option to generate prettified output 
-	 * right now, tidy twig templates and only do it for the admin when 'tidyup' is set in the request string (tidy can be slow) 
-	 * pretty HTML output helps with debugging templates
+	 * and only do it for the admin when 'tidyup' is set in the request string (tidy can be slow) 
+	 * pretty HTML output might help with debugging templates
 	 */
 	if(isset($_REQUEST['tidyup']) && !isset($_REQUEST['xml']) && class_exists('Tidy') && $user_info['is_admin']) {
 		$tidy = new Tidy;
@@ -481,5 +481,4 @@ function ob_sessrewrite($buffer)
 	$buffer = str_replace('@%%__loadtime__%%@', $context['load_time'] . 's CPU (' . $context['template_benchmark_time'] . 's template), ' . $context['load_queries'] . ' ' . $txt['queries'] . SimpleSEF::getPerfData(), $buffer);
 	return $buffer;
 }
-
 ?>

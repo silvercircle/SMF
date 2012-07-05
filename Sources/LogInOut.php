@@ -515,6 +515,8 @@ function DoLogin()
 	);
 	$_SESSION['log_time'] = 0;
 
+	CacheAPI::putCache('_team_members_online', null, 0);
+
 	// Just log you back out if it's in maintenance mode and you AREN'T an admin.
 	if (empty($maintenance) || allowedTo('admin_forum'))
 		redirectexit('action=login2;sa=check;member=' . $user_info['id'], $context['server']['needs_login_fix']);
@@ -563,6 +565,7 @@ function Logout($internal = false, $redirect = true)
 
 	// Empty the cookie! (set it in the past, and for id_member = 0)
 	setLoginCookie(-3600, 0);
+	CacheAPI::putCache('_team_members_online', null, 0);
 
 	// Off to the merry board index we go!
 	if ($redirect)

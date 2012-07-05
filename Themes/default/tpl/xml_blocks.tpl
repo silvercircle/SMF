@@ -14,7 +14,7 @@
  * small template blocks for ajax response handlers
  *}
 {function help_popup}
-  <div class="blue_container norounded content tinytext mediumpadding">
+  <div class="blue_container norounded content smalltext mediumpadding">
     {$C.help_text}<br>
   </div>
 {/function}

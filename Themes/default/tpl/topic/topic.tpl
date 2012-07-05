@@ -60,27 +60,32 @@
       {/if}
       </span>
     </div>
+    {$status_parts = array()}
+    {$imgsrc = $C.clip_image_src}
     <div class="userbit_compact_textpart">
       <h1 class="bigheader topic">
+        {if $C.is_locked}
+          {$status_parts[] = '<div class="csrcwrapper16px floatleft"><img class="clipsrc locked" src="'|cat:$imgsrc|cat:'" alt="" title="'|cat:$T.locked_topic|cat:'" /></div>'}
+        {/if}
+        {if $C.is_sticky}
+          {$status_parts[] = '<div class="csrcwrapper16px floatleft"><img class="clipsrc sticky" src="'|cat:$imgsrc|cat:'" alt="" title="'|cat:$T.sticky_topic|cat:'" /></div>'}
+        {/if}
+        <span class="floatright smalltext">{""|implode:$status_parts}</span>
         {$C.prefix}{$C.subject}&nbsp;({$T.read} {$C.num_views} {$T.times})
       </h1>
       {$T.started_by}&nbsp;{$C.topicstarter.link}, {$C.topicstarter.start_time}
       {if !empty($C.tags_active)}
-        <div id="tagstrip" class="tinytext">
+        <div id="tagstrip" class="tinytext righttext">
           <span id="tags">
             {foreach from=$C.topic_tags item=tag}
               <a class="tag" href="{$SCRIPTURL}?action=tags;tagid={$tag.ID_TAG}">{$tag.tag}</a>
               {if $C.can_delete_tags}
                 <a href="{$SCRIPTURL}?action=tags;sa=deletetag;tagid={$tag.ID}"><span onclick="sendRequest('action=xmlhttp;sa=tags;deletetag=1;tagid={$tag.ID}', $('#tags'));return(false);" class="xtag">&nbsp;&nbsp;</span></a>
-              {else}
-                &nbsp;&nbsp;
               {/if}
             {/foreach}
           </span>
           {if $C.can_add_tags}
             &nbsp;<a rel="nofollow" id="addtag" onclick="$('#tagform').remove();sendRequest('action=xmlhttp;sa=tags;addtag=1;topic={$topic}', $('#addtag'));return(false);" data-id="{$topic}" href="{$SCRIPTURL}?action=tags;sa=addtag;topic={$topic}">{$T.smftags_addtag}</a>
-          {else}
-            &nbsp;
           {/if}
         </div>
         <br>

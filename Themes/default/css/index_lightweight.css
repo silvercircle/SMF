@@ -1106,11 +1106,11 @@ h1.bigheader.topic {
 	font-weight: normal;
 }
 h1.bigheader.secondary, div.spoiler.head {
-	font-size: 12px;
+	font-size: 14px;
 	font-weight:normal;
-	border-bottom: 1px solid #ccc;
-	color: #88c;
-	padding: 2px 20px;
+	border-bottom: 1px solid #cce;
+	color: #88a;
+	padding: 2px 0;
 }
 div.spoiler.head {
 	border-bottom:0;

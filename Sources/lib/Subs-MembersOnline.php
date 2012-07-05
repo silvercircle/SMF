@@ -24,12 +24,15 @@ if (!defined('SMF'))
 		- used by the board index and SSI.
 		- also returns the membergroups of the users that are currently online.
 		- (optionally) hides members that chose to hide their online presense.
+		- populate the buddies array for the sidebar user panel
+		- populate team_members with members who are in the global moderators
+		  group (= "the forum team") for the sidebar panel.
 */
 
 // Retrieve a list and several other statistics of the users currently online.
 function getMembersOnlineStats($membersOnlineOptions)
 {
-	global $smcFunc, $context, $scripturl, $user_info, $modSettings, $txt;
+	global $smcFunc, $context, $scripturl, $user_info, $modSettings, $txt, $memberContext;
 
 	// The list can be sorted in several ways.
 	$allowed_sort_options = array(
@@ -71,8 +74,8 @@ function getMembersOnlineStats($membersOnlineOptions)
 	// Load the users online right now.
 	$request = smf_db_query( '
 		SELECT
-			lo.id_member, lo.log_time, lo.id_spider, mem.real_name, mem.member_name, mem.show_online,
-			mg.online_color, mg.id_group, mg.group_name
+			lo.id_member, lo.log_time, lo.id_spider, mem.real_name, mem.member_name, mem.show_online, mem.id_group AS primary_group, 
+			mem.additional_groups AS secondary_groups, mg.online_color, mg.id_group, mg.group_name
 		FROM {db_prefix}log_online AS lo
 			LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = lo.id_member)
 			LEFT JOIN {db_prefix}membergroups AS mg ON (mg.id_group = CASE WHEN mem.id_group = {int:reg_mem_group} THEN mem.id_post_group ELSE mem.id_group END)',
@@ -80,8 +83,15 @@ function getMembersOnlineStats($membersOnlineOptions)
 			'reg_mem_group' => 0,
 		)
 	);
+	$real_team_members = array();
+	$visible_team_members = array();
 	while ($row = mysql_fetch_assoc($request))
 	{
+		if(!empty($modSettings['who_track_team']) && ($row['primary_group'] == 2 || in_array(2, explode(',', $row['secondary_groups'])))) {
+			$real_team_members[] = $row['id_member'];
+			if(($row['show_online'] || $membersOnlineOptions['show_hidden']) && $user_info['id'] != $row['id_member'])
+				$visible_team_members[] = $row['id_member'];
+		}
 		if (empty($row['real_name']))
 		{
 			// Do we think it's a spider?
@@ -130,9 +140,13 @@ function getMembersOnlineStats($membersOnlineOptions)
 			'hidden' => empty($row['show_online']),
 			'is_last' => false,
 		);
-
+		if($is_buddy)
+			$membersOnlineStats['buddies_online'][] = $membersOnlineStats['users_online'][$row[$membersOnlineOptions['sort']] . $row['member_name']]['link'];
 		// This is the compact version, simply implode it to show.
 		$membersOnlineStats['list_users_online'][$row[$membersOnlineOptions['sort']] . $row['member_name']] = empty($row['show_online']) ? '<em>' . $link . '</em>' : $link;
+
+		if($row['primary_group'] == 2 || in_array(2, explode(',', $row['secondary_groups'])))
+			$team_members[] = $row['id_member'];
 
 		// Store all distinct (primary) membergroups that are shown.
 		if (!isset($membersOnlineStats['online_groups'][$row['id_group']]))
@@ -143,6 +157,26 @@ function getMembersOnlineStats($membersOnlineOptions)
 			);
 	}
 	mysql_free_result($request);
+
+	/*
+	 * team members can be cached. reload them when the number of cached team members != the number of
+	 * actually online (= a team member logged in or out)
+	 */
+	if(($_team_members = CacheAPI::getCache('_team_members_online', 1200)) == null) {
+		$_team_members = array();
+		if(!empty($real_team_members)) {
+			$ids = loadMemberData($real_team_members);
+			foreach($real_team_members as $member) {
+				loadMemberContext($member);
+				$_team_members[$member] = &$memberContext[$member];
+			}
+			CacheAPI::putCache('_team_members_online', $_team_members, 1200);
+		}
+		else
+			CacheAPI::putCache('_team_members_online', null, 0);
+	}
+	$membersOnlineStats['team_members'] = &$_team_members;		
+	$membersOnlineStats['visible_team_members'] = $visible_team_members;
 
 	// If there are spiders only and we're showing the detail, add them to the online list - at the bottom.
 	if (!empty($spider_finds) && $modSettings['show_spider_online'] > 1)
@@ -185,6 +219,13 @@ function getMembersOnlineStats($membersOnlineOptions)
 	// Hidden and non-hidden members make up all online members.
 	$membersOnlineStats['num_users_online'] = count($membersOnlineStats['users_online']) + $membersOnlineStats['num_users_hidden'] - (isset($modSettings['show_spider_online']) && $modSettings['show_spider_online'] > 1 ? count($spider_finds) : 0);
 
+	// output users who were online today
+	if(!empty($modSettings['who_track_daily_visitors']) && !empty($modSettings['online_today'])) {
+		foreach($modSettings['online_today'] as $member) {
+			if($member['show_online'] || $membersOnlineOptions['show_hidden'])
+				$membersOnlineStats['online_today'][] = $member['link'];
+		}
+	}
 	return $membersOnlineStats;
 }
 
@@ -241,6 +282,7 @@ function trackStatsUsersOnline($total_users_online)
 
 		$settingsToUpdate['mostOnlineUpdated'] = $date;
 		$settingsToUpdate['mostOnlineToday'] = $total_users_online;
+		$settingsToUpdate['log_online_today'] = '';
 	}
 
 	// Highest number of users online today?

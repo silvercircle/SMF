@@ -630,10 +630,10 @@ function MessageIndex()
 	// They can only mark read if they are logged in and it's enabled!
 	if (!$context['user']['is_logged'] || !$settings['show_mark_read'])
 		unset($context['normal_buttons']['markread']);
-	HookAPI::callHook('integrate_messageindex_buttons', array(&$normal_buttons));
+	HookAPI::callHook('messageindex_buttons', array(&$normal_buttons));
 
 	enqueueThemeScript('topic', 'scripts/topic.js', true);
-	HookAPI::callHook('integrate_messageindex', array());
+	HookAPI::callHook('messageindex', array());
 }
 
 // Allows for moderation from the message index.

@@ -40,6 +40,12 @@
 
   <div class="clear"></div>
   </div>
+  {if !empty($C.num_buddies)}
+    <div class="smalltext" style="margin-bottom:5px;">
+    <h1 class="bigheader secondary">{$C.num_buddies} {($C.num_buddies > 1) ? $T.buddies : $T.buddy} {$T.online}.</h1>
+    <span class="tinytext">{", "|implode:$C.buddies_online}</span>
+    </div>
+  {/if}
   <div style="margin-top:3px;">
   {* Is the forum in maintenance mode? *}
   {if $C.in_maintenance and $C.user.is_admin}
@@ -57,11 +63,11 @@
   </div>
   {* Otherwise they're a guest - this time ask them to either register or login - lazy bums...*}
 {else}
-  <div class="smalltext mediumpadding">
+  <div class="smalltext smallpadding">
   <script type="text/javascript" src="{$S.default_theme_url}/scripts/min/sha1.js{$C.jsver}"></script>
   <div>
     <form id="guest_form" action="{$SCRIPTURL}?action=login2" method="post" accept-charset="UTF-8" {(empty($C.disable_login_hasing)) ? " onsubmit=\"hashLoginPassword(this, '{$C.session_id}');\" " : ''}>
-      <div class="orange_container centertext">{$T.welcome_guest|sprintf:$T.guest_title}</div>
+      <h1 class="bigheader secondary">{$T.welcome_guest|sprintf:$T.guest_title}</h1>
         <table>
           <tr>
             <td class="nowrap"><strong>{$T.username}:</strong></td>
@@ -82,9 +88,7 @@
     </form>
     <br>
     {if !(!empty($M.registration_method) and $M.registration_method == 3)}
-      <div class="orange_container">
         {$T.login_or_register}
-      </div>
     {else}
       <div class="orange_container">
         {$T.registration_disabled}
@@ -100,7 +104,36 @@
 {if $S.show_stats_index and !empty($C.show_stats)}
   {call collapser id='stats_panel' title=$T.forum_stats widgetstyle=$widgetstyle}
   <div class="blue_container norounded smallpadding gradient_darken_down">
-    <div class="smallpadding smalltext">
+    <div class="nopadding smalltext">
+      {if !empty($C.visible_team_members)}
+        <h1 class="bigheader secondary">{$T.team_members_online}</h1>
+        <ol class="commonlist" style="margin-bottom:0;">
+        {foreach $C.visible_team_members as $id_member}
+          {$member = $C.team_members.$id_member}
+          <li>
+          <div class="userbit_compact">
+            <div class="floatleft">
+              <span class="small_avatar">
+              {if !empty($member.avatar.image)}
+                <img class="twentyfour" src="{$member.avatar.href}" alt="avatar" />
+              {else}
+                <img class="twentyfour" src="{$S.images_url}/unknown.png" alt="avatar" />
+              {/if}
+              </span>
+            </div>
+            <div class="userbit_compact_textpart small">
+              <h2>{$member.link}</h2><br>
+              {if !empty($member.blurb)}
+                {$member.blurb}
+              {/if}
+            </div>
+          </div>
+          </li>
+        {/foreach}
+        </ol>
+        <div class="clear"></div>
+      {/if}
+      <h1 class="bigheader secondary">{$T.stats_header}</h1>
       <dl class="common">
         <dt>{$T.posts}: </dt><dd class="righttext">{$C.common_stats.total_posts}</dd>
         <dt>{$T.topics}: </dt><dd class="righttext">{$C.common_stats.total_topics}</dd>
@@ -110,10 +143,9 @@
         {/if}
       </dl>
       <div>
-        <div class="floatright righttext">
+        <div class="clear">
           {($C.show_stats) ? "<a href=\"{$SUPPORT->url_action($SCRIPTURL|cat:'?action=stats')}\">{$T.more_stats}</a>" : ''}
         </div>
-        <a href="{$SUPPORT->url_action($SCRIPTURL|cat:'?action=recent')}">{$T.recent_view}</a>
       </div>
     </div>
     </div>
@@ -133,7 +165,7 @@
 {* This is the "Recent Posts" bar. *}
 {if !empty($S.number_recent_posts) and (!empty($C.latest_posts) or !empty($C.latest_post))}
   {call collapser id='recent_panel' title='<a href="'|cat:$SUPPORT->url_parse($SCRIPTURL|cat:'?action=recent')|cat:'">'|cat:$T.recent_posts|cat:'</a>' widgetstyle=$widgetstyle}
-  <div class="blue_container norounded smallpadding gradient_darken_down">
+  <div class="blue_container norounded nopadding gradient_darken_down">
     <div class="smalltext" id="recent_posts_content" style="line-height:120%;">
       <div class="entry-title" style="display: none;">{$C.forum_name_html_safe} - {$T.recent_posts}</div>
       <div class="entry-content" style="display: none;">
@@ -155,6 +187,7 @@
         </ol>
       {/if}
     </div>
+    <span class="smalltext smallpadding"><strong><a href="{$SUPPORT->url_action($SCRIPTURL|cat:'?action=recent')}">{$T.recent_view}</a></strong></span>
    </div>
   </div>
   <div class="cContainer_end"></div>

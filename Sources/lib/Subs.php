@@ -3020,6 +3020,9 @@ function setupThemeContext($forceload = false)
 	if ($loaded && !$forceload)
 		return;
 
+	$context['clip_image_src'] = $settings['images_url'] . '/' . $settings['clip_image_src'][$context['theme_variant']];
+	$context['sprite_image_src'] = $settings['images_url'] . '/' . $settings['sprite_image_src'][$context['theme_variant']];
+
 	$loaded = true;
 
 	$context['in_maintenance'] = !empty($maintenance);
@@ -4198,6 +4201,9 @@ function HDC($a, $b, $c)
  */
 function AjaxErrorMsg($msg = 'Unknown or unspecified error', $title = 'Error', $code = 1)
 {
+	if(!isset($_REQUEST['xml']))
+		fatal_error($msg);
+	
 	header('Content-Type: text/xml; charset=UTF-8');
 	echo '<', '?xml version="1.0" encoding="UTF-8" ?', '>
 <document>
