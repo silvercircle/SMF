@@ -15,6 +15,7 @@
 {include 'generics.tpl'}
 {include 'boardbits.tpl'}
 {$widgetstyle = 'framed_region cleantop tinypadding'}
+<div id="messageindex">
 <a id="top"></a>
 <h1 class="bigheader">{$C.name}</h1>
 {if !empty($O.show_board_desc) and !empty($C.description)}
@@ -61,7 +62,7 @@
     </div>
     {*If Quick Moderation is enabled start the form. *}
     {if $C.can_quick_mod and $O.display_quick_mod > 0 and !empty($C.topics)}
-      <form action="{$SCRIPTURL}?action=quickmod;board={$C.current_board}.{$C.start}" method="post" accept-charset="UTF-8" class="clear" name="quickModForm" id="quickModForm">
+      <form action="{$SCRIPTURL}?action=quickmod;board={$C.current_board}.{$C.start}" method="post" accept-charset="UTF-8" name="quickModForm" id="quickModForm">
     {/if}
     <div class="framed_region">
       <table class="topic_table">
@@ -160,6 +161,7 @@
       <br class="clear" />
     </div>
   </div>
+</div>
 {/block}
 {block footerscripts}
 <script>

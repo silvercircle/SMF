@@ -454,7 +454,7 @@ function loadUserSettings()
 	);
 	$user_info['guest_tzoffset'] = ($user_info['is_guest'] && isset($_SESSION['tzoffset']) ? $_SESSION['tzoffset'] : 0);
 	$user_info['guest_need_tzoffset'] = $user_info['is_guest'] && !isset($_SESSION['tzoffset']); // don't have it yet, embed the js to determine tz offset for *guests only*
-
+	$user_info['smf_sidebar_disabled'] = 0;
 	$user_info['groups'] = array_unique($user_info['groups']);
 	// Make sure that the last item in the ignore boards array is valid.  If the list was too long it could have an ending comma that could cause problems.
 	if (!empty($user_info['ignoreboards']) && empty($user_info['ignoreboards'][$tmp = count($user_info['ignoreboards']) - 1]))

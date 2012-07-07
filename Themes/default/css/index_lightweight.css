@@ -1443,11 +1443,6 @@ img.new_posts {
 div.table_frame .table_list {
 	margin: 0;
 }
-#messageindex {
-	clear: both;
-	margin:5px 0;
-	padding:5px;
-}
 #moderationbuttons {
 	overflow: hidden;
 }

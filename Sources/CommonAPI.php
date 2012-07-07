@@ -994,5 +994,37 @@ class EoS_Plugin_Loader
 
 		$pluginInstance->installHooks();
 	}
+
+	public static function uninstall($product)
+	{
+		$pluginMain = HookAPI::getAddonsDir() . $product . '/main.php';
+		require_once($pluginMain);
+		$autoloader = $product . '_autoloader';
+
+		$pluginInstance = $autoloader();
+
+		$pluginInstance->removeHooks();
+	}
+
+	public static function installProducts()
+	{
+		global $context, $user_info;
+
+		isAllowedTo('admin_forum');
+		
+		if($user_info['is_admin']) {
+			$action = isset($_REQUEST['sa']) ? $_REQUEST['sa'] : '';
+			$pluginlist = isset($_REQUEST['p']) ? explode(',', $_REQUEST['p']) : array();
+
+			if(!empty($pluginlist) && ($action === 'install' || $action === 'uninstall')) {
+				foreach($pluginlist as $plugin) {
+					if($action === 'install')
+						self::install($plugin);
+					else
+						self::uninstall($plugin);
+				}
+			}
+		}
+	}
 }
 ?>

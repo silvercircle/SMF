@@ -633,7 +633,7 @@ function MessageIndex()
 	HookAPI::callHook('messageindex_buttons', array(&$normal_buttons));
 
 	enqueueThemeScript('topic', 'scripts/topic.js', true);
-	HookAPI::callHook('messageindex', array());
+	HookAPI::callHook('messageindex', array(&$board_info));
 }
 
 // Allows for moderation from the message index.

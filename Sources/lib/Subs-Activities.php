@@ -212,6 +212,44 @@ function actfmt_default(&$params)
 		return($_s);
 	}
 }
+
+/**
+ * @param $result = mysql database query result
+ * @return void
+ *
+ * output the result of a activity stream query
+ */
+function aStreamOutput($result, $is_notification = false, $rich_output = false)
+{
+	global $context, $memberContext, $txt;
+
+	$users = array();
+	$context['act_results'] = 0;
+	$context['unread_count'] = 0;
+	while($row = mysql_fetch_assoc($result)) {
+		if(!isset($context['board_name']))
+			$context['board_name'] = $row['board_name'];
+		$users[] = $row['id_member'];
+		aStreamFormatActivity($row, $is_notification);
+		$row['dateline'] = timeformat($row['updated']);
+		$row['unread'] = isset($row['unread']) ? $row['unread'] : false;
+		$context['unread_count'] += ($row['unread'] ? 1 : 0);			// needed when showing notifications
+		$context['activities'][] = $row;
+		$context['act_results']++;
+	}
+	mysql_free_result($result);
+	if(isset($context['rich_output']) || $rich_output) {
+		$n = 0;
+		loadMemberData($users);
+		foreach($users as $user) {
+			loadMemberContext($user);
+			$context['activities'][$n++]['member'] = &$memberContext[$user];
+		}
+	}
+	if(!isset($context['titletext']) && !isset($context['get_notifications']))
+		$context['titletext'] = $context['act_results'] ? ($context['act_global'] ? $txt['act_recent_global'] : sprintf($txt['act_recent_board'], $context['board_name'])) : $txt['act_no_results_title'];
+}
+
 /**
  * @param $row - a full row from log_activities and activity_type
  * @return void

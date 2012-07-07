@@ -39,12 +39,19 @@ function XMLhttpMain()
 		'prefix' => array('function' => 'InlinePrefixActions'),
 		'collapse' => array('function' => 'AjaxCollapseCategory'),
 		'sidebar' => array('function' => 'GetSidebarContent'),
+		'togglesb' => array('function' => '_ToggleSideBar'),
 		'tzoffset' => array('function' => 'SetGuestTZOffset')
 	);
 	if (!isset($_REQUEST['sa'], $sub_actions[$_REQUEST['sa']]))
 		fatal_lang_error('no_access', false);
 
 	$sub_actions[$_REQUEST['sa']]['function']();
+}
+
+function _ToggleSideBar()
+{
+	ToggleSideBar();
+	die;
 }
 
 function SetGuestTZOffset()

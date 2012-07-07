@@ -1,5 +1,5 @@
 {function collapser}
-{$state = (isset($_COOKIE.SF_collapsed)) ? ($id|array_search:$collapsed_containers) : false}
+{$state = $id|array_search:$C.collapsed_containers}
 {$headerclass = 'cContainer_header'}
 {$headerstyle = ''}
 <div class="{$headerclass}" {$headerstyle}>

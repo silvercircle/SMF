@@ -37,8 +37,9 @@ function BoardIndex()
 
 	$context['is_board_index'] = true;
 	$context['sidebar_template'] = 'sidebars/sidebar_on_index.tpl';
-	$context['sidebar_context_output'] = 'template_sidebar_content_index';
 	$context['show_sidebar'] = true;
+	$context['sidebar_class'] = 'index';
+	GetSidebarVisibility('index');
 	// Set a canonical URL for this page.
 	$context['canonical_url'] = $scripturl;
 	$context['share_url'] = $boardurl;

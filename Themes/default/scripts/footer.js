@@ -1544,22 +1544,25 @@ function catCollapse(el)
 function sbToggle(el)
 {
 	// side bar (toggle, animate, load content via ajax request)
-	var is_visible = ($('#sidebar').css('display') == 'none' ? false : true);
+	//var is_visible = ($('#sidebar').css('display') == 'none' ? false : true);
+	var is_visible = !sidebar_disabled;
 	$('#sbtoggle').removeClass('expand collapse');
 	if(is_visible) {
 		$('#sidebar').fadeOut(100, function() {
 			$('#container').animate({marginRight: '0'}, 350);
 		});
-		createCookie('smf_sidebar_disabled', 1, 300);
+		//createCookie('smf_sidebar_disabled', 1, 300);
 		$('#sbtoggle').addClass('expand');
 	}
 	else {
 		$('#container').animate({marginRight: sideBarWidth + 20 + 'px'}, 350, function() {
 			$('#sidebar').fadeIn(100);
 		});
-		createCookie('smf_sidebar_disabled', 0, 300);
+		//createCookie('smf_sidebar_disabled', 0, 300);
 		$('#sbtoggle').addClass('collapse');
 	}
+	sidebar_disabled = !sidebar_disabled;
+	sendRequest('action=xmlhttp;sa=togglesb;class=' + $('#sbtoggle').attr('data-class'), $('#sidebar'));
 	return(false);
 }
 
@@ -1694,6 +1697,8 @@ function response(ele, responseText)
 {
 	try {
 		setBusy(0);
+		if(ele.attr('id') == 'sidebar')
+			return;
 		if(ele.attr('id') == 'addtag') {
 			$('#addtag').before(responseText);
 			return;

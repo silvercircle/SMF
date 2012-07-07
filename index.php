@@ -91,6 +91,8 @@ $context['jquery_version'] = '1.7.2';
 $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();
 $context['additional_admin_errors'] = '';
+$context['query_string'] = $boardurl . $_SERVER['REQUEST_URI'];
+$context['sidebar_class'] = '';
 
 // Seed the random generator.
 if (empty($modSettings['rand_seed']) || mt_rand(1, 250) == 69)
@@ -328,6 +330,7 @@ function smf_main()
 		'processlink' => array('Display.php', 'ProcessLink'),
 		'dismissnews' => array('Profile-Actions.php', 'DismissNews'),
 		'whatsnew' => array('Recent.php', 'WhatsNew'),
+		'plugininstall' => array('CommonAPI.php', 'EoS_Plugin_Loader::installProducts'),
 		'smartytest' => array('EosSmarty.php', 'TestSmarty')
 	);
 	// Allow modifying $actionArray easily.

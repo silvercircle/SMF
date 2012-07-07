@@ -4182,6 +4182,36 @@ function getPostIcon($the_icon)
 		return($context['posticons'][$the_icon]);
 }
 
+function ToggleSideBar()
+{
+	global $user_info;
+
+	$sidebar_classes = array('index', 'messageindex', 'topic', 'profile');
+
+	$class = isset($_REQUEST['class']) ? trim($_REQUEST['class']) : 'index';
+	$class = in_array($class, $sidebar_classes) ? $class : 'index';			// must be a valid class
+	$disabled = !($user_info['is_guest'] ? (isset($_SESSION['smf_sidebar_disabled'][$class]) && $_SESSION['smf_sidebar_disabled'][$class] ? true : false) : (isset($user_info['meta']['smf_sidebar_disabled'][$class]) && $user_info['meta']['smf_sidebar_disabled'][$class] ? true : false));
+
+	if($user_info['is_guest'])
+		$_SESSION['smf_sidebar_disabled'][$class] = $disabled;
+	else {
+		$user_info['meta']['smf_sidebar_disabled'][$class] = $disabled;
+		updateMemberData($user_info['id'], array('meta' => @serialize($user_info['meta'])));
+	}
+}
+
+/**
+ * @param $class - string, sidebar class name
+ *
+ * determines whether the visitor has hidden the side bar for the given class.
+ */
+function GetSidebarVisibility($class)
+{
+	global $user_info;
+
+	$user_info['smf_sidebar_disabled'] = $user_info['is_guest'] ? (isset($_SESSION['smf_sidebar_disabled'][$class]) && $_SESSION['smf_sidebar_disabled'][$class] ? 1 : 0) : (isset($user_info['meta']['smf_sidebar_disabled'][$class]) && $user_info['meta']['smf_sidebar_disabled'][$class] ? 1 : 0);
+	return $user_info['smf_sidebar_disabled'];
+}
 /*
  * this is needed to support $a ? $foo : $bar constructs in HEREDoc output
  * templates that need it do a $h = 'HDC'; and then use it as {$h($a, $foo, $bar)}

@@ -68,7 +68,7 @@ function template_html_above()
 	var textSizeMin = 8;
 	var textSizeDefault = 10;
 	var sideBarWidth = 250;
-	var sidebar_content_loaded = 0;
+    var sidebar_disabled = {$user_info['smf_sidebar_disabled']};
 	var cookie = readCookie('SMF_textsize');
 	var fb_appid = '{$modSettings['fb_appid']}';
 	var ssp_imgpath = '{$settings['images_url']}/share';

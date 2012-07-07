@@ -237,7 +237,7 @@ function aStreamGet($b = 0, $xml = false, $global = false)
 			$result = smf_db_query('SELECT COUNT(a.id_act) FROM {db_prefix}log_activities AS a
 				LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
 				WHERE ' . $uquery . ' a.id_board = {int:id_board} AND {query_wanna_see_board} '.$pquery,
-				array('id_board' => $board, 'start' => 0, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage));
+				array('id_board' => $board, 'start' => 0, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage, 'ignoredusers' => $user_info['ignoreusers']));
 
 			list($total) = mysql_fetch_row($result);
 			mysql_free_result($result);
@@ -246,7 +246,7 @@ function aStreamGet($b = 0, $xml = false, $global = false)
 			LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
 			LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board)
 			WHERE ' . $uquery . ' a.id_board = {int:id_board} AND {query_wanna_see_board}'.$pquery.' ORDER BY a.id_act DESC LIMIT {int:start}, {int:perpage}',
-			array('id_board' => $board, 'start' => $start, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage));
+			array('id_board' => $board, 'start' => $start, 'id_user' => $user_info['id'], 'filter' => $filterby, 'perpage' => $perpage, 'ignoredusers' => $user_info['ignoreusers']));
 		
 		$context['viewall_url'] = URL::parse($scripturl . '?action=astream;sa=get;b=' . $board);
 	}
@@ -256,43 +256,6 @@ function aStreamGet($b = 0, $xml = false, $global = false)
 	if($xml)
 		header('Content-Type: text/xml; charset=UTF-8');
 	aStreamOutput($result);
-}
-
-/**
- * @param $result = mysql database query result
- * @return void
- *
- * output the result of a activity stream query
- */
-function aStreamOutput($result, $is_notification = false)
-{
-	global $context, $memberContext, $txt;
-
-	$users = array();
-	$context['act_results'] = 0;
-	$context['unread_count'] = 0;
-	while($row = mysql_fetch_assoc($result)) {
-		if(!isset($context['board_name']))
-			$context['board_name'] = $row['board_name'];
-		$users[] = $row['id_member'];
-		aStreamFormatActivity($row, $is_notification);
-		$row['dateline'] = timeformat($row['updated']);
-		$row['unread'] = isset($row['unread']) ? $row['unread'] : false;
-		$context['unread_count'] += ($row['unread'] ? 1 : 0);			// needed when showing notifications
-		$context['activities'][] = $row;
-		$context['act_results']++;
-	}
-	mysql_free_result($result);
-	if($context['rich_output']) {
-		$n = 0;
-		loadMemberData($users);
-		foreach($users as $user) {
-			loadMemberContext($user);
-			$context['activities'][$n++]['member'] = &$memberContext[$user];
-		}
-	}
-	if(!isset($context['titletext']) && !isset($context['get_notifications']))
-		$context['titletext'] = $context['act_results'] ? ($context['act_global'] ? $txt['act_recent_global'] : sprintf($txt['act_recent_board'], $context['board_name'])) : $txt['act_no_results_title'];
 }
 
 function aStreamGetForTopic($t = 0, $xml = false)

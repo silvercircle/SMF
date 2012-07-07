@@ -955,7 +955,8 @@ function sendpm($recipients, $subject, $message, $store_outbox = false, $from = 
 		{
 			if (!is_numeric($recipients[$rec_type][$id]))
 			{
-				$recipients[$rec_type][$id] = commonAPI::strtolower(trim(preg_replace('/[<>&"\'=\\\]/', '', $recipients[$rec_type][$id])));
+				//$recipients[$rec_type][$id] = commonAPI::strtolower(trim(preg_replace('/[<>&"\'=\\\]/', '', $recipients[$rec_type][$id])));
+				$recipients[$rec_type][$id] = commonAPI::strtolower(trim(preg_replace('/[<>&"\'=\\]/', '', $recipients[$rec_type][$id])));
 				$usernames[$recipients[$rec_type][$id]] = 0;
 			}
 		}
@@ -1925,7 +1926,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 		}
 
 		// What if we want to export new topics out to a CMS?
-		HookAPI::callHook('integrate_create_topic', array($msgOptions, $topicOptions, $posterOptions));
+		HookAPI::callHook('create_topic', array(&$msgOptions, &$topicOptions, &$posterOptions));
 		// record the activity
 		if($modSettings['astream_active'] && !$context['no_astream']) {
 			require_once($sourcedir . '/lib/Subs-Activities.php');
@@ -1971,6 +1972,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 				   		array('member_name' => $posterOptions['real_name'], 'topic_title' => $msgOptions['subject']),
 				   		$topicOptions['board'], $topicOptions['id'], $msg_to_update, $topicOptions['id_member_started'], 0, $posterOptions['id'] == $topicOptions['id_member_started'] ? true : false);
 		}
+		HookAPI::callHook('update_topic', array(&$msgOptions, &$topicOptions, &$posterOptions));
 	}
 
 	// Creating is modifying...in a way.

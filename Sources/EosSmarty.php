@@ -481,6 +481,7 @@ class EoS_Smarty_Template_Support {
   		$this->_smarty_instance->assignByRef('_COOKIE', $_COOKIE);
   		$this->_smarty_instance->assign('SID', SID != '' ? '&' . SID : '');
 
+  		$context['collapsed_containers'] = isset($_COOKIE['SF_collapsed']) ? explode(',', $_COOKIE['SF_collapsed']) : array(0);
   		/*
   		 * hook to extend theme context initialization.
   		 */

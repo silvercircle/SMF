@@ -16,7 +16,6 @@
  *}
 <!DOCTYPE html >
 {include 'generics.tpl'}
-{$collapsed_containers = (!empty($_COOKIE.SF_collapsed)) ? (","|explode:$_COOKIE.SF_collapsed) : array()}
 <html id="_S_" lang="en-US">
   <head>
     <link rel="stylesheet" type="text/css" href="{$S.primary_css}" />
@@ -57,7 +56,7 @@
       var textSizeMin = 8;
       var textSizeDefault = 10;
       var sideBarWidth = 250;
-      var sidebar_content_loaded = 0;
+      var sidebar_disabled = {$U.smf_sidebar_disabled};
       var cookie = readCookie('SMF_textsize');
       var fb_appid = '{$M.fb_appid}';
       var ssp_imgpath = '{$S.images_url}/share';
@@ -246,9 +245,9 @@
   <div id="main_content_section">
   {include file = "linktree.tpl"}
   {$sidebar_allowed = !empty($C.show_sidebar)}
-  {$sidebar_vis = (!empty($_COOKIE.smf_sidebar_disabled)) ? false : true}
+  {$sidebar_vis = !$U.smf_sidebar_disabled}
   {if $sidebar_allowed}
-    <div onclick="sbToggle($(this));" id="sbtoggle" class="{($sidebar_vis) ? 'collapse' : 'expand'}">&nbsp;</div>
+    <a href="{$C.query_string};sbtoggle" data-class="{$C.sidebar_class}" onclick="sbToggle($(this));return(false);" id="sbtoggle" class="{($sidebar_vis) ? 'collapse' : 'expand'}">&nbsp;</a>
   {/if}
   {* Show the navigation tree. *}
   <div style="position:relative;">
