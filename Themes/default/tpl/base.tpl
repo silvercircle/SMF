@@ -243,7 +243,7 @@
   {* The main content should go here. *}
   <div id="content_section">
   <div id="main_content_section">
-  {include file = "linktree.tpl"}
+  {include "linktree.tpl"}
   {$sidebar_allowed = !empty($C.show_sidebar)}
   {$sidebar_vis = !$U.smf_sidebar_disabled}
   {if $sidebar_allowed}

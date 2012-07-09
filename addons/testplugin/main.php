@@ -20,6 +20,11 @@
  * 1) 5 most recent posts in the board
  * 2) 5 most recent events in the board (posts, ratings, new topics etc.)
  */
+
+// this should always be there
+if (!defined('EOSA'))
+	die('No access');
+
 function testplugin_autoloader()
 {
 	return new TestPlugin();
@@ -27,13 +32,26 @@ function testplugin_autoloader()
 
 class TestPlugin extends EoS_Plugin
 {
-	protected $productShortName = 'testplugin';
+	protected $productShortName = 'testplugin';		// mandatory. should only contain letters and numbers, no special chars. This is the internal plugin identifier.
+	
+	protected $_product = array(
+		'Version' => '0.1',
+		'Name' => 'TestPlugin',
+		'Description' => 'A simple plugin to implement a side bar in the message index display.'
+	);
+
 	protected $installableHooks = array(
 		'messageindex' => array('file' => 'main.php', 'callable' => 'TestPlugin::messageindex'),
 		'astream_event_added' => array('file' => 'main.php', 'callable' => 'TestPlugin::EventAdded'),
-		'create_topic' => array('file' => 'main.phhp', 'callable' => 'TestPlugin::PostAdded'),
-		'update_topic' => array('file' => 'main.phhp', 'callable' => 'TestPlugin::PostAdded')
+		'create_topic' => array('file' => 'main.php', 'callable' => 'TestPlugin::PostAdded'),
+		'update_topic' => array('file' => 'main.php', 'callable' => 'TestPlugin::PostAdded')
 	);
+
+	/* 
+	 * this is for updating a plugin. Hooks listed here (same format as in $installableHooks)
+	 * will be removed during the installation / updating procedure.
+	 */
+	protected $removeableHooks = array();
 
 	protected $cacheName_Events = 'testplugin-messageindex-events';
 	protected $cacheName_Posts = 'testplugin-messageindex-posts';
@@ -80,17 +98,24 @@ class TestPlugin extends EoS_Plugin
 		$request = smf_db_query('SELECT a.*, t.*, b.name AS board_name FROM {db_prefix}log_activities AS a
 				LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
 				LEFT JOIN {db_prefix}boards AS b ON (b.id_board = a.id_board)
-				WHERE a.id_board = {int:id_board} AND a.id_member NOT IN({array_int:ignoredusers}) LIMIT 5',
-				array('id_board' => $context['current_board'], 'ignoredusers' => $ignoreusers)
+				WHERE a.id_board = {int:id_board} AND a.id_member NOT IN({array_int:ignoredusers}) ORDER BY a.id_act DESC LIMIT 5',
+			array('id_board' => $context['current_board'], 'ignoredusers' => $ignoreusers)
 		);
 		aStreamOutput($request, false, true);
+		/*
 		if(isset($context['activities'])) {
-			uasort($context['activities'], function($a, $b) {
+			usort($context['activities'], function($a, $b) {
 	    		if ($a['updated'] == $b['updated'])
 	        		return 0;
 	    		return ($a['updated'] < $b['updated']) ? -1 : 1;
 			});
-		}
+		}*/
+		$request = smf_db_query('SELECT m.* FROM {db_prefix}messages AS m
+				WHERE m.id_board = {int:id_board} AND m.id_member NOT IN ({array_int:ignoredusers})
+				ORDER BY m.id_msg DESC LIMIT 10',
+			array('id_board' => $context['current_board'], 'ignoredusers' => $ignoreusers));
+
+		mysql_free_result($request);
 	}
 
 	/*
@@ -99,7 +124,7 @@ class TestPlugin extends EoS_Plugin
 	 */
 	public static function EventAdded(&$eventData)
 	{
-		if($eventData['id_board'])				// the event references a board event
+		if(isset($eventData['id_board']) && !empty($eventData['id_board']))				// the event references a board event
 			CacheAPI::putCache(self::$cacheName_Events, null, 0);
 	}
 

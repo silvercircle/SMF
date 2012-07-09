@@ -288,10 +288,10 @@ function template_body_above()
 
 	theme_linktree();
 	$sidebar_allowed = isset($context['show_sidebar']);			// todo: make this more flexible and define a set of pages where the sidebar can show up
-	$sidebar_vis = (isset($_COOKIE['smf_sidebar_disabled']) && $_COOKIE['smf_sidebar_disabled'] == 1) ? false : true;
+	$sidebar_vis = !$user_info['smf_sidebar_disabled'];
 	if($sidebar_allowed)
 		echo '
-			<div onclick="sbToggle($(this));" id="sbtoggle" class="',$sidebar_vis ? 'collapse' : 'expand','">&nbsp;</div>';
+    		<a href="',$context['query_string'],';sbtoggle" data-class="',$context['sidebar_class'],'" onclick="sbToggle($(this));return(false);" id="sbtoggle" class="',($sidebar_vis ? 'collapse' : 'expand'),'">&nbsp;</a>';
 	// Show the navigation tree.
 	echo '<div style="position:relative;">
 		  <form onmouseout="return false;" onsubmit="submitSearchBox();" class="floatright" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="UTF-8">';

@@ -11,7 +11,13 @@ class FootNotes extends EoS_Plugin
 	protected $installableHooks = array(
 		'parse_bbc_after' => array('file' => 'main.php', 'callable' => 'FootNotes::parse')
 	);
-	
+
+	protected $_product = array(
+		'Version' => '0.1',
+		'Name' => 'Foot Notes',
+		'Description' => 'A plugin to implement a foot notes BBCode.'
+	);
+
 	public function __construct() { parent::__construct(); }
 
 

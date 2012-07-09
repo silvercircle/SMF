@@ -27,6 +27,7 @@ $forum_version = 'EosAlpha 1.0pre';
 
 // Get everything started up...
 define('SMF', 1);
+define('EOSA', 1);
 define('__APICOMPAT__', 0);			// if set to 1, smcFunc[] will be populated like in SMF 2
 
 if (function_exists('set_magic_quotes_runtime'))
@@ -86,7 +87,7 @@ $context['template_hooks']['global'] = array(
 	'header' => ''
 );
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
-$context['jsver'] = '?v=1552';
+$context['jsver'] = '?v=1553';
 $context['jquery_version'] = '1.7.2';
 $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();
@@ -169,14 +170,12 @@ function smf_main()
 		loadTheme();
 		EoS_Smarty::init();
 	}
-	//EoS_Plugin_Loader::install('fnotes');
-	//HookApi::clearAllHooks();
-	// Check if the user should be disallowed access.
 	URL::setSID();
 	array_unshift($context['linktree'], array(
 		'url' => URL::home(),
 		'name' => $context['forum_name_html_safe']
 	));
+	// Check if the user should be disallowed access.
 	is_not_banned();
 
 	$context['can_see_hidden_level1'] = allowedTo('see_hidden1');
@@ -330,7 +329,6 @@ function smf_main()
 		'processlink' => array('Display.php', 'ProcessLink'),
 		'dismissnews' => array('Profile-Actions.php', 'DismissNews'),
 		'whatsnew' => array('Recent.php', 'WhatsNew'),
-		'plugininstall' => array('CommonAPI.php', 'EoS_Plugin_Loader::installProducts'),
 		'smartytest' => array('EosSmarty.php', 'TestSmarty')
 	);
 	// Allow modifying $actionArray easily.

@@ -493,11 +493,17 @@ class EoS_Smarty_Template_Support {
 	 * @param $position - string. indicates where the template fragment 
 	 *        should go.
 	 * @param $template_name a template file name. must be relative to the
-	 *        one of the configured template directories.
+	 *        one of the configured template directories. can be either
+	 *		  a string (single template) or an array of template fragments
 	 */
 	public function registerHookTemplate($position, $template_name)
 	{
-		$this->_hook_templates[$position][] = $template_name . '.tpl';
+		if(!is_array($template_name))
+			$this->_hook_templates[$position][] = $template_name . '.tpl';
+		else {
+			foreach($template_name as $name)
+				$this->_hook_templates[$position][] = $name . '.tpl';
+		}
 	}
 	/**
 	 * @static

@@ -14,6 +14,12 @@ class MyPlugin extends EoS_Plugin
 		'smarty_init' => array('file' => 'main.php', 'callable' => 'MyPlugin::registerTemplateHooks')
 	);
 
+	protected $_product = array(
+		'Version' => '0.1',
+		'Name' => 'MyPlugin',
+		'Description' => 'Does nothing :)'
+	);
+
 	public function __construct()
 	{
 		parent::__construct();

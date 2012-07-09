@@ -1107,7 +1107,7 @@ h1.bigheader.topic {
 }
 h1.bigheader.secondary, div.spoiler.head {
 	font-size: 14px;
-	font-weight:normal;
+	font-weight:bold;
 	border-bottom: 1px solid #cce;
 	color: #88a;
 	padding: 2px 0;
@@ -2381,12 +2381,12 @@ tr.titlebg td {
 	width: 200px;
 	position: relative;
 	background: white;
-	/*right: -1px;*/
+	right: -1px;
 	float: left;
 	margin-top: 15px;
 	z-index: 10;
 	min-height: 600px;
-	/*border-right: 1px solid #ddd;*/
+	border-right: 1px solid #ddd;
 }
 .cat_bar2 img {
 	margin-top:4px;

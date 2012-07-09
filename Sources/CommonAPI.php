@@ -303,10 +303,16 @@ class HookAPI {
 	}
 
 	public static function getAddonsDir() { return self::$addonsdir; }
+
 	public static function clearAllHooks()
 	{
 		$change_array = array('integration_hooks' => '');
 		updateSettings($change_array, true);
+	}
+
+	public static function &getHooks()
+	{
+		return self::$hooks;
 	}
 }
 
@@ -979,52 +985,17 @@ class EoS_Plugin
 	{
 		HookAPI::removeAll($this->productShortName);
 	}
-}
 
-/* this has no business here, should go to packages */
-class EoS_Plugin_Loader
-{
-	public static function install($product)
+	public function __get($property)
 	{
-		$pluginMain = HookAPI::getAddonsDir() . $product . '/main.php';
-		require_once($pluginMain);
-		$autoloader = $product . '_autoloader';
-
-		$pluginInstance = $autoloader();
-
-		$pluginInstance->installHooks();
+		if(isset($this->_product[$property]))
+			return $this->_product[$property];
+		else
+			return false;
 	}
-
-	public static function uninstall($product)
+	public function test()
 	{
-		$pluginMain = HookAPI::getAddonsDir() . $product . '/main.php';
-		require_once($pluginMain);
-		$autoloader = $product . '_autoloader';
-
-		$pluginInstance = $autoloader();
-
-		$pluginInstance->removeHooks();
-	}
-
-	public static function installProducts()
-	{
-		global $context, $user_info;
-
-		isAllowedTo('admin_forum');
-		
-		if($user_info['is_admin']) {
-			$action = isset($_REQUEST['sa']) ? $_REQUEST['sa'] : '';
-			$pluginlist = isset($_REQUEST['p']) ? explode(',', $_REQUEST['p']) : array();
-
-			if(!empty($pluginlist) && ($action === 'install' || $action === 'uninstall')) {
-				foreach($pluginlist as $plugin) {
-					if($action === 'install')
-						self::install($plugin);
-					else
-						self::uninstall($plugin);
-				}
-			}
-		}
+		echo $this->productShortName;
 	}
 }
 ?>

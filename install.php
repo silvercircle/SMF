@@ -14,7 +14,7 @@
 $GLOBALS['current_smf_version'] = '1.0pre';
 $GLOBALS['db_script_version'] = '2-0';
 
-$GLOBALS['required_php_version'] = '5.2.10';
+$GLOBALS['required_php_version'] = '5.3.1';
 
 global $installurl, $incontext, $databases, $txt;
 

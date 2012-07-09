@@ -712,4 +712,8 @@ $txt['simplesef_debug'] = 'Enable debug mode';
 $txt['simplesef_debug_desc'] = 'This option will enable debugging on your board.  This does not output any specific information to the screen, but will rapidly fill up your error log with debugging statements from SimpleSEF.  This should really only be used if the author requests it when seeking support';
 $txt['hidden_content_level_x_admin'] = 'Hidden content Level %d no permission message';
 $txt['hidden_content_bbc_settings'] = "Hidden content BBCode settings";
+
+$txt['plugins_title'] = 'Plugins';
+$txt['browse_plugins'] = 'List plugins';
+$txt['browse_hooks'] = 'Hooks';
 ?>

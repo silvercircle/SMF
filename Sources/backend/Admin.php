@@ -103,6 +103,17 @@ function AdminMain()
 						'options' => array($txt['package_settings']),
 					),
 				),
+				'plugins' => array(
+					'label' => $txt['plugins_title'],
+					'file' => $backend_subdir . '/Plugins.php',
+					'function' => 'PluginsMain',
+					'permission' => array('admin_forum'),
+					'icon' => 'packages.gif',
+					'subsections' => array(
+						'browse' => array($txt['browse_plugins']),
+						'hooks' => array($txt['browse_hooks'])
+					),
+				),
 				'search' => array(
 					'function' => 'AdminSearch',
 					'permission' => array('admin_forum'),
