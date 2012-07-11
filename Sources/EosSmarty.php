@@ -23,8 +23,6 @@ class EoS_Smarty {
 
 	/**
 	 * init smarty engine and custom theme support object
-	 * TODO: #) allow multiple template dirs (for theme inheritance - easy)
-	 *       #) 
 	 *
 	 * this is called once from index.php when ALL other initializations
 	 * are complete.

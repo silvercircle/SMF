@@ -1135,10 +1135,17 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
             	'test' => '[A-Za-z0-9_,\-\s]+?\]',
             	'block_level' => true,
             	'validate' =>  create_function('&$tag, &$data, $disabled', '
-               $data[0] = strtr(parse_bbc($data[0], ' . ($smileys ? 'true' : 'false') . ', \'' . $cache_id . '\'), array(\'<brdd />\' => ""));
-			   global $txt;
-               $tag[\'content\'] = "<div class=\"codeheader\">" . "Code" . ": (" . $data[1] . ") </div><pre class=\"brush:" . $data[1] . "\">" . $data[0] . "</pre>";
+               		$data[0] = strtr(parse_bbc($data[0], ' . ($smileys ? 'true' : 'false') . ', \'' . $cache_id . '\'), array(\'<brdd />\' => ""));
+			   		global $txt;
+               		$tag[\'content\'] = "<div class=\"codeheader\">" . "Code" . ": (" . $data[1] . ") </div><pre class=\"brush:" . $data[1] . "\">" . $data[0] . "</pre>";
             	'),
+				/*
+            	'validate' => function(&$tag, &$data, $disabled) {
+               		$data[0] = strtr(parse_bbc($data[0], $smileys, $cache_id), array('<brdd />' => ""));
+			   		global $txt;
+               		$tag['content'] = '<div class="codeheader">' . 'Code' . ': (' . $data[1] . ') </div><pre class="brush:' . $data[1] . '">' . $data[0] . '</pre>';
+               	}
+				*/
 			),			
 			array(
 				'tag' => 'color',
@@ -1215,7 +1222,10 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'type' => 'unparsed_content',
 				'content' => '<a href="mailto:$1" class="bbc_email">$1</a>',
 				// !!! Should this respect guest_hideContacts?
-				'validate' => create_function('&$tag, &$data, $disabled', '$data = strtr($data, array(\'<br />\' => \'\'));'),
+				'validate' => function(&$tag, &$data, $disabled) {
+					$data = strtr($data, array('<br />' => ''));
+				}
+				//'validate' => create_function('&$tag, &$data, $disabled', '$data = strtr($data, array(\'<br />\' => \'\'));'),
 			),
 			array(
 				'tag' => 'email',
@@ -1270,22 +1280,36 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				),
 				//'content' => '<div class="bbc_img_cnt"><div class="bbc_resize{resized}">Resized image, click to zoom</div><br><img style="{width}{height}" src="$1" alt="{alt}" class="bbc_img resized" /></div><div class="clear"></div>',
 				'content' => '<div class="bbc_img_resizer" style="display:none;">'.$txt['img_resizebar_msg'].'</div><img style="{width}{height}" src="$1" alt="{alt}" class="bbc_img resize{resized}" />',
+				/*
 				'validate' => create_function('&$tag, &$data, $disabled', '
 					$data = strtr($data, array(\'<br />\' => \'\'));
 					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
 						$data = \'http://\' . $data;
 				'),
+				*/
+				'validate' => function(&$tag, &$data, $disabled) {
+					$data = strtr($data, array('<br />' => ''));
+					if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0)
+						$data = 'http://' . $data;
+				},
 				'disabled_content' => '($1)',
 			),
 			array(
 				'tag' => 'img',
 				'type' => 'unparsed_content',
 				'content' => '<img src="$1" alt="" class="bbc_img" />',
+				/*
 				'validate' => create_function('&$tag, &$data, $disabled', '
 					$data = strtr($data, array(\'<br />\' => \'\'));
 					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
 						$data = \'http://\' . $data;
 				'),
+				*/
+				'validate' => function(&$tag, &$data, $disabled) {
+					$data = strtr($data, array('<br />' => ''));
+					if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0)
+						$data = 'http://' . $data;
+				},
 				'disabled_content' => '($1)',
 			),
 			array(
@@ -1428,10 +1452,16 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'test' => '[1-7]\]',
 				'before' => '<span style="font-size: $1;" class="bbc_size">',
 				'after' => '</span>',
+				/*
 				'validate' => create_function('&$tag, &$data, $disabled', '
 					$sizes = array(1 => 0.7, 2 => 1.0, 3 => 1.35, 4 => 1.45, 5 => 2.0, 6 => 2.65, 7 => 3.95);
 					$data = $sizes[$data] . \'em\';'
 				),
+				*/
+				'validate' => function(&$tag, &$data, $disabled) {
+					$sizes = array(1 => 0.7, 2 => 1.0, 3 => 1.35, 4 => 1.45, 5 => 2.0, 6 => 2.65, 7 => 3.95);
+					$data = $sizes[$data] . 'em';
+				}
 			),
 			array(
 				'tag' => 'spoiler',
@@ -1470,11 +1500,19 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'tag' => 'time',
 				'type' => 'unparsed_content',
 				'content' => '$1',
+				/*
 				'validate' => create_function('&$tag, &$data, $disabled', '
 					if (is_numeric($data))
 						$data = timeformat($data);
 					else
 						$tag[\'content\'] = \'[time]$1[/time]\';'),
+				*/
+				'validate' => function(&$tag, &$data, $disabled) {
+					if (is_numeric($data))
+						$data = timeformat($data);
+					else
+						$tag['content'] = '[time]$1[/time]';
+				}
 			),
 			array(
 				'tag' => 'tr',
@@ -1510,21 +1548,34 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'tag' => 'url',
 				'type' => 'unparsed_content',
 				'content' => '<a href="$1" class="bbc_link" target="_blank">$1</a>',
+				/*
 				'validate' => create_function('&$tag, &$data, $disabled', '
 					$data = strtr($data, array(\'<br />\' => \'\'));
 					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
 						$data = \'http://\' . $data;
 				'),
+				*/
+				'validate' => function(&$tag, &$data, $disabled) {
+					$data = strtr($data, array('<br />' => ''));
+					if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0)
+						$data = 'http://' . $data;
+				}
 			),
 			array(
 				'tag' => 'url',
 				'type' => 'unparsed_equals',
 				'before' => '<a href="$1" class="bbc_link" target="_blank">',
 				'after' => '</a>',
+				/*
 				'validate' => create_function('&$tag, &$data, $disabled', '
 					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
 						$data = \'http://\' . $data;
 				'),
+				*/
+				'validate' => function(&$tag, &$data, $disabled) {
+					if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0)
+						$data = 'http://' . $data;
+				},
 				'disallow_children' => array('email', 'ftp', 'url', 'iurl'),
 				'disabled_after' => ' ($1)',
 			),

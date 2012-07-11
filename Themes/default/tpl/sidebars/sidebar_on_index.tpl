@@ -61,6 +61,7 @@
   </div>
   </div>
   </div>
+  {$SUPPORT->displayHook('sidebar_userblock')}
   {* Otherwise they're a guest - this time ask them to either register or login - lazy bums...*}
 {else}
   <div class="smalltext smallpadding">
@@ -148,6 +149,7 @@
         </div>
       </div>
     </div>
+    {$SUPPORT->displayHook('sidebar_infoblock')}
     </div>
   </div>
   <div class="cContainer_end"></div>

@@ -53,8 +53,8 @@ class TestPlugin extends EoS_Plugin
 	 */
 	protected $removeableHooks = array();
 
-	protected $cacheName_Events = 'testplugin-messageindex-events';
-	protected $cacheName_Posts = 'testplugin-messageindex-posts';
+	protected static $cacheName_Events = 'testplugin-messageindex-events';
+	protected static $cacheName_Posts = 'testplugin-messageindex-posts';
 	
 	protected static $mydata = array();
 

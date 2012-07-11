@@ -194,12 +194,12 @@
 {if $ID != $C.first_message}
   {($message.first_new) ? '<a id="new"></a>' : ''}
 {/if}
-  <div class="keyinfo lean tinytext" style="line-height:19px;">
+  <div class="keyinfo lean tinytext gradient_darken_down" style="line-height:19px;">
   {if !empty($S.show_user_images) and empty($O.show_no_avatars)}
     {if !empty($message.member.avatar.image)}
       <span class="small_avatar floatleft">
         {$message.member.avatar.image}
-    </span>
+      </span>
     {else}
       <span class="small_avatar floatleft">
         <img src="{$S.images_url}/unknown.png" alt="avatar" />

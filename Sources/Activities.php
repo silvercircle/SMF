@@ -193,6 +193,7 @@ function aStreamGet($b = 0, $xml = false, $global = false)
 	$context['xml'] = $xml;
 	$context['act_global'] = false;
 	$total = 0;
+	$context['sef_full_rewrite'] = true;
 	
 	$perpage = $xml ? 15 : (empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) ? $options['topics_per_page'] : $modSettings['defaultMaxTopics']);
 	

@@ -258,8 +258,6 @@ function template_body_above()
 
 	echo $context['additional_admin_errors'];
 	
-	if($context['news_item_count'])
-		template_news_listitems();
 	echo '<aside>
 		  <div id="sidebar" style="width:260px;display:',$sidebar_allowed ? 'inline' : 'none',';">';
 		if($sidebar_allowed && is_callable($context['sidebar_context_output']))

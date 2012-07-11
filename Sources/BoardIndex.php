@@ -136,7 +136,7 @@ function BoardIndex()
 		'markread' => array('text' => 'mark_as_read', 'image' => 'markread.gif', 'lang' => true, 'url' => $scripturl . '?action=markasread;sa=all;' . $context['session_var'] . '=' . $context['session_id'])
 	);
 
-	HookAPI::callHook('integrate_boardindex', array());
+	HookAPI::callHook('boardindex', array());
 	fetchNewsItems(0, 0);
 }
 

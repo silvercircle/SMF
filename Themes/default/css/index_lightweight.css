@@ -3446,7 +3446,7 @@ img.twentyfour {
 	height: 24px !important;
 }
 
-li.medium_avatar img {
+li.medium_avatar img, span.medium_avatar img {
 	height: 48px;
 	width: 48px;
 	margin: 2px 5px;

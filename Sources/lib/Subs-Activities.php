@@ -159,7 +159,7 @@ function aStreamAddNotification(&$users, $id_act, $id_type)
  */
 function actfmt_rating(&$params)
 {
-	global $user_info, $txt, $context;
+	global $user_info, $txt, $context, $modSettings;
 
 	if(!isset($context['can_view_ratings']))
 		$context['can_view_ratings'] = allowedTo('can_view_ratings');
@@ -172,7 +172,15 @@ function actfmt_rating(&$params)
 	else if($params['id_owner'] && (int)$params['id_owner'] === (int)$user_info['id'])
 	    $key = $params['f_your'];
 
-	$_k = 'acfmt_' . $params['id_desc'] . '_' . trim($key) . ($context['can_view_ratings'] ? '' : '_a');
+	if(!isset($params['rtype']))
+		$params['rtype'] = 1;
+
+	if(isset($modSettings['ratings'][$params['rtype']]))
+		$params['rating_type'] = $modSettings['ratings'][$params['rtype']]['text'];
+	else
+		return false;
+
+	$_k = 'acfmt_' . $params['id_desc'] . '_' . trim($key) . ($context['can_view_ratings'] || $modSettings['ratings'][$params['rtype']]['points'] == 0 ? '' : '_a');
 	if(isset($txt[$_k]))
 		return(_vsprintf($txt[$_k], $params));
 	else {
@@ -231,11 +239,13 @@ function aStreamOutput($result, $is_notification = false, $rich_output = false)
 			$context['board_name'] = $row['board_name'];
 		$users[] = $row['id_member'];
 		aStreamFormatActivity($row, $is_notification);
-		$row['dateline'] = timeformat($row['updated']);
-		$row['unread'] = isset($row['unread']) ? $row['unread'] : false;
-		$context['unread_count'] += ($row['unread'] ? 1 : 0);			// needed when showing notifications
-		$context['activities'][] = $row;
-		$context['act_results']++;
+		if($row['formatted_result'] !== false) {
+			$row['dateline'] = timeformat($row['updated']);
+			$row['unread'] = isset($row['unread']) ? $row['unread'] : false;
+			$context['unread_count'] += ($row['unread'] ? 1 : 0);			// needed when showing notifications
+			$context['activities'][] = $row;
+			$context['act_results']++;
+		}
 	}
 	mysql_free_result($result);
 	if(isset($context['rich_output']) || $rich_output) {
@@ -270,7 +280,10 @@ function aStreamFormatActivity(&$row, $is_notification = false)
 	$callback = $row['formatter'];
 	if(function_exists($callback)) {
 		$out = call_user_func_array($callback, array(&$params));
-		$row['formatted_result'] = str_replace(array('@SCRIPTURL@', '@URL_MEMBER@', '@NM@'), array($scripturl, URL::user($params['id_member'], $params['member_name']), $is_notification ? ';nmdismiss=' . $row['id_act'] : ''), $out);
+		if(false !== $out)
+			$row['formatted_result'] = str_replace(array('@SCRIPTURL@', '@URL_MEMBER@', '@NM@'), array($scripturl, URL::user($params['id_member'], $params['member_name']), $is_notification ? ';nmdismiss=' . $row['id_act'] : ''), $out);
+		else
+			$row['formatted_result'] = false;
 	}
 	else {
 		$_s = sprintf($txt['activity_missing_callback'], $params['id_type']);

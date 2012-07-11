@@ -116,8 +116,7 @@ function reloadSettings()
 {
 	global $modSettings, $sourcedir, $boardurl, $cachedir;
 
-	//todo: the $_REQUEST[] thing should go away, it is only for debugging
-	$no_hooks = ((isset($GLOBALS['g_disable_all_hooks']) && $GLOBALS['g_disable_all_hooks'] === true) || isset($_REQUEST['nohooks']));
+	$no_hooks = (isset($GLOBALS['g_disable_all_hooks']) && $GLOBALS['g_disable_all_hooks'] === true);
 
 	CacheAPI::init($GLOBALS['db_cache_api'], md5($boardurl . filemtime($sourcedir . '/Load.php')) . '-SMF-', $GLOBALS['db_cache_memcached'], $cachedir);
 
@@ -162,13 +161,8 @@ function reloadSettings()
 		CacheAPI::disable();
 
 	if($no_hooks)
-		$the_hooks = '';
-	else
-		$the_hooks = &$modSettings['integration_hooks'];
-	HookAPI::setHooks($the_hooks);
-
-	if(__APICOMPAT__)
-		require_once($sourcedir . '/Compat.php');
+		$modSettings['integration_hooks'] = '';
+	HookAPI::setHooks($modSettings['integration_hooks']);
 
 	// Setting the timezone is a requirement for some functions in PHP >= 5.1.
 	if (isset($modSettings['default_timezone']) && function_exists('date_default_timezone_set'))
@@ -223,7 +217,7 @@ function reloadSettings()
 			HookAPI::addHook($hook['hook'], $hook['file'], $hook['function'], false);
 	}
 	// Call pre load integration functions.
-	HookAPI::callHook('integrate_pre_load');
+	HookAPI::callHook('pre_load');
 	SimpleSEF::convertQueryString();
 }
 
@@ -540,6 +534,7 @@ function loadUserSettings()
 		);
 		updateSettings(array('log_online_today' => @serialize($modSettings['online_today'])));
 	}
+	HookAPI::callHook('load_userdata', array(&$user_info, &$user_settings));
 }
 
 // Check for moderators and see if they have access to the board.
@@ -595,6 +590,7 @@ function loadBoard()
 		{
 			loadPermissions();
 			loadTheme();
+			EoS_Smarty::init();
 			fatal_lang_error('topic_gone', false);
 		}
 	}
@@ -790,6 +786,7 @@ function loadBoard()
 		// The permissions and theme need loading, just to make sure everything goes smoothly.
 		loadPermissions();
 		loadTheme();
+		EoS_Smarty::init();
 
 		$_GET['board'] = '';
 		$_GET['topic'] = '';
@@ -1013,7 +1010,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 	else
 		trigger_error('loadMemberData(): Invalid member data set \'' . $set . '\'', E_USER_WARNING);
 
-	HookAPI::callHook('integrate_loadmemberdata', array(&$set, &$select_columns, &$select_tables));
+	HookAPI::callHook('load_memberdata', array(&$set, &$select_columns, &$select_tables));
 
 	if (!empty($users))
 	{
@@ -1830,7 +1827,7 @@ function loadAdminTemplate($template_name, $fatal = true)
 	if ($loaded)
 	{
 		if ($db_show_debug === true)
-			$context['debug']['templates'][] = $template_name . ' (' . basename($settings['base_theme_dir']) . ')';
+			$context['debug']['templates'][] = $template_name . ' (' . basename($base) . ')';
 
 		if (function_exists('template_' . $template_name . '_init'))
 			call_user_func('template_' . $template_name . '_init');

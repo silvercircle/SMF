@@ -149,7 +149,7 @@ function GiveLike($mid)
 					aStreamAdd($uid, ACT_LIKE,
 							array('member_name' => $context['user']['name'],
 							  'topic_title' => $row['subject'],
-							  'rating_type' => $modSettings['ratings'][$like_type]['text']),
+							  'rtype' => $like_type),
 							$row['id_board'], $row['id_topic'], $mid, $like_receiver);
 				}
 			}
@@ -233,7 +233,7 @@ function LikesGenerateOutput($like_status, &$output, $mid, $have_liked)
 	}
 
 	if(!empty($parts))
-		$output = '<span class="ratings" data-mid="'.$mid.'"><span class="title">Ratings:</span> ' . implode(' | ', $parts) . '</span>';
+		$output = '<span class="ratings" data-mid="'.$mid.'"><span class="title"></span> ' . implode(' | ', $parts) . '</span>';
 }
 
 function CreateLikeBar()
