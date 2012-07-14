@@ -51,9 +51,6 @@ if(!isset($db_cache_api))
 
 if(!isset($db_no_admin_security))
 	$db_no_admin_security = 0;
-// Make absolutely sure the cache directory is defined.
-//if ((empty($cachedir) || !file_exists($cachedir)) && file_exists($boarddir . '/cache'))
-//	$cachedir = $boarddir . '/cache';
 
 // And important includes.
 require_once($sourcedir . '/CommonAPI.php');
@@ -87,7 +84,7 @@ $context['template_hooks']['global'] = array(
 	'header' => ''
 );
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
-$context['jsver'] = '?v=1556';
+$context['jsver'] = '?v=1558';
 $context['jquery_version'] = '1.7.2';
 $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();

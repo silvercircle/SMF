@@ -27,7 +27,7 @@ function template_html_above()
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/rtl.css" />';
     if(isset($context['need_synhlt']))
     	echo '
-    <link rel="stylesheet" type="text/css" href="',$settings['default_theme_url'],'/css/shlt.css" />';
+    <link rel="stylesheet" type="text/css" href="',$settings['default_theme_url'],'/prettify/prettify.css" />';
 
 	// Here comes the JavaScript bits!
 	if(!empty($modSettings['jQueryFromGoogleCDN']))
@@ -388,7 +388,7 @@ EOT;
 	var t3 = document.createElement(\'SCRIPT\');
 	t3.type = "text/javascript";
 	t3.async = true;
-	t3.src = "',$settings['theme_url'],'/scripts/shlt.js?ver=1.1.0";
+	t3.src = "',$settings['theme_url'],'/prettify/prettify.js?ver=1.1.0";
 	anchor.parentNode.insertBefore(t3, anchor);';
 
 	$context['inline_footer_script'] .= $txt['jquery_timeago_loc'];

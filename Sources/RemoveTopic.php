@@ -942,7 +942,7 @@ function removeMessage($message, $decreasePostCount = true)
 	// Only remove posts if they're not recycled.
 	if (!$recycle)
 	{
-		require_once($sourcedir . '/lib/Subs-LikeSystem.php');
+		require_once($sourcedir . '/lib/Subs-Ratings.php');
 		require_once($sourcedir . '/lib/Subs-Activities.php');
 		// Remove the message + maybe its cached version
 		smf_db_query( '
@@ -979,7 +979,7 @@ function removeMessage($message, $decreasePostCount = true)
 
 		// remove likes and like_cache
 		$likes_to_remove = array($message);
-		LikesRemoveByPosts($likes_to_remove);
+		Ratings::removeByPosts($likes_to_remove);
 
 		// remove activities related to this post
 		aStreamRemoveByContent($likes_to_remove);

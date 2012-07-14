@@ -1125,20 +1125,25 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			array(
 				'tag' => 'code',
 				'type' => 'unparsed_content',
-				'content' => '<div class="codeheader">Code:</div><pre class="brush:text;">$1</pre>',
-				'block_level' => false,
-				'disabled_content' => '$1',
+				'content' => '<div class="codeheader">Code:</div><pre class="prettyprint lang-php linenums:1">$1</pre>',
+				'block_level' => true,
+				//'disabled_content' => '$1',
 			),
 			array(
 				'tag' => 'code',
-            	'type' => 'unparsed_equals_content',
+            	'type' => 'unparsed_equals',
             	'test' => '[A-Za-z0-9_,\-\s]+?\]',
             	'block_level' => true,
+            	/*
             	'validate' =>  create_function('&$tag, &$data, $disabled', '
                		$data[0] = strtr(parse_bbc($data[0], ' . ($smileys ? 'true' : 'false') . ', \'' . $cache_id . '\'), array(\'<brdd />\' => ""));
 			   		global $txt;
                		$tag[\'content\'] = "<div class=\"codeheader\">" . "Code" . ": (" . $data[1] . ") </div><pre class=\"brush:" . $data[1] . "\">" . $data[0] . "</pre>";
+               		//$tag[\'content\'] = "<div class=\"codeheader\">" . "Code" . ": (" . $data[1] . ") </div><pre><code data-language=\"" . $data[1]. "\">" . $data[0] . "</code></pre>";
             	'),
+            	*/
+				'before' => '<div class="codeheader">Code ($1)</div><pre class="prettyprint lang-$1 linenums:1">',
+				'after' => '</pre>',
 				/*
             	'validate' => function(&$tag, &$data, $disabled) {
                		$data[0] = strtr(parse_bbc($data[0], $smileys, $cache_id), array('<brdd />' => ""));

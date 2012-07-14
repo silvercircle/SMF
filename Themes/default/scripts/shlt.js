@@ -58,7 +58,7 @@ function shConfig()
 		'sql                    ' + smf_theme_url + '/shlt/scripts/shBrushSql.js',
 		'xml xhtml xslt html    ' + smf_theme_url + '/shlt/scripts/shBrushXml.js'
 		 );
-	  SyntaxHighlighter.config.stripBrs = true;			// strip all <br />'s from the preformatted element
+	  SyntaxHighlighter.config.stripBrs = false;			// strip all <br />'s from the preformatted element
 	  SyntaxHighlighter.config.bloggerMode = true;
 	  SyntaxHighlighter.all();
 }

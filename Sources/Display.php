@@ -84,7 +84,7 @@ function Display()
 		'footer' => ''
 	);
 	//EoS_Smarty::getConfigInstance()->registerHookTemplate('postbit_below', 'overrides/foo');
-	require_once($sourcedir . '/lib/Subs-LikeSystem.php');
+	require_once($sourcedir . '/lib/Subs-Ratings.php');
 	fetchNewsItems($board, $topic);
 	// What are you gonna display if these are empty?!
 	if (empty($topic))
@@ -1233,8 +1233,6 @@ function Display()
 	$context['can_delete_replies'] = allowedTo('delete_replies');
 	$context['can_delete_own'] = allowedTo('delete_own');
 	
-	$context['can_see_like'] = allowedTo('like_see');
-	$context['can_give_like'] = allowedTo('like_give');
 	$context['use_share'] = allowedTo('use_share') && ($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar']));
 	
 	$context['can_lock'] |= $context['can_manage_own'];
@@ -1455,7 +1453,7 @@ function prepareDisplayContext($reset = false)
 	);
 
 	if($context['can_see_like'])
-		AddLikeBar($output, $context['can_give_like'], $context['time_cutoff_ref']);
+		Ratings::addContent($output, $context['can_give_like'], $context['time_cutoff_ref']);
 	else
 		$output['likes_count'] = 0;
 	// Is this user the message author?

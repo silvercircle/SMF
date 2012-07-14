@@ -23,7 +23,7 @@
       <link rel="stylesheet" type="text/css" href="{$S.theme_url}/css/rtl.css" />
     {/if}
     {if isset($C.need_synhlt)}
-      <link rel="stylesheet" type="text/css" href="{$S.default_theme_url}/css/shlt.css" />
+      <link rel="stylesheet" type="text/css" href="{$S.default_theme_url}/prettify/prettify.css" />
     {/if}    
     {if $M.jQueryFromGoogleCDN}
       <script type="text/javascript" src="{($C.is_https) ? 'https://' : 'http://'}ajax.googleapis.com/ajax/libs/jquery/{$C.jquery_version}/jquery.min.js"></script>
@@ -337,7 +337,8 @@
     var t3 = document.createElement('SCRIPT');
     t3.type = "text/javascript";
     t3.async = true;
-    t3.src = "{$S.theme_url}/scripts/shlt.js?ver=1.1.0";
+    t3.src = "{$S.theme_url}/prettify/prettify.js";
+    {*t3.src = "{$S.theme_url}/scripts/rainbow-custom.min.js";*}
     anchor.parentNode.insertBefore(t3, anchor);
   {/if}
 

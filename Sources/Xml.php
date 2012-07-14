@@ -123,7 +123,7 @@ function GetMcard()
 		loadMemberData($uid, false, 'profile');
 		loadMemberContext($uid);
 		loadLanguage('Profile');
-		loadLanguage('Like');
+		loadLanguage('Ratings');
 		$context['member'] = $memberContext[$uid];
 
     	if(!empty($context['member']['gender']['name']))
@@ -148,8 +148,8 @@ function HandleLikeRequest()
 	
 	$mid = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
 	
-	require_once($sourcedir . '/lib/Subs-LikeSystem.php');
-	GiveLike($mid);
+	require_once($sourcedir . '/lib/Subs-Ratings.php');
+	Ratings::rateIt($mid);
 }
 	
 // todo: check permissions!!

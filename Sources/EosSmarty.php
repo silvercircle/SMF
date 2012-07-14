@@ -52,7 +52,7 @@ class EoS_Smarty {
 				self::$_smartyInstance->addTemplateDir($dir . '/tpl');
 			$firstdir++;
 		}
-		self::$_smartyInstance->setCompileDir($boarddir . 'template_cache');		// TODO: make this customizable
+		self::$_smartyInstance->setCompileDir(rtrim($boarddir, '/') . '/template_cache');		// TODO: make this customizable
 		/*
 		 * this hook could be used to re-configure smarty (for example, add additional template dir(s)),
 		 * or register hook template fragments via $_configInstance->registerTemplateHook()

@@ -17,11 +17,11 @@ function FixLikes()
 {
 	global $sourcedir;
 
-	require_once($sourcedir . '/lib/Subs-LikeSystem.php');
+	require_once($sourcedir . '/lib/Subs-Ratings.php');
 
 	$result = smf_db_query('SELECT id_msg FROM {db_prefix}messages');
 	while($row = mysql_fetch_assoc($result))
-		LikesUpdate($row['id_msg']);
+		Ratings::updateForContent($row['id_msg']);
 
 	mysql_free_result($result);
 }
@@ -38,7 +38,7 @@ function LikeDispatch()
 	$mid = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
 	$rtype = isset($_REQUEST['r']) ? (int)$_REQUEST['r'] : 0;
 
-	loadLanguage('Like');
+	loadLanguage('Ratings');
 	if(!isset($modSettings['ratings'][$rtype]))
 		AjaxErrorMsg($txt['unknown_rating_type']);
 
@@ -106,7 +106,7 @@ function LikesByUser($memID)
 	$out = $_GET['sa'] === 'likesout';			// display likes *given* instead of received ones
 	$is_owner = $user_info['id'] == $memID;		// we are the owner of this profile, this is important for proper formatting (you/yours etc.)
 	
-	loadLanguage('Like');
+	loadLanguage('Ratings');
 	$boards_like_see  = boardsAllowedTo('like_see');	// respect permissions
 	$start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
 

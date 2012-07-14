@@ -661,7 +661,10 @@ function template_main()
 					bodyText += preview.getElementsByTagName(\'body\')[0].childNodes[i].nodeValue;
 
 				setInnerHTML(document.getElementById(\'preview_body\'), bodyText);
-				shConfig();
+				if(typeof(prettyPrint) != \'undefined\') {
+					prettyPrint();
+					$(\'pre.prettyprint\').fadeIn();
+				}
 
 				// Show a list of errors (if any).
 				var errors = XMLDoc.getElementsByTagName(\'smf\')[0].getElementsByTagName(\'errors\')[0];

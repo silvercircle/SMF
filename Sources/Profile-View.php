@@ -501,7 +501,7 @@ function showPosts($memID)
 	$context['posts'] = array();
 	$board_ids = array('own' => array(), 'any' => array());
 	
-	require_once($sourcedir . '/lib/Subs-LikeSystem.php');
+	require_once($sourcedir . '/lib/Subs-Ratings.php');
 
 	$time_now = time();
 	if($context['is_topics']) {
@@ -665,7 +665,7 @@ function showPosts($memID)
 				'likelink' => ''
 			);
 			if($context['can_see_like'])
-				AddLikeBar($context['posts'][$i], $context['can_give_like'], $time_now);
+				Ratings::addContent($context['posts'][$i], $context['can_give_like'], $time_now);
 
 			if ($user_info['id'] == $row['id_member_started'])
 				$board_ids['own'][$row['id_board']][] = $counter;

@@ -85,7 +85,7 @@ function RecentPosts()
 {
 	global $sourcedir, $txt, $scripturl, $user_info, $context, $modSettings, $board, $memberContext;
 
-	require_once($sourcedir . '/lib/Subs-LikeSystem.php');
+	require_once($sourcedir . '/lib/Subs-Ratings.php');
 	$context['time_now'] = time();
 
 	$context['need_synhlt'] = true;
@@ -411,7 +411,7 @@ function RecentPosts()
 			'likelink' => ''
 		);
 		if($context['can_see_like'])
-			AddLikeBar($context['posts'][$row['id_msg']], $context['can_give_like'], $context['time_now']);
+			Ratings::addContent($context['posts'][$row['id_msg']], $context['can_give_like'], $context['time_now']);
 
 		if ($user_info['id'] == $row['id_first_member'])
 			$board_ids['own'][$row['id_board']][] = $row['id_msg'];

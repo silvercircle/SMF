@@ -1267,6 +1267,11 @@ function setDimmed(mode)
 			return;
 		var _e = $('<div id="pagedimmer" style="position:fixed;left:0;top:0;z-index:2999;width:100%;height:100%;"></div>');
 		_e.prependTo('body');
+		_e.click(function() {
+			mcardClose();
+			if($('#tagform').length > 0)
+				$('#tagform').remove();
+		});
 	}
 	else if($('#pagedimmer').length > 0)
 		$('#pagedimmer').remove();
@@ -1437,6 +1442,10 @@ jQuery(document).ready(function() {
 		sendRequest('action=like;sa=getlikes;m=' + parseInt($(this).parent().attr('data-mid'))  + ';r=' + parseInt($(this).attr('data-rtype')), null);
 		return(false);
 	});
+	if(typeof(prettyPrint) != 'undefined') {
+		prettyPrint();
+		$('pre.prettyprint').fadeIn();
+	}
 });
 
 /*
@@ -1603,6 +1612,7 @@ function submitTagForm(ele)
 {
 	sendRequest('action=xmlhttp;sa=tags;submittag=1;topic=' + $('#tagtopic').val() + ';tag=' + encodeURIComponent($('#newtags').val()), ele);
 	$('#tagform').remove();
+	setDimmed(0);
 }
 // submit ajax request for a topic preview
 function firePreview(topic_id, ele)
@@ -1701,6 +1711,7 @@ function response(ele, responseText)
 			return;
 		if(ele.attr('id') == 'addtag') {
 			$('#addtag').before(responseText);
+			setDimmed(1);
 			return;
 		}
 		if(ele.attr('id') == 'tags') {
