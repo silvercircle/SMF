@@ -1,3 +1,17 @@
+{*
+ * @name      EosAlpha BBS
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
+ * Simple Machines Forum (SMF)
+ * copyright: 2011 Simple Machines (http://www.simplemachines.org)
+ * license:   BSD, See included LICENSE.TXT for terms and conditions.
+ *
+ * @version 1.0pre
+ * 
+ * profile summary template
+ *}
 {extends 'profile/profile_base.tpl'}
 {block 'profile_content'}
 <div id="profileview">
@@ -9,18 +23,18 @@
 	<div id="basicinfo">
 		<div class="blue_container cleantop">
 			<div class="content flow_auto">
-				<div class="username"><h4>{$C.member.name} <span class="position"> {(!empty($C.member.group)) ? $C.member.group : $C.member.post_group}</span></h4></div>
+				<div class="username"><h4>{$C.member.name}<span class="position">{(!empty($C.member.group)) ? $C.member.group : $C.member.post_group}</span></h4></div>
 				{if !empty($C.member.avatar.image)}
 					{$C.member.avatar.image}
 				{else}
-        	<img class="fourtyeight" src="{$S.images_url}/unknown.png" alt="avatar" />
+        	<img class="avatar" src="{$S.images_url}/unknown.png" alt="avatar" />
 				{/if}
 				<ul class="reset">
 				{if $C.member.show_email === 'yes' || $C.member.show_email === 'no_through_forum' || $C.member.show_email === 'yes_permission_override'}
 					<li><a href="{$SCRIPTURL}?action=emailuser;sa=email;uid={$C.member.id}" title="{($C.member.show_email == 'yes' || $C.member.show_email == 'yes_permission_override') ? $C.member.email : ''}" rel="nofollow">{$T.send_email}</a></li>
 				{/if}
 				{if !empty($C.custom_fields)}
-					{foreach $C.custom_fields as $field)
+					{foreach $C.custom_fields as $field}
 						{if ($field.placement == 1 || empty($field.output_html)) && !empty($field.value)}
 							<li class="custom_field">{$field.output_html}</li>
 						{/if}
@@ -89,149 +103,96 @@
 					<dd>{$C.member.location}</dd>
 				{/if}
 				</dl>
-
-	// Any custom fields for standard placement?
-	if (!empty($context['custom_fields']))
-	{
-		$shown = false;
-		foreach ($context['custom_fields'] as $field)
-		{
-			if ($field['placement'] != 0 || empty($field['output_html']))
-				continue;
-
-			if (empty($shown))
-			{
-				echo '
-				<dl>';
-				$shown = true;
-			}
-
-			echo '
-					<dt>', $field['name'], ':</dt>
-					<dd>', $field['output_html'], '</dd>';
-		}
-
-		if (!empty($shown))
-			echo '
-				</dl>';
-	}
-
-	echo '
-				<dl class="noborder">';
-
-	// Can they view/issue a warning?
-	if ($context['can_view_warning'] && $context['member']['warning'])
-	{
-		echo '
-					<dt>', $txt['profile_warning_level'], ': </dt>
+				{if !empty($C.custom_fields)}
+					{$shown = false}
+					{foreach $C.custom_fields as $field}
+						{if $field.placement != 0 || empty($field.output_html)}
+							{continue}
+						{/if}
+						{if empty($shown)}
+							<dl>
+							{$shown = true}
+						{/if}
+						<dt>{$field.name}:</dt>
+						<dd>{$field.output_html}</dd>
+					{/foreach}
+					{if !empty($shown)}
+						</dl>
+					{/if}
+				{/if}
+				<dl class="noborder">
+				{if $C.can_view_warning && $C.member.warning}
+					<dt>{$T.profile_warning_level}: </dt>
 					<dd>
-						<a href="', $scripturl, '?action=profile;u=', $context['id_member'], ';area=', $context['can_issue_warning'] ? 'issuewarning' : 'viewwarning', '">', $context['member']['warning'], '%</a>';
-
-		// Can we provide information on what this means?
-		if (!empty($context['warning_status']))
-			echo '
-						<span class="smalltext">(', $context['warning_status'], ')</span>';
-
-		echo '
-					</dd>';
-	}
-
-	// Is this member requiring activation and/or banned?
-	if (!empty($context['activate_message']) || !empty($context['member']['bans']))
-	{
-
-		// If the person looking at the summary has permission, and the account isn't activated, give the viewer the ability to do it themselves.
-		if (!empty($context['activate_message']))
-			echo '
-					<dt class="clear"><span class="alert">', $context['activate_message'], '</span>&nbsp;(<a href="' . $scripturl . '?action=profile;save;area=activateaccount;u=' . $context['id_member'] . ';' . $context['session_var'] . '=' . $context['session_id'] . '"', ($context['activate_type'] == 4 ? ' onclick="return confirm(\'' . $txt['profileConfirm'] . '\');"' : ''), '>', $context['activate_link_text'], '</a>)</dt>';
-
-		// If the current member is banned, show a message and possibly a link to the ban.
-		if (!empty($context['member']['bans']))
-		{
-			echo '
-					<dt class="clear"><span class="alert">', $txt['user_is_banned'], '</span>&nbsp;[<a href="#" onclick="document.getElementById(\'ban_info\').style.display = document.getElementById(\'ban_info\').style.display == \'none\' ? \'\' : \'none\';return false;">' . $txt['view_ban'] . '</a>]</dt>
-					<dt class="clear" id="ban_info" style="display: none;">
-						<strong>', $txt['user_banned_by_following'], ':</strong>';
-
-			foreach ($context['member']['bans'] as $ban)
-				echo '
-						<br /><span class="smalltext">', $ban['explanation'], '</span>';
-
-			echo '
-					</dt>';
-		}
-	}
-
-	echo '
-					<dt>', $txt['date_registered'], ': </dt>
-					<dd>', $context['member']['registered'], '</dd>';
-
-	// If the person looking is allowed, they can check the members IP address and hostname.
-	if ($context['can_see_ip'])
-	{
-		if (!empty($context['member']['ip']))
-		echo '
-					<dt>', $txt['ip'], ': </dt>
-					<dd><a href="', $scripturl, '?action=profile;area=tracking;sa=ip;searchip=', $context['member']['ip'], ';u=', $context['member']['id'], '">', $context['member']['ip'], '</a></dd>';
-
-		if (empty($modSettings['disableHostnameLookup']) && !empty($context['member']['ip']))
-			echo '
-					<dt>', $txt['hostname'], ': </dt>
-					<dd>', $context['member']['hostname'], '</dd>';
-	}
-
-	echo '
-					<dt>', $txt['local_time'], ':</dt>
-					<dd>', $context['member']['local_time'], '</dd>';
-
-	if (!empty($modSettings['userLanguage']) && !empty($context['member']['language']))
-		echo '
-					<dt>', $txt['language'], ':</dt>
-					<dd>', $context['member']['language'], '</dd>';
-
-	echo '
-					<dt>', $txt['lastLoggedIn'], ': </dt>
-					<dd>', $context['member']['last_login'], '</dd>
-				</dl>';
-
-	// Are there any custom profile fields for the summary?
-	if (!empty($context['custom_fields']))
-	{
-		$shown = false;
-		foreach ($context['custom_fields'] as $field)
-		{
-			if ($field['placement'] != 2 || empty($field['output_html']))
-				continue;
-			if (empty($shown))
-			{
-				$shown = true;
-				echo '
-				<div class="custom_fields_above_signature">
-					<ul class="reset nolist">';
-			}
-			echo '
-						<li>', $field['output_html'], '</li>';
-		}
-		if ($shown)
-				echo '
-					</ul>
-				</div>';
-	}
-
-	// Show the users signature.
-	if ($context['signature_enabled'] && !empty($context['member']['signature']))
-		echo '
-				<div class="signature">
-					<h5>', $txt['signature'], ':</h5>
-					', $context['member']['signature'], '
-				</div>';
-
-	echo '
+						<a href="{$SCRIPTURL}?action=profile;u={$C.id_member};area={($C.can_issue_warning) ? 'issuewarning' : 'viewwarning'}">{$C.member.warning}%</a>
+						{if !empty($C.warning_status)}
+							<span class="smalltext">({$C.warning_status})</span>
+						{/if}
+					</dd>
+				{/if}
+				{if !empty($C.activate_message) || !empty($C.member.bans)}
+					{if !empty($C.activate_message)}
+						<dt class="clear"><span class="alert">', $context['activate_message'], '</span>&nbsp;(<a href="' . $scripturl . '?action=profile;save;area=activateaccount;u=' . $context['id_member'] . ';' . $context['session_var'] . '=' . $context['session_id'] . '"', ($context['activate_type'] == 4 ? ' onclick="return confirm(\'' . $txt['profileConfirm'] . '\');"' : ''), '>', $context['activate_link_text'], '</a>)</dt>';
+					{/if}
+					{if !empty($C.member.bans)}
+						<dt class="clear"><span class="alert">{$T.user_is_banned}</span>&nbsp;[<a href="#" onclick="document.getElementById('ban_info').style.display = document.getElementById('ban_info').style.display == 'none' ? '' : 'none';return false;">{$T.view_ban}</a>]</dt>
+						<dt class="clear" id="ban_info" style="display: none;">
+							<strong>{$T.user_banned_by_following}:</strong>
+							{foreach $C.member.bans as $ban}
+								<br /><span class="smalltext">{$ban.explanation}</span>
+							{/foreach}
+						</dt>
+					{/if}
+				{/if}
+				<dt>{$T.date_registered}: </dt>
+				<dd>{$C.member.registered}</dd>
+				{if $C.can_see_ip}
+					{if !empty($C.member.ip)}
+						<dt>{$T.ip}: </dt>
+						<dd><a href="{$SCRIPTURL}?action=profile;area=tracking;sa=ip;searchip={$C.member.ip};u={$C.member.id}">{$C.member.ip}</a></dd>
+					{/if}
+					{if empty($M.disableHostnameLookup) && !empty($C.member.ip)}
+						<dt>{$T.hostname}: </dt>
+						<dd>{$C.member.hostname}</dd>
+					{/if}
+				{/if}
+				<dt>{$T.local_time}:</dt>
+				<dd>{$C.member.local_time}</dd>
+				{if !empty($M.userLanguage) && !empty($C.member.language)}
+					<dt>{$T.language}:</dt>
+					<dd>{$C.member.language}</dd>
+				{/if}
+				<dt>{$T.lastLoggedIn}: </dt>
+				<dd>{$C.member.last_login}</dd>
+				</dl>
+				{if !empty($C.custom_fields)}
+				{
+					{$shown = false}
+					{foreach $C.custom_fields as $field}
+						{if $field.placement != 2 || empty($field.output_html)}
+							{continue}
+						{/if}
+						{if empty($shown)}
+							{$shown = true}
+							<div class="custom_fields_above_signature">
+							<ul class="reset nolist">
+						{/if}
+						<li>{$field.output_html}</li>
+					{/foreach}
+					{if $shown}
+						</ul>
+						</div>
+					{/if}
+				{/if}
+				{if $C.signature_enabled && !empty($C.member.signature)}
+					<div class="signature">
+						<h5>{$T.signature}:</h5>
+						{$C.member.signature}
+					</div>
+				{/if}
 			</div>
 		</div>
 	</div>
 <div class="clear"></div>
-</div>';
-
-
+</div>
 {/block}
