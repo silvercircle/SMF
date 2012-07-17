@@ -523,9 +523,13 @@ function TestSmarty()
 {
 	global $context;
 	EoS_Smarty::init();
-	EoS_Smarty::loadTemplate('test');
+	EoS_Smarty::loadTemplate('foo');
 
 	$context['footpl'] = 'foo.tpl';
-	$context['testvar'] = array('foo' => 'foofoofoobar');
+	$context['testvar'] = 'foo';
+
+	for($i = 0; $i < 1000; $i++)
+		$context['foobar'][$i] = $i;
+
 }
 ?>

@@ -48,9 +48,6 @@ function MessageIndex()
 	}
 
 	fetchNewsItems($board, 0);
-
-	//loadTemplate('MessageIndex');
-	//loadTemplate('GenericBits');
 	EoS_Smarty::loadTemplate('messageindex');
 
 	$context['act_as_cat'] = $board_info['allow_topics'] ? false : true;

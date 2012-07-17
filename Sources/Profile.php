@@ -383,7 +383,7 @@ function ModifyProfile($post_errors = array())
 		unset($profile_areas['info']['areas']['showposts']['subsections']['likesout']);
 	}
 	// Let them modify profile areas easily.
-	HookAPI::callHook('integrate_profile_areas', array(&$profile_areas));
+	HookAPI::callHook('profile_areas', array(&$profile_areas));
 
 	// Do some cleaning ready for the menu function.
 	$context['password_areas'] = array();

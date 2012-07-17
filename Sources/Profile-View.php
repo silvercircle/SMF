@@ -70,6 +70,7 @@ function summary($memID)
 {
 	global $context, $memberContext, $txt, $modSettings, $user_profile, $sourcedir, $scripturl;
 
+	//EoS_Smarty::loadTemplate('profile/summary');
 	// Attempt to load the member's profile data.
 	if (!loadMemberContext($memID) || !isset($memberContext[$memID]))
 		fatal_lang_error('not_a_user', false);
@@ -85,7 +86,7 @@ function summary($memID)
 	$context['can_view_warning'] = in_array('w', $context['admin_features']) && (allowedTo('issue_warning') && !$context['user']['is_owner']) || (!empty($modSettings['warning_show']) && ($modSettings['warning_show'] > 1 || $context['user']['is_owner']));
 
 	// Set a canonical URL for this page.
-	$context['canonical_url'] = $scripturl . '?action=profile;u=' . $memID;
+	$context['canonical_url'] = URL::user($memID, $memberContext[$memID]['name']);
 
 	// Are there things we don't show?
 	$context['disabled_fields'] = isset($modSettings['disabled_profile_fields']) ? array_flip(explode(',', $modSettings['disabled_profile_fields'])) : array();
