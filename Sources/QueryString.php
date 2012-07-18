@@ -477,8 +477,8 @@ function ob_sessrewrite($buffer)
 
 	if(!empty($modSettings['simplesef_enable']))
 		$buffer = isset($context['sef_full_rewrite']) ? SimpleSEF::ob_simplesef($buffer) : SimpleSEF::ob_simplesef_light($buffer);
-
-	$buffer = str_replace('@%%__loadtime__%%@', $context['load_time'] . 's CPU (' . $context['template_benchmark_time'] . 's template), ' . $context['load_queries'] . ' ' . $txt['queries'] . SimpleSEF::getPerfData(), $buffer);
+	$_t = EoS_Smarty::isActive() ? 's template-smarty), ' : 's template), ';
+	$buffer = str_replace('@%%__loadtime__%%@', $context['load_time'] . 's CPU (' . $context['template_benchmark_time'] . $_t . $context['load_queries'] . ' ' . $txt['queries'] . SimpleSEF::getPerfData(), $buffer);
 	return $buffer;
 }
 ?>

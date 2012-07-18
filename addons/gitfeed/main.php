@@ -1,0 +1,94 @@
+<?php
+/**
+ * @name      EosAlpha BBS
+ * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
+ *
+ * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
+ *
+ * @version 1.0pre
+ */
+
+// this should always be there
+if (!defined('EOSA'))
+	die('No access');
+
+function gitfeed_autoloader()
+{
+	return new GitFeed();
+}
+
+class GitFeed extends EoS_Plugin
+{
+	protected $productShortName = 'gitfeed';		// mandatory. should only contain letters and numbers, no special chars. This is the internal plugin identifier.
+	
+	protected $_product = array(
+		'Version' => '0.1',
+		'Name' => 'GitFeed',
+		'Description' => 'A simple plugin to implement a github feed in the sidebar.'
+	);
+
+	protected $installableHooks = array(
+		'boardindex' => array('file' => 'main.php', 'callable' => 'GitFeed::boardindex'),
+	);
+
+	protected static $my_git_url = 'https://github.com/silvercircle/SMF/commit/';
+	/* 
+	 * this is for updating a plugin. Hooks listed here (same format as in $installableHooks)
+	 * will be removed during the installation / updating procedure.
+	 */
+	protected $removeableHooks = array();
+
+	public function __construct() { parent::__construct(); }	// mandatory
+
+	/*
+	 * runs in board index
+	 * 1) fetch our data (we cache this for a while...)
+	 * 2) build $context['gitfeed'] array with the last 5 commits
+	 */
+	public static function boardindex()
+	{
+		global $context, $txt, $sourcedir, $user_info;
+		$data = array();
+
+		if(($data = CacheAPI::getCache('github-feed-index', 1800)) === null) {
+			$f = curl_init();
+			if($f) {
+				curl_setopt_array($f, array(CURLOPT_URL => 'https://api.github.com/repos/silvercircle/SMF/commits',
+					CURLOPT_HEADER => false,
+					CURLOPT_RETURNTRANSFER => true,
+					CURLOPT_SSL_VERIFYPEER => false
+				));
+				$json_response = curl_exec($f);
+				$data = json_decode($json_response, true);
+				CacheAPI::putCache('github-feed-index', $data, 1800);
+				curl_close($f);
+			}
+		}
+		$n = 0;
+		foreach($data as $commit) {
+			$context['gitfeed'][] = array(
+				'message_short' => shorten_subject($commit['commit']['message'], 60),
+				'message' => nl2br($commit['commit']['message']),
+				'dateline' => timeformat(strtotime($commit['commit']['committer']['date'])),
+				'sha' => $commit['sha'],
+				'href' => self::$my_git_url . $commit['sha']
+			);
+			if(++$n > 5)
+				break;
+		}
+		if(!empty($data)) {
+			/* 
+			 * add our plugin directory to the list of directories to search for templates
+			 * and register the template hook.
+			 * only do this if we actually have something to display
+			 */
+			EoS_Smarty::addTemplateDir(dirname(__FILE__));
+			EoS_Smarty::getConfigInstance()->registerHookTemplate('sidebar_below_userblock', 'gitfeed_sidebar_top');
+		}
+	}
+}
+?>

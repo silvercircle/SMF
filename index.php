@@ -84,7 +84,7 @@ $context['template_hooks']['global'] = array(
 	'header' => ''
 );
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
-$context['jsver'] = '?v=1558';
+$context['jsver'] = '?v=1561';
 $context['jquery_version'] = '1.7.2';
 $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();
@@ -107,7 +107,7 @@ if (isset($_GET['scheduled']))
 if (!empty($modSettings['enableCompressedOutput']) && !headers_sent())
 {
 	// If zlib is being used, turn off output compression.
-	if (@ini_get('zlib.output_compression') == '1' || @ini_get('output_handler') == 'ob_gzhandler' || @version_compare(PHP_VERSION, '4.2.0') == -1)
+	if (@ini_get('zlib.output_compression') == '1' || @ini_get('output_handler') == 'ob_gzhandler')
 		$modSettings['enableCompressedOutput'] = '0';
 	else
 	{
