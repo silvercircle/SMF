@@ -166,7 +166,7 @@ class HookAPI {
 		if(isset($GLOBALS['addonsdir']) && !empty($GLOBALS['addonsdir']) && file_exists($GLOBALS['addonsdir']) && is_dir($GLOBALS['addonsdir']))
 			self::$addonsdir = rtrim($GLOBALS['addonsdir'], '/\\ ') . '/';
 		else
-			self::$addonsdir = $boarddir . 'addons/';
+			self::$addonsdir = rtrim($boarddir, '/\\ ') . '/addons/';
 	}
 
 	/**
