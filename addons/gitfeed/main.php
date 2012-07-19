@@ -35,7 +35,12 @@ class GitFeed extends EoS_Plugin
 		'boardindex' => array('file' => 'main.php', 'callable' => 'GitFeed::boardindex'),
 	);
 
-	protected static $my_git_url = 'https://github.com/silvercircle/SMF/commit/';
+	/*
+	 * these should be options
+	 * right now, the plugin is in "lazy mode", so no options. sorry.
+	 */
+	protected static $my_git_url = 'https://github.com/silvercircle/SMF/commit/';				// frontend base url
+	protected static $my_git_api_url = 'https://api.github.com/repos/silvercircle/SMF/commits'; // this is where we fetch our json data
 	/* 
 	 * this is for updating a plugin. Hooks listed here (same format as in $installableHooks)
 	 * will be removed during the installation / updating procedure.
@@ -57,7 +62,7 @@ class GitFeed extends EoS_Plugin
 		if(($data = CacheAPI::getCache('github-feed-index', 1800)) === null) {
 			$f = curl_init();
 			if($f) {
-				curl_setopt_array($f, array(CURLOPT_URL => 'https://api.github.com/repos/silvercircle/SMF/commits',
+				curl_setopt_array($f, array(CURLOPT_URL => self::$my_git_api_url,
 					CURLOPT_HEADER => false,
 					CURLOPT_RETURNTRANSFER => true,
 					CURLOPT_SSL_VERIFYPEER => false
@@ -72,7 +77,7 @@ class GitFeed extends EoS_Plugin
 		foreach($data as $commit) {
 			$context['gitfeed'][] = array(
 				'message_short' => shorten_subject($commit['commit']['message'], 60),
-				'message' => nl2br($commit['commit']['message']),
+				'message' => nl2br($commit['commit']['message']),		// for the tool tip
 				'dateline' => timeformat(strtotime($commit['commit']['committer']['date'])),
 				'sha' => $commit['sha'],
 				'href' => self::$my_git_url . $commit['sha']

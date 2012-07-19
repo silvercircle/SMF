@@ -433,6 +433,7 @@ function CheckFilesWritable()
 		'attachments',
 		'avatars',
 		'cache',
+		'template_cache',
 		'Packages',
 		'Packages/installed.list',
 		'Smileys',
