@@ -320,20 +320,6 @@ EOT;
 	anchor.parentNode.insertBefore(t3, anchor);';
 
 	$context['inline_footer_script'] .= $txt['jquery_timeago_loc'];
-	if(isset($modSettings['embed_GA']) && $modSettings['embed_GA'] && ($context['user']['is_guest'] || (empty($options['disable_analytics']) ? 1 : !$options['disable_analytics'])))	{
-		echo '
-	var _gaq = _gaq || [];
-	_gaq.push([\'_setAccount\', \'',$modSettings['GA_tracker_id'], '\']);
-	_gaq.push([\'_setDomainName\', \'',$modSettings['GA_domain_name'],'\']);
-   	_gaq.push([\'_trackPageview\']);
-	
-	var ga = document.createElement(\'script\');
-	var sa = document.getElementsByTagName(\'script\')[0];
-	ga.async = true;
-	ga.src = (\'https:\' == document.location.protocol ? \'https://ssl\' : \'http://www\') + \'.google-analytics.com/ga.js\';
-	sa.parentNode.insertBefore(ga, sa);
-	';
-	}
 	echo '
 	// ]]>
 	</script>
@@ -363,25 +349,6 @@ EOT;
 	</div>
 	</div>
 	</footer>';
-	if(1) { // piwik, todo: make configurable in admin area!
-		echo <<<EOT
-	
-	<script src="http://piwik.miranda.or.at/piwik.js"></script>
-	<script>
-	var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.miranda.or.at/" : "http://piwik.miranda.or.at/");
-	try {
-		var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
-		piwikTracker.trackPageView();
-		piwikTracker.enableLinkTracking();
-	}
-	catch( err ) {
-	}
-	</script>
-	<noscript>
-	  <div style="width:0px;height:0px;"><img src="http://piwik.miranda.or.at/piwik.php?idsite=1" style="border:0" alt="" /></div>
-	</noscript>
-EOT;
-	}
 }
 
 function template_html_below()

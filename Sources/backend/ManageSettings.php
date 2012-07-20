@@ -208,6 +208,9 @@ function ModifySocialSettingsGeneral()
 			array('text', 'GA_domain_name'),
 			array('text', 'fb_appid'),
 			array('text', 'twitter_id'),
+			array('check', 'embed_piwik'),
+			array('text', 'piwik_uri'),
+			array('text', 'piwik_tracker_id')
 	);
 	$context['page_title'] = $txt['admin_social'];
 

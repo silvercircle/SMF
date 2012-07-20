@@ -1949,6 +1949,9 @@ VALUES ('use_post_cache', '0'),
 	('whatsNewCutoffDays', '30'),
 	('who_track_daily_visitors', '1'),
 	('who_track_team'),
+	('embed_piwik', '0'),
+	('piwik_uri', ''),
+	('piwik_tracker_id', ''),
 	('embed_GA', '0');
 
 INSERT INTO {$db_prefix}activity_types

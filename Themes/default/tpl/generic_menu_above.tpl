@@ -4,7 +4,6 @@
   {$C.cur_menu_id = (isset($C.cur_menu_id)) ? $C.cur_menu_id + 1 : 1}
   {$context_id = 'menu_data_'|cat:$C.cur_menu_id}
   {$menu_context = $C.$context_id}
-
   {$firstSection = true}
   {foreach $menu_context.sections as $section}
     <div class="flat_container minpadding" style="margin-bottom:15px;border-right:0;border-radius:3px 0 0 3px;">
@@ -19,12 +18,12 @@
           {continue}
         {/if}
         {if $i == $menu_context.current_area}
-          <li class="active"><a href="{(isset($area.url)) ? $area.url : ($menu_context.base_url|cat:';area='|cat:$i|cat:$menu_context.extra_parameters)}">{$area.label}</a></li>
+          <li class="active"><a href="{(isset($area.url)) ? $SUPPORT->url_parse($area.url) : $SUPPORT->url_parse($menu_context.base_url|cat:';area='|cat:$i)}{$menu_context.extra_parameters}">{$area.label}</a></li>
           {if empty($C.tabs)}
             {$C.tabs = (isset($area.subsections)) ? $area.subsections : array()}
           {/if}
         {else}
-          <li><a href="{(isset($area.url)) ? $area.url : ($menu_context.base_url|cat:';area='|cat:$i|cat:$menu_context.extra_parameters)}">{$area.label}</a></li>
+          <li><a href="{(isset($area.url)) ? $SUPPORT->url_parse($area.url) : $SUPPORT->url_parse($menu_context.base_url|cat:';area='|cat:$i)}{$menu_context.extra_parameters}">{$area.label}</a></li>
         {/if}
       {/foreach}
       </ul>

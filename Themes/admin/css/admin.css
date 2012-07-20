@@ -1148,7 +1148,7 @@ h3, h4 {
 	/*background: #d6d6d6;*/
 }
 .notibar_intro {
-	background: transparent url(../images/clipsrc_l.png) 0 -32px no-repeat;
+	background: transparent url(../../default/images/clipsrc_l.png) 0 -32px no-repeat;
 	line-height: 24px;
 	float: right;
 	height: 24px;

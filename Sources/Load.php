@@ -1455,6 +1455,15 @@ function loadTheme($id_theme = 0, $initialize = true)
 	$settings = $themeData[0];
 	$options = $themeData[$member];
 
+	$member_tracking_optin = ($user_info['is_guest'] || (empty($options['disable_analytics']) ? 1 : !$options['disable_analytics']));
+  	if(isset($modSettings['embed_GA']) && $modSettings['embed_GA'] && !empty($modSettings['GA_tracker_id']) && !empty($modSettings['GA_domain_name']) && $member_tracking_optin)
+		$context['want_GA_embedded'] = true;
+
+  	if(isset($modSettings['embed_piwik']) && $modSettings['embed_piwik'] && !empty($modSettings['piwik_uri']) && !empty($modSettings['piwik_tracker_id']) &&  $member_tracking_optin) {
+		$context['want_piwik_embedded'] = true;
+		$modSettings['piwik_uri'] = rtrim($modSettings['piwik_uri'], '/\\ ');
+	}
+
 	$settings['theme_id'] = $id_theme;
 
 	$settings['actual_theme_url'] = $settings['theme_url'];

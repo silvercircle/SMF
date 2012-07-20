@@ -462,9 +462,6 @@ class EoS_Smarty_Template_Support {
 			$settings['theme_dir'] = $settings['actual_theme_dir'];
 		}
 
-  		if(isset($modSettings['embed_GA']) && $modSettings['embed_GA'] && ($context['user']['is_guest'] || (empty($options['disable_analytics']) ? 1 : !$options['disable_analytics'])))
-  			$context['want_GA_embedded'] = true;
-
   		/*
   		 * globals that must be available to all templates by default
   		 */
