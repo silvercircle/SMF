@@ -1,6 +1,3 @@
-<?php
-if (!defined('SMF'))
-	die('No access');
 function foo()
 {
 	smf_db_query('UPDATE {db_prefix}members AS m 
