@@ -41,10 +41,6 @@ class GitFeed extends EoS_Plugin
 	 */
 	protected static $my_git_url = 'https://github.com/silvercircle/SMF/commit/';				// frontend base url
 	protected static $my_git_api_url = 'https://api.github.com/repos/silvercircle/SMF/commits'; // this is where we fetch our json data
-	/* 
-	 * this is for updating a plugin. Hooks listed here (same format as in $installableHooks)
-	 * will be removed during the installation / updating procedure.
-	 */
 	protected $removeableHooks = array();
 
 	public function __construct() { parent::__construct(); }	// mandatory
