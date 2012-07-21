@@ -1607,16 +1607,18 @@ function Post2()
 			$_POST['guestname'] = $row['poster_name'];
 			$_POST['email'] = $row['poster_email'];
 		}
-		$draft = saveDraft();
-		if (!empty($draft) && !in_array('session_timeout', $post_errors))
-		{
-			if (isset($_REQUEST['xml']))
-				draftXmlReturn($draft);
-			loadTemplate('Post');
-			$context['page_title'] = $txt['draft_saved_short'];
-			$context['sub_template'] = 'draft_saved';
-			return;
-		}		
+		if($context['have_drafts']) {
+			$draft = saveDraft();
+			if (!empty($draft) && !in_array('session_timeout', $post_errors))
+			{
+				if (isset($_REQUEST['xml']))
+					draftXmlReturn($draft);
+				loadTemplate('Post');
+				$context['page_title'] = $txt['draft_saved_short'];
+				$context['sub_template'] = 'draft_saved';
+				return;
+			}		
+		}
 	}
 
 	// If the poster is a guest evaluate the legality of name and email.

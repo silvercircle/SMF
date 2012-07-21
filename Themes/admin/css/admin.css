@@ -1355,6 +1355,12 @@ ol.commonlist.noshadow {
 	box-shadow: none !important;
 	margin:0 !important;
 }
+ol.commonlist.pluginlist li {
+	background-color:#fff0f0;
+}
+ol.commonlist.pluginlist li.installed {
+	background-color:#f0fff0;
+}
 ol.category > li div.lastpost {
 	min-width: 300px;
 	max-width: 300px;

@@ -26,9 +26,9 @@ function LegacyBBC_autoloader()
 
 class LegacyBBC extends EoS_Plugin
 {
-	protected $productShortName = 'myplugin';
+	protected $productShortName = 'LegacyBBC';
 	protected $installableHooks = array(
-		'parse_bbc' => array('file' => 'main.php', 'callable' => 'LegacyBBC::addtags')
+		'bbc_codes' => array('file' => 'main.php', 'callable' => 'LegacyBBC::addtags')
 	);
 
 	protected $_product = array(
@@ -45,7 +45,6 @@ class LegacyBBC extends EoS_Plugin
 	public static function addtags(&$codes)
 	{
 		global $context;
-
 		$codes = array_merge($codes, array(
 			array(
 				'tag' => 'black',

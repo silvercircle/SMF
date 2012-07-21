@@ -1587,7 +1587,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 		);
 
 		// Let mods add new BBC without hassle.
-		HookAPI::callHook('integrate_bbc_codes', array(&$codes));
+		HookAPI::callHook('bbc_codes', array(&$codes));
 
 		// This is mainly for the bbc manager, so it's easy to add tags above.  Custom BBC should be added above this line.
 		if ($message === false)
