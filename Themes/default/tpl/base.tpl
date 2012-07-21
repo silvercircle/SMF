@@ -16,7 +16,7 @@
  *}
 <!DOCTYPE html >
 {include 'generics.tpl'}
-<html id="_S_" lang="en-US">
+<html id="_S_">
   <head>
     <link rel="stylesheet" type="text/css" href="{$S.primary_css}" />
     {if $C.right_to_left > 0}
@@ -168,7 +168,7 @@
     {* Output any remaining HTML headers. (from mods, maybe?) *}
     {$C.html_headers}
     <style>
-      #main_content_section { max-width: {(!empty($O.content_width)) ? $O.content_width : '95%'}; }
+      {*#main_content_section { max-width: {(!empty($O.content_width)) ? $O.content_width : '95%'}; }*}
       {if isset($C.css_overrides)}
       {foreach from=$C.css_overrides item=css}
       {$css}
@@ -193,7 +193,7 @@
   <div id="jsconfirm" style="width:450px;" class="jqmWindow"><div class="jqmWindow_container"><div class="glass jsconfirm title"></div><div class="jsconfirm content blue_container norounded smallpadding mediummargin tinytext"></div><div class="floatright mediummargin"><span class="button default" id="c_yes">Yes</span><span class="button" id="c_no">No</span><span class="button" id="c_ok">Ok</span></div><div class="clear"></div></div></div>
   <div id="ajaxbusy" style="display:none;"><img src="{$S.images_url}/ajax-loader.gif" alt="loader" /></div>
   <div id="mcard" style="display:none;"><div onclick="mcardClose();" id="mcard_close">X</div><div id="mcard_inner"></div></div>
-  <div id="wrap" style="max-width: {($S.forum_width == 0)  ? '3000px;' : $S.forum_width};">
+  <div id="wrap" style="max-width: {($S.forum_width == 0)  ? '1400px;' : $S.forum_width};">
   <header>
   <div id="header">
     {include 'header.tpl'}

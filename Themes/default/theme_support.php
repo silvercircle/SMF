@@ -19,6 +19,8 @@ $my_theme_context = array();
  * it's therefore mandatory
  */
 
+global $settings;
+
 $settings['theme_variants'] = array('default', 'lightweight');
 $settings['clip_image_src'] = array(
 	'_default' => 'clipsrc.png',

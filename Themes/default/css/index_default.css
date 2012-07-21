@@ -1,5 +1,5 @@
 body {
-	background: #D0D1E6;
+	background: #eaeaea;
 	font-family: "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
 	font-size: 10pt;
 	margin: 0;
@@ -22,6 +22,8 @@ table {
 #wrap {
 	background-color: #eaeaea; /*#D0D1E6*/
 	margin: 0 auto;
+	padding-left:40px;
+	padding-right:40px;
 }
 body, td, th, tr {
 	color: #555;
@@ -773,12 +775,14 @@ div.dropselect_content.right {
 	right:0;
 }
 #main_menu, #mcard .title_bar {
-	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;
+	/*background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;*/
+	background:#404040;
 }
 #main_menu {
 	padding: 0 0.5em;
 	font-size: 11px;
 	text-shadow: 2px 2px 4px black;
+	border-top-left-radius: 6px;
 }
 .dropmenu, .dropmenu ul {
 	list-style: none;
@@ -964,23 +968,50 @@ ul#navigation li {
 }
 #adm_submenus li.active a {
 }
-/* Styles for the general looks for the Curve theme.
-------------------------------------------------------- */
 
-/* the content section, wrapper for everything between header and footer */
-
-#content_section {
-	padding: 10px 40px 5px 40px;
+/* boardlisting (list of check boxes to select boards) */
+div.boardlisting {
+	width:50%;
+}
+div.boardlisting.left {
+	float:left;
+}
+div.boardlisting.right {
+	float:right;
+}
+div.boardlisting ul {
+	list-style: none;
+	padding-left:10px;
+	padding-right:10px;
+}
+div.boardlisting ul li {
+	height:20px;
+	line-height: 20px;
+}
+div.boardlisting ul li.category {
+	height:25px;
+	line-height: 25px;
+	background: #fff url(../images/theme/sprite.png) 0 -614px repeat-x;
+	color: #666;
+	font-size: 12px;
+	font-weight: bold !important;
+	border: 0 !important;
+	margin: 0 !important;
+	line-height:24px !important;
+	padding:1px 10px 0 10px !important;
+	text-shadow: white 1px 1px 1px;
 }
 
+/* the content section, wrapper for everything between header and footer */
+#content_section {
+	padding: 10px 10px 0 10px;
+}
 /* inner content section, defines the width for the forum itself (but not the header or footer)*/
 #main_content_section {
-	min-width: 800px;
-	max-width: 1400px;
 	width: auto;
 	background-color: #fff;
 	min-height: 200px;
-	margin: 0 auto 20px auto;
+	margin: 0 auto 0 auto;
 	border: 1px solid #ccc;
 	box-shadow: 0 0 10px 0 #aaa;
 	padding: 10px;
@@ -993,21 +1024,22 @@ ul#navigation li {
 #sbtoggle {
 	float: right;
 	position: relative;
-	right: -28px;
-	top: -10px;
+	right: -22px;
+	top: -12px;
 	width: 20px;
-	height: 40px;
+	height: 35px;
 	background: white;
 	border-radius: 0 4px 4px 0;
 	cursor: pointer;
 	margin-bottom: -40px;
 	background:transparent;
+	text-decoration: none;
 }
 #sbtoggle.expand {
-	background: transparent url(../images/clipsrc.png) -152px 0 no-repeat;
+	background: white url(../images/clipsrc.png) -152px 0 no-repeat;
 }
 #sbtoggle.collapse {
-	background: transparent url(../images/clipsrc.png) -179px 0 no-repeat;
+	background: white url(../images/clipsrc.png) -179px 0 no-repeat;
 }
 /* the main title, always stay at 45 pixels in height! */
 h1.forumtitle {
@@ -1034,11 +1066,11 @@ h1.bigheader.topic {
 	font-weight: normal;
 }
 h1.bigheader.secondary, div.spoiler.head {
-	font-size: 12px;
-	font-weight:normal;
-	border-bottom: 1px solid #ccc;
-	color: #88c;
-	padding: 2px 20px;
+	font-size: 14px;
+	font-weight:bold;
+	border-bottom: 1px solid #cce;
+	color: #88a;
+	padding: 2px 0;
 }
 div.spoiler.head {
 	border-bottom:0;
@@ -1073,15 +1105,21 @@ h3, h4 {
 .bbc_head.l4 {
 	font-size:0.9em;
 }
+#header {
+	margin-left:auto;
+	margin-right:auto;
+	padding-left:10px;
+	padding-right:10px;
+}
 #upper_section {
 	height: 67px;
 	max-height: 67px;
 	min-height: 67px;
 	font-size: 12px;
-	background: #516679 url(../images/upper_bg.png) 225px 12px no-repeat;
+	background: transparent url(../images/upper_bg.png) 225px 12px no-repeat;
 }
 .notibar {
-	background: #516679 url(../images/upper_bg.png) 225px 3px no-repeat;
+	background: transparent url(../images/upper_bg.png) 225px 3px no-repeat;
 	height: 24px;
 	line-height: 24px;
 	font-size: 10px;
@@ -1091,6 +1129,8 @@ h3, h4 {
 	float: right;
 	width: 500px;
 	background: #404040;
+	padding-right:15px;
+	border-top-right-radius: 6px;
 }
 .notibar a {
 	color: white !important;
@@ -1172,6 +1212,8 @@ div.navigate_section {
 	text-align: left;
 	padding: 3px 10px;
 	font-size:8pt;
+	margin-left:10px;
+	margin-right:10px;
 }
 
 #footer_section a {
@@ -1373,11 +1415,6 @@ img.new_posts {
 div.table_frame .table_list {
 	margin: 0;
 }
-#messageindex {
-	clear: both;
-	margin:5px 0;
-	padding:5px;
-}
 #moderationbuttons {
 	overflow: hidden;
 }
@@ -1528,9 +1565,6 @@ div.userbit_compact_textpart.small {
 	margin-left: 220px;
 	padding-bottom:5px;
 	background-color:#fcfcfc;
-	border:1px dotted #ddd;
-	border-radius:4px;
-	margin-bottom:5px;
 }
 .post_content.lean {
 	margin-left: 10px !important;
@@ -2440,13 +2474,16 @@ table.topic_table td {
 	width: 100%;
 	font-size: 1.0em;
 }
-.topic_table td.subject a, a.boardlink {
+a.boardlink, span.topiclink a {
+	color:#666;
+	font-size: 1.1em;
+	font-family: "Trebuchet MS", "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
+	line-height:130%;
+}
+a.boardlink { font-weight:normal;text-shadow: 0 0 1px rgba(150, 150, 150, 0.9);}
+a.child_boardlink {
 	color:#666;
 }
-.topic_table span.tpeek {
-	font-size: 1.1em;
-}
-
 .topic_table span.tpeek > a.tpeek {
 	font-size: 11px;
 }

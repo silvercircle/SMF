@@ -3727,18 +3727,6 @@ function setupMenuContext()
 				'title' => $txt['home'],
 				'href' => URL::home(),
 				'show' => true,
-				'sub_buttons' => array(
-					'unread' => array(
-						'title' => $txt['unread_since_visit'],
-						'href' => URL::parse($scripturl . '?action=unread'),
-						'show' => $context['user']['is_logged'],
-					),
-					'replies' => array(
-						'title' => $txt['show_unread_replies'],
-						'href' => URL::parse($scripturl . '?action=unreadreplies'),
-						'show' => $context['user']['is_logged'],
-					)
-				),
 				'is_last' => $context['right_to_left'],
 			),
 			'help' => array(

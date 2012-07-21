@@ -784,7 +784,6 @@ function SetThemeSettings()
 		if (preg_match('~\$settings\[\'theme_variants\'\]\s*=(.+?);~', $file_contents, $matches))
 				eval('global $settings;' . $matches[0]);
 	}
-
 	// Submitting!
 	if (isset($_POST['submit']))
 	{
@@ -1233,35 +1232,27 @@ function PickTheme()
 		$context['available_themes'][$id_theme]['description'] = $txt['theme_description'];
 
 		// Are there any variants?
-		if (file_exists($theme_data['theme_dir'] . '/index.template.php') && empty($theme_data['disable_user_variant']))
+		if (file_exists($theme_data['theme_dir'] . '/theme_support.php') && empty($theme_data['disable_user_variant']))
 		{
-			$file_contents = implode('', file($theme_data['theme_dir'] . '/index.template.php'));
-			if (preg_match('~\$settings\[\'theme_variants\'\]\s*=(.+?);~', $file_contents, $matches))
+			@require_once($theme_data['theme_dir'] . '/theme_support.php');
+			if (!empty($settings['theme_variants']))
 			{
-				$settings['theme_variants'] = array();
+				loadLanguage('Settings');
 
-				// Fill settings up.
-				eval('global $settings;' . $matches[0]);
+				$context['available_themes'][$id_theme]['variants'] = array();
+				foreach ($settings['theme_variants'] as $variant)
+					$context['available_themes'][$id_theme]['variants'][$variant] = array(
+						'label' => isset($txt['variant_' . $variant]) ? $txt['variant_' . $variant] : $variant,
+						'thumbnail' => !file_exists($theme_data['theme_dir'] . '/images/thumbnail.gif') || file_exists($theme_data['theme_dir'] . '/images/thumbnail_' . $variant . '.gif') ? $theme_data['images_url'] . '/thumbnail_' . $variant . '.gif' : ($theme_data['images_url'] . '/thumbnail.gif'),
+					);
 
-				if (!empty($settings['theme_variants']))
-				{
-					loadLanguage('Settings');
+				$context['available_themes'][$id_theme]['selected_variant'] = isset($_GET['vrt']) ? $_GET['vrt'] : (!empty($variant_preferences[$id_theme]) ? $variant_preferences[$id_theme] : (!empty($settings['default_variant']) ? $settings['default_variant'] : $settings['theme_variants'][0]));
+				if (!isset($context['available_themes'][$id_theme]['variants'][$context['available_themes'][$id_theme]['selected_variant']]['thumbnail']))
+					$context['available_themes'][$id_theme]['selected_variant'] = $settings['theme_variants'][0];
 
-					$context['available_themes'][$id_theme]['variants'] = array();
-					foreach ($settings['theme_variants'] as $variant)
-						$context['available_themes'][$id_theme]['variants'][$variant] = array(
-							'label' => isset($txt['variant_' . $variant]) ? $txt['variant_' . $variant] : $variant,
-							'thumbnail' => !file_exists($theme_data['theme_dir'] . '/images/thumbnail.gif') || file_exists($theme_data['theme_dir'] . '/images/thumbnail_' . $variant . '.gif') ? $theme_data['images_url'] . '/thumbnail_' . $variant . '.gif' : ($theme_data['images_url'] . '/thumbnail.gif'),
-						);
-
-					$context['available_themes'][$id_theme]['selected_variant'] = isset($_GET['vrt']) ? $_GET['vrt'] : (!empty($variant_preferences[$id_theme]) ? $variant_preferences[$id_theme] : (!empty($settings['default_variant']) ? $settings['default_variant'] : $settings['theme_variants'][0]));
-					if (!isset($context['available_themes'][$id_theme]['variants'][$context['available_themes'][$id_theme]['selected_variant']]['thumbnail']))
-						$context['available_themes'][$id_theme]['selected_variant'] = $settings['theme_variants'][0];
-
-					$context['available_themes'][$id_theme]['thumbnail_href'] = $context['available_themes'][$id_theme]['variants'][$context['available_themes'][$id_theme]['selected_variant']]['thumbnail'];
-					// Allow themes to override the text.
-					$context['available_themes'][$id_theme]['pick_label'] = isset($txt['variant_pick']) ? $txt['variant_pick'] : $txt['theme_pick_variant'];
-				}
+				$context['available_themes'][$id_theme]['thumbnail_href'] = $context['available_themes'][$id_theme]['variants'][$context['available_themes'][$id_theme]['selected_variant']]['thumbnail'];
+				// Allow themes to override the text.
+				$context['available_themes'][$id_theme]['pick_label'] = isset($txt['variant_pick']) ? $txt['variant_pick'] : $txt['theme_pick_variant'];
 			}
 		}
 	}

@@ -34,7 +34,6 @@ class EoS_Smarty {
 		@require_once($sourcedir . '/lib/Smarty/Smarty.class.php');
 		self::$_smartyInstance = new Smarty();
 		self::$_smartyInstance->caching = 0;		// this is *STATIC* caching of generated pages, we don't want (or even need) this for a forum...
-
 		if(is_callable('theme_support_autoload'))	// theme_support.php (if present) was previously loaded in loadTheme().
 			self::$_configInstance = theme_support_autoload(self::$_smartyInstance);
 		else

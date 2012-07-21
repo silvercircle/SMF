@@ -179,8 +179,7 @@ CREATE TABLE {$db_prefix}log_online_today (
 
 # now the changes to stock smf 2 tables
 
-# this can be used to prevent a post from being cached (unimplemented as of now)
-# ALTER TABLE {$db_prefix}messages ADD locked tinyint(2) NOT NULL default '0';
+ALTER TABLE {$db_prefix}messages ADD locked tinyint(2) NOT NULL default '0';
 ALTER TABLE {$db_prefix}messages ADD KEY updated(poster_time, modified_time);
 
 # like stats for members

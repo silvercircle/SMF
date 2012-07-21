@@ -416,10 +416,6 @@ function template_menu()
 {
 	global $context;
 
-	$context['menu_buttons']['blog']['title'] = "Blog";
-	$context['menu_buttons']['blog']['show'] = true;
-	$context['menu_buttons']['blog']['href'] = "http://blog.miranda.or.at";
-	
 	echo '
 		<div id="main_menu">
 			<ul class="dropmenu" id="menu_nav">';
