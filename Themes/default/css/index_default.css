@@ -851,7 +851,9 @@ div.dropselect_content.right {
 	margin: -1.8em 0 0 13em;
 }
 .dropmenu li.active {
-	background-color: #eaeaea; /*#D0D1E6;*/
+	background-color: white; /*#D0D1E6;*/
+	border-top:2px solid orange;
+	margin-top:-2px;
 }
 .dropmenu li.active > a {
 	color: black;
@@ -1004,7 +1006,7 @@ div.boardlisting ul li.category {
 
 /* the content section, wrapper for everything between header and footer */
 #content_section {
-	padding: 10px 10px 0 10px;
+	padding: 0 10px 0 10px;
 }
 /* inner content section, defines the width for the forum itself (but not the header or footer)*/
 #main_content_section {
@@ -1012,9 +1014,9 @@ div.boardlisting ul li.category {
 	background-color: #fff;
 	min-height: 200px;
 	margin: 0 auto 0 auto;
-	border: 1px solid #ccc;
+	border-top:1px solid white;
 	box-shadow: 0 0 10px 0 #aaa;
-	padding: 10px;
+	padding: 10px 20px;
 	padding-top:0;
 }
 #sidebar, #sbar {
@@ -1024,7 +1026,7 @@ div.boardlisting ul li.category {
 #sbtoggle {
 	float: right;
 	position: relative;
-	right: -22px;
+	right: -28px;
 	top: -12px;
 	width: 20px;
 	height: 35px;

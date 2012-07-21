@@ -883,6 +883,8 @@ div.dropselect_content.right {
 }
 .dropmenu li.active {
 	background-color: white;
+	border-top:2px solid orange;
+	margin-top:-2px;
 }
 .dropmenu li.active > a {
 	color: black;
@@ -1057,8 +1059,6 @@ div.boardlisting ul li.category {
 }
 /* inner content section, defines the width for the forum itself (but not the header or footer)*/
 #main_content_section {
-	min-width: 800px;
-	max-width: 1400px;
 	width: auto;
 	min-height: 200px;
 	margin: 0 auto 20px auto;

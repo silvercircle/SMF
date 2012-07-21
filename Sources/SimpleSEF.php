@@ -806,7 +806,8 @@ class SimpleSEF {
             }
 
             saveDBSettings($save_vars);
-
+            CacheAPI::putCache('simplesef_board_list', null, 0);
+            CacheAPI::putCache('simplesef_extensions', null, 0);
             redirectexit('action=admin;area=simplesef;sa=basic');
         }
 
@@ -875,7 +876,8 @@ class SimpleSEF {
             $save_vars[] = array('text', 'simplesef_ignore_actions');
 
             saveDBSettings($save_vars);
-
+            CacheAPI::putCache('simplesef_board_list', null, 0);
+            CacheAPI::putCache('simplesef_extensions', null, 0);
             redirectexit('action=admin;area=simplesef;sa=advanced');
         }
 
@@ -928,7 +930,8 @@ class SimpleSEF {
             );
 
             updateSettings($updates);
-
+            CacheAPI::putCache('simplesef_board_list', null, 0);
+            CacheAPI::putCache('simplesef_extensions', null, 0);
             redirectexit('action=admin;area=simplesef;sa=alias');
         }
     }

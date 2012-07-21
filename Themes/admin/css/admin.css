@@ -1,5 +1,5 @@
 body {
-	background: #D0D1E6;
+	background: #eaeaea;
 	font-family: "Trebuchet MS", "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
 	font-size: 10pt;
 	margin: 0;
@@ -23,6 +23,7 @@ table {
 #wrap {
 	background-color: #eaeaea; /*#D0D1E6*/
 	margin: 0 auto;
+	padding-bottom: 10px;
 }
 body, td, th, tr {
 	color: #555;
@@ -786,6 +787,7 @@ div.dropselect_content.right {
 	font-family: "Cuprum", "Tahoma", "Arial", sans-serif;	
 	text-shadow: 1px 1px 5px #ddd;
 	padding-left:30px;
+	border-top-left-radius: 6px;
 }
 .dropmenu, .dropmenu ul {
 	list-style: none;
@@ -864,6 +866,8 @@ div.dropselect_content.right {
 }
 .dropmenu li.active {
 	background-color: white;
+	border-top:2px solid orange;
+	margin-top:-2px;
 }
 .dropmenu li.active > a {
 	color: black;
@@ -1029,12 +1033,15 @@ div.boardlisting ul li.category {
 	background:white;
 	margin-left:30px;
 	margin-right:30px;
+	border-left:1px solid #ddd;
+	border-right:1px solid #ddd;
 }
-
+#header {
+	margin-left:30px;
+	margin-right:30px;
+}
 /* inner content section, defines the width for the forum itself (but not the header or footer)*/
 #main_content_section {
-	min-width: 800px;
-	max-width: 1400px;
 	width: auto;
 	min-height: 200px;
 	margin: 0 auto 20px auto;
@@ -1133,10 +1140,11 @@ h3, h4 {
 	max-height: 67px;
 	min-height: 67px;
 	font-size: 12px;
-	background:#bbbbc5 url(../images/upper_bg.png) 225px 12px no-repeat;
+	background:#eaeaea url(../images/upper_bg.png) 225px 12px no-repeat;
+	padding-left:10px;
 }
 .notibar {
-	background:#bbbbc5 url(../images/upper_bg.png) 225px 3px no-repeat;
+	background:#eaeaea url(../images/upper_bg.png) 225px 3px no-repeat;
 	height: 24px;
 	line-height: 24px;
 	font-size: 11px;
@@ -1145,10 +1153,11 @@ h3, h4 {
 	background: #222;
 	float: right;
 	width: 500px;
-	/*background: #d6d6d6;*/
+	padding-right:15px;
+	border-top-right-radius: 6px;
 }
 .notibar_intro {
-	background: transparent url(../../default/images/clipsrc_l.png) 0 -32px no-repeat;
+	background: transparent url(../images/clipsrc_l.png) 0 -32px no-repeat;
 	line-height: 24px;
 	float: right;
 	height: 24px;
@@ -1224,6 +1233,9 @@ div.navigate_section {
 	text-align: left;
 	padding: 3px 10px;
 	font-size:8pt;
+	margin-left:30px;
+	margin-right:30px;
+	border-radius: 0 0 6px 6px;
 }
 
 #footer_section a {
@@ -1291,7 +1303,6 @@ ol.commonlist.category {
 	background-color:#fcfcfc;
 	padding-top:0;
 	margin: 0;
-	border-bottom: 1px solid #ddd;
 }
 .gradient_darken_down {
 	line-height: 16px;
@@ -1343,12 +1354,6 @@ ol.commonlist.notifications li:hover {
 ol.commonlist.noshadow {
 	box-shadow: none !important;
 	margin:0 !important;
-}
-ol.commonlist.pluginlist li {
-	background-color:#faeeee;
-}
-ol.commonlist.pluginlist li.installed {
-	background-color:#eefaee;
 }
 ol.category > li div.lastpost {
 	min-width: 300px;
@@ -2384,7 +2389,7 @@ tr.titlebg td {
 	margin-bottom: 0;
 	border:0;
 	border-bottom:1px solid orange;
-	background:#666;
+	background:#e5e5e5;
 	height:25px !important;
 	line-height:25px;
 	padding: 0 10px;
@@ -2392,15 +2397,19 @@ tr.titlebg td {
 	font-family: "Trebuchet MS", "Segoe UI", "Tahoma", "Arial", sans-serif;	
 	color:white;
 	/*font-variant: small-caps;*/
-
+	font-size: 14px;
+	font-weight:bold;
+	/*border-bottom: 1px solid #cce;*/
 }
 .cContainer_header a, .cat_bar2 a, .cat_bar a
 {
-	color:#ddddff;
+	/*color:#ddddff;*/
+	color:#88a;
 }
 .cContainer_header a, .cat_bar2 a, .cContainer_header h3, .cat_bar2 h3, .cat_bar h3 {
-	color: #eee;
-	text-shadow:0 0 1px rgba(200,200,200,1.0);
+	/*color: #eee;*/
+	color:#88a;
+	/*text-shadow:0 0 1px rgba(200,200,200,1.0);*/
 	font-size:1.05em;
 	font-weight:normal;
 }
@@ -3343,6 +3352,8 @@ table.cleantop {
 }
 #boardindex .framed_region.root_cat {
 	padding:2px;
+	border-top:1px solid #ddd;
+	border-bottom:1px solid #ddd;
 }
 span.arrow {
 	line-height: 16px;
@@ -3435,7 +3446,7 @@ img.twentyfour {
 	height: 24px !important;
 }
 
-li.medium_avatar img {
+li.medium_avatar img, span.medium_avatar img {
 	height: 48px;
 	width: 48px;
 	margin: 2px 5px;

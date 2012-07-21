@@ -1419,7 +1419,7 @@ function WhatsNew()
 	list($first_msg) = mysql_fetch_row($request);
 
 	mysql_free_result($request);
-	$request = smf_db_query('SELECT DISTINCT(t.id_topic), COUNT(t.id_topic) FROM smf_topics AS t 
+	$request = smf_db_query('SELECT DISTINCT(t.id_topic), COUNT(t.id_topic) FROM {db_prefix}topics AS t 
 			LEFT JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
 			WHERE {query_wanna_see_board} AND t.id_last_msg >= {int:first_msg} limit 1',
 		array('first_msg' => $first_msg));
