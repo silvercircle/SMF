@@ -208,9 +208,9 @@
         <div class="floatright"><a style="{($alerts > 0) ? '' : 'display:none; '}position:relative;top:-12px;right:12px;z-index:9999;" id="alerts">{$alerts}</a></div>
       {/if}
       <div class="floatright nowrap" id="notification_target">
-        <ul class="dropmenu menu" id="content_menu">
+        <ul class="dropmenu menu compact" id="content_menu">
         {foreach $C.usermenu_buttons as $key => $button}
-          <li id="button_{$key}">
+          <li id="button_{$key}" class="{(isset($button.active_button)) ? 'active' :''}">
             {(isset($button.link)) ? $button.link : ("<a class=\"firstlevel compact\" href=\"{$button.href}\">{$button.title}</a>")}
           {if !empty($button.sub_buttons)}
             &nbsp;&nbsp;<span onclick="onMenuArrowClick($(this));" style="display:inline-block;" id="_{$key}" class="m_downarrow compact">&nbsp;</span>

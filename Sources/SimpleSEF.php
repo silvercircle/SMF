@@ -347,6 +347,7 @@ class SimpleSEF {
 
 	private static $topics_base = '';
 
+	public static $debug_info = '';
     /**
      * Initialize the mod and it's settings.  We can't use a constructor
      * might change this in the future (either singleton or two classes,
@@ -461,12 +462,20 @@ class SimpleSEF {
 		global $scripturl, $txt, $context;
 
 		self::benchmark('buffer');
-
 		$matches = array();
   		$count = 0;
 		preg_match_all('~\b' . preg_quote($scripturl) . '.*?topic=([0-9]+)\b~', $buffer, $matches);
 		if (!empty($matches[1])) {
-    		self::loadTopicNames(array_unique($matches[1]));
+			$matches[1] = array_unique($matches[1]);
+			$valid_matches = array();
+			//self::$debug_info .= 'matches found<br>';
+			foreach($matches[1] as $match) {
+				if($match)
+					$valid_matches[] = $match;
+				//self::$debug_info .= $match . '<br>';
+			}
+			//self::$debug_info .= 'ob_simplesef_light > call loadtopicnames<br>';
+			self::loadTopicNames(array_unique($valid_matches));
 			$matches = array();
 			preg_match_all('~\b(' . preg_quote($scripturl) . '\?topic=[-a-zA-Z0-9+&@#/%?=\~_|!:,.;\[\]]*[-a-zA-Z0-9+&@#/%=\~_|\[\]]?)([^-a-zA-Z0-9+&@#/%=\~_|])~', $buffer, $matches);
 			if (!empty($matches[0])) {
@@ -525,9 +534,10 @@ class SimpleSEF {
         // Grab the topics...
         $matches = array();
         preg_match_all('~\b' . preg_quote($scripturl) . '.*?topic=([0-9]+)~', $buffer, $matches);
-        if (!empty($matches[1]))
-            self::loadTopicNames(array_unique($matches[1]));
-
+        if (!empty($matches[1])) {
+			//self::$debug_info .= 'ob_simplesef > call loadtopicnames<br>';
+			self::loadTopicNames(array_unique($matches[1]));
+		}
         // We need to find urls that include a user id, so we can grab them all and fetch them ahead of time
         $matches = array();
         preg_match_all('~\b' . preg_quote($scripturl) . '.*?u=([0-9]+)~', $buffer, $matches);
@@ -1114,7 +1124,7 @@ class SimpleSEF {
 
         // If the topic id isn't here (probably from a redirect) we need a query to get it
         if (empty(self::$topicNames[$value]))
-            self::loadTopicNames((int) $value);
+			self::loadTopicNames((int) $value);
 
         // and if it still doesn't exist
         if (empty(self::$topicNames[$value])) {
@@ -1318,9 +1328,17 @@ class SimpleSEF {
      */
     private static function loadTopicNames($ids) {
 
-        $ids = is_array($ids) ? $ids : array($ids);
+		$ids = is_array($ids) ? $ids : array($ids);
+		if(count($ids) == 0)
+			return;
 
-        // Fill the topic 'cache' in one fell swoop
+		if(count($ids) == 1 && $ids[0] == 0)
+			return;
+
+		//self::$debug_info .= 'run loadtopicnames<br>';
+		//foreach($ids as $id)
+		//	self::$debug_info .= 'id = ' . $id . '<br>';
+		// Fill the topic 'cache' in one fell swoop
         $request = smf_db_query( '
 			SELECT t.id_topic, m.subject, t.id_board
 			FROM {db_prefix}topics AS t

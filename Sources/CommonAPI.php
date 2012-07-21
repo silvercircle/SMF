@@ -26,7 +26,8 @@ class commonAPI {
 
 	private static function ent_check($string)
 	{
-		return(preg_replace('~(&#(\d{1,7}|x[0-9a-fA-F]{1,6});)~e', self::entity_fix($string), $string));
+		return($string);
+		//return(preg_replace('~(&#(\d{1,7}|x[0-9a-fA-F]{1,6});)~e', self::entity_fix($string), $string));
 	}
 
 	public static function entity_fix($string)
@@ -51,7 +52,8 @@ class commonAPI {
 
 	public static function substr($string, $start, $length = 0)
 	{
-		$ent_arr = preg_split('~(&#' . ('\d{1,7}') . ';|&quot;|&amp;|&lt;|&gt;|&nbsp;|.)~u', self::ent_check($string), -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+		//$ent_arr = preg_split('~(&#' . ('021') . ';|&quot;|&amp;|&lt;|&gt;|&nbsp;|.)~u', self::ent_check($string), -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+		$ent_arr = preg_split('~(&#' . ('021') . ';|&quot;|&amp;|&lt;|&gt;|&nbsp;|.)~u', $string, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
 		return $length == 0 ? implode('', array_slice($ent_arr, $start)) : implode('', array_slice($ent_arr, $start, $length));
 	}
 
@@ -79,7 +81,7 @@ class commonAPI {
 
 	public static function truncate($string, $length)
 	{
-		$string = self::ent_check($string);
+		//$string = self::ent_check($string);
 		$matches = array();
 		
 		preg_match('~^(' . self::$ent_list . '|.){' . self::strlen(substr($string, 0, $length)) . '}~u', $string, $matches);
@@ -91,23 +93,25 @@ class commonAPI {
 
 	public static function strlen($string)
 	{
-		return strlen(preg_replace('~' . self::$ent_list . '|.~u', '_', self::ent_check($string)));
+		return strlen(preg_replace('~' . self::$ent_list . '|.~u', '_', $string));
 	}
 
 	public static function htmltrim($string)
 	{
-		return preg_replace('~^(?:[ \t\n\r\x0B\x00' . self::$space_chars . ']|&nbsp;)+|(?:[ \t\n\r\x0B\x00' . self::$space_chars . ']|&nbsp;)+$~u', '', self::ent_check($string));
+		//return preg_replace('~^(?:[ \t\n\r\x0B\x00' . self::$space_chars . ']|&nbsp;)+|(?:[ \t\n\r\x0B\x00' . self::$space_chars . ']|&nbsp;)+$~u', '', self::ent_check($string));
+		return preg_replace('~^(?:[ \t\n\r\x0B\x00' . self::$space_chars . ']|&nbsp;)+|(?:[ \t\n\r\x0B\x00' . self::$space_chars . ']|&nbsp;)+$~u', '', $string);
 	}
 
 	public static function htmlspecialchars($string, $quote_style = ENT_COMPAT)
 	{
-		return preg_replace(strtr('~(&#(\d{1,7}|x[0-9a-fA-F]{1,6});)~e', array('&' => '&amp;')), self::entity_fix($string), htmlspecialchars($string, $quote_style, 'UTF-8'));
+		//return preg_replace(strtr('~(&#(\d{1,7}|x[0-9a-fA-F]{1,6});)~e', array('&' => '&amp;')), self::entity_fix($string), htmlspecialchars($string, $quote_style, 'UTF-8'));
+		return htmlspecialchars($string, $quote_style, 'UTF-8');
 	}
 
 	public static function strpos($haystack, $needle, $offset = 0)
 	{
-		$haystack_arr = preg_split('~(&#\d{1,7}' . ';|&quot;|&amp;|&lt;|&gt;|&nbsp;|.)~u', self::ent_check($haystack), -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
-		//$haystack_size = count($haystack_arr);
+		//$haystack_arr = preg_split('~(&#\d{1,7}' . ';|&quot;|&amp;|&lt;|&gt;|&nbsp;|.)~u', self::ent_check($haystack), -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+		$haystack_arr = preg_split('~(&#021' . ';|&quot;|&amp;|&lt;|&gt;|&nbsp;|.)~u', $haystack, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
 		if (strlen($needle) === 1)
 		{
 			$result = array_search($needle, array_slice($haystack_arr, $offset));
@@ -115,7 +119,8 @@ class commonAPI {
 		}
 		else
 		{
-			$needle_arr = preg_split('~(&#\d{1,7}' . ';|&quot;|&amp;|&lt;|&gt;|&nbsp;|.)~u',  self::ent_check($needle), -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+			//$needle_arr = preg_split('~(&#\d{1,7}' . ';|&quot;|&amp;|&lt;|&gt;|&nbsp;|.)~u',  self::ent_check($needle), -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+			$needle_arr = preg_split('~(&#021' . ';|&quot;|&amp;|&lt;|&gt;|&nbsp;|.)~u',  $needle, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
 			$needle_size = count($needle_arr);
 
 			$result = array_search($needle_arr[0], array_slice($haystack_arr, $offset));

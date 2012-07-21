@@ -1703,6 +1703,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	$posterOptions['id'] = empty($posterOptions['id']) ? 0 : (int) $posterOptions['id'];
 	$posterOptions['ip'] = empty($posterOptions['ip']) ? $user_info['ip'] : $posterOptions['ip'];
 
+	$context['can_tag_users'] = allowedTo('tag_users');
 	$tagged_users = handleUserTags($msgOptions['body']);
 	
 	// We need to know if the topic is approved. If we're told that's great - if not find out.
@@ -2456,6 +2457,7 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	$topicOptions['sticky_mode'] = isset($topicOptions['sticky_mode']) ? $topicOptions['sticky_mode'] : null;
 
 	$tagged_users = array();
+	$context['can_tag_users'] = allowedTo('tag_users');
 	if(isset($msgOptions['body']))
 		$tagged_users = handleUserTags($msgOptions['body']);
 	
@@ -3378,7 +3380,7 @@ function handleUserTags(&$message)
 
 	$users_found = array();
 	
-	if(!$context['can_tag_users'] || (isset($_REQUEST['allowtags']) && $_REQUEST['allowtags']) || empty($modSettings['enableUserTagging']) || 0 == $modSettings['maxTagsPerPost'])
+	if(!isset($context['can_tag_users']) || !$context['can_tag_users'] || (isset($_REQUEST['allowtags']) && $_REQUEST['allowtags']) || empty($modSettings['enableUserTagging']) || 0 == $modSettings['maxTagsPerPost'])
 		return($users_found);
 
 	$pat = '~@@([\s\w,;-_\[\]\{\}\\\/\+\.\~\$\!]+):~u';

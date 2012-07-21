@@ -3988,7 +3988,7 @@ function setupMenuContext()
 	// Default to home.
 	$current_action = 'home';
 
-	if (isset($context['menu_buttons'][$context['current_action']]))
+	if (isset($context['menu_buttons'][$context['current_action']]) || isset($context['usermenu_buttons'][$context['current_action']]))
 		$current_action = $context['current_action'];
 	elseif ($context['current_action'] == 'search2')
 		$current_action = 'search';
@@ -4000,8 +4000,13 @@ function setupMenuContext()
 		$current_action = 'login';
 	elseif ($context['current_action'] == 'groups' && $context['allow_moderation_center'])
 		$current_action = 'moderate';
-
-	$context['menu_buttons'][$current_action]['active_button'] = true;
+	elseif (stristr($context['current_action'], 'unread'))
+		$current_action = 'whatsnew';
+	
+	if(isset($context['usermenu_buttons'][$current_action]))
+		$context['usermenu_buttons'][$current_action]['active_button'] = true;
+	else
+		$context['menu_buttons'][$current_action]['active_button'] = true;
 
 	if (!$user_info['is_guest'] && $context['user']['unread_messages'] > 0 && isset($context['menu_buttons']['pm']))
 	{

@@ -475,8 +475,10 @@ function ob_sessrewrite($buffer)
 	$context['load_queries'] = $db_count;
 	$context['template_benchmark_time'] = round(array_sum(explode(' ', $now)) - array_sum(explode(' ', $context['template_benchmark'])), 3);
 
-	if(!empty($modSettings['simplesef_enable']))
+	if(!empty($modSettings['simplesef_enable'])) {
 		$buffer = isset($context['sef_full_rewrite']) ? SimpleSEF::ob_simplesef($buffer) : SimpleSEF::ob_simplesef_light($buffer);
+		//$buffer .= SimpleSEF::$debug_info;
+	}
 	$_t = EoS_Smarty::isActive() ? 's template-smarty), ' : 's template), ';
 	$buffer = str_replace('@%%__loadtime__%%@', $context['load_time'] . 's CPU (' . $context['template_benchmark_time'] . $_t . $context['load_queries'] . ' ' . $txt['queries'] . SimpleSEF::getPerfData(), $buffer);
 	return $buffer;

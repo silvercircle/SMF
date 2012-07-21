@@ -242,10 +242,10 @@ function template_body_above()
 			</div>
       		<div class="floatright"><a style="',($alerts > 0 ? '' : 'display:none; '),'position:relative;top:-12px;right:12px;z-index:9999;" id="alerts">',$alerts, '</a></div>
       		<div class="floatright nowrap" id="notification_target">
-  				<ul class="dropmenu menu" id="menu_content">';
+  				<ul class="dropmenu menu compact" id="menu_content">';
   				foreach($context['usermenu_buttons'] as $key => $button) {
           			echo '
-          			<li id="button_',$key,'">',
+          			<li id="button_',$key,'" class="',isset($button['active_button']) ? 'active' : '','">',
            			isset($button['link']) ? $button['link'] : ('<a class="firstlevel compact" href="'.$button['href'].'">'.$button['title'].'</a>');
           			if(!empty($button['sub_buttons'])) {
           				echo '

@@ -482,7 +482,7 @@ function UnreadTopics()
 
 	// Guests can't have unread things, we don't know anything about them.
 	is_not_guest();
-
+	$context['current_action'] = 'whatsnew';
 	// Prefetching + lots of MySQL work = bad mojo.
 	if (isset($_SERVER['HTTP_X_MOZ']) && $_SERVER['HTTP_X_MOZ'] == 'prefetch')
 	{
@@ -1385,7 +1385,7 @@ function WhatsNew()
 	global $context, $modSettings, $txt, $user_info, $scripturl;
 
 	$cutoff_days = !empty($modSettings['whatsNewCutoffDays']) ? $modSettings['whatsNewCutoffDays'] : 30;
-
+	$context['current_action'] = 'whatsnew';
 	$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
 	$context['topics_per_page'] = empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) ? $options['topics_per_page'] : $modSettings['defaultMaxTopics'];
 

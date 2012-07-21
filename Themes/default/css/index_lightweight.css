@@ -886,6 +886,14 @@ div.dropselect_content.right {
 	border-top:2px solid orange;
 	margin-top:-2px;
 }
+.dropmenu.compact li.active {
+	background-color: #eaeaea;
+	border-bottom:2px solid orange;
+	border-top:0;
+}
+.dropmenu.compact li.active a {
+	color:black;
+}
 .dropmenu li.active > a {
 	color: black;
 	font-weight: bold;
