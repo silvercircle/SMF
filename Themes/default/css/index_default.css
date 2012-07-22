@@ -855,6 +855,14 @@ div.dropselect_content.right {
 	border-top:2px solid orange;
 	margin-top:-2px;
 }
+.dropmenu.compact li.active {
+	background-color: #eaeaea;
+	border-bottom:2px solid orange;
+	border-top:0;
+}
+.dropmenu.compact li.active a {
+	color:black;
+}
 .dropmenu li.active > a {
 	color: black;
 	font-weight: bold;
@@ -1135,7 +1143,7 @@ h3, h4 {
 	border-top-right-radius: 6px;
 }
 .notibar a {
-	color: white !important;
+	color: white;
 }
 .notibar_intro {
 	background: transparent url(../images/clipsrc.png) 0 -32px no-repeat;
@@ -3609,6 +3617,18 @@ div.likebar {
 	border-top: 1px solid #d5ecfa;
 	/*border-radius:4px;
 	background-color: #f2f5fe;*/
+}
+span.ratings .title {
+	font-weight:bold;
+	font-size:13px;
+}
+span.ratings .number {
+	background:orange;
+	border-radius:2px;
+	padding:0 4px;
+	font-weight:bold;
+	color:white;
+	cursor:pointer;
 }
 div#ajaxbusy {
 	border: 2px solid white;

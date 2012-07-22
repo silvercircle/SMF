@@ -161,12 +161,13 @@ CREATE TABLE {$db_prefix}drafts (
 
 CREATE TABLE {$db_prefix}news (
 	id_news mediumint(8) unsigned NOT NULL auto_increment,
-	body tinytext NOT NULL,
-	teaser tinytext NOT NULL,
+	body text NOT NULL,
+	teaser text NOT NULL,
 	boards varchar(100) NOT NULL default '',
 	topics varchar(100) NOT NULL default '',
 	groups varchar(50) NOT NULL default '',
 	on_index tinyint(2) NOT NULL default '0',
+  can_dismiss tinyint(2) NOT NULL default '1',
 	PRIMARY KEY (id_news)
 ) ENGINE=MyISAM;
 

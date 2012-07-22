@@ -39,7 +39,7 @@ class GitFeed extends EoS_Plugin
 	 * these should be options
 	 * right now, the plugin is in "lazy mode", so no options. sorry.
 	 */
-	protected static $my_git_url = 'https://github.com/silvercircle/SMF/commit/';				// frontend base url
+	protected static $my_git_url = 'https://github.com/silvercircle/SMF/';				// frontend base url
 	protected static $my_git_api_url = 'https://api.github.com/repos/silvercircle/SMF/commits'; // this is where we fetch our json data
 	protected $removeableHooks = array();
 
@@ -76,7 +76,7 @@ class GitFeed extends EoS_Plugin
 				'message' => nl2br($commit['commit']['message']),		// for the tool tip
 				'dateline' => timeformat(strtotime($commit['commit']['committer']['date'])),
 				'sha' => $commit['sha'],
-				'href' => self::$my_git_url . $commit['sha']
+				'href' => self::$my_git_url . 'commit/'. $commit['sha']
 			);
 			if(++$n > 5)
 				break;
@@ -89,6 +89,8 @@ class GitFeed extends EoS_Plugin
 			 */
 			EoS_Smarty::addTemplateDir(dirname(__FILE__));
 			EoS_Smarty::getConfigInstance()->registerHookTemplate('sidebar_below_userblock', 'gitfeed_sidebar_top');
+			$context['gitfeed_global']['see_all']['href'] = self::$my_git_url . 'commits/master';
+			$context['gitfeed_global']['see_all']['txt'] = 'Browse all commits';
 		}
 	}
 }

@@ -14,6 +14,9 @@
           <div class="clear"></div>
         </li>
       {/foreach}
+      <li class="righttext">
+        <a href="{$C.gitfeed_global.see_all.href}">{$C.gitfeed_global.see_all.txt}</a>
+      </li
     </ol>
   {/if}
 </div>
