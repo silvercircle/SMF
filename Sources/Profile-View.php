@@ -280,7 +280,7 @@ function showPosts($memID)
 	if (!empty($context['load_average']) && !empty($modSettings['loadavg_show_posts']) && $context['load_average'] >= $modSettings['loadavg_show_posts'])
 		fatal_lang_error('loadavg_show_posts_disabled', false);
 
-	if (isset($_GET['sa']) && ($_GET['sa'] == 'likes' || $_GET['sa'] == 'likesout')) {
+	if (isset($_GET['sa']) && !empty($modSettings['karmaMode']) && ($_GET['sa'] == 'likes' || $_GET['sa'] == 'likesout')) {
 		require_once($sourcedir . '/LikeSystem.php');
 		return(LikesByUser($memID));
 	}
@@ -288,8 +288,6 @@ function showPosts($memID)
 	$boards_hidden_1  = boardsAllowedTo('see_hidden1');
 	$boards_hidden_2  = boardsAllowedTo('see_hidden2');
 	$boards_hidden_3  = boardsAllowedTo('see_hidden3');
-	$boards_like_see  = boardsAllowedTo('like_see');
-	$boards_like_give = boardsAllowedTo('like_give');
 
 	// If we're specifically dealing with attachments use that function!
 	if (isset($_GET['sa']) && $_GET['sa'] == 'attach')
@@ -467,7 +465,7 @@ function showPosts($memID)
 			SELECT
 				b.id_board, b.name AS bname, c.id_cat, c.name AS cname, m.id_topic, m.id_msg,
 				t.id_member_started, t.id_first_msg, t.id_last_msg, m.body, m.smileys_enabled, m.id_member, m.icon,
-				m.subject, m.poster_time, m.approved, mc.body AS cached_body, c1.likes_count, c1.like_status, c1.updated AS like_updated, l.rtype AS liked,
+				m.subject, m.poster_time, m.approved, mc.body AS cached_body, ' . (!empty($modSettings['karmaMode']) ? 'c1.likes_count, c1.like_status, c1.updated AS like_updated, l.rtype AS liked, ' : '0 AS likes_count, 0 AS like_status, 0 AS like_updated, 0 AS liked, ') . '
 				m2.id_member AS id_first_member, m2.subject AS first_subject, m2.poster_time AS time_started,
 				IFNULL(mem2.real_name, m2.poster_name) AS first_poster_name
 			FROM {db_prefix}messages AS m
@@ -475,9 +473,10 @@ function showPosts($memID)
 				INNER JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
 				INNER JOIN {db_prefix}messages AS m2 ON (m2.id_msg = t.id_first_msg)
 				LEFT JOIN {db_prefix}members AS mem2 ON (mem2.id_member = m2.id_member)
-				LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)
-				LEFT JOIN {db_prefix}likes AS l ON (l.id_msg = m.id_msg AND l.ctype = 1 AND l.id_user = {int:id_user})
-				LEFT JOIN {db_prefix}like_cache AS c1 ON (c1.id_msg = m.id_msg AND c1.ctype = 1)
+				LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat) ' .
+				(!empty($modSettings['karmaMode']) ? '
+					LEFT JOIN {db_prefix}likes AS l ON (l.id_msg = m.id_msg AND l.ctype = 1 AND l.id_user = {int:id_user})
+					LEFT JOIN {db_prefix}like_cache AS c1 ON (c1.id_msg = m.id_msg AND c1.ctype = 1)' : '') . '
 				LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang}
 			WHERE m.id_member = {int:current_member}' . (!empty($board) ? '
 				AND b.id_board = {int:board}' : '') . (empty($range_limit) ? '' : '
@@ -502,7 +501,16 @@ function showPosts($memID)
 	$context['posts'] = array();
 	$board_ids = array('own' => array(), 'any' => array());
 	
-	require_once($sourcedir . '/lib/Subs-Ratings.php');
+	if(!empty($modSettings['karmaMode'])) {
+		require_once($sourcedir . '/lib/Subs-Ratings.php');
+		$boards_like_see  = boardsAllowedTo('like_see');
+		$boards_like_give = boardsAllowedTo('like_give');
+	}
+	else {
+		$boards_like_see  = array();
+		$boards_like_give = array();
+		$context['can_see_like'] = $context['can_give_like'] = false;
+	}
 
 	$time_now = time();
 	if($context['is_topics']) {

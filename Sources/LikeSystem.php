@@ -32,8 +32,12 @@ function LikeDispatch()
 
 	$xml = isset($_REQUEST['xml']) ? true : false;
 	$action = isset($_REQUEST['sa']) ? $_REQUEST['sa'] : '';
+	
 	if($action === '')
 		$action = 'getlikes';
+	if($action === 'widget')
+		return GetRatingWidget();
+
 	$ctype = isset($_REQUEST['ctype']) ? $_REQUEST['ctype'] : 1;		// default to content type = 1 (post)
 	$mid = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
 	$rtype = isset($_REQUEST['r']) ? (int)$_REQUEST['r'] : 0;
@@ -86,6 +90,31 @@ function LikeDispatch()
 		if($xml)
 			$context['xml'] = true;
 	}
+}
+
+function GetRatingWidget()
+{
+	global $modSettings, $user_info, $context;
+
+	loadLanguage('Ratings');
+	
+	if($user_info['is_guest'])
+		AjaxErrorMsg($txt['no_like_for_guests']);
+
+	$xml = isset($_REQUEST['xml']);
+	$board = isset($_REQUEST['b']) ? (int)$_REQUEST['b'] : 0;
+	$topic = isset($_REQUEST['t']) ? (int)$_REQUEST['t'] : 0;
+	$content_id = isset($_REQUEST['id']) ? (int)$_REQUEST['id'] : 0;
+	$ctype = isset($_REQUEST['c']) ? (int)$_REQUEST['c'] : 0;
+	if(0 == $ctype)
+		AjaxErrorMsg($txt['rating_no_content_type']);
+
+	if($xml) {
+		EoS_Smarty::loadTemplate('xml_blocks');
+		$context['template_functions'] = 'ratingwidget';
+	}
+	else
+		EoS_Smarty::loadTemplate('ratings/widget');
 }
 
 /**

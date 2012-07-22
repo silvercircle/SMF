@@ -25,21 +25,51 @@
 if (!defined('EOSA'))
 	die('No access');
 
+/**
+ * the autoloader function must exist for the plugin installer in the admin area
+ * it is in no ways used at run time.
+ * naming rule: $productShortName_autoloader
+ */
 function testplugin_autoloader()
 {
 	return new TestPlugin();
 }
 
+/**
+ * a plugin must, at least, define one class and this class must inherit from EoS_Plugin.
+ * this class is mandatory for the plugin manager (install/uninstall/activate/deactivate)
+ * the autoloader must create and return an instance of this class.
+ */
 class TestPlugin extends EoS_Plugin
 {
-	protected $productShortName = 'testplugin';		// mandatory. should only contain letters and numbers, no special chars. This is the internal plugin identifier.
+	protected $productShortName = 'testplugin';		// mandatory. should only contain letters and numbers, no special chars. 
+													// This is the internal plugin identifier. It is also the name of the directory that
+													// hosts the plugin. So, directory namd === short name
 	
+	/**
+	 * This will be used for displaying plugin information in the admin area
+	 *
+	 * License can be either a full link (http:// or https://) to a license description on the net, 
+	 * OR the name of a file relative to the plugin base directory.
+	 */
 	protected $_product = array(
 		'Version' => '0.1',
 		'Name' => 'TestPlugin',
-		'Description' => 'A simple plugin to implement a side bar in the message index display.'
+		'Description' => 'A simple plugin to implement a side bar in the message index display.',
+		'Author' => '',		// usually your email adress, name, whatever...
+		'Site' => '',		// If this plugin has a home on the web, here is where it should go.
+		'License' => ''
 	);
 
+	/**
+	 * the hooks used by this plugin.
+	 * each entry must be 'hookname' => array($file, $callable).
+	 * file is the name of the file *relative* to the plugin's home directory (usually $addonsdir/$productShortName)
+	 * callable is callable function in that file.
+	 *
+	 * hooks will be added to the global and persistant table of active hooks when a plugin is activated
+	 * and removed, when it gets deactivated.
+	 */
 	protected $installableHooks = array(
 		'messageindex' => array('file' => 'main.php', 'callable' => 'TestPlugin::messageindex'),
 		'astream_event_added' => array('file' => 'main.php', 'callable' => 'TestPlugin::EventAdded'),

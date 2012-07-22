@@ -378,11 +378,11 @@ tr.titlebg th a:link, tr.titlebg th a:visited {
 }
 .windowbg {
 	color: #333;
-	background-color: #eaeaf0;
+	background-color: #f0f0f0;
 }
 .windowbg2 {
 	color: #333;
-	background-color: #f0f0f5;
+	background-color: #f5f5f5;
 }
 .pagesection {
 	font-size: 0.9em;
@@ -2445,7 +2445,8 @@ li.cat_desc > h3 {
 }
 
 tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td {
-	padding: 2px 0.7em;
+	padding-left:0.7em;
+	padding-right:0.7em;
 }
 
 #credits p {
@@ -3400,7 +3401,7 @@ span.arrow {
 
 .codeheader {
 	margin: 10px 0 0 0;
-	padding: 2px 1em;
+	padding: 0 1em;
 	background-color: #ddd;
 }
 
@@ -3770,9 +3771,10 @@ a.fnote_ref {
 	box-shadow: 0 0 12px 2px #444;
 }
 #easyTooltip > div.content {
-	background: #fcecb8;
+	background: #000;
 	opacity: 1.0;
 	font-size:11px;
+	color:white;
 }
 #easyTooltip h3{
 	margin:0 0 .5em 0;
@@ -3783,11 +3785,11 @@ a.fnote_ref {
 	margin:0 0 .5em 0;
 }
 #easyTooltip img{
-		background:#fff;
-		padding:1px;
-		border:1px solid #e1e1e1;
-		float:left;
-		margin-right:10px;
+	background:#fff;
+	padding:1px;
+	border:1px solid #e1e1e1;
+	float:left;
+	margin-right:10px;
 }
 
 .clipsrc {

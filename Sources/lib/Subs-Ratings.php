@@ -32,10 +32,14 @@ class Ratings {
 
 	public static function createRatingBar()
 	{
-		global $modSettings;
+		global $modSettings, $txt;
 
-		foreach($modSettings['ratings'] as $key => $rating)
-			self::$rate_bar .= '<a rel="nofollow" class="givelike" data-fn="give" href="#" data-rtype="'.$key.'">'.$rating['text'].'</a>&nbsp;&nbsp;&nbsp;';
+		if(empty($modSettings['use_rating_widget'])) {
+			foreach($modSettings['ratings'] as $key => $rating)
+				self::$rate_bar .= '<a rel="nofollow" class="givelike" data-fn="give" href="#" data-rtype="'.$key.'">'.$rating['text'].'</a>&nbsp;&nbsp;&nbsp;';
+		}
+		else 
+			self::$rate_bar = '<a rel="nofollow" href="!#" class="widgetanchor">' . $txt['rate_this'] . '</a>';
 	}
 
 	/**
@@ -49,7 +53,7 @@ class Ratings {
 	 */
 	public static function addContent(&$row, $can_give_like, $now)
 	{
-		global $user_info, $txt, $modSettings;
+		global $user_info, $txt, $modSettings, $context;
 		
 		$row['likers'] = '';
 
@@ -75,7 +79,8 @@ class Ratings {
 		if($user_info['is_admin'])
 			$row['likelink'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$row['id'].'">Repair ratings</a>';
 
-		$row['likelink'] = '<span data-likebarid="'.$row['id'].'">'. $row['likelink'] . '</span>';
+		// todo: make ctype dynamic (for different content types)
+		$row['likelink'] = '<span data-ctype="1" data-likebarid="'.$row['id'].'">'. $row['likelink'] . '</span>';
 		if($row['likes_count'] > 0)
 			self::generateOutput(unserialize($row['like_status']), $row['likers'], $row['id'], $have_liked_it);
 	}

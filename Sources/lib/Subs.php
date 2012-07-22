@@ -3984,7 +3984,7 @@ function setupMenuContext()
 	if (isset($context['menu_buttons']['logout']))
 		$context['menu_buttons']['logout']['href'] = sprintf($context['menu_buttons']['logout']['href'], $context['session_var'], $context['session_id']);
 
-	// Figure out which action we are doing so we can set the active tab.
+	// Figure out which action we are doing so we can set the active menu button in either the main or the user menu
 	// Default to home.
 	$current_action = 'home';
 
@@ -4002,7 +4002,9 @@ function setupMenuContext()
 		$current_action = 'moderate';
 	elseif (stristr($context['current_action'], 'unread'))
 		$current_action = 'whatsnew';
-	
+	elseif ($context['current_action'] == 'pm')
+		$current_action = 'profile';
+
 	if(isset($context['usermenu_buttons'][$current_action]))
 		$context['usermenu_buttons'][$current_action]['active_button'] = true;
 	else

@@ -90,16 +90,6 @@ $txt['who_track_daily_visitors'] = 'Display members who have been online today (
 $txt['who_track_team'] = 'Display online team members in the side bar (Who is online list must be enabled)';
 $txt['make_email_viewable'] = 'Allow viewable email addresses';
 $txt['meta_keywords'] = 'Meta keywords associated with forum<div class="smalltext">For search engines. Leave blank for default.</div>';
-
-$txt['karmaMode'] = 'Karma mode';
-$txt['karma_options'] = 'Disable karma|Enable karma total|Enable karma positive/negative';
-$txt['karmaMinPosts'] = 'Set the minimum posts needed to modify karma';
-$txt['karmaWaitTime'] = 'Set wait time in hours';
-$txt['karmaTimeRestrictAdmins'] = 'Restrict administrators to wait time';
-$txt['karmaLabel'] = 'Karma label';
-$txt['karmaApplaudLabel'] = 'Karma applaud label';
-$txt['karmaSmiteLabel'] = 'Karma smite label';
-
 $txt['caching_information'] = '<div class="smalltext"><div class="aligncenter underline"><strong>Important! Read this first before enabling these features.</strong></div><br />
 	SMF supports caching through the use of accelerators. The currently supported accelerators include:<br />
 	<ul class="normallist">
@@ -292,8 +282,8 @@ $txt['core_settings_item_cd'] = 'Calendar';
 $txt['core_settings_item_cd_desc'] = 'Enabling this feature will open up a selection of options to enable your users to view the calendar, add and review events, see users birthdates on a calendar and much, much more.';
 $txt['core_settings_item_cp'] = 'Advanced Profile Fields';
 $txt['core_settings_item_cp_desc'] = 'This enables you to hide standard profile fields, add profile fields to registration, and create new profile fields for your forum.';
-$txt['core_settings_item_k'] = 'Karma';
-$txt['core_settings_item_k_desc'] = 'Karma is a feature that shows the popularity of a member. Members, if allowed, can \'applaud\' or \'smite\' other members, which is how their popularity is calculated.';
+$txt['core_settings_item_k'] = 'Post ratings';
+$txt['core_settings_item_k_desc'] = 'This feature allows posts to be rated with admin-definable rating classes. Ratings can be set up just for fun or, alternatively, can modify a members reputation (formerly known as Karma in SMF).';
 $txt['core_settings_item_ml'] = 'Moderation, Administration and User Logs';
 $txt['core_settings_item_ml_desc'] = 'Enable the moderation and administration logs to keep an audit trail of all the key actions taken on your forum. Also allows forum moderators to view a history of key changes a user makes to their profile.';
 $txt['core_settings_item_pm'] = 'Post Moderation';
@@ -380,4 +370,5 @@ $txt['core_settings_item_dr'] = 'Drafts';
 $txt['core_settings_item_dr_desc'] = 'Allow users to store drafts when posting new or modifying existing messages. Drafts can be used to temporarily save an unfinished post before submitting it or to protect against general problems like browser crashes or networking issues while posting on the forum<br><br>Drafts come with a handy auto-saving feature - never lose a post again.';
 
 $txt['astream_expire_days'] = 'Number of days to keep the activity stream';
+$txt['use_rating_widget'] = 'Use rating widget';
 ?>

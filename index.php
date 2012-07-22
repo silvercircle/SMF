@@ -274,7 +274,6 @@ function smf_main()
 		'mlist' => array('Memberlist.php', 'Memberlist'),
 		'moderate' => array('ModerationCenter.php', 'ModerationMain'),
 		'modifycat' => array('ManageBoards.php', 'ModifyCat'),
-		'modifykarma' => array('Karma.php', 'ModifyKarma'),
 		'movetopic' => array('MoveTopic.php', 'MoveTopic'),
 		'movetopic2' => array('MoveTopic.php', 'MoveTopic2'),
 		'notify' => array('Notify.php', 'Notify'),
@@ -291,7 +290,6 @@ function smf_main()
 		'recent' => array('Recent.php', 'RecentPosts'),
 		'register' => array('Register.php', 'Register'),
 		'register2' => array('Register.php', 'Register2'),		
-		'related' => array('lib/Subs-Related.php', 'Related'),
 		'reminder' => array('Reminder.php', 'RemindMe'),
 		'removepoll' => array('Poll.php', 'RemovePoll'),
 		'removetopic2' => array('RemoveTopic.php', 'RemoveTopic2'),
@@ -308,7 +306,6 @@ function smf_main()
 		'sticky' => array('LockTopic.php', 'Sticky'),
 		'theme' => array($backend_subdir . '/Themes.php', 'ThemesMain'),
 		'trackip' => array('Profile-View.php', 'trackIP'),
-		'about:mozilla' => array('Karma.php', 'BookOfUnknown'),
 		'about:unknown' => array('Karma.php', 'BookOfUnknown'),
 		'unread' => array('Recent.php', 'UnreadTopics'),
 		'unreadreplies' => array('Recent.php', 'UnreadTopics'),
@@ -326,7 +323,6 @@ function smf_main()
 		'processlink' => array('Display.php', 'ProcessLink'),
 		'dismissnews' => array('Profile-Actions.php', 'DismissNews'),
 		'whatsnew' => array('Recent.php', 'WhatsNew'),
-		'smartytest' => array('EosSmarty.php', 'TestSmarty')
 	);
 	// Allow modifying $actionArray easily.
 	HookAPI::callHook('integrate_actions', array(&$actionArray));

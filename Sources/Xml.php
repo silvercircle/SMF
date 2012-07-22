@@ -144,14 +144,17 @@ function GetMcard()
 
 function HandleLikeRequest()
 {
-	global $sourcedir;
+	global $sourcedir, $modSettings, $txt;
 	
 	$mid = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
 	
-	require_once($sourcedir . '/lib/Subs-Ratings.php');
-	Ratings::rateIt($mid);
+	if($mid > 0 && !empty($modSettings['karmaMode'])) {
+		require_once($sourcedir . '/lib/Subs-Ratings.php');
+		Ratings::rateIt($mid);
+	}
+	else
+		AjaxErrorMsg($txt['post_ratings_disabled']);
 }
-	
 // todo: check permissions!!
 function TopicPeek()
 {

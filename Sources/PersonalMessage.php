@@ -113,6 +113,7 @@ function MessageMain()
 	loadLanguage('PersonalMessage');
 	loadTemplate('PersonalMessage');
 
+	$context['need_synhlt'] = true;
 	// Load up the members maximum message capacity.
 	if ($user_info['is_admin'])
 		$context['message_limit'] = 0;

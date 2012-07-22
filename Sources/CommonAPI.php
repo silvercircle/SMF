@@ -977,7 +977,11 @@ class Topiclist {
 
 class EoS_Plugin
 {
-	public function __construct() {}
+	protected $plugindir;
+
+	public function __construct() {
+		$this->plugindir = HookAPI::getAddonsDir() . $this->productShortName;
+	}
 
 	public function installHooks()
 	{

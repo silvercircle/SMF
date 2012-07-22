@@ -394,11 +394,11 @@ tr.titlebg th a:link, tr.titlebg th a:visited {
 }
 .windowbg {
 	color: #333;
-	background-color: #eaeaf0;
+	background-color: #f5f5f5;
 }
 .windowbg2 {
 	color: #333;
-	background-color: #f0f0f5;
+	background-color: #fcfcfc;
 }
 .pagesection {
 	font-size: 0.9em;
@@ -718,14 +718,12 @@ table.table_grid {
 	margin-top: 0.1em;
 	border-collapse: separate;
 	border-spacing: 0 0;
-	border:1px solid #ddd;
-	border-radius:0 0 4px 4px;
 	border-top:0;
 }
 
 table.table_grid td {
 	padding: 3px;
-	border-bottom: 1px solid #d5ecfa;
+	border-bottom: 1px solid #ddd;
 	font-size: 0.95em;
 }
 
@@ -2481,7 +2479,8 @@ li.cat_desc > h3 {
 }
 
 tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td {
-	padding: 2px 0.7em;
+	padding-left: 0.7em;
+	padding-right: 0.7em;
 }
 
 #credits p {
@@ -3395,8 +3394,8 @@ span.arrow {
 
 .codeheader {
 	margin: 10px 0 0 0;
-	padding: 2px 1em;
-	background-color: #ddd;
+	padding: 0 1em;
+	background-color: #eee;
 }
 
 /* page links (navpages) */

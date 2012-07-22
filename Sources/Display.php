@@ -84,7 +84,11 @@ function Display()
 		'footer' => ''
 	);
 	//EoS_Smarty::getConfigInstance()->registerHookTemplate('postbit_below', 'overrides/foo');
-	require_once($sourcedir . '/lib/Subs-Ratings.php');
+	if(!empty($modSettings['karmaMode'])) 
+		require_once($sourcedir . '/lib/Subs-Ratings.php');
+	else
+		$context['can_see_like'] = $context['can_give_like'] = false;
+
 	fetchNewsItems($board, $topic);
 	// What are you gonna display if these are empty?!
 	if (empty($topic))
@@ -1134,15 +1138,15 @@ function Display()
 
 		$sql_what = '
 			m.id_msg, m.icon, m.subject, m.poster_time, m.poster_ip, m.id_member, m.modified_time, m.modified_name, m.body, mc.body AS cached_body,
-			m.smileys_enabled, m.poster_name, m.poster_email, m.approved, m.locked, c.likes_count, c.like_status, c.updated AS like_updated, l.rtype AS liked,
+			m.smileys_enabled, m.poster_name, m.poster_email, m.approved, m.locked,' . (!empty($modSettings['karmaMode']) ? 'c.likes_count, c.like_status, c.updated AS like_updated, l.rtype AS liked,' : '0 AS likes_count, 0 AS like_status, 0 AS like_updated, 0 AS liked,') . '
 			m.id_msg_modified < {int:new_from} AS is_read';
 
 		$sql_from_tables = '
 			FROM {db_prefix}messages AS m';
 
-		$sql_from_joins = '
+		$sql_from_joins = (!empty($modSettings['karmaMode']) ? '
 			LEFT JOIN {db_prefix}likes AS l ON (l.id_msg = m.id_msg AND l.ctype = 1 AND l.id_user = {int:id_user})
-			LEFT JOIN {db_prefix}like_cache AS c ON (c.id_msg = m.id_msg AND c.ctype = 1)
+			LEFT JOIN {db_prefix}like_cache AS c ON (c.id_msg = m.id_msg AND c.ctype = 1)' : '') . '
 			LEFT JOIN {db_prefix}messages_cache AS mc on mc.id_msg = m.id_msg AND mc.style = {int:style} AND mc.lang = {int:lang}';
 
 		$sql_array = array(

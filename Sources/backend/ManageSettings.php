@@ -98,7 +98,7 @@ function ModifyFeatureSettings()
 	$subActions = array(
 		'basic' => 'ModifyBasicSettings',
 		'layout' => 'ModifyLayoutSettings',
-		'karma' => 'ModifyKarmaSettings',
+		'karma' => 'ModifyRatingSettings',
 		'sig' => 'ModifySignatureSettings',
 		'profile' => 'ShowCustomProfiles',
 		'profileedit' => 'EditCustomProfiles',
@@ -335,7 +335,7 @@ function ModifyCoreFeatures($return_config = false)
 		'k' => array(
 			'url' => 'action=admin;area=featuresettings;sa=karma',
 			'settings' => array(
-				'karmaMode' => 2,
+				'karmaMode' => 1,
 			),
 		),
 		// ml = moderation log.
@@ -729,23 +729,12 @@ function ModifyLayoutSettings($return_config = false)
 	prepareDBSettingContext($config_vars);
 }
 
-function ModifyKarmaSettings($return_config = false)
+function ModifyRatingSettings($return_config = false)
 {
 	global $txt, $scripturl, $context, $settings, $sc;
 
 	$config_vars = array(
-			// Karma - On or off?
-			array('select', 'karmaMode', explode('|', $txt['karma_options'])),
-		'',
-			// Who can do it.... and who is restricted by time limits?
-			array('int', 'karmaMinPosts'),
-			array('float', 'karmaWaitTime'),
-			array('check', 'karmaTimeRestrictAdmins'),
-		'',
-			// What does it look like?  [smite]?
-			array('text', 'karmaLabel'),
-			array('text', 'karmaApplaudLabel'),
-			array('text', 'karmaSmiteLabel'),
+			array('check', 'use_rating_widget')
 	);
 
 	if ($return_config)

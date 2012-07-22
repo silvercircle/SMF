@@ -3,7 +3,6 @@
 <div class="main_section" id="whos_online">
   <form action="{$SCRIPTURL}?action=who" method="post" id="whoFilter" accept-charset="UTF-8">
     <h1 class="bigheader">{$T.who_title}</h1>
-    <br>
     <div class="table_grid mediumpadding" id="mlist">
       <div class="pagesection">
         <div class="pagelinks floatleft">{$C.page_index}</div>

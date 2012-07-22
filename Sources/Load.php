@@ -209,13 +209,6 @@ function reloadSettings()
 	URL::init($boardurl);
 
 	$modSettings['online_today'] = @unserialize($modSettings['log_online_today']);
-	// Integration is cool.
-	if (defined('INTEGRATION_SETTINGS'))
-	{
-		$integration_settings = unserialize(INTEGRATION_SETTINGS);
-		foreach ($integration_settings as $hook)
-			HookAPI::addHook($hook['hook'], $hook['file'], $hook['function'], false);
-	}
 	// Call pre load integration functions.
 	HookAPI::callHook('pre_load');
 	SimpleSEF::convertQueryString();

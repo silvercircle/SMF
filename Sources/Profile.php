@@ -378,7 +378,7 @@ function ModifyProfile($post_errors = array())
 		unset($profile_areas['info']['areas']['activities']['subsections']['settings']);
 	}
 
-	if(!$context['user']['is_owner'] && !allowedTo('can_view_ratings')) {
+	if((!$context['user']['is_owner'] && !allowedTo('can_view_ratings')) || empty($modSettings['karmaMode'])) {
 		unset($profile_areas['info']['areas']['showposts']['subsections']['likes']);
 		unset($profile_areas['info']['areas']['showposts']['subsections']['likesout']);
 	}
