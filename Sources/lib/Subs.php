@@ -3540,6 +3540,28 @@ function getLegacyAttachmentFilename($filename, $attachment_id, $dir = null, $ne
 // Convert a single IP to a ranged IP.
 function ip2range($fullip)
 {
+	// If its IPv6, validate it first.
+	if (strpos($fullip, ':') !== false)
+	{
+		$ip_parts = explode(':', smf_ipv6_expand($fullip, false));
+		$ip_array = array();
+
+		if (count($ip_parts) != 8)
+			return array();
+
+		for ($i = 0; $i < 8; $i++)
+		{
+			if ($ip_parts[$i] == '*')
+				$ip_array[$i] = array('low' => '0', 'high' => hexdec('ffff'));
+			elseif (preg_match('/^([0-9A-Fa-f]{1,4})\-([0-9A-Fa-f]{1,4})$/', $ip_parts[$i], $range) == 1)
+				$ip_array[$i] = array('low' => hexdec($range[1]), 'high' => hexdec($range[2]));
+			elseif (is_numeric(hexdec($ip_parts[$i])))
+				$ip_array[$i] = array('low' => hexdec($ip_parts[$i]), 'high' => hexdec($ip_parts[$i]));
+		}
+
+		return $ip_array;
+	}
+
 	// Pretend that 'unknown' is 255.255.255.255. (since that can't be an IP anyway.)
 	if ($fullip == 'unknown')
 		$fullip = '255.255.255.255';
@@ -3560,9 +3582,14 @@ function ip2range($fullip)
 			$ip_array[$i] = array('low' => $ip_parts[$i], 'high' => $ip_parts[$i]);
 	}
 
+	// Makes it simpiler to work with.
+	$ip_array[4] = array('low' => 0, 'high' => 0);
+	$ip_array[5] = array('low' => 0, 'high' => 0);
+	$ip_array[6] = array('low' => 0, 'high' => 0);
+	$ip_array[7] = array('low' => 0, 'high' => 0);
+
 	return $ip_array;
 }
-
 // Lookup an IP; try shell_exec first because we can do a timeout on it.
 function host_from_ip($ip)
 {

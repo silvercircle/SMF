@@ -222,3 +222,12 @@ ALTER TABLE {$db_prefix}members DROP aim;
 ALTER TABLE {$db_prefix}members DROP yim;
 ALTER TABLE {$db_prefix}members DROP msn;
 ALTER TABLE {$db_prefix}members DROP icq;
+
+ALTER TABLE {$db_prefix}ban_items ADD ip_low5 smallint(255) unsigned NOT NULL default '0';
+ALTER TABLE {$db_prefix}ban_items ADD ip_high5 smallint(255) unsigned NOT NULL default '0';
+ALTER TABLE {$db_prefix}ban_items ADD ip_low6 smallint(255) unsigned NOT NULL default '0';
+ALTER TABLE {$db_prefix}ban_items ADD ip_high6 smallint(255) unsigned NOT NULL default '0';
+ALTER TABLE {$db_prefix}ban_items ADD ip_low7 smallint(255) unsigned NOT NULL default '0';
+ALTER TABLE {$db_prefix}ban_items ADD ip_high7 smallint(255) unsigned NOT NULL default '0';
+ALTER TABLE {$db_prefix}ban_items ADD ip_low8 smallint(255) unsigned NOT NULL default '0';
+ALTER TABLE {$db_prefix}ban_items ADD ip_high8 smallint(255) unsigned NOT NULL default '0';

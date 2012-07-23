@@ -636,7 +636,9 @@ function list_getNumSpiderLogs()
 	return $numLogs;
 }
 
-// Show the spider statistics.
+/**
+ * Show the spider statistics.
+ */
 function SpiderStats()
 {
 	global $context, $txt, $sourcedir, $scripturl;
@@ -648,8 +650,26 @@ function SpiderStats()
 		$_SESSION['spider_stat'] = time();
 	}
 
+	// Are we cleaning up some old stats?
+	if (!empty($_POST['delete_entries']) && isset($_POST['older']))
+	{
+		checkSession();
+		//validateToken('admin-ss');
+
+		$deleteTime = time() - (((int) $_POST['older']) * 24 * 60 * 60);
+
+		// Delete the entires.
+		smf_db_query('
+			DELETE FROM {db_prefix}log_spider_stats
+			WHERE last_seen < {int:delete_period}',
+			array(
+				'delete_period' => $deleteTime,
+			)
+		);
+	}
+
 	// Get the earliest and latest dates.
-	$request = smf_db_query( '
+	$request = smf_db_query('
 		SELECT MIN(stat_date) AS first_date, MAX(stat_date) AS last_date
 		FROM {db_prefix}log_spider_stats',
 		array(
@@ -705,7 +725,7 @@ function SpiderStats()
 	{
 		$date_query = sprintf('%04d-%02d-01', substr($current_date, 0, 4), substr($current_date, 4));
 
-		$request = smf_db_query( '
+		$request = smf_db_query('
 			SELECT COUNT(*) AS offset
 			FROM {db_prefix}log_spider_stats
 			WHERE stat_date < {date:date_being_viewed}',
@@ -719,6 +739,7 @@ function SpiderStats()
 
 	$listOptions = array(
 		'id' => 'spider_stat_list',
+		'title' => $txt['spider'] . ' ' . $txt['spider_stats'],
 		'items_per_page' => 20,
 		'base_href' => $scripturl . '?action=admin;area=sengines;sa=stats',
 		'default_sort_col' => 'stat_date',
@@ -780,10 +801,12 @@ function SpiderStats()
 		),
 	);
 
+	//createToken('admin-ss');
+
 	require_once($sourcedir . '/lib/Subs-List.php');
 	createList($listOptions);
 
-	$context['sub_template'] = 'show_list';
+	$context['sub_template'] = 'show_spider_stats';
 	$context['default_list'] = 'spider_stat_list';
 }
 

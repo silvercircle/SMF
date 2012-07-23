@@ -1,16 +1,15 @@
 <?php
 /**
- * @name      EosAlpha BBS
- * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
- *
- * This software is a derived product, based on:
- *
  * Simple Machines Forum (SMF)
- * copyright:	2011 Simple Machines (http://www.simplemachines.org)
- * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @version 1.0pre
+ * @package SMF
+ * @author Simple Machines
+ * @copyright 2011 Simple Machines
+ * @license http://www.simplemachines.org/about/smf/license.php BSD
+ *
+ * @version 2.1 Alpha 1
  */
+
 function template_ban_edit()
 {
 	global $context, $settings, $options, $scripturl, $txt, $modSettings;
@@ -30,29 +29,28 @@ function template_ban_edit()
 
 	echo '
 		<div class="windowbg">
-			<span class="topslice"><span></span></span>
 			<div class="content">
-				<form action="', $scripturl, '?action=admin;area=ban;sa=edit" method="post" accept-charset="UTF-8" onsubmit="if (this.ban_name.value == \'\') {alert(\'', $txt['ban_name_empty'], '\'); return false;} if (this.partial_ban.checked &amp;&amp; !(this.cannot_post.checked || this.cannot_register.checked || this.cannot_login.checked)) {alert(\'', $txt['ban_restriction_empty'], '\'); return false;}">
+				<form action="', $scripturl, '?action=admin;area=ban;sa=edit" method="post" accept-charset="', $context['character_set'], '" onsubmit="if (this.ban_name.value == \'\') {alert(\'', $txt['ban_name_empty'], '\'); return false;} if (this.partial_ban.checked &amp;&amp; !(this.cannot_post.checked || this.cannot_register.checked || this.cannot_login.checked)) {alert(\'', $txt['ban_restriction_empty'], '\'); return false;}">
 					<dl class="settings">
 						<dt>
-							<strong>', $txt['ban_name'], ':</strong>
+							<strong><label for="ban_name">', $txt['ban_name'], ':</label></strong>
 						</dt>
 						<dd>
-							<input type="text" name="ban_name" value="', $context['ban']['name'], '" size="45" maxlength="60" class="input_text" />
+							<input type="text" name="ban_name" id="ban_name" value="', $context['ban']['name'], '" size="47" maxlength="60" class="input_text" />
 						</dd>
 						<dt>
-							<strong>', $txt['ban_reason'], ':</strong><br />
+							<strong><label for="reason">', $txt['ban_reason'], ':</label></strong><br />
 							<span class="smalltext">', $txt['ban_reason_desc'], '</span>
 						</dt>
 						<dd>
-							<textarea name="reason" cols="44" rows="3">', $context['ban']['reason'], '</textarea>
+							<textarea name="reason" id="reason" cols="40" rows="3" style="min-height: 64px; max-height: 64px; min-width: 50%; max-width: 99%;">', $context['ban']['reason'], '</textarea>
 						</dd>
 						<dt>
-							<strong>', $txt['ban_notes'], ':</strong><br />
+							<strong><label for="ban_notes">', $txt['ban_notes'], ':</label></strong><br />
 							<span class="smalltext">', $txt['ban_notes_desc'], '</span>
 						</dt>
 						<dd>
-							<textarea name="notes" cols="44" rows="3">', $context['ban']['notes'], '</textarea>
+							<textarea name="notes" id="ban_notes" cols="40" rows="3" style="min-height: 64px; max-height: 64px; min-width: 50%; max-width: 99%;">', $context['ban']['notes'], '</textarea>
 						</dd>
 					</dl>
 					<fieldset class="ban_settings floatleft">
@@ -165,29 +163,28 @@ function template_ban_edit()
 	}
 
 	echo '
-						<div class="righttext">
-							<input type="submit" name="', $context['ban']['is_new'] ? 'add_ban' : 'modify_ban', '" value="', $context['ban']['is_new'] ? $txt['ban_add'] : $txt['ban_modify'], '" class="button_submit" />
-							<input type="hidden" name="old_expire" value="', $context['ban']['expiration']['days'], '" />
-							<input type="hidden" name="bg" value="', $context['ban']['id'], '" />
-							<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-						</div>
+						<hr class="hrcolor" />
+						<input type="submit" name="', $context['ban']['is_new'] ? 'add_ban' : 'modify_ban', '" value="', $context['ban']['is_new'] ? $txt['ban_add'] : $txt['ban_modify'], '" class="button_submit" />
+						<input type="hidden" name="old_expire" value="', $context['ban']['expiration']['days'], '" />
+						<input type="hidden" name="bg" value="', $context['ban']['id'], '" />
+						<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
+						<br class="clear_right" />
 					</form>
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>';
 
 	if (!$context['ban']['is_new'] && empty($context['ban_suggestions']))
 	{
 		echo '
 			<br />
-			<form action="', $scripturl, '?action=admin;area=ban;sa=edit" method="post" accept-charset="UTF-8" style="padding: 0px;margin: 0px;" onsubmit="return confirm(\'', $txt['ban_remove_selected_triggers_confirm'], '\');">
+			<form action="', $scripturl, '?action=admin;area=ban;sa=edit" method="post" accept-charset="', $context['character_set'], '" style="padding: 0px;margin: 0px;" onsubmit="return confirm(\'', $txt['ban_remove_selected_triggers_confirm'], '\');">
 				<table class="table_grid" width="100%">
 					<thead>
 						<tr class="catbg">
-							<th width="65%" align="left">', $txt['ban_banned_entity'], '</td>
-							<th width="15%" align="center">', $txt['ban_hits'], '</td>
-							<th width="15%" align="center">', $txt['ban_actions'], '</td>
-							<th width="5%" align="center"><input type="checkbox" onclick="invertAll(this, this.form, \'ban_items\');" class="input_check" /></td>
+							<th scope="col" class="first_th" width="65%" align="left">', $txt['ban_banned_entity'], '</th>
+							<th scope="col" width="15%" align="center">', $txt['ban_hits'], '</th>
+							<th scope="col" width="15%" align="center">', $txt['ban_actions'], '</th>
+							<th scope="col" class="last_th" width="5%" align="center"><input type="checkbox" onclick="invertAll(this, this.form, \'ban_items\');" class="input_check" /></th>
 						</tr>
 					</thead>
 					<tbody>';
@@ -198,10 +195,11 @@ function template_ban_edit()
 						</tr>';
 		else
 		{
+			$alternate = true;
 			foreach ($context['ban_items'] as $ban_item)
 			{
 				echo '
-						<tr class="windowbg2" align="left">
+						<tr class="', $alternate ? 'windowbg' : 'windowbg2', '" align="left">
 							<td>';
 				if ($ban_item['type'] == 'ip')
 					echo '		<strong>', $txt['ip'], ':</strong>&nbsp;', $ban_item['ip'];
@@ -213,22 +211,23 @@ function template_ban_edit()
 					echo '		<strong>', $txt['username'], ':</strong>&nbsp;', $ban_item['user']['link'];
 				echo '
 							</td>
-							<td class="windowbg" align="center">', $ban_item['hits'], '</td>
-							<td class="windowbg" align="center"><a href="', $scripturl, '?action=admin;area=ban;sa=edittrigger;bg=', $context['ban']['id'], ';bi=', $ban_item['id'], '">', $txt['ban_edit_trigger'], '</a></td>
-							<td align="center" class="windowbg2"><input type="checkbox" name="ban_items[]" value="', $ban_item['id'], '" class="input_check" /></td>
+							<td align="center">', $ban_item['hits'], '</td>
+							<td align="center"><a href="', $scripturl, '?action=admin;area=ban;sa=edittrigger;bg=', $context['ban']['id'], ';bi=', $ban_item['id'], '">', $txt['ban_edit_trigger'], '</a></td>
+							<td align="center"><input type="checkbox" name="ban_items[]" value="', $ban_item['id'], '" class="input_check" /></td>
 						</tr>';
+				$alternate = !$alternate;
 			}
 		}
 
 		echo '
 					</tbody>
 				</table>
-				<div class="additional_rows">
-					<div class="floatleft">
-						[<a href="', $scripturl, '?action=admin;area=ban;sa=edittrigger;bg=', $context['ban']['id'], '">', $txt['ban_add_trigger'], '</a>]
-					</div>
+				<div class="flow_auto">
 					<div class="floatright">
-						<input type="submit" name="remove_selection" value="', $txt['ban_remove_selected_triggers'], '" class="button_submit" />
+						<div class="additional_row">
+							<input type="submit" name="remove_selection" value="', $txt['ban_remove_selected_triggers'], '" class="button_submit" />
+							<a class="button_link" href="', $scripturl, '?action=admin;area=ban;sa=edittrigger;bg=', $context['ban']['id'], '">', $txt['ban_add_trigger'], '</a>
+						</div>
 					</div>
 				</div>
 				<br class="clear" />
@@ -241,7 +240,7 @@ function template_ban_edit()
 	echo '
 	</div>
 	<br class="clear" />
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/suggest.js?fin20"></script>
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/suggest.js?alp21"></script>
 	<script type="text/javascript"><!-- // --><![CDATA[
 		var fUpdateStatus = function ()
 		{
@@ -257,8 +256,8 @@ function template_ban_edit()
 		echo '
 			var oAddMemberSuggest = new smc_AutoSuggest({
 			sSelf: \'oAddMemberSuggest\',
-			sSessionId: \'', $context['session_id'], '\',
-			sSessionVar: \'', $context['session_var'], '\',
+			sSessionId: smf_session_id,
+			sSessionVar: smf_session_var,
 			sSuggestId: \'user\',
 			sControlId: \'user\',
 			sSearchType: \'member\',
@@ -282,14 +281,13 @@ function template_ban_edit_trigger()
 
 	echo '
 	<div id="manage_bans">
-		<form action="', $scripturl, '?action=admin;area=ban;sa=edit" method="post" accept-charset="UTF-8">
+		<form action="', $scripturl, '?action=admin;area=ban;sa=edit" method="post" accept-charset="', $context['character_set'], '">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					', $context['ban_trigger']['is_new'] ? $txt['ban_add_trigger'] : $txt['ban_edit_trigger_title'], '
 				</h3>
 			</div>
 			<div class="windowbg">
-				<span class="topslice"><span></span></span>
 				<div class="content">
 					<fieldset>
 						<legend>
@@ -329,11 +327,9 @@ function template_ban_edit_trigger()
 							</dd>
 						</dl>
 					</fieldset>
-					<div class="righttext">
-						<input type="submit" name="', $context['ban_trigger']['is_new'] ? 'add_new_trigger' : 'edit_trigger', '" value="', $context['ban_trigger']['is_new'] ? $txt['ban_add_trigger_submit'] : $txt['ban_edit_trigger_submit'], '" class="button_submit" />
-					</div>
+					<input type="submit" name="', $context['ban_trigger']['is_new'] ? 'add_new_trigger' : 'edit_trigger', '" value="', $context['ban_trigger']['is_new'] ? $txt['ban_add_trigger_submit'] : $txt['ban_edit_trigger_submit'], '" class="button_submit" />
+					<br class="clear_right" />
 				</div>
-				<span class="botslice"><span></span></span>
 			</div>
 			<input type="hidden" name="bi" value="' . $context['ban_trigger']['id'] . '" />
 			<input type="hidden" name="bg" value="' . $context['ban_trigger']['group'] . '" />
@@ -341,12 +337,12 @@ function template_ban_edit_trigger()
 		</form>
 	</div>
 	<br class="clear" />
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/suggest.js?fin20"></script>
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/suggest.js?alp21"></script>
 	<script type="text/javascript"><!-- // --><![CDATA[
 		var oAddMemberSuggest = new smc_AutoSuggest({
 			sSelf: \'oAddMemberSuggest\',
-			sSessionId: \'', $context['session_id'], '\',
-			sSessionVar: \'', $context['session_var'], '\',
+			sSessionId: smf_session_id,
+			sSessionVar: smf_session_var,
 			sSuggestId: \'username\',
 			sControlId: \'user\',
 			sSearchType: \'member\',

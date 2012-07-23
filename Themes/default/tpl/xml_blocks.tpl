@@ -55,7 +55,7 @@
   </content>
   <handler>
   <![CDATA[
-  function _h_dismiss_news_item(content)
+  function _h_dismiss_news_item(content, data)
   {
     var result = $.parseJSON(content);
     var id = parseInt(result['id']) || 0;
@@ -82,7 +82,7 @@
   </content>
   <handler>
   <![CDATA[
-  function _h_ratings_return(content)
+  function _h_ratings_return(content, data)
   {
     result = $.parseJSON(content);
     if(result['mid'] > 0) {
@@ -90,6 +90,9 @@
       if(result['likebar'].length > 0)
         $('span[data-likebarid="' + result['mid'] + '"]').html(result['likebar']);
     }
+    if($('#ratingwidget').length > 0)
+      $('#ratingwidget').remove();
+
     // refresh event handlers for changed content
     $('.givelike').click(function() {
       giveLike($(this));
@@ -132,7 +135,44 @@
   </content>
 </document>
 {/function}
-
+{function ratingwidget}
+<document>
+  <response open="private_handler" fn="_create_rating_widget" />
+  <content>
+    <![CDATA[ <!-- > -->
+      <div class="inlinePopup nowrap" id="ratingwidget" data-id="{$C.content_id}" style="position:absolute;right:0;float:right;z-index:9999;min-width:170px;">
+        <div class="cat_bar">
+          <h3>{$T.rate_this_post}</h3>
+        </div>
+        <div class="tinypadding smalltext">
+        <ol class="commonlist notifications">
+        {foreach $C.ratings as $rating}
+          <li><a onclick="{$rating.onclick}" href="!#">{$rating.label}</a></li>
+        {/foreach}
+        </ol>
+        <div class="centertext smallpadding">
+          <span class="button default centered" onclick="$('#ratingwidget').remove();return(false);">{$T.find_close}</span>
+          <div class="clear"></div>
+        </div>
+      </div>
+      </div>
+    ]]>
+  </content>
+  <data>
+    {$C.json_data}
+  </data>
+  <handler>
+    <![CDATA[ <!-- 
+    function _create_rating_widget(content, data)
+    {
+      var _el = $(content);
+      $('span[data-likebarid=' + data['id'] + ']').after(_el);
+      return(false);
+    }
+    ]]>
+  </handler>
+</document>
+{/function}
 {foreach from=$C.template_functions item=fn}
 {call name=$fn}
 {/foreach}

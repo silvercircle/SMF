@@ -57,7 +57,7 @@ function template_dismiss_handler_xml()
 
 	<handler>
  	<![CDATA[
-	function _h_dismiss_news_item(content)
+	function _h_dismiss_news_item(content, data)
 	{
 		var result = $.parseJSON(content);
 		var id = parseInt(result['id']) || 0;

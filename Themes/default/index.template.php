@@ -440,7 +440,7 @@ EOT;
 	
 	<script src="{$modSettings['piwik_uri']}/piwik.js"></script>
 	<script>
-	var pkBaseURL = {$modSettings['piwik_uri']};
+	var pkBaseURL = "{$modSettings['piwik_uri']}";
 	try {
 		var piwikTracker = Piwik.getTracker(pkBaseURL + "/piwik.php", {$modSettings['piwik_tracker_id']});
 		piwikTracker.trackPageView();

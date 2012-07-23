@@ -2605,8 +2605,12 @@ function cache_quick_get($key, $file, $function, $params, $level = 1)
 	return $cache_block['data'];
 }
 
-//!!! Should this not be... you know... in a different file?
-// Do we think the current user is a spider?
+/**
+ * Do we think the current user is a spider?
+ * 
+ * @todo Should this not be... you know... in a different file?
+ * @return int
+ */
 function SpiderCheck()
 {
 	global $modSettings;
@@ -2616,10 +2620,7 @@ function SpiderCheck()
 	$_SESSION['robot_check'] = time();
 
 	// We cache the spider data for five minutes if we can.
-	if (!empty($modSettings['cache_enable']))
-		$spider_data = CacheAPI::getCache('spider_search', 1200);
-
-	if (!isset($spider_data) || $spider_data === NULL)
+	if (($spider_data = CacheAPI::getCache('spider_search', 300)) === null)
 	{
 		$request = smf_db_query('
 			SELECT id_spider, user_agent, ip_info
@@ -2632,8 +2633,7 @@ function SpiderCheck()
 			$spider_data[] = $row;
 		mysql_free_result($request);
 
-		if (!empty($modSettings['cache_enable']))
-			CacheAPI::putCache('spider_search', $spider_data, 1200);
+		CacheAPI::putCache('spider_search', $spider_data, 300);
 	}
 
 	if (empty($spider_data))
@@ -2641,7 +2641,12 @@ function SpiderCheck()
 
 	// Only do these bits once.
 	$ci_user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-	preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/', $_SERVER['REMOTE_ADDR'], $ip_parts);
+
+	// Always attempt IPv6 first.
+	if (strpos($_SERVER['REMOTE_ADDR'], ':') !== false)
+		$ip_parts = convertIPv6toInts($_SERVER['REMOTE_ADDR']);
+	else
+		preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/', $_SERVER['REMOTE_ADDR'], $ip_parts);
 
 	foreach ($spider_data as $spider)
 	{
@@ -2661,7 +2666,7 @@ function SpiderCheck()
 					{
 						if ($value['low'] > $ip_parts[$key + 1] || $value['high'] < $ip_parts[$key + 1])
 							break;
-						elseif ($key == 3)
+						elseif (($key == 7 && strpos($_SERVER['REMOTE_ADDR'], ':') !== false) || ($key == 3 && strpos($_SERVER['REMOTE_ADDR'], ':') === false))
 							$_SESSION['id_robot'] = $spider['id_spider'];
 					}
 				}
@@ -2678,6 +2683,7 @@ function SpiderCheck()
 
 	return !empty($_SESSION['id_robot']) ? $_SESSION['id_robot'] : 0;
 }
+
 
 // Log the spider presence online.
 //!!! Different file?

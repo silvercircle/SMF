@@ -106,8 +106,8 @@ function GetRatingWidget()
 	$topic = isset($_REQUEST['t']) ? (int)$_REQUEST['t'] : 0;
 	$content_id = isset($_REQUEST['id']) ? (int)$_REQUEST['id'] : 0;
 	$ctype = isset($_REQUEST['c']) ? (int)$_REQUEST['c'] : 0;
-	if(0 == $ctype)
-		AjaxErrorMsg($txt['rating_no_content_type']);
+	if(0 == $ctype || 0 == $content_id)
+		AjaxErrorMsg($txt['rating_invalid_params']);
 
 	if($xml) {
 		EoS_Smarty::loadTemplate('xml_blocks');
@@ -115,6 +115,15 @@ function GetRatingWidget()
 	}
 	else
 		EoS_Smarty::loadTemplate('ratings/widget');
+
+	foreach($modSettings['ratings'] as $key => $rating)
+		$context['ratings'][] = array(
+			'rtype' => (int)$key,
+			'label' => $rating['text'],
+			'onclick' => 'sendRequest(\'action=xmlhttp;sa=givelike;r=' . $key . ';m=' . $content_id . '\', null);return(false);'
+		);
+	$context['content_id'] = $content_id;
+	$context['json_data'] = json_encode(array('id' => $content_id));
 }
 
 /**

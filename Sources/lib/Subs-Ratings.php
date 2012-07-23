@@ -39,7 +39,7 @@ class Ratings {
 				self::$rate_bar .= '<a rel="nofollow" class="givelike" data-fn="give" href="#" data-rtype="'.$key.'">'.$rating['text'].'</a>&nbsp;&nbsp;&nbsp;';
 		}
 		else 
-			self::$rate_bar = '<a rel="nofollow" href="!#" class="widgetanchor">' . $txt['rate_this'] . '</a>';
+			self::$rate_bar = '<a onclick="ratingWidgetInvoke($(this));return(false);" rel="nofollow" href="!#" class="widgetanchor">' . $txt['rate_this'] . '</a>';
 	}
 
 	/**
@@ -80,7 +80,7 @@ class Ratings {
 			$row['likelink'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$row['id'].'">Repair ratings</a>';
 
 		// todo: make ctype dynamic (for different content types)
-		$row['likelink'] = '<span data-ctype="1" data-likebarid="'.$row['id'].'">'. $row['likelink'] . '</span>';
+		$row['likelink'] = '<div style="position:relative;"><span data-ctype="1" data-likebarid="'.$row['id'].'">'. $row['likelink'] . '</span></div>';
 		if($row['likes_count'] > 0)
 			self::generateOutput(unserialize($row['like_status']), $row['likers'], $row['id'], $have_liked_it);
 	}

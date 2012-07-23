@@ -369,7 +369,7 @@
   {if isset($C.want_piwik_embedded)}
     <script src="{$M.piwik_uri}/piwik.js"></script>
     <script>
-    var pkBaseURL = {$M.piwik_uri};
+    var pkBaseURL = "{$M.piwik_uri}";
     try {
       var piwikTracker = Piwik.getTracker(pkBaseURL + "/piwik.php", {$M.piwik_tracker_id});
       piwikTracker.trackPageView();

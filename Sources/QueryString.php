@@ -70,16 +70,15 @@ if (!defined('SMF'))
 		  versions lower than 4.3.0 - please upgrade if this hurts you.
 */
 
-// Clean the request variables - add html entities to GET and slashes if magic_quotes_gpc is Off.
 function cleanRequest()
 {
-	global $board, $topic, $boardurl, $scripturl, $modSettings;
+	global $board, $topic, $boardurl, $scripturl, $modSettings, $smcFunc;
 
 	// Makes it easier to refer to things this way.
 	$scripturl = $boardurl . '/index.php';
 
 	// What function to use to reverse magic quotes - if sybase is on we assume that the database sensibly has the right unescape function!
-	$removeMagicQuoteFunction = @ini_get('magic_quotes_sybase') || strtolower(@ini_get('magic_quotes_sybase')) == 'on' ? 'unescapestring__recursive' : 'stripslashes__recursive';
+	$removeMagicQuoteFunction = ini_get('magic_quotes_sybase') || strtolower(ini_get('magic_quotes_sybase')) == 'on' ? 'unescapestring__recursive' : 'stripslashes__recursive';
 
 	// Save some memory.. (since we don't use these anyway.)
 	unset($GLOBALS['HTTP_POST_VARS'], $GLOBALS['HTTP_POST_VARS']);
@@ -111,7 +110,7 @@ function cleanRequest()
 	}
 
 	// Are we going to need to parse the ; out?
-	if ((strpos(@ini_get('arg_separator.input'), ';') === false) && !empty($_SERVER['QUERY_STRING']))
+	if (strpos(ini_get('arg_separator.input'), ';') === false && !empty($_SERVER['QUERY_STRING']))
 	{
 		// Get rid of the old one! You don't know where it's been!
 		$_GET = array();
@@ -121,14 +120,14 @@ function cleanRequest()
 		$_SERVER['QUERY_STRING'] = substr($_SERVER['QUERY_STRING'], 0, 5) === 'url=/' ? $_SERVER['REDIRECT_QUERY_STRING'] : $_SERVER['QUERY_STRING'];
 
 		// Replace ';' with '&' and '&something&' with '&something=&'.  (this is done for compatibility...)
-		// !!! smflib
+		// @todo smflib
 		parse_str(preg_replace('/&(\w+)(?=&|$)/', '&$1=', strtr($_SERVER['QUERY_STRING'], array(';?' => '&', ';' => '&', '%00' => '', "\0" => ''))), $_GET);
 
 		// Magic quotes still applies with parse_str - so clean it up.
 		if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc() != 0 && empty($modSettings['integrate_magic_quotes']))
 			$_GET = $removeMagicQuoteFunction($_GET);
 	}
-	elseif (strpos(@ini_get('arg_separator.input'), ';') !== false)
+	elseif (strpos(ini_get('arg_separator.input'), ';') !== false)
 	{
 		if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc() != 0 && empty($modSettings['integrate_magic_quotes']))
 			$_GET = $removeMagicQuoteFunction($_GET);
@@ -136,7 +135,7 @@ function cleanRequest()
 		// Search engines will send action=profile%3Bu=1, which confuses PHP.
 		foreach ($_GET as $k => $v)
 		{
-			if (is_string($v) && strpos($k, ';') !== false)
+			if ((string) $v === $v && strpos($k, ';') !== false)
 			{
 				$temp = explode(';', $v);
 				$_GET[$k] = $temp[0];
@@ -167,7 +166,7 @@ function cleanRequest()
 		else
 			$request = $_SERVER['REQUEST_URI'];
 
-		// !!! smflib.
+		// @todo smflib.
 		// Replace 'index.php/a,b,c/d/e,f' with 'a=b,c&d=&e=f' and parse it into $_GET.
 		if (strpos($request, basename($scripturl) . '/') !== false)
 		{
@@ -218,6 +217,10 @@ function cleanRequest()
 	else
 		$board = 0;
 
+	// If there's a threadid, it's probably an old YaBB SE link.  Flow with it.
+	if (isset($_REQUEST['threadid']) && !isset($_REQUEST['topic']))
+		$_REQUEST['topic'] = $_REQUEST['threadid'];
+
 	// We've got topic!
 	if (isset($_REQUEST['topic']))
 	{
@@ -256,14 +259,23 @@ function cleanRequest()
 		// A new magic variable to indicate we think this is command line.
 		$_SERVER['is_cli'] = true;
 	}
-	elseif (preg_match('~^((([1]?\d)?\d|2[0-4]\d|25[0-5])\.){3}(([1]?\d)?\d|2[0-4]\d|25[0-5])$~', $_SERVER['REMOTE_ADDR']) === 0)
-		$_SERVER['REMOTE_ADDR'] = 'unknown';
+	// Perhaps we have a IPv6 address.
+	elseif (!isValidIPv6($_SERVER['REMOTE_ADDR']) || preg_match('~::ffff:\d+\.\d+\.\d+\.\d+~', $_SERVER['REMOTE_ADDR']) !== 0)
+	{
+		$_SERVER['REMOTE_ADDR'] = preg_replace('~^::ffff:(\d+\.\d+\.\d+\.\d+)~', '\1', $_SERVER['REMOTE_ADDR']);
+
+		// Just incase we have a legacy IPv4 address.
+		// @ TODO: Convert to IPv6.
+		if (preg_match('~^((([1]?\d)?\d|2[0-4]\d|25[0-5])\.){3}(([1]?\d)?\d|2[0-4]\d|25[0-5])$~', $_SERVER['REMOTE_ADDR']) === 0)
+			$_SERVER['REMOTE_ADDR'] = 'unknown';
+	}
 
 	// Try to calculate their most likely IP for those people behind proxies (And the like).
 	$_SERVER['BAN_CHECK_IP'] = $_SERVER['REMOTE_ADDR'];
 
 	// Find the user's IP address. (but don't let it give you 'unknown'!)
-	if (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_CLIENT_IP']) && (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown)~', $_SERVER['HTTP_CLIENT_IP']) == 0 || preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown)~', $_SERVER['REMOTE_ADDR']) != 0))
+	// @ TODO: IPv6 really doesn't need this.
+	if (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_CLIENT_IP']) && (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['HTTP_CLIENT_IP']) == 0 || preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['REMOTE_ADDR']) != 0))
 	{
 		// We have both forwarded for AND client IP... check the first forwarded for as the block - only switch if it's better that way.
 		if (strtok($_SERVER['HTTP_X_FORWARDED_FOR'], '.') != strtok($_SERVER['HTTP_CLIENT_IP'], '.') && '.' . strtok($_SERVER['HTTP_X_FORWARDED_FOR'], '.') == strrchr($_SERVER['HTTP_CLIENT_IP'], '.') && (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown)~', $_SERVER['HTTP_X_FORWARDED_FOR']) == 0 || preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown)~', $_SERVER['REMOTE_ADDR']) != 0))
@@ -271,7 +283,7 @@ function cleanRequest()
 		else
 			$_SERVER['BAN_CHECK_IP'] = $_SERVER['HTTP_CLIENT_IP'];
 	}
-	if (!empty($_SERVER['HTTP_CLIENT_IP']) && (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown)~', $_SERVER['HTTP_CLIENT_IP']) == 0 || preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown)~', $_SERVER['REMOTE_ADDR']) != 0))
+	if (!empty($_SERVER['HTTP_CLIENT_IP']) && (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['HTTP_CLIENT_IP']) == 0 || preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['REMOTE_ADDR']) != 0))
 	{
 		// Since they are in different blocks, it's probably reversed.
 		if (strtok($_SERVER['REMOTE_ADDR'], '.') != strtok($_SERVER['HTTP_CLIENT_IP'], '.'))
@@ -290,7 +302,7 @@ function cleanRequest()
 			foreach ($ips as $i => $ip)
 			{
 				// Make sure it's in a valid range...
-				if (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown)~', $ip) != 0 && preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown)~', $_SERVER['REMOTE_ADDR']) == 0)
+				if (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $ip) != 0 && preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['REMOTE_ADDR']) == 0)
 					continue;
 
 				// Otherwise, we've got an IP!
@@ -299,7 +311,7 @@ function cleanRequest()
 			}
 		}
 		// Otherwise just use the only one.
-		elseif (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown)~', $_SERVER['HTTP_X_FORWARDED_FOR']) == 0 || preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown)~', $_SERVER['REMOTE_ADDR']) != 0)
+		elseif (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['HTTP_X_FORWARDED_FOR']) == 0 || preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['REMOTE_ADDR']) != 0)
 			$_SERVER['BAN_CHECK_IP'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
 	}
 
@@ -315,10 +327,101 @@ function cleanRequest()
 	$_SERVER['HTTP_USER_AGENT'] = isset($_SERVER['HTTP_USER_AGENT']) ? htmlspecialchars(stripslashes($_SERVER['HTTP_USER_AGENT']), ENT_QUOTES) : '';
 
 	// Some final checking.
-	if (preg_match('~^((([1]?\d)?\d|2[0-4]\d|25[0-5])\.){3}(([1]?\d)?\d|2[0-4]\d|25[0-5])$~', $_SERVER['BAN_CHECK_IP']) === 0)
+	if (preg_match('~^((([1]?\d)?\d|2[0-4]\d|25[0-5])\.){3}(([1]?\d)?\d|2[0-4]\d|25[0-5])$~', $_SERVER['BAN_CHECK_IP']) === 0 || !isValidIPv6($_SERVER['BAN_CHECK_IP']))
 		$_SERVER['BAN_CHECK_IP'] = '';
 	if ($_SERVER['REMOTE_ADDR'] == 'unknown')
 		$_SERVER['REMOTE_ADDR'] = '';
+}
+
+/**
+ * Validates a IPv6 address. returns true if it is ipv6.
+ * @param string $ip ip address to be validated
+ * @return bool true|false
+ */
+function isValidIPv6($ip)
+{
+	// wow, impressive regex, but it can be done easier :)
+	//if (preg_match('~^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$~', $ip) === 0)
+	//return false;
+	if(defined('AF_INET6') && strstr($ip, ':') !== false && inet_pton($ip) != false)
+		return true;
+
+	return false;
+}
+
+/**
+ * Converts IPv6s to numbers.  This makes ban checks much easier.
+ * @param string $ip ip address to be converted
+ * @return array 
+ */
+function convertIPv6toInts($ip)
+{
+	static $expanded = array();
+
+	// Check if we have done this already.
+	if (isset($expanded[$ip]))
+		return $expanded[$ip];
+
+	// Expand the IP out.
+	$expanded_ip = explode(':', expandIPv6($ip));
+
+	$new_ip = array();
+	foreach ($expanded_ip as $int)
+		$new_ip[] = hexdec($int);
+
+	// Save this incase of repeated use.
+	$expanded[$ip] = $new_ip;
+
+	return $expanded[$ip];
+}
+
+/**
+ * Expands a IPv6 address to its full form.
+ * @param string $ip ip address to be converted
+ * @return bool/string expanded ipv6 address.
+ */
+function expandIPv6($addr, $strict_check = true)
+{
+	static $converted = array();
+
+	// Check if we have done this already.
+	if (isset($converted[$addr]))
+		return $converted[$addr];
+
+	// Check if there are segments missing, insert if necessary.
+	if (strpos($addr, '::') !== false)
+	{
+		$part = explode('::', $addr);
+		$part[0] = explode(':', $part[0]);
+		$part[1] = explode(':', $part[1]);
+		$missing = array();
+
+		for ($i = 0; $i < (8 - (count($part[0]) + count($part[1]))); $i++)
+			array_push($missing, '0000');
+
+		$part = array_merge($part[0], $missing, $part[1]);
+	}
+	else
+		$part = explode(':', $addr);
+
+	// Pad each segment until it has 4 digits.
+	foreach ($part as &$p)
+		while (strlen($p) < 4)
+			$p = '0' . $p;
+
+	unset($p);
+
+    // Join segments.
+	$result = implode(':', $part);
+
+	// Save this incase of repeated use.
+	$converted[$addr] = $result;
+
+	// Quick check to make sure the length is as expected. 
+	if (!$strict_check || strlen($result) == 39)
+		return $result;
+	else
+		return false;
 }
 
 // Adds slashes to the array/variable.  Uses two underscores to guard against overloading.

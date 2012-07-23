@@ -211,11 +211,17 @@ function is_not_guest($message = '')
 	trigger_error('Hacking attempt...', E_USER_ERROR);
 }
 
-// Do banning related stuff.  (ie. disallow access....)
+/**
+ * Do banning related stuff.  (ie. disallow access....)
+ * Checks if the user is banned, and if so dies with an error.
+ * Caches this information for optimization purposes.
+ * Forces a recheck if force_check is true.
+ * @param bool $forceCheck = false
+ */
 function is_not_banned($forceCheck = false)
 {
 	global $txt, $modSettings, $context, $user_info;
-	global $sourcedir, $cookiename, $user_settings, $smcFunc;
+	global $sourcedir, $cookiename, $user_settings;
 
 	// You cannot be banned if you are an admin - doesn't help if you log out.
 	if ($user_info['is_admin'])
@@ -240,31 +246,19 @@ function is_not_banned($forceCheck = false)
 		// Check both IP addresses.
 		foreach (array('ip', 'ip2') as $ip_number)
 		{
-			// Check if we have a valid IP address.
-			if (preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/', $user_info[$ip_number], $ip_parts) == 1)
+			if ($ip_number == 'ip2' && $user_info['ip2'] == $user_info['ip'])
+				continue;
+			$ban_query[] = constructBanQueryIP($user_info[$ip_number]);
+			// IP was valid, maybe there's also a hostname...
+			if (empty($modSettings['disableHostnameLookup']) && $user_info[$ip_number] != 'unknown')
 			{
-				$ban_query[] = '((' . $ip_parts[1] . ' BETWEEN bi.ip_low1 AND bi.ip_high1)
-							AND (' . $ip_parts[2] . ' BETWEEN bi.ip_low2 AND bi.ip_high2)
-							AND (' . $ip_parts[3] . ' BETWEEN bi.ip_low3 AND bi.ip_high3)
-							AND (' . $ip_parts[4] . ' BETWEEN bi.ip_low4 AND bi.ip_high4))';
-
-				// IP was valid, maybe there's also a hostname...
-				if (empty($modSettings['disableHostnameLookup']))
+				$hostname = host_from_ip($user_info[$ip_number]);
+				if (strlen($hostname) > 0)
 				{
-					$hostname = host_from_ip($user_info[$ip_number]);
-					if (strlen($hostname) > 0)
-					{
-						$ban_query[] = '({string:hostname} LIKE bi.hostname)';
-						$ban_query_vars['hostname'] = $hostname;
-					}
+					$ban_query[] = '({string:hostname} LIKE bi.hostname)';
+					$ban_query_vars['hostname'] = $hostname;
 				}
 			}
-			// We use '255.255.255.255' for 'unknown' since it's not valid anyway.
-			elseif ($user_info['ip'] == 'unknown')
-				$ban_query[] = '(bi.ip_low1 = 255 AND bi.ip_high1 = 255
-							AND bi.ip_low2 = 255 AND bi.ip_high2 = 255
-							AND bi.ip_low3 = 255 AND bi.ip_high3 = 255
-							AND bi.ip_low4 = 255 AND bi.ip_high4 = 255)';
 		}
 
 		// Is their email address banned?
@@ -290,7 +284,7 @@ function is_not_banned($forceCheck = false)
 				'cannot_post',
 				'cannot_register',
 			);
-			$request = smf_db_query( '
+			$request = smf_db_query('
 				SELECT bi.id_ban, bi.email_address, bi.id_member, bg.cannot_access, bg.cannot_register,
 					bg.cannot_post, bg.cannot_login, bg.reason, IFNULL(bg.expire_time, 0) AS expire_time
 				FROM {db_prefix}ban_items AS bi
@@ -336,7 +330,7 @@ function is_not_banned($forceCheck = false)
 		$bans = explode(',', $_COOKIE[$cookiename . '_']);
 		foreach ($bans as $key => $value)
 			$bans[$key] = (int) $value;
-		$request = smf_db_query( '
+		$request = smf_db_query('
 			SELECT bi.id_ban, bg.reason
 			FROM {db_prefix}ban_items AS bi
 				INNER JOIN {db_prefix}ban_groups AS bg ON (bg.id_ban_group = bi.id_ban_group)
@@ -360,9 +354,9 @@ function is_not_banned($forceCheck = false)
 		// My mistake. Next time better.
 		if (!isset($_SESSION['ban']['cannot_access']))
 		{
-			require_once($sourcedir . '/lib/Subs-Auth.php');
+			require_once($sourcedir . '/Subs-Auth.php');
 			$cookie_url = url_parts(!empty($modSettings['localCookies']), !empty($modSettings['globalCookies']));
-			setcookie($cookiename . '_', '', time() - 3600, $cookie_url[1], $cookie_url[0], 0);
+			smf_setcookie($cookiename . '_', '', time() - 3600, $cookie_url[1], $cookie_url[0], false, false);
 		}
 	}
 
@@ -371,7 +365,7 @@ function is_not_banned($forceCheck = false)
 	{
 		// We don't wanna see you!
 		if (!$user_info['is_guest'])
-			smf_db_query( '
+			smf_db_query('
 				DELETE FROM {db_prefix}log_online
 				WHERE id_member = {int:current_member}',
 				array(
@@ -400,9 +394,9 @@ function is_not_banned($forceCheck = false)
 		);
 
 		// A goodbye present.
-		require_once($sourcedir . '/lib/Subs-Auth.php');
+		require_once($sourcedir . '/Subs-Auth.php');
 		$cookie_url = url_parts(!empty($modSettings['localCookies']), !empty($modSettings['globalCookies']));
-		setcookie($cookiename . '_', implode(',', $_SESSION['ban']['cannot_access']['ids']), time() + 3153600, $cookie_url[1], $cookie_url[0], 0);
+		smf_setcookie($cookiename . '_', implode(',', $_SESSION['ban']['cannot_access']['ids']), time() + 3153600, $cookie_url[1], $cookie_url[0], false, false);
 
 		// Don't scare anyone, now.
 		$_GET['action'] = '';
@@ -420,7 +414,7 @@ function is_not_banned($forceCheck = false)
 	elseif (isset($_SESSION['ban']['cannot_login']) && !$user_info['is_guest'])
 	{
 		// We don't wanna see you!
-		smf_db_query( '
+		smf_db_query('
 			DELETE FROM {db_prefix}log_online
 			WHERE id_member = {int:current_member}',
 			array(
@@ -545,7 +539,7 @@ function banPermissions()
 // Log a ban in the database.
 function log_ban($ban_ids = array(), $email = null)
 {
-	global $user_info, $smcFunc;
+	global $user_info;
 
 	// Don't log web accelerators, it's very confusing...
 	if (isset($_SERVER['HTTP_X_MOZ']) && $_SERVER['HTTP_X_MOZ'] == 'prefetch')
@@ -573,7 +567,7 @@ function log_ban($ban_ids = array(), $email = null)
 // Checks if a given email address might be banned.
 function isBannedEmail($email, $restriction, $error)
 {
-	global $txt, $smcFunc;
+	global $txt;
 
 	// Can't ban an empty email
 	if (empty($email) || trim($email) == '')
@@ -1007,7 +1001,7 @@ function isAllowedTo($permission, $boards = null)
 // Return the boards a user has a certain (board) permission on. (array(0) if all.)
 function boardsAllowedTo($permissions, $check_access = true)
 {
-	global $user_info, $modSettings, $smcFunc;
+	global $user_info, $modSettings;
 
 	// Administrators are all powerful, sorry.
 	if ($user_info['is_admin'])

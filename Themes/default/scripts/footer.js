@@ -1322,6 +1322,16 @@ function giveLike(_el)
 	}
 	return(false);
 }
+function ratingWidgetInvoke(_el)
+{
+	var 	id, ctype;
+	id = parseInt(_el.parent().attr('data-likebarid'));
+	ctype = parseInt(_el.parent().attr('data-ctype'));
+
+	if(id > 0 && ctype > 0)
+		sendRequest('action=like;sa=widget;id=' + id + ';c=' + ctype, null);
+	return(false);
+}
 jQuery(document).ready(function() {
 	
 	// this kills the pure CSS hover effect from the dropdown menus so they will
@@ -1666,7 +1676,7 @@ function response_xml(responseXML)
 				Eos_Alert(title, msg);
 				return(false);
 			}
-			var content = data.find('content').text();
+			var content = data.find('content').text() || '';
 			/*
 			 * how private handlers work:
 			 *
@@ -1679,10 +1689,14 @@ function response_xml(responseXML)
 			 * display the response content.
 			 */
 			if(_r.attr('open') == 'private_handler') {
-				var handler = data.find('handler').text();
+				var handler = data.find('handler').text() || '';
+				var json_data = new Array();
+				var param = data.find('data').text() || '';
+				if(param.length > 0)
+					json_data = $.parseJSON(param);
 				var fn = _r.attr('fn');
 				$('#__t_script').html('<script>' + handler + '</script>');
-				window[fn](content);
+				window[fn](content, json_data);
 				return(false);
 			}
 			var width = _r.attr('width') || '300px';

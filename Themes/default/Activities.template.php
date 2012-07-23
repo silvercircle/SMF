@@ -253,7 +253,7 @@ function template_notifications_xml()
 echo <<<EOT
  <handler>
  <![CDATA[
-	function _h_notify_popup(content)
+	function _h_notify_popup(content, data)
 	{
 	var wrapper = $('<div id="notify_wrapper" class="popup_wrapper" style="float:right;position:relative;margin-right:20px;"></div>');
 	wrapper.html(content);
