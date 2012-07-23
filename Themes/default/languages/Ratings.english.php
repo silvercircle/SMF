@@ -24,4 +24,5 @@ $txt['liked_a_post'] = '%s rated %s\'s <a href="%s">post</a> in %s with %s.';
 $txt['rating_invalid_params'] = 'Missing content type or invalid content ID';
 $txt['rate_this'] = 'Rate It';
 $txt['rate_this_post'] = 'Rate this post';
+$txt['ratingwidget_error'] = 'Select the rating you want to submit and click the <b>Submit</b> button or simply click <b>Close</b> to cancel your action';
 ?>

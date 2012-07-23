@@ -94,7 +94,7 @@ function LikeDispatch()
 
 function GetRatingWidget()
 {
-	global $modSettings, $user_info, $context;
+	global $modSettings, $user_info, $context, $txt;
 
 	loadLanguage('Ratings');
 	
@@ -120,10 +120,10 @@ function GetRatingWidget()
 		$context['ratings'][] = array(
 			'rtype' => (int)$key,
 			'label' => $rating['text'],
-			'onclick' => 'sendRequest(\'action=xmlhttp;sa=givelike;r=' . $key . ';m=' . $content_id . '\', null);return(false);'
+			//'onclick' => 'sendRequest(\'action=xmlhttp;sa=givelike;r=' . $key . ';m=' . $content_id . '\', null);return(false);'
 		);
 	$context['content_id'] = $content_id;
-	$context['json_data'] = json_encode(array('id' => $content_id));
+	$context['json_data'] = htmlspecialchars(json_encode(array('id' => $content_id, 'error_text' => $txt['ratingwidget_error'])));
 }
 
 /**

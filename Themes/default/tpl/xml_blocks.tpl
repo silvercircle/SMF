@@ -140,17 +140,22 @@
   <response open="private_handler" fn="_create_rating_widget" />
   <content>
     <![CDATA[ <!-- > -->
-      <div class="inlinePopup nowrap" id="ratingwidget" data-id="{$C.content_id}" style="position:absolute;right:0;float:right;z-index:9999;min-width:170px;">
+      <div class="inlinePopup" id="ratingwidget" data-id="{$C.content_id}" style="position:absolute;right:0;float:right;z-index:9999;min-width:170px;">
         <div class="cat_bar">
           <h3>{$T.rate_this_post}</h3>
         </div>
         <div class="tinypadding smalltext">
         <ol class="commonlist notifications">
         {foreach $C.ratings as $rating}
-          <li><a onclick="{$rating.onclick}" href="!#">{$rating.label}</a></li>
+          <li><input class="rw_option" name="RW" value="{$rating.rtype}" type="radio" />{$rating.label}</li>
         {/foreach}
         </ol>
+        <div class="centertext tinytext" style="line-height:110%;">
+          You may attach a comment to your rating
+          <input type="text" size="20" name="ratingcomment" id="ratingcomment" />
+        </div>
         <div class="centertext smallpadding">
+          <span class="button default centered" onclick="ratingwidget_submit();return(false);">Submit</span>&nbsp;&nbsp;&nbsp;
           <span class="button default centered" onclick="$('#ratingwidget').remove();return(false);">{$T.find_close}</span>
           <div class="clear"></div>
         </div>
@@ -166,8 +171,27 @@
     function _create_rating_widget(content, data)
     {
       var _el = $(content);
+      window._data = data;
+      if($('#ratingwidget').length > 0)
+        $('#ratingwidget').remove();
       $('span[data-likebarid=' + data['id'] + ']').after(_el);
       return(false);
+    }
+    function ratingwidget_submit()
+    {
+      var done = false;
+      $('#ratingwidget input.rw_option').each(function() {
+        if($(this).is(':checked')) {
+          var uri = 'action=xmlhttp;sa=givelike;r=' + $(this).val() + ';m=' + parseInt($('#ratingwidget').attr('data-id'));
+          sendRequest(uri, null);
+          done = true;
+        }
+      });
+      if(done) {
+        $('#ratingwidget').remove();
+        return(false);
+      }
+      Eos_Alert('Error', window._data['error_text']);
     }
     ]]>
   </handler>
