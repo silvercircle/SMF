@@ -13,6 +13,8 @@
  *
  * implements UI features for the content - liking system.
  */
+require_once($sourcedir . '/lib/Subs-Ratings.php');
+
 function FixLikes()
 {
 	global $sourcedir;

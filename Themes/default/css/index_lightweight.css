@@ -121,6 +121,12 @@ input[type="text"], input[type="password"], select {
 	padding:4px;
 	box-shadow: 0 0 10px 0px #ddd inset;
 }
+input.aligned, span.cblabel {
+	height:20px;
+	line-height:20px;
+	vertical-align:middle;
+	margin:0 2px;
+}
 select {
 	padding:3px;
 }
@@ -3641,7 +3647,7 @@ div#ajaxbusy {
 	border-bottom-right-radius: 5px !important;
 }
 .light_shadow {
-	box-shadow: 0 0 12px 0 #bbb;
+	box-shadow: 0 3px 5px 2px #bbb;
 }
 .inset_shadow {
 	box-shadow: 0 0 5px 1px #ccc inset;

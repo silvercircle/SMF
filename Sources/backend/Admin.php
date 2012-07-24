@@ -139,7 +139,6 @@ function AdminMain()
 					'subsections' => array(
 						'basic' => array($txt['mods_cat_features']),
 						'layout' => array($txt['mods_cat_layout']),
-						'karma' => array($txt['karma'], 'enabled' => in_array('k', $context['admin_features'])),
 						'sig' => array($txt['signature_settings_short']),
 						'profile' => array($txt['custom_profile_shorttitle'], 'enabled' => in_array('cp', $context['admin_features'])),
 					),
@@ -261,6 +260,7 @@ function AdminMain()
 						'topics' => array($txt['manageposts_topic_settings']),
 						'prefixes' => array($txt['manageposts_prefix_settings']),
 						'tags' => array($txt['manageposts_tag_settings']),
+						'ratings' => array($txt['karma'])
 					),
 				),
 				'managecalendar' => array(

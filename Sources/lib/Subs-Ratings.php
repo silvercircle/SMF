@@ -19,15 +19,62 @@ Ratings::init();
 class Ratings {
 	protected static $perm_can_see, $perm_can_give;
 	protected static $rate_bar = '';
+	protected static $is_valid;
 
 	public static function init()
 	{
-		global $context;
+		global $context, $modSettings;
 
-		$context['can_see_like'] = self::$perm_can_see = allowedTo('like_see');
-		$context['can_give_like'] = self::$perm_can_give = allowedTo('like_give');
+		$modSettings['ratings'] = !empty($modSettings['raw_ratings']) ? @unserialize($modSettings['raw_ratings']) : array();
+
+		self::$is_valid = (isset($modSettings['ratings']) && count($modSettings['ratings']) > 0 ? true : false);
+
+		$context['can_see_like'] = self::$perm_can_see = (self::$is_valid ? allowedTo('like_see') : false);
+		$context['can_give_like'] = self::$perm_can_give = (self::$is_valid ? allowedTo('like_give') : false);
 		
 		loadLanguage('Ratings');
+	}
+
+	public static function isValid()
+	{
+		return self::$is_valid;
+	}
+
+	/**
+	 * @static
+	 * @param: $class_id int, the rating id we want to query
+	 * @param: $board_id int, the board id
+	 *
+	 * determine whether the rating class id is allowed in the given board
+	 * and for the current member's member groups.
+	 */
+	public static function isAllowed($class_id, $board_id)
+	{
+		global $user_info, $modSettings;
+
+		$board_allowed = $group_allowed = false;
+
+		$id = (int)$class_id;
+
+		//if($user_info['is_admin'])
+		//	return true;
+
+		if(0 == (int)$class_id || 0 == (int)$board_id)
+			return false;
+
+		if(isset($modSettings['ratings'][$id])) {
+			$rating = &$modSettings['ratings'][$id];
+			$board_allowed = (isset($rating['boards']) && !empty($rating['boards'])) ? in_array((int)$board_id, $rating['boards']) : true;
+			if(isset($rating['groups']) && !empty($rating['groups'])) {
+				$group_interset = array_intersect($rating['groups'], $user_info['groups']);
+			 	$group_allowed = !empty($group_interset) ? true : false;
+			}
+			else
+				$group_allowed = true;
+
+			return $board_allowed && $group_allowed ? true : false;
+		}
+		return false;
 	}
 
 	public static function createRatingBar()

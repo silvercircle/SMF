@@ -38,9 +38,6 @@ if (!defined('SMF'))
 	void ModifyLayoutSettings()
 		// !!!
 
-	void ModifyKarmaSettings()
-		// !!!
-
 	void ModifyModerationSettings()
 		// !!!
 
@@ -98,7 +95,6 @@ function ModifyFeatureSettings()
 	$subActions = array(
 		'basic' => 'ModifyBasicSettings',
 		'layout' => 'ModifyLayoutSettings',
-		'karma' => 'ModifyRatingSettings',
 		'sig' => 'ModifySignatureSettings',
 		'profile' => 'ShowCustomProfiles',
 		'profileedit' => 'EditCustomProfiles',
@@ -115,8 +111,6 @@ function ModifyFeatureSettings()
 			'basic' => array(
 			),
 			'layout' => array(
-			),
-			'karma' => array(
 			),
 			'sig' => array(
 				'description' => $txt['signature_settings_desc'],
@@ -725,32 +719,6 @@ function ModifyLayoutSettings($return_config = false)
 
 	$context['post_url'] = $scripturl . '?action=admin;area=featuresettings;save;sa=layout';
 	$context['settings_title'] = $txt['mods_cat_layout'];
-
-	prepareDBSettingContext($config_vars);
-}
-
-function ModifyRatingSettings($return_config = false)
-{
-	global $txt, $scripturl, $context, $settings, $sc;
-
-	$config_vars = array(
-			array('check', 'use_rating_widget')
-	);
-
-	if ($return_config)
-		return $config_vars;
-
-	// Saving?
-	if (isset($_GET['save']))
-	{
-		checkSession();
-
-		saveDBSettings($config_vars);
-		redirectexit('action=admin;area=featuresettings;sa=karma');
-	}
-
-	$context['post_url'] = $scripturl . '?action=admin;area=featuresettings;save;sa=karma';
-	$context['settings_title'] = $txt['karma'];
 
 	prepareDBSettingContext($config_vars);
 }

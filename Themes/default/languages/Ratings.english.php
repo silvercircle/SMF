@@ -25,4 +25,5 @@ $txt['rating_invalid_params'] = 'Missing content type or invalid content ID';
 $txt['rate_this'] = 'Rate It';
 $txt['rate_this_post'] = 'Rate this post';
 $txt['ratingwidget_error'] = 'Select the rating you want to submit and click the <b>Submit</b> button or simply click <b>Close</b> to cancel your action';
+$txt['rating_attach_comment'] = 'You may attach a comment:';
 ?>

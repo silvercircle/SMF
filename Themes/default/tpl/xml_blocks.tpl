@@ -140,19 +140,17 @@
   <response open="private_handler" fn="_create_rating_widget" />
   <content>
     <![CDATA[ <!-- > -->
-      <div class="inlinePopup" id="ratingwidget" data-id="{$C.content_id}" style="position:absolute;right:0;float:right;z-index:9999;min-width:170px;">
-        <div class="cat_bar">
-          <h3>{$T.rate_this_post}</h3>
-        </div>
+      <div class="blue_container light_shadow blue_topbar" id="ratingwidget" data-id="{$C.content_id}" style="position:absolute;right:0;float:right;z-index:9999;min-width:170px;">
+        <h1 class="bigheader secondary">{$T.rate_this_post}</h1>
         <div class="tinypadding smalltext">
-        <ol class="commonlist notifications">
+        <ol class="commonlist">
         {foreach $C.ratings as $rating}
-          <li><input class="rw_option" name="RW" value="{$rating.rtype}" type="radio" />{$rating.label}</li>
+          <li><input class="rw_option aligned" name="RW" value="{$rating.rtype}" type="radio" /><span class="cblabel">{$rating.label}</span></li>
         {/foreach}
         </ol>
         <div class="centertext tinytext" style="line-height:110%;">
-          You may attach a comment to your rating
-          <input type="text" size="20" name="ratingcomment" id="ratingcomment" />
+          <span class="floatleft">{$T.rating_attach_comment}</span>
+          <input type="text" size="30" name="ratingcomment" id="ratingcomment" />
         </div>
         <div class="centertext smallpadding">
           <span class="button default centered" onclick="ratingwidget_submit();return(false);">Submit</span>&nbsp;&nbsp;&nbsp;
@@ -175,6 +173,9 @@
       if($('#ratingwidget').length > 0)
         $('#ratingwidget').remove();
       $('span[data-likebarid=' + data['id'] + ']').after(_el);
+      $('#ratingwidget').on('mouseleave', function(event) {
+        $('#ratingwidget').remove();
+      });
       return(false);
     }
     function ratingwidget_submit()

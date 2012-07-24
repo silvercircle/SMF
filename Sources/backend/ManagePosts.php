@@ -66,6 +66,7 @@ function ManagePostSettings()
 		'censor' => 'SetCensor',
 		'topics' => 'ModifyTopicSettings',
 		'prefixes' => 'ModifyPrefixSettings',
+		'ratings' => 'ModifyRatingSettings'
 	);
 	if($modSettings['tags_active'])
 		$subActions['tags'] = 'ModifyTagSettings';
@@ -499,6 +500,65 @@ function ModifyPrefixSettings()
 		}
 		redirectexit('action=admin;area=postsettings;sa=prefixes');
 	}
+}
+
+/**
+ * implements features and options -> Post ratings settings page
+ */
+function ModifyRatingSettings($return_config = false)
+{
+	global $txt, $scripturl, $context, $settings, $sc, $modSettings, $sourcedir;
+
+	@require_once($sourcedir . '/lib/Subs-Ratings.php');
+
+	loadAdminTemplate('ManageRatings');
+	$context['sub_template'] = 'manage_ratings';
+
+	$config_vars = array(
+		array('check', 'use_rating_widget')
+	);
+	$context['use_rating_widget'] = $modSettings['use_rating_widget'];
+	foreach($modSettings['ratings'] as $id => $rating) {
+		$context['rating_classes'][] = array(
+			'id' => $id,
+			'desc' => isset($rating['desc']) ? $rating['desc'] : '',
+			'format' => isset($rating['format']) ? $rating['format'] : '<span>%s</span>',
+			'label' => $rating['label'],
+			'points' => isset($rating['points']) ? $rating['points'] : 0,
+			'groups' => isset($rating['groups']) && !empty($rating['groups']) ? implode(',', $rating['groups']) : '',
+			'boards' => isset($rating['boards']) && !empty($rating['boards']) ? implode(',', $rating['boards']) : '',
+		);
+	}
+	if ($return_config)
+		return $config_vars;
+
+	// Saving?
+	if (isset($_GET['save']))
+	{
+		checkSession();
+		$new_ratings = array();
+
+		for($i = 1; $i <= 10; $i++) {
+			if(isset($_REQUEST['rating_id_' . $i]) && (int)$_REQUEST['rating_id_' . $i] >= 1 && (int)$_REQUEST['rating_id_' . $i] <= 10) {
+				$new_ratings[$i] = array(
+					'desc' => htmlentities(isset($_REQUEST['rating_desc_' . $i]) ? strip_tags($_REQUEST['rating_desc_' . $i]) : ''),
+					'format' => htmlentities(isset($_REQUEST['rating_format_' . $i]) ? $_REQUEST['rating_format_' . $i] : '<span>%s</span>'),
+					'label' => htmlentities(isset($_REQUEST['rating_label_' . $i]) ? $_REQUEST['rating_label_' . $i] : 'No label'),
+					'groups' => isset($_REQUEST['rating_groups_' . $i]) && !empty($_REQUEST['rating_groups_' . $i]) ? explode(',', normalizeCommaDelimitedList($_REQUEST['rating_groups_' . $i])) : array(),
+					'boards' => isset($_REQUEST['rating_boards_' . $i]) && !empty($_REQUEST['rating_boards_' . $i]) ? explode(',', normalizeCommaDelimitedList($_REQUEST['rating_boards_' . $i])) : array(),
+					'points' => isset($_REQUEST['rating_points_' . $i]) && !empty($_REQUEST['rating_points_' . $i]) ? $_REQUEST['rating_points_' . $i] : 0,
+				);
+			}
+		}
+		foreach($new_ratings as &$rating)
+			$rating['text'] = sprintf(html_entity_decode($rating['format']), $rating['label']);
+
+		if(!empty($new_ratings))
+			updateSettings(array('raw_ratings' => @serialize($new_ratings)));
+		redirectexit('action=admin;area=postsettings;sa=ratings');
+	}
+
+	$context['post_url'] = $scripturl . '?action=admin;area=postsettings;save;sa=ratings';
 }
 
 function ModifyTagSettings()

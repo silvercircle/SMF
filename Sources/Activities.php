@@ -16,6 +16,8 @@
 if (!defined('SMF'))
 	die('No access');
 
+@require_once($sourcedir . '/lib/Subs-Ratings.php');
+
 function aStreamDispatch()
 {
 	global $sourcedir, $modSettings;

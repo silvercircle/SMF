@@ -716,4 +716,23 @@ $txt['hidden_content_bbc_settings'] = "Hidden content BBCode settings";
 $txt['plugins_title'] = 'Plugins';
 $txt['browse_plugins'] = 'List plugins';
 $txt['browse_hooks'] = 'Hooks';
+$txt['use_rating_widget'] = 'Use rating widget';
+$txt['rating_class_ID'] = 'ID';
+$txt['rating_class_label'] = 'Label';
+$txt['rating_class_desc'] = 'Description';
+$txt['rating_class_format'] = 'Formatting';
+$txt['rating_class_points'] = 'Points';
+$txt['rating_class_groups_allowed'] = 'Member groups';
+$txt['rating_class_boards_allowed'] = 'Boards';
+$txt['ratings_settings_title'] = 'Post rating settings';
+$txt['ratings_help'] = 'You can define up to ten rating classes here. Each class must have a unique numeric id between 1 and 10.
+	<ul>
+	<li>The description is optional.</li>
+	<li>Label must not be empty.</li>
+	<li>Format can contain basic HTML tags like SPAN, DIV and style or class attributes. Format <b>MUST</b> contain a %s placeholder where the label should go.</li>
+	<li>Groups is a comma-delimited list of member group ids which are allowed to use this rating. Leave it empty to allow all members to use this rating.</li>
+	<li>Boards is a comma-delimited list of board ids where the rating should be available. Leave it empty to allow this rating in all boards.</li>
+	<li>Points is a positive or negative number that specifies the number of reputation points a member will receive for this rating. When left empty, the rating is considered a neutral one and no points will be granted. <b>NOTE: THIS IS CURRENTLY UNIMPLEMENTED.</b></li>
+	</ul>
+	';
 ?>

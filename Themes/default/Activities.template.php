@@ -210,10 +210,8 @@ function template_notifications_xml()
  <![CDATA[
 ';
 	echo '
-	<div class="inlinePopup notifications" id="notificationsBody">
-	<div class="cat_bar2 norounded">
-	<h3>',$txt['act_recent_notifications'],'</h3>
-	</div>
+	<div class="blue_container blue_topbar light_shadow notifications" id="notificationsBody">
+	<h1 class="bigheader secondary">',$txt['act_recent_notifications'],'</h1>
 	';
 	if($context['act_results']) {
 		echo '
@@ -225,9 +223,11 @@ function template_notifications_xml()
 	}
 	else
 		echo '
-	<div class="red_container cleantop centertext smalltext">'
+	<div class="cContainer_end"></div>
+	<div class="red_container centertext smalltext norounded">'
 	  ,$txt['act_no_unread_notifications'],'
-	</div>';
+	</div>
+	<div class="cContainer_end"></div>';
 	echo '
 	<div class="yellow_container smalltext cleantop">
 	<dl class="common">
