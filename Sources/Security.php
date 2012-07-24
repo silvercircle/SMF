@@ -220,7 +220,7 @@ function is_not_guest($message = '')
  */
 function is_not_banned($forceCheck = false)
 {
-	global $txt, $modSettings, $context, $user_info;
+	global $txt, $modSettings, $context, $user_info, $backend_subdir;
 	global $sourcedir, $cookiename, $user_settings;
 
 	// You cannot be banned if you are an admin - doesn't help if you log out.
@@ -319,7 +319,7 @@ function is_not_banned($forceCheck = false)
 		if ($user_info['id'] && (($user_settings['is_activated'] >= 10 && !$flag_is_activated)
 			|| ($user_settings['is_activated'] < 10 && $flag_is_activated)))
 		{
-			require_once($sourcedir . '/ManageBans.php');
+			require_once($sourcedir . '/' . $backend_subdir . '/ManageBans.php');
 			updateBanMembers();
 		}
 	}
@@ -354,7 +354,7 @@ function is_not_banned($forceCheck = false)
 		// My mistake. Next time better.
 		if (!isset($_SESSION['ban']['cannot_access']))
 		{
-			require_once($sourcedir . '/Subs-Auth.php');
+			require_once($sourcedir . '/lib/Subs-Auth.php');
 			$cookie_url = url_parts(!empty($modSettings['localCookies']), !empty($modSettings['globalCookies']));
 			smf_setcookie($cookiename . '_', '', time() - 3600, $cookie_url[1], $cookie_url[0], false, false);
 		}
@@ -394,7 +394,7 @@ function is_not_banned($forceCheck = false)
 		);
 
 		// A goodbye present.
-		require_once($sourcedir . '/Subs-Auth.php');
+		require_once($sourcedir . '/lib/Subs-Auth.php');
 		$cookie_url = url_parts(!empty($modSettings['localCookies']), !empty($modSettings['globalCookies']));
 		smf_setcookie($cookiename . '_', implode(',', $_SESSION['ban']['cannot_access']['ids']), time() + 3153600, $cookie_url[1], $cookie_url[0], false, false);
 
