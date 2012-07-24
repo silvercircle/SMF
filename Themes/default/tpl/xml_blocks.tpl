@@ -154,7 +154,7 @@
         </div>
         <div class="centertext smallpadding">
           <span class="button default centered" onclick="ratingwidget_submit();return(false);">Submit</span>&nbsp;&nbsp;&nbsp;
-          <span class="button default centered" onclick="$('#ratingwidget').remove();return(false);">{$T.find_close}</span>
+          <span class="button centered" onclick="$('#ratingwidget').remove();return(false);">{$T.find_close}</span>
           <div class="clear"></div>
         </div>
       </div>

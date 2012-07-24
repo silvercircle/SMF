@@ -20,19 +20,25 @@ class Ratings {
 	protected static $perm_can_see, $perm_can_give;
 	protected static $rate_bar = '';
 	protected static $is_valid;
+	protected static $show_repair_link;
 
 	public static function init()
 	{
-		global $context, $modSettings;
+		global $context, $modSettings, $txt;
 
 		$modSettings['ratings'] = !empty($modSettings['raw_ratings']) ? @unserialize($modSettings['raw_ratings']) : array();
+
+		loadLanguage('Ratings');
+		foreach($modSettings['ratings'] as &$rating)
+			$rating['text'] = sprintf(html_entity_decode($rating['format']), !empty($rating['localized']) && isset($txt[$rating['localized']]) ? $txt[$rating['localized']] : $rating['label']);
 
 		self::$is_valid = (isset($modSettings['ratings']) && count($modSettings['ratings']) > 0 ? true : false);
 
 		$context['can_see_like'] = self::$perm_can_see = (self::$is_valid ? allowedTo('like_see') : false);
 		$context['can_give_like'] = self::$perm_can_give = (self::$is_valid ? allowedTo('like_give') : false);
 		
-		loadLanguage('Ratings');
+		self::$show_repair_link = !empty($modSettings['rating_show_repair']) ? true : false;
+		self::$rate_bar = '<a onclick="ratingWidgetInvoke($(this));return(false);" rel="nofollow" href="!#" class="widgetanchor">' . $txt['rate_this'] . '</a>';
 	}
 
 	public static function isValid()
@@ -56,8 +62,8 @@ class Ratings {
 
 		$id = (int)$class_id;
 
-		//if($user_info['is_admin'])
-		//	return true;
+		if($user_info['is_admin'])
+			return true;
 
 		if(0 == (int)$class_id || 0 == (int)$board_id)
 			return false;
@@ -77,18 +83,6 @@ class Ratings {
 		return false;
 	}
 
-	public static function createRatingBar()
-	{
-		global $modSettings, $txt;
-
-		if(empty($modSettings['use_rating_widget'])) {
-			foreach($modSettings['ratings'] as $key => $rating)
-				self::$rate_bar .= '<a rel="nofollow" class="givelike" data-fn="give" href="#" data-rtype="'.$key.'">'.$rating['text'].'</a>&nbsp;&nbsp;&nbsp;';
-		}
-		else 
-			self::$rate_bar = '<a onclick="ratingWidgetInvoke($(this));return(false);" rel="nofollow" href="!#" class="widgetanchor">' . $txt['rate_this'] . '</a>';
-	}
-
 	/**
 	 * @param $row - array, fully prepared message
 	 * @param $can_give_like - int, permission to use the ratings
@@ -103,9 +97,6 @@ class Ratings {
 		global $user_info, $txt, $modSettings, $context;
 		
 		$row['likers'] = '';
-
-		if(empty(self::$rate_bar))
-			self::createRatingBar();
 
 		$have_liked_it = (int)$row['liked'] > 0 ? $row['liked'] : false;
 
@@ -123,7 +114,7 @@ class Ratings {
 			$row['likelink'] = '';
 
 		// todo: admin gets a "repair likes" link (just a debugging tool, will probably go away...)
-		if($user_info['is_admin'])
+		if($user_info['is_admin'] && self::$show_repair_link)
 			$row['likelink'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$row['id'].'">Repair ratings</a>';
 
 		// todo: make ctype dynamic (for different content types)
@@ -251,7 +242,6 @@ class Ratings {
 			$like_receiver = $row['id_member'];
 			EoS_Smarty::loadTemplate('xml_blocks');
 			$context['template_functions'] = 'rating_response';
-			self::createRatingBar();
 			$context['ratings_output']['mid'] = $mid;
 
 			/*
@@ -347,7 +337,7 @@ class Ratings {
 			
 				$context['ratings_output']['likebar'] = '<a rel="nofollow" class="givelike" data-fn="remove" href="#" data-id="'.$mid.'">'.$txt['unlike_label'].'</a>';
 			}
-			if($user_info['is_admin'])
+			if($user_info['is_admin'] && self::$show_repair_link)
 				$context['ratings_output']['likebar'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$mid.'">Repair ratings</a>';
 			$total = self::updateForContent($mid);
 			$output = '';

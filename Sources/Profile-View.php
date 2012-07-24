@@ -281,7 +281,7 @@ function showPosts($memID)
 		fatal_lang_error('loadavg_show_posts_disabled', false);
 
 	if (isset($_GET['sa']) && !empty($modSettings['karmaMode']) && ($_GET['sa'] == 'likes' || $_GET['sa'] == 'likesout')) {
-		require_once($sourcedir . '/LikeSystem.php');
+		require_once($sourcedir . '/Ratings.php');
 		return(LikesByUser($memID));
 	}
 

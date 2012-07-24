@@ -327,7 +327,7 @@ function ModifyCoreFeatures($return_config = false)
 		),
 		// k = karma.
 		'k' => array(
-			'url' => 'action=admin;area=featuresettings;sa=karma',
+			'url' => 'action=admin;area=postsettings;sa=ratings',
 			'settings' => array(
 				'karmaMode' => 1,
 			),

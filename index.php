@@ -317,7 +317,7 @@ function smf_main()
 		'who' => array('Who.php', 'Who'),
 		'.xml' => array('News.php', 'ShowXmlFeed'),
 		'xmlhttp' => array('Xml.php', 'XMLhttpMain'),
-		'like' => array('LikeSystem.php', 'LikeDispatch'),
+		'like' => array('Ratings.php', 'LikeDispatch'),
 		'tags' => array('Tagging.php', 'TagsMain'),
 		'astream' => array('Activities.php', 'aStreamDispatch'),
 		'processlink' => array('Display.php', 'ProcessLink'),

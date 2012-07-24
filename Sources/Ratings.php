@@ -44,7 +44,6 @@ function LikeDispatch()
 	$mid = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
 	$rtype = isset($_REQUEST['r']) ? (int)$_REQUEST['r'] : 0;
 
-	loadLanguage('Ratings');
 	if(!isset($modSettings['ratings'][$rtype]))
 		AjaxErrorMsg($txt['unknown_rating_type']);
 
@@ -94,12 +93,13 @@ function LikeDispatch()
 	}
 }
 
+/**
+ * generate the rating widget
+ */
 function GetRatingWidget()
 {
 	global $modSettings, $user_info, $context, $txt;
 
-	loadLanguage('Ratings');
-	
 	if($user_info['is_guest'])
 		AjaxErrorMsg($txt['no_like_for_guests']);
 
@@ -116,13 +116,12 @@ function GetRatingWidget()
 		$context['template_functions'] = 'ratingwidget';
 	}
 	else
-		EoS_Smarty::loadTemplate('ratings/widget');
+		EoS_Smarty::loadTemplate('ratings/widget');	// todo: allow rating without ajax / js
 
 	foreach($modSettings['ratings'] as $key => $rating)
 		$context['ratings'][] = array(
 			'rtype' => (int)$key,
 			'label' => $rating['text'],
-			//'onclick' => 'sendRequest(\'action=xmlhttp;sa=givelike;r=' . $key . ';m=' . $content_id . '\', null);return(false);'
 		);
 	$context['content_id'] = $content_id;
 	$context['json_data'] = htmlspecialchars(json_encode(array('id' => $content_id, 'error_text' => $txt['ratingwidget_error'])));
@@ -146,7 +145,6 @@ function LikesByUser($memID)
 	$out = $_GET['sa'] === 'likesout';			// display likes *given* instead of received ones
 	$is_owner = $user_info['id'] == $memID;		// we are the owner of this profile, this is important for proper formatting (you/yours etc.)
 	
-	loadLanguage('Ratings');
 	$boards_like_see  = boardsAllowedTo('like_see');	// respect permissions
 	$start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
 

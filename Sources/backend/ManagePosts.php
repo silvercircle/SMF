@@ -14,45 +14,6 @@
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
-/*	This file contains all the screens that control settings for topics and
-	posts.
-
-	void ManagePostSettings()
-		- the main entrance point for the 'Posts and topics' screen.
-		- accessed from ?action=admin;area=postsettings.
-		- calls the right function based on the given sub-action.
-		- defaults to sub-action 'posts'.
-		- requires (and checks for) the admin_forum permission.
-
-	void SetCensor()
-		- shows an interface to set and test word censoring.
-		- requires the admin_forum permission.
-		- uses the Admin template and the edit_censored sub template.
-		- tests the censored word if one was posted.
-		- uses the censor_vulgar, censor_proper, censorWholeWord, and
-		  censorIgnoreCase settings.
-		- accessed from ?action=admin;area=postsettings;sa=censor.
-
-	void ModifyPostSettings()
-		- set any setting related to posts and posting.
-		- requires the admin_forum permission
-		- uses the edit_post_settings sub template of the Admin template.
-		- accessed from ?action=admin;area=postsettings;sa=posts.
-
-	void ModifyBBCSettings()
-		- set a few Bulletin Board Code settings.
-		- requires the admin_forum permission
-		- uses the edit_bbc_settings sub template of the Admin template.
-		- accessed from ?action=admin;area=postsettings;sa=bbc.
-		- loads a list of Bulletin Board Code tags to allow disabling tags.
-
-	void ModifyTopicSettings()
-		- set any setting related to topics.
-		- requires the admin_forum permission
-		- uses the edit_topic_settings sub template of the Admin template.
-		- accessed from ?action=admin;area=postsettings;sa=topics.
-*/
-
 function ManagePostSettings()
 {
 	global $context, $txt, $modSettings;
@@ -505,7 +466,7 @@ function ModifyPrefixSettings()
 /**
  * implements features and options -> Post ratings settings page
  */
-function ModifyRatingSettings($return_config = false)
+function ModifyRatingSettings()
 {
 	global $txt, $scripturl, $context, $settings, $sc, $modSettings, $sourcedir;
 
@@ -514,24 +475,34 @@ function ModifyRatingSettings($return_config = false)
 	loadAdminTemplate('ManageRatings');
 	$context['sub_template'] = 'manage_ratings';
 
-	$config_vars = array(
-		array('check', 'use_rating_widget')
-	);
 	$context['use_rating_widget'] = $modSettings['use_rating_widget'];
-	foreach($modSettings['ratings'] as $id => $rating) {
-		$context['rating_classes'][] = array(
-			'id' => $id,
-			'desc' => isset($rating['desc']) ? $rating['desc'] : '',
-			'format' => isset($rating['format']) ? $rating['format'] : '<span>%s</span>',
-			'label' => $rating['label'],
-			'points' => isset($rating['points']) ? $rating['points'] : 0,
-			'groups' => isset($rating['groups']) && !empty($rating['groups']) ? implode(',', $rating['groups']) : '',
-			'boards' => isset($rating['boards']) && !empty($rating['boards']) ? implode(',', $rating['boards']) : '',
-		);
+	for($i = 1; $i <= 10; $i++) {
+		if(isset($modSettings['ratings'][$i])) {
+			$rating = &$modSettings['ratings'][$i];
+			$context['rating_classes'][$i] = array(
+				'id' => $i,
+				'desc' => isset($rating['desc']) ? $rating['desc'] : '',
+				'format' => isset($rating['format']) ? $rating['format'] : '<span>%s</span>',
+				'label' => $rating['label'],
+				'localized' => isset($rating['localized']) ? $rating['localized'] : '',
+				'points' => isset($rating['points']) ? $rating['points'] : 0,
+				'groups' => isset($rating['groups']) && !empty($rating['groups']) ? implode(',', $rating['groups']) : '',
+				'boards' => isset($rating['boards']) && !empty($rating['boards']) ? implode(',', $rating['boards']) : '',
+			);
+		}
+		else {
+			$context['rating_classes'][$i] = array(
+				'id' => $i,
+				'desc' => '',
+				'format' => '',
+				'label' => '',
+				'points' => '',
+				'groups' => '',
+				'boards' => '',
+				'localized' => ''
+			);
+		}
 	}
-	if ($return_config)
-		return $config_vars;
-
 	// Saving?
 	if (isset($_GET['save']))
 	{
@@ -539,22 +510,25 @@ function ModifyRatingSettings($return_config = false)
 		$new_ratings = array();
 
 		for($i = 1; $i <= 10; $i++) {
-			if(isset($_REQUEST['rating_id_' . $i]) && (int)$_REQUEST['rating_id_' . $i] >= 1 && (int)$_REQUEST['rating_id_' . $i] <= 10) {
+			if(isset($_REQUEST['rating_id_' . $i]) && (int)$_REQUEST['rating_id_' . $i] >= 1 && (int)$_REQUEST['rating_id_' . $i] <= 10 && isset($_REQUEST['rating_label_' . $i]) && !empty($_REQUEST['rating_label_' . $i])) {
 				$new_ratings[$i] = array(
 					'desc' => htmlentities(isset($_REQUEST['rating_desc_' . $i]) ? strip_tags($_REQUEST['rating_desc_' . $i]) : ''),
 					'format' => htmlentities(isset($_REQUEST['rating_format_' . $i]) ? $_REQUEST['rating_format_' . $i] : '<span>%s</span>'),
 					'label' => htmlentities(isset($_REQUEST['rating_label_' . $i]) ? $_REQUEST['rating_label_' . $i] : 'No label'),
+					'localized' => htmlentities(isset($_REQUEST['rating_localized_' . $i]) ? $_REQUEST['rating_localized_' . $i] : ''),
 					'groups' => isset($_REQUEST['rating_groups_' . $i]) && !empty($_REQUEST['rating_groups_' . $i]) ? explode(',', normalizeCommaDelimitedList($_REQUEST['rating_groups_' . $i])) : array(),
 					'boards' => isset($_REQUEST['rating_boards_' . $i]) && !empty($_REQUEST['rating_boards_' . $i]) ? explode(',', normalizeCommaDelimitedList($_REQUEST['rating_boards_' . $i])) : array(),
 					'points' => isset($_REQUEST['rating_points_' . $i]) && !empty($_REQUEST['rating_points_' . $i]) ? $_REQUEST['rating_points_' . $i] : 0,
 				);
 			}
 		}
-		foreach($new_ratings as &$rating)
-			$rating['text'] = sprintf(html_entity_decode($rating['format']), $rating['label']);
-
+		$settings_to_update = array(
+			'rating_show_repair' => isset($_REQUEST['rating_show_repair']) ? $_REQUEST['rating_show_repair'] : 0
+		);
 		if(!empty($new_ratings))
-			updateSettings(array('raw_ratings' => @serialize($new_ratings)));
+			$settings_to_update['raw_ratings'] = @serialize($new_ratings);
+
+		updateSettings($settings_to_update);
 		redirectexit('action=admin;area=postsettings;sa=ratings');
 	}
 
