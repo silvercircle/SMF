@@ -2100,6 +2100,9 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	if ($msgOptions['approved'])
 		updateLastMessages($topicOptions['board'], $new_topic || !empty($topicOptions['is_approved']) ? $msg_to_update : 0);
 
+	// Clear recent posts cache
+	CacheAPI::clearCacheByPrefix('boardindex-latest_posts');
+
 	// Alright, done now... we can abort now, I guess... at least this much is done.
 	ignore_user_abort($previous_ignore_user_abort);
 
