@@ -58,19 +58,20 @@ class Ratings {
 	{
 		global $user_info, $modSettings;
 
-		$board_allowed = $group_allowed = false;
+		$board_allowed = $board_denied = $group_allowed = false;
 
 		$id = (int)$class_id;
 
 		if($user_info['is_admin'])
 			return true;
 
-		if(0 == (int)$class_id || 0 == (int)$board_id)
+		if(0 == $id || 0 == (int)$board_id)
 			return false;
 
 		if(isset($modSettings['ratings'][$id])) {
 			$rating = &$modSettings['ratings'][$id];
 			$board_allowed = (isset($rating['boards']) && !empty($rating['boards'])) ? in_array((int)$board_id, $rating['boards']) : true;
+			$board_denied = (isset($rating['boards_denied']) && !empty($rating['boards_denied'])) ? in_array((int)$board_id, $rating['boards_denied']) : false;
 			if(isset($rating['groups']) && !empty($rating['groups'])) {
 				$group_interset = array_intersect($rating['groups'], $user_info['groups']);
 			 	$group_allowed = !empty($group_interset) ? true : false;
@@ -78,7 +79,7 @@ class Ratings {
 			else
 				$group_allowed = true;
 
-			return $board_allowed && $group_allowed ? true : false;
+			return $board_allowed && !$board_denied && $group_allowed ? true : false;
 		}
 		return false;
 	}

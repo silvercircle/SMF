@@ -104,8 +104,6 @@ function GetRatingWidget()
 		AjaxErrorMsg($txt['no_like_for_guests']);
 
 	$xml = isset($_REQUEST['xml']);
-	$board = isset($_REQUEST['b']) ? (int)$_REQUEST['b'] : 0;
-	$topic = isset($_REQUEST['t']) ? (int)$_REQUEST['t'] : 0;
 	$content_id = isset($_REQUEST['id']) ? (int)$_REQUEST['id'] : 0;
 	$ctype = isset($_REQUEST['c']) ? (int)$_REQUEST['c'] : 0;
 	if(0 == $ctype || 0 == $content_id)
@@ -118,11 +116,22 @@ function GetRatingWidget()
 	else
 		EoS_Smarty::loadTemplate('ratings/widget');	// todo: allow rating without ajax / js
 
-	foreach($modSettings['ratings'] as $key => $rating)
-		$context['ratings'][] = array(
-			'rtype' => (int)$key,
-			'label' => $rating['text'],
-		);
+	$request = smf_db_query('SELECT m.id_msg, m.id_topic, m.id_board FROM {db_prefix}messages AS m WHERE m.id_msg = {int:id} LIMIT 1',
+		array('id' => $content_id));
+
+	list($id_msg, $id_topic, $id_board) = mysql_fetch_row($request);
+	mysql_free_result($request);
+
+	$context['result_count'] = 0;
+	foreach($modSettings['ratings'] as $key => $rating) {
+		if(Ratings::isAllowed($key, $id_board)) {
+			$context['result_count']++;
+			$context['ratings'][] = array(
+				'rtype' => (int)$key,
+				'label' => $rating['text'],
+			);
+		}
+	}
 	$context['content_id'] = $content_id;
 	$context['json_data'] = htmlspecialchars(json_encode(array('id' => $content_id, 'error_text' => $txt['ratingwidget_error'])));
 }
@@ -154,8 +163,7 @@ function LikesByUser($memID)
 		$bq = '';
 
 	$q = ($out ? 'l.id_user = {int:id_user}' : 'l.id_receiver = {int:id_user}');
-	$request = smf_db_query('
-		SELECT count(l.id_msg) FROM {db_prefix}likes AS l
+	$request = smf_db_query('SELECT count(l.id_msg) FROM {db_prefix}likes AS l
 			INNER JOIN {db_prefix}messages AS m ON (m.id_msg = l.id_msg)
 			INNER JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic)
 			INNER JOIN {db_prefix}boards AS b ON (b.id_board = t.id_board)
@@ -165,8 +173,7 @@ function LikesByUser($memID)
 	list($context['total_likes']) = mysql_fetch_row($request);
 	mysql_free_result($request);
 
-	$request = smf_db_query('
-		SELECT m.subject, m.id_topic, l.id_user, l.id_receiver, l.updated, l.id_msg, l.rtype, mfirst.subject AS first_subject, SUBSTRING(m.body, 1, 150) AS body FROM {db_prefix}likes AS l
+	$request = smf_db_query('SELECT m.subject, m.id_topic, l.id_user, l.id_receiver, l.updated, l.id_msg, l.rtype, mfirst.subject AS first_subject, SUBSTRING(m.body, 1, 150) AS body FROM {db_prefix}likes AS l
 			INNER JOIN {db_prefix}messages AS m ON (m.id_msg = l.id_msg)
 			INNER JOIN {db_prefix}topics AS t ON (t.id_topic = m.id_topic)
 			INNER JOIN {db_prefix}messages AS mfirst ON (mfirst.id_msg = t.id_first_msg)

@@ -1,5 +1,5 @@
 <script type="text/javascript" src="{$S.default_theme_url}/scripts/profile.js"></script>
-{if $C.browser.is_chrome && !$C.useris_owner}
+{if $C.browser.is_chrome && !$C.user.is_owner}
   <script type="text/javascript"><!-- // --><![CDATA[
     disableAutoComplete();
   // ]]>

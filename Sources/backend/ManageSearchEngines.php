@@ -216,11 +216,11 @@ function ViewSpiders()
 					'value' => $txt['spider_name'],
 				),
 				'data' => array(
-					'function' => create_function('$rowData', '
+					'function' => function($rowData) {
 						global $scripturl;
 
-						return sprintf(\'<a href="%1$s?action=admin;area=sengines;sa=editspiders;sid=%2$d">%3$s</a>\', $scripturl, $rowData[\'id_spider\'], htmlspecialchars($rowData[\'spider_name\']));
-					'),
+						return sprintf('<a href="%1$s?action=admin;area=sengines;sa=editspiders;sid=%2$d">%3$s</a>', $scripturl, $rowData['id_spider'], htmlspecialchars($rowData['spider_name']));
+					}
 				),
 				'sort' => array(
 					'default' => 'spider_name',

@@ -488,6 +488,8 @@ function ModifyRatingSettings()
 				'points' => isset($rating['points']) ? $rating['points'] : 0,
 				'groups' => isset($rating['groups']) && !empty($rating['groups']) ? implode(',', $rating['groups']) : '',
 				'boards' => isset($rating['boards']) && !empty($rating['boards']) ? implode(',', $rating['boards']) : '',
+				'boards_denied' => isset($rating['boards_denied']) && !empty($rating['boards_denied']) ? implode(',', $rating['boards_denied']) : '',
+				'groups_denied' => isset($rating['groups_denied']) && !empty($rating['groups_denied']) ? implode(',', $rating['groups_denied']) : '',
 			);
 		}
 		else {
@@ -499,6 +501,8 @@ function ModifyRatingSettings()
 				'points' => '',
 				'groups' => '',
 				'boards' => '',
+				'boards_denied' => '',
+				'groups_denied' => '',
 				'localized' => ''
 			);
 		}
@@ -517,7 +521,9 @@ function ModifyRatingSettings()
 					'label' => htmlentities(isset($_REQUEST['rating_label_' . $i]) ? $_REQUEST['rating_label_' . $i] : 'No label'),
 					'localized' => htmlentities(isset($_REQUEST['rating_localized_' . $i]) ? $_REQUEST['rating_localized_' . $i] : ''),
 					'groups' => isset($_REQUEST['rating_groups_' . $i]) && !empty($_REQUEST['rating_groups_' . $i]) ? explode(',', normalizeCommaDelimitedList($_REQUEST['rating_groups_' . $i])) : array(),
+					'groups_denied' => isset($_REQUEST['rating_groups_denied_' . $i]) && !empty($_REQUEST['rating_groups_denied_' . $i]) ? explode(',', normalizeCommaDelimitedList($_REQUEST['rating_groups_denied_' . $i])) : array(),
 					'boards' => isset($_REQUEST['rating_boards_' . $i]) && !empty($_REQUEST['rating_boards_' . $i]) ? explode(',', normalizeCommaDelimitedList($_REQUEST['rating_boards_' . $i])) : array(),
+					'boards_denied' => isset($_REQUEST['rating_boards_denied_' . $i]) && !empty($_REQUEST['rating_boards_denied_' . $i]) ? explode(',', normalizeCommaDelimitedList($_REQUEST['rating_boards_denied_' . $i])) : array(),
 					'points' => isset($_REQUEST['rating_points_' . $i]) && !empty($_REQUEST['rating_points_' . $i]) ? $_REQUEST['rating_points_' . $i] : 0,
 				);
 			}

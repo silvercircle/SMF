@@ -143,17 +143,27 @@
       <div class="blue_container light_shadow blue_topbar" id="ratingwidget" data-id="{$C.content_id}" style="position:absolute;right:0;float:right;z-index:9999;min-width:170px;">
         <h1 class="bigheader secondary">{$T.rate_this_post}</h1>
         <div class="tinypadding smalltext">
-        <ol class="commonlist">
-        {foreach $C.ratings as $rating}
-          <li><input class="rw_option aligned" name="RW" value="{$rating.rtype}" type="radio" /><span class="cblabel">{$rating.label}</span></li>
-        {/foreach}
-        </ol>
-        <div class="centertext tinytext" style="line-height:110%;">
-          <span class="floatleft">{$T.rating_attach_comment}</span>
-          <input type="text" size="30" name="ratingcomment" id="ratingcomment" />
-        </div>
+        {if $C.result_count}
+          <ol class="commonlist">
+          {foreach $C.ratings as $rating}
+            <li><input class="rw_option aligned" name="RW" value="{$rating.rtype}" type="radio" /><span class="cblabel">{$rating.label}</span></li>
+          {/foreach}
+          </ol>
+        {else}
+          <div class="red_container norounded">
+            No rating types available
+          </div>
+        {/if}
+        {if $C.result_count}
+          <div class="centertext tinytext" style="line-height:110%;">
+            <span class="floatleft">{$T.rating_attach_comment}</span>
+            <input type="text" size="30" name="ratingcomment" id="ratingcomment" />
+          </div>
+        {/if}
         <div class="centertext smallpadding">
-          <span class="button default centered" onclick="ratingwidget_submit();return(false);">Submit</span>&nbsp;&nbsp;&nbsp;
+          {if $C.result_count}
+            <span class="button default centered" onclick="ratingwidget_submit();return(false);">Submit</span>&nbsp;&nbsp;&nbsp;
+          {/if}
           <span class="button centered" onclick="$('#ratingwidget').remove();return(false);">{$T.find_close}</span>
           <div class="clear"></div>
         </div>

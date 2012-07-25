@@ -505,4 +505,37 @@ function template_manage_sphinx()
 		</div>
 		</div>';
 }
+// Show... spider... stats...
+function template_show_spider_stats()
+{
+	global $context, $txt, $settings, $scripturl;
+
+	echo '
+	<div id="admincenter">';
+
+	// Standard fields.
+	template_show_list('spider_stat_list');
+
+	echo '
+		<br />
+		<div class="cat_bar">
+			<h3 class="catbg">', $txt['spider_logs_delete'], '</h3>
+		</div>
+		<form action="', $scripturl, '?action=admin;area=sengines;sa=stats" method="post" accept-charset="', $context['character_set'], '">
+			<div class="windowbg">
+				<div class="content">
+					<p>
+						', sprintf($txt['spider_stats_delete_older'], '<input type="text" name="older" id="older" value="90" size="3" class="input_text" />'), '
+					</p>
+					<hr class="hrcolor" />
+					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
+					<input type="submit" name="delete_entries" value="', $txt['spider_logs_delete_submit'], '" onclick="if (document.getElementById(\'older\').value &lt; 1 &amp;&amp; !confirm(\'' . addcslashes($txt['spider_logs_delete_confirm'], "'") . '\')) return false; return true;" class="button_submit" />
+					<br />
+				</div>
+			</div>
+		</form>
+	</div>
+	<br class="clear" />';
+}
+
 ?>

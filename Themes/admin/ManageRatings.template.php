@@ -8,7 +8,10 @@ function template_manage_ratings()
 		<h3>', $txt['ratings_settings_title'],'</h3>
 	</div>
 	<div class="blue_container mediumpadding cleantop">',
-	$txt['ratings_help'], '
+	$txt['ratings_help_intro'], '
+	<div id="rhelp" style="display:none;">',
+	$txt['ratings_help'],'
+	</div>
 	<form method="post" accept-charset="UTF-8" action="',$context['post_url'],'">
 		<input type="hidden" name="',$context['session_var'],'" value="',$context['session_id'],'" />
 		<br>
@@ -62,11 +65,13 @@ function template_manage_ratings()
 					<td style="width:95%;">
 						<input type="text" style="width:96%;" name="rating_format_', $id, '" value="', $class['format'], '" />
 					</td>
-					<td>
-						<input type="text" size="15" name="rating_groups_', $id, '" value="', $class['groups'], '" />
+					<td class="nowrap">
+						<span style="color:green;">&bull;</span><input style=margin-bottom:4px;" type="text" size="15" name="rating_groups_', $id, '" value="', $class['groups'], '" /><br>
+						<span style="color:red;">&bull;</span><input type="text" size="15" name="rating_groups_denied_', $id, '" value="', $class['groups_denied'], '" /><br>
 					</td>
-					<td>
-						<input type="text" size="15" name="rating_boards_', $id, '" value="', $class['boards'], '" />
+					<td class="nowrap">
+						<span style="color:green;">&bull;</span><input style=margin-bottom:4px;" type="text" size="15" name="rating_boards_', $id, '" value="', $class['boards'], '" /><br>
+						<span style="color:red;">&bull;</span><input type="text" size="15" name="rating_boards_denied_', $id, '" value="', $class['boards_denied'], '" />
 					</td>
 					<td>
 						<input type="text" size="5" name="rating_points_', $id, '" value="', $class['points'], '" />
