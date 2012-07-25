@@ -107,7 +107,7 @@
     {/if} 
     {if !empty($message.member.custom_fields)}
       {foreach from=$message.member.custom_fields item=custom}
-        {if empty($custom.placement) or !empty($custom.value)}
+        {if empty($custom.placement) and !empty($custom.value)}
           <li class="custom">{$custom.title}: {$custom.value}</li>
         {/if}
       {/foreach}
