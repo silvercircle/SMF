@@ -1,2 +1,5 @@
 * text eol=lf
 *.png -text
+*.gif -text
+*.ttf -text
+*.psd -text
