@@ -210,7 +210,7 @@ class HookAPI {
 		}
 		self::$hooks[$hook][] = array('p' => $product, 'f' => $ref['f'], 'c' => trim($function));
 		$change_array = array('integration_hooks' => serialize(self::$hooks));
-		updateSettings($change_array, true);
+		updateSettings($change_array, false);
 		return true;
 	}
 

@@ -44,7 +44,7 @@ class TestPlugin extends EoS_Plugin
 {
 	protected $productShortName = 'testplugin';		// mandatory. should only contain letters and numbers, no special chars. 
 													// This is the internal plugin identifier. It is also the name of the directory that
-													// hosts the plugin. So, directory namd === short name
+													// hosts the plugin. So, directory name === short name
 	
 	/**
 	 * This will be used for displaying plugin information in the admin area

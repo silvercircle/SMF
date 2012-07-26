@@ -83,7 +83,7 @@ function template_manage_ratings()
 		</table>
 		<br>
 		<h1 class="bigheader secondary">',$txt['rating_other'],'</h1>
-		<input ',(!empty($modSettings['rating_show_repair']) ? 'checked="checked"' : ''), ' class="aligned" type="checkbox" name="rating_show_repair" value="1" />&nbsp;&nbsp;<span class="cblabel">',$txt['rating_show_repair'],'</span>
+		<input ',(!empty($context['rating_show_repair']) ? 'checked="checked"' : ''), ' class="aligned" type="checkbox" name="rating_show_repair" value="1" />&nbsp;&nbsp;<span class="cblabel">',$txt['rating_show_repair'],'</span>
 		<div class="righttext">
 			<input type="submit" class="button_submit" value="Save" />
 		</div>

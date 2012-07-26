@@ -474,8 +474,8 @@ function ModifyRatingSettings()
 
 	loadAdminTemplate('ManageRatings');
 	$context['sub_template'] = 'manage_ratings';
-
-	$context['use_rating_widget'] = $modSettings['use_rating_widget'];
+	$context['rating_show_repair'] = empty($modSettings['rating_show_repair']) ? false : true;
+	
 	for($i = 1; $i <= 10; $i++) {
 		if(isset($modSettings['ratings'][$i])) {
 			$rating = &$modSettings['ratings'][$i];

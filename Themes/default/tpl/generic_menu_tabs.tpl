@@ -39,7 +39,7 @@
     {$tab_context.title}
     </h3>
   </div>
-  <div class="orange_container cleantop mediumpadding">
+  <div class="orange_container cleantop mediumpadding gradient_darken_down">
     {(!empty($selected_tab.description)) ? $selected_tab.description : $tab_context.description}
   </div>
   <br>

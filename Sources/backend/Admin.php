@@ -796,7 +796,7 @@ function AdminSearchInternal()
 		array('ModifyCoreFeatures', 'area=corefeatures'),
 		array('ModifyBasicSettings', 'area=featuresettings;sa=basic'),
 		array('ModifyLayoutSettings', 'area=featuresettings;sa=layout'),
-		array('ModifyKarmaSettings', 'area=featuresettings;sa=karma'),
+		//array('ModifyRatingSettings', 'area=postsettings;sa=ratings'),
 		array('ModifySignatureSettings', 'area=featuresettings;sa=sig'),
 		array('ModifyGeneralSecuritySettings', 'area=securitysettings;sa=general'),
 		array('ModifySpamSettings', 'area=securitysettings;sa=spam'),

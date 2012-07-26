@@ -81,7 +81,7 @@
         </table>
         <span style="line-height:20px;">{$T.always_logged_in}<input type="checkbox" name="cookielength" value="-1"></span>
         <input style="width:90%;margin-left:5%;margin-top:10px;" type="submit" value="{$T.login}" class="button_submit" /><br />
-        {if $M.enableOpenID}
+        {if !empty($M.enableOpenID)}
           <br>
           <input type="text" name="openid_identifier" id="openid_url" size="25" class="input_text openid_login" />
         {/if}

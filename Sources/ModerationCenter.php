@@ -197,7 +197,8 @@ function ModerationHome()
 {
 	global $txt, $context, $scripturl, $modSettings, $user_info, $user_settings;
 
-	loadTemplate('ModerationCenter');
+	EoS_Smarty::loadTemplate('modcenter/main');
+	//loadTemplate('ModerationCenter');
 
 	$context['page_title'] = $txt['moderation_center'];
 	$context['sub_template'] = 'moderation_center';
@@ -228,8 +229,11 @@ function ModerationHome()
 		if (in_array($k, $user_blocks))
 		{
 			$block = 'ModBlock' . $block;
-			if (function_exists($block))
-				$context['mod_blocks'][] = $block();
+			if (function_exists($block)) {
+				$template_name = $block();
+				$context['mod_blocks'][] = $template_name;
+				EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_blocks', 'modcenter/block_' . $template_name);
+			}
 		}
 	}
 }
@@ -469,7 +473,7 @@ function ModBlockReportedPosts()
 		);
 	}
 
-	return 'reported_posts_block';
+	return 'reported_posts';
 }
 
 // Show a list of all the group requests they can see.
@@ -515,7 +519,7 @@ function ModBlockGroupRequests()
 	}
 	mysql_free_result($request);
 
-	return 'group_requests_block';
+	return 'group_requests';
 }
 
 //!!! This needs to be given its own file.
@@ -523,8 +527,6 @@ function ModBlockGroupRequests()
 function ReportedPosts()
 {
 	global $txt, $context, $scripturl, $modSettings, $user_info, $smcFunc;
-
-	loadTemplate('ModerationCenter');
 
 	// Put the open and closed options into tabs, because we can...
 	$context[$context['moderation_menu_name']]['tab_data'] = array(
@@ -541,6 +543,9 @@ function ReportedPosts()
 	if (!empty($_REQUEST['report']))
 		return ModReport();
 
+	EoS_Smarty::loadTemplate('modcenter/reported_posts');
+	//loadTemplate('ModerationCenter');
+
 	// Set up the comforting bits...
 	$context['page_title'] = $txt['mc_reported_posts'];
 	$context['sub_template'] = 'reported_posts';
@@ -555,8 +560,7 @@ function ReportedPosts()
 		$_GET['rid'] = (int) $_GET['rid'];
 
 		// Update the report...
-		smf_db_query( '
-			UPDATE {db_prefix}log_reported
+		smf_db_query( 'UPDATE {db_prefix}log_reported
 			SET ' . (isset($_GET['ignore']) ? 'ignore_all = {int:ignore_all}' : 'closed = {int:closed}') . '
 			WHERE id_report = {int:id_report}
 				AND ' . $user_info['mod_cache']['bq'],
@@ -688,6 +692,11 @@ function ReportedPosts()
 		}
 		mysql_free_result($request);
 	}
+	// Make the buttons.
+	$context['close_button'] = create_button($context['view_closed'] ? 'mc_reportedp_open' : 'mc_reportedp_close', $context['view_closed'] ? 'mc_reportedp_open' : 'mc_reportedp_close');
+	$context['details_button'] = create_button('mc_reportedp_details', 'mc_reportedp_details');
+	$context['ignore_button'] = create_button('mc_reportedp_ignore', 'mc_reportedp_ignore');
+	$context['unignore_button'] = create_button('mc_reportedp_unignore', 'mc_reportedp_unignore');
 }
 
 // Act as an entrace for all group related activity.
@@ -753,6 +762,7 @@ function ModReport()
 	if (empty($_REQUEST['report']))
 		fatal_lang_error('mc_no_modreport_specified');
 
+	EoS_Smarty::setActive();
 	// Integers only please
 	$_REQUEST['report'] = (int) $_REQUEST['report'];
 
@@ -996,9 +1006,14 @@ function ModReport()
 		$context[$context['moderation_menu_name']]['current_subsection'] = 'closed';
 
 	// Finally we are done :P
-	loadTemplate('ModerationCenter');
+	//loadTemplate('ModerationCenter');
+	EoS_Smarty::loadTemplate('modcenter/viewmodreport');
 	$context['page_title'] = sprintf($txt['mc_viewmodreport'], $context['report']['subject'], $context['report']['author']['name']);
 	$context['sub_template'] = 'viewmodreport';
+
+    $context['close_button'] = create_button($context['report']['closed'] ? 'mc_reportedp_open' : 'mc_reportedp_close', $context['report']['closed'] ? 'mc_reportedp_open' : 'mc_reportedp_close');
+    $context['ignore_button'] = create_button('mc_reportedp_ignore', 'mc_reportedp_ignore');
+    $context['unignore_button'] = create_button('mc_reportedp_unignore', 'mc_reportedp_unignore');
 }
 
 // Show a notice sent to a user.
@@ -1040,7 +1055,8 @@ function ViewWatchedUsers()
 	$context['view_posts'] = isset($_GET['sa']) && $_GET['sa'] == 'post';
 	$context['start'] = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
 
-	loadTemplate('ModerationCenter');
+	EoS_Smarty::loadTemplate('modcenter/watched_users');
+	//loadTemplate('ModerationCenter');
 
 	// Get some key settings!
 	$modSettings['warning_watch'] = empty($modSettings['warning_watch']) ? 1 : $modSettings['warning_watch'];
@@ -1225,9 +1241,9 @@ function ViewWatchedUsers()
 		$listOptions['columns'] = array(
 			'posts' => array(
 				'data' => array(
-					'function' => create_function('$post', '
-						return template_user_watch_post_callback($post);
-					'),
+					'function' => function($post) {
+						return EoS_Smarty::getConfigInstance()->user_watch_post_callback($post);
+					}
 				),
 			),
 		);
@@ -1236,7 +1252,7 @@ function ViewWatchedUsers()
 	// Create the watched user list.
 	createList($listOptions);
 
-	$context['sub_template'] = 'show_list';
+	//$context['sub_template'] = 'show_list';
 	$context['default_list'] = 'watch_user_list';
 }
 
@@ -1429,7 +1445,7 @@ function ViewWarnings()
 	$_REQUEST['sa'] = isset($_REQUEST['sa']) && isset($subActions[$_REQUEST['sa']]) && (empty($subActions[$_REQUEST['sa']][1]) || allowedTo($subActions[$_REQUEST['sa']]))? $_REQUEST['sa'] : 'log';
 
 	// Some of this stuff is overseas, so to speak.
-	loadTemplate('ModerationCenter');
+	//loadTemplate('ModerationCenter');
 	loadLanguage('Profile');
 
 	// Setup the admin tabs.
@@ -1451,6 +1467,7 @@ function ViewWarningLog()
 	$context['page_title'] = $txt['mc_warning_log_title'];
 
 	require_once($sourcedir . '/lib/Subs-List.php');
+	EoS_Smarty::loadTemplate('modcenter/warnings');
 
 	// This is all the information required for a watched user listing.
 	$listOptions = array(
@@ -1541,7 +1558,6 @@ function ViewWarningLog()
 	// Create the watched user list.
 	createList($listOptions);
 
-	$context['sub_template'] = 'show_list';
 	$context['default_list'] = 'warning_list';
 }
 
@@ -1645,7 +1661,7 @@ function ViewWarningTemplates()
 
 	// Setup context as always.
 	$context['page_title'] = $txt['mc_warning_templates_title'];
-
+	EoS_Smarty::loadTemplate('modcenter/warnings');
 	require_once($sourcedir . '/lib/Subs-List.php');
 
 	// This is all the information required for a watched user listing.
@@ -1737,8 +1753,6 @@ function ViewWarningTemplates()
 
 	// Create the watched user list.
 	createList($listOptions);
-
-	$context['sub_template'] = 'show_list';
 	$context['default_list'] = 'warning_template_list';
 }
 
@@ -1802,8 +1816,10 @@ function list_getWarningTemplates($start, $items_per_page, $sort)
 // Edit a warning template.
 function ModifyWarningTemplate()
 {
-	global $smcFunc, $context, $txt, $user_info, $sourcedir;
+	global $context, $txt, $user_info, $sourcedir;
 
+	EoS_Smarty::loadTemplate('modcenter/edit_warning');
+	
 	$context['id_template'] = isset($_REQUEST['tid']) ? (int) $_REQUEST['tid'] : 0;
 	$context['is_edit'] = $context['id_template'];
 
@@ -1936,9 +1952,8 @@ function ModerationSettings()
 	global $context, $smcFunc, $txt, $sourcedir, $scripturl, $user_settings, $user_info;
 
 	// Some useful context stuff.
-	loadTemplate('ModerationCenter');
+	EoS_Smarty::loadTemplate('modcenter/settings');
 	$context['page_title'] = $txt['mc_settings'];
-	$context['sub_template'] = 'moderation_settings';
 
 	// What blocks can this user see?
 	$context['homepage_blocks'] = array(

@@ -25,7 +25,7 @@ function PostModerationMain()
 
 	//!!! We'll shift these later bud.
 	loadLanguage('ModerationCenter');
-	loadTemplate('ModerationCenter');
+	//loadTemplate('ModerationCenter');
 
 	// Probably need this...
 	require_once($sourcedir . '/ModerationCenter.php');
@@ -53,6 +53,7 @@ function UnapprovedPosts()
 
 	$context['current_view'] = isset($_GET['sa']) && $_GET['sa'] == 'topics' ? 'topics' : 'replies';
 	$context['page_title'] = $txt['mc_unapproved_posts'];
+	EoS_Smarty::loadTemplate('modcenter/unapproved_posts');
 
 	// Work out what boards we can work in!
 	$approve_boards = boardsAllowedTo('approve_posts');
@@ -298,7 +299,9 @@ function UnapprovedPosts()
 	}
 	mysql_free_result($request);
 
-	$context['sub_template'] = 'unapproved_posts';
+  	// Make up some buttons
+  	$context['approve_button'] = create_button('approve', 'approve');
+  	$context['remove_button'] = create_button('remove_message', 'remove');
 }
 
 // View all unapproved attachments.
@@ -453,7 +456,10 @@ function UnapprovedAttachments()
 	}
 	mysql_free_result($request);
 
-	$context['sub_template'] = 'unapproved_attachments';
+	EoS_Smarty::loadTemplate('modcenter/unapproved_attachments');
+  	// The ever popular approve button, with the massively unpopular delete.
+  	$context['approve_button'] = create_button('approve', 'approve');
+  	$context['remove_button'] = create_button('remove_message', 'remove');
 }
 
 // Approve a post, just the one.

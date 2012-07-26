@@ -78,6 +78,15 @@ class EoS_Smarty {
 	}
 
 	/**
+	 * clear all templates that have been loaded
+	 * this is needed in a few places (e.g. setup_fatal_error_context) when we have
+	 * to disregard all other templates.
+	 */
+	public static function resetTemplates()
+	{
+		self::$_template_names = array();
+	}
+	/**
 	 * @static
 	 * @param string - $_dir. The template directory to add
 	 *
@@ -94,6 +103,8 @@ class EoS_Smarty {
 	public static function dummy() {}
 
 	public static function isActive() { return self::$_is_Active; }
+
+	public static function setActive() { self::$_is_Active = true; }
 	/**
 	 * output all enqued footer scripts.
 	 * used as custom template function

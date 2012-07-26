@@ -231,7 +231,8 @@ function createList($listOptions)
 		$list_context['list_menu'] = $listOptions['list_menu'];
 
 	// Make sure the template is loaded.
-	loadTemplate('GenericList');
+	if(!EoS_Smarty::isActive())
+		loadTemplate('GenericList');
 }
 
 ?>
