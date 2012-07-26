@@ -23,6 +23,7 @@ function ModerationMain($dont_call = false)
 {
 	global $txt, $context, $scripturl, $sc, $modSettings, $user_info, $settings, $sourcedir, $options, $smcFunc;
 
+	EoS_Smarty::setActive();
 	// Don't run this twice... and don't conflict with the admin bar.
 	if (isset($context['admin_area']))
 		return;
@@ -205,7 +206,6 @@ function ModerationHome()
 
 	// Load what blocks the user actually can see...
 	$valid_blocks = array(
-		'n' => 'LatestNews',
 		'p' => 'Notes',
 	);
 	if ($context['can_moderate_groups'])
@@ -710,7 +710,7 @@ function ModerateGroups()
 		isAllowedTo('manage_membergroups');
 
 	// Load the group templates.
-	loadTemplate('ModerationCenter');
+	//loadTemplate('ModerationCenter');
 
 	// Setup the subactions...
 	$subactions = array(
@@ -1022,10 +1022,9 @@ function ShowNotice()
 	global $smcFunc, $txt, $context;
 
 	$context['page_title'] = $txt['show_notice'];
-	$context['sub_template'] = 'show_notice';
-	$context['template_layers'] = array();
+	EoS_Smarty::loadTemplate('modcenter/show_notice');
 
-	loadTemplate('ModerationCenter');
+	//loadTemplate('ModerationCenter');
 
 	//!!! Assumes nothing needs permission more than accessing moderation center!
 	$id_notice = (int) $_GET['nid'];

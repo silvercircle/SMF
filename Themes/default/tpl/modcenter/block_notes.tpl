@@ -6,17 +6,18 @@
   <div class="blue_container cleantop">
     <div class="content modbox">
     {if !empty($C.notes)}
-      <ul class="reset moderation_notes">';
+      <ol class="commonlist">
       {foreach $C.notes as $note}
-        <li class="smalltext"><a href="{$note.delete_href}"><img src="{$S.images_url}/pm_recipient_delete.gif" alt="" /></a> <strong>{$note.author.link}:</strong>{$note.text}</li>
+        <li class="smalltext"><a href="{$note.delete_href}"><img src="{$S.images_url}/pm_recipient_delete.gif" alt="" /></a> <strong>{$note.author.link}:</strong>&nbsp;{$note.text}</li>
       {/foreach}
-      </ul>
-      <div class="pagesection notes">
+      </ol>
+      <div class="pagelinks">
         <span class="smalltext">{$C.page_index}</span>
       </div>
     {/if}
+    <br>
     <div class="floatleft post_note">
-      <input type="text" name="new_note" value="{$T.mc_click_add_note}" style="width: 95%;" onclick="if (this.value == \'{$T.mc_click_add_note}\') this.value = \'\';" class="input_text" />
+      <input type="text" name="new_note" value="{$T.mc_click_add_note}" style="width: 95%;" onclick="if (this.value == '{$T.mc_click_add_note}') this.value = '';" class="input_text" />
     </div>
     <div class="floatright">
       <input type="submit" name="makenote" value="{$T.mc_add_note}" class="button_submit" />

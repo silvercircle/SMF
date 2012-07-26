@@ -80,11 +80,13 @@
     {if !empty($message.member.title)}
       <li class="title">{$message.member.title}</li>
     {/if}
+    {* todo: here goes reputation...
     {if $M.karmaMode == '1'}
       <li class="karma">{$M.karmaLabel} {$message.member.karma.good - $message.member.karma.bad}</li>
     {elseif $M.karmaMode == '2'}
       <li class="karma">{$M.karmaLabel} +{$message.member.karma.good}/-{$message.member.karma.bad}</li>
     {/if}
+    *}
     {if !empty($message.member.blurb)}
       <li class="blurb">{$message.member.blurb}</li>
     {/if}

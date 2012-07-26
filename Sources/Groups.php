@@ -64,7 +64,7 @@ function Groups()
 	// Get the template stuff up and running.
 	loadLanguage('ManageMembers');
 	loadLanguage('ModerationCenter');
-	//if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin')
+	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin')
 		loadAdminTemplate('ManageMembergroups');
 
 	// If we can see the moderation center, and this has a mod bar entry, add the mod center bar.
@@ -618,9 +618,10 @@ function MembergroupMembers()
 		);
 	}
 	mysql_free_result($request);
-
-	// Select the template.
-	$context['sub_template'] = 'group_members';
+	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'moderate')
+		EoS_Smarty::loadTemplate('modcenter/group_members');
+	else
+		$context['sub_template'] = 'group_members';
 	$context['page_title'] = $txt['membergroups_members_title'] . ': ' . $context['group']['name'];
 }
 
