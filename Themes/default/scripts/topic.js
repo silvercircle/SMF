@@ -79,7 +79,6 @@ function modify_topic_done(XMLDoc)
 		modify_topic_cancel();
 		return true;
 	}
-
 	var message = XMLDoc.getElementsByTagName("smf")[0].getElementsByTagName("message")[0];
 	var subject = message.getElementsByTagName("subject")[0];
 	var error = message.getElementsByTagName("error")[0];
@@ -90,11 +89,8 @@ function modify_topic_done(XMLDoc)
 		return false;
 
 	subjectText = subject.childNodes[0].nodeValue;
-
 	modify_topic_hide_edit(subjectText);
-
 	set_hidden_topic_areas('');
-
 	in_edit_mode = 0;
 
 	return false;
@@ -446,6 +442,9 @@ QuickModify.prototype.onModifyDone = function (XMLDoc)
 		document.forms.quickModForm.message.style.border = error.getAttribute('in_body') == '1' ? this.opt.sErrorBorderStyle : '';
 		document.forms.quickModForm.subject.style.border = error.getAttribute('in_subject') == '1' ? this.opt.sErrorBorderStyle : '';
 	}
+
+	if(typeof(prettyPrint) != 'undefined')
+		prettyPrint();
 }
 
 function InTopicModeration(oOptions)

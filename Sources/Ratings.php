@@ -42,7 +42,7 @@ function LikeDispatch()
 
 	$ctype = isset($_REQUEST['ctype']) ? $_REQUEST['ctype'] : 1;		// default to content type = 1 (post)
 	$mid = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
-	$rtype = isset($_REQUEST['r']) ? (int)$_REQUEST['r'] : 0;
+	$rtype = isset($_REQUEST['r']) ? (int)$_REQUEST['r'] : '0';
 
 	if(!isset($modSettings['ratings'][$rtype]))
 		AjaxErrorMsg($txt['unknown_rating_type']);
@@ -73,7 +73,7 @@ function LikeDispatch()
 		if($action === 'getlikes') {
 			$request = smf_db_query('SELECT l.id_msg, l.id_user, l.updated, l.id_receiver, m.real_name
 					FROM {db_prefix}likes AS l LEFT JOIN {db_prefix}members AS m ON (m.id_member = l.id_user) 
-					WHERE l.id_msg = {int:idmsg} AND l.ctype = {int:ctype} AND l.rtype = {int:rtype}
+					WHERE l.id_msg = {int:idmsg} AND l.ctype = {int:ctype} AND FIND_IN_SET({int:rtype}, l.rtype)
 					ORDER BY l.updated DESC LIMIT {int:start}, 500',
 				array('idmsg' => $mid, 'ctype' => $ctype, 'start' => $start, 'rtype' => $rtype)); // todo: paging and limit per page should be configurable
 
@@ -123,13 +123,19 @@ function GetRatingWidget()
 	mysql_free_result($request);
 
 	$context['result_count'] = 0;
-	foreach($modSettings['ratings'] as $key => $rating) {
-		if(Ratings::isAllowed($key, $id_board)) {
-			$context['result_count']++;
-			$context['ratings'][] = array(
-				'rtype' => (int)$key,
-				'label' => $rating['text'],
-			);
+	$uniques = array(true, false);
+	foreach($uniques as $uniqueness) {
+		foreach($modSettings['ratings'] as $key => $rating) {
+			if($rating['unique'] != $uniqueness)
+				continue;
+			if(Ratings::isAllowed($key, $id_board)) {
+				$context['result_count']++;
+				$context['ratings'][] = array(
+					'rtype' => (int)$key,
+					'label' => $rating['text'],
+					'unique' => $rating['unique']
+				);
+			}
 		}
 	}
 	$context['content_id'] = $content_id;

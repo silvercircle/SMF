@@ -645,7 +645,7 @@ $txt['change_color'] = 'Change Color';
 $txt['quickmod_delete_selected'] = 'Remove Selected';
 
 // In this string, don't use entities. (&amp;, etc.)
-$txt['show_personal_messages'] = 'You have received one or more new personal messages.\\nWould you like to open a new window to view them?';
+$txt['show_personal_messages'] = 'You have %d unread personal message(s)';
 
 $txt['previous_next_back'] = '&laquo; previous';
 $txt['previous_next_forward'] = 'next &raquo;';

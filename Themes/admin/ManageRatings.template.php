@@ -43,6 +43,9 @@ function template_manage_ratings()
 			<th class="last_th glass cleantop nowrap">',
 				$txt['rating_class_points'],'
 			</th>
+			<th class="last_th glass cleantop nowrap">',
+				$txt['rating_class_unique'],'
+			</th>
 			</tr>
 			</thead>
 			<tbody>';
@@ -54,13 +57,13 @@ function template_manage_ratings()
 						<input type="text" size="3" name="rating_id_', $id, '" value="', $id, '" />
 					</td>
 					<td>
-						<input type="text" size="15" name="rating_desc_', $id, '" value="', $class['desc'], '" />
+						<input type="text" size="8" name="rating_desc_', $id, '" value="', $class['desc'], '" />
 					</td>
 					<td>
-						<input type="text" size="15" name="rating_label_', $id, '" value="', $class['label'], '" />
+						<input type="text" size="10" name="rating_label_', $id, '" value="', $class['label'], '" />
 					</td>
 					<td>
-						<input type="text" size="15" name="rating_localized_', $id, '" value="', $class['localized'], '" />
+						<input type="text" size="10" name="rating_localized_', $id, '" value="', $class['localized'], '" />
 					</td>
 					<td style="width:95%;">
 						<input type="text" style="width:96%;" name="rating_format_', $id, '" value="', $class['format'], '" />
@@ -75,6 +78,9 @@ function template_manage_ratings()
 					</td>
 					<td>
 						<input type="text" size="5" name="rating_points_', $id, '" value="', $class['points'], '" />
+					</td>
+					<td>
+						<input type="checkbox" ',($class['unique'] ? 'checked="checked"' : ''),' name="rating_unique_', $id, '" value="1" />
 					</td>
 				</tr>';
 			}

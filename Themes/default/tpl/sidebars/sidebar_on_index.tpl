@@ -55,9 +55,6 @@
   {if !empty($C.unapproved_members)}
     <div>{($C.unapproved_members == 1) ? $T.approve_thereis : $T.approve_thereare} <a href="{$SCRIPTURL}?action=admin;area=viewmembers;sa=browse;type=approve">{($C.unapproved_members == 1) ? $T.approve_member : ($C.unapproved_members|cat:' '|cat:$T.approve_members)}</a>{$T.approve_members_waiting}</div>
   {/if}
-  {if $C.open_mod_reports > 0 and $C.show_open_reports > 0}
-    <div><a href="{$SCRIPTURL}?action=moderate;area=reports">{$T.mod_reports_waiting|sprintf:$C.open_mod_reports}</a></div>
-  {/if}
   </div>
   </div>
   </div>

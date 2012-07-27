@@ -196,6 +196,9 @@ function Post()
 
 		$context['notify'] = !empty($context['notify']);
 		$context['sticky'] = isset($_REQUEST['sticky']) ? !empty($_REQUEST['sticky']) : $sticky;
+		// Check whether this is a really old post being bumped...
+		if (!empty($modSettings['oldTopicDays']) && $lastPostTime + $modSettings['oldTopicDays'] * 86400 < time() && empty($sticky) && !isset($_REQUEST['subject']))
+			$oldTopicError = true;
 	}
 	else
 	{
@@ -407,9 +410,6 @@ function Post()
 				$modSettings['topicSummaryPosts'] = $context['new_replies'] > $modSettings['topicSummaryPosts'] ? max($modSettings['topicSummaryPosts'], 5) : $modSettings['topicSummaryPosts'];
 			}
 		}
-		// Check whether this is a really old post being bumped...
-		if (!empty($modSettings['oldTopicDays']) && $lastPostTime + $modSettings['oldTopicDays'] * 86400 < time() && empty($sticky) && !isset($_REQUEST['subject']))
-			$oldTopicError = true;
 	}
 
 	// Get a response prefix (like 'Re:') in the default forum language.

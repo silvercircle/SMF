@@ -512,7 +512,7 @@ function loadUserSettings()
 		CacheAPI::putCache('user_settings-' . $id_member, $user_settings, 600);
 
 	$user_info['notify_count'] = isset($user_settings['notify_count']) ? $user_settings['notify_count'] : 0;
-
+	$user_info['notify_count'] += ($user_info['unread_messages'] ? 1 : 0);
 	// record the user in the list of users who were online today. todo: there should be an option for this feature.
 	if(!empty($modSettings['who_track_daily_visitors']) && $user_info['id'] > 0 && !isset($modSettings['online_today'][$user_info['id']])) {
 		$modSettings['online_today'][$user_info['id']] = array(

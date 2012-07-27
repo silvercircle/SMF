@@ -146,7 +146,13 @@
         {if $C.result_count}
           <ol class="commonlist">
           {foreach $C.ratings as $rating}
-            <li><input class="rw_option aligned" name="RW" value="{$rating.rtype}" type="radio" /><span class="cblabel">{$rating.label}</span></li>
+            <li>
+              {if $rating.unique}
+                <input class="rw_option aligned" name="RW" value="{$rating.rtype}" type="radio" /><span class="cblabel">{$rating.label}</span>
+              {else}
+                <input class="rw_option aligned" name="RW" value="{$rating.rtype}" type="checkbox" /><span class="cblabel">{$rating.label}</span>
+              {/if}
+            </li>
           {/foreach}
           </ol>
         {else}
@@ -191,14 +197,17 @@
     function ratingwidget_submit()
     {
       var done = false;
+      var rtypes = new Array();
+      var i = 0;
       $('#ratingwidget input.rw_option').each(function() {
         if($(this).is(':checked')) {
-          var uri = 'action=xmlhttp;sa=givelike;r=' + $(this).val() + ';m=' + parseInt($('#ratingwidget').attr('data-id'));
-          sendRequest(uri, null);
+          rtypes[i++] = parseInt($(this).val());
           done = true;
         }
       });
       if(done) {
+        var uri = 'action=xmlhttp;sa=givelike;r=' + rtypes.join(',') + ';m=' + parseInt($('#ratingwidget').attr('data-id'));
+        sendRequest(uri, null);
         $('#ratingwidget').remove();
         return(false);
       }

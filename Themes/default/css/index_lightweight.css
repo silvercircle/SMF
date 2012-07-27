@@ -99,8 +99,8 @@ div.inlinePopup.dark {
 	background: #e0e0e0;
 }
 
-div.inlinePopup.notifications {
-	width: 300px;
+div.notifications {
+	width: 280px;
 }
 div.popup_wrapper {
 	z-index: 9999;
@@ -948,11 +948,10 @@ span.m_downarrow.compact {
 	background: transparent url(../images/theme/sprite.png) 0 7px no-repeat;
 }
 a.prefix {
-	font-size:11px;
-	line-height:1.8em;
-	padding:1px 5px;
+	font-size:11px !important;
+	padding:0 5px;
 	border:1px solid #ccc;
-	background-color:#eee;
+	background-color:#ddd;
 	border-radius:3px;
 }
 span.m_downarrow:hover {
@@ -1357,7 +1356,7 @@ ol.commonlist.notifications {
 	font-size: 11px;
 	background-color: white;
 	margin-bottom: 0;
-	padding: 0 5px 5px 5px;
+	padding: 0 0 5px 0;
 	overflow: auto;
 }
 
@@ -1377,8 +1376,11 @@ ol.commonlist.notifications li a:hover {
 ol.commonlist.notifications li.unread {
 	background-color: #ffeeff;
 }
-ol.commonlist.notifications li:hover {
+ol.commonlist.notifications li.unread:hover, ol.commonlist.notifications li.read:hover {
 	background-color: #d5ecfa;
+}
+ol.commonlist.notifications li.header {
+	border-bottom: 0;
 }
 ol.commonlist.noshadow {
 	box-shadow: none !important;

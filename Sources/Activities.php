@@ -55,7 +55,7 @@ function aStreamDispatch()
  */
 function aStreamGetNotifications()
 {
-	global $user_info, $context;
+	global $user_info, $context, $scripturl;
 
 	if($user_info['is_guest'])				// guests don't get anything, they can't have notifications
 		fatal_lang_error('no_access');
@@ -63,7 +63,7 @@ function aStreamGetNotifications()
 	$xml = isset($_REQUEST['xml']) ? true : false;
 	$view = isset($_REQUEST['view']) ? $_REQUEST['view'] : 'recent';
 
-	loadTemplate('Activities');
+	//loadTemplate('Activities');
 	loadLanguage('Activities');
 	$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
 
@@ -86,13 +86,11 @@ function aStreamGetNotifications()
 		array('id_member' => $user_info['id'], 'start' => $start, 'ignoredusers' => $user_info['ignoreusers']));
 
 	aStreamOutput($result, true);
+	Eos_Smarty::loadTemplate($xml ? 'astream/notification_popup' : 'astream/notification_full');
 
-	if($xml) {
-		$context['template_layers'] = array();
-		$context['sub_template'] = 'notifications_xml';
-	}
-	else
-		$context['sub_template'] = 'notifications';
+	$context['unread_pm'] = $user_info['unread_messages'];
+	$context['pmlink'] = URL::parse($scripturl . '?action=pm');
+	$context['modlink'] = URL::parse($scripturl . '?action=moderate;area=reports');
 }
 
 /**
@@ -164,7 +162,6 @@ function aStreamGetStream()
 	global $context;
 
 	$xml = isset($_REQUEST['xml']) ? true : false;
-	loadTemplate('Activities');
 	loadLanguage('Activities');
 
 	$board = isset($_REQUEST['b']) ? $_REQUEST['b'] : 0;
@@ -176,12 +173,7 @@ function aStreamGetStream()
 	else if($topic)
 		aStreamGetForTopic($topic, $xml);
 
-	if($xml) {
-		$context['template_layers'] = array();
-		$context['sub_template'] = 'showactivity_xml';
-	}
-	else
-		$context['sub_template'] = 'showactivity';
+	Eos_Smarty::loadTemplate($xml ? 'astream/astream_xml' : 'astream/astream_full');
 }
 
 function aStreamGet($b = 0, $xml = false, $global = false)

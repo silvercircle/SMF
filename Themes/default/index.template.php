@@ -710,10 +710,6 @@ function template_sidebar_content_index()
 			echo '
 					<div>', $context['unapproved_members'] == 1 ? $txt['approve_thereis'] : $txt['approve_thereare'], ' <a href="', $scripturl, '?action=admin;area=viewmembers;sa=browse;type=approve">', $context['unapproved_members'] == 1 ? $txt['approve_member'] : $context['unapproved_members'] . ' ' . $txt['approve_members'], '</a> ', $txt['approve_members_waiting'], '</div>';
 
-		if (!empty($context['open_mod_reports']) && $context['show_open_reports'])
-			echo '
-					<div><a href="', $scripturl, '?action=moderate;area=reports">', sprintf($txt['mod_reports_waiting'], $context['open_mod_reports']), '</a></div>';
-
 		echo '</div></div></div>';
 	}
 	// Otherwise they're a guest - this time ask them to either register or login - lazy bums...

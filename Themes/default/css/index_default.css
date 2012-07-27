@@ -82,8 +82,8 @@ div.inlinePopup.dark {
 	background: #e0e0e0;
 }
 
-div.inlinePopup.notifications {
-	width: 300px;
+div.notifications {
+	width: 280px;
 }
 div.popup_wrapper {
 	z-index: 9999;
@@ -1342,8 +1342,11 @@ ol.commonlist.notifications li a:hover {
 ol.commonlist.notifications li.unread {
 	background-color: #ffeeff;
 }
-ol.commonlist.notifications li:hover {
+ol.commonlist.notifications li.unread:hover, ol.commonlist.notifications li.read:hover {
 	background-color: #d5ecfa;
+}
+ol.commonlist.notifications li.header {
+	border-bottom: 0;
 }
 ol.commonlist.noshadow {
 	box-shadow: none !important;

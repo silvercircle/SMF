@@ -726,6 +726,7 @@ $txt['rating_class_format'] = 'Formatting';
 $txt['rating_class_points'] = 'Points';
 $txt['rating_class_groups_allowed'] = 'Member groups';
 $txt['rating_class_boards_allowed'] = 'Boards';
+$txt['rating_class_unique'] = 'U';
 $txt['ratings_settings_title'] = 'Post rating settings';
 $txt['rating_show_repair'] = 'Show repair link (for administrators only - allows to rebuild the rating stats for a post)';
 $txt['ratings_help_intro'] = 'You can define up to ten rating classes here. Each class must have a unique numeric id between 1 and 10. <a onclick="$(\'#rhelp\').fadeIn();return(false);" href="!#">See more help.</a>';

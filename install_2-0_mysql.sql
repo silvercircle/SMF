@@ -1374,10 +1374,12 @@ CREATE TABLE {$db_prefix}likes (
   id_receiver mediumint(8) NOT NULL default '0',
   updated int(4) unsigned NOT NULL default '0',
   ctype tinyint(2) NOT NULL default '0',
-  rtype tinyint(2) NOT NULL default '1',
+  rtype varchar(60) NOT NULL default '1',
+  comment varchar(255) NOT NULL default '',
   PRIMARY KEY  (id_like),
   UNIQUE KEY id (id_msg,id_user,ctype),
-  KEY ordering (id_msg,updated)
+  KEY ordering (id_msg,updated),
+  KEY rtype (rtype)
 ) ENGINE=MyISAM;
 
 #

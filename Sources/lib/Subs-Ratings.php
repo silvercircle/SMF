@@ -147,24 +147,26 @@ class Ratings {
 			array('id_message' => $mid, 'ctype' => $content_type));
 
 		while ($row = mysql_fetch_assoc($request)) {
-			$rtype = $row['rtype'];
-			if(empty($row['member_name']) || !isset($modSettings['ratings'][$rtype]))
-				continue;
-			if(!isset($likers[$rtype]['count']))
-				$likers[$rtype]['count'] = 0;
-			$likers[$rtype]['count']++;
-			if(!isset($likers[$rtype]['members']))
-				$likers[$rtype]['members'][0] = array('name' => $row['member_name'], 'id' => $row['like_user']);
-			$count++;
+			$rtypes = explode(',', $row['rtype']);
+			foreach($rtypes as $rtype) {
+				if(empty($row['member_name']) || !isset($modSettings['ratings'][$rtype]))
+					continue;
+				if(!isset($likers[$rtype]['count']))
+					$likers[$rtype]['count'] = 0;
+				$likers[$rtype]['count']++;
+				if(!isset($likers[$rtype]['members']))
+					$likers[$rtype]['members'][0] = array('name' => $row['member_name'], 'id' => $row['like_user']);
+				$count++;
+			}
 		}
 		mysql_free_result($request);
-		$totalcount = $count;
+
 		smf_db_query('INSERT INTO {db_prefix}like_cache(id_msg, likes_count, like_status, updated, ctype) 
 				VALUES({int:id_msg}, {int:total}, {string:like_status}, {int:updated}, {int:ctype})
 				ON DUPLICATE KEY UPDATE updated = {int:updated}, likes_count = {int:total}, like_status = {string:like_status}',
-			array('id_msg' => $mid, 'total' => $totalcount, 'updated' => time(), 'like_status' => serialize($likers), 'ctype' => $content_type));
+			array('id_msg' => $mid, 'total' => $count, 'updated' => time(), 'like_status' => serialize($likers), 'ctype' => $content_type));
 
-		$result['count'] = $totalcount;
+		$result['count'] = $count;
 		$result['status'] = $likers;
 		return($result);
 	}
@@ -182,15 +184,16 @@ class Ratings {
 	{
 		global $txt, $modSettings;
 		$parts = array();
+		$types = explode(',', $have_liked);
 
 		if(is_array($like_status)) {
 			foreach($like_status as $key => $the_like) {
 				if(isset($modSettings['ratings'][$key]) && isset($the_like['members'])) {
 					$parts[$key] = '<span data-rtype="'.$key.'" class="number">' . $the_like['count'] . '</span>&nbsp;' . $modSettings['ratings'][$key]['text'] . '&nbsp;';
 					if($the_like['count'] > 1)
-						$parts[$key] .= ($key == $have_liked ? sprintf($the_like['count'] > 2 ? $txt['you_and_others'] : $txt['you_and_other'], $the_like['count'] - 1) : '(<a rel="nofollow" onclick="getMcard('.$the_like['members'][0]['id'].', $(this));return(false);" class="mcard" href="'.URL::user($the_like['members'][0]['id'], $the_like['members'][0]['name']) .'">'.$the_like['members'][0]['name'].'</a>&nbsp;' . sprintf($the_like['count'] > 2 ? $txt['and_others'] : $txt['and_other'], $the_like['count'] - 1));
+						$parts[$key] .= (in_array($key, $types) ? sprintf($the_like['count'] > 2 ? $txt['you_and_others'] : $txt['you_and_other'], $the_like['count'] - 1) : '(<a rel="nofollow" onclick="getMcard('.$the_like['members'][0]['id'].', $(this));return(false);" class="mcard" href="'.URL::user($the_like['members'][0]['id'], $the_like['members'][0]['name']) .'">'.$the_like['members'][0]['name'].'</a>&nbsp;' . sprintf($the_like['count'] > 2 ? $txt['and_others'] : $txt['and_other'], $the_like['count'] - 1));
 					else
-						$parts[$key] .= ($key == $have_liked ? $txt['rated_you'] : '(<a rel="nofollow" onclick="getMcard('.$the_like['members'][0]['id'].', $(this));return(false);" class="mcard" href="'.URL::user($the_like['members'][0]['id'], $the_like['members'][0]['name']) .'">'.$the_like['members'][0]['name'].'</a>)');
+						$parts[$key] .= (in_array($key, $types) ? $txt['rated_you'] : '(<a rel="nofollow" onclick="getMcard('.$the_like['members'][0]['id'].', $(this));return(false);" class="mcard" href="'.URL::user($the_like['members'][0]['id'], $the_like['members'][0]['name']) .'">'.$the_like['members'][0]['name'].'</a>)');
 				}
 			}
 		}
@@ -222,8 +225,11 @@ class Ratings {
 			$update_mode = false;
 			$like_type = ((isset($_REQUEST['r']) && (int)$_REQUEST['r'] > 0) ? $_REQUEST['r'] : '1');
 
-			if(!isset($modSettings['ratings'][$like_type]))
-				AjaxErrorMsg($txt['unknown_rating_type']);
+			$rtypes = explode(',', $like_type);
+			foreach($rtypes as $rtype) {
+				if(!isset($modSettings['ratings'][$rtype]))
+					AjaxErrorMsg($txt['unknown_rating_type']);
+			}
 			if($user_info['is_guest'])
 				AjaxErrorMsg($txt['no_like_for_guests']);
 
@@ -312,7 +318,7 @@ class Ratings {
 				}
 				if(($like_receiver && !$memberContext[$like_receiver]['is_banned']) || $like_receiver == 0) {  // posts by guests can be liked
 					smf_db_query('INSERT INTO {db_prefix}likes(id_msg, id_user, id_receiver, updated, ctype, rtype) 
-							VALUES({int:id_message}, {int:id_user}, {int:id_receiver}, {int:updated}, {int:ctype}, {int:rtype})',
+							VALUES({int:id_message}, {int:id_user}, {int:id_receiver}, {int:updated}, {int:ctype}, {string:rtype})',
 						array('id_message' => $mid, 'id_user' => $uid, 'id_receiver' => $like_receiver, 'updated' => time(), 'ctype' => $content_type, 'rtype' => $like_type));
 						
 					if($like_receiver)

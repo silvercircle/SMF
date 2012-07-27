@@ -1379,7 +1379,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			array(
 				'tag' => 'php',
 				'type' => 'unparsed_content',
-				'content' => '<div class="codeheader">PHP</div><pre class="brush:php;">$1</pre>',
+				'content' => '<div class="codeheader">PHP:</div><pre class="prettyprint lang-php linenums:1">$1</pre>',
 				'block_level' => false,
 				'disabled_content' => '$1',
 			),

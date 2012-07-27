@@ -84,7 +84,7 @@ $context['template_hooks']['global'] = array(
 	'header' => ''
 );
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
-$context['jsver'] = '?v=1568';
+$context['jsver'] = '?v=1570';
 $context['jquery_version'] = '1.7.2';
 $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();
@@ -167,6 +167,7 @@ function smf_main()
 		loadTheme();
 		EoS_Smarty::init();
 	}
+	$user_info['notify_count'] += (!empty($context['open_mod_reports']) ? 1 : 0);
 	URL::setSID();
 	array_unshift($context['linktree'], array(
 		'url' => URL::home(),

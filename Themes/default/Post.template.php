@@ -663,7 +663,7 @@ function template_main()
 				setInnerHTML(document.getElementById(\'preview_body\'), bodyText);
 				if(typeof(prettyPrint) != \'undefined\') {
 					prettyPrint();
-					$(\'pre.prettyprint\').fadeIn();
+					//$(\'pre.prettyprint\').fadeIn();
 				}
 
 				// Show a list of errors (if any).

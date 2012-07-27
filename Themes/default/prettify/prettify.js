@@ -29,5 +29,4 @@ PR_NOCODE:"nocode",PR_PLAIN:"pln",PR_PUNCTUATION:"pun",PR_SOURCE:"src",PR_STRING
 
 $(document).ready(function() {
 	prettyPrint();
-	$('pre.prettyprint').fadeIn();
 });

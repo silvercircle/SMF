@@ -630,12 +630,12 @@ function GroupRequests()
 {
 	global $txt, $context, $scripturl, $user_info, $sourcedir, $smcFunc, $modSettings, $language;
 
-	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'moderate')
+	//if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'moderate')
 		EoS_Smarty::loadTemplate('modcenter/list_groups');
 
 	// Set up the template stuff...
 	$context['page_title'] = $txt['mc_group_requests'];
-	$context['sub_template'] = 'show_list';
+	//$context['sub_template'] = 'show_list';
 
 	// Verify we can be here.
 	if ($user_info['mod_cache']['gq'] == '0=1')

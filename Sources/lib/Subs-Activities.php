@@ -175,12 +175,20 @@ function actfmt_rating(&$params)
 	if(!isset($params['rtype']))
 		$params['rtype'] = 1;
 
-	if(isset($modSettings['ratings'][$params['rtype']]))
-		$params['rating_type'] = $modSettings['ratings'][$params['rtype']]['text'];
-	else
-		return false;
+	$rtypes = explode(',', $params['rtype']);
+	$rating_text = array();
+	$anonymize = false;
+	foreach($rtypes as $rtype) {
+		if(isset($modSettings['ratings'][(int)$rtype]))
+			$rating_text[] = $modSettings['ratings'][(int)$rtype]['text'];
+		else
+			return false;
+		if(!$context['can_view_ratings'] && $modSettings['ratings'][$rtype]['points'] != 0)
+			$anonymize = true;
+	}
+	$params['rating_type'] = implode(' and ', $rating_text);
 
-	$_k = 'acfmt_' . $params['id_desc'] . '_' . trim($key) . ($context['can_view_ratings'] || $modSettings['ratings'][$params['rtype']]['points'] == 0 ? '' : '_a');
+	$_k = 'acfmt_' . $params['id_desc'] . '_' . trim($key) . ($anonymize ? '_a' : '');
 	if(isset($txt[$_k]))
 		return(_vsprintf($txt[$_k], $params));
 	else {
