@@ -144,7 +144,7 @@
         <h1 class="bigheader secondary">{$T.rate_this_post}</h1>
         <div class="tinypadding smalltext">
         {if $C.result_count}
-          <ol class="commonlist">
+          <ol class="commonlist" style="margin-bottom:0;">
           {foreach $C.ratings as $rating}
             <li>
               {if $rating.unique}
@@ -161,8 +161,9 @@
           </div>
         {/if}
         {if $C.result_count}
+          <hr>
           <div class="centertext tinytext" style="line-height:110%;">
-            <span class="floatleft">{$T.rating_attach_comment}</span>
+            <div class="lefttext" style="margin-bottom:4px;">{$T.rating_attach_comment}</div>
             <input type="text" size="30" name="ratingcomment" id="ratingcomment" />
           </div>
         {/if}

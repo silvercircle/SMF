@@ -323,7 +323,7 @@ function EditPoll()
 		fatal_lang_error('no_access', false);
 
 	loadLanguage('Post');
-	loadTemplate('Poll');
+	EoS_Smarty::loadTemplate('topic/poll');
 
 	$context['can_moderate_poll'] = isset($_REQUEST['add']) ? 1 : allowedTo('moderate_board');
 	$context['start'] = (int) $_REQUEST['start'];
@@ -586,6 +586,24 @@ function EditPoll()
 	$context['linktree'][] = array(
 		'name' => $context['page_title'],
 	);
+
+	$context['poll_script'] = '
+	<script type="text/javascript"><!-- // --><![CDATA[
+			var pollOptionNum = 0;
+
+			function addPollOption()
+			{
+				if (pollOptionNum == 0)
+				{
+					for (var i = 0; i < document.forms.postmodify.elements.length; i++)
+						if (document.forms.postmodify.elements[i].id.substr(0, 8) == "options-")
+							pollOptionNum++;
+				}
+				pollOptionNum++
+
+				setOuterHTML(document.getElementById("pollMoreOptions"), \'<li><label for="options-\' + pollOptionNum + \'" ' . (isset($context['poll_error']['no_question']) ? ' class="error"' : '') . '>' . $txt['option'] . ' \' + pollOptionNum + \'</label>: <input type="text" name="options[\' + (pollOptionNum - 1) + \']" id="options-\' + (pollOptionNum - 1) + \'" value="" size="80" maxlength="255" class="input_text" /></li><li id="pollMoreOptions"></li\');
+			}
+		// ]]></script>';
 
 	// Register this form in the session variables.
 	checkSubmitOnce('register');

@@ -43,6 +43,7 @@
     </dd>
     </dl>
   </div>
+  {$SUPPORT->displayHook('notification_popup')}
   </div>
   <div class="clear"></div>
   {call notifications_scripts}

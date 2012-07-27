@@ -40,43 +40,6 @@ function template_news_listitem()
 		</li>';
 	}
 }
-
-function template_dismiss_handler_xml()
-{
-	global $context;
-
-	echo '<', '?xml version="1.0" encoding="UTF-8"?', '>
- <document>
- 	<response open="private_handler" fn="_h_dismiss_news_item" />
- 	<content>
- 		<![CDATA[
- 		',$context['item_to_dismiss'],'
-		]]>
- 	</content>';
-	echo <<<EOT
-
-	<handler>
- 	<![CDATA[
-	function _h_dismiss_news_item(content, data)
-	{
-		var result = $.parseJSON(content);
-		var id = parseInt(result['id']) || 0;
-		if(id) {
-	        if($('li#newsitem_' + id).length) {
-	        	$('li#newsitem_' + id).fadeOut();
-	        	$('li#newsitem_' + id).removeClass('visible');
-	        }
-	        if($('#newsitem_list').children('li.visible').length == 0)
-	        	$('#newsitem_container').fadeOut();
-		}
-	}
-	]]>
-	</handler>
-EOT;
-echo '
-</document>';
-}
-
 function template_dismiss_handler()
 {
 	global $context;

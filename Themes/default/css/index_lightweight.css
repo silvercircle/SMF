@@ -148,7 +148,7 @@ input[disabled].input_text {
 hr, .hrcolor {
 	height: 1px;
 	border: 0;
-	color: #ccc;
+	color: #aac;
 	background-color: #ccc;
 }
 h1, h2, h3, h4, h5, h6 {
@@ -1485,7 +1485,6 @@ h4#pollquestion {
 	padding: 0 0 0.5em 2em;
 }
 #poll_options ul.options {
-	border-top: 1px solid #9999aa;
 	padding: 1em 2.5em 0 2em;
 	margin: 0 0 1em 0;
 }
@@ -1496,8 +1495,6 @@ h4#pollquestion {
 	margin: 0 0 1em 0;
 }
 #poll_options dl.options {
-	border: solid #9999aa;
-	border-width: 1px 0;
 	padding: 1em 2.5em 1em 2em;
 	margin: 0 1em 1em 0;
 	line-height: 1.1em !important;
@@ -3032,18 +3029,11 @@ dl.stats dd {
 
 .statsbar div.bar {
 	float: left;
-	background: url(../images/bar_stats.png) no-repeat;
 	display: block;
 	margin: 0 4px;
 	height: 16px;
-}
-
-.statsbar div.bar div {
-	position: relative;
-	right: -4px;
-	padding: 0 4px 0 0;
-	background: url(../images/bar_stats.png) no-repeat 100%;
-	height: 16px;
+	background: #88b;
+	border-radius:2px;
 }
 
 tr.windowbg2 th.stats_month {

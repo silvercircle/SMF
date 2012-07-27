@@ -77,8 +77,8 @@ function aStreamGetNotifications()
 	}
 	else
 		$context['view_all'] = true;
-	$result = smf_db_query('
-		SELECT n.id_act, n.unread, a.id_member, a.updated, a.id_type, a.params, a.is_private, a.id_board, a.id_topic, a.id_content, a.id_owner, t.*, b.name AS board_name FROM {db_prefix}log_notifications AS n
+	$result = smf_db_query('SELECT n.id_act, n.unread, a.id_member, a.updated, a.id_type, a.params, a.is_private, a.id_board, a.id_topic, a.id_content, a.id_owner, t.*, b.name AS board_name 
+		FROM {db_prefix}log_notifications AS n
 		LEFT JOIN {db_prefix}log_activities AS a ON (a.id_act = n.id_act)
 		LEFT JOIN {db_prefix}activity_types AS t ON (t.id_type = a.id_type)
 		LEFT JOIN {db_prefix}boards AS b ON(b.id_board = a.id_board) '.
@@ -91,6 +91,10 @@ function aStreamGetNotifications()
 	$context['unread_pm'] = $user_info['unread_messages'];
 	$context['pmlink'] = URL::parse($scripturl . '?action=pm');
 	$context['modlink'] = URL::parse($scripturl . '?action=moderate;area=reports');
+	/*
+	 * this hook allows plugins to extend the notification popup
+	 */
+	HookAPI::callHook('astream_notification_popup');
 }
 
 /**

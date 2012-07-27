@@ -1125,33 +1125,74 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			array(
 				'tag' => 'code',
 				'type' => 'unparsed_content',
-				'content' => '<div class="codeheader">Code:</div><pre class="prettyprint lang-php linenums:1">$1</pre>',
+				'content' => '<div class="codeheader">' . $txt['code'] . ': </div><pre class="prettyprint lang-php linenums:1">$1</pre>',
+				// @todo Maybe this can be simplified?
+				'validate' => isset($disabled['code']) ? null : function(&$tag, &$data, $disabled) {
+					global $context;
+
+					if (!isset($disabled['code']))
+					{
+						$php_parts = preg_split('~(&lt;\?php|\?&gt;)~', $data, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+						/*
+						for ($php_i = 0, $php_n = count($php_parts); $php_i < $php_n; $php_i++)
+						{
+							// Do PHP code coloring?
+							if ($php_parts[$php_i] != '&lt;?php')
+								continue;
+
+							$php_string = '';
+							while ($php_i + 1 < count($php_parts) && $php_parts[$php_i] != '?&gt;')
+							{
+								$php_string .= $php_parts[$php_i];
+								$php_parts[$php_i++] = '';
+							}
+							$php_parts[$php_i] = highlight_php_code($php_string . $php_parts[$php_i]);
+						}
+						*/
+						// Fix the PHP code stuff...
+						$data = str_replace("<pre style=\"display: inline;\">\t</pre>", "\t", implode('', $php_parts));
+
+						$data = str_replace("\t", "<span style=\"white-space: pre;\">\t</span>", $data);
+					}
+				},
 				'block_level' => true,
-				//'disabled_content' => '$1',
 			),
 			array(
 				'tag' => 'code',
-            	'type' => 'unparsed_equals',
-            	'test' => '[A-Za-z0-9_,\-\s]+?\]',
-            	'block_level' => true,
-            	/*
-            	'validate' =>  create_function('&$tag, &$data, $disabled', '
-               		$data[0] = strtr(parse_bbc($data[0], ' . ($smileys ? 'true' : 'false') . ', \'' . $cache_id . '\'), array(\'<brdd />\' => ""));
-			   		global $txt;
-               		$tag[\'content\'] = "<div class=\"codeheader\">" . "Code" . ": (" . $data[1] . ") </div><pre class=\"brush:" . $data[1] . "\">" . $data[0] . "</pre>";
-               		//$tag[\'content\'] = "<div class=\"codeheader\">" . "Code" . ": (" . $data[1] . ") </div><pre><code data-language=\"" . $data[1]. "\">" . $data[0] . "</code></pre>";
-            	'),
-            	*/
-				'before' => '<div class="codeheader">Code ($1)</div><pre class="prettyprint lang-$1 linenums:1">',
-				'after' => '</pre>',
-				/*
-            	'validate' => function(&$tag, &$data, $disabled) {
-               		$data[0] = strtr(parse_bbc($data[0], $smileys, $cache_id), array('<brdd />' => ""));
-			   		global $txt;
-               		$tag['content'] = '<div class="codeheader">' . 'Code' . ': (' . $data[1] . ') </div><pre class="brush:' . $data[1] . '">' . $data[0] . '</pre>';
-               	}
-				*/
-			),			
+				'type' => 'unparsed_equals_content',
+				'content' => '<div class="codeheader">' . $txt['code'] . ': ($2)</div><pre class="prettyprint lang-$2 linenums:1">$1</pre>',
+				'validate' => isset($disabled['code']) ? null : function(&$tag, &$data, $disabled) {
+					global $context;
+
+					if (!isset($disabled['code']))
+					{
+						$php_parts = preg_split('~(&lt;\?php|\?&gt;)~', $data[0], -1, PREG_SPLIT_DELIM_CAPTURE);
+
+						/*
+						for ($php_i = 0, $php_n = count($php_parts); $php_i < $php_n; $php_i++)
+						{
+							// Do PHP code coloring?
+							if ($php_parts[$php_i] != '&lt;?php')
+								continue;
+
+							$php_string = '';
+							while ($php_i + 1 < count($php_parts) && $php_parts[$php_i] != '?&gt;')
+							{
+								$php_string .= $php_parts[$php_i];
+								$php_parts[$php_i++] = '';
+							}
+							$php_parts[$php_i] = highlight_php_code($php_string . $php_parts[$php_i]);
+						}
+						*/
+						// Fix the PHP code stuff...
+						$data[0] = str_replace("<pre style=\"display: inline;\">\t</pre>", "\t", implode('', $php_parts));
+
+						$data[0] = str_replace("\t", "<span style=\"white-space: pre;\">\t</span>", $data[0]);
+					}
+				},
+				'block_level' => true,
+			),		
 			array(
 				'tag' => 'color',
 				'type' => 'unparsed_equals',
@@ -1178,48 +1219,37 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			array(
 				'tag' => 'yt',
 				'type' => 'unparsed_content',
-				'validate' => create_function('&$tag, &$data, $disabled', '
-					// Access globals
+				'validate' => function(&$tag, &$data, $disabled) {
 					global $txt, $context;
-					// Determine which variable is the link
+
 					$link = !is_array($data) ? $data : $data[0] ;
-					// Remove linebreaks & trim
-					$link = trim(strtr($link, array(\'<br />\' => \'\')));
-					// Parse the ID of video or playlist safely
-					if  (preg_match(\'~^(?:http://((?:www|au|br|ca|es|fr|de|hk|ie|in|il|it|jp|kr|mx|nl|nz|pl|ru|tw|uk)\.)?youtube\.com/(?:[^"]*?)(?:(?:video_)?id=|(?:v|p)(?:/|=)))?([0-9a-f]{16}|[0-9a-z-_]{11})~i\' . \'u\', $link, $matches))
-					{
-						// Localised youtube site?  If not use www.
-						$site = !empty($matches[1]) ? strtolower($matches[1]) : \'www.\' ;
-						// Video or Playlist ID?
+					$link = trim(strtr($link, array('<br />' => '')));
+
+					if  (preg_match('~^(?:http://((?:www|au|br|ca|es|fr|de|hk|ie|in|il|it|jp|kr|mx|nl|nz|pl|ru|tw|uk)\.)?youtube\.com/(?:[^"]*?)(?:(?:video_)?id=|(?:v|p)(?:/|=)))?([0-9a-f]{16}|[0-9a-z-_]{11})~i' . 'u', $link, $matches)) {
+
+						$site = !empty($matches[1]) ? strtolower($matches[1]) : 'www.' ;
 						$type = strlen($matches[2]) == 11 ? 1 : 0 ;
-						// Set sizes Or Normalise sizes (If sizes are <100 or > 780)
 						if(!is_array($data) || ($data[1] > 780 || $data[1] < 100 || $data[2] > 780 || $data[2] < 100))
 							$data = array(0, 425, ($type ? 350 : 355));
-						// Set ID in the array
 						$data[0] = $matches[2];
-						// Tidy up
 						unset($matches, $link);
 
 						// Set the Content (With conditions on disabled types of BBCode)
-						if (isset($disabled[\'url\']) && isset($disabled[\'youtube\']))
-							// Youtube & Url bbc disabled? (eg Printer friendly pages)
-							$tag[\'content\'] = "http://". $site ."youtube.com/". ($type ? "watch?v" : "view_play_list?p") ."=". $data[0];
-						elseif(isset($disabled[\'youtube\']))
-							// Only Youtube is disabled, So make an active link
-							$tag[\'content\'] = "<a href=\"http://". $site ."youtube.com/". ($type ? "watch?v" : "view_play_list?p") ."=". $data[0]."\" target=\"_blank\">http://". $site ."youtube.com/". ($type ? "watch?v" : "view_play_list?p") ."=". $data[0]."</a>";
+						if (isset($disabled['url']) && isset($disabled['youtube']))
+							$tag['content'] = "http://". $site ."youtube.com/". ($type ? "watch?v" : "view_play_list?p") ."=". $data[0];
+						elseif(isset($disabled['youtube']))
+							$tag['content'] = "<a href=\"http://". $site ."youtube.com/". ($type ? "watch?v" : "view_play_list?p") ."=". $data[0]."\" target=\"_blank\">http://". $site ."youtube.com/". ($type ? "watch?v" : "view_play_list?p") ."=". $data[0]."</a>";
 						else
 						{
-							// Empty content
-							$tag[\'content\'] = \'\';
+							$tag['content'] = '';
 							
-							$tag[\'content\'] = "<div class=\"blue_container mediumpadding\" style=\"width:auto;margin:auto;text-align:center;\"><iframe style=\"width:640px;height:385px;border:0;\" class=\"youtube-player\" src=\"http://www.youtube.com/embed/".$data[0]."\"></iframe></div>";
+							$tag['content'] = "<div class=\"blue_container mediumpadding\" style=\"width:auto;margin:auto;text-align:center;\"><iframe style=\"width:640px;height:385px;border:0;\" class=\"youtube-player\" src=\"http://www.youtube.com/embed/".$data[0]."\"></iframe></div>";
 							//$tag[\'content\'] = "<div class=\"blue_container mediumpadding\" style=\"text-align:center;\"><a rel=\"prettyPhoto\" href=\"http://www.youtube.com/watch?v=".$data[0]."?width=640&height=385\"><img src=\"http://img.youtube.com/vi/".$data[0]."/0.jpg\" alt=\"thumb\" /></a></div>";
 						}
 					}
 					else
-						// Invalid link
-						$tag[\'content\'] = $txt[\'youtube_invalid\'];
-				'),
+						$tag['content'] = $txt['youtube_invalid'];
+				},
 				'disabled_content' => '$1',
             ),
 			array(
@@ -1230,7 +1260,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'validate' => function(&$tag, &$data, $disabled) {
 					$data = strtr($data, array('<br />' => ''));
 				}
-				//'validate' => create_function('&$tag, &$data, $disabled', '$data = strtr($data, array(\'<br />\' => \'\'));'),
 			),
 			array(
 				'tag' => 'email',
@@ -1285,13 +1314,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				),
 				//'content' => '<div class="bbc_img_cnt"><div class="bbc_resize{resized}">Resized image, click to zoom</div><br><img style="{width}{height}" src="$1" alt="{alt}" class="bbc_img resized" /></div><div class="clear"></div>',
 				'content' => '<div class="bbc_img_resizer" style="display:none;">'.$txt['img_resizebar_msg'].'</div><img style="{width}{height}" src="$1" alt="{alt}" class="bbc_img resize{resized}" />',
-				/*
-				'validate' => create_function('&$tag, &$data, $disabled', '
-					$data = strtr($data, array(\'<br />\' => \'\'));
-					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
-						$data = \'http://\' . $data;
-				'),
-				*/
 				'validate' => function(&$tag, &$data, $disabled) {
 					$data = strtr($data, array('<br />' => ''));
 					if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0)
@@ -1303,13 +1325,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'tag' => 'img',
 				'type' => 'unparsed_content',
 				'content' => '<img src="$1" alt="" class="bbc_img" />',
-				/*
-				'validate' => create_function('&$tag, &$data, $disabled', '
-					$data = strtr($data, array(\'<br />\' => \'\'));
-					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
-						$data = \'http://\' . $data;
-				'),
-				*/
 				'validate' => function(&$tag, &$data, $disabled) {
 					$data = strtr($data, array('<br />' => ''));
 					if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0)
@@ -1457,12 +1472,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'test' => '[1-7]\]',
 				'before' => '<span style="font-size: $1;" class="bbc_size">',
 				'after' => '</span>',
-				/*
-				'validate' => create_function('&$tag, &$data, $disabled', '
-					$sizes = array(1 => 0.7, 2 => 1.0, 3 => 1.35, 4 => 1.45, 5 => 2.0, 6 => 2.65, 7 => 3.95);
-					$data = $sizes[$data] . \'em\';'
-				),
-				*/
 				'validate' => function(&$tag, &$data, $disabled) {
 					$sizes = array(1 => 0.7, 2 => 1.0, 3 => 1.35, 4 => 1.45, 5 => 2.0, 6 => 2.65, 7 => 3.95);
 					$data = $sizes[$data] . 'em';
@@ -1505,13 +1514,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'tag' => 'time',
 				'type' => 'unparsed_content',
 				'content' => '$1',
-				/*
-				'validate' => create_function('&$tag, &$data, $disabled', '
-					if (is_numeric($data))
-						$data = timeformat($data);
-					else
-						$tag[\'content\'] = \'[time]$1[/time]\';'),
-				*/
 				'validate' => function(&$tag, &$data, $disabled) {
 					if (is_numeric($data))
 						$data = timeformat($data);
@@ -1553,13 +1555,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'tag' => 'url',
 				'type' => 'unparsed_content',
 				'content' => '<a href="$1" class="bbc_link" target="_blank">$1</a>',
-				/*
-				'validate' => create_function('&$tag, &$data, $disabled', '
-					$data = strtr($data, array(\'<br />\' => \'\'));
-					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
-						$data = \'http://\' . $data;
-				'),
-				*/
 				'validate' => function(&$tag, &$data, $disabled) {
 					$data = strtr($data, array('<br />' => ''));
 					if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0)
@@ -1571,12 +1566,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'type' => 'unparsed_equals',
 				'before' => '<a href="$1" class="bbc_link" target="_blank">',
 				'after' => '</a>',
-				/*
-				'validate' => create_function('&$tag, &$data, $disabled', '
-					if (strpos($data, \'http://\') !== 0 && strpos($data, \'https://\') !== 0)
-						$data = \'http://\' . $data;
-				'),
-				*/
 				'validate' => function(&$tag, &$data, $disabled) {
 					if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0)
 						$data = 'http://' . $data;
