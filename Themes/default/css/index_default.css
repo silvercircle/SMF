@@ -1542,6 +1542,10 @@ div.ignoringpost {
 	clear: both;
 	font-size: 11px;
 	background-color:#eaeaea;
+	opacity: 0.5;
+}
+.post_bottom:hover {
+	opacity: 1.0;
 }
 .post_bottom.mq {
 	background: #edd !important;

@@ -181,11 +181,10 @@
   {$scope = 0}
   {$search_label = $T.search_all_boards}
 
-  {if isset($C.current_topic)}
+  {if !empty($C.current_topic)}
     {$search_label = $T.search_topic}
     {$scope = 2}
-  {elseif isset($C.current_board)}
-  {* If we're on a certain board, limit it to this board ;). *}
+  {elseif !empty($C.current_board)}
     {$search_label = $T.search_board}
     {$scope = 1}
   {/if}

@@ -111,13 +111,5 @@
     } 
   } );
   var topic_id = {$C.current_topic};
-  $(document).ready(function() { 
-    $('div.post_bottom').hover(function() {
-      $(this).css('opacity', '1.0');
-    },
-    function() {
-      $(this).css('opacity', '0.5');
-    } );
-  } );
 // ]]>
 </script>

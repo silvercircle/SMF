@@ -206,13 +206,13 @@ function KickGuest()
 	global $txt, $context;
 
 	loadLanguage('Login');
-	loadTemplate('Login');
+	EoS_Smarty::loadTemplate('loginout/login');
 
 	// Never redirect to an attachment
 	if (strpos($_SERVER['REQUEST_URL'], 'dlattach') === false)
 		$_SESSION['login_url'] = $_SERVER['REQUEST_URL'];
 
-	$context['sub_template'] = 'kick_guest';
+	$context['is_kick_guest'] = true;
 	$context['page_title'] = $txt['login'];
 }
 
@@ -222,13 +222,12 @@ function InMaintenance()
 	global $txt, $mtitle, $mmessage, $context;
 
 	loadLanguage('Login');
-	loadTemplate('Login');
+	EoS_Smarty::loadTemplate('loginout/maintainance');
 
 	// Send a 503 header, so search engines don't bother indexing while we're in maintenance mode.
 	header('HTTP/1.1 503 Service Temporarily Unavailable');
 
 	// Basic template stuff..
-	$context['sub_template'] = 'maintenance';
 	$context['title'] = &$mtitle;
 	$context['description'] = &$mmessage;
 	$context['page_title'] = $txt['maintain_mode'];
@@ -239,7 +238,7 @@ function adminLogin()
 	global $context, $scripturl, $txt, $user_info, $user_settings;
 
 	loadLanguage('Admin');
-	loadTemplate('Login');
+	EoS_Smarty::loadTemplate('loginout/adminlogin');
 
 	// They used a wrong password, log it and unset that.
 	if (isset($_POST['admin_hash_pass']) || isset($_POST['admin_pass']))
@@ -263,9 +262,6 @@ function adminLogin()
 	$_POST[$context['session_var']] = $context['session_id'];
 	foreach ($_POST as $k => $v)
 		$context['post_data'] .= adminLogin_outputPostVars($k, $v);
-
-	// Now we'll use the admin_login sub template of the Login template.
-	$context['sub_template'] = 'admin_login';
 
 	// And title the page something like "Login".
 	if (!isset($context['page_title']))

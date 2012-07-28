@@ -78,7 +78,7 @@ function DisplayStats()
 	}
 
 	loadLanguage('Stats');
-	loadTemplate('Stats');
+	Eos_Smarty::loadTemplate('forumstats');
 
 	// Build the link tree......
 	$context['linktree'][] = array(

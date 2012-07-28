@@ -1243,6 +1243,7 @@ function Display()
 	$context['can_lock'] |= $context['can_manage_own'];
 	$context['can_sticky'] |= $context['can_manage_own'];
 	
+	$context['can_unapprove'] = $context['can_approve'] && !empty($modSettings['postmod_active']);
 	$context['can_profile_view_any'] = allowedTo('profile_view_any');
 	$context['can_profile_view_own'] = allowedTo('profile_view_own');
 	
@@ -1443,7 +1444,7 @@ function prepareDisplayContext($reset = false)
 		'first_new' => isset($context['start_from']) && $context['start_from'] == $counter,
 		'is_ignored' => !empty($modSettings['enable_buddylist']) && !empty($options['posts_apply_ignore_list']) && in_array($message['id_member'], $context['user']['ignoreusers']),
 		'can_approve' => !$message['approved'] && $context['can_approve'],
-		'can_unapprove' => $message['approved'] && $context['can_approve'],
+		'can_unapprove' => $message['approved'] && $context['can_unapprove'],
 		'can_modify' => (!$message['locked'] || $context['can_moderate_board']) && ((!$context['is_locked'] || $context['can_moderate_board']) && ($context['can_modify_any'] || ($context['can_modify_replies'] && $context['user']['started']) || ($context['can_modify_own'] && $message['id_member'] == $user_info['id'] && (empty($modSettings['edit_disable_time']) || !$message['approved'] || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 > time())))),
 		'can_remove' => (!$message['locked'] || $context['can_moderate_board']) && ($context['can_delete_any'] || ($context['can_delete_replies'] && $context['user']['started']) || ($context['can_delete_own'] && $message['id_member'] == $user_info['id'] && (empty($modSettings['edit_disable_time']) || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 > time()))),
 		'can_see_ip' => $context['can_moderate_forum'] || ($message['id_member'] == $user_info['id'] && !empty($user_info['id'])),

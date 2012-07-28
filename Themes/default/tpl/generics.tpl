@@ -21,14 +21,16 @@
   <ul class="floatright plainbuttonlist">
   {$imgsrc = $C.clip_image_src}
   {$ID = $message.id}
+  {$t_href = $C.current_topic|cat:'.'|cat:$C.start}
+  {$_s = $C.session_var|cat:'='|cat:$C.session_id}
   {if $message.can_approve}
-    <li><a href="{$SCRIPTURL}?action=moderate;area=postmod;sa=approve;topic={$C.current_topic}.{$C.start};msg={$ID};{$C.session_var}={$C.session_id}">
+    <li><a href="{$SCRIPTURL}?action=moderate;area=postmod;sa=approve;topic={$t_href};msg={$ID};{$_s}">
       <div class="csrcwrapper16px"><img class="clipsrc approve" src="{$imgsrc}" alt="{$T.approve}" title="{$T.approve}" /></div>
     </a></li>
   {/if}
   {if $C.can_quote}
     <li>
-      <a rel="nofollow" onclick="return oQuickReply.quote({$ID});" href="{$SCRIPTURL}?action=post;quote={$ID};topic={$C.current_topic}.{$C.start};last_msg={$C.topic_last_message}">
+      <a rel="nofollow" onclick="return oQuickReply.quote({$ID});" href="{$SCRIPTURL}?action=post;quote={$ID};topic={$t_href};last_msg={$C.topic_last_message}">
         <div class="csrcwrapper16px"><img class="clipsrc reply" src="{$imgsrc}" alt="{$T.quote}" title="{$T.quote}" /></div>
       </a></li>
       <li id="mquote_{$ID}"><a rel="nofollow" href="javascript:void(0);" onclick="return oQuickReply.addForMultiQuote({$ID});">
@@ -36,27 +38,27 @@
       </a></li>
   {/if}
   {if $message.can_modify}
-    <li><a rel="nofollow" onclick="oQuickModify.modifyMsg({$ID});return(false);" href="{$SCRIPTURL}?action=post;msg={$ID};topic={$C.current_topic}.{$C.start}">
+    <li><a rel="nofollow" onclick="oQuickModify.modifyMsg({$ID});return(false);" href="{$SCRIPTURL}?action=post;msg={$ID};topic={$t_href}">
       <div class="csrcwrapper16px"><img class="clipsrc modify" src="{$imgsrc}" alt="{$T.modify}" title="{$T.modify}" /></div>
     </a></li>
   {/if}
   {if $message.can_remove}
-    <li><a rel="nofollow" href="{$SCRIPTURL}?action=deletemsg;topic={$C.current_topic}.{$C.start};msg={$ID};{$C.session_var}={$C.session_id}" onclick="return Eos_Confirm('', '{$T.remove_message}?', $(this).attr('href'));">
+    <li><a rel="nofollow" href="{$SCRIPTURL}?action=deletemsg;topic={$t_href};msg={$ID};{$_s}" onclick="return Eos_Confirm('', '{$T.remove_message}?', $(this).attr('href'));">
       <div class="csrcwrapper16px"><img class="clipsrc remove" src="{$imgsrc}" alt="{$T.remove}" title="{$T.remove}" /></div>
     </a></li>
   {/if}
   {if $message.can_unapprove}
-    <li class="approve_button"><a href="{$SCRIPTURL}?action=moderate;area=postmod;sa=unapprove;topic={$C.current_topic}.{$C.start};msg={$ID};{$C.session_var}={$C.session_id}">
+    <li class="approve_button"><a href="{$SCRIPTURL}?action=moderate;area=postmod;sa=unapprove;topic={$t_href};msg={$ID};{$_s}">
       <div class="csrcwrapper16px"><img class="clipsrc unapprove" src="{$imgsrc}" alt="{$T.unapprove}" title="{$T.unapprove}" /></div>
     </a></li>
   {/if}
   {if $C.can_split and $C.real_num_replies}
-    <li><a rel="nofollow" href="{$SCRIPTURL}?action=splittopics;topic={$C.current_topic }}.0;at={$ID}">
+    <li><a rel="nofollow" href="{$SCRIPTURL}?action=splittopics;topic={$C.current_topic}.0;at={$ID}">
       <div class="csrcwrapper16px"><img class="clipsrc split" src="{$imgsrc}" alt="{$T.split}" title="{$T.split}" /></div>
     </a></li>
   {/if}
   {if $C.can_restore_msg}
-    <li><a rel="nofollow" href="{$SCRIPTURL}?action=restoretopic;msgs={$ID};{$C.session_var}={$C.session_id}">{$T.restore_message}</a></li>
+    <li><a rel="nofollow" href="{$SCRIPTURL}?action=restoretopic;msgs={$ID};{$_s}">{$T.restore_message}</a></li>
   {/if}
   {if $O.display_quick_mod and $message.can_remove}
     <li class="inline_mod_check" style="display: none;" id="in_topic_mod_check_{$ID}"></li>

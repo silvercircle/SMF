@@ -196,8 +196,8 @@ function is_not_guest($message = '')
 	}
 	else
 	{
-		loadTemplate('Login');
-		$context['sub_template'] = 'kick_guest';
+		EoS_Smarty::loadTemplate('loginout/login');
+		$context['is_kick_guest'] = true;
 		$context['robot_no_index'] = true;
 	}
 

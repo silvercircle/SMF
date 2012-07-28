@@ -76,12 +76,15 @@
             <td><input type="password" name="passwrd" size="20" class="input_password" /></td>
           </tr>
         </table>
-        <span style="line-height:20px;">{$T.always_logged_in}<input type="checkbox" name="cookielength" value="-1"></span>
-        <input style="width:90%;margin-left:5%;margin-top:10px;" type="submit" value="{$T.login}" class="button_submit" /><br />
         {if !empty($M.enableOpenID)}
-          <br>
-          <input type="text" name="openid_identifier" id="openid_url" size="25" class="input_text openid_login" />
+          <div class="centertext">
+            {$T.or}
+            <br>
+            <input type="text" name="openid_identifier" id="openid_url" size="25" class="input_text openid_login" />
+          </div>
         {/if}
+        <span class="cblabel">{$T.always_logged_in}</span><input type="checkbox" class="input_check" name="cookielength" value="-1" />
+        <input style="width:90%;margin-left:5%;margin-top:10px;" type="submit" value="{$T.login}" class="button_submit" /><br />
         <input type="hidden" name="hash_passwrd" value="" />
     </form>
     <br>
@@ -108,26 +111,28 @@
         <h1 class="bigheader secondary">{$T.team_members_online}</h1>
         <ol class="commonlist" style="margin-bottom:0;">
         {foreach $C.visible_team_members as $id_member}
-          {$member = $C.team_members.$id_member}
-          <li>
-          <div class="userbit_compact">
-            <div class="floatleft">
-              <span class="small_avatar">
-              {if !empty($member.avatar.image)}
-                <img class="twentyfour" src="{$member.avatar.href}" alt="avatar" />
-              {else}
-                <img class="twentyfour" src="{$S.images_url}/unknown.png" alt="avatar" />
-              {/if}
-              </span>
+          {if isset($C.team_members.$id_member)}
+            {$member = $C.team_members.$id_member}
+            <li>
+            <div class="userbit_compact">
+              <div class="floatleft">
+                <span class="small_avatar">
+                {if !empty($member.avatar.image)}
+                  <img class="twentyfour" src="{$member.avatar.href}" alt="avatar" />
+                {else}
+                  <img class="twentyfour" src="{$S.images_url}/unknown.png" alt="avatar" />
+                {/if}
+                </span>
+              </div>
+              <div class="userbit_compact_textpart small">
+                <h2>{$member.link}</h2><br>
+                {if !empty($member.blurb)}
+                  {$member.blurb}
+                {/if}
+              </div>
             </div>
-            <div class="userbit_compact_textpart small">
-              <h2>{$member.link}</h2><br>
-              {if !empty($member.blurb)}
-                {$member.blurb}
-              {/if}
-            </div>
-          </div>
-          </li>
+            </li>
+          {/if}
         {/foreach}
         </ol>
         <div class="clear"></div>

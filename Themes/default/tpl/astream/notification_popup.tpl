@@ -23,11 +23,11 @@
     <ol class="commonlist notifications" style="max-height:400px;overflow:auto;">
     {if $C.unread_pm > 0}
       <li class="header"><h1 class="bigheader secondary">{$T.personal_messages}</h1></li>
-      <li class="unread"><a href="{$C.pmlink}">{$T.show_personal_messages|sprintf:$C.unread_pm}</a></li>
+      <li class="unread borderless"><a href="{$C.pmlink}">{$T.show_personal_messages|sprintf:$C.unread_pm}</a></li>
     {/if}
     {if !empty($C.open_mod_reports)}
       <li class="header"><h1 class="bigheader secondary">Moderation center</h1></li>
-      <li class="unread"><a href="{$C.modlink}">{$T.mod_reports_waiting|sprintf:$C.open_mod_reports}</a></li>
+      <li class="unread borderless"><a href="{$C.modlink}">{$T.mod_reports_waiting|sprintf:$C.open_mod_reports}</a></li>
     {/if}
     </ol>
   {/if}

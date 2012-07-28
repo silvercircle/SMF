@@ -273,7 +273,7 @@ class HookAPI {
 					if(0 == count(self::$hooks[$hook]))
 						unset(self::$hooks[$hook]);
 					$change_array = array('integration_hooks' => serialize(self::$hooks));
-					updateSettings($change_array, true);
+					updateSettings($change_array, false);
 					return;
 				}
 			}
@@ -303,7 +303,7 @@ class HookAPI {
 		}
 		if($changed) {
 			$change_array = array('integration_hooks' => serialize(self::$hooks));
-			updateSettings($change_array, true);
+			updateSettings($change_array, false);
 		}
 	}
 
@@ -312,7 +312,7 @@ class HookAPI {
 	public static function clearAllHooks()
 	{
 		$change_array = array('integration_hooks' => '');
-		updateSettings($change_array, true);
+		updateSettings($change_array, false);
 	}
 
 	public static function &getHooks()

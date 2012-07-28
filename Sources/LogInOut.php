@@ -58,8 +58,7 @@ function Login()
 	global $txt, $context, $scripturl;
 
 	loadLanguage('Login');
-	loadTemplate('Login');
-	$context['sub_template'] = 'login';
+	EoS_Smarty::loadTemplate('loginout/login');
 
 	// Get the template ready.... not really much else to do.
 	$context['page_title'] = $txt['login'];
@@ -147,8 +146,7 @@ function Login2()
 		$modSettings['cookieTime'] = (int) $_POST['cookielength'];
 
 	loadLanguage('Login');
-	loadTemplate('Login');
-	$context['sub_template'] = 'login';
+	EoS_Smarty::loadTemplate('loginout/login');
 
 	// Set up the default/fallback stuff.
 	$context['default_username'] = isset($_POST['user']) ? preg_replace('~&amp;#(\\d{1,7}|x[0-9a-fA-F]{1,6});~', '&#\\1;', htmlspecialchars($_POST['user'])) : '';
