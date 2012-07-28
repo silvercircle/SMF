@@ -14,8 +14,8 @@
  *}
 {extends 'base.tpl'}
 {block content}
-{include 'generic_menu_above.tpl'}
+{include 'generics/menu_above.tpl'}
 {block 'modcenter_content'}
 {/block}
-{include 'generic_menu_below.tpl'}
+{include 'generics/menu_below.tpl'}
 {/block}

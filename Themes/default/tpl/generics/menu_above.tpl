@@ -33,5 +33,5 @@
   </div>
   <div id="main_admsection">
   {if !empty($C.tabs) && empty($C.force_disable_tabs)}
-    {include 'generic_menu_tabs.tpl'}
+    {include 'generics/menu_tabs.tpl'}
   {/if}

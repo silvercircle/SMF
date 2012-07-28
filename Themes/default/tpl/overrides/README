@@ -1,0 +1,14 @@
+This folder may hold override templates which are only being used when
+the option "Allow templates from overrides directory" is enabled
+under Admin->Current Theme. If this option is off (which is the
+default setting) all content here is ignored.
+
+Note that the contents of this directory must follow the file
+name structure of the main templates folder. So if you want to
+override postbits/bits, you must place it into
+override/postbits/bits.tpl.
+
+Template overrides provide an easy way to modify an existing
+theme without having to install a completely new theme. Note
+that template overrides are global and a member cannot choose
+to use the original or overriden templates.

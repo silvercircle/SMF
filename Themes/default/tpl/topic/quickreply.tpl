@@ -24,8 +24,10 @@
       {/if}
       {* Is visual verification enabled? *}
       {if $C.require_verification}
+        <div class="centertext">
         <strong>{$T.verification}:</strong>
-        {include 'visual_verification.tpl'}  {$SUPPORT->template_control_verification($C.visual_verification_id, 'quick_reply')}
+        {$SUPPORT->template_control_verification($C.visual_verification_id, 'quick_reply')}
+        </div>
         <br>
       {/if}
       {if !empty($C.user.avatar.image)}

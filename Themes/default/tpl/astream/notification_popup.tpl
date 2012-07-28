@@ -56,7 +56,7 @@
       var wrapper = $('<div id="notify_wrapper" class="popup_wrapper" style="float:right;position:relative;margin-right:20px;"></div>');
       wrapper.html(content);
       $('#notification_target').after(wrapper);
-      $('div.inlinePopup abbr.timeago').timeago();
+      $('div.notify_wrapper abbr.timeago').timeago();
       $('#notificationsBody').live('mouseleave',function(event) {
         $('#notify_wrapper').remove();
       });

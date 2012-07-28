@@ -1411,10 +1411,8 @@ function template_control_chmod()
 	// ]]></script>';
 
 	// Make sure the button gets generated last.
-	$context['insert_after_template'] .= '
-	<script type="text/javascript"><!-- // --><![CDATA[
-		generateFTPTest();
-	// ]]></script>';
+	$context['inline_footer_script'] .= '
+		generateFTPTest();';
 }
 
 function template_ftp_required()

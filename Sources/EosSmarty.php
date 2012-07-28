@@ -44,6 +44,10 @@ class EoS_Smarty {
 			self::$_smartyInstance->setTemplateDir($settings['default_theme_dir'] . '/m');
 			$firstdir++;
 		}
+		if($settings['allow_template_overrides']) {			// allow overrides (mod setting)
+			self::$_smartyInstance->setTemplateDir($settings['default_theme_dir'] . '/tpl/overrides');
+			$firstdir++;
+		}
 		foreach($settings['template_dirs'] as $dir) {
 			if(!$firstdir)
 				self::$_smartyInstance->setTemplateDir($dir . '/tpl');
@@ -86,6 +90,12 @@ class EoS_Smarty {
 	{
 		self::$_template_names = array();
 	}
+
+	public static function &getTemplates()
+	{
+		return self::$_template_names;
+	}
+
 	/**
 	 * @static
 	 * @param string - $_dir. The template directory to add
@@ -185,10 +195,6 @@ class EoS_Smarty {
 		{
 			if (WIRELESS && !isset($context['sub_template']))
 				fatal_lang_error('wireless_error_notyet', false);
-
-			// Anything special to put out?
-			if (!empty($context['insert_after_template']) && !isset($_REQUEST['xml']))
-				echo $context['insert_after_template'];
 
 			self::Display();
 			// Just so we don't get caught in an endless loop of errors from the footer...
@@ -509,6 +515,21 @@ class EoS_Smarty_Template_Support {
 			foreach($template_name as $name)
 				$this->_hook_templates[$position][] = $name . '.tpl';
 		}
+	}
+
+	/**
+	 * @static
+	 * 
+	 * return formatted list of registered hooks. Used for debugging purpose
+	 * only
+	 */
+	public function getHookDebugInfo()
+	{
+		$parts = array();
+		foreach($this->_hook_templates as $position => $hook)
+			$parts[] = '<strong>' . $position . ':</strong> ' . implode(', ', $hook);
+
+		return !empty($parts) ? ('<span style="font-size:1.1em;color:red;"><strong>Hook templates:</strong></span><br>' . implode('<br>', $parts)) : '';
 	}
 	/**
 	 * @static

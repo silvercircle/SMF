@@ -63,8 +63,8 @@ function PlushSearch1()
 	loadLanguage('Search');
 	// Don't load this in XML mode.
 	if (!isset($_REQUEST['xml']))
-		loadTemplate('Search');
-
+		EoS_Smarty::loadTemplate('search/form');
+		//loadTemplate('Search');
 	// Check the user's permissions.
 	isAllowedTo('search_posts');
 
@@ -1607,6 +1607,9 @@ function PlushSearch2()
 
 	$context['key_words'] = &$searchArray;
 
+	if(empty($context['compact']))
+		$context['need_synhlt'] = 1;
+	
 	$context['sub_template'] = 'results';
 	$context['page_title'] = $txt['search_results'];
 	$context['get_topics'] = 'prepareSearchContext';

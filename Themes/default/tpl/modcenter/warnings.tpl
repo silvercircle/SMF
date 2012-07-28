@@ -1,5 +1,5 @@
 {extends "modcenter/modcenter_base.tpl"}
 {block modcenter_content}
-{include "generic_list.tpl"}
+{include "generics/list.tpl"}
 {call show_list list_id=$C.default_list}
 {/block}

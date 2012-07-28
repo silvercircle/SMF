@@ -15,10 +15,10 @@
  *}
 {extends 'base.tpl'}
 {block content}
-{include 'generic_menu_above.tpl'}
+{include 'generics/menu_above.tpl'}
 {include 'profile/above.tpl'}
 {block 'profile_content'}
 {/block}
 {include 'profile/below.tpl'}
-{include 'generic_menu_below.tpl'}
+{include 'generics/menu_below.tpl'}
 {/block}

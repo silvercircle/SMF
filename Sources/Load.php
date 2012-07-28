@@ -1625,8 +1625,6 @@ function loadTheme($id_theme = 0, $initialize = true)
 	));
 	*/
 	// This allows sticking some HTML on the page output - useful for controls.
-	$context['insert_after_template'] = '';
-
 	if (!isset($txt))
 		$txt = array();
 	$simpleActions = array(

@@ -1,6 +1,6 @@
 {extends "modcenter/modcenter_base.tpl"}
 {block modcenter_content}
-{include "generic_list.tpl"}
+{include "generics/list.tpl"}
 <div id="modcenter">
   <form action="{$SCRIPTURL}?action=moderate;area=reports;report={$C.report.id}" method="post" accept-charset="UTF-8">
     <div class="cat_bar">

@@ -893,7 +893,6 @@ function SetThemeSettings()
 	loadSubTemplate('init', 'ignore');
 
 	$settings = $old_settings;
-
 	loadTemplate('Themes');
 }
 

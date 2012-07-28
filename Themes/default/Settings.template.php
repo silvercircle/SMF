@@ -190,10 +190,6 @@ function template_settings()
 			'id' => 'allow_no_censored',
 			'label' => $txt['allow_no_censored'],
 		),
-		array(
-			'id' => 'enable_news',
-			'label' => $txt['enable_random_news'],
-		),
 	'',
 		array(
 			'id' => 'number_recent_posts',
@@ -255,8 +251,8 @@ function template_settings()
 			'label' => $txt['admin_bbc'],
 		),
 		array(
-			'id' => 'additional_options_collapsable',
-			'label' => $txt['additional_options_collapsable'],
+			'id' => 'allow_template_overrides',
+			'label' => $txt['allow_template_overrides'],
 		),
 	);
 }
