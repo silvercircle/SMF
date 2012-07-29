@@ -631,6 +631,63 @@ class cacheAPI {
 		if (isset($db_show_debug) && $db_show_debug === true)
 			self::$cache_hits[self::$cache_count]['t'] = array_sum(explode(' ', microtime())) - array_sum(explode(' ', $st));
 	}
+
+	/**
+	 * Delete all values in cache by prefix.
+	 *
+	 * This function does not work with all caching engines and should not
+	 * be relied on! It can help clearing stale caches, but caching in
+	 * general caching should try to be independent of this function. At
+	 * this point, only xcache and the file cache support this feature.
+	 *
+	 * @param string $key
+	 */
+	public static function clearCacheByPrefix($key)
+	{
+		if(-1 == self::$API)
+			return;
+
+		$key = self::$basekey . strtr($key, ':', '-');
+
+		switch(self::$API) {
+			case 5:
+				// memcached doesn't support deleting by prefix :(
+				//
+				// it is possible to get a list of all keys
+				// from the server, but that function is not
+				// even guaranted to return all keys, so the
+				// user will just have to live with stale cache
+				// here for now.
+				//
+				// we could also flush here, but that would be
+				// quite volatile behavior
+				break;
+
+			case 4:
+				// memcache doesn't support deleting by prefix :(
+				// see above.
+				break;
+
+			case 1:
+				// apc doesn't support deleting by prefix :(
+				break;
+
+			case 3:
+				// zend doesn't support deleting by prefix :(
+				break;
+
+			case 2:
+				xcache_unset_by_prefix($key);
+				break;
+
+			case 0:
+				// Glob using the prefix and unlink all hits.
+				foreach(glob(self::$cachedir . '/data_' . $key . '*.php') as $filename) {
+					@unlink($filename);
+				}
+				break;
+		}
+	}
 }
 
 /**

@@ -290,8 +290,8 @@ function AdminMain()
 				),
 				'smileys' => array(
 					'label' => $txt['smileys_manage'],
-					'file' => 'ManageSmileys.php',
-					'function' => $backend_subdir . '/ManageSmileys',
+					'file' => $backend_subdir . '/ManageSmileys.php',
+					'function' => 'ManageSmileys',
 					'icon' => 'smiley.gif',
 					'permission' => array('manage_smileys'),
 					'subsections' => array(
