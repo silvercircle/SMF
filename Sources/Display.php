@@ -1675,10 +1675,17 @@ function Download()
 	{
 		if (strpos($_SERVER['HTTP_USER_AGENT'], 'Windows') !== false)
 			$callback = create_function('$buffer', 'return preg_replace(\'~[\r]?\n~\', "\r\n", $buffer);');
-		elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Mac') !== false)
-			$callback = create_function('$buffer', 'return preg_replace(\'~[\r]?\n~\', "\r", $buffer);');
+		// Mac OS X uses \n. It hasn't used \r since Mac OS 9.
+		// elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Mac') !== false)
+			// $callback = create_function('$buffer', 'return preg_replace(\'~[\r]?\n~\', "\r", $buffer);');
 		else
 			$callback = create_function('$buffer', 'return preg_replace(\'~[\r]?\n~\', "\n", $buffer);');
+	}
+
+	// If no reencoding needs to be done, send via X-Sendfile
+	if(!isset($callback) && !empty($modSettings['attachmentViaSendfile'])) {
+		header('X-Sendfile: ' . $filename);
+		obExit(false);
 	}
 
 	// Since we don't do output compression for files this large...
