@@ -167,6 +167,7 @@ function ManageAttachmentSettings($return_config = false)
 			array('select', 'attachmentEnable', array($txt['attachmentEnable_deactivate'], $txt['attachmentEnable_enable_all'], $txt['attachmentEnable_disable_new'])),
 		'',
 			// Extension checks etc.
+			array('check', 'attachmentViaSendfile'),
 			array('check', 'attachmentCheckExtensions'),
 			array('text', 'attachmentExtensions', 40),
 			array('check', 'attachmentRecodeLineEndings'),

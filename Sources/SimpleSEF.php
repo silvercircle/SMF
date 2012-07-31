@@ -205,7 +205,10 @@ class URL {
 	public static function init($b)
 	{
 		global $modSettings;
-		
+
+		//if(isset($GLOBALS['force_disable_sef']) && !empty($GLOBALS['force_disable_sef']))
+		//	$modSettings['simplesef_enable'] = false;
+
 		if(!empty($modSettings['simplesef_enable'])) {
 			self::$impl = new URLFactory($b);
 			self::$is_sef = true;

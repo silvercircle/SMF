@@ -46,6 +46,11 @@ class GitFeed extends EoS_Plugin
 
 	public function __construct() { parent::__construct(); }	// mandatory
 
+	/**
+	 * this shouldn't really be here, but just for convenience and I'm too lazy
+	 * to write another plugin for just a single menu entry (this is also a hint,
+	 * yes, we DO need a menu manager...)
+	 */
 	public static function menuextend(&$menu_buttons, &$usermenu_buttons)
 	{
 		$menu_buttons['wiki'] = array(
