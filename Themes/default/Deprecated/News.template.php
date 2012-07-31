@@ -40,9 +40,4 @@ function template_news_listitem()
 		</li>';
 	}
 }
-function template_dismiss_handler()
-{
-	global $context;
-	echo 'foobar';
-}
 ?>
