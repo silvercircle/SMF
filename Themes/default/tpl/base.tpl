@@ -284,7 +284,7 @@
   {$C.template_hooks.global.above}
   {$C.additional_admin_errors}
   {if $C.news_item_count}
-    {include file="notices_list.tpl"}
+    {include "notices_list.tpl"}
   {/if}
   <aside>
     <div id="sidebar" style="width:260px;display:{($sidebar_allowed) ? 'inline' : 'none'};">

@@ -529,7 +529,7 @@ function loadUserSettings()
 function loadBoard()
 {
 	global $txt, $scripturl, $context, $modSettings;
-	global $board_info, $board, $topic, $user_info;
+	global $board_info, $board, $topic, $user_info, $db_show_debug;
 
 	// Assume they are not a moderator.
 	$user_info['is_mod'] = false;
@@ -578,7 +578,7 @@ function loadBoard()
 		{
 			loadPermissions();
 			loadTheme();
-			EoS_Smarty::init();
+			EoS_Smarty::init($db_show_debug);
 			fatal_lang_error('topic_gone', false);
 		}
 	}
@@ -774,7 +774,7 @@ function loadBoard()
 		// The permissions and theme need loading, just to make sure everything goes smoothly.
 		loadPermissions();
 		loadTheme();
-		EoS_Smarty::init();
+		EoS_Smarty::init($db_show_debug);
 
 		$_GET['board'] = '';
 		$_GET['topic'] = '';

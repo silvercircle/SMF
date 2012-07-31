@@ -12,13 +12,6 @@
  * @version 1.0pre
  */
 
-$my_theme_context = array();
-
-/*
- * this is called to initialize your object
- * it's therefore mandatory
- */
-
 global $settings;
 
 $settings['theme_variants'] = array('default', 'lightweight');
@@ -35,28 +28,19 @@ $settings['sprite_image_src'] = array(
 
 function theme_support_autoload($smarty_instance)
 {
-	return new MyCustomTheme($smarty_instance);
+	return new DefaultTheme($smarty_instance);
 }
 
 /**
  * your class MUST inherit from _EoS_Smarty_Template_Support
  */
-class MyCustomTheme extends EoS_Smarty_Template_Support
+class DefaultTheme extends EoS_Smarty_Template_Support
 {
 	public function __construct($smarty_instance) 
 	{
 		global $my_theme_context, $settings;
 
 		parent::__construct($smarty_instance);		// this is a MUST
-
-		/*
-		 * add a custom theme variable and make it available in templates
-		 * we always assign by reference!
-
-		$smarty_instance->assignByRef('MYCONTEXT', $my_theme_context);
-		$my_theme_context['testvalue'] = 'FOO';
-
-		*/
 	}
 
 	/*

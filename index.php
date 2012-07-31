@@ -138,7 +138,7 @@ obExit(null, null, true);
 // The main controlling function.
 function smf_main()
 {
-	global $context, $modSettings, $settings, $user_info, $board, $topic, $board_info, $maintenance, $sourcedir, $backend_subdir;
+	global $context, $modSettings, $settings, $user_info, $board, $topic, $board_info, $maintenance, $sourcedir, $backend_subdir, $db_show_debug;
 
 	// Special case: session keep-alive, output a transparent pixel.
 	if (isset($_GET['action']) && $_GET['action'] == 'keepalive')
@@ -165,7 +165,7 @@ function smf_main()
 	// Load the current theme.  (note that ?theme=1 will also work, may be used for guest theming.)
 	else {
 		loadTheme();
-		EoS_Smarty::init();
+		EoS_Smarty::init($db_show_debug);
 	}
 	$user_info['notify_count'] += (!empty($context['open_mod_reports']) ? 1 : 0);
 	URL::setSID();

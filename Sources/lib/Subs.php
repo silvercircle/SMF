@@ -4139,41 +4139,6 @@ function registerCSSOverrideFragment($t)
  * Look at the current user group(s) to determine whether the user
  * is supposed to see the item.
  */
-function __fetchNewsItems($board = 0, $topic = 0, $force_full = false)
-{
-	global $context, $user_info;
-
-	$context['news_items'] = array();
-	$context['news_item_count'] = 0;
-	$sel = '';
-
-	if(0 == $board && 0 == $topic)
-		$sel = ' on_index = 1 ';
-	elseif($topic)
-		$sel = ' ((topics = -1 && FIND_IN_SET({int:board}, boards)) OR FIND_IN_SET({int:topic}, topics)) ';
-	elseif($board)
-		$sel = ' (boards = "" OR FIND_IN_SET({int:board}, boards)) ';
-
-	$gsel = '(groups = "" OR FIND_IN_SET(' . implode(', groups) != 0 OR FIND_IN_SET(', $user_info['groups']) . ', groups) != 0) AND ';
-
-	$result = smf_db_query('
-		SELECT id_news, teaser, body FROM {db_prefix}news WHERE ' . $gsel . $sel,
-		array('board' => (int)$board, 'topic' => (int)$topic, 'group' => (int)$user_info['groups']));
-
-	while($row = mysql_fetch_assoc($result)) {
-		$context['news_item_count']++;
-		$context['news_items'][] = array(
-			'id' => $row['id_news'],
-			'teaser' => !empty($row['teaser']) ? parse_bbc($row['teaser']) : '',
-			'body' => parse_bbc($row['body']),
-		);
-	}
-	mysql_free_result($result);
-	// we have news items to show, we need the template
-	if($context['news_item_count'])
-		loadTemplate('News');
-}
-
 function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 {
 	global $context, $user_info;
@@ -4235,7 +4200,7 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 		$context['news_item_count']++;
 	}
 	// we have news items to show, we need the template
-	if($context['news_item_count'])
+	if($context['news_item_count'] && !EoS_Smarty::isActive())
 		loadTemplate('News');
 }
 

@@ -46,10 +46,8 @@ function MessageIndex()
 
 		redirectexit($board_info['redirect']);
 	}
-
-	fetchNewsItems($board, 0);
 	EoS_Smarty::loadTemplate('messageindex');
-
+	fetchNewsItems($board, 0);
 	$context['act_as_cat'] = $board_info['allow_topics'] ? false : true;
 	$context['name'] = $board_info['name'];
 	$context['description'] = $board_info['description'];

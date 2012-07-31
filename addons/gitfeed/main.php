@@ -33,6 +33,7 @@ class GitFeed extends EoS_Plugin
 
 	protected $installableHooks = array(
 		'boardindex' => array('file' => 'main.php', 'callable' => 'GitFeed::boardindex'),
+		'menu_buttons' => array('file' => 'main.php', 'callable' => 'GitFeed::menuextend'),
 	);
 
 	/*
@@ -45,6 +46,15 @@ class GitFeed extends EoS_Plugin
 
 	public function __construct() { parent::__construct(); }	// mandatory
 
+	public static function menuextend(&$menu_buttons, &$usermenu_buttons)
+	{
+		$menu_buttons['wiki'] = array(
+			'title' => 'Wiki',
+			'href' => 'http://eos.miranda.or.at/wiki/',
+			'show' => true,
+			'is_last' => true,
+		);
+	}
 	/*
 	 * runs in board index
 	 * 1) fetch our data (we cache this for a while...)

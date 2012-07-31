@@ -1,23 +1,6 @@
-/*@import url(http://fonts.googleapis.com/css?family=Ubuntu:500,500italic,700,700italic&subset=latin,cyrillic-ext,greek-ext,greek,latin-ext,cyrillic);*/
-/*@import url(http://fonts.googleapis.com/css?family=Cuprum:400,400italic,700,700italic&subset=latin,latin-ext,cyrillic);*/
-/*
-@font-face {
-    font-family: 'Cuprum';
-    src: url('../fonts/Cuprum/Cuprum-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Cuprum';
-    src: url('../fonts/Cuprum/Cuprum-Bold.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-}
-*/
 body {
 	background: #eaeaea;
-	font-family: "Trebuchet MS", "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
+	font-family: "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
 	font-size: 10pt;
 	margin: 0;
 	padding: 0;
@@ -91,7 +74,7 @@ div.inlinePopup {
 	box-shadow: 0 0 7px 2px #666;
 	border: 2px solid #888;
 	border-radius: 0 0 4px 4px;
-	font-family: "Trebuchet MS", "Verdana", "Arial", helvetica, sans-serif;
+	font-family: "Segoe UI", "Verdana", "Arial", helvetica, sans-serif;
 	font-size: 10pt;
 }
 
@@ -2425,7 +2408,7 @@ tr.titlebg td {
 	line-height:25px;
 	padding: 0 10px;
 	border-radius:2px 2px 0 0;
-	font-family: "Trebuchet MS", "Segoe UI", "Tahoma", "Arial", sans-serif;	
+	font-family: "Segoe UI", "Tahoma", "Arial", sans-serif;	
 	color:white;
 	/*font-variant: small-caps;*/
 	font-size: 14px;
@@ -2530,7 +2513,7 @@ table.topic_table td {
 a.boardlink, span.topiclink a {
 	color:#666;
 	font-size: 1.1em;
-	font-family: "Trebuchet MS", "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
+	font-family: "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
 	line-height:130%;
 }
 a.boardlink { font-weight:normal;text-shadow: 0 0 1px rgba(150, 150, 150, 0.9);}

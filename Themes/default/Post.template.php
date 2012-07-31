@@ -444,7 +444,7 @@ function template_main()
 							', $modSettings['astream_active'] ? '<li><label for="noactivity"><input type="checkbox" name="noactivity" id="noactivity" value="1" class="input_check" /> ' . $txt['no_activity_record'] . '</label></li>' : '', '
 							', $context['can_tag_users'] ? '<li><label for="allowtags"><input type="checkbox" name="allowtags" id="allowtags" value="1" class="input_check" /> ' . $txt['disable_user_tagging'] . '</label></li>' : '', '
 						</ul>';
-	if($context['can_stick_firstpost'])
+	if(isset($context['can_stick_firstpost']) && $context['can_stick_firstpost'] && isset($context['first_has_layout']))
 		echo '
 						<hr>
 						<select name="firstlayout">

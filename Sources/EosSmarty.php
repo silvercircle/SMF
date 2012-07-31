@@ -10,16 +10,20 @@
  * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
  * @version 1.0pre
+ *
+ * this implements smarty template handling.
  */
 if (!defined('SMF'))
 	die('No access.');
 
 class EoS_Smarty {
 	private static $_template_names = array();
+	private static $_additional_template_dirs = array();
 	private static $_smartyInstance;
 	private static $_configInstance;
 	private static $_is_BoardIndex = false;
 	private static $_is_Active = false;
+	private static $_is_Debug = false;
 
 	/**
 	 * init smarty engine and custom theme support object
@@ -27,10 +31,11 @@ class EoS_Smarty {
 	 * this is called once from index.php when ALL other initializations
 	 * are complete.
 	 */
-	public static function init()
+	public static function init($debug = false)
 	{
 		global $sourcedir, $settings, $boarddir, $context;
 
+		self::$_is_Debug = $debug;
 		@require_once($sourcedir . '/lib/Smarty/Smarty.class.php');
 		self::$_smartyInstance = new Smarty();
 		self::$_smartyInstance->caching = 0;		// this is *STATIC* caching of generated pages, we don't want (or even need) this for a forum...
@@ -84,13 +89,17 @@ class EoS_Smarty {
 	/**
 	 * clear all templates that have been loaded
 	 * this is needed in a few places (e.g. setup_fatal_error_context) when we have
-	 * to disregard all other templates.
+	 * to discard all previously loaded templates.
 	 */
 	public static function resetTemplates()
 	{
 		self::$_template_names = array();
 	}
 
+	/**
+	 * @static
+	 * @return array of template names
+	 */
 	public static function &getTemplates()
 	{
 		return self::$_template_names;
@@ -100,11 +109,21 @@ class EoS_Smarty {
 	 * @static
 	 * @param string - $_dir. The template directory to add
 	 *
-	 * add a new template directory 
+	 * add a new template directory. this will typically be used by plugins to add
+	 * additional template directories.
+
+	 * todo: add some debugging support to assist plugin authors (e.g. check whether
+	 * the directory does actually exist).
 	 */
 	public static function addTemplateDir($_dir)
 	{
-		self::$_smartyInstance->addTemplateDir($_dir);
+		/*
+		 * since this function could - in theory - been called before the init()
+		 * method, but additional (= plugin-hosted) template dirs *must* exist at the end 
+		 * of the list, we just remember them here. it will also make things faster, because
+		 * we can add all template directories with a single call to Smarty::addTemplateDir()
+		 */
+		self::$_additional_template_dirs[] = $_dir;
 	}
 	/**
 	 * does absolutely nothing
@@ -140,7 +159,10 @@ class EoS_Smarty {
 	public static function Display()
 	{
 		global $context;
-		
+	
+		if(!empty(self::$_additional_template_dirs))
+			self::$_smartyInstance->addTemplateDir(self::$_additional_template_dirs);
+
   		$context['template_benchmark'] = microtime();
   		self::$_configInstance->setupContext();
   		foreach(self::$_template_names as $the_template)
@@ -520,8 +542,10 @@ class EoS_Smarty_Template_Support {
 	/**
 	 * @static
 	 * 
-	 * return formatted list of registered hooks. Used for debugging purpose
+	 * return formatted list of registered hooks. Used for debugging purposes
 	 * only
+	 *
+	 * todo: does this need translation?
 	 */
 	public function getHookDebugInfo()
 	{
@@ -545,19 +569,5 @@ class EoS_Smarty_Template_Support {
 				$this->_smarty_instance->display($the_template);
 		}
 	}
-}
-
-function TestSmarty()
-{
-	global $context;
-	EoS_Smarty::init();
-	EoS_Smarty::loadTemplate('foo');
-
-	$context['footpl'] = 'foo.tpl';
-	$context['testvar'] = 'foo';
-
-	for($i = 0; $i < 1000; $i++)
-		$context['foobar'][$i] = $i;
-
 }
 ?>
