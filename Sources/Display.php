@@ -89,7 +89,6 @@ function Display()
 	else
 		$context['can_see_like'] = $context['can_give_like'] = false;
 
-	fetchNewsItems($board, $topic);
 	// What are you gonna display if these are empty?!
 	if (empty($topic))
 		fatal_lang_error('no_board', false);
@@ -1326,6 +1325,7 @@ function Display()
   		$context['mod_buttons_style'] = array('id' => 'moderationbuttons_strip', 'class' => 'plainbuttonlist');
 		$context['full_members_viewing_list'] = empty($context['view_members_list']) ? '0 ' . $txt['members'] : implode(', ', $context['view_members_list']) . ((empty($context['view_num_hidden']) || $context['can_moderate_forum']) ? '' : ' (+ ' . $context['view_num_hidden'] . ' ' . $txt['hidden'] . ')');
 	}
+	fetchNewsItems($board, $topic);
 	HookAPI::callHook('display_general', array());
 	/*
 	 * $message is always available in templates as global variable
@@ -1455,7 +1455,7 @@ function prepareDisplayContext($reset = false)
 		'id_member' => $message['id_member'],
 		'postbit_callback' => $message['approved'] ? ($message['id_msg'] == $context['first_message'] ? $context['postbit_callbacks']['firstpost'] : $context['postbit_callbacks']['post']) : 'template_postbit_comment',
 		'postbit_template_class' => $message['approved'] ? ($message['id_msg'] == $context['first_message'] ? $context['postbit_template_class']['firstpost'] : $context['postbit_template_class']['post']) : 'c',
-		'mq_marked' => in_array($message['id_msg'], $context['multiquote_posts'])
+		'mq_marked' => in_array($message['id_msg'], $context['multiquote_posts']),
 	);
 
 	if($context['can_see_like'])
