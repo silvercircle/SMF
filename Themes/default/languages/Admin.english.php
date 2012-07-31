@@ -344,6 +344,7 @@ $txt['attachmentEnable'] = 'Attachments mode';
 $txt['attachmentEnable_deactivate'] = 'Disable attachments';
 $txt['attachmentEnable_enable_all'] = 'Enable all attachments';
 $txt['attachmentEnable_disable_new'] = 'Disable new attachments';
+$txt['attachmentViaSendfile'] = 'Send via <a href="http://blog.lighttpd.net/articles/2006/07/02/x-sendfile" target="_blank">X-Sendfile</a><div class="smalltext">(disabled when line endings are recoded)</div>';
 $txt['attachmentCheckExtensions'] = 'Check attachment\'s extension';
 $txt['attachmentExtensions'] = 'Allowed attachment extensions';
 $txt['attachmentRecodeLineEndings'] = 'Recode line endings in textual attachments';
