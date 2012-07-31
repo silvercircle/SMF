@@ -2202,25 +2202,37 @@ function createAttachment(&$attachmentOptions)
 
 	if (!empty($modSettings['attachmentDirSizeLimit']))
 	{
-		// Make sure the directory isn't full.
-		$dirSize = 0;
-		$dir = @opendir($attach_dir) or fatal_lang_error('cant_access_upload_path', 'critical');
-		while ($file = readdir($dir))
-		{
-			if ($file == '.' || $file == '..')
-				continue;
-
-			if (preg_match('~^post_tmp_\d+_\d+$~', $file) != 0)
+		// This is a really expensive operation for big numbers of
+		// attachments, which is also very easy to cache. Only do it
+		// every ten minutes.
+		if(empty($modSettings['attachment_dirsize']) || empty($modSettings['attachment_dirsize_time']) || $modSettings['attachment_dirsize_time'] < time() - 600) {
+			// It has been cached - just work with this value for now!
+			$dirSize = $modSettings['attachment_dirsize'];
+		} else {
+			// Make sure the directory isn't full.
+			$dirSize = 0;
+			$dir = @opendir($attach_dir) or fatal_lang_error('cant_access_upload_path', 'critical');
+			while ($file = readdir($dir))
 			{
-				// Temp file is more than 5 hours old!
-				if (filemtime($attach_dir . '/' . $file) < time() - 18000)
-					@unlink($attach_dir . '/' . $file);
-				continue;
-			}
+				if ($file == '.' || $file == '..')
+					continue;
 
-			$dirSize += filesize($attach_dir . '/' . $file);
+				if (preg_match('~^post_tmp_\d+_\d+$~', $file) != 0)
+				{
+					// Temp file is more than 5 hours old!
+					if (filemtime($attach_dir . '/' . $file) < time() - 18000)
+						@unlink($attach_dir . '/' . $file);
+					continue;
+				}
+
+				$dirSize += filesize($attach_dir . '/' . $file);
+			}
+			closedir($dir);
+			updateSettings(array(
+				'attachment_dirsize' => $dirSize,
+				'attachment_dirsize_time' => time(),
+			));
 		}
-		closedir($dir);
 
 		// Too big!  Maybe you could zip it or something...
 		if ($attachmentOptions['size'] + $dirSize > $modSettings['attachmentDirSizeLimit'] * 1024)
@@ -2309,6 +2321,14 @@ function createAttachment(&$attachmentOptions)
 		rename($attachmentOptions['tmp_name'], $attachmentOptions['destination']);
 	elseif (!move_uploaded_file($attachmentOptions['tmp_name'], $attachmentOptions['destination']))
 		fatal_lang_error('attach_timeout', 'critical');
+
+	// Udate the cached directory size, if we care for it.
+	if (!empty($modSettings['attachmentDirSizeLimit'])) {
+		updateSettings(array(
+			'attachment_dirsize' => $modSettings['attachment_dirsize'] +$attachmentOptions['size'],
+			'attachment_dirsize_time' => time(),
+		));
+	}
 
 	// Attempt to chmod it.
 	@chmod($attachmentOptions['destination'], 0644);
