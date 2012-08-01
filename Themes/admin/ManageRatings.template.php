@@ -89,7 +89,8 @@ function template_manage_ratings()
 		</table>
 		<br>
 		<h1 class="bigheader secondary">',$txt['rating_other'],'</h1>
-		<input ',(!empty($context['rating_show_repair']) ? 'checked="checked"' : ''), ' class="aligned" type="checkbox" name="rating_show_repair" value="1" />&nbsp;&nbsp;<span class="cblabel">',$txt['rating_show_repair'],'</span>
+		<input ',(!empty($context['rating_show_repair']) ? 'checked="checked"' : ''), ' class="aligned" type="checkbox" id="rating_show_repair" name="rating_show_repair" value="1" />&nbsp;&nbsp;<label for="rating_show_repair" class="aligned">',$txt['rating_show_repair'],'</label><br>
+		<input ',(!empty($context['rating_allow_comments']) ? 'checked="checked"' : ''), ' class="aligned" type="checkbox" id="rating_allow_comments" name="rating_allow_comments" value="1" />&nbsp;&nbsp;<label for="rating_allow_comments" class="aligned">',$txt['rating_allow_comments'],'</label>
 		<div class="righttext">
 			<input type="submit" class="button_submit" value="Save" />
 		</div>

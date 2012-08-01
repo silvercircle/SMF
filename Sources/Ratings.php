@@ -71,7 +71,7 @@ function LikeDispatch()
 		$start = 0;
 		$users = array();
 		if($action === 'getlikes') {
-			$request = smf_db_query('SELECT l.id_msg, l.id_user, l.updated, l.id_receiver, m.real_name
+			$request = smf_db_query('SELECT l.id_msg, l.id_user, l.updated, l.id_receiver, l.comment, m.real_name
 					FROM {db_prefix}likes AS l LEFT JOIN {db_prefix}members AS m ON (m.id_member = l.id_user) 
 					WHERE l.id_msg = {int:idmsg} AND l.ctype = {int:ctype} AND FIND_IN_SET({int:rtype}, l.rtype)
 					ORDER BY l.updated DESC LIMIT {int:start}, 500',

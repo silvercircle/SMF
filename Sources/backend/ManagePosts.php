@@ -475,6 +475,7 @@ function ModifyRatingSettings()
 	loadAdminTemplate('ManageRatings');
 	$context['sub_template'] = 'manage_ratings';
 	$context['rating_show_repair'] = empty($modSettings['rating_show_repair']) ? false : true;
+	$context['rating_allow_comments'] = empty($modSettings['rating_allow_comments']) ? false : true;
 	
 	for($i = 1; $i <= 10; $i++) {
 		if(isset($modSettings['ratings'][$i])) {
@@ -532,7 +533,8 @@ function ModifyRatingSettings()
 			}
 		}
 		$settings_to_update = array(
-			'rating_show_repair' => isset($_REQUEST['rating_show_repair']) ? $_REQUEST['rating_show_repair'] : 0
+			'rating_show_repair' => isset($_REQUEST['rating_show_repair']) ? $_REQUEST['rating_show_repair'] : 0,
+			'rating_allow_comments' => isset($_REQUEST['rating_allow_comments']) ? $_REQUEST['rating_allow_comments'] : 0,
 		);
 		if(!empty($new_ratings))
 			$settings_to_update['raw_ratings'] = @serialize($new_ratings);

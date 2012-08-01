@@ -42,7 +42,8 @@
         {(!$C.can_reply_approved and $C.require_verification) ? '<br>' : ''}
         <textarea id="quickReplyMessage" style="width:99%;" rows="18" name="message" tabindex="{$tabindex++}"></textarea>
         {if $C.automerge}
-          <input type="checkbox" name="want_automerge" id="want_automerge" checked="checked" value="1" />{$T.want_automerge}
+          <input class="aligned" type="checkbox" name="want_automerge" id="want_automerge" checked="checked" value="1" />
+          <label class="aligned" for="want_automerge">{$T.want_automerge}</label>
         {/if}
       </div>
       <div class="righttext padding">

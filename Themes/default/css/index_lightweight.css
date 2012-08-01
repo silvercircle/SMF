@@ -104,7 +104,7 @@ input[type="text"], input[type="password"], select {
 	padding:4px;
 	box-shadow: 0 0 10px 0px #ddd inset;
 }
-input.aligned, span.cblabel {
+input.aligned, span.cblabel, label.aligned {
 	height:20px;
 	line-height:20px;
 	vertical-align:middle;

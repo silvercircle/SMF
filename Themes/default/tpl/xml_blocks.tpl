@@ -122,9 +122,11 @@
       {foreach $C.likes as $like}
       <li>
         <span class="floatright">{$like.dateline}</span>
-        <strong>{$like.memberlink}</strong>
+        <strong>{$like.memberlink}</strong> <span class="tinytext lowcontrast">(-0/0/+0)</span>
         <br>
-        Ratings: +0/0/-0
+        {if !empty($like.comment)}
+          <span class="tinytext"><span class="lowcontrast">Comment:</span> {$like.comment}</span>
+        {/if}
       </li>
       {/foreach}
     </ol>
@@ -148,9 +150,9 @@
           {foreach $C.ratings as $rating}
             <li>
               {if $rating.unique}
-                <input class="rw_option aligned" name="RW" value="{$rating.rtype}" type="radio" /><span class="cblabel">{$rating.label}</span>
+                <input class="rw_option aligned" name="RW" id="rtype_{$rating.rtype}" value="{$rating.rtype}" type="radio" /><label for="rtype_{$rating.rtype}" class="aligned">{$rating.label}</label>
               {else}
-                <input class="rw_option aligned" name="RW" value="{$rating.rtype}" type="checkbox" /><span class="cblabel">{$rating.label}</span>
+                <input class="rw_option aligned" name="RW" id="rtype_{$rating.rtype}" value="{$rating.rtype}" type="checkbox" /><label for="rtype_{$rating.rtype}" class="aligned">{$rating.label}</label>
               {/if}
             </li>
           {/foreach}
@@ -207,7 +209,8 @@
         }
       });
       if(done) {
-        var uri = 'action=xmlhttp;sa=givelike;r=' + rtypes.join(',') + ';m=' + parseInt($('#ratingwidget').attr('data-id'));
+        var comment = $('#ratingcomment').val().length > 0 ? ';comment=' + encodeURIComponent($('#ratingcomment').val()) : '';
+        var uri = 'action=xmlhttp;sa=givelike;r=' + rtypes.join(',') + ';m=' + parseInt($('#ratingwidget').attr('data-id')) + comment;
         sendRequest(uri, null);
         $('#ratingwidget').remove();
         return(false);

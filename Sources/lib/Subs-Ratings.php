@@ -224,6 +224,7 @@ class Ratings {
 			$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
 			$update_mode = false;
 			$like_type = ((isset($_REQUEST['r']) && (int)$_REQUEST['r'] > 0) ? $_REQUEST['r'] : '1');
+			$comment = isset($_REQUEST['comment']) ? strip_tags($_REQUEST['comment']) : '';
 
 			$rtypes = explode(',', $like_type);
 			foreach($rtypes as $rtype) {
@@ -317,9 +318,9 @@ class Ratings {
 					loadMemberContext($like_receiver);
 				}
 				if(($like_receiver && !$memberContext[$like_receiver]['is_banned']) || $like_receiver == 0) {  // posts by guests can be liked
-					smf_db_query('INSERT INTO {db_prefix}likes(id_msg, id_user, id_receiver, updated, ctype, rtype) 
-							VALUES({int:id_message}, {int:id_user}, {int:id_receiver}, {int:updated}, {int:ctype}, {string:rtype})',
-						array('id_message' => $mid, 'id_user' => $uid, 'id_receiver' => $like_receiver, 'updated' => time(), 'ctype' => $content_type, 'rtype' => $like_type));
+					smf_db_query('INSERT INTO {db_prefix}likes(id_msg, id_user, id_receiver, updated, ctype, rtype, comment) 
+							VALUES({int:id_message}, {int:id_user}, {int:id_receiver}, {int:updated}, {int:ctype}, {string:rtype}, {string:comment})',
+						array('id_message' => $mid, 'id_user' => $uid, 'id_receiver' => $like_receiver, 'updated' => time(), 'ctype' => $content_type, 'rtype' => $like_type, 'comment' => $comment));
 						
 					if($like_receiver)
 						smf_db_query('UPDATE {db_prefix}members SET likes_received = likes_received + 1 WHERE id_member = {int:id_member}',
