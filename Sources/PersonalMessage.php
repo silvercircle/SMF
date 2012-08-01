@@ -96,6 +96,8 @@ if (!defined('SMF'))
 		// !!!
 */
 
+$output = array();
+
 // This helps organize things...
 function MessageMain()
 {
@@ -419,7 +421,7 @@ function messageIndexBar($area)
 // A folder, ie. inbox/sent etc.
 function MessageFolder()
 {
-	global $txt, $scripturl, $modSettings, $context, $subjects_request;
+	global $txt, $scripturl, $modSettings, $context, $subjects_request, $output;
 	global $messages_request, $user_info, $recipients, $options, $smcFunc, $memberContext, $user_settings;
 
 	// Changing view?
@@ -436,6 +438,16 @@ function MessageFolder()
 		$_GET['start'] = 0;
 	else
 		$_GET['start'] = 'new';
+
+	// we read pms now, so mark all notifications regarding pms as read
+	if($modSettings['astream_active'] && $user_info['notify_count'] > 0) {
+		smf_db_query('UPDATE {db_prefix}log_notifications AS n 
+				LEFT JOIN {db_prefix}log_activities AS a ON(n.id_act = a.id_act) SET n.unread = 0 WHERE n.id_member = {int:member} AND n.unread = 1 AND a.id_type = {int:type}',
+			array('member' => $user_info['id'], 'type' => 6));
+		invalidateMemberData($user_info['id']);
+	}
+	EoS_Smarty::getConfigInstance()->assignGlobals();
+	EoS_Smarty::getSmartyInstance()->assignByRef('message', $output);
 
 	// Set up some basic theme stuff.
 	$context['from_or_to'] = $context['folder'] != 'sent' ? 'from' : 'to';
@@ -856,7 +868,7 @@ function MessageFolder()
 // Get a personal message for the theme.  (used to save memory.)
 function prepareMessageContext($type = 'subject', $reset = false)
 {
-	global $txt, $scripturl, $modSettings, $context, $messages_request, $memberContext, $recipients, $smcFunc;
+	global $txt, $scripturl, $modSettings, $context, $messages_request, $memberContext, $recipients, $output;
 	global $user_info, $subjects_request;
 
 	// Count the current message number....

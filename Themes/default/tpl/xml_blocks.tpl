@@ -162,7 +162,7 @@
             No rating types available
           </div>
         {/if}
-        {if $C.result_count}
+        {if $C.result_count > 0 and !empty($M.rating_allow_comments)}
           <hr>
           <div class="centertext tinytext" style="line-height:110%;">
             <div class="lefttext" style="margin-bottom:4px;">{$T.rating_attach_comment}</div>

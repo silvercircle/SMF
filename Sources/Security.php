@@ -103,7 +103,7 @@ if (!defined('SMF'))
 // Check if the user is who he/she says he is
 function validateSession()
 {
-	global $modSettings, $sourcedir, $user_info, $sc, $user_settings, $db_no_admin_security;
+	global $modSettings, $sourcedir, $user_info, $sc, $user_settings;
 
 	// We don't care if the option is off, because Guests should NEVER get past here.
 	is_not_guest();
@@ -112,7 +112,7 @@ function validateSession()
 	$refreshTime = isset($_GET['xml']) ? 4200 : 3600;
 
 	// Is the security option off?  Or are they already logged in?
-	if (!empty($db_no_admin_security) || (!empty($_SESSION['admin_time']) && $_SESSION['admin_time'] + $refreshTime >= time()))
+	if ((!empty($_SESSION['admin_time']) && $_SESSION['admin_time'] + $refreshTime >= time()))
 		return;
 
 	require_once($sourcedir . '/lib/Subs-Auth.php');

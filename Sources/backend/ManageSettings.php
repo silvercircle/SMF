@@ -447,6 +447,7 @@ function ModifyCoreFeatures($return_config = false)
 			'settings' => array(
 			),
 		),
+		/* todo: drafts -> plugin
 		'dr' => array(
 			'url' => 'action=admin;area=postsettings;sa=drafts',
 			'settings' => array(
@@ -454,6 +455,7 @@ function ModifyCoreFeatures($return_config = false)
 				'drafts_autosave_interval' => 600
 			),
 		),
+		*/
 	);
 
 	// Anyone who would like to add a core feature?

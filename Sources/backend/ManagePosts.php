@@ -32,8 +32,8 @@ function ManagePostSettings()
 	if($modSettings['tags_active'])
 		$subActions['tags'] = 'ModifyTagSettings';
 	
-	if(in_array('dr', $context['admin_features']))
-		$subActions['drafts'] = 'ModifyDraftSettings';
+	//if(in_array('dr', $context['admin_features']))
+	//	$subActions['drafts'] = 'ModifyDraftSettings'; todo: drafts -> plugin
 
 	// Default the sub-action to 'posts'.
 	$_REQUEST['sa'] = isset($_REQUEST['sa']) && isset($subActions[$_REQUEST['sa']]) ? $_REQUEST['sa'] : 'posts';
@@ -60,11 +60,13 @@ function ManagePostSettings()
 			),
 		),
 	);
+	/* todo: drafts -> plugin
 	if(in_array('dr', $context['admin_features']))
 		$context[$context['admin_menu_name']]['tab_data']['tabs']['drafts'] = array(
 			'label' => $txt['manageposts_draft_label'],
 			'description' => $txt['manageposts_draft_settings_desc'],
 		);
+	*/
 	$subActions[$_REQUEST['sa']]();
 }
 

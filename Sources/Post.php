@@ -91,13 +91,13 @@ function Post()
 	$context['tagging_ui'] = '';
 
 	$context['can_tag_users'] = allowedTo('tag_users');
-
+	/* todo: drafts should be a plugin
 	if(in_array('dr', $context['admin_features'])) {
 		require_once($sourcedir . '/lib/Subs-Drafts.php');
 		$context['have_drafts'] = true;
 		enqueueThemeScript('drafts', 'scripts/drafts.js', true);
 	}
-	else
+	else*/
 		$context['have_drafts'] = false;
 
 	// You can't reply with a poll... hacker.
@@ -1299,12 +1299,13 @@ function Post2()
 	global $board, $topic, $txt, $modSettings, $sourcedir, $context;
 	global $user_info, $board_info, $options, $backend_subdir;
 
+	/*  todo: drafts -> plugin
 	if(in_array('dr', $context['admin_features'])) {
 		require_once($sourcedir . '/lib/Subs-Drafts.php');
 		enqueueThemeScript('drafts', 'scripts/drafts.js', true);
 		$context['have_drafts'] = true;
 	}
-	else
+	else*/
 		$context['have_drafts'] = false;
 
 	$context['need_synhlt'] = true;
@@ -2817,6 +2818,7 @@ function QuoteFast()
     $board = $row['id_board'];
 
 	// quick modify, attempt to find existing drafts and load them
+	/* todo: drafts -> plugin
 	if(!$context['close_window'] && isset($_REQUEST['modify']) && !$user_info['is_guest'] && in_array('dr', $context['admin_features']) && allowedTo('drafts_allow', $row['id_board']) && !empty($options['use_drafts'])) {
 		$draftrequest = smf_db_query( '
 			SELECT body FROM {db_prefix}drafts WHERE id_msg = {int:id_msg} AND id_member = {int:user}',
@@ -2824,7 +2826,7 @@ function QuoteFast()
 		$draftrow = mysql_fetch_assoc($draftrequest);
 		mysql_free_result($draftrequest);
 	}
-
+    */
 	if(isset($_REQUEST['modify']) && isset($draftrow) && !empty($draftrow['body']) && !empty($row))
 		$row['body'] = $draftrow['body'];
 		

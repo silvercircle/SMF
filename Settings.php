@@ -54,5 +54,4 @@ $db_show_debug = false;
 $g_disable_all_hooks = false;
 $db_cache_api = 'file';
 $db_cache_memcached = 'localhost:11211';
-$db_no_admin_security = false;
 ?>

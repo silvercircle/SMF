@@ -623,33 +623,6 @@ function hltColumn(el, state)
 }
 
 $(document).ready(function() {
-	/*
-	$('input.cb_inline').change(function() {
-		var cbox = this;
-		var state = $(cbox).is(':checked');
-		hltColumn($(this), state);
-	});
-	$('input.cb_invertall').change(function() {
-		var state = $(this).is(':checked');
-		$('input.cb_inline').each(function() {
-			hltColumn($(this), state);
-		});
-	});
-	*/
-	$('input.it_check').change(function() {
-		var cbox = this;
-		var id = $(this).val();
-		$('div.post_wrapper[data-mid=' + id + ']').each(function() {
-			if($(cbox).is(':checked')) {
-				$(this).addClass('inline_highlight');
-				$(this).find('div.post_content:first').addClass('inline_highlight');
-			}
-			else {
-				$(this).removeClass('inline_highlight');
-				$(this).find('div.post_content:first').removeClass('inline_highlight');
-			}
-		});
-	});
 	$('.iconrequest').click(function() {
 		setBusy(1);
 		var m = $(this).attr('id').substr(6);

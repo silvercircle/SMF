@@ -739,24 +739,6 @@ $txt['prompt_text_img'] = 'Enter image location';
 // Escape any single quotes in here twice.. 'it\'s' -> 'it\\\'s'.
 $txt['autosuggest_delete_item'] = 'Delete Item';
 
-// Debug related - when $db_show_debug is true.
-$txt['debug_templates'] = 'Templates: ';
-$txt['debug_subtemplates'] = 'Sub templates: ';
-$txt['debug_language_files'] = 'Language files: ';
-$txt['debug_stylesheets'] = 'Style sheets: ';
-$txt['debug_files_included'] = 'Files included: ';
-$txt['debug_kb'] = 'KB.';
-$txt['debug_show'] = 'show';
-$txt['debug_cache_hits'] = 'Cache hits: ';
-$txt['debug_cache_seconds_bytes'] = '%1$ss - %2$s bytes';
-$txt['debug_cache_seconds_bytes_total'] = '%1$ss for %2$s bytes';
-$txt['debug_queries_used'] = 'Queries used: %1$d.';
-$txt['debug_queries_used_and_warnings'] = 'Queries used: %1$d, %2$d warnings.';
-$txt['debug_query_in_line'] = 'in <em>%1$s</em> line <em>%2$s</em>, ';
-$txt['debug_query_which_took'] = 'which took %1$s seconds.';
-$txt['debug_query_which_took_at'] = 'which took %1$s seconds at %2$s into request.';
-$txt['debug_show_queries'] = '[Show Queries]';
-$txt['debug_hide_queries'] = '[Hide Queries]';
 $txt['no_access'] = 'Insufficient permissions to access this section';
 
 $txt['add_mq'] = '+Multi quote';
@@ -765,26 +747,12 @@ $txt['smftags_addtag'] = 'Add tag';
 $txt['smftags_menu'] = 'Tags';
 $txt['smftags_admin'] = 'Tags Configuration';
 
-$txt['like_label'] = "Like";
-$txt['unlike_label'] = "Unlike";
 $txt['content_label'] = 'Content';
 $txt['font_increase'] = 'Increase text size';
 $txt['font_decrease'] = 'Decrease text size';
 $txt['who_posted'] = 'Who posted';
 $txt['read_topic'] = 'Read the topic from the beginning';
 $txt['visit_new'] = 'Go to first unread post';
-
-$txt['save_draft'] = 'Save as Draft';
-$txt['save_draft_warning'] = 'Saving a draft will retain the basic post details (title, text, icon), but not attachments, polls options or calendar events. Are you happy to proceed with saving this draft?';
-$txt['empty_draft'] = 'You cannot have a draft that is completely empty.';
-$txt['draft_saved_short'] = 'Draft saved';
-$txt['draft_saved'] = 'Your post has been saved as a draft';
-$txt['draft_saved_full'] = 'The contents of your post has been saved as a draft, and will be accessible from the <a href="%1$s">Show Drafts area</a> of <a href="%2$s">your profile</a>.';
-$txt['showDrafts'] = 'Drafts';
-$txt['show_drafts_none'] = 'You have no draft messages saved at this time.';
-$txt['edit_draft'] = 'Edit draft';
-$txt['remove_draft'] = 'Remove draft';
-$txt['last_saved_on'] = 'Last saved on';
 
 $txt['permalink'] = 'Permalink';
 $txt['view_in_thread'] = 'View in topic context';

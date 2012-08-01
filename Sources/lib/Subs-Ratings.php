@@ -108,7 +108,7 @@ class Ratings {
 				if($row['id_member'] != $user_info['id'])
 					$row['likelink'] = self::$rate_bar;
 				else
-					$row['likelink'] = '&nbsp;';
+					$row['likelink'] = '';
 			}
 		}
 		else
@@ -119,7 +119,8 @@ class Ratings {
 			$row['likelink'] .= ' <a rel="nofollow" class="givelike" data-fn="repair" href="#" data-id="'.$row['id'].'">Repair ratings</a>';
 
 		// todo: make ctype dynamic (for different content types)
-		$row['likelink'] = '<div style="position:relative;"><span data-ctype="1" data-likebarid="'.$row['id'].'">'. $row['likelink'] . '</span></div>';
+		if(!empty($row['likelink']))
+			$row['likelink'] = '<div style="position:relative;"><span data-ctype="1" data-likebarid="'.$row['id'].'">'. $row['likelink'] . '</span></div>';
 		if($row['likes_count'] > 0)
 			self::generateOutput(unserialize($row['like_status']), $row['likers'], $row['id'], $have_liked_it);
 	}

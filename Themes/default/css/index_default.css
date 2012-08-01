@@ -74,7 +74,7 @@ div.inlinePopup {
 	box-shadow: 0 0 7px 2px #666;
 	border: 2px solid #888;
 	border-radius: 0 0 4px 4px;
-	font-family: "Trebuchet MS", "Verdana", "Arial", helvetica, sans-serif;
+	font-family: "Segoe UI", "Verdana", "Arial", helvetica, sans-serif;
 	font-size: 10pt;
 }
 
@@ -435,9 +435,10 @@ span.xtag:hover {
 }
 /* Posts and personal messages displayed throughout the forum. */
 .post, .personalmessage {
-	line-height: 1.55em;
+	line-height: 1.30em;
 	padding: 0.5em 1.0em 0 1.0em;
 	overflow:hidden;
+	min-height: 100px;
 }
 .post p {
 	margin:0;
@@ -1869,7 +1870,7 @@ span.button.notify a {
 	background-color: #ff9933;
 	font-weight: bold;
 	color: white;
-	padding: 2px 5px 3px 5px;
+	padding: 1px 5px 1px 5px;
 	border-radius: 2px;
 	line-height: 100%;
 }
@@ -2379,15 +2380,18 @@ tr.titlebg td {
 	width: 200px;
 	position: relative;
 	background: white;
-	/*right: -1px;*/
 	float: left;
 	margin-top: 15px;
 	z-index: 10;
 	min-height: 600px;
-	/*border-right: 1px solid #ddd;*/
 }
-.cat_bar2 img {
-	margin-top:4px;
+.cat_bar2 img, .cat_bar img {
+	padding:0;
+	margin:5px 2px;
+}
+.cat_bar2 img.icon, .cat_bar img.icon {
+	float:left;
+	height:16px;
 }
 .cat_bar h3 {
 	text-shadow: 2px 2px 5px white;
@@ -2498,7 +2502,7 @@ table.topic_table td {
 a.boardlink, span.topiclink a {
 	color:#666;
 	font-size: 1.1em;
-	font-family: "Trebuchet MS", "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
+	font-family: "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
 	line-height:130%;
 }
 a.boardlink { font-weight:normal;text-shadow: 0 0 1px rgba(150, 150, 150, 0.9);}

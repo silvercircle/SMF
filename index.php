@@ -49,9 +49,6 @@ require_once(dirname(__FILE__) . '/Settings.php');
 if(!isset($db_cache_api))
 	$db_cache_api = 'file';
 
-if(!isset($db_no_admin_security))
-	$db_no_admin_security = 0;
-
 // And important includes.
 require_once($sourcedir . '/CommonAPI.php');
 require_once($sourcedir . '/QueryString.php');

@@ -1388,7 +1388,6 @@ jQuery(document).ready(function() {
 		});
 		return(false);
 	});
-	
 	$('table.table_grid th .input_check, table.topic_table th .input_check').change(function() {
 		var cbox = this;
 		$(this).parent().parent().parent().parent().find('tbody').find('input.input_check').each(function() {
@@ -1401,6 +1400,21 @@ jQuery(document).ready(function() {
 			});
 		});
 		return(false);
+	});
+
+	$('input.it_check').change(function() {
+		var cbox = this;
+		var id = $(this).val();
+		$('div.post_wrapper[data-mid=' + id + ']').each(function() {
+			if($(cbox).is(':checked')) {
+				$(this).addClass('inline_highlight');
+				$(this).find('div.post_content:first').addClass('inline_highlight');
+			}
+			else {
+				$(this).removeClass('inline_highlight');
+				$(this).find('div.post_content:first').removeClass('inline_highlight');
+			}
+		});
 	});
 	
 	// handle the topic preview functionality in MessageIndex

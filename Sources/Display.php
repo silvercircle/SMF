@@ -1279,8 +1279,9 @@ function Display()
 		$context['email'] = isset($_SESSION['guest_email']) ? $_SESSION['guest_email'] : '';
 	}
 	
-	$context['can_save_draft'] = $context['can_reply'] && !$context['user']['is_guest'] && in_array('dr', $context['admin_features']) && !empty($options['use_drafts']) && allowedTo('drafts_allow');
-	$context['can_autosave_draft'] = $context['can_save_draft'] && !empty($modSettings['enableAutoSaveDrafts']) && allowedTo('drafts_autosave_allow');
+	// todo: drafts -> plugin
+	$context['can_save_draft'] = false; //$context['can_reply'] && !$context['user']['is_guest'] && in_array('dr', $context['admin_features']) && !empty($options['use_drafts']) && allowedTo('drafts_allow');
+	$context['can_autosave_draft'] = false; //$context['can_save_draft'] && !empty($modSettings['enableAutoSaveDrafts']) && allowedTo('drafts_autosave_allow');
 
 	enqueueThemeScript('topic', 'scripts/topic.js', true);
 	if($context['can_autosave_draft'])

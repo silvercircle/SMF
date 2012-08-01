@@ -131,7 +131,7 @@ function aStreamMarkNotificationRead()
 			$query = 'UPDATE {db_prefix}log_notifications SET unread = 0 WHERE ' . $where;
 			smf_db_query($query,
 				array('id_member' => $user_info['id']));
-			updateMemberData($user_info['id'], array('last_login' => time()));
+			invalidateMemberData($user_info['id']);
 		}
 
 		if($xml) {		// construct xml response for the JavaScript markread handler

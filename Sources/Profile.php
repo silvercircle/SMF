@@ -138,6 +138,7 @@ function ModifyProfile($post_errors = array())
 						'any' => 'profile_view_any',
 					),
 				),
+				/* todo: drafts -> plugin
 				'drafts' => array(
 					'label' => $txt['showDrafts'],
 					'file' => 'Profile-View.php',
@@ -147,6 +148,7 @@ function ModifyProfile($post_errors = array())
 						'any' => 'profile_view_any',
 					),
 				),
+				*/
 				'permissions' => array(
 					'label' => $txt['showPermissions'],
 					'file' => 'Profile-View.php',
@@ -367,7 +369,7 @@ function ModifyProfile($post_errors = array())
 		),
 	);
 
-	if(!$context['user']['is_owner'] || !in_array('dr', $context['admin_features']))
+	//if(!$context['user']['is_owner'] || !in_array('dr', $context['admin_features'])) todo: drafts -> plugin
 		unset($profile_areas['info']['areas']['drafts']);
 
 	if(!in_array('as', $context['admin_features']))

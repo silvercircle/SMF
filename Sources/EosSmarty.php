@@ -322,13 +322,6 @@ class EoS_Smarty {
 			echo '
 				</div>';
 		}
-
-		if (isset($settings['use_default_images']) && $settings['use_default_images'] == 'defaults' && isset($settings['default_template']))
-		{
-			$settings['theme_url'] = $settings['default_theme_url'];
-			$settings['images_url'] = $settings['default_images_url'];
-			$settings['theme_dir'] = $settings['default_theme_dir'];
-		}
 	}
 }
 
@@ -437,10 +430,6 @@ class EoS_Smarty_Template_Support {
 		',$context['inline_footer_script'],'
 
 		';
-		if(isset($context['footer_script_fragments'])) {
-			foreach($context['footer_script_fragments'] as $this_script)
-				echo $this_script;
-		}
 		echo '
 		// ]]>
 		</script>
@@ -482,7 +471,7 @@ class EoS_Smarty_Template_Support {
 	}
 	public function setupContext()
 	{
-		global $context, $settings, $modSettings, $options, $txt, $scripturl, $user_info, $cookiename;
+		global $context, $settings, $modSettings, $options, $txt;
 		global $forum_copyright, $forum_version;
 
   		$context['template_time_now'] = forum_time(false);
@@ -500,9 +489,22 @@ class EoS_Smarty_Template_Support {
 			$settings['theme_dir'] = $settings['actual_theme_dir'];
 		}
 
+		$this->assignGlobals();
+  		$context['collapsed_containers'] = isset($_COOKIE['SF_collapsed']) ? explode(',', $_COOKIE['SF_collapsed']) : array(0);
   		/*
-  		 * globals that must be available to all templates by default
+  		 * hook to extend theme context initialization.
   		 */
+  		HookAPI::callHook('smarty_init_context', array(&$this));
+	}
+
+	/**
+	 * @
+	 * globals that must be available to all templates by default
+	 */
+	public function assignGlobals()
+	{
+		global $context, $settings, $modSettings, $options, $txt, $scripturl, $user_info, $cookiename;
+
   		$this->_smarty_instance->assignByRef('C', $context);
   		$this->_smarty_instance->assignByRef('T', $txt);
   		$this->_smarty_instance->assignByRef('M', $modSettings);
@@ -513,12 +515,6 @@ class EoS_Smarty_Template_Support {
   		$this->_smarty_instance->assignByRef('COOKIENAME', $cookiename);
   		$this->_smarty_instance->assignByRef('_COOKIE', $_COOKIE);
   		$this->_smarty_instance->assign('SID', SID != '' ? '&' . SID : '');
-
-  		$context['collapsed_containers'] = isset($_COOKIE['SF_collapsed']) ? explode(',', $_COOKIE['SF_collapsed']) : array(0);
-  		/*
-  		 * hook to extend theme context initialization.
-  		 */
-  		HookAPI::callHook('smarty_init_context', array(&$this));
 	}
 
 	/**

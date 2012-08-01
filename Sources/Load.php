@@ -165,7 +165,7 @@ function reloadSettings()
 	HookAPI::setHooks($modSettings['integration_hooks']);
 
 	// Setting the timezone is a requirement for some functions in PHP >= 5.1.
-	if (isset($modSettings['default_timezone']) && function_exists('date_default_timezone_set'))
+	if (isset($modSettings['default_timezone']))
 		date_default_timezone_set($modSettings['default_timezone']);
 
 	// Check the load averages?
@@ -1341,7 +1341,7 @@ function detectBrowser()
 // Load a theme, by ID.
 function loadTheme($id_theme = 0, $initialize = true)
 {
-	global $user_info, $user_settings, $board_info, $boarddir;
+	global $user_info, $user_settings, $board_info, $boarddir, $db_show_debug;
 	global $txt, $boardurl, $scripturl, $mbname, $modSettings;
 	global $context, $settings, $options, $sourcedir, $ssi_theme;
 
@@ -1672,6 +1672,9 @@ function loadTheme($id_theme = 0, $initialize = true)
 		else
 			$context['template_layers'] = array('html', 'body');
 	}
+
+	if(isset($db_show_debug) && !empty($db_show_debug))
+		loadLanguage('Debug');
 
 	if(file_exists($settings['theme_dir'] . '/theme_support.php'))
 		@require_once($settings['theme_dir'] . '/theme_support.php');

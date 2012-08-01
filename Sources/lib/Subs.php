@@ -3076,11 +3076,6 @@ function setupThemeContext($forceload = false)
 		$context['user']['messages'] = &$user_info['messages'];
 		$context['user']['unread_messages'] = &$user_info['unread_messages'];
 
-		// Personal message popup...
-		if ($user_info['unread_messages'] > (isset($_SESSION['unread_messages']) ? $_SESSION['unread_messages'] : 0))
-			$context['user']['popup_messages'] = true;
-		else
-			$context['user']['popup_messages'] = false;
 		$_SESSION['unread_messages'] = $user_info['unread_messages'];
 
 		if (allowedTo('moderate_forum'))
@@ -3131,7 +3126,6 @@ function setupThemeContext($forceload = false)
 		$context['user']['unread_messages'] = 0;
 		$context['user']['avatar'] = array();
 		$context['user']['total_time_logged_in'] = array('days' => 0, 'hours' => 0, 'minutes' => 0);
-		$context['user']['popup_messages'] = false;
 
 		if (!empty($modSettings['registration_method']) && $modSettings['registration_method'] == 1)
 			$txt['welcome_guest_missed_activation'] = $txt['welcome_guest_activate'];
@@ -3144,9 +3138,6 @@ function setupThemeContext($forceload = false)
 
 	// Setup the main menu items.
 	setupMenuContext();
-
-	if (empty($settings['theme_version']))
-		$context['show_vBlogin'] = $context['show_quick_login'];
 
 	// Resize avatars the fancy, but non-GD requiring way.
 	if ($modSettings['avatar_action_too_large'] == 'option_js_resize' && (!empty($modSettings['avatar_max_width_external']) || !empty($modSettings['avatar_max_height_external'])))
@@ -4103,24 +4094,6 @@ function enqueueThemeScript($key, $script, $footer = true, $default = true)
 	global $context;
 
 	$context['theme_scripts'][$key] = array('name' => $script, 'default' => $default, 'footer' => $footer);
-}
-
-/**
- * @param $key		string unique key
- * @param $script	string javascript code
- *
- * register a javascript code fragment that will be part of the inline
- * footer script block.
- */
-function registerFooterScriptFragment($key, $script)
-{
-	global $context;
-
-	if(isset($context['footer_script_fragments'][$key]))
-		return;
-
-	if(!empty($key) && !empty($script))
-		$context['footer_script_fragments'][$key] = $script;
 }
 
 function registerCSSOverrideFragment($t)

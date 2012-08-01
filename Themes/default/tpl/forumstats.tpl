@@ -241,7 +241,7 @@
         {foreach $C.yearly as $id => $year}
           <tr class="windowbg2 centertext" id="year_{$id}">
             <th class="lefttext" style="width:30%;">
-              <h1 class="bigheader secondary borderless">{$year.year}</h1>
+              <strong>{$year.year}</strong>
             </th>
             <th>{$year.new_topics}</th>
             <th>{$year.new_posts}</th>

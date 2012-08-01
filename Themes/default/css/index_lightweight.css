@@ -434,9 +434,10 @@ span.xtag:hover {
 }
 /* Posts and personal messages displayed throughout the forum. */
 .post, .personalmessage {
-	line-height: 1.55em;
+	line-height: 1.3em;
 	padding: 0.5em 1.0em 0 1.0em;
 	overflow:hidden;
+	min-height: 100px;
 }
 .post p {
 	margin:0;
@@ -1880,7 +1881,7 @@ span.button.notify a {
 	background-color: #ff9933;
 	font-weight: bold;
 	color: white !important;
-	padding: 0 5px 0 5px;
+	padding: 1px 5px 1px 5px;
 	border-radius: 2px;
 	line-height: 100%;
 }
@@ -2396,8 +2397,13 @@ tr.titlebg td {
 	min-height: 600px;
 	border-right: 1px solid #ddd;
 }
-.cat_bar2 img {
-	margin-top:4px;
+.cat_bar2 img, .cat_bar img {
+	padding:0;
+	margin:5px 2px;
+}
+.cat_bar2 img.icon, .cat_bar img.icon {
+	float:left;
+	height:16px;
 }
 .cContainer_header, .cat_bar2, .cat_bar {
 	margin-bottom: 0;
@@ -2467,6 +2473,7 @@ li.cat_desc > h3 {
 	border: 1px solid #ddd;
 	padding: 5px;
 	overflow: hidden;
+	background-color: #f2f2f2;
 }
 
 tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td {
@@ -3603,7 +3610,7 @@ span.ratings .title {
 span.ratings .number {
 	background:orange;
 	border-radius:2px;
-	padding:0 4px;
+	padding:1px 4px;
 	font-weight:bold;
 	color:white;
 	cursor:pointer;

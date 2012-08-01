@@ -27,7 +27,7 @@
   {/if}
   <div class="cContainer_header">
     <div class="messageicon floatleft">
-      <img src="{$message.icon_url}" alt="" />
+      <img src="{$message.icon_url}" alt="" />&nbsp;&nbsp;
     </div>
     <h3 style="display:inline;" id="subject_{$ID}">
       {$message.subject}

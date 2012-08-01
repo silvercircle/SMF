@@ -845,51 +845,6 @@ function template_create_collapsible_container(array &$_c)
 		';
 }
 
-function template_create_dropselector(&$_c)
-{
-	global $context;
-	
-	$id = $_c['id'];
-	echo '
-	<div class="dropselect">
-	<div class="downarrow" id="',$id,'">
-	</div>
-	TESTING
-	<div class="dropselect_content left" id="',$id,'_content">';
-	if(isset($_c['content']))
-		echo $_c['content'];
-	elseif(isset($_c['items'])) {
-	echo '
-	<ol class="commonlist">';
-	foreach($_c['items'] as $item)
-		echo '
-		<li>
-		 ',$item['html'],'
-		</li>';
-	echo '
-	</ol>';
-	}
-	echo '
-	</div>
-	</div>';
-	if(!isset($context['footer_script_fragments']['dropselector'])) {
-		$script = <<<EOT
-	$("div.downarrow").hover(function() {
-		var id = $(this).attr("id");
-		$("#" + id + "_content").show();
-	},
-	function() {
-
-	});
-	$("div.dropselect_content").live("mouseleave", function(event) {
-		$(this).hide();
-	});
-EOT;
-
-		registerFooterScriptFragment('dropselector', $script);
-	}
-}
-
 /*
  * output all enqued scripts
  */
@@ -911,10 +866,6 @@ function template_footer_scripts()
 	',$context['inline_footer_script'],'
 
 	';
-	if(isset($context['footer_script_fragments'])) {
-		foreach($context['footer_script_fragments'] as $this_script)
-			echo $this_script;
-	}
 	echo '
 	// ]]>
 	</script>
