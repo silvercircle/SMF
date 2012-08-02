@@ -32,6 +32,23 @@ form {
 	padding: 0;
 	margin: 0;
 }
+.auto_suggest_div {
+    border: 1px solid rgb(0, 0, 0);
+    position: absolute;
+    visibility: hidden;
+    padding:4px;
+}
+.auto_suggest_item
+{
+	padding:0 4px;
+}
+.auto_suggest_item_hover
+{
+	background-color: #888;
+	cursor: pointer;
+	color: #eee;
+	padding:0 4px;
+}
 img.icon {
 	vertical-align: middle;
 	padding: 0;
@@ -117,7 +134,7 @@ select {
 }
 textarea {
 	border: 1px solid #6b81ab;
-	font-family: consolas,monospace;
+	font-family:"Segoe UI", Tahoma,sans-serif;
 }
 input[type="text"]:focus, textarea:focus, select:focus {
 	border: 1px solid orange;

@@ -3486,4 +3486,3 @@ function notifyTaggedUsers(&$members, $postOptions)
 			aStreamAddNotification($to_notify, $id_act, ACT_USERTAGGED);
 	}
 }
-?>

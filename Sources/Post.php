@@ -3162,4 +3162,3 @@ function JavaScriptModify()
 	else
 		obExit(false);
 }
-?>
