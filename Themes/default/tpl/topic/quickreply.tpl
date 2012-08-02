@@ -10,9 +10,9 @@
       <input type="hidden" name="subject" value="{$C.response_prefix}{$C.subject}" />
       <input type="hidden" name="icon" value="xx" />
       <input type="hidden" name="from_qr" value="1" />
-      <input type="hidden" name="notify" value="{($C.is_marked_notify or !empty($O.auto_notify)) ? '1' : '0' }}" />
+      <input type="hidden" name="notify" value="{($C.is_marked_notify or !empty($O.auto_notify)) ? '1' : '0'}" />
       <input type="hidden" name="not_approved" value="{!$C.can_reply_approved}" />
-      <input type="hidden" name="goback" value="{(empty($O.return_to_post)) ? '0' : '1' }}" />
+      <input type="hidden" name="goback" value="{(empty($O.return_to_post)) ? '0' : '1'}" />
       <input type="hidden" name="last_msg" value="{$C.topic_last_message}" />
       <input type="hidden" name="{$C.session_var}" value="{$C.session_id}" />
       <input type="hidden" name="seqnum" value="{$C.form_sequence_number}" />
