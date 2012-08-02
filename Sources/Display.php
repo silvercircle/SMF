@@ -1323,7 +1323,7 @@ function Display()
   		$context['message_ids'] = $messages;
   		$context['perma_request'] = isset($_REQUEST['perma']) ? true : false;
 
-  		$context['mod_buttons_style'] = array('id' => 'moderationbuttons_strip', 'class' => 'plainbuttonlist');
+  		$context['mod_buttons_style'] = array('id' => 'moderationbuttons_strip', 'class' => 'buttonlist');
 		$context['full_members_viewing_list'] = empty($context['view_members_list']) ? '0 ' . $txt['members'] : implode(', ', $context['view_members_list']) . ((empty($context['view_num_hidden']) || $context['can_moderate_forum']) ? '' : ' (+ ' . $context['view_num_hidden'] . ' ' . $txt['hidden'] . ')');
 	}
 	fetchNewsItems($board, $topic);

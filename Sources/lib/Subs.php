@@ -764,8 +764,6 @@ function timeformat($log_time, $show_today = false, $offset_type = false)
 	else
 		$time = $log_time;
 
-	$time += $user_info['guest_tzoffset'];
-
 	// We can't have a negative date (on Windows, at least.)
 	if ($log_time < 0)
 		$log_time = 0;

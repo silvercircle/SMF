@@ -343,7 +343,7 @@ function Login2()
 		// SMF's sha1 function can give a funny result on Linux (Not our fault!). If we've now got the real one let the old one be valid!
 		if (strpos(strtolower(PHP_OS), 'win') !== 0)
 		{
-			require_once($sourcedir . '/Subs-Compat.php');
+			require_once($sourcedir . '/lib/Subs-Compat.php');
 			$other_passwords[] = sha1_smf(strtolower($user_settings['member_name']) . un_htmlspecialchars($_POST['passwrd']));
 		}
 

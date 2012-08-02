@@ -59,7 +59,7 @@ function SetGuestTZOffset()
 	global $user_info;
 
 	if($user_info['is_guest'] && isset($_REQUEST['o']))
-		$_SESSION['tzoffset'] = $_REQUEST['o'] * 3600;
+		$_SESSION['tzoffset'] = $_REQUEST['o'];
 	die;
 }
 // Get a list of boards and categories used for the jumpto dropdown.

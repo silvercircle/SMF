@@ -45,6 +45,8 @@ function template_html_above()
 		}
 	}
 	$sSID = SID != '' ? '&' . SID  : '';
+	$timeoff = ($user_info['time_offset'] + $modSettings['time_offset']) * 3600;
+
 	echo <<<EOT
 
 	<script type="text/javascript">
@@ -65,6 +67,7 @@ function template_html_above()
 	var textSizeMin = 8;
 	var textSizeDefault = 10;
 	var sideBarWidth = 250;
+    var timeOffsetMember = {$timeoff};
     var sidebar_disabled = {$user_info['smf_sidebar_disabled']};
 	var cookie = readCookie('SMF_textsize');
 	var fb_appid = '{$modSettings['fb_appid']}';
@@ -74,7 +77,6 @@ function template_html_above()
 	var t2 = document.createElement('SCRIPT');
 	var _cname = '{$cookiename}';
 	var _mqcname = '{$context['multiquote_cookiename']}';
-	var guest_time_offset = 0;
 	t2.type = "text/javascript";
 	t2.async = true;
 	t2.src = '{$settings['default_theme_url']}/scripts/footer.js{$context['jsver']}';

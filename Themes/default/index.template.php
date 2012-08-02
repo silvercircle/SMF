@@ -25,9 +25,9 @@ function template_html_above()
 	if ($context['right_to_left'])
 		echo '
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/rtl.css" />';
-    if(isset($context['need_synhlt']))
+    if(isset($settings['additional_css']))
     	echo '
-    <link rel="stylesheet" type="text/css" href="',$settings['default_theme_url'],'/prettify/prettify.css" />';
+    <link rel="stylesheet" type="text/css" href="',$settings['theme_url'],'/css',$settings['additional_css'][$context['theme_variant']],'" />';
 
 	// Here comes the JavaScript bits!
 	if(!empty($modSettings['jQueryFromGoogleCDN']))
@@ -48,6 +48,7 @@ function template_html_above()
 		}
 	}
 	$sSID = SID != '' ? '&' . SID  : '';
+	$timeoff = ($user_info['time_offset'] + $modSettings['time_offset']) * 3600;
 	echo <<<EOT
 
 	<script type="text/javascript">
@@ -66,8 +67,9 @@ function template_html_above()
 	var textSizeStep = 1;
 	var textSizeMax = 16;
 	var textSizeMin = 8;
-	var textSizeDefault = 10;
+	var textSizeDefault = 11;
 	var sideBarWidth = 250;
+    var timeOffsetMember = {$timeoff};
     var sidebar_disabled = {$user_info['smf_sidebar_disabled']};
 	var cookie = readCookie('SMF_textsize');
 	var fb_appid = '{$modSettings['fb_appid']}';
@@ -77,7 +79,6 @@ function template_html_above()
 	var t2 = document.createElement('SCRIPT');
 	var _cname = '{$cookiename}';
 	var _mqcname = '{$context['multiquote_cookiename']}';
-	var guest_time_offset = 0;
 	t2.type = "text/javascript";
 	t2.async = true;
 	t2.src = '{$settings['default_theme_url']}/scripts/footer.js{$context['jsver']}';

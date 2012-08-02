@@ -117,6 +117,7 @@ select {
 }
 textarea {
 	border: 1px solid #6b81ab;
+	font-family: consolas,monospace;
 }
 input[type="text"]:focus, textarea:focus, select:focus {
 	border: 1px solid orange;
@@ -166,6 +167,12 @@ em {
 }
 .underline {
 	text-decoration: underline;
+}
+.borderbox {
+   -moz-box-sizing:    border-box;
+   -webkit-box-sizing: border-box;
+   -ms-box-sizing:     border-box;
+    box-sizing:        border-box;	
 }
 .floatright {
 	float: right !important;
@@ -1553,11 +1560,11 @@ div.ignoringpost {
 }
 .poster.std {
 	float: left;
-	width: 200px;
-	max-width: 200px;
-	min-width: 200px;
+	width: 220px;
+	max-width: 220px;
+	min-width: 220px;
 	text-align: center;
-	margin:0 5px 10px 5px;
+	margin:0 0 10px 0;
 	padding:0 5px;
 	overflow:hidden;
 }
@@ -1585,15 +1592,13 @@ div.userbit_compact_textpart.small {
 .post_content {
 	margin-left: 220px;
 	padding-bottom:5px;
-	background-color:#fcfcfc;
+	min-height:180px;
 }
 .post_content.lean {
 	margin-left: 10px !important;
 	margin-right: 10px !important;
 }
 .post_content.std {
-	margin-right:10px;
-	border-radius:0 0 4px 4px;
 	border-top:0;
 }
 .post_content.commentstyle {
@@ -1618,14 +1623,15 @@ div.userbit_compact_textpart.small {
 .poster h4, .poster ul {
 	padding: 0;
 }
-
 h4.poster {
 	font-size: 110%;
-	padding: 1px 3px;
+	padding: 0 5px;
 	line-height:26px;
-	font-weight:bold;
+	width:220px;
+	min-width:220px;
+	max-width:220px;
+	overflow:hidden;
 }
-
 .poster h4 a {
 	text-shadow: 1px 1px 3px white;
 }
@@ -1748,7 +1754,7 @@ h4.poster {
 ul.buttonlist li, ul.plainbuttonlist li {
 	float: left;
 	display: inline;
-	margin: 0 0 0 7px;
+	margin: 0 3px 0 3px;
 	padding: 0;
 	cursor: pointer;
 }
@@ -1756,10 +1762,12 @@ ul.plainbuttonlist {
 	margin:0;
 	height:18px;
 	line-height:18px;
+	padding:0;
 }
 ul.buttonlist {
 	z-index: 100;
 	margin: 0 0.2em 5px 0;
+	padding:0;
 }
 ul.plainbuttonlist li a {
 	font-size: 11px !important;
@@ -3546,15 +3554,32 @@ div.td_children td {
 h4.childlink {
 	display:inline;
 }
-.permalink_old {
-	/*background: transparent url(../images/theme/sprite.png) 0 -729px no-repeat;*/
-	padding-left: 12px;
-	float: right;
+span.newindicator {
+	position:relative;
+	float:right;
+	display:block;
+	right:-14px;
+	top:6px;
+	font-size:10px;
+	border:1px solid red;
+	padding: 0 3px;
+	line-height:14px;
+	text-align: center;
+	background:#ffccaa;
+	border:1px solid #cc9977;
+	border-radius:2px 0 0 2px;
+	border-bottom-color: #e5b595;
+	border-right-color: #e5b595;
 }
-.permalink_new {
-	background: transparent url(../images/theme/sprite.png) 0 -701px no-repeat;
-	padding-left: 12px;
-	float: right;
+span.newindicator span {
+	background: #cc9977;
+	width:4px;
+	height:4px;
+	padding:0;
+	position:absolute;
+	right:-1px;
+	top:-5px;
+	display:block;
 }
 #quick_search form {
 	padding-top: 1px !important;
@@ -3621,10 +3646,8 @@ div.likebar {
 	padding: 2px 4px;
 	min-height: 18px;
 	line-height: 18px;
-	margin:10px 0 0 0;
+	margin:5px 0;
 	border-top: 1px solid #d5ecfa;
-	/*border-radius:4px;
-	background-color: #f2f5fe;*/
 }
 span.ratings .title {
 	font-weight:bold;
@@ -5792,3 +5815,56 @@ h3.grid_header
 {
 	margin-bottom: 4px;
 }
+
+/* Pretty printing styles. Used with prettify.js. */
+
+/* SPAN elements with the classes below are added by prettyprint. */
+.pln { color: #000 }  /* plain text */
+
+@media screen {
+  .str { color: #080 }  /* string content */
+  .kwd { color: #008; font-weight: bold; }  /* a keyword */
+  .com { color: #999; }  /* a comment */
+  .typ { color: #808 }  /* a type name */
+  .lit { color: #066 }  /* a literal value */
+  /* punctuation, lisp open bracket, lisp close bracket */
+  .pun, .opn, .clo { color: #f55; font-weight:bold; }
+  .tag { color: #088; font-weight: bold; }  /* a markup tag name */
+  .atn { color: #606 }  /* a markup attribute name */
+  .atv { color: #080 }  /* a markup attribute value */
+  .dec, .var { color: #606 }  /* a declaration; a variable name */
+  .fun { color: #088; font-weight: bold;}  /* a function name */
+}
+
+/* Use higher contrast and text-weight for printable form. */
+@media print, projection {
+  .str { color: #060 }
+  .kwd { color: #006; font-weight: bold }
+  .com { color: #600; font-style: italic }
+  .typ { color: #404; font-weight: bold }
+  .lit { color: #044 }
+  .pun, .opn, .clo { color: #440 }
+  .tag { color: #006; font-weight: bold }
+  .atn { color: #404 }
+  .atv { color: #060 }
+}
+
+/* Put a border around prettyprinted code snippets. */
+pre.prettyprint { padding: 1px; border: 1px dotted #ddd; font-size:12px; line-height: 120%; overflow:auto; margin:0;}
+
+/* Specify class=linenums on a pre to get line numbering */
+ol.linenums { margin-top: 0; margin-bottom: 0; overflow: visible; } /* IE indents via margin-left */
+li.L0,
+li.L1,
+li.L2,
+li.L3,
+li.L5,
+li.L6,
+li.L7,
+li.L8 { }
+/* Alternate shading for lines */
+li.L1, li.L1 span,
+li.L3, li.L3 span,
+li.L5, li.L5 span,
+li.L7, li.L7 span,
+li.L9, li.L9 span { background: #eee; }

@@ -42,13 +42,13 @@
       {$T.show_ignore_user_post}
    </div>
 {/if}
-<div id="msg{$ID}" class="post_wrapper{($message.is_ignored) ? ' ignored' : '' }" data-mid="{$ID}">
+<div id="msg{$ID}" class="post_wrapper{($message.is_ignored) ? ' ignored' : ''}{($C.alternate) ? ' alternate' : ''}" data-mid="{$ID}">
 {if $ID != $C.first_message}
   {($message.first_new) ? '<a id="new"></a>' : ''}
 {/if}
-<div class="keyinfo std gradient_darken_down">
-  <div class="floatleft" style="width:200px;text-align:center;margin-right:20px;" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">
-    <h4 class="poster">{$message.member.link}</h4>
+<div class="keyinfo std">
+  <div class="floatleft" style="width:230px;text-align:center;" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">
+    <h4 class="poster borderbox">{$message.member.link}</h4>
   </div>
   <div class="messageicon">
     <img src="{$message.icon_url}" alt="" {($message.can_modify) ? (' class="iconrequest" id="micon_'|cat:$ID|cat:'"') : ''} />
@@ -56,13 +56,16 @@
   <h5 style="display:inline;" id="subject_{$ID}">
     {$message.subject}
   </h5>
-  <span class="tinytext {($message.new) ? 'permalink_new' : 'permalink_old'}"><a {($C.perma_request) ? '' : ('onclick="getIntralink($(this),'|cat:$ID|cat:');return(false);"')} href="{$message.permahref}" rel="nofollow">{$message.permalink}</a></span>
+  {if $message.new}
+    <span class="newindicator"><span> </span>{$T.new}</span>
+  {/if}
+  <span class="tinytext floatright"><a {($C.perma_request) ? '' : ('onclick="getIntralink($(this),'|cat:$ID|cat:');return(false);"')} href="{$message.permahref}" rel="nofollow">{$message.permalink}</a></span>
   <span class="tinytext">&nbsp;{$message.time}</span>
   <div id="msg_{$ID}_quick_mod"></div>
 </div>
 <div class="clear"></div>
 {* Show information about the poster of this message. *}
-<div class="poster std">
+<div class="poster std borderbox">
   <ul class="reset tinytext" id="msg_{$ID}_extra_info">
   {if !$message.member.is_guest}
     {if $S.show_user_images and empty($O.show_no_avatars)}
@@ -192,18 +195,18 @@
       {$T.show_ignore_user_post}
    </div>
 {/if}
-<div id="msg{$ID}" class="post_wrapper{($message.is_ignored) ? ' ignored' : '' }" data-mid="{$ID}">
+<div id="msg{$ID}" class="post_wrapper{($message.is_ignored) ? ' ignored' : ''}{($C.alternate) ? ' alternate' : ''}" data-mid="{$ID}">
 {if $ID != $C.first_message}
   {($message.first_new) ? '<a id="new"></a>' : ''}
 {/if}
-  <div class="keyinfo lean tinytext gradient_darken_down" style="line-height:19px;">
+  <div class="keyinfo lean">
   {if !empty($S.show_user_images) and empty($O.show_no_avatars)}
     {if !empty($message.member.avatar.image)}
-      <span class="small_avatar floatleft">
+      <span class="small_avatar floatleft" style="margin-top:5px;margin-right:10px">
         {$message.member.avatar.image}
       </span>
     {else}
-      <span class="small_avatar floatleft">
+      <span class="small_avatar floatleft" style="margin-top:5px;margin-right:10px">
         <img src="{$S.images_url}/unknown.png" alt="avatar" />
     </span>
     {/if}
@@ -215,8 +218,11 @@
     <h5 style="display:inline;" id="subject_{$ID}">
       {$message.subject}
     </h5>
-    <span class="{($message.new) ? 'permalink_new' : 'permalink_old'}"><a onclick="getIntralink($(this),{$ID});return(false);" href="{$message.permahref}" rel="nofollow">{$message.permalink}</a></span>
-    <br>{$T.posted_by}&nbsp;<strong>{$message.member.link}</strong>&nbsp;{$message.time}
+    {if $message.new}
+      <span class="newindicator"><span> </span>{$T.new}</span>
+    {/if}
+    <span class="tinytext floatright"><a onclick="getIntralink($(this),{$ID});return(false);" href="{$message.permahref}" rel="nofollow">{$message.permalink}</a></span>
+    <br><span class="tinytext">{$T.posted_by}&nbsp;<strong>{$message.member.link}</strong>&nbsp;{$message.time}</span>
     <div class="clear"></div>
   </div>
   <div id="msg_'{$ID}_quick_mod"></div>
@@ -285,7 +291,7 @@
       {$T.show_ignore_user_post}
    </div>
 {/if}
-<div id="msg{$ID}" class="post_wrapper{($message.is_ignored) ? ' ignored' : '' }" data-mid="{$ID}">
+<div id="msg{$ID}" class="post_wrapper{($message.is_ignored) ? ' ignored' : ''}{($C.alternate) ? ' alternate' : ''}" data-mid="{$ID}">
 {if $ID != $C.first_message}
   {($message.first_new) ? '<a id="new"></a>' : ''}
 {/if}
@@ -305,7 +311,10 @@
   </div>
   <div>
     {$message.member.link} said<span class="smalltext">&nbsp;{$message.time}</span>&nbsp;-&nbsp;{$message.subject}
-    <span class="{($message.new) ? 'permalink_new' : 'permalink_old'}"><a onclick="getIntralink($(this), {$ID});return(false);" href="{$message.permahref}" rel="nofollow">{$message.permalink}</a></span>
+    {if $message.new}
+      <span class="newindicator"><span> </span>{$T.new}</span>
+    {/if}
+    <span class="tinytext floatright"><a onclick="getIntralink($(this), {$ID});return(false);" href="{$message.permahref}" rel="nofollow">{$message.permalink}</a></span>
     <div id="msg_{$ID}_quick_mod"></div>
   </div>
 </div>
@@ -361,7 +370,7 @@
 {/if}
 <div class="keyinfo clean">
   <div>
-    <span class="{($message.new) ? 'permalink_new' : 'permalink_old'}"><a onclick="getIntralink($(this), {$ID});return(false);" href="{$message.permahref}" rel="nofollow">{$message.permalink}</a></span>
+    <span class="tinytext floatright"><a onclick="getIntralink($(this), {$ID});return(false);" href="{$message.permahref}" rel="nofollow">{$message.permalink}</a></span>
     Posted by: {$message.member.link}&nbsp;
     <span class="smalltext">{$message.time}</span>
   </div>

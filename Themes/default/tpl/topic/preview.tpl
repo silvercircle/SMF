@@ -1,15 +1,3 @@
-{**
- * @name      EosAlpha BBS
- * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
- *
- * This software is a derived product, based on:
- *
- * Simple Machines Forum (SMF)
- * copyright:	2011 Simple Machines (http://www.simplemachines.org)
- * license:  	BSD, See included LICENSE.TXT for terms and conditions.
- *
- * @version 1.0pre
- *}
 <?xml version="1.0" encoding="UTF-8" ?>
 <document>
  <response open="default_overlay" width="50%" />

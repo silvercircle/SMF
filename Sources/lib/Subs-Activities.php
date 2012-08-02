@@ -82,12 +82,18 @@ function aStreamAdd($id_member, $atype, $params, $id_board = 0, $id_topic = 0, $
 	
 	$act_must_notify = array(ACT_LIKE, ACT_REPLIED);	// these activity types will trigger a *mandatory*
 	if(0 == $id_member || 0 == $id_owner)				// notification for $id_owner unless $dont_notify indicates otherwise
-		return(0);
+		return 0;
 
+	if(0 == $atype) {
+		$_s = sprintf('Warning: tried to add atype==0 with id_member=%d, params=%s, id_board=%d, id_topic=%d', $id_member, @serialize($params), $id_board, $id_topic);
+		log_error($_s);
+		return 0;
+
+	}
 	// respect opt out setting
 	if(!empty($user_info['act_optout'])) {
 		if(in_array($atype, explode(',', $user_info['act_optout'])) !== false)
-			return(0);
+			return 0 ;
 	}
 	smf_db_insert('',
 		'{db_prefix}log_activities',

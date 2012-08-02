@@ -16,10 +16,10 @@
     {$message.time}
   </span>
   {if $C.folder != 'sent' and !empty($C.currently_using_labels) and $C.display_mode}
-    <div class="labels righttext">';
+    <div class="labels righttext floatright">
     {if !empty($C.currently_using_labels)}
       <select name="pm_actions[{$message.id}]" onchange="if (this.options[this.selectedIndex].value) form.submit();">
-        <option value="">{$txt.pm_msg_label_title}:</option>
+        <option value="">{$T.pm_msg_label_title}:</option>
         <option value="" disabled="disabled">---------------</option>
         {if !$message.fully_labeled}
           <option value="" disabled="disabled">{$T.pm_msg_label_apply}:</option>

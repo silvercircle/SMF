@@ -14,6 +14,8 @@
 
 global $settings;
 
+echo $context['current_theme_variant'];
+
 $settings['theme_variants'] = array('default', 'lightweight');
 $settings['clip_image_src'] = array(
 	'_default' => 'clipsrc.png',
@@ -25,6 +27,17 @@ $settings['sprite_image_src'] = array(
 	'_lightweight' => 'theme/sprite.png',
 	'_dark' => 'theme/sprite.png'
 );
+
+/**
+ * this css will be loaded after the main css and can hold css overrides and custom styles
+ * you need one per theme variant.
+ */
+/*
+$settings['additional_css'] = array(
+	'_default' => 'foo.css',
+	'_lightweight' => 'foo_lightweight.css'
+);
+*/
 
 function theme_support_autoload($smarty_instance)
 {

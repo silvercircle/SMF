@@ -101,7 +101,7 @@ CREATE TABLE {$db_prefix}tags_log (
 #
 CREATE TABLE {$db_prefix}activity_types (
 	id_type tinyint(3) NOT NULL default '0',
-	desc_id varchar(150) NOT NULL default '',
+	id_desc varchar(150) NOT NULL default '',
 	formatter varchar(50) NOT NULL default 'act_format_default',
 	f_neutral int(8) NOT NULL default '0',
 	f_you int(8) NOT NULL default '0',

@@ -187,8 +187,6 @@ $txt['welcome_guest_activate'] = '<br />Did you miss your <a href="' . $scriptur
 $txt['hello_member'] = 'Hey,';
 // Use numeric entities in the below string.
 $txt['hello_guest'] = 'Welcome,';
-$txt['welmsg_hey'] = 'Hey,';
-$txt['welmsg_welcome'] = 'Welcome,';
 $txt['welmsg_please'] = 'Please';
 $txt['select_destination'] = 'Please select a destination';
 
@@ -232,7 +230,6 @@ $txt['forgot_your_password'] = 'Forgot your password?';
 $txt['date'] = 'Date';
 // Use numeric entities in the below string.
 $txt['from'] = 'From';
-$txt['check_new_messages'] = 'Check for new messages';
 $txt['to'] = 'To';
 
 $txt['board_topics'] = 'Topics';
@@ -293,22 +290,7 @@ $txt['by'] = 'by';
 
 $txt['hours'] = 'hours';
 $txt['days_word'] = 'days';
-
-$txt['newest_member'] = ', our newest member.';
-
 $txt['search_for'] = 'Search for';
-
-$txt['aim'] = 'AIM';
-// In this string, please use +'s for spaces.
-$txt['aim_default_message'] = 'Hi.+Are+you+there?';
-$txt['aim_title'] = 'AOL Instant Messenger';
-$txt['icq'] = 'ICQ';
-$txt['icq_title'] = 'ICQ Messenger';
-$txt['msn'] = 'MSN';
-$txt['msn_title'] = 'MSN Messenger';
-$txt['yim'] = 'YIM';
-$txt['yim_title'] = 'Yahoo Instant Messenger';
-
 $txt['maintain_mode_on'] = 'Remember, this forum is in \'Maintenance Mode\'.';
 
 $txt['read'] = 'Read';
@@ -320,6 +302,7 @@ $txt['total_cats'] = 'Total Categories';
 $txt['latest_post'] = 'Latest Post';
 $txt['team_members_online'] = 'Team members online';
 $txt['stats_header'] = 'Statistics';
+$txt['stats_header_online'] = 'Online now...';
 
 $txt['you_have'] = 'You\'ve got';
 $txt['click'] = 'Click';
@@ -331,10 +314,6 @@ $txt['total_boards'] = 'Total Boards';
 $txt['print_page'] = 'Print Page';
 $txt['view_printable'] = 'View printable version';
 $txt['valid_email'] = 'This must be a valid email address.';
-
-$txt['geek'] = 'I am a geek!!';
-$txt['info_center_title'] = '%1$s - Info Center';
-
 $txt['send_topic'] = 'Send this topic';
 $txt['email_topic'] = 'Email this topic';
 
@@ -653,9 +632,6 @@ $txt['previous_next_forward'] = 'next &raquo;';
 $txt['movetopic_auto_board'] = '[BOARD]';
 $txt['movetopic_auto_topic'] = '[TOPIC LINK]';
 $txt['movetopic_default'] = 'This topic has been moved to ' . $txt['movetopic_auto_board'] . ".\n\n" . $txt['movetopic_auto_topic'];
-
-$txt['upshrink_description'] = 'Shrink or expand the header.';
-
 $txt['mark_unread'] = 'Mark unread';
 
 $txt['ssi_not_direct'] = 'Please don\'t access SSI.php by URL directly; you may want to use the path (%1$s) or add ?ssi_function=something.';
@@ -757,6 +733,7 @@ $txt['visit_new'] = 'Go to first unread post';
 $txt['permalink'] = 'Permalink';
 $txt['view_in_thread'] = 'View in topic context';
 $txt['who_summary'] = 'A total of %d guest(s) and %d registered user(s) were online in the last %d minutes.';
+$txt['who_summary_short'] = '%d guest(s) and %d registered members.';
 $txt['who_showby'] = 'Show online users sorted by: ';
 $txt['who_lastact'] = 'Last activity';
 $txt['a_page'] = 'A page';

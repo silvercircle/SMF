@@ -1428,10 +1428,10 @@ function template_profile_theme_settings()
 							<dd></dd>
 						</dl>
 						<ul id="theme_settings">
-							<li>
+							<!-- todo drafts -> plugin <li>
 								<input type="hidden" name="default_options[use_drafts]" value="0" />
 								<label for="use_drafts"><input type="checkbox" name="default_options[use_drafts]" id="use_drafts" value="1"', !empty($context['member']['options']['use_drafts']) ? ' checked="checked"' : '', ' class="input_check" /> ', $txt['use_drafts'], '</label>
-							</li>
+							</li>-->
 							<li>
 								<input type="hidden" name="default_options[show_board_desc]" value="0" />
 								<label for="show_board_desc"><input type="checkbox" name="default_options[show_board_desc]" id="show_board_desc" value="1"', !empty($context['member']['options']['show_board_desc']) ? ' checked="checked"' : '', ' class="input_check" /> ', $txt['board_desc_inside'], '</label>

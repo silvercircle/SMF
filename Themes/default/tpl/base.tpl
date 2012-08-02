@@ -22,8 +22,9 @@
     {if $C.right_to_left > 0}
       <link rel="stylesheet" type="text/css" href="{$S.theme_url}/css/rtl.css" />
     {/if}
-    {if isset($C.need_synhlt)}
-      <link rel="stylesheet" type="text/css" href="{$S.default_theme_url}/prettify/prettify.css" />
+    {if isset($S.additional_css)}
+      {$variant = $C.theme_variant}
+      <link rel="stylesheet" type="text/css" href="{$S.theme_url}/css/{$S.additional_css.$variant}" />
     {/if}    
     {if $M.jQueryFromGoogleCDN}
       <script type="text/javascript" src="{($C.is_https) ? 'https://' : 'http://'}ajax.googleapis.com/ajax/libs/jquery/{$C.jquery_version}/jquery.min.js"></script>
@@ -50,11 +51,12 @@
       var sSessionVar = '{$C.session_var}';
       var sSID = '{$SID}';
       var disableDynamicTime = {(empty($O.disable_dynatime)) ? 0 : 1};
+      var timeOffsetMember =  {($U.time_offset + $M.time_offset) * 3600};
       var textSizeUnit = 'pt';
       var textSizeStep = 1;
       var textSizeMax = 16;
       var textSizeMin = 8;
-      var textSizeDefault = 10;
+      var textSizeDefault = 11;
       var sideBarWidth = 250;
       var sidebar_disabled = {$U.smf_sidebar_disabled};
       var cookie = readCookie('SMF_textsize');
@@ -65,7 +67,6 @@
       var t2 = document.createElement('SCRIPT');
       var _cname = '{$COOKIENAME}';
       var _mqcname = '{$C.multiquote_cookiename}';
-      var guest_time_offset = 0;
       t2.type = "text/javascript";
       t2.async = true;
       t2.src = '{$S.default_theme_url}/scripts/footer.js{$C.jsver}';
@@ -79,7 +80,7 @@
     {/if}
     <title>{$C.page_title_html_safe}</title>
 
-    {if $U.is_guest && !empty($U.guest_need_tzoffset)}
+    {if $U.is_guest and !empty($U.guest_need_tzoffset)}
     <script type="text/javascript">
     // <![CDATA[
       function calculate_time_zone() {
@@ -135,7 +136,7 @@
         mins = (mins < 10) ? "0"+mins : mins;
         return display_hours+":"+mins;
       }
-      guest_time_offset = calculate_time_zone();
+      var guest_time_offset = calculate_time_zone();
       sendXMLDocument(smf_prepareScriptUrl(smf_scripturl) + 'action=xmlhttp;sa=tzoffset;o=' + guest_time_offset + ';xml', '', function() {});
     // ]]>
     </script>

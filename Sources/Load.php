@@ -368,7 +368,7 @@ function loadUserSettings()
 		// This is a logged in user, so definitely not a spider.
 		$user_info['possibly_robot'] = false;
 		$user_info['show_online'] = $user_settings['show_online'];
-
+		$user_info['time_offset'] = empty($user_settings['time_offset']) ? 0 : $user_settings['time_offset'];
 	}
 	// If the user is a guest, initialize all the critical user settings.
 	else
@@ -394,6 +394,8 @@ function loadUserSettings()
 			$ci_user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
 			$user_info['possibly_robot'] = (strpos($_SERVER['HTTP_USER_AGENT'], 'Mozilla') === false && strpos($_SERVER['HTTP_USER_AGENT'], 'Opera') === false) || strpos($ci_user_agent, 'googlebot') !== false || strpos($ci_user_agent, 'slurp') !== false || strpos($ci_user_agent, 'crawl') !== false;
 		}
+		$user_info['time_offset'] = isset($_SESSION['tzoffset']) ? $_SESSION['tzoffset'] : 0;
+		$user_info['guest_need_tzoffset'] = !isset($_SESSION['tzoffset']); // don't have it yet, embed the js to determine tz offset for *guests only*
 	}
 
 	// Set up the $user_info array.
@@ -412,7 +414,6 @@ function loadUserSettings()
 		'ip2' => $_SERVER['BAN_CHECK_IP'],
 		'posts' => empty($user_settings['posts']) ? 0 : $user_settings['posts'],
 		'time_format' => empty($user_settings['time_format']) ? $modSettings['time_format'] : $user_settings['time_format'],
-		'time_offset' => empty($user_settings['time_offset']) ? 0 : $user_settings['time_offset'],
 		'avatar' => array(
 			'url' => isset($user_settings['avatar']) ? $user_settings['avatar'] : '',
 			'filename' => empty($user_settings['filename']) ? '' : $user_settings['filename'],
@@ -434,8 +435,6 @@ function loadUserSettings()
 		'notify_optout' => isset($user_settings['notify_optout']) ? $user_settings['notify_optout'] : '',
 		'meta' => !empty($user_settings['meta']) ? @unserialize($user_settings['meta']) : array()
 	);
-	$user_info['guest_tzoffset'] = ($user_info['is_guest'] && isset($_SESSION['tzoffset']) ? $_SESSION['tzoffset'] : 0);
-	$user_info['guest_need_tzoffset'] = $user_info['is_guest'] && !isset($_SESSION['tzoffset']); // don't have it yet, embed the js to determine tz offset for *guests only*
 	$user_info['smf_sidebar_disabled'] = 0;
 	$user_info['groups'] = array_unique($user_info['groups']);
 	// Make sure that the last item in the ignore boards array is valid.  If the list was too long it could have an ending comma that could cause problems.
@@ -512,7 +511,8 @@ function loadUserSettings()
 		CacheAPI::putCache('user_settings-' . $id_member, $user_settings, 600);
 
 	$user_info['notify_count'] = isset($user_settings['notify_count']) ? $user_settings['notify_count'] : 0;
-	$user_info['notify_count'] += ($user_info['unread_messages'] ? 1 : 0);
+	if($user_info['unread_messages'] && $user_info['notify_count'] == 0)
+		$user_info['notify_count']++;
 	// record the user in the list of users who were online today. todo: there should be an option for this feature.
 	if(!empty($modSettings['who_track_daily_visitors']) && $user_info['id'] > 0 && !isset($modSettings['online_today'][$user_info['id']])) {
 		$modSettings['online_today'][$user_info['id']] = array(
@@ -1144,7 +1144,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'buddies' => $buddy_list,
 		'title' => !empty($modSettings['titlesEnable']) ? $profile['usertitle'] : '',
 		'href' => $m_href,
-		'link' => '<a onclick="getMcard('.$profile['id_member'].');return(false);" href="' . $m_href . '" title="' . $txt['profile_of'] . ' ' . $profile['real_name'] . '">' . $profile['real_name'] . '</a>',
+		'link' => '<a class="member group_'.$profile['id_group'].'" onclick="getMcard('.$profile['id_member'].');return(false);" href="' . $m_href . '" title="' . $txt['profile_of'] . ' ' . $profile['real_name'] . '">' . $profile['real_name'] . '</a>',
 		'email' => $profile['email_address'],
 		'show_email' => showEmailAddress(!empty($profile['hide_email']), $profile['id_member']),
 		'registered' => empty($profile['date_registered']) ? $txt['not_applicable'] : timeformat($profile['date_registered']),
@@ -1158,7 +1158,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'signature' => $profile['signature'],
 		'location' => $profile['location'],
 		'real_posts' => $profile['posts'],
-		'posts' => $profile['posts'] > 500000 ? $txt['geek'] : comma_format($profile['posts']),
+		'posts' => comma_format($profile['posts']),
 		'avatar' => array(
 			'name' => $profile['avatar'],
 			'image' => $profile['avatar'] == '' ? ($profile['id_attach'] > 0 ? '<img class="avatar" src="' . (empty($profile['attachment_type']) ? $scripturl . '?action=dlattach;attach=' . $profile['id_attach'] . ';type=avatar' : $modSettings['custom_avatar_url'] . '/' . $profile['filename']) . '" alt="" />' : '') : (stristr($profile['avatar'], 'http://') ? '<img class="avatar" src="' . $profile['avatar'] . '"' . $avatar_width . $avatar_height . ' alt="" />' : '<img class="avatar" src="' . $modSettings['avatar_url'] . '/' . htmlspecialchars($profile['avatar']) . '" alt="" />'),

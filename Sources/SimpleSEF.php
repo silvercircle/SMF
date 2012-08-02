@@ -72,6 +72,7 @@ class URLFactory {
 		$this->topics_fragment = !empty($modSettings['simplesef_topicsbase']) ? '/'.$modSettings['simplesef_topicsbase'] : '/topics/';
 		$this->topics_base = $this->boardurl . $this->topics_fragment;
 		$this->profile_base = $this->boardurl . '/profile/';
+		$this->sep = $modSettings['simplesef_space'];
 	}
 
 	/**
@@ -378,9 +379,11 @@ class SimpleSEF {
 		self::$topics_base = !empty($modSettings['simplesef_topicsbase']) ? $modSettings['simplesef_topicsbase'] : 'topics/';
 
         // Do a bit of post processing on the arrays above
-        self::$stripWords = array_filter(self::$stripWords, create_function('$value', 'return !empty($value);'));
+        //self::$stripWords = array_filter(self::$stripWords, create_function('$value', 'return !empty($value);'));
+        self::$stripWords = array_filter(self::$stripWords, function($value) { return !empty($value); });
         array_walk(self::$stripWords, 'trim');
-        self::$stripChars = array_filter(self::$stripChars, create_function('$value', 'return !empty($value);'));
+        //self::$stripChars = array_filter(self::$stripChars, create_function('$value', 'return !empty($value);'));
+        self::$stripChars = array_filter(self::$stripChars, function($value) { return !empty($value); });
         array_walk(self::$stripChars, 'trim');
 
         self::loadBoardNames($force);
@@ -1338,9 +1341,6 @@ class SimpleSEF {
 		if(count($ids) == 1 && $ids[0] == 0)
 			return;
 
-		//self::$debug_info .= 'run loadtopicnames<br>';
-		//foreach($ids as $id)
-		//	self::$debug_info .= 'id = ' . $id . '<br>';
 		// Fill the topic 'cache' in one fell swoop
         $request = smf_db_query( '
 			SELECT t.id_topic, m.subject, t.id_board

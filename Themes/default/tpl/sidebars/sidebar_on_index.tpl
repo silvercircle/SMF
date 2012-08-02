@@ -83,7 +83,7 @@
             <input type="text" name="openid_identifier" id="openid_url" size="25" class="input_text openid_login" />
           </div>
         {/if}
-        <span class="cblabel">{$T.always_logged_in}</span><input type="checkbox" class="input_check" name="cookielength" value="-1" />
+        <label for="cookielength" class="aligned">{$T.always_logged_in}</label><input id="cookielength" type="checkbox" class="input_check aligned" name="cookielength" value="-1" />
         <input style="width:90%;margin-left:5%;margin-top:10px;" type="submit" value="{$T.login}" class="button_submit" /><br />
         <input type="hidden" name="hash_passwrd" value="" />
     </form>
@@ -151,6 +151,8 @@
           {($C.show_stats) ? "<a href=\"{$SUPPORT->url_action($SCRIPTURL|cat:'?action=stats')}\">{$T.more_stats}</a>" : ''}
         </div>
       </div>
+      <h1 class="bigheader secondary">{$T.stats_header_online}</h1>
+      {$T.who_summary_short|sprintf:$C.num_guests:$C.num_users_online}
     </div>
     {$SUPPORT->displayHook('sidebar_infoblock')}
     </div>

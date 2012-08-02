@@ -160,10 +160,12 @@
   <form data-alt="{$SCRIPTURL}?action=post;msg=%id_msg%;topic={$topic}.{$C.start}" action="{$SCRIPTURL}?action=quickmod2;topic={$topic}.{$C.start}" method="post" accept-charset="UTF-8" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave('{$C.session_id}', '{$C.session_var}') : false">
     <div class="posts_container nopadding" id="posts_container">
       {* Get all the messages... *}
+      {$C.alternate = 0}
       {foreach from=$C.message_ids item=msg}
         {$SUPPORT->getMessage()}
         {*{include 'postbits/postbit_'|cat:$message.postbit_template_class|cat:'.tpl'}*}
         {call 'postbit_'|cat:$message.postbit_template_class}
+        {$C.alternate = !$C.alternate}
       {/foreach}
     </div>
     <input type="hidden" name="goadvanced" value="1" />
@@ -171,7 +173,6 @@
 </div>
 <a id="lastPost"></a>
 {$C.template_hooks.display.below_posts}
-<div id="moderationbuttons">{$SUPPORT->button_strip($C.mod_buttons, 'right', $C.mod_buttons_style)}</div>
 {if $C.can_reply and !empty($O.display_quick_reply)}
   {include 'topic/quickreply.tpl'}
 {/if} {* quick reply *}
@@ -241,7 +242,9 @@
 {$C.template_hooks.display.footer}
 {* Show the lower breadcrumbs *}
 {include '../linktree.tpl'}
-<div class="plainbox" id="display_jump_to">&nbsp;</div>
+<div class="plainbox floatright" id="display_jump_to">&nbsp;</div>
+<br>
+<div id="moderationbuttons">{$SUPPORT->button_strip($C.mod_buttons, 'left', $C.mod_buttons_style)}</div>
 {/block}
 {block footerscripts}
 {include 'topic/topic_js.tpl'}

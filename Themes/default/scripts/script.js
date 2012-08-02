@@ -1054,12 +1054,12 @@ function createCookie(name,value,days) {
 
 function setTextSize(_s)
 {
-    var textsize = _s;
-  
+    textsize = _s;
+
 	if(textsize < textSizeMin || textsize > textSizeMax)
    		textsize = textSizeDefault;
-	$('body').css('font-size', _s + textSizeUnit);
-	createCookie('SMF_textsize', textsize, 500);
+	$('.post_wrapper .post').css('font-size', _s + textSizeUnit);
+	createCookie('SMF_textsize', _s, 500);
 	$('#curfontsize').html(textsize + textSizeUnit);
 }
 
@@ -1092,13 +1092,11 @@ function setTextSize(_s)
 
   $.extend($.timeago, {
     settings: {
-      refreshMillis: 60000,
+      //refreshMillis: 60000,
+      refreshMillis: 10000,
       allowFuture: true
     },
     inWords: function(distanceMillis) {
-	  if(guest_time_offset != 0)
-	  	this.settings.allowFuture = false;
-	  //distanceMillis -= (guest_time_offset * 60 * 1000 * 60);
       var $l = this.settings.strings;
       var prefix = $l.prefixAgo;
       var suffix = $l.suffixAgo;
@@ -1185,7 +1183,7 @@ function setTextSize(_s)
 
   function inWords(date) {
     var now = new Date();
-    var ref = (date.getTime() + (now.getTimezoneOffset() * 60 * 1000));
+    var ref = (date.getTime() - (timeOffsetMember * 1000));
     var dist = now.getTime() - ref;
 	var onehour = 3600 * 1000;
     
@@ -1195,12 +1193,14 @@ function setTextSize(_s)
     var todayref = now.getTime();
     
     if(ref < todayref) {
+    	_temp = new Date();
+    	_temp.setTime(date.getTime() - (timeOffsetMember * 1000));
     	todayref -= ref;
     	var hours = todayref / onehour;
     	if(hours > 24 && hours < 144 )
-    		return($t.settings.strings.weekdays[date.getUTCDay()] + ', ' + pad(date.getUTCHours()) + ':'+ pad(date.getUTCMinutes()));
+    		return($t.settings.strings.weekdays[_temp.getDay()] + ', ' + pad(_temp.getHours()) + ':'+ pad(_temp.getMinutes()));
 		if(hours > 0 && hours < 24)
-    		return($t.settings.strings.yesterday + ', ' + pad(date.getUTCHours()) + ':'+ pad(date.getUTCMinutes()));
+    		return($t.settings.strings.yesterday + ', ' + pad(_temp.getHours()) + ':'+ pad(_temp.getMinutes()));
 	}
 	// correct possible mismatch between server time and local time (after time zone correction)
 	// future timestamps within the next hour will be wrong. 
@@ -1211,7 +1211,7 @@ function setTextSize(_s)
 
   function distance(date) {
   	  var d = new Date();
-      return (d.getTime() - (date.getTime() + (d.getTimezoneOffset() * 60 * 1000) ));
+      return (d.getTime() - (date.getTime())); // - timeOffsetMember * 1000));
   }
   
   function pad(n) {
