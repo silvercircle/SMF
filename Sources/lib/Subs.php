@@ -4263,4 +4263,3 @@ function AjaxErrorMsg($msg = 'Unknown or unspecified error', $title = 'Error', $
 </document>';
 	obExit(false);
 }
-?>

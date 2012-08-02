@@ -323,7 +323,7 @@ function template_topiclist(&$topiclist)
 	if(!empty($topiclist['form'])) {
 		$form = $topiclist['form'];
 		echo '
-	<form id="',$form['id'],'" action="',$form['href'],'">';
+	<form method="post" accept-charset="UTF-8" id="',$form['id'],'" action="',$form['href'],'">';
 		foreach($form['hidden_fields'] as $field)
 			echo '
 		<input type="hidden" name="',$field['name'],'" value="',$field['value'],'" />';
@@ -381,6 +381,10 @@ function template_topiclist(&$topiclist)
 
 	if(!empty($topiclist['form']))
 		echo '
+		<div class="floatright" style="margin:10px 0;">
+		<input type="submit" class="button_submit" name="',$topiclist['form']['submit_name'],'" value="',$topiclist['form']['submit_label'],'" />
+		<div class="clear"></div>
+		</div>
 	</form>';
 }
 ?>

@@ -15,13 +15,13 @@
   {if !empty($C.search_errors)}
     <p id="search_error" class="error">{'<br />'|implode:$C.search_errors.messages}</p>
   {/if}
-  {if $C.simple_search}
+  {if isset($C.simple_search) and !empty($C.simple_search)}
     <fieldset id="simple_search">
       <div>
         <div id="search_term_input">
           <strong>{$T.search_for}:</strong>
           <input type="text" name="search"{(!empty($C.search_params.search)) ? (' value="'|cat:$C.search_params.search|cat:'"') : ''} maxlength="{$C.search_string_limit}" size="40" class="input_text" />
-            {($C.require_verification) ? '' : ('&nbsp;<input type="submit" name="submit" value="'|cat:$T.search|cat:'" class="button_submit" />')}
+            {(isset($C.require_verification) and !empty($C.require_verification)) ? '' : ('&nbsp;<input type="submit" name="submit" value="'|cat:$T.search|cat:'" class="button_submit" />')}
         </div>
         {if empty($M.search_simple_fulltext)}
           <p class="smalltext">{$T.search_example}</p>

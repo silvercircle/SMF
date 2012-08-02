@@ -379,4 +379,3 @@ function GetSidebarContent()		// unused at the moment
 
 	$context['page_title'] = sprintf($txt['forum_index'], $context['forum_name']);
 }
-?>

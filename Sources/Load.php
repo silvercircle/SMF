@@ -2753,4 +2753,3 @@ function cache_get_data($key, $ttl = 120)
 {
 	return CacheAPI::getCache($key, $ttl);
 }
-?>

@@ -403,4 +403,3 @@ function showActivitiesProfileSettings($memID)
 		redirectexit($scripturl . '?action=profile;area=activities;sa=settings;u=' . $memID);
 	}
 }
-?>

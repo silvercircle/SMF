@@ -53,7 +53,7 @@
   </div>
   <div class="cContainer_end"></div>
 {/if}
-
+{$can_quickmod = isset($C.can_quick_mod) and !empty($C.can_quick_mod)}
 {if $C.act_as_cat == 0}
   {if $C.no_topic_listing == 0}
     <div class="pagesection top smallpadding">
@@ -61,7 +61,7 @@
       {$SUPPORT->button_strip($C.normal_buttons, 'right')}
     </div>
     {*If Quick Moderation is enabled start the form. *}
-    {if $C.can_quick_mod and $O.display_quick_mod > 0 and !empty($C.topics)}
+    {if $can_quickmod and $O.display_quick_mod > 0 and !empty($C.topics)}
       <form action="{$SCRIPTURL}?action=quickmod;board={$C.current_board}.{$C.start}" method="post" accept-charset="UTF-8" name="quickModForm" id="quickModForm">
     {/if}
     <div class="framed_region">
@@ -75,7 +75,7 @@
           <th scope="col" class="nowrap glass cleantop">{$C.views_sort_header}</th>
           <th scope="col" class="centertext nowrap glass cleantop">{$C.lastpost_sort_header}</th>
           {* Show a "select all" box for quick moderation? *}
-          {if !empty($C.can_quick_mod)}
+          {if $can_quickmod}
             <th scope="col" class="glass cleantop last_th" style="width:24px;"><input type="checkbox" class="input_check cb_invertall" /></th>
           {/if}
       {else}
@@ -88,7 +88,7 @@
         </thead>
       {if !empty($S.display_who_viewing)}
         <tr class="whos_viewing mediumpadding">
-          <td colspan="{(!empty($C.can_quick_mod)) ? '6' : '5'}" class="smalltext">
+          <td colspan="{($can_quickmod) ? '6' : '5'}" class="smalltext">
           {if $S.display_who_viewing == 1}
             {count($C.view_members)} {(count($C.view_members) == 1) ? $T.who_member : $T.members}
           {else}
@@ -101,7 +101,7 @@
       {* If this person can approve items and we have some awaiting approval tell them. *}
       {if !empty($C.unapproved_posts_message)}
         <tr class="windowbg2">
-          <td colspan="{(!empty($C.can_quick_mod)) ? '6' : '5' }}">
+          <td colspan="{($can_quick_mod) ? '6' : '5' }}">
             <span class="alert">!</span>{$C.unapproved_posts_message}
           </td>
         </tr>
@@ -109,7 +109,7 @@
       {foreach from=$C.topics item=topic}
         {call topicbit topic=$topic}
       {/foreach}
-      {if !empty($C.can_quick_mod) and $O.display_quick_mod and !empty($C.topics)}
+      {if $can_quickmod and $O.display_quick_mod and !empty($C.topics)}
         <tr>
           <td colspan="6" class="righttext">
             <select class="qaction" name="qaction"{($C.can_move) ? ' onchange="this.form.moveItTo.disabled = (this.options[this.selectedIndex].value != \'move\');"' : ''}>
@@ -144,7 +144,7 @@
     </div>
   {/if}
   <a id="bot"></a>
-  {if !empty($C.can_quick_mod) and $O.display_quick_mod > 0 and !empty($C.topics)}
+  {if $can_quickmod and $O.display_quick_mod > 0 and !empty($C.topics)}
     <input type="hidden" name="{$C.session_var}" value="{$C.session_id}" />
     </form>
   {/if}

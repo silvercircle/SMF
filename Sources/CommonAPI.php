@@ -917,6 +917,7 @@ class Topiclist {
 		if(!isset($context['pageindex_multiplier']))
 			$context['pageindex_multiplier'] = commonAPI::getMessagesPerPage();
 
+		$cb_name = isset($context['cb_name']) ? $context['cb_name'] : 'topics[]';
 		while ($row = mysql_fetch_assoc($request))
 		{
 			censorText($row['subject']);
@@ -964,6 +965,7 @@ class Topiclist {
 					'href' => $l_post_msg_href,
 					'link' => '<a href="' . $l_post_msg_href . ($row['num_replies'] == 0 ? '' : ' rel="nofollow"') . '>' . $row['last_subject'] . '</a>'
 				),
+				'checkbox_name' => $cb_name,
 				'subject' => $row['subject'],
 				'new' => $row['new_from'] <= $row['id_msg_modified'],
 				'new_from' => $row['new_from'],
@@ -1064,4 +1066,3 @@ class EoS_Plugin
 		echo $this->productShortName;
 	}
 }
-?>

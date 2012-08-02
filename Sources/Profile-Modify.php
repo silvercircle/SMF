@@ -1832,6 +1832,9 @@ function notification($memID)
 		'form' => array(
 			'href' => $scripturl . '?action=profile;area=notification;save',
 			'id' => 'topic_notifications',
+			'method' => 'post',
+			'submit_name' => 'edit_notify_topics',
+			'submit_label' => $txt['notifications_update'],
 			'hidden_fields' => array(
 				array(
 					'name' => 'u',
@@ -1872,6 +1875,7 @@ function notification($memID)
 	$context['can_quick_mod'] = true;			// we always want the checkboxes to select topics to unsubscribe. no permissions needed here...
 	$db = list_getTopicNotifications($context['start'], $modSettings['defaultMaxMessages'], $context['topiclist']['sort'][$context['sort_by']][$sort_order], $memID);
 
+	$context['cb_name'] = 'notify_topics[]';
 	$_t = new Topiclist($db, $context['topiclist']['item_count']);
 	$context['topiclist']['items'] = $_t->getResult();
 	mysql_free_result($db);
@@ -3308,4 +3312,3 @@ function profileManageBoardNews($memID)
 	$context['have_items'] = count($context['dismissed_items']);
 	$context['reactivate_link'] = $context['have_items'] ? '<a href="' . $scripturl . '?action=profile;area=boardnews;sa=reactivateall;u=' . $memID . '">' . $txt['news_items_reactivate'] . '</a>' : '';
 }
-?>

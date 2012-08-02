@@ -332,7 +332,7 @@ function template_topicbit(&$topic)
 			<td class="moderation topicrow gradient_darken_down', $color_class, '" style="text-align:center;">';
 		if ($options['display_quick_mod'])
 			echo '
-				<input type="checkbox" name="topics[]" value="', $topic['id'], '" class="input_check cb_inline" />';
+				<input type="checkbox" name="',(isset($topic['checkbox_name']) ? $topic['checkbox_name'] : 'topics[]'), '" value="', $topic['id'], '" class="input_check cb_inline" />';
 		echo '
 			</td>';
 	}

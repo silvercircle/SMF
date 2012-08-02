@@ -3,6 +3,7 @@
 {$limit = ceil($C.num_boards / 2)}
 {$nextcolumn = false}
 <div class="boardlisting left">
+  {if isset($C.categories)}
   <ul>
   {foreach $C.categories as $category}
     {if count($category.boards) > $limit}
@@ -34,5 +35,6 @@
     {/foreach}
   {/foreach}
   </ul>
+  {/ul}
 </div>
 {/function}
