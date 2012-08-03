@@ -81,8 +81,10 @@
         </tr>
       </thead>
       <tbody>
+      {$C.alt_row = false}
       {foreach $C.topics as $topic}
         {call topicbit topic=$topic}
+        {$C.alt_row = !$C.alt_row}
       {/foreach}
       {if !empty($C.topics) and !$C.showing_all_topics}
         {*{$C.mark_read_buttons.readall = array('text' => 'unread_topics_all', 'image' => 'markreadall.gif', 'lang' => true, 'url' => $SCRIPTURL|cat:'?action=unread;all'|cat:$C.querystring_board_limits, 'active' => true)}*}
@@ -156,8 +158,10 @@
         </tr>
       </thead>
       <tbody>
+      {$C.alt_row = false}
       {foreach $C.topics as $topic}
         {call topicbit topic=$topic}
+        {$C.alt_row = !$C.alt_row}
       {/foreach}
       </tbody>
     </table>

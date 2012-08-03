@@ -1197,10 +1197,16 @@ function setTextSize(_s)
     	_temp.setTime(date.getTime() - (timeOffsetMember * 1000));
     	todayref -= ref;
     	var hours = todayref / onehour;
-    	if(hours > 24 && hours < 144 )
-    		return($t.settings.strings.weekdays[_temp.getDay()] + ', ' + pad(_temp.getHours()) + ':'+ pad(_temp.getMinutes()));
-		if(hours > 0 && hours < 24)
-    		return($t.settings.strings.yesterday + ', ' + pad(_temp.getHours()) + ':'+ pad(_temp.getMinutes()));
+    	if(hours > 24 && hours < 144 ) {
+			var str = _temp.toLocaleTimeString();
+    		//return($t.settings.strings.weekdays[_temp.getDay()] + ', ' + pad(_temp.getHours()) + ':'+ pad(_temp.getMinutes()));
+    		return($t.settings.strings.weekdays[_temp.getDay()] + ', ' + str);
+    	}
+		if(hours > 0 && hours < 24) {
+			var str = _temp.toLocaleTimeString();
+    		//return($t.settings.strings.yesterday + ', ' + pad(_temp.getHours()) + ':'+ pad(_temp.getMinutes()));
+    		return($t.settings.strings.yesterday + ', ' + str);
+    	}
 	}
 	// correct possible mismatch between server time and local time (after time zone correction)
 	// future timestamps within the next hour will be wrong. 

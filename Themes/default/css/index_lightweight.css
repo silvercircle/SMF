@@ -24,6 +24,7 @@ table {
 	background-color: #eaeaea; /*#D0D1E6*/
 	margin: 0 auto;
 	padding-bottom: 10px;
+	min-width:800px;
 }
 body, td, th, tr {
 	color: #333;
@@ -1348,8 +1349,8 @@ ol.commonlist.category {
 	background-image: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
 	background-image: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
 }
-.boardrow.gradient_darken_down, .subcatrow .gradient_darken_down, .topicrow.gradient_darken_down {
-	background-image: none !important;
+.topicrow.alternate, .boardrow.alternate {
+	background: #f2f8ff;
 }
 .altbg {
 	background: rgb(242, 242, 242);

@@ -1,3 +1,5 @@
+{*foo*}
+
 <?xml version="1.0" encoding="UTF-8" ?>
 <document>
  <response open="default_overlay" width="50%" />

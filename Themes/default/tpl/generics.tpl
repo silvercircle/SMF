@@ -85,9 +85,8 @@
 {/function}
 {function topicbit}
   {$imgsrc = $C.clip_image_src}
-  {$color_class = ''}
+  {$color_class = ($C.alt_row) ? ' alternate' : ''}
   {$iconlegend = ''}
-
   {* Is this topic pending approval, or does it have any posts pending approval? *}
   {if $C.can_approve_posts and !empty($topic.unapproved_posts)}
     {$color_class = ' altbg'}
@@ -119,7 +118,7 @@
     {$iconlegend = $iconlegend|cat:('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc old" src="'|cat:$imgsrc|cat:'" alt="" title="'|cat:$C.old_topic_message|cat:'" /></div>')}
   {/if}
   <tr>
-    <td class="icon1 topicrow gradient_darken_down{$color_class}">
+    <td class="icon1 topicrow{$color_class}">
     {if !empty($S.show_user_images) and $O.show_no_avatars == 0}
       <span class="small_avatar">
       {if !empty($topic.first_post.member.avatar)}
@@ -134,10 +133,10 @@
     {/if}
     {$is_new = $topic.new and $C.user.is_logged}
     </td>
-    <td class="icon2 topicrow gradient_darken_down{$color_class}">
+    <td class="icon2 topicrow{$color_class}">
       <img src="{$topic.first_post.icon_url}" alt="" />
     </td>
-    <td class="subject topicrow gradient_darken_down{$color_class}">
+    <td class="subject topicrow{$color_class}">
       <div {(!empty($topic.quick_mod.modify)) ? ('id="topic_'|cat:$topic.first_post.id|cat:'" ondblclick="modify_topic(\''|cat:$topic.id|cat:'\', \''|cat:$topic.first_post.id|cat:'\');"') : ''}>
       <span class="topiclink tpeek" data-id="{$topic.id}" id="msg_{$topic.first_post.id}">{$topic.prefix}{($is_new) ? '<strong>' : ''}{$topic.first_post.link}{($C.can_approve_posts and $topic.approved == 0) ? ('&nbsp;<em>('|cat:$T.awaiting_approval|cat:')</em>') : ''}{($is_new) ? '</strong>' : ''}</span>
       {if $is_new}
@@ -155,7 +154,7 @@
       </p>
       </div>
     </td>
-    <td class="stats nowrap topicrow gradient_darken_down{$color_class}">
+    <td class="stats nowrap topicrow{$color_class}">
       {if $topic.replies}
         <a rel="nofollow" title="{$T.who_posted}" onclick="whoPosted($(this));return(false);" class="whoposted" data-topic="{$topic.id}" href="{$SCRIPTURL}?action=xmlhttp;sa=whoposted;t={$topic.id}">{$topic.replies} {$T.replies}</a>
       {else}
@@ -164,12 +163,12 @@
       <br />
       {$topic.views} {$T.views}
     </td>
-    <td class="lastpost topicrow gradient_darken_down{$color_class}">
+    <td class="lastpost topicrow{$color_class}">
       {$T.by}: {$topic.last_post.member.link}<br />
       <a class="lp_link" title="{$T.last_post}" href="{$topic.last_post.href}">{$topic.last_post.time}</a>
     </td>
     {if !empty($C.can_quick_mod)}
-      <td class="moderation topicrow gradient_darken_down{$color_class}" style="text-align:center;">
+      <td class="moderation topicrow{$color_class}" style="text-align:center;">
         {if $O.display_quick_mod}
           <input type="checkbox" name="topics[]" value="{$topic.id}" class="input_check cb_inline" />
         {/if}

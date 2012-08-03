@@ -584,6 +584,7 @@ function ob_sessrewrite($buffer)
 	}
 	$_t = EoS_Smarty::isActive() ? 's template-smarty), ' : 's template), ';
 	$buffer = str_replace('@%%__loadtime__%%@', $context['load_time'] . 's CPU (' . $context['template_benchmark_time'] . $_t . $context['load_queries'] . ' ' . $txt['queries'] . SimpleSEF::getPerfData(), $buffer);
+	if(isset($_REQUEST['xml']))
+		$buffer = ltrim($buffer);
 	return $buffer;
 }
-?>

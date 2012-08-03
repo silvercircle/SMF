@@ -28,9 +28,11 @@
   {call collapser id=$C.current_board|cat:'_childboards' title=$T.parent_boards widgetstyle=$widgetstyle}
   <div class="framed_region smallpadding">
     <ol id="board_{$C.current_board}_children" class="commonlist category">
+    {$C.alt_row = false}
     {foreach from=$C.boards item=board}
       {if $board.ignored == 0}
         {call boardbit board=$board}
+        {$C.alt_row = !$C.alt_row}
       {/if}
     {/foreach}
     </ol>
@@ -45,8 +47,10 @@
   <div class="category" id="hidden_boards" style="display:none;">
     <div class="framed_region cleantop root_cat" id="category_0">
       <ol class="commonlist category">
+        {$C.alt_row = false}
         {foreach from=$C.hidden_boards.boards item=board}
           {call boardbit board=$board}
+          {$C.alt_row = !$C.alt_row}
         {/foreach}
       </ol>
     </div>
@@ -106,8 +110,10 @@
           </td>
         </tr>
       {/if}
+      {$C.alt_row = false}
       {foreach from=$C.topics item=topic}
         {call topicbit topic=$topic}
+        {$C.alt_row = !$C.alt_row}
       {/foreach}
       {if $can_quickmod and $O.display_quick_mod and !empty($C.topics)}
         <tr>

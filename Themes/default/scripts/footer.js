@@ -1356,11 +1356,15 @@ jQuery(document).ready(function() {
 			jQuery(this).children('ul').hide();
 		}
 	});
-	$('img.resize_1').live('mouseenter', function(event) {
+	$('img.resize_1').on('mouseenter', function(event) {
 		var resizer = $(this).prev();
 		resizer.css({'position':'absolute', 'width': $(this).width(), 'left': $(this).position().left + 3, 'top': $(this).position().top + 3});
 		resizer.show();
 	});
+	$('div.bbc_img_resizer').on('mouseleave', function(event) {
+		$(this).hide();
+		return(false);
+	})
 	$('div.bbc_img_resizer').click(function() {
 		var url = $(this).next().attr('src');
 		$.prettyPhoto.open(url);
@@ -1455,7 +1459,7 @@ jQuery(document).ready(function() {
 	});
 	$('#jsconfirm').jqm({overlay: 50, modal: true, trigger: false, center:true});
 
-	$('a.easytip').easyTooltip( {parentData: true} );
+	$('a.easytip, span.easytip').easyTooltip( {parentData: true} );
 	$('div.iconlegend_container').hover(function() {
 		$(this).css('opacity', '1.0');
 	},

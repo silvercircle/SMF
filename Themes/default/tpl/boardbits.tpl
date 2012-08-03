@@ -4,7 +4,7 @@
 {if $board.act_as_cat}
   {call boardbit_subcat board=$board}
 {else}  
-  <li id="board_{$board.id}" class="boardrow gradient_darken_down">
+  <li id="board_{$board.id}" class="boardrow{($C.alt_row) ? ' alternate' : ''}">
   {if empty($board.is_page)}
     <div class="info">
     <div class="icon floatleft">
@@ -76,8 +76,8 @@
 {/function}
 
 {function boardbit_subcat}
-  <li id="board_'{$board.id}" class="subcatrow">
-    <div class="gradient_darken_down smallpadding">
+  <li id="board_{$board.id}" class="boardrow subcatrow{($C.alt_row) ? ' alternate' : ''}">
+    <div class="smallpadding">
     <div class="info subcat">
      <div class="icon floatleft">
       <a href="{($board.is_redirect or $C.user.is_guest) ? $board.href : ($SCRIPTURL|cat:'?action=unread;board='|cat:$board.id|cat:'.0;children')}">
@@ -109,7 +109,6 @@
     {else}
       <div></div>
     {/if}
-
     {if !empty($board.last_post.id)}
       <div class="tinytext nowrap righttext" style="position:static;max-width:auto;">
       <a class="lp_link" title="{$T.last_post}" href="{$board.last_post.href}">{$board.last_post.time}</a><span class="tinytext lowcontrast">{$T.last_post} in: </span>{$board.last_post.prefix}{$board.last_post.topiclink}

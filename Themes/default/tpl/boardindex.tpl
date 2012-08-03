@@ -43,8 +43,10 @@
             <h3>{$category.desc}</h3>
           </li>
         {/if}
+        {$C.alt_row = false}
         {foreach from=$category.boards item=board}
           {call boardbit board=$board}
+          {$C.alt_row = !$C.alt_row}
         {/foreach}
       </ol>
     </div>
@@ -57,8 +59,10 @@
     <div class="category" id="category_{$C.hidden_boards.id}" style="display:none;">
     <div class="framed_region cleantop root_cat" id="category_{$C.hidden_boards.id}_boards">
       <ol class="commonlist category">
+        {$C.alt_row = false}
         {foreach from=$C.hidden_boards.boards item=board}
             {call boardbit board=$board}
+            {$C.alt_row = !$C.alt_row}
         {/foreach}
       </ol>
     </div>

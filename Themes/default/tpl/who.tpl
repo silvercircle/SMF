@@ -27,9 +27,10 @@
         </thead>
         <tbody>
         {$alternate = 0}
-        {foreach from=$C.members item=member}
+        {$seq = 0}
+        {foreach $C.members as $member}
           <tr class="windowbg{($alternate) ? '2' : ''}">
-            <td style="width:50%;" class="nowrap">
+            <td style="width:60%;" class="nowrap">
             {if $member.is_guest == 0 and !empty($member.online)}
               <span class="contact_info floatright">
                 {($C.can_send_pm) ? ('<a href="{$member.online.href}" title="{$member.online.label}">') : ''} {($S.use_image_buttons) ? ('<img src="'|cat:$member.online.image_href|cat: '" alt="'|cat: $member.online.text|cat:'" />') : $member.online.text}{($C.can_send_pm) ? '</a>' : ''}
@@ -37,16 +38,19 @@
             {/if}
             <span class="member{($member.is_hidden) ? ' hidden' : '' }">
               {$color = (empty($member.color)) ? '' : " style=\"color: {$member.color};\""}
-              {($member.is_guest == 1) ? $member.name : "<a href=\"{$member.href}\" title=\"{$T.profile_of} {$member.name}\" {$color}>{$member.name}</a>"}
+              {($member.is_guest == 1) ? $member.name : "<a href=\"{$member.href}\" title=\"{$T.profile_of} {$member.name}\" {$color}><strong>{$member.name}</strong></a>"}
             </span>
             {if !empty($member.ip)}
               <a href="{$SCRIPTURL}?action={($member.is_guest) ? 'trackip' : 'profile;area=tracking;sa=ip;u='|cat:$member.id};searchip={$member.ip}">({$member.ip})</a>
+              <span class="easytip tinytext floatright lowcontrast" data-tip="tip_{$seq}">{$member.user_agent_short}</span>
+              <div style="display:none;" id="tip_{$seq}">{$member.user_agent}</div>
             {/if}
             </td>
             <td class="nowrap">{$member.time}</td>
             <td style="width:100%;" class="nowrap">{$member.action}</td>
           </tr>
           {$alternate = !$alternate}
+          {$seq = $seq + 1}
         {/foreach}
         {* No members *}
         {if empty($C.members)}

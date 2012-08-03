@@ -198,8 +198,12 @@ function Who()
 			'query' => $actions,
 			'is_hidden' => $row['show_online'] == 0,
 			'id_spider' => $row['id_spider'],
+			'id_unique' => base64_encode($row['session']),
 			'color' => empty($row['online_color']) ? '' : $row['online_color']
 		);
+		$url = @unserialize($row['url']);
+		$context['members'][$row['session']]['user_agent'] = isset($url['USER_AGENT']) ? $url['USER_AGENT'] : '';
+		$context['members'][$row['session']]['user_agent_short'] = isset($url['USER_AGENT']) ? shorten_subject($url['USER_AGENT'], 50) : '';
 
 		$url_data[$row['session']] = array($row['url'], $row['id_member']);
 		$member_ids[] = $row['id_member'];
