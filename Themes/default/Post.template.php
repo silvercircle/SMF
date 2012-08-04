@@ -661,9 +661,9 @@ function template_main()
 					bodyText += preview.getElementsByTagName(\'body\')[0].childNodes[i].nodeValue;
 
 				setInnerHTML(document.getElementById(\'preview_body\'), bodyText);
+				bbc_refresh();
 				if(typeof(prettyPrint) != \'undefined\') {
 					prettyPrint();
-					//$(\'pre.prettyprint\').fadeIn();
 				}
 
 				// Show a list of errors (if any).

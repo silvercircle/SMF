@@ -1119,70 +1119,32 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'type' => 'unparsed_content',
 				'content' => '<div class="codeheader">' . $txt['code'] . ': </div><pre class="prettyprint lang-php linenums:1">$1</pre>',
 				// @todo Maybe this can be simplified?
-				'validate' => isset($disabled['code']) ? null : function(&$tag, &$data, $disabled) {
+				/*'validate' => isset($disabled['code']) ? null : function(&$tag, &$data, $disabled) {
 					global $context;
 
 					if (!isset($disabled['code']))
 					{
 						$php_parts = preg_split('~(&lt;\?php|\?&gt;)~', $data, -1, PREG_SPLIT_DELIM_CAPTURE);
-
-						/*
-						for ($php_i = 0, $php_n = count($php_parts); $php_i < $php_n; $php_i++)
-						{
-							// Do PHP code coloring?
-							if ($php_parts[$php_i] != '&lt;?php')
-								continue;
-
-							$php_string = '';
-							while ($php_i + 1 < count($php_parts) && $php_parts[$php_i] != '?&gt;')
-							{
-								$php_string .= $php_parts[$php_i];
-								$php_parts[$php_i++] = '';
-							}
-							$php_parts[$php_i] = highlight_php_code($php_string . $php_parts[$php_i]);
-						}
-						*/
-						// Fix the PHP code stuff...
 						$data = str_replace("<pre style=\"display: inline;\">\t</pre>", "\t", implode('', $php_parts));
-
 						$data = str_replace("\t", "<span style=\"white-space: pre;\">\t</span>", $data);
 					}
-				},
+				},*/
 				'block_level' => true,
 			),
 			array(
 				'tag' => 'code',
 				'type' => 'unparsed_equals_content',
 				'content' => '<div class="codeheader">' . $txt['code'] . ': ($2)</div><pre class="prettyprint lang-$2 linenums:1">$1</pre>',
-				'validate' => isset($disabled['code']) ? null : function(&$tag, &$data, $disabled) {
+				/*'validate' => isset($disabled['code']) ? null : function(&$tag, &$data, $disabled) {
 					global $context;
 
 					if (!isset($disabled['code']))
 					{
 						$php_parts = preg_split('~(&lt;\?php|\?&gt;)~', $data[0], -1, PREG_SPLIT_DELIM_CAPTURE);
-
-						/*
-						for ($php_i = 0, $php_n = count($php_parts); $php_i < $php_n; $php_i++)
-						{
-							// Do PHP code coloring?
-							if ($php_parts[$php_i] != '&lt;?php')
-								continue;
-
-							$php_string = '';
-							while ($php_i + 1 < count($php_parts) && $php_parts[$php_i] != '?&gt;')
-							{
-								$php_string .= $php_parts[$php_i];
-								$php_parts[$php_i++] = '';
-							}
-							$php_parts[$php_i] = highlight_php_code($php_string . $php_parts[$php_i]);
-						}
-						*/
-						// Fix the PHP code stuff...
 						$data[0] = str_replace("<pre style=\"display: inline;\">\t</pre>", "\t", implode('', $php_parts));
-
 						$data[0] = str_replace("\t", "<span style=\"white-space: pre;\">\t</span>", $data[0]);
 					}
-				},
+				},*/
 				'block_level' => true,
 			),		
 			array(
@@ -1473,6 +1435,14 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'tag' => 'spoiler',
 				'before' => '<div class="spoiler head">'.$txt['spoiler_title'].'</div><div class="spoiler content" style="display:none">',
 				'after' => '</div>',
+				'block_level' => true
+			),
+			array(
+				'tag' => 'spoiler',
+				'type' => 'unparsed_equals',
+				'before' => '<div class="spoiler head">'.sprintf($txt['spoiler_intro'], '$1').'</div><div class="spoiler content" style="display:none">',
+				'after' => '</div>',
+				'block_level' => true
 			),
 			array(
 				'tag' => 'sub',

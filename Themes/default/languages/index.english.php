@@ -747,6 +747,7 @@ $txt['search_by_member'] = 'Search posts by member';
 $txt['img_resizebar_msg'] = 'Resized image, click here to zoom';
 $txt['show_all'] = 'View all';
 $txt['spoiler_title'] = 'Spoiler, click to toggle visibilty';
+$txt['spoiler_intro'] = 'Spoiler: %s (click to see content)';
 $txt['hidden_not_visible'] = 'Hidden content is only supported in full topic view';
 $txt['hidden_show_content'] = 'Hidden content, click to view';
 $txt['hidden_no_access'] = 'Hidden content (you have insufficient permission to view)';

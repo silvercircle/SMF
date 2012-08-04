@@ -1106,22 +1106,17 @@ h1.bigheader.topic {
 	border:0;
 	font-weight: normal;
 }
-h1.bigheader.secondary, div.spoiler.head {
+h1.bigheader.secondary {
 	font-size: 14px;
 	font-weight:bold;
 	border-bottom: 1px solid #cce;
 	color: #88a;
 	padding: 2px 0;
 }
-div.spoiler.head {
-	border-bottom:0;
-	cursor:pointer;
-	font-weight:bold;
-	background: transparent url(../images/theme/sprite.png) 0 -455px no-repeat;
-}
 div.spoiler.content {
-	padding:5px;
-	border:1px dotted #ccc;
+	padding:2px 5px !important;
+	border:1px dotted #ccc !important;
+	margin: 0 !important;
 }
 h3, h4 {
 	padding-bottom: 3px;
@@ -3424,17 +3419,18 @@ span.arrow {
 	padding-left: 18px;
 	text-decoration: none;
 }
-
-.quoteheader, .codeheader {
-	font-size: 11px;
-	font-weight: bold;
+.quoteheader, .codeheader, div.spoiler.head {
+	font-size: 90%;
 	margin: 10px 10px 0 20px;
 }
 
-.codeheader {
+.codeheader, div.spoiler.head {
 	margin: 10px 0 0 0;
-	padding: 0 1em;
+	padding: 0.15em 1em;
 	background-color: #ddd;
+}
+div.spoiler.head {
+	cursor: pointer;
 }
 
 /* page links (navpages) */

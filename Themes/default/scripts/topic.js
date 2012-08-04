@@ -442,6 +442,7 @@ QuickModify.prototype.onModifyDone = function (XMLDoc)
 	this.bInEditMode = _inModify = false;
 	if(typeof(prettyPrint) != 'undefined')
 		prettyPrint();
+	bbc_refresh();
 }
 
 function InTopicModeration(oOptions)

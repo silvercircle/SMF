@@ -424,6 +424,31 @@ function ratingWidgetInvoke(_el)
 		sendRequest('action=like;sa=widget;id=' + id + ';c=' + ctype, null);
 	return(false);
 }
+
+function bbc_refresh()
+{
+	$('img.resize_1').on('mouseenter', function(event) {
+		var resizer = $(this).prev();
+		resizer.css({'position':'absolute', 'width': $(this).width(), 'left': $(this).position().left + 3, 'top': $(this).position().top + 3});
+		resizer.show();
+	});
+	$('div.bbc_img_resizer').on('mouseleave', function(event) {
+		$(this).hide();
+		return(false);
+	})
+	$('div.spoiler.head').click(function() {
+       var content = $(this).next();
+		if(content.css('display') != 'none')
+			content.hide();
+		else
+			content.show();
+        return(false);
+	});
+	$('a.bbc_link').each(function() {
+		if($(this).html().match(/<img .*>/))
+			$(this).css('border', 'none');
+	});
+}
 jQuery(document).ready(function() {
 	
 	// this kills the pure CSS hover effect from the dropdown menus so they will
@@ -448,15 +473,6 @@ jQuery(document).ready(function() {
 			jQuery(this).children('ul').hide();
 		}
 	});
-	$('img.resize_1').on('mouseenter', function(event) {
-		var resizer = $(this).prev();
-		resizer.css({'position':'absolute', 'width': $(this).width(), 'left': $(this).position().left + 3, 'top': $(this).position().top + 3});
-		resizer.show();
-	});
-	$('div.bbc_img_resizer').on('mouseleave', function(event) {
-		$(this).hide();
-		return(false);
-	})
 	// passive share button (for sharing a topic)
 	$('.share_this').click(function() {
 		$('#share_bar').hide();
@@ -530,18 +546,6 @@ jQuery(document).ready(function() {
 	if($('#socialshareprivacy'))
     	$('#socialshareprivacy').socialSharePrivacy();
 	
-	$('div.spoiler.head').click(function() {
-        var content = $(this).next();
-		if(content.css('display') != 'none')
-			content.hide();
-		else
-			content.show();
-        return(false);
-	});
-	$('a.bbc_link').each(function() {
-		if($(this).html().match(/<img .*>/))
-			$(this).css('border', 'none');
-	});
 	$('#jsconfirm').jqm({overlay: 50, modal: true, trigger: false, center:true});
 
 	$('a.easytip, span.easytip').easyTooltip( {parentData: true} );
@@ -555,6 +559,7 @@ jQuery(document).ready(function() {
 		sendRequest('action=like;sa=getlikes;m=' + parseInt($(this).parent().attr('data-mid'))  + ';r=' + parseInt($(this).attr('data-rtype')), null);
 		return(false);
 	});
+	bbc_refresh();
 });
 
 /*
