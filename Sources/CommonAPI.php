@@ -996,6 +996,7 @@ class Topiclist {
 					'href' => ''
 				)
 			);
+			determineTopicClass($this->topiclist[$row['id_topic']]);
 			if(!empty($row['id_member']) && ($row['id_member'] != $user_info['id'] || $not_profile))
 				$this->users_to_load[$row['id_member']] = $row['id_member'];
 		}

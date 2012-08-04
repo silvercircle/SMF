@@ -84,41 +84,9 @@
   <div class="clear"></div>
 {/function}
 {function topicbit}
-  {$imgsrc = $C.clip_image_src}
-  {$color_class = ($C.alt_row) ? ' alternate' : ''}
-  {$iconlegend = ''}
-  {* Is this topic pending approval, or does it have any posts pending approval? *}
-  {if $C.can_approve_posts and !empty($topic.unapproved_posts)}
-    {$color_class = ' altbg'}
-    {$iconlegend = $iconlegend|cat:('<div class="csrcwrapper16px floatleft"><img class="clipsrc unapproved" src="'|cat:$imgsrc|cat:'" alt="" title="'|cat:$T.awaiting_approval|cat:'" /></div>')}
-  {elseif $topic.is_sticky or $topic.is_locked}
-    {$color_class = ' altbg'}
-  {/if}
-
-  {if $topic.is_locked}
-    {$iconlegend = $iconlegend|cat:('<div class="csrcwrapper16px floatleft"><img class="clipsrc locked" src="'|cat:$imgsrc|cat:'" alt="" title="'|cat:$T.locked_topic|cat:'" /></div>')}
-  {/if}    
-  {if $topic.is_sticky}
-    {$iconlegend = $iconlegend|cat:('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc sticky" src="'|cat:$imgsrc|cat:'" alt="" title="'|cat:$T.sticky_topic|cat:'" /></div>')}
-  {/if}
-  {if $topic.is_poll}
-    {$iconlegend = $iconlegend|cat:('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc poll" src="'|cat:$imgsrc|cat:'" alt="" title="'|cat:$T.poll|cat:'" /></div>')}
-  {/if}
-  {if $topic.is_posted_in}
-    {$iconlegend = $iconlegend|cat:('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc postedin" src="'|cat:$imgsrc|cat:'" alt="" title="'|cat:$T.participation_caption|cat:'" /></div>')}
-  {/if}
-
-  {if $topic.is_very_hot}
-    {$iconlegend = $iconlegend|cat:('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc veryhot" src="'|cat:$imgsrc|cat:'" alt="" title="'|cat:$C.very_hot_topic_message|cat:'" /></div>')}
-  {elseif $topic.is_hot}
-    {$iconlegend = $iconlegend|cat:('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc hot" src="'|cat:$imgsrc|cat:'" alt="" title="'|cat:$C.hot_topic_message|cat:'" /></div>')}
-  {/if}
-
-  {if $topic.is_old}
-    {$iconlegend = $iconlegend|cat:('<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc old" src="'|cat:$imgsrc|cat:'" alt="" title="'|cat:$C.old_topic_message|cat:'" /></div>')}
-  {/if}
   <tr>
-    <td class="icon1 topicrow{$color_class}">
+    {$color_class = 'topicrow'|cat:$topic.class|cat:(($C.alt_row) ? ' alternate' : '')}
+    <td class="{$color_class}">
     {if !empty($S.show_user_images) and $O.show_no_avatars == 0}
       <span class="small_avatar">
       {if !empty($topic.first_post.member.avatar)}
@@ -133,17 +101,17 @@
     {/if}
     {$is_new = $topic.new and $C.user.is_logged}
     </td>
-    <td class="icon2 topicrow{$color_class}">
+    <td class="{$color_class}">
       <img src="{$topic.first_post.icon_url}" alt="" />
     </td>
-    <td class="subject topicrow{$color_class}">
+    <td class="{$color_class} subject">
       <div {(!empty($topic.quick_mod.modify)) ? ('id="topic_'|cat:$topic.first_post.id|cat:'" ondblclick="modify_topic(\''|cat:$topic.id|cat:'\', \''|cat:$topic.first_post.id|cat:'\');"') : ''}>
       <span class="topiclink tpeek" data-id="{$topic.id}" id="msg_{$topic.first_post.id}">{$topic.prefix}{($is_new) ? '<strong>' : ''}{$topic.first_post.link}{($C.can_approve_posts and $topic.approved == 0) ? ('&nbsp;<em>('|cat:$T.awaiting_approval|cat:')</em>') : ''}{($is_new) ? '</strong>' : ''}</span>
       {if $is_new}
         <a href="{$topic.new_href}" id="newicon{$topic.first_post.id}"><img src="{$S.images_url}/new.png" alt="{$T.new}" /></a>
       {/if}
       <div class="floatright">
-        <div class="floatright iconlegend_container" style="position:relative;top:-2px;opacity:0.4;">{$iconlegend}</div>
+        <div class="floatright iconlegend_container" style="position:relative;top:-2px;opacity:0.4;">{$topic.iconlegend}</div>
         {if !empty($topic.board.id)}
           <div class="tinytext" style="margin-top:16px;"><span class="lowcontrast">{$T.in} <a href="{$topic.board.href}">{$topic.board.name}</a></span></div>
         {/if}
@@ -154,7 +122,7 @@
       </p>
       </div>
     </td>
-    <td class="stats nowrap topicrow{$color_class}">
+    <td class="{$color_class} stats nowrap">
       {if $topic.replies}
         <a rel="nofollow" title="{$T.who_posted}" onclick="whoPosted($(this));return(false);" class="whoposted" data-topic="{$topic.id}" href="{$SCRIPTURL}?action=xmlhttp;sa=whoposted;t={$topic.id}">{$topic.replies} {$T.replies}</a>
       {else}
@@ -163,12 +131,12 @@
       <br />
       {$topic.views} {$T.views}
     </td>
-    <td class="lastpost topicrow{$color_class}">
+    <td class="{$color_class} lastpost">
       {$T.by}: {$topic.last_post.member.link}<br />
       <a class="lp_link" title="{$T.last_post}" href="{$topic.last_post.href}">{$topic.last_post.time}</a>
     </td>
     {if !empty($C.can_quick_mod)}
-      <td class="moderation topicrow{$color_class}" style="text-align:center;">
+      <td class="{$color_class} moderation topicrow" style="text-align:center;">
         {if $O.display_quick_mod}
           <input type="checkbox" name="topics[]" value="{$topic.id}" class="input_check cb_inline" />
         {/if}

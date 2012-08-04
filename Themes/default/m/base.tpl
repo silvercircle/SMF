@@ -31,13 +31,6 @@
       <script type="text/javascript" src="{$S.default_theme_url}/scripts/min/jquery.js?v=162"></script>
     {/if}
     <script type="text/javascript" src="{$S.default_theme_url}/scripts/script.js{$C.jsver}"></script>
-    {if $C.theme_scripts}
-      {foreach from=$C.theme_scripts item=script}
-      {if $script.footer}
-        <script type="text/javascript" src="{($script.default) ? $S.default_theme_url : $S.theme_url}/{$script.name}{$C.jsver}"></script>
-      {/if}
-      {/foreach}
-    {/if}
     <script type="text/javascript">
     // <![CDATA[
       var smf_theme_url = '{$S.theme_url}';
@@ -166,11 +159,6 @@
     {* Output any remaining HTML headers. (from mods, maybe?) *}
     {$C.html_headers}
     <style>
-      {if isset($C.css_overrides)}
-      {foreach from=$C.css_overrides item=css}
-      {$css}
-      {/foreach}
-      {/if}
     </style>
   </head>
   <body>

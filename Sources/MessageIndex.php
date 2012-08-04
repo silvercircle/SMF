@@ -497,7 +497,7 @@ function MessageIndex()
 				'approved' => $row['approved'],
 				'unapproved_posts' => $row['unapproved_posts'],
 			);
-			//determineTopicClass($context['topics'][$row['id_topic']]);
+			determineTopicClass($context['topics'][$row['id_topic']]);
 			
 			if(!empty($context['topics'][$row['id_topic']]['prefix']))
 				$context['topics'][$row['id_topic']]['prefix'] .= '&nbsp;';

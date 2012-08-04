@@ -141,8 +141,6 @@ $txt['attachmentPostLimit'] = 'Max attachment size per post (in KB)';
 $txt['attachmentSizeLimit'] = 'Max size per attachment (in KB)';
 $txt['attachmentNumPerPostLimit'] = 'Max number of attachments per post';
 
-$txt['smf293'] = 'Karma';
-$txt['karmaMode'] = 'Karma mode';
 $txt['smf64'] = 'Disable karma|Enable karma total|Enable karma positive/negative';
 $txt['karmaMinPosts'] = 'Set the minimum posts needed to modify karma';
 $txt['karmaWaitTime'] = 'Set wait time in hours';

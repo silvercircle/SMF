@@ -142,17 +142,6 @@ function template_summary()
 					<dt>', $txt['personal_text'], ': </dt>
 					<dd>', $context['member']['blurb'], '</dd>';
 
-	// If karma enabled show the members karma.
-	if ($modSettings['karmaMode'] == '1')
-		echo '
-					<dt>', $modSettings['karmaLabel'], ' </dt>
-					<dd>', ($context['member']['karma']['good'] - $context['member']['karma']['bad']), '</dd>';
-
-	elseif ($modSettings['karmaMode'] == '2')
-		echo '
-					<dt>', $modSettings['karmaLabel'], ' </dt>
-					<dd>+', $context['member']['karma']['good'], '/-', $context['member']['karma']['bad'], '</dd>';
-
 	if (!isset($context['disabled_fields']['gender']) && !empty($context['member']['gender']['name']))
 		echo '
 					<dt>', $txt['gender'], ': </dt>

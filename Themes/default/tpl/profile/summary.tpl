@@ -85,13 +85,6 @@
 					<dt>{$T.personal_text}: </dt>
 					<dd>{$C.member.blurb}</dd>
 				{/if}
-				{if $M.karmaMode == '1'}
-					<dt>{$M.karmaLabel}</dt>
-					<dd>{$C.member.karma.good - $C.member.karma.bad}</dd>
-				{elseif $M.karmaMode == '2'}
-					<dt>{$M.karmaLabel}</dt>
-					<dd>+{$C.member.karma.good}/-{$C.member.karma.bad}</dd>
-				{/if}
 				{if !isset($C.disabled_fields.gender) && !empty($C.member.gender.name)}
 					<dt>{$T.gender}: </dt>
 					<dd>{$C.member.gender.name}</dd>

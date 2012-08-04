@@ -16,10 +16,9 @@
     sScriptUrl: smf_scripturl,
     sImagesUrl: "{$S.images_url}",
     sContainerId: "quickReplyOptions",
-    sImageId: "quickReplyExpand",
-    sImageCollapsed: "collapse.gif",
-    sImageExpanded: "expand.gif",
     iMarkedForMQ: {$C.multiquote_posts_count},
+    sErrorInEditMsg: "{$T.inline_edit_inprogress}",
+    sErrorTitle: "{$T.error_occured}",
     sJumpAnchor: "quickreplybox",
     bEnabled: {(!empty($O.display_quick_reply)) ? 'true' : 'false'}
   

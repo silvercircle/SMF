@@ -82,21 +82,6 @@ function template_postbit_normal(&$message)
 		// Show how many posts they have made.
 
 		// Is karma display enabled?  Total or +/-?
-		if ($modSettings['karmaMode'] == '1')
-			echo '
-		<li class="karma">', $modSettings['karmaLabel'], ' ', $message['member']['karma']['good'] - $message['member']['karma']['bad'], '</li>';
-		elseif ($modSettings['karmaMode'] == '2')
-			echo '
-		<li class="karma">', $modSettings['karmaLabel'], ' +', $message['member']['karma']['good'], '/-', $message['member']['karma']['bad'], '</li>';
-
-		// Is this user allowed to modify this member's karma?
-		if ($message['member']['karma']['allow'])
-			echo '
-		<li class="karma_allow">
-		<a href="', $scripturl, '?action=modifykarma;sa=applaud;uid=', $message['member']['id'], ';topic=', $context['current_topic'], '.' . $context['start'], ';m=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $modSettings['karmaApplaudLabel'], '</a>
-		<a href="', $scripturl, '?action=modifykarma;sa=smite;uid=', $message['member']['id'], ';topic=', $context['current_topic'], '.', $context['start'], ';m=', $message['id'], ';', $context['session_var'], '=', $context['session_id'], '">', $modSettings['karmaSmiteLabel'], '</a>
-		</li>';
-
 		// Show their personal text?
 		if ($message['member']['blurb'] != '')
 			echo '

@@ -304,11 +304,9 @@ $txt['team_members_online'] = 'Team members online';
 $txt['stats_header'] = 'Statistics';
 $txt['stats_header_online'] = 'Online now...';
 
-$txt['you_have'] = 'You\'ve got';
+$txt['you'] = 'You';
 $txt['click'] = 'Click';
 $txt['here'] = 'here';
-$txt['to_view'] = 'to view them.';
-
 $txt['total_boards'] = 'Total Boards';
 
 $txt['print_page'] = 'Print Page';
@@ -775,4 +773,6 @@ $txt['show_my_subscriptions'] = 'Show my subscribed topics';
 $txt['whatsnew_menu'] = 'What\'s new';
 $txt['view_recent_activity'] = 'View recent activity';
 $txt['post_ratings_disabled'] = 'The ratings system is disabled.';
+
+$txt['inline_edit_inprogress'] = 'You are editing a message. Please cancel your current action first.';
 ?>

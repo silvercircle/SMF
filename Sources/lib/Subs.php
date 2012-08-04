@@ -131,12 +131,6 @@ if (!defined('SMF'))
 		- caches the smileys from the database or array in memory.
 		- doesn't return anything, but rather modifies message directly.
 
-	string highlight_php_code(string code)
-		- Uses PHP's highlight_string() to highlight PHP syntax
-		- does special handling to keep the tabs in the code available.
-		- used to parse PHP code from inside [code] and [php] tags.
-		- returns the code with highlighted HTML.
-
 	void writeLog(bool force = false)
 		// !!!
 
@@ -2522,24 +2516,6 @@ function parsesmileys(&$message)
 	$message = preg_replace($smileyPregSearch, 'isset($smileyPregReplacements[\'$1\']) ? $smileyPregReplacements[\'$1\'] : \'\'', $message);
 }
 
-// Highlight any code...
-function highlight_php_code($code)
-{
-	// Remove special characters.
-	$code = un_htmlspecialchars(strtr($code, array('<br />' => "\n", "\t" => 'SMF_TAB();', '&#91;' => '[')));
-
-	$oldlevel = error_reporting(0);
-
-	$buffer = str_replace(array("\n", "\r"), '', @highlight_string($code, true));
-
-	error_reporting($oldlevel);
-
-	// Yes, I know this is kludging it, but this is the best way to preserve tabs from PHP :P.
-	$buffer = preg_replace('~SMF_TAB(?:</(?:font|span)><(?:font color|span style)="[^"]*?">)?\\(\\);~', '<pre style="display: inline;">' . "\t" . '</pre>', $buffer);
-
-	return strtr($buffer, array('\'' => '&#039;', '<code>' => '', '</code>' => ''));
-}
-
 // Put this user in the online log.
 function writeLog($force = false)
 {
@@ -3029,23 +3005,41 @@ function url_image_size($url)
 	return $size;
 }
 
-function determineTopicClass(&$topic_context)
+function determineTopicClass(&$topic)
 {
-	// Set topic class depending on locked status and number of replies.
-	if ($topic_context['is_very_hot'])
-		$topic_context['class'] = 'veryhot';
-	elseif ($topic_context['is_hot'])
-		$topic_context['class'] = 'hot';
-	else
-		$topic_context['class'] = 'normal';
+	global $context, $txt;
+	$imgsrc = $context['clip_image_src'];
+	$iconlegend = $class = '';
 
-	$topic_context['class'] .= $topic_context['is_poll'] ? '_poll' : '_post';
+	if(isset($context['can_approve_posts']) && !empty($topic['unapproved_posts'])) {
+		$class = ' unapproved';
+		$iconlegend .= '<div class="csrcwrapper16px floatleft"><img class="clipsrc unapproved" src="'.$imgsrc.'" alt="" title="'.$txt['awaiting_approval'].'" /></div>';
+	}
+	elseif($topic['is_sticky'] || $topic['is_locked'])
+		$class = $topic['is_sticky'] ? ' sticky' : ' locked';
 
-	if ($topic_context['is_locked'])
-		$topic_context['class'] .= '_locked';
+	if($topic['is_locked'])
+		$iconlegend .= '<div class="csrcwrapper16px floatleft"><img class="clipsrc locked" src="'.$imgsrc.'" alt="" title="'.$txt['locked_topic'].'" /></div>';
 
-	if ($topic_context['is_sticky'])
-		$topic_context['class'] .= '_sticky';
+	if($topic['is_sticky'])
+		$iconlegend .= '<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc sticky" src="'.$imgsrc.'" alt="" title="'.$txt['sticky_topic'].'" /></div>';
+
+	if($topic['is_poll'])
+		$iconlegend .= '<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc poll" src="'.$imgsrc.'" alt="" title="'.$txt['poll'].'" /></div>';
+
+	if(isset($topic['is_posted_in']))
+		$iconlegend .= '<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc postedin" src="'.$imgsrc.'" alt="" title="'.$txt['participation_caption'].'" /></div>';
+
+	if(isset($topic['is_very_hot']))
+		$iconlegend .= '<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc veryhot" src="'.$imgsrc.'" alt="" title="'.$context['very_hot_topic_message'].'" /></div>';
+	elseif(isset($topic['is_hot']))
+		$iconlegend .= '<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc hot" src="'.$imgsrc.'" alt="" title="'.$context['hot_topic_message'].'" /></div>';
+
+	if(isset($topic['is_old']))
+		$iconlegend .= '<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc old" src="'.$imgsrc.'" alt="" title="'.$context['old_topic_message'].'" /></div>';
+
+	$topic['iconlegend'] = $iconlegend;
+	$topic['class'] = $class;
 }
 
 // Sets up the basic theme context stuff.
@@ -3058,9 +3052,6 @@ function setupThemeContext($forceload = false)
 	//   So only run the function once unless we are forced to run it again.
 	if ($loaded && !$forceload)
 		return;
-
-	$context['clip_image_src'] = $settings['images_url'] . '/' . $settings['clip_image_src'][$context['theme_variant']];
-	$context['sprite_image_src'] = $settings['images_url'] . '/' . $settings['sprite_image_src'][$context['theme_variant']];
 
 	$loaded = true;
 
@@ -3179,6 +3170,9 @@ function setupThemeContext($forceload = false)
 	$context['page_title_html_safe'] = $context['forum_name_html_safe'] . ' - ' . commonAPI::htmlspecialchars(un_htmlspecialchars($context['page_title']));
 	$context['meta_keywords'] = !empty($modSettings['meta_keywords']) ? commonAPI::htmlspecialchars($modSettings['meta_keywords']) : '';
 	$context['page_description_html_safe'] = isset($context['meta_page_description']) ? commonAPI::htmlspecialchars(un_htmlspecialchars($context['meta_page_description'])) : $context['page_title_html_safe'];
+
+	if(empty($modSettings['groupColorsFromTheme']))
+		$context['html_headers'] .= $modSettings['groupColorsInline'];
 }
 
 // This is the only template included in the sources...
@@ -4091,16 +4085,9 @@ function enqueueThemeScript($key, $script, $footer = true, $default = true)
 {
 	global $context;
 
-	$context['theme_scripts'][$key] = array('name' => $script, 'default' => $default, 'footer' => $footer);
+	$context['theme_scripts'][$key] = array('name' => $script, 'default' => $default, 'footer' => true);
 }
 
-function registerCSSOverrideFragment($t)
-{
-	global $context;
-
-	if(!empty($t))
-		$context['css_overrides'][] = $t;
-}
 /**
  * @param int $board  board id or 0
  * @param int $topic  topic id or 0

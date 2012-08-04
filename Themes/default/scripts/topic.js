@@ -1,5 +1,6 @@
 var cur_topic_id, cur_msg_id, buff_subject, cur_subject_div, in_edit_mode = 0;
 var hide_prefixes = Array();
+var _inModify = false;
 
 function modify_topic(topic_id, first_msg_id)
 {
@@ -190,6 +191,10 @@ QuickReply.prototype.quote = function (iMessageId)
 	if(parseInt(this.iMessagesMarked) > 0 || false == this.opt.bEnabled)
 		return(true);
 
+	if(_inModify) {
+		Eos_Alert(this.opt.sErrorTitle, this.opt.sErrorInEditMsg);
+		return(false);
+	}
 	$(parseInt(iMessageId) != 0 ? '#msg' + iMessageId : '#posts_container').after($('#quickreplybox'));
 	if(!this.bInReplyMode) {
 		$('#quickreplybox').show();
@@ -233,15 +238,6 @@ QuickReply.prototype.onQuoteReceived = function (oXMLDoc)
 	replaceText(sQuoteText, document.forms.quickModForm.message);
 
 	setBusy(false);
-}
-
-// The function handling the swapping of the quick reply.
-QuickReply.prototype.swap = function ()
-{
-	document.getElementById(this.opt.sImageId).src = this.opt.sImagesUrl + "/" + (this.bCollapsed ? this.opt.sImageCollapsed : this.opt.sImageExpanded);
-	document.getElementById(this.opt.sContainerId).style.display = this.bCollapsed ? '' : 'none';
-
-	this.bCollapsed = !this.bCollapsed;
 }
 
 // *** QuickModify object.
@@ -293,7 +289,7 @@ QuickModify.prototype.modifyMsg = function (iMessageId)
 		this.modifyCancel();
 
 	// At least NOW we're in edit mode
-	this.bInEditMode = true;
+	this.bInEditMode = _inModify = true;
 
 	// Send out the XMLhttp request to get more info
 	setBusy(1);
@@ -352,7 +348,7 @@ QuickModify.prototype.modifyCancel = function ()
 	}
 
 	// No longer in edit mode, that's right.
-	this.bInEditMode = false;
+	this.bInEditMode = _inModify = false;
 
 	return false;
 }
@@ -443,6 +439,7 @@ QuickModify.prototype.onModifyDone = function (XMLDoc)
 		document.forms.quickModForm.subject.style.border = error.getAttribute('in_subject') == '1' ? this.opt.sErrorBorderStyle : '';
 	}
 
+	this.bInEditMode = _inModify = false;
 	if(typeof(prettyPrint) != 'undefined')
 		prettyPrint();
 }

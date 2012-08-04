@@ -265,14 +265,13 @@ function loadUserSettings()
 		if ($modSettings['cache_enable'] < 2 || ($user_settings = CacheAPI::getCache('user_settings-' . $id_member, 600)) == null)
 		{
 			$request = smf_db_query( '
-				SELECT mem.*, IFNULL(a.id_attach, 0) AS id_attach, a.filename, a.attachment_type, mg.online_color
+				SELECT mem.*, IFNULL(a.id_attach, 0) AS id_attach, a.filename, a.attachment_type
 				FROM {db_prefix}members AS mem
 					LEFT JOIN {db_prefix}attachments AS a ON (a.id_member = {int:id_member})
-					LEFT JOIN {db_prefix}membergroups AS mg ON (mg.id_group = CASE WHEN mem.id_group = {int:reg_mem_group} THEN mem.id_post_group ELSE mem.id_group END)
 				WHERE mem.id_member = {int:id_member}
 				LIMIT 1',
 				array(
-					'id_member' => $id_member, 'reg_mem_group' => 0
+					'id_member' => $id_member
 				)
 			);
 			$user_settings = mysql_fetch_assoc($request);
@@ -518,7 +517,7 @@ function loadUserSettings()
 		$modSettings['online_today'][$user_info['id']] = array(
 			'name' => $user_info['name'],
 			'show_online' => $user_info['show_online'],
-			'link' => !empty($user_settings['online_color']) ? '<a href="' . URL::user($user_info['id'], $user_info['name']) . '" style="color: ' . $user_settings['online_color'] . ';">' . $user_info['name'] . '</a>' : '<a href="' . URL::user($user_info['id'], $user_info['name']) . '">' . $user_info['name'] . '</a>'
+			'link' => '<a class="member group_'.(empty($user_settings['id_group']) ? $user_settings['id_post_group'] : $user_settings['id_group']). '" href="' . URL::user($user_info['id'], $user_info['name']) . '">' . $user_info['name'] . '</a>'
 		);
 		updateSettings(array('log_online_today' => @serialize($modSettings['online_today'])));
 	}
@@ -956,7 +955,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 			mem.signature, mem.personal_text, mem.location, mem.gender, mem.avatar, mem.id_member, mem.member_name,
 			mem.real_name, mem.email_address, mem.hide_email, mem.date_registered,
 			mem.birthdate, mem.member_ip, mem.member_ip2, mem.posts, mem.last_login,
-			mem.karma_good, mem.id_post_group, mem.karma_bad, mem.lngfile, mem.id_group, mem.time_offset, mem.show_online,
+			mem.id_post_group, mem.lngfile, mem.id_group, mem.time_offset, mem.show_online,
 			mem.buddy_list, mg.online_color AS member_group_color, IFNULL(mg.group_name, {string:blank_string}) AS member_group,
 			mem.likes_received AS liked, mem.likes_given AS likesgiven,
 			pg.online_color AS post_group_color, IFNULL(pg.group_name, {string:blank_string}) AS post_group, mem.is_activated, mem.warning,
@@ -974,8 +973,8 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 			IFNULL(lo.log_time, 0) AS is_online, IFNULL(a.id_attach, 0) AS id_attach, a.filename, a.attachment_type,
 			mem.signature, mem.personal_text, mem.location, mem.gender, mem.avatar, mem.id_member, mem.member_name,
 			mem.real_name, mem.email_address, mem.hide_email, mem.date_registered,
-			mem.openid_uri, mem.birthdate, mem.posts, mem.last_login, mem.karma_good,
-			mem.karma_bad, mem.member_ip, mem.member_ip2, mem.lngfile, mem.id_group, mem.id_theme, mem.buddy_list,
+			mem.openid_uri, mem.birthdate, mem.posts, mem.last_login,
+			mem.member_ip, mem.member_ip2, mem.lngfile, mem.id_group, mem.id_theme, mem.buddy_list,
 			mem.pm_ignore_list, mem.pm_email_notify, mem.pm_receive_from, mem.time_offset' . (!empty($modSettings['titlesEnable']) ? ', mem.usertitle' : '') . ',
 			mem.time_format, mem.secret_question, mem.is_activated, mem.additional_groups, mem.smiley_set, mem.show_online,
 			mem.total_time_logged_in, mem.id_post_group, mem.notify_announcements, mem.notify_regularity, mem.notify_send_body,
@@ -1144,7 +1143,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'buddies' => $buddy_list,
 		'title' => !empty($modSettings['titlesEnable']) ? $profile['usertitle'] : '',
 		'href' => $m_href,
-		'link' => '<a class="member group_'.$profile['id_group'].'" onclick="getMcard('.$profile['id_member'].');return(false);" href="' . $m_href . '" title="' . $txt['profile_of'] . ' ' . $profile['real_name'] . '">' . $profile['real_name'] . '</a>',
+		'link' => '<a class="member group_'.(empty($profile['id_group']) ? $profile['id_post_group'] : $profile['id_group']).'" onclick="getMcard('.$profile['id_member'].');return(false);" href="' . $m_href . '" title="' . $txt['profile_of'] . ' ' . $profile['real_name'] . '">' . $profile['real_name'] . '</a>',
 		'email' => $profile['email_address'],
 		'show_email' => showEmailAddress(!empty($profile['hide_email']), $profile['id_member']),
 		'registered' => empty($profile['date_registered']) ? $txt['not_applicable'] : timeformat($profile['date_registered']),
@@ -1167,12 +1166,6 @@ function loadMemberContext($user, $display_custom_fields = false)
 		),
 		'last_login' => empty($profile['last_login']) ? $txt['never'] : !empty($profile['show_online']) || allowedTo('moderate_forum') ? timeformat($profile['last_login']) : $txt['hidden'],
 		//'last_login_timestamp' => empty($profile['last_login']) ? 0 : forum_time(0, $profile['last_login']),
-		'karma' => array(
-			'good' => $profile['karma_good'],
-			'bad' => $profile['karma_bad'],
-			'allow' => !$user_info['is_guest'] && !empty($modSettings['karmaMode']) && $user_info['id'] != $user && allowedTo('karma_edit') &&
-			($user_info['posts'] >= $modSettings['karmaMinPosts'] || $user_info['is_admin']),
-		),
 		'ip' => htmlspecialchars($profile['member_ip']),
 		'ip2' => htmlspecialchars($profile['member_ip2']),
 		'online' => array(

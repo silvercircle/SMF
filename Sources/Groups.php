@@ -49,7 +49,7 @@ if (!defined('SMF'))
 // Entry point, permission checks, admin bars, etc.
 function Groups()
 {
-	global $context, $txt, $scripturl, $sourcedir, $user_info;
+	global $context, $txt, $scripturl, $sourcedir, $user_info, $modSettings;
 
 	// The sub-actions that we can do. Format "Function Name, Mod Bar Index if appropriate".
 	$subActions = array(
@@ -58,21 +58,29 @@ function Groups()
 		'requests' => array('GroupRequests', 'group_requests'),
 	);
 
+	if(!isset($modSettings['groupColorsInline'])) {
+		require_once($sourcedir . '/lib/Subs-Membergroups.php');
+		regenerateColorStyle();
+	}
 	// Default to sub action 'index' or 'settings' depending on permissions.
 	$_REQUEST['sa'] = isset($_REQUEST['sa']) && isset($subActions[$_REQUEST['sa']]) ? $_REQUEST['sa'] : 'index';
 
 	// Get the template stuff up and running.
 	loadLanguage('ManageMembers');
 	loadLanguage('ModerationCenter');
-	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin')
+	if(isset($_REQUEST['action']) && ($_REQUEST['action'] === 'admin') || $_REQUEST['action'] === 'groups')
 		loadAdminTemplate('ManageMembergroups');
 
 	// If we can see the moderation center, and this has a mod bar entry, add the mod center bar.
-	if (allowedTo('access_mod_center') || $user_info['mod_cache']['bq'] != '0=1' || $user_info['mod_cache']['gq'] != '0=1' || allowedTo('manage_membergroups'))
+	if ($_REQUEST['action'] != 'moderate' && (allowedTo('access_mod_center') || $user_info['mod_cache']['bq'] != '0=1' || $user_info['mod_cache']['gq'] != '0=1' || allowedTo('manage_membergroups')))
 	{
-		require_once($sourcedir . '/ModerationCenter.php');
-		$_GET['area'] = $_REQUEST['sa'] == 'requests' ? 'groups' : 'viewgroups';
-		ModerationMain(true);
+		if(isset($_REQUEST['group']))
+			redirectexit(URL::parse('?action=moderate;area=viewgroups;sa=members;group=' . $_REQUEST['group']));
+		else
+			redirectexit(URL::parse('?action=moderate;area=viewgroups'));
+		//require_once($sourcedir . '/ModerationCenter.php');
+		//$_GET['area'] = $_REQUEST['sa'] == 'requests' ? 'groups' : 'viewgroups';
+		//ModerationMain(true);
 	}
 	// Otherwise add something to the link tree, for normal people.
 	else
@@ -941,7 +949,7 @@ function list_getGroupRequestCount($where, $where_parameters)
 
 function list_getGroupRequests($start, $items_per_page, $sort, $where, $where_parameters)
 {
-	global $smcFunc, $txt, $scripturl;
+	global $scripturl;
 
 	$request = smf_db_query( '
 		SELECT lgr.id_request, lgr.id_member, lgr.id_group, lgr.time_applied, lgr.reason,
@@ -971,5 +979,3 @@ function list_getGroupRequests($start, $items_per_page, $sort, $where, $where_pa
 
 	return $group_requests;
 }
-
-?>

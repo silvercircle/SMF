@@ -36,14 +36,6 @@ function template_html_above()
 	<script type="text/javascript" src="', $boardurl, '/Themes/admin/admin.js',$context['jsver'],'"></script>
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js',$context['jsver'],'"></script>';
 
-	if(!empty($context['theme_scripts'])) {
-		foreach($context['theme_scripts'] as $type => $script) {
-			if(!$script['footer'])
-				echo '
-	<script type="text/javascript" src="',($script['default'] ? $settings['default_theme_url'] : $settings['theme_url']) . '/' . $script['name'] . $context['jsver'], '"></script>
-	';
-		}
-	}
 	$sSID = SID != '' ? '&' . SID  : '';
 	$timeoff = ($user_info['time_offset'] + $modSettings['time_offset']) * 3600;
 
@@ -123,12 +115,6 @@ EOT;
 	echo '
 	<style>
 	 #main_content_section {max-width:',isset($options['content_width']) ? $options['content_width'] : '95%', ';}';
-	if(isset($context['css_overrides'])) {
-		foreach($context['css_overrides'] as $k)
-			echo '
-	',$k,'
-	';
-	}
 	echo '
 	</style>
 </head>
@@ -856,8 +842,7 @@ function template_footer_scripts()
 
 	if(!empty($context['theme_scripts'])) {
 		foreach($context['theme_scripts'] as $type => $script) {
-			if($script['footer'])
-				echo '
+			echo '
 	<script type="text/javascript" src="',($script['default'] ? $settings['default_theme_url'] : $settings['theme_url']) . '/' . $script['name'] . $context['jsver'], '"></script>';
 		}
 	}

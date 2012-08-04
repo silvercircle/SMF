@@ -22,6 +22,9 @@ function template_html_above()
 <head>';
 	echo '
 	<link rel="stylesheet" type="text/css" href="', $settings['primary_css'],'" />';
+	if (isset($context['need_synhlt']))
+		echo '
+	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'],'/css/secondary.css',$context['jsver'],'" />';
 	if ($context['right_to_left'])
 		echo '
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/rtl.css" />';
@@ -39,14 +42,6 @@ function template_html_above()
 	echo '
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js',$context['jsver'],'"></script>';
 
-	if(!empty($context['theme_scripts'])) {
-		foreach($context['theme_scripts'] as $type => $script) {
-			if(!$script['footer'])
-				echo '
-	<script type="text/javascript" src="',($script['default'] ? $settings['default_theme_url'] : $settings['theme_url']) . '/' . $script['name'] . $context['jsver'], '"></script>
-	';
-		}
-	}
 	$sSID = SID != '' ? '&' . SID  : '';
 	$timeoff = ($user_info['time_offset'] + $modSettings['time_offset']) * 3600;
 	echo <<<EOT
@@ -192,12 +187,6 @@ EOT;
 	echo '
 	<style>
 	 /* #main_content_section {max-width:',isset($options['content_width']) ? $options['content_width'] : '95%', ';} */';
-	if(isset($context['css_overrides'])) {
-		foreach($context['css_overrides'] as $k)
-			echo '
-	',$k,'
-	';
-	}
 	echo '
 	</style>
 </head>
@@ -389,9 +378,14 @@ EOT;
 	var t3 = document.createElement(\'SCRIPT\');
 	t3.type = "text/javascript";
 	t3.async = true;
-	t3.src = "',$settings['theme_url'],'/prettify/prettify.js?ver=1.1.0";
-	anchor.parentNode.insertBefore(t3, anchor);';
-
+	t3.src = "',$settings['default_theme_url'],'/prettify/prettify.js";
+	anchor.parentNode.insertBefore(t3, anchor);
+    t3 = document.createElement(\'SCRIPT\');
+    t3.type = "text/javascript";
+    t3.async = true;
+    t3.src = "',$settings['default_theme_url'],'/scripts/min/prettyphoto.js";
+    anchor.parentNode.insertBefore(t3, anchor);
+	';
 	$context['inline_footer_script'] .= $txt['jquery_timeago_loc'];
 	if(isset($context['want_GA_embedded'])) {
 		echo '
@@ -658,242 +652,6 @@ function socialbar_passive($l, $t)
 	echo '</div><div class="clear"></div>';
 }
 
-function template_sidebar_content_index()
-{
-	global $context, $txt, $modSettings, $scripturl, $settings, $user_info, $options;
-
-	$widgetstyle = 'framed_region cleantop tinypadding';
-	echo $context['template_hooks']['global']['sidebar_top'];
-	$collapser = array('id' => 'user_panel', 'title' => 'User panel', 'bodyclass' => $widgetstyle);
-	echo '<script>
-		   // <![CDATA[
-		   sidebar_content_loaded = 1;
-           // ]]>
-		  </script>';
-
-	template_create_collapsible_container($collapser);
-		//<h1 class="bigheader greyback" style="margin-top:0;">User panel</h1>';
-		
-	// If the user is logged in, display stuff like their name, new messages, etc.
-	// for the logo -> <img style="margin-left:30px;margin-top:10px;float:left;display:inline-block;" src="'.$settings['images_url'].'/bloglogo.png" alt="logo" />
-	echo '
-		<div class="blue_container smallpadding norounded gradient_darken_down">';
-	if ($context['user']['is_logged'])
-	{
-		echo '<div class="smalltext user">';
-
-		if (!empty($context['user']['avatar']))
-			echo '
-				<div class="avatar floatleft">', $context['user']['avatar']['image'], '</div>';
-		else
-			echo '
-				<div class="avatar floatleft"><img src="',$settings['images_url'],'/unknown.png" alt="avatar" /></div>';
-		echo '
-				 <ul class="reset" style="line-height:110%;">
-					<li class="greeting"><a href="',URL::user($context['user']['id'], $context['user']['name']),'">', $context['user']['name'], '</a></li>
-					<li class="smalltext">',$user_info['posts'],' ',$txt['posts'],'<li>
-					<li class="smalltext">',$user_info['likesreceived'],' ',$txt['likes'],'<li>
-					<li class="smalltext"><span class="smalltext floatright"><a href="',$scripturl,'?action=logout;',$context['session_var'],'=',$context['session_id'], '">Sign out</a></span><li>
-				 </ul>
-				 <div class="clear">
-					<a href="', URL::parse($scripturl . '?action=unread">'), $txt['unread_since_visit'], '</a><br>
-					<a href="', URL::parse($scripturl . '?action=unreadreplies">'), $txt['show_unread_replies'], '</a>
-				 </div>';
-
-		echo '<div style="margin-top:3px;">';
-		// Is the forum in maintenance mode?
-		if ($context['in_maintenance'] && $context['user']['is_admin'])
-			echo '
-					<div class="errorbox smallpadding">', $txt['maintain_mode_on'], '</div>';
-
-		// Are there any members waiting for approval?
-		if (!empty($context['unapproved_members']))
-			echo '
-					<div>', $context['unapproved_members'] == 1 ? $txt['approve_thereis'] : $txt['approve_thereare'], ' <a href="', $scripturl, '?action=admin;area=viewmembers;sa=browse;type=approve">', $context['unapproved_members'] == 1 ? $txt['approve_member'] : $context['unapproved_members'] . ' ' . $txt['approve_members'], '</a> ', $txt['approve_members_waiting'], '</div>';
-
-		echo '</div></div></div>';
-	}
-	// Otherwise they're a guest - this time ask them to either register or login - lazy bums...
-	else {
-		echo '
-				<div class="smalltext">
-				<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/sha1.js',$context['jsver'],'"></script>
-				<div>
-					<form id="guest_form" action="', $scripturl, '?action=login2" method="post" accept-charset="UTF-8" ', empty($context['disable_login_hashing']) ? ' onsubmit="hashLoginPassword(this, \'' . $context['session_id'] . '\');"' : '', '>
-					<div class="orange_container centertext">', sprintf($txt['welcome_guest'], $txt['guest_title']), '</div>
-					<table>
-					<tr>
-					<td class="nowrap"><strong>',$txt['username'],':</strong></td>
-					<td><input type="text" name="user" size="20" class="input_text" /></td>
-					</tr>
-					<tr>
-					<td class="nowrap"><strong>',$txt['password'],':</strong></td>
-					<td><input type="password" name="passwrd" size="20" class="input_password" /></td>
-					</tr>
-					</table>
-					<span style="line-height:20px;">',$txt['always_logged_in'],'<input type="checkbox" name="cookielength" value="-1"></span>
-					<input style="width:90%;margin-left:5%;margin-top:10px;" type="submit" value="', $txt['login'], '" class="button_submit" /><br />';
-
-		if (!empty($modSettings['enableOpenID']))
-			echo '
-					<br /><input type="text" name="openid_identifier" id="openid_url" size="25" class="input_text openid_login" />';
-
-		echo '
-					<input type="hidden" name="hash_passwrd" value="" />
-					</form>
-					<br>';
-		if(!(!empty($modSettings['registration_method']) && $modSettings['registration_method'] == 3))
-			echo '
-					<div class="orange_container">
-					',$txt['login_or_register'],'
-					</div>';
-		else
-			echo '
-					<div class="orange_container">
-					',$txt['registration_disabled'],'
-					</div>';
-		echo '
-					</div>
-				</div>
-			</div>';
-	}
-	echo '</div>
-		<div class="cContainer_end"></div>';
-		
-	// Show statistical style information...
-	if ($settings['show_stats_index'] && isset($context['show_stats']))
-	{
-		$collapser = array('bodyclass' => $widgetstyle, 'id'=> 'stats_panel','title' => $txt['forum_stats']);
-		template_create_collapsible_container($collapser);
-		echo '
-			<div class="blue_container norounded smallpadding gradient_darken_down">
-			<div class="smallpadding smalltext">
-				<dl class="common">
-				 <dt>', $txt['posts'], ': </dt><dd class="righttext">',$context['common_stats']['total_posts'], '</dd>
-				 <dt>', $txt['topics'], ': </dt><dd class="righttext">', $context['common_stats']['total_topics'], '</dd>
-				 <dt>', $txt['members'], ': </dt><dd class="righttext">', $context['common_stats']['total_members'], '</dd>';
-				 if(!empty($settings['show_latest_member']))
-				 	echo '<dt>', $txt['latest_member'] . ': </dt><dd class="righttext"><strong><a href="',URL::user($context['common_stats']['latest_member']['id'], $context['common_stats']['latest_member']['name']),'">', $context['common_stats']['latest_member']['name'] . '</a></strong></dd>';
-				 echo '</dl>';
-				echo '
-				<div>
-				  <div class="floatright righttext"><a href="', URL::action($scripturl . '?action=recent') . '">', $txt['recent_view'], '</a>', $context['show_stats'] ? '
-				  </div>
-				 <a href="' . URL::action($scripturl . '?action=stats') .'">' . $txt['more_stats'] . '</a>' : '', '
-				</div>
-			</div>
-			</div>
-			</div>
-			<div class="cContainer_end"></div>';
-	}
-	
-	// social panel in the side bar
-	if(($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar']))) {
-		$collapser = array('id' => 'social_panel', 'title' => 'Socialize', 'bodyclass' => $widgetstyle, 'framed' => 'smallpadding');
-		template_create_collapsible_container($collapser);
-		echo '
-		<div class="blue_container norounded smallpadding gradient_darken_down">
-		<div id="socialshareprivacy"></div>
-		<div class="clear"></div>
-		</div>
-		</div>
-		<div class="cContainer_end"></div>';
-	}
-	
-	// This is the "Recent Posts" bar.
-	if (!empty($settings['number_recent_posts']) && (!empty($context['latest_posts']) || !empty($context['latest_post'])))
-	{
-		$collapser = array('bodyclass' => $widgetstyle, 'id' => 'recent_panel', 'title' => '<a href="'. URL::parse($scripturl. '?action=recent') . '">' . $txt['recent_posts']. '</a>', 'framed' => 'smallpadding');
-		template_create_collapsible_container($collapser);
-		echo '
-			<div class="blue_container norounded smallpadding gradient_darken_down">
-			<div class="smalltext" id="recent_posts_content" style="line-height:120%;">
-				<div class="entry-title" style="display: none;">', $context['forum_name_html_safe'], ' - ', $txt['recent_posts'], '</div>
-				<div class="entry-content" style="display: none;">
-					<a rel="alternate" type="application/rss+xml" href="', $scripturl, '?action=.xml;type=webslice">', $txt['subscribe_webslice'], '</a>
-				</div>';
-
-		// Only show one post.
-		if ($settings['number_recent_posts'] == 1)
-		{
-			// latest_post has link, href, time, subject, short_subject (shortened with...), and topic. (its id.)
-			echo '
-				<strong><a href="', $scripturl, '?action=recent">', $txt['recent_posts'], '</a></strong>
-				<p id="infocenter_onepost" class="smalltext">
-					', $txt['recent_view'], ' &quot;', $context['latest_post']['link'], '&quot; ', $txt['recent_updated'], ' (', $context['latest_post']['time'], ')<br />
-				</p>';
-		}
-		// Show lots of posts.
-		elseif (!empty($context['latest_posts']))
-		{
-			echo '
-			   	<ol class="commonlist smalltext" style="padding:0;margin:0;">';
-			/* Each post in latest_posts has:
-					board (with an id, name, and link.), topic (the topic's id.), poster (with id, name, and link.),
-					subject, short_subject (shortened with...), time, link, and href. */
-			foreach ($context['latest_posts'] as $post)
-				echo '
-				<li class="smallpadding">
-					<a href = "',$post['href'],'" title = "',$post['subject'],'">',$post['short_subject'],'</a><br>
-					<span class="nowrap floatright tinytext">', $post['time'], '</span><strong class="tinytext">', $post['poster']['link'],'</strong><br>
-				</li>';
-			echo '
-				</ol>';
-		}
-		echo '
-			</div>
-			</div>
-			</div>
-			<div class="cContainer_end"></div>
-			';
-	}
-	
-	// Show information about events, birthdays, and holidays on the calendar.
-	if ($context['show_calendar'])
-	{
-		$title = $context['calendar_only_today'] ? $txt['calendar_today'] : ($txt['calendar']. ' (Next '.$modSettings['cal_days_for_index'].' days)');
-		$collapser = array('bodyclass'=> $widgetstyle, 'id' => 'cal_panel', 'title' => '<a href="'. URL::action($scripturl . '?action=calendar') . '">'. $title . '</a>', 'framed' => 'smallpadding');
-		template_create_collapsible_container($collapser);
-		echo '
-			<div class="blue_container norounded smallpadding gradient_darken_down">
-			<div class="smalltext">';
-
-		// Holidays like "Christmas", "Chanukah", and "We Love [Unknown] Day" :P.
-		if (!empty($context['calendar_holidays']))
-				echo '
-				<div class="holiday">', $txt['calendar_prompt'], '</div>', implode(', ', $context['calendar_holidays']), '<br><div class="cContainer_end"></div>';
-
-		// People's birthdays. Like mine. And yours, I guess. Kidding.
-		if (!empty($context['calendar_birthdays']))	{
-				echo '
-				<div class="birthday">', $context['calendar_only_today'] ? $txt['birthdays'] : $txt['birthdays_upcoming'], '</div> ';
-		/* Each member in calendar_birthdays has:
-				id, name (person), age (if they have one set?), is_last. (last in list?), and is_today (birthday is today?) */
-		foreach ($context['calendar_birthdays'] as $member)
-				echo '
-				<a href="', URL::user($member['id'], $member['name']), '">', $member['is_today'] ? '<strong>' : '', $member['name'], $member['is_today'] ? '</strong>' : '', isset($member['age']) ? ' (' . $member['age'] . ')' : '', '</a>', $member['is_last'] ? '<br />' : ', ';
-		}
-		// Events like community get-togethers.
-		if (!empty($context['calendar_events']))
-		{
-			echo '
-				<span class="event">', $context['calendar_only_today'] ? $txt['events'] : $txt['events_upcoming'], '</span> ';
-			/* Each event in calendar_events should have:
-					title, href, is_last, can_edit (are they allowed?), modify_href, and is_today. */
-			foreach ($context['calendar_events'] as $event)
-				echo '
-					', $event['can_edit'] ? '<a href="' . $event['modify_href'] . '" title="' . $txt['calendar_edit'] . '"><img src="' . $settings['images_url'] . '/icons/modify_small.gif" alt="*" /></a> ' : '', $event['href'] == '' ? '' : '<a href="' . $event['href'] . '">', $event['is_today'] ? '<strong>' . $event['title'] . '</strong>' : $event['title'], $event['href'] == '' ? '' : '</a>', $event['is_last'] ? '<br />' : ', ';
-		}
-		echo '
-			</div>
-			</div>
-			</div>
-			<div class="cContainer_end"></div>
-			';
-	}
-	echo $context['template_hooks']['global']['sidebar_bottom'];
-}
-
 /*
  * create a collapsible container with an id, a title and html content
  * caller is responsible to provide the final </div> unless you pass a box
@@ -956,8 +714,7 @@ function template_footer_scripts()
 
 	if(!empty($context['theme_scripts'])) {
 		foreach($context['theme_scripts'] as $type => $script) {
-			if($script['footer'])
-				echo '
+			echo '
 	<script type="text/javascript" src="',($script['default'] ? $settings['default_theme_url'] : $settings['theme_url']) . '/' . $script['name'] . $context['jsver'], '"></script>';
 		}
 	}

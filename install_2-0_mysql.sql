@@ -1762,16 +1762,12 @@ VALUES ('smfVersion', '{$smf_version}'),
 	('enableStickyTopics', '1'),
 	('todayMod', '1'),
 	('karmaMode', '0'),
-	('karmaTimeRestrictAdmins', '1'),
 	('enablePreviousNext', '1'),
 	('pollMode', '1'),
 	('enableVBStyleLogin', '1'),
 	('enableCompressedOutput', '{$enableCompressedOutput}'),
 	('karmaWaitTime', '1'),
 	('karmaMinPosts', '0'),
-	('karmaLabel', '{$default_karmaLabel}'),
-	('karmaSmiteLabel', '{$default_karmaSmiteLabel}'),
-	('karmaApplaudLabel', '{$default_karmaApplaudLabel}'),
 	('attachmentSizeLimit', '128'),
 	('attachmentPostLimit', '192'),
 	('attachmentNumPerPostLimit', '4'),
@@ -1965,7 +1961,9 @@ VALUES ('use_post_cache', '0'),
 	('embed_piwik', '0'),
 	('piwik_uri', ''),
 	('piwik_tracker_id', ''),
-	('embed_GA', '0');
+	('embed_GA', '0'),
+	('groupColorsFromTheme', '0'), 
+	('groupColorsInline', '');
 
 INSERT INTO {$db_prefix}activity_types
 	(id_type, id_desc, formatter, f_neutral, f_you, f_your, f_you_your)

@@ -99,7 +99,7 @@
 {/function}
 {* param: list_id = list identifier *}
 {function show_list}
-  {$lid = ($list_id === null) ? $C.default_list : $list_id}
+  {$lid = $list_id}
   {*$cur_list = &$context[$list_id];*}
   {if isset($C.$lid.list_menu, $C.$lid.list_menu.show_on) and ($C.$lid.list_menushow_on == 'both' or $C.$lid.list_menu.show_on == 'top')}
     {call list_menu list_menu=$C.$lid.list_menu direction='top'}

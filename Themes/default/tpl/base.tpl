@@ -22,6 +22,9 @@
     {if $C.right_to_left > 0}
       <link rel="stylesheet" type="text/css" href="{$S.theme_url}/css/rtl.css" />
     {/if}
+    {if isset($C.need_synhlt)}
+      <link rel="stylesheet" type="text/css" href="{$S.theme_url}/css/secondary.css{$C.jsver}" />
+    {/if}
     {if isset($S.additional_css)}
       {$variant = $C.theme_variant}
       <link rel="stylesheet" type="text/css" href="{$S.theme_url}/css/{$S.additional_css.$variant}" />
@@ -32,13 +35,6 @@
       <script type="text/javascript" src="{$S.default_theme_url}/scripts/min/jquery.js?v=162"></script>
     {/if}
     <script type="text/javascript" src="{$S.default_theme_url}/scripts/script.js{$C.jsver}"></script>
-    {if $C.theme_scripts}
-      {foreach from=$C.theme_scripts item=script}
-      {if $script.footer}
-        <script type="text/javascript" src="{($script.default) ? $S.default_theme_url : $S.theme_url}/{$script.name}{$C.jsver}"></script>
-      {/if}
-      {/foreach}
-    {/if}
     <script type="text/javascript">
     // <![CDATA[
       var smf_theme_url = '{$S.theme_url}';
@@ -170,11 +166,6 @@
     {$C.html_headers}
     <style>
       {*#main_content_section { max-width: {(!empty($O.content_width)) ? $O.content_width : '95%'}; }*}
-      {if isset($C.css_overrides)}
-      {foreach from=$C.css_overrides item=css}
-      {$css}
-      {/foreach}
-      {/if}
     </style>
   </head>
   <body>
@@ -337,8 +328,12 @@
     var t3 = document.createElement('SCRIPT');
     t3.type = "text/javascript";
     t3.async = true;
-    t3.src = "{$S.theme_url}/prettify/prettify.js";
-    {*t3.src = "{$S.theme_url}/scripts/rainbow-custom.min.js";*}
+    t3.src = "{$S.default_theme_url}/prettify/prettify.js";
+    anchor.parentNode.insertBefore(t3, anchor);
+    t3 = document.createElement('SCRIPT');
+    t3.type = "text/javascript";
+    t3.async = true;
+    t3.src = "{$S.default_theme_url}/scripts/min/prettyphoto.js";
     anchor.parentNode.insertBefore(t3, anchor);
   {/if}
 

@@ -42,7 +42,7 @@ $txt['membergroups_group_type_request'] = 'Requestable <span class="smalltext">(
 $txt['membergroups_group_type_free'] = 'Free <span class="smalltext">(User may leave and join group at will)</span>';
 $txt['membergroups_group_type_post'] = 'Post Based <span class="smalltext">(Membership based on post count)</span>';
 $txt['membergroups_min_posts'] = 'Required posts';
-$txt['membergroups_online_color'] = 'Color in online list';
+$txt['membergroups_online_color'] = 'Membergroup color';
 $txt['membergroups_star_count'] = 'Number of star images';
 $txt['membergroups_star_image'] = 'Star image filename';
 $txt['membergroups_star_image_note'] = 'you can use $language for the language of the user';
@@ -123,4 +123,5 @@ $txt['dont_check_for_duplicate'] = 'Don\'t Check for Duplicates';
 $txt['duplicates'] = 'Duplicates';
 
 $txt['not_activated'] = 'Not activated';
+$txt['groupColorsFromTheme'] = 'Define group colors in the theme\'s style sheet';
 ?>

@@ -11,7 +11,7 @@
           <strong>{$T.name}:</strong>
         </dt>
         <dd>
-          <span {($C.group.online_color) ? ('style="color: '|cat:$C.group.online_color|cat:';"') : ''}>{$C.group.name}</span> {$C.group.stars}
+          <a href="#!" class="member group_{$C.group.id}">{$C.group.name}</a> {$C.group.stars}
         </dd>
         {if !empty($C.group.description)}
           <dt>

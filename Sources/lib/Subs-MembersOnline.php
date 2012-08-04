@@ -72,15 +72,15 @@ function getMembersOnlineStats($membersOnlineOptions)
 		$spiders = unserialize($modSettings['spider_name_cache']);
 
 	// Load the users online right now.
-	$request = smf_db_query( '
+	$request = smf_db_query('
 		SELECT
-			lo.id_member, lo.log_time, lo.id_spider, mem.real_name, mem.member_name, mem.show_online, mem.id_group AS primary_group, 
-			mem.additional_groups AS secondary_groups, mg.online_color, mg.id_group, mg.group_name
+			lo.id_member, lo.log_time, lo.id_spider, mem.real_name, mem.member_name, mem.show_online, mem.id_group AS primary_group, mem.id_post_group AS post_group,
+			mem.additional_groups AS secondary_groups, mg.group_name
 		FROM {db_prefix}log_online AS lo
 			LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = lo.id_member)
 			LEFT JOIN {db_prefix}membergroups AS mg ON (mg.id_group = CASE WHEN mem.id_group = {int:reg_mem_group} THEN mem.id_post_group ELSE mem.id_group END)',
 		array(
-			'reg_mem_group' => 0,
+			'reg_mem_group' => 0
 		)
 	);
 	$real_team_members = array();
@@ -115,25 +115,24 @@ function getMembersOnlineStats($membersOnlineOptions)
 
 		$href = URL::user($row['id_member'], $row['real_name']);
 		// Some basic color coding...
-		if (!empty($row['online_color']))
-			$link = '<a href="' . $href . '" style="color: ' . $row['online_color'] . ';">' . $row['real_name'] . '</a>';
-		else
-			$link = '<a href="' . $href . '">' . $row['real_name'] . '</a>';
-
 		// Buddies get counted and highlighted.
 		$is_buddy = in_array($row['id_member'], $user_info['buddies']);
 		if ($is_buddy)
-		{
 			$membersOnlineStats['num_buddies']++;
-			$link = '<strong>' . $link . '</strong>';
-		}
+
+		$class = 'member group_' . (empty($row['primary_group']) ? $row['post_group'] : $row['primary_group']) . ($is_buddy ? ' buddy' : '');
+
+		if($row['id_member'] == $user_info['id'])
+			$link = '<strong>'.$txt['you'].'</strong>';
+		else
+			$link = '<a onclick="getMcard('.$row['id_member'].');return(false);" class="'.$class.'" href="' . $href . '">' . $row['real_name'] . '</a>';
 
 		// A lot of useful information for each member.
 		$membersOnlineStats['users_online'][$row[$membersOnlineOptions['sort']] . $row['member_name']] = array(
 			'id' => $row['id_member'],
 			'username' => $row['member_name'],
 			'name' => $row['real_name'],
-			'group' => $row['id_group'],
+			'group' => $row['primary_group'],
 			'href' => $href,
 			'link' => $link,
 			'is_buddy' => $is_buddy,
@@ -149,11 +148,10 @@ function getMembersOnlineStats($membersOnlineOptions)
 			$team_members[] = $row['id_member'];
 
 		// Store all distinct (primary) membergroups that are shown.
-		if (!isset($membersOnlineStats['online_groups'][$row['id_group']]))
-			$membersOnlineStats['online_groups'][$row['id_group']] = array(
-				'id' => $row['id_group'],
+		if (!isset($membersOnlineStats['online_groups'][$row['primary_group']]))
+			$membersOnlineStats['online_groups'][$row['primary_group']] = array(
+				'id' => $row['primary_group'],
 				'name' => $row['group_name'],
-				'color' => $row['online_color']
 			);
 	}
 	mysql_free_result($request);

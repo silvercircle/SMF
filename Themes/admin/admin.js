@@ -19,7 +19,11 @@
 */
 
 
-
+function showFile(file, line)
+{
+	sendRequest('action=admin;area=logs;sa=errorlog;file=' + file + ';line=' + line);
+	return(false);
+}
 // Handle the JavaScript surrounding the admin and moderation center.
 function smf_AdminIndex(oOptions)
 {

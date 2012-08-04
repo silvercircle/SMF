@@ -61,6 +61,10 @@ class EoS_Smarty {
 			$firstdir++;
 		}
 		self::$_smartyInstance->setCompileDir(rtrim($boarddir, '/') . '/template_cache');		// TODO: make this customizable
+
+		$context['clip_image_src'] = $settings['images_url'] . '/' . $settings['clip_image_src'][$context['theme_variant']];
+		$context['sprite_image_src'] = $settings['images_url'] . '/' . $settings['sprite_image_src'][$context['theme_variant']];
+
 		/*
 		 * this hook could be used to re-configure smarty (for example, add additional template dir(s)),
 		 * or register hook template fragments via $_configInstance->registerTemplateHook()
@@ -418,8 +422,7 @@ class EoS_Smarty_Template_Support {
 
 		if(!empty($context['theme_scripts'])) {
 			foreach($context['theme_scripts'] as $type => $script) {
-				if($script['footer'])
-					echo '
+				echo '
 		<script type="text/javascript" src="',($script['default'] ? $settings['default_theme_url'] : $settings['theme_url']) . '/' . $script['name'] . $context['jsver'], '"></script>';
 			}
 		}

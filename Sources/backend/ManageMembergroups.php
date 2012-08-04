@@ -66,6 +66,8 @@ if (!defined('SMF'))
 		- redirects to itself.
 */
 
+require_once($sourcedir . '/lib/Subs-Membergroups.php');
+
 // The entrance point for all 'Manage Membergroup' actions.
 function ModifyMembergroups()
 {
@@ -543,6 +545,7 @@ function AddMembergroup()
 
 		// We did it.
 		logAction('add_group', array('group' => $_POST['group_name']), 'admin');
+		regenerateColorStyle();
 
 		// Go change some more settings.
 		redirectexit('action=admin;area=membergroups;sa=edit;group=' . $id_group);
@@ -604,7 +607,6 @@ function DeleteMembergroup()
 
 	require_once($sourcedir . '/lib/Subs-Membergroups.php');
 	deleteMembergroups((int) $_REQUEST['group']);
-
 	// Go back to the membergroup index.
 	redirectexit('action=admin;area=membergroups;');
 }
@@ -931,7 +933,7 @@ function EditMembergroup()
 
 		// Log the edit.
 		logAction('edited_group', array('group' => $_POST['group_name']), 'admin');
-
+		regenerateColorStyle();
 		redirectexit('action=admin;area=membergroups');
 	}
 
@@ -1056,6 +1058,8 @@ function ModifyMembergroupsettings()
 	// Only one thing here!
 	$config_vars = array(
 			array('permissions', 'manage_membergroups'),
+			'',
+			array('check', 'groupColorsFromTheme')
 	);
 
 	if (isset($_REQUEST['save']))
@@ -1072,6 +1076,5 @@ function ModifyMembergroupsettings()
 	$context['settings_title'] = $txt['membergroups_settings'];
 
 	prepareDBSettingContext($config_vars);
+	regenerateColorStyle();
 }
-
-?>

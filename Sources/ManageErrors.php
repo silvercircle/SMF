@@ -159,11 +159,13 @@ function ViewErrorLog()
 			// Eval'd files rarely point to the right location and cause havoc for linking, so don't link them.
 			$linkfile = strpos($row['file'], 'eval') === false || strpos($row['file'], '?') === false; // De Morgan's Law.  Want this true unless both are present.
 
+			$matches = array();
+			preg_match('~(.*\.php).*~', $row['file'], $matches);
 			$context['errors'][$row['id_error']]['file'] = array(
 				'file' => $row['file'],
 				'line' => $row['line'],
-				'href' => $scripturl . '?action=admin;area=logs;sa=errorlog;file=' . base64_encode($row['file']) . ';line=' . $row['line'],
-				'link' => $linkfile ? '<a href="' . $scripturl . '?action=admin;area=logs;sa=errorlog;file=' . base64_encode($row['file']) . ';line=' . $row['line'] . '" onclick="return reqWin(this.href, 600, 400, false);">' . $row['file'] . '</a>' : $row['file'],
+				'href' => $scripturl . '?action=admin;area=logs;sa=errorlog;file=' . base64_encode($matches[1]) . ';line=' . $row['line'],
+				'link' => $linkfile ? '<a href="' . $scripturl . '?action=admin;area=logs;sa=errorlog;file=' . base64_encode($matches[1]) . ';line=' . $row['line'] . '" onclick="return showFile(\''.base64_encode($matches[1]).'\', '.$row['line'].');return(false);">' . $row['file'] . '</a>' : $row['file'],
 				'search' => base64_encode($row['file']),
 			);
 		}
@@ -327,11 +329,42 @@ function deleteErrors()
 	redirectexit('action=admin;area=logs;sa=errorlog' . (isset($_REQUEST['desc']) ? ';desc' : ''));
 }
 
+/**
+ * Highlight any code.
+ *
+ * Uses PHP's highlight_string() to highlight PHP syntax
+ * does special handling to keep the tabs in the code available.
+ * used to parse PHP code from inside [code] and [php] tags.
+ *
+ * @param string $code
+ * @return string the code with highlighted HTML.
+ */
+function highlight_php_code($code)
+{
+	global $context;
+
+	// Remove special characters.
+	$code = un_htmlspecialchars(strtr($code, array('<br />' => "\n", "\t" => 'SMF_TAB();', '&#91;' => '[')));
+
+	$oldlevel = error_reporting(0);
+
+	$buffer = str_replace(array("\n", "\r"), '', @highlight_string($code, true));
+
+	error_reporting($oldlevel);
+
+	// Yes, I know this is kludging it, but this is the best way to preserve tabs from PHP :P.
+	$buffer = preg_replace('~SMF_TAB(?:</(?:font|span)><(?:font color|span style)="[^"]*?">)?\\(\\);~', '<pre style="display: inline;">' . "\t" . '</pre>', $buffer);
+
+	return strtr($buffer, array('\'' => '&#039;', '<code>' => '', '</code>' => ''));
+}
+
 function ViewFile()
 {
 	global $context, $txt, $boarddir, $sourcedir;
 	// Check for the administrative permission to do this.
 	isAllowedTo('admin_forum');
+
+	$context['need_synhlt'] = true;
 
 	// decode the file and get the line
 	$file = base64_decode($_REQUEST['file']);
@@ -361,11 +394,8 @@ function ViewFile()
 		'target' => $line,
 		'file' => strtr($file, array('"' => '\\"')),
 	);
-
-	loadAdminTemplate('Errors');
-	$context['template_layers'] = array();
-	$context['sub_template'] = 'show_file';
-
+	Eos_Smarty::loadTemplate('admin/errors_show_file');
+	//loadAdminTemplate('Errors');
 }
 
 ?>

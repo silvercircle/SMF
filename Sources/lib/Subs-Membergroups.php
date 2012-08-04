@@ -648,7 +648,7 @@ function cache_getMembergroupList()
 	);
 	$groupCache = array();
 	while ($row = mysql_fetch_assoc($request))
-		$groupCache[] = '<a href="' . $scripturl . '?action=groups;sa=members;group=' . $row['id_group'] . '" ' . ($row['online_color'] ? 'style="color: ' . $row['online_color'] . '"' : '') . '>' . $row['group_name'] . '</a>';
+		$groupCache[] = '<a class="member group_'.$row['id_group']. '" href="' . URL::parse('?action=groups;sa=members;group=' . $row['id_group']) . '">' . $row['group_name'] . '</a>';
 	mysql_free_result($request);
 
 	return array(
@@ -754,4 +754,18 @@ function list_getMembergroups($start, $items_per_page, $sort, $membergroup_type)
 	return $groups;
 }
 
-?>
+function regenerateColorStyle()
+{
+	global $modSettings;
+	$_s = '';
+
+	$result = smf_db_query('SELECT mg.id_group, mg.online_color FROM {db_prefix}membergroups AS mg WHERE mg.online_color <> {string:blank}',
+		array('blank' => ''));
+
+	while($row = mysql_fetch_assoc($result))
+		$_s .= 'a.member group_' . trim($row['id_group']) . '{color:' . $row['online_color'] . ';} ';
+
+	mysql_free_result($result);
+	if($_s != '')
+		updateSettings(array('groupColorsInline' => '<style>' . $_s . '</style>'), false);
+}

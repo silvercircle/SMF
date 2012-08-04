@@ -23,9 +23,6 @@
             </div>
             {$member.group_stars}
             <br />
-            <br />
-            Karma: {$member.karma.good}
-            <br />
             {$url = "?action=profile;area=showposts;u={$member.id}"}
             {$T.posts}: <a class="important" href="{$SUPPORT->url_parse($url)}">{$member.posts}</a>
           </td>
