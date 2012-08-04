@@ -12,7 +12,7 @@
  *}
 {function postbit_compact}
   {$ID = $message.id}
-  {$imgsrc = $S.images_url|cat:'/clipsrc.png'}
+  {$imgsrc = $C.clip_image_src}
   <div class="post_wrapper" data-mid="{$ID}">
   {if !empty($C.is_display_std)}
     {$message.can_quote = $C.can_quote}

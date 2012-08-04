@@ -41,9 +41,8 @@
               {($member.is_guest == 1) ? $member.name : "<a href=\"{$member.href}\" title=\"{$T.profile_of} {$member.name}\" {$color}><strong>{$member.name}</strong></a>"}
             </span>
             {if !empty($member.ip)}
-              <a href="{$SCRIPTURL}?action={($member.is_guest) ? 'trackip' : 'profile;area=tracking;sa=ip;u='|cat:$member.id};searchip={$member.ip}">({$member.ip})</a>
-              <span class="easytip tinytext floatright lowcontrast" data-tip="tip_{$seq}">{$member.user_agent_short}</span>
-              <div style="display:none;" id="tip_{$seq}">{$member.user_agent}</div>
+              <a href="{$SCRIPTURL}?action={($member.is_guest) ? 'trackip' : 'profile;area=tracking;sa=ip;u='|cat:$member.id};searchip={$member.ip}">({$member.ip})</a>&nbsp;&nbsp;<span style="cursor:pointer;" onclick="$('#tip_{$seq}').fadeIn();return(false);" class="tinytext lowcontrast">{$member.user_agent_short}</span>
+              <div class="tinytext" style="display:none;" id="tip_{$seq}">{$member.user_agent}</div>
             {/if}
             </td>
             <td class="nowrap">{$member.time}</td>

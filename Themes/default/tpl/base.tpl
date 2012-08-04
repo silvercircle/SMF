@@ -32,7 +32,7 @@
     {if $M.jQueryFromGoogleCDN}
       <script type="text/javascript" src="{($C.is_https) ? 'https://' : 'http://'}ajax.googleapis.com/ajax/libs/jquery/{$C.jquery_version}/jquery.min.js"></script>
     {else}
-      <script type="text/javascript" src="{$S.default_theme_url}/scripts/min/jquery.js?v=162"></script>
+      <script type="text/javascript" src="{$S.default_theme_url}/scripts/min/jquery.js?v=172"></script>
     {/if}
     <script type="text/javascript" src="{$S.default_theme_url}/scripts/script.js{$C.jsver}"></script>
     <script type="text/javascript">

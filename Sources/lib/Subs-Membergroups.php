@@ -763,7 +763,7 @@ function regenerateColorStyle()
 		array('blank' => ''));
 
 	while($row = mysql_fetch_assoc($result))
-		$_s .= 'a.member group_' . trim($row['id_group']) . '{color:' . $row['online_color'] . ';} ';
+		$_s .= 'a.member.group_' . trim($row['id_group']) . '{color:' . $row['online_color'] . ';} ';
 
 	mysql_free_result($result);
 	if($_s != '')

@@ -31,7 +31,7 @@ function template_html_above()
 	<script type="text/javascript" src="', ($context['is_https'] ? 'https://' : 'http://'), 'ajax.googleapis.com/ajax/libs/jquery/',$context['jquery_version'],'/jquery.min.js"></script>';
 	else
 		echo '
-	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js?v=162"></script>';
+	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/min/jquery.js?v=172"></script>';
 	echo '
 	<script type="text/javascript" src="', $boardurl, '/Themes/admin/admin.js',$context['jsver'],'"></script>
 	<script type="text/javascript" src="', $settings['default_theme_url'], '/scripts/script.js',$context['jsver'],'"></script>';

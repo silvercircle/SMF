@@ -43,6 +43,7 @@ if (!defined('SMF'))
 		- passes sorting duty to the current API.
 */
 
+$output = array();
 // This defines two version types for checking the API's are compatible with this version of SMF.
 $GLOBALS['search_versions'] = array(
 	// This is the forum version but is repeated due to some people rewriting $forum_version.
@@ -64,7 +65,6 @@ function PlushSearch1()
 	// Don't load this in XML mode.
 	if (!isset($_REQUEST['xml']))
 		EoS_Smarty::loadTemplate('search/form');
-		//loadTemplate('Search');
 	// Check the user's permissions.
 	isAllowedTo('search_posts');
 
@@ -258,6 +258,8 @@ function PlushSearch2()
 	if (!empty($context['load_average']) && !empty($modSettings['loadavg_search']) && $context['load_average'] >= $modSettings['loadavg_search'])
 		fatal_lang_error('loadavg_search_disabled', false);
 
+	$_ctx = new SearchContext();
+
 	// No, no, no... this is a bit hard on the server, so don't you go prefetching it!
 	if (isset($_SERVER['HTTP_X_MOZ']) && $_SERVER['HTTP_X_MOZ'] == 'prefetch')
 	{
@@ -302,13 +304,6 @@ function PlushSearch2()
 	$context['search_string_limit'] = 100;
 
 	loadLanguage('Search');
-	if (!isset($_REQUEST['xml'])) {
-		loadTemplate('Search');
-		loadTemplate('PostbitExtra');
-	}
-	//If we're doing XML we need to use the results template regardless really.
-	else
-		$context['sub_template'] = 'results';
 
 	// Are you allowed?
 	isAllowedTo('search_posts');
@@ -575,6 +570,11 @@ function PlushSearch2()
 	$search_params['subject_only'] = !empty($search_params['subject_only']) || !empty($_REQUEST['subject_only']);
 
 	$context['compact'] = !$search_params['show_complete'];
+
+	if (!isset($_REQUEST['xml']))
+		EoS_Smarty::loadTemplate($context['compact'] ? 'search/results_compact' : 'search/results_as_messages');
+	else
+		$context['sub_template'] = 'results';
 
 	// Get the sorting parameters right. Default to sort by relevance descending.
 	$sort_columns = array(
@@ -1627,7 +1627,7 @@ function prepareSearchContext($reset = false)
 {
 	global $txt, $modSettings, $scripturl, $user_info, $sourcedir;
 	global $memberContext, $context, $options, $messages_request;
-	global $boards_can, $participants;
+	global $boards_can, $participants, $output;
 
 	// Remember which message this is.  (ie. reply #83)
 	static $counter = null;
@@ -1842,6 +1842,8 @@ function prepareSearchContext($reset = false)
 		$subject_highlighted = preg_replace('/(' . preg_quote($query, '/') . ')/iu', '<strong class="highlight">$1</strong>', $subject_highlighted);
 	}
 
+	$mhref = URL::topic($message['id_topic'], $message['subject'], 0, false, '.msg' . $message['id_msg'], '#msg' . $message['id_msg']);
+
 	$output['matches'][] = array(
 		'id' => $message['id_msg'],
 		'attachment' => loadAttachmentContext($message['id_msg']),
@@ -1862,10 +1864,10 @@ function prepareSearchContext($reset = false)
 		'body' => $body_highlighted,
 		'body_highlighted' => $body_highlighted,
 		'start' => 'msg' . $message['id_msg'],
-		'href' => $scripturl . '?topic=' . $message['id_topic'] . '.msg' . $message['id_msg'] . '#msg' . $message['id_msg'],
+		'href' => $mhref,
+		'link' => '<a href="'.$mhref.'">'.$message['subject'].'</a>'
 	);
 	$counter++;
-
 	return $output;
 }
 
@@ -1877,4 +1879,19 @@ function searchSort($a, $b)
 	return $searchAPI->searchSort($a, $b);
 }
 
+class SearchContext
+{
+	public function __construct()
+	{
+		global $output;
+
+		EoS_Smarty::getSmartyInstance()->assignByRef('SEARCHCONTEXT', $this);
+		EoS_Smarty::getSmartyInstance()->assignByRef('topic', $output);
+	}
+
+	public function getTopic()
+	{
+		return prepareSearchContext();
+	}
+}
 ?>

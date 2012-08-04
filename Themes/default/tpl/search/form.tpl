@@ -79,8 +79,8 @@
           </dd>
           <dt class="options">{$T.search_options}:</dt>
           <dd class="options">
-            <label for="show_complete"><input type="checkbox" name="show_complete" id="show_complete" value="1"{(!empty($C.search_params.show_complete)) ? ' checked="checked"' : ''} class="input_check" /> {$T.search_show_complete_messages}</label><br />
-            <label for="subject_only"><input type="checkbox" name="subject_only" id="subject_only" value="1"{(!empty($C.search_params.subject_only)) ? ' checked="checked"' : ''} class="input_check" /> {$T.search_subject_only}</label>
+            <label class="aligned" for="show_complete1"><input type="checkbox" name="show_complete" id="show_complete1" value="1"{(!empty($C.search_params.show_complete)) ? ' checked="checked"' : ''} class="input_check aligned" /> {$T.search_show_complete_messages}</label><br />
+            <label class="aligned" for="subject_only1"><input type="checkbox" name="subject_only" id="subject_only1" value="1"{(!empty($C.search_params.subject_only)) ? ' checked="checked"' : ''} class="input_check aligned" /> {$T.search_subject_only}</label>
           </dd>
           <dt class="between">{$T.search_post_age}: </dt>
           <dd>{$T.search_between} <input type="text" name="minage" value="{(empty($C.search_params.minage)) ? '0' : $C.search_params.minage}" size="5" maxlength="4" class="input_text" />&nbsp;{$T.search_and}&nbsp;<input type="text" name="maxage" value="{(empty($C.search_params.maxage)) ? '9999' : $C.search_params.maxage}" size="5" maxlength="4" class="input_text" /> {$T.days_word}</dd>

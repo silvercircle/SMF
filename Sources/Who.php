@@ -203,7 +203,7 @@ function Who()
 		);
 		$url = @unserialize($row['url']);
 		$context['members'][$row['session']]['user_agent'] = isset($url['USER_AGENT']) ? $url['USER_AGENT'] : '';
-		$context['members'][$row['session']]['user_agent_short'] = isset($url['USER_AGENT']) ? shorten_subject($url['USER_AGENT'], 50) : '';
+		$context['members'][$row['session']]['user_agent_short'] = isset($url['USER_AGENT']) ? shorten_subject(substr($url['USER_AGENT'], 0, strpos($url['USER_AGENT'], ' ')), 25) : '';
 
 		$url_data[$row['session']] = array($row['url'], $row['id_member']);
 		$member_ids[] = $row['id_member'];

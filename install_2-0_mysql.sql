@@ -1963,7 +1963,7 @@ VALUES ('use_post_cache', '0'),
 	('piwik_tracker_id', ''),
 	('embed_GA', '0'),
 	('groupColorsFromTheme', '0'), 
-	('groupColorsInline', '');
+	('groupColorsInline', '<style>a.member.group_1{color:red;} a.member.group_2{color:blue;}</style>');
 
 INSERT INTO {$db_prefix}activity_types
 	(id_type, id_desc, formatter, f_neutral, f_you, f_your, f_you_your)
