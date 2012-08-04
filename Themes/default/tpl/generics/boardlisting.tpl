@@ -35,6 +35,6 @@
     {/foreach}
   {/foreach}
   </ul>
-  {/ul}
+  {/if}
 </div>
 {/function}
