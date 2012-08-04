@@ -271,20 +271,22 @@
   {/if}
   {include 'footer.tpl'}
   </footer>
-  <script src="http://piwik.miranda.or.at/piwik.js"></script>
-  <script>
-  var pkBaseURL = (("https:" == document.location.protocol) ? "https://piwik.miranda.or.at/" : "http://piwik.miranda.or.at/");
-  try {
-    var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
-    piwikTracker.trackPageView();
-    piwikTracker.enableLinkTracking();
-  }
-  catch( err ) {
-  }
-  </script>
-  <noscript>
-    <div style="width:0px;height:0px;"><img src="http://piwik.miranda.or.at/piwik.php?idsite=1" style="border:0" alt="" /></div>
-  </noscript>
+  {if isset($C.want_piwik_embedded)}
+    <script src="{$M.piwik_uri}/piwik.js"></script>
+    <script>
+    var pkBaseURL = "{$M.piwik_uri}";
+    try {
+      var piwikTracker = Piwik.getTracker(pkBaseURL + "/piwik.php", {$M.piwik_tracker_id});
+      piwikTracker.trackPageView();
+      piwikTracker.enableLinkTracking();
+    }
+    catch( err ) {
+    }
+    </script>
+    <noscript>
+      <div style="width:0px;height:0px;"><img src="{$M.piwik_uri}/piwik.php?idsite=1" style="border:0" alt="" /></div>
+    </noscript>
+  {/if}
   </div>
   {* output additional scripts defined in the code *}
   {$SUPPORT->footer_scripts()}

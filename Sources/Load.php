@@ -1671,6 +1671,8 @@ function loadTheme($id_theme = 0, $initialize = true)
 
 	if(file_exists($settings['theme_dir'] . '/theme_support.php'))
 		@require_once($settings['theme_dir'] . '/theme_support.php');
+	else
+		@require_once($settings['default_theme_dir'] . '/theme_support.php');
 
 	// Initialize the theme.
 	loadSubTemplate('init', 'ignore');
