@@ -774,5 +774,5 @@ $txt['show_my_subscriptions'] = 'Show my subscribed topics';
 $txt['whatsnew_menu'] = 'What\'s new';
 $txt['view_recent_activity'] = 'View recent activity';
 $txt['post_ratings_disabled'] = 'The ratings system is disabled.';
-
 $txt['inline_edit_inprogress'] = 'You are editing a message. Please cancel your current action first.';
+$txt['inbox'] = 'Inbox';

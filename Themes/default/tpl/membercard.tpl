@@ -45,7 +45,9 @@
               {/if}
               {$T.date_registered}: {$member.registered}<br />
               <br />
-              {$T.like_profile_report|sprintf:$member.name:$SUPPORT->url_parse("?action=profile;area=showposts;sa=likesout;u={$member.id}"):$member.likesgiven:$SUPPORT->url_parse("?action=profile;area=showposts;sa=likes;u={$member.id}"):$member.liked:$SUPPORT->url_parse("?action=profile;area=showposts;u={$member.id}"):$member.posts}
+              {if !empty($M.karmaMode)}
+                {$T.like_profile_report|sprintf:$member.name:$SUPPORT->url_parse("?action=profile;area=showposts;sa=likesout;u={$member.id}"):$member.likesgiven:$SUPPORT->url_parse("?action=profile;area=showposts;sa=likes;u={$member.id}"):$member.liked:$SUPPORT->url_parse("?action=profile;area=showposts;u={$member.id}"):$member.posts}
+              {/if}
               <br />
               <br />
               {if !empty($member.online.is_online)}

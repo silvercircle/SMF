@@ -3885,10 +3885,12 @@ function setupMenuContext()
 						'href' => URL::parse('?action=profile;area=account'),
 						'title' => $txt['account']
 					),
-					'pm_read' => array(
-						'href' => URL::parse('?action=pm'),
-						'title' => $txt['pm_menu_read']
-					),
+				)
+			);
+			$context['usermenu_buttons']['inbox'] = array(
+				'title' => $txt['inbox'],
+				'href' => URL::parse('?action=pm'),
+				'sub_buttons' => array(
 					'pm_send' => array(
 						'href' => URL::parse('?action=pm;sa=send'),
 						'title' => $txt['pm_menu_send']
@@ -3968,7 +3970,7 @@ function setupMenuContext()
 	elseif (stristr($context['current_action'], 'unread'))
 		$current_action = 'whatsnew';
 	elseif ($context['current_action'] == 'pm')
-		$current_action = 'profile';
+		$current_action = 'inbox';
 
 	if(isset($context['usermenu_buttons'][$current_action]))
 		$context['usermenu_buttons'][$current_action]['active_button'] = true;
