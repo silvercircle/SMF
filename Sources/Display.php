@@ -1123,7 +1123,7 @@ function Display()
 			$context['topicstarter']['avatar'] = array();
 		}
 		else {
-			loadMemberContext($context['topic_starter_id']);
+			loadMemberContext($context['topic_starter_id'], true);
 			$context['topicstarter'] = &$memberContext[$context['topic_starter_id']];
 		}
 
