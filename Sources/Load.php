@@ -127,7 +127,7 @@ function reloadSettings()
 	);
 
 	// Try to load it from the cache first; it'll never get cached if the setting is off.
-	if (($modSettings = CacheAPI::getCache('modSettings', 360)) == null)
+	if (($modSettings = CacheAPI::getCache('modSettings', 600)) == null)
 	{
 		$request = smf_db_query( '
 			SELECT variable, value
@@ -153,8 +153,20 @@ function reloadSettings()
 		if (empty($modSettings['max_messageLength']))
 			$modSettings['max_messageLength'] = 1024 * 1024;	// hard post length limit, 1M *should* be more than ever needed
 			
+		if(isset($modSettings['admin_features'])) {
+			$_f = explode(',', $modSettings['admin_features']);
+			$modSettings['postmod_active'] = in_array('pm', $_f);
+			$modSettings['astream_active'] = in_array('as', $_f);
+			$modSettings['tags_active'] = in_array('ts', $_f);
+		}
+		else
+			$modSettings['tags_active'] = $modSettings['postmod_active'] = $modSettings['astream_active'] = false;
+
+		$modSettings['hidden_content_no_view_msg'] = @unserialize($modSettings['hidden_content_no_view']);
+		$modSettings['online_today'] = @unserialize($modSettings['log_online_today']);
+	
 		if (!empty($modSettings['cache_enable']))
-			CacheAPI::putCache('modSettings', $modSettings, 360);
+			CacheAPI::putCache('modSettings', $modSettings, 600);
 	}
 
 	if(empty($modSettings['cache_enable']))
@@ -165,8 +177,7 @@ function reloadSettings()
 	HookAPI::setHooks($modSettings['integration_hooks']);
 
 	// Setting the timezone is a requirement for some functions in PHP >= 5.1.
-	if (isset($modSettings['default_timezone']))
-		date_default_timezone_set($modSettings['default_timezone']);
+	date_default_timezone_set(isset($modSettings['default_timezone']) ? $modSettings['default_timezone'] : 'UTC');
 
 	// Check the load averages?
 	if (!empty($modSettings['loadavg_enable']))
@@ -189,21 +200,9 @@ function reloadSettings()
 			db_fatal_error(true);
 	}
 
-	if(isset($modSettings['admin_features'])) {
-		$_f = explode(',', $modSettings['admin_features']);
-		$modSettings['postmod_active'] = in_array('pm', $_f);
-		$modSettings['astream_active'] = in_array('as', $_f);
-		$modSettings['tags_active'] = in_array('ts', $_f);
-	}
-	else
-		$modSettings['tags_active'] = $modSettings['postmod_active'] = $modSettings['astream_active'] = true;
-	
-	$modSettings['hidden_content_no_view_msg'] = @unserialize($modSettings['hidden_content_no_view']);
-	
 	require_once($sourcedir . '/SimpleSEF.php');
 	URL::init($boardurl);
 
-	$modSettings['online_today'] = @unserialize($modSettings['log_online_today']);
 	// Call pre load integration functions.
 	HookAPI::callHook('pre_load');
 	SimpleSEF::convertQueryString();
@@ -1002,8 +1001,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 	if (!empty($users))
 	{
 		// Load the member's data.
-		$request = smf_db_query( '
-			SELECT' . $select_columns . '
+		$request = smf_db_query('SELECT' . $select_columns . '
 			FROM {db_prefix}members AS mem' . $select_tables . '
 			WHERE mem.' . ($is_name ? 'member_name' : 'id_member') . (count($users) == 1 ? ' = {' . ($is_name ? 'string' : 'int') . ':users}' : ' IN ({' . ($is_name ? 'array_string' : 'array_int') . ':users})'),
 			array(

@@ -58,8 +58,7 @@ function template_html_above()
 	var sSessionVar = '{$context['session_var']}';
 	var sSID = '{$sSID}';
 	var disableDynamicTime = {$h(empty($options['disable_dynatime']), 0, 1)};
-	var textSizeUnit = 'pt';
-	var textSizeStep = 1;
+	var memberTimeFormat = '{$user_info['time_format']}';
 	var textSizeMax = 16;
 	var textSizeMin = 8;
 	var textSizeDefault = 11;
@@ -74,6 +73,7 @@ function template_html_above()
 	var t2 = document.createElement('SCRIPT');
 	var _cname = '{$cookiename}';
 	var _mqcname = '{$context['multiquote_cookiename']}';
+    var is_am_pm = (memberTimeFormat.indexOf('%p') != -1);
 	t2.type = "text/javascript";
 	t2.async = true;
 	t2.src = '{$settings['default_theme_url']}/scripts/footer.js{$context['jsver']}';

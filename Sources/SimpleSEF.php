@@ -639,9 +639,6 @@ class SimpleSEF {
     public static function fixXMLOutput($do_footer) {
         global $modSettings;
 
-        if (empty($modSettings['simplesef_enable']))
-            return;
-
         if (!$do_footer && !self::$redirect) {
             $temp = ob_get_contents();
 

@@ -1140,6 +1140,9 @@ h1.bigheader.secondary {
 	color: #88a;
 	padding: 2px 0;
 }
+h1.bigheader.indent {
+	text-indent: 10px;
+}
 div.spoiler.content {
 	padding:2px 5px !important;
 	border:1px dotted #ccc !important;
@@ -1338,13 +1341,13 @@ ol.commonlist.category {
 	padding-top:0;
 	margin: 0;
 }
-.gradient_darken_down, div.keyinfo.std, div.keyinfo.lean {
+.gradient_darken_down, div.keyinfo.std, div.keyinfo.lean, div.keyinfo.pm, div.avatar.pm {
 	background-image: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
 	background-image: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
 	background-image: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
 	background-image: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
 }
-.topicrow.alternate, .boardrow.alternate {
+.topicrow.alternate, .boardrow.alternate, .tablerow.alternate {
 	background: #f2f8ff;
 }
 .topicrow.sticky, .topicrow.locked {
@@ -1727,6 +1730,10 @@ h4.poster {
 }
 .keyinfo.std {
 	background:#eee;
+}
+.keyinfo.pm {
+	min-height: 40px;
+	max-height: 40px;
 }
 .post_wrapper.alternate .keyinfo.std {
 	background:#e5e5e5;
@@ -2501,7 +2508,7 @@ li.cat_desc > h3 {
 	border: 1px solid #ddd;
 	padding: 5px;
 	overflow: hidden;
-	background-color: #f2f2f2;
+	background-color: #f6f6f6;
 }
 
 tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td {

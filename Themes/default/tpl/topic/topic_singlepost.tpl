@@ -49,7 +49,7 @@
   <form data-alt="{$SCRIPTURL}?action=post;msg=%id_msg%;topic={$topic}.{$C.start}" action="{$SCRIPTURL}?action=quickmod2;topic={$topic}.{$C.start}" method="post" accept-charset="UTF-8" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave('{$C.session_id}', '{$C.session_var}') : false">
     <div class="posts_container nopadding" id="posts_container">
       {* Get all the messages... *}
-      {$alternate = true}
+      {$C.alternate = true}
       {foreach from=$C.message_ids item=msg}
         {$SUPPORT->getMessage()}
         {call 'postbit_'|cat:$message.postbit_template_class}

@@ -1,54 +1,47 @@
 {$imgsrc = $C.clip_image_src}
 <div class="post_wrapper" data-mid="{$message.id}">
-  <div class="keyinfo std gradient_darken_down">
-    <div class="floatleft" style="width:200px;text-align:center;margin-right:20px;" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">
-      <h4 class="poster">{$message.member.link}</h4>
+  {if !$message.member.is_guest}
+    {*{if $S.show_user_images and empty($O.show_no_avatars)}
+      <div class="floatright blue_container avatar pm" style="border-width: 0 0 0 0; border-radius:0 0 0 6px;">
+      <span class="medium_avatar">
+      {if !empty($message.member.avatar.image)}
+        {$message.member.avatar.image}
+      {else}
+        <img class="borderless" style="background:transparent; border:0;" src="{$S.images_url}/unknown.png" alt="avatar" />
+      {/if}
+      </span>
+      </div>
+    {/if}*}
+    <div class="floatright smallpadding">
+      {$message.member.group_stars}
+      {if !empty($message.member.title)}
+        {$message.member.title}
+      {/if}
     </div>
-  <h5 style="display:inline;" id="subject_{$message.id}">
-    {$message.subject}
-  </h5>
-  <span class="tinytext">&nbsp;&nbsp;-&nbsp;&nbsp;{$T.sent_to}:&nbsp;
-    {if !empty($message.recipients.to)}
-      {', '|implode:$message.recipients.to}
-    {elseif $context.folder != 'sent'}
-      ({$T.pm_undisclosed_recipients})
-    {/if}
-    {$message.time}
-  </span>
-  {if $C.folder != 'sent' and !empty($C.currently_using_labels) and $C.display_mode}
-    <div class="labels righttext floatright">
-    {if !empty($C.currently_using_labels)}
-      <select name="pm_actions[{$message.id}]" onchange="if (this.options[this.selectedIndex].value) form.submit();">
-        <option value="">{$T.pm_msg_label_title}:</option>
-        <option value="" disabled="disabled">---------------</option>
-        {if !$message.fully_labeled}
-          <option value="" disabled="disabled">{$T.pm_msg_label_apply}:</option>
-          {foreach $C.labels as $label}
-            {if !isset($message.labels.$label.id)}
-              <option value="{$label.id}">&nbsp;{$label.name}</option>
-            {/if}
-          {/foreach}
-        {/if}
-        {$minusone = -1}
-        {if !empty($message.labels) and (count($message.labels) > 1 or !isset($message.labels.$minusone))}
-          <option value="" disabled="disabled">{$T.pm_msg_label_remove}:</option>
-          {foreach $message.labels as $label}
-            <option value="{$label.id}">&nbsp;{$label.name}</option>
-          {/foreach}
-        {/if}
-      </select>
-      <noscript>
-        <input type="submit" value="{$T.pm_apply}" class="button_submit" />
-      </noscript>
-    {/if}
-    </div>
+  {elseif !empty($message.member.allow_show_email)}
+      <li class="email"><a href="{$SCRIPTURL}?action=emailuser;sa=email;msg={$ID}" rel="nofollow">{$T.email}</a></li>
   {/if}
+  <div class="keyinfo pm">
+    <div class="floatleft smallpadding" style="line-height:110%" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">
+      <h2 class="poster">{$message.member.link}</h2>
+      <h5 style="display:inline;" id="subject_{$message.id}">
+        {$message.subject}
+      </h5>
+      <span class="tinytext">&nbsp;&nbsp;&nbsp;&nbsp;{$T.sent_to}:&nbsp;
+        {if !empty($message.recipients.to)}
+          {', '|implode:$message.recipients.to},&nbsp;
+        {elseif $context.folder != 'sent'}
+          ({$T.pm_undisclosed_recipients}),&nbsp;
+        {/if}
+        {$message.time}
+      </span>
+    </div>
   {if !empty($message.recipients.bcc)}
     <br>
     <span class="smalltext">&#171; <strong> {$T.pm_bcc}:</strong> {', '|implode:$message.recipients.bcc}</span>
   {/if}
   </div>
-  <div class="clear"></div>
+  {*
   <div class="poster std">
     <ul class="reset smalltext" id="msg_{$message.id}_extra_info">
     {if !empty($message.member.title)}
@@ -58,28 +51,6 @@
       <li class="membergroup">{$message.member.group}</li>
     {/if}
     {if !$message.member.is_guest}
-      {if $S.show_user_images and empty($O.show_no_avatars)}
-        {if !empty($message.member.avatar.image)}
-          <li class="avatar">
-            {$message.member.avatar.image}
-          </li>
-        {else}
-          <li class="avatar">
-            <img src="{$S.images_url}/unknown.png" alt="avatar" />
-          </li>
-        {/if}
-      {/if}
-      <li class="membergroup">{$message.member.group_stars}</li>
-      {if !empty($message.member.title)}
-        <li class="title">{$message.member.title}</li>
-      {/if}
-      {* todo: here goes reputation...
-      {if $M.karmaMode == '1'}
-        <li class="karma">{$M.karmaLabel} {$message.member.karma.good - $message.member.karma.bad}</li>
-      {elseif $M.karmaMode == '2'}
-        <li class="karma">{$M.karmaLabel} +{$message.member.karma.good}/-{$message.member.karma.bad}</li>
-      {/if}
-      *}
       {if !empty($message.member.blurb)}
         <li class="blurb">{$message.member.blurb}</li>
       {/if}
@@ -107,7 +78,6 @@
           {/if}
         {/foreach}
       {/if}
-      {* Are we showing the warning status? *}
       {if $message.member.can_see_warning}
         <li class="warning">{($C.can_issue_warning) ? ('<a href="'|cat:$SCRIPTURL|cat:'?action=profile;area=issuewarning;u='|cat:$message.member.id|cat:'">') : ''}<img src="{$S.images_url }}/warning_{$message.member.warning_status}.gif" alt="{$message.member.warning_status_desc}" />{($C.can_issue_warning) ? '</a>' : ''}<span class="warn_{$message.member.warning_status}">{$message.member.warning_status_desc1}</span></li>
       {/if}
@@ -116,15 +86,44 @@
       {/if}
     {elseif !empty($message.member.allow_show_email)}
       <li class="email"><a href="{$SCRIPTURL}?action=emailuser;sa=email;msg={$ID}" rel="nofollow">{$T.email}</a></li>
-    {/if} {* is guest *}
+    {/if}
     {$SUPPORT->displayHook('pmbit_extend_userblock')}
     </ul>
   </div>
-  <div class="post_content std">
+  *}
+  <div class="post_content lean clear_left">
     {if !empty($message.is_replied_to)}
-      <div style="margin:3px;" class="flat_container tinytext lowcontrast">{$T.pm_is_replied_to}</div>
+      <div style="margin:3px;" class="tinytext lowcontrast">{$T.pm_is_replied_to}</div>
     {/if}
     <div class="post">
+      {if $C.folder != 'sent' and !empty($C.currently_using_labels) and $C.display_mode}
+        <div class="labels righttext floatright">
+        {if !empty($C.currently_using_labels)}
+          <select name="pm_actions[{$message.id}]" onchange="if (this.options[this.selectedIndex].value) form.submit();">
+            <option value="">{$T.pm_msg_label_title}:</option>
+            <option value="" disabled="disabled">---------------</option>
+            {if !$message.fully_labeled}
+              <option value="" disabled="disabled">{$T.pm_msg_label_apply}:</option>
+              {foreach $C.labels as $label}
+                {$this_id = $label.id}
+                {if !isset($message.labels.$this_id)}
+                  <option value="{$label.id}">&nbsp;{$label.name}</option>
+                {/if}
+              {/foreach}
+            {/if}
+            {if !empty($message.labels) and (count($message.labels) > 1 or !isset($message['labels'][-1]))}
+              <option value="" disabled="disabled">{$T.pm_msg_label_remove}:</option>
+              {foreach $message.labels as $label}
+                <option value="{$label.id}">&nbsp;{$label.name}</option>
+              {/foreach}
+            {/if}
+          </select>
+          <noscript>
+            <input type="submit" value="{$T.pm_apply}" class="button_submit" />
+          </noscript>
+        {/if}
+        </div>
+      {/if}
       <div class="inner" id="msg_{$message.id}">
         {$message.body}
       </div>

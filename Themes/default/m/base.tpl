@@ -42,8 +42,7 @@
       var sSessionId = '{$C.session_id}';
       var sSessionVar = '{$C.session_var}';
       var disableDynamicTime = {(empty($O.disable_dynatime)) ? 0 : 1};
-      var textSizeUnit = 'pt';
-      var textSizeStep = 1;
+      var memberTimeFormat = '{$U.time_format}';
       var textSizeMax = 16;
       var textSizeMin = 8;
       var textSizeDefault = 10;
@@ -57,7 +56,7 @@
       var t2 = document.createElement('SCRIPT');
       var _cname = '{$COOKIENAME}';
       var _mqcname = '{$C.multiquote_cookiename}';
-      var guest_time_offset = 0;
+      var is_am_pm = (memberTimeFormat.indexOf('%p') != -1);
       t2.type = "text/javascript";
       t2.async = true;
       t2.src = '{$S.default_theme_url}/scripts/footer.js{$C.jsver}';
@@ -127,7 +126,8 @@
         mins = (mins < 10) ? "0"+mins : mins;
         return display_hours+":"+mins;
       }
-        guest_time_offset = calculate_time_zone();
+        var guest_time_offset = calculate_time_zone();
+        sendXMLDocument(smf_prepareScriptUrl(smf_scripturl) + 'action=xmlhttp;sa=tzoffset;o=' + guest_time_offset + ';xml', '', function() {});
     // ]]>
     </script>
     {/if}

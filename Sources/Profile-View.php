@@ -465,7 +465,7 @@ function showPosts($memID)
 			SELECT
 				b.id_board, b.name AS bname, c.id_cat, c.name AS cname, m.id_topic, m.id_msg,
 				t.id_member_started, t.id_first_msg, t.id_last_msg, m.body, m.smileys_enabled, m.id_member, m.icon,
-				m.subject, m.poster_time, m.approved, mc.body AS cached_body, ' . (!empty($modSettings['karmaMode']) ? 'c1.likes_count, c1.like_status, c1.updated AS like_updated, l.rtype AS liked, ' : '0 AS likes_count, 0 AS like_status, 0 AS like_updated, 0 AS liked, ') . '
+				m.subject, m.poster_time, m.modified_time, m.approved, mc.body AS cached_body, ' . (!empty($modSettings['karmaMode']) ? 'c1.likes_count, c1.like_status, c1.updated AS like_updated, l.rtype AS liked, ' : '0 AS likes_count, 0 AS like_status, 0 AS like_updated, 0 AS liked, ') . '
 				m2.id_member AS id_first_member, m2.subject AS first_subject, m2.poster_time AS time_started,
 				IFNULL(mem2.real_name, m2.poster_name) AS first_poster_name
 			FROM {db_prefix}messages AS m

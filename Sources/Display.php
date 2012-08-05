@@ -1407,7 +1407,7 @@ function prepareDisplayContext($reset = false)
         }
 	}
 	else {
-		$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
+		$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg'] . '|' . $message['modified_time']);
 		parse_bbc_stage2($message['body'], $message['id_msg']);
     }
 

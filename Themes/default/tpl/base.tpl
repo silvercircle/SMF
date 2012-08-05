@@ -48,8 +48,7 @@
       var sSID = '{$SID}';
       var disableDynamicTime = {(empty($O.disable_dynatime)) ? 0 : 1};
       var timeOffsetMember =  {($U.time_offset + $M.time_offset) * 3600};
-      var textSizeUnit = 'pt';
-      var textSizeStep = 1;
+      var memberTimeFormat = '{$U.time_format}';
       var textSizeMax = 16;
       var textSizeMin = 8;
       var textSizeDefault = 11;
@@ -63,6 +62,7 @@
       var t2 = document.createElement('SCRIPT');
       var _cname = '{$COOKIENAME}';
       var _mqcname = '{$C.multiquote_cookiename}';
+      var is_am_pm = (memberTimeFormat.indexOf('%p') != -1);
       t2.type = "text/javascript";
       t2.async = true;
       t2.src = '{$S.default_theme_url}/scripts/footer.js{$C.jsver}';

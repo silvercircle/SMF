@@ -163,7 +163,7 @@
   {elseif !empty($C.$lid.rows)}
     {$alternate = false}
     {foreach $C.$lid.rows as $id => $row}
-      <tr class="windowbg{($alternate) ? '2' : ''}" id="list_{$lid}_{$id}">
+      <tr class="tablerow{($alternate) ? ' alternate' : ''}" id="list_{$lid}_{$id}">
       {foreach $row as $row_data}
         <td{(empty($row_data.class)) ? '' : (' class="'|cat:$row_data.class|cat:'"')}{(empty($row_data.style)) ? '' : (' style="'|cat:$row_data.style|cat:'"')}>{$row_data.value}</td>
       {/foreach}

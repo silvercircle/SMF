@@ -787,8 +787,8 @@ function timeformat($log_time, $show_today = false, $offset_type = false)
 	}
 
 	// Windows doesn't support %e; on some versions, strftime fails altogether if used, so let's prevent that.
-	if ($context['server']['is_windows'] && strpos($str, '%e') !== false)
-		$str = str_replace('%e', ltrim(strftime('%d', $time), '0'), $str);
+	//if ($context['server']['is_windows'] && strpos($str, '%e') !== false)
+	//	$str = str_replace('%e', ltrim(strftime('%d', $time), '0'), $str);
 
 	return '<abbr class="timeago" title="'.date('c', $time).'">'.strftime($str, $time).'</abbr>';
 }
@@ -939,6 +939,13 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	global $txt, $scripturl, $context, $modSettings, $user_info, $board;
 	static $bbc_codes = array(), $itemcodes = array(), $no_autolink_tags = array();
 	static $disabled;
+
+	if(stripos($cache_id, '|'))
+		list($cache_id, $cache_unique) = explode('|', $cache_id);
+	else
+		$cache_unique = &$message;
+
+	//echo 'id=',$cache_id,' unique=',$cache_unique;
 
 	// Don't waste cycles
 	if ($message === '')
@@ -1587,12 +1594,12 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	if ($cache_id != '' && $modSettings['cache_enable'] >= 2)
 	{
 		// It's likely this will change if the message is modified.
-		$cache_key = 'parse:' . $cache_id . '-' . md5(md5($message) . '-' . $smileys . (empty($disabled) ? '' : implode(',', array_keys($disabled))) . serialize($context['browser']) . $txt['lang_locale'] . $user_info['time_offset'] . $user_info['time_format']);
+		$cache_key = 'parse:' . $cache_id . '-' . md5(md5($cache_unique) . '-' . $smileys . (empty($disabled) ? '' : implode(',', array_keys($disabled))) . $txt['lang_locale'] . $user_info['time_offset'] . $user_info['time_format']);
 
 		if (($temp = CacheAPI::getCache($cache_key, 1200)) != null)
 			return $temp;
 
-		// $cache_t = microtime();
+		$cache_t = microtime();
 	}
     
 	if ($smileys === 'print')
@@ -2362,8 +2369,8 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	HookAPI::callHook('parse_bbc_after', array(&$message, &$parse_tags, &$smileys));
 
 	// Cache the output if it took some time...
-	//if (isset($cache_key, $cache_t)) // && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
-	if (isset($cache_key)) // && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
+	if (isset($cache_key, $cache_t) && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.01)
+	//if (isset($cache_key)) // && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
 		CacheAPI::putCache($cache_key, $message, 1200);
 
 	// If this was a force parse revert if needed.
@@ -2377,7 +2384,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			unset($temp_bbc);
 		}
 	}
-
 	return $message;
 }
 
@@ -3887,22 +3893,22 @@ function setupMenuContext()
 		if(!$user_info['is_guest']) {
 			$context['usermenu_buttons']['profile'] = array(
 				'title' => $txt['your_profile'],
-				'href' => URL::parse($scripturl . '?action=profile'),
+				'href' => URL::parse('?action=profile'),
 				'sub_buttons' => array(
 					'forumprofile' => array(
-						'href' => URL::parse($scripturl . '?action=profile;area=forumprofile'),
+						'href' => URL::parse('?action=profile;area=forumprofile'),
 						'title' => $txt['forumprofile']
 					),
 					'account' => array(
-						'href' => URL::parse($scripturl . '?action=profile;area=account'),
+						'href' => URL::parse('?action=profile;area=account'),
 						'title' => $txt['account']
 					),
 					'pm_read' => array(
-						'href' => URL::parse($scripturl . '?action=pm'),
+						'href' => URL::parse('?action=pm'),
 						'title' => $txt['pm_menu_read']
 					),
 					'pm_send' => array(
-						'href' => URL::parse($scripturl . '?action=pm;sa=send'),
+						'href' => URL::parse('?action=pm;sa=send'),
 						'title' => $txt['pm_menu_send']
 					)
 				)
@@ -3910,7 +3916,7 @@ function setupMenuContext()
 		}
 		$context['usermenu_buttons']['whatsnew'] = array(
 			'title' => $txt['whatsnew_menu'],
-			'href' => URL::parse($scripturl . '?action=whatsnew'),
+			'href' => URL::parse('?action=whatsnew'),
 		);
 
 		if($modSettings['astream_active']) {
@@ -3923,15 +3929,15 @@ function setupMenuContext()
 		if(!$user_info['is_guest']) {
 			$context['usermenu_buttons']['whatsnew']['sub_buttons']['unread'] = array(
 				'title' => $txt['unread_since_visit'],
-				'href' => URL::parse($scripturl . '?action=unread')
+				'href' => URL::parse('?action=unread')
 			);
 			$context['usermenu_buttons']['whatsnew']['sub_buttons']['unread_replies'] = array(
 					'title' => $txt['show_unread_replies'],
-					'href' => URL::parse($scripturl . '?action=unreadreplies')
+					'href' => URL::parse('?action=unreadreplies')
 			);
 			$context['usermenu_buttons']['whatsnew']['sub_buttons']['subscriptions'] = array(
 					'title' => $txt['show_my_subscriptions'],
-					'href' => URL::parse($scripturl . '?action=profile;area=notification')
+					'href' => URL::parse('?action=profile;area=notification')
 			);
 
 			if($modSettings['astream_active'])
@@ -4038,7 +4044,7 @@ function getCachedPost(&$message)
 		parse_bbc_stage2($message['body'], $message['id_msg']);
     }
 	else {
-		$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
+		$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg'] . '|' . $message['modified_time']);
 		parse_bbc_stage2($message['body'], $message['id_msg']);
     }
 }
@@ -4080,7 +4086,7 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 	$dismissed_item_count = count($dismissed_items);
 
 	$cache_key = 'newsitems';
-	if (($cached_news = CacheAPI::getCache($cache_key, 360)) == null) {
+	if (($cached_news = CacheAPI::getCache($cache_key, 1200)) == null) {
 
 		$result = smf_db_query('
 			SELECT * FROM {db_prefix}news');
@@ -4099,9 +4105,9 @@ function fetchNewsItems($board = 0, $topic = 0, $force_full = false)
 		}
 		mysql_free_result($result);
 		if(count($context['raw_news_items']) > 0)
-			CacheAPI::putCache($cache_key, $context['raw_news_items'], 360);
+			CacheAPI::putCache($cache_key, $context['raw_news_items'], 1200);
 		else
-			CacheAPI::putCache($cache_key, null, 360);
+			CacheAPI::putCache($cache_key, null, 0);
 	}
 	else
 		$context['raw_news_items'] = $cached_news;

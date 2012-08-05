@@ -1058,9 +1058,9 @@ function setTextSize(_s)
 
 	if(textsize < textSizeMin || textsize > textSizeMax)
    		textsize = textSizeDefault;
-	$('.post_wrapper .post').css('font-size', _s + textSizeUnit);
+	$('.post_wrapper .post').css('font-size', _s + 'pt');
 	createCookie('SMF_textsize', _s, 500);
-	$('#curfontsize').html(textsize + textSizeUnit);
+	$('#curfontsize').html(textsize + 'pt');
 }
 
 /*
@@ -1092,8 +1092,7 @@ function setTextSize(_s)
 
   $.extend($.timeago, {
     settings: {
-      //refreshMillis: 60000,
-      refreshMillis: 10000,
+      refreshMillis: 60000,
       allowFuture: true
     },
     inWords: function(distanceMillis) {
@@ -1198,12 +1197,12 @@ function setTextSize(_s)
     	todayref -= ref;
     	var hours = todayref / onehour;
     	if(hours > 24 && hours < 144 ) {
-			var str = _temp.toLocaleTimeString();
+			var str =getLocaleClockTime(_temp.getHours(), _temp.getMinutes());
     		//return($t.settings.strings.weekdays[_temp.getDay()] + ', ' + pad(_temp.getHours()) + ':'+ pad(_temp.getMinutes()));
     		return($t.settings.strings.weekdays[_temp.getDay()] + ', ' + str);
     	}
 		if(hours > 0 && hours < 24) {
-			var str = _temp.toLocaleTimeString();
+			var str =getLocaleClockTime(_temp.getHours(), _temp.getMinutes());
     		//return($t.settings.strings.yesterday + ', ' + pad(_temp.getHours()) + ':'+ pad(_temp.getMinutes()));
     		return($t.settings.strings.yesterday + ', ' + str);
     	}
@@ -1226,6 +1225,26 @@ function setTextSize(_s)
     	s = "0" + s;
     return s;
   }
+
+	function getLocaleClockTime(hour, minute)
+	{
+		if(!is_am_pm)
+			return(pad(hour) + ':' + pad(minute));
+
+		var ap = " AM";
+
+		if (hour > 11) { 
+			ap = " PM";             
+		}
+		if (hour > 12) { 
+			hour = hour - 12;      
+		}
+		if (hour == 0) { 
+			hour = 12;             
+		}
+		return(pad(hour) + ':' + pad(minute) + ap);
+	}
+
 }(jQuery));
 
 /*

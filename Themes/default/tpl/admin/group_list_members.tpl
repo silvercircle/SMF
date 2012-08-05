@@ -4,48 +4,30 @@
   <div class="cat_bar">
     <h3>{$C.page_title}</h3>
   </div>
-  <div class="blue_container smalltext">
+  <div class="blue_container smalltext cleantop">
     <div class="content">
-      <dl class="settings">
-        <dt>
-          <strong>{$T.name}:</strong>
-        </dt>
-        <dd>
-          <a href="#!" class="member group_{$C.group.id}">{$C.group.name}</a> {$C.group.stars}
-        </dd>
+        <div class="floatright">
+          {$C.group.stars}
+        </div>
+        <a href="#!" class="member group_{$C.group.id}" style="font-size:1.5em;">{$C.group.name}</a><br>
         {if !empty($C.group.description)}
-          <dt>
-            <strong>{$T.membergroups_members_description}:</strong>
-          </dt>
-          <dd>
-            {$C.group.description}
-          </dd>
+          {$C.group.description}
+          <br>
         {/if}
-        <dt>
-          <strong>{$T.membergroups_members_top}:</strong>
-        </dt>
-        <dd>
-          {$C.total_members}
-        </dd>
+        <strong>{$T.membergroups_members_top}:</strong>
+        {$C.total_members}
         {if !empty($C.group.moderators)}
           {$moderators = array()}
           {foreach $C.group.moderators as $moderator}
             {$moderators[] = '<a href="'|cat:$SCRIPTURL|cat:'?action=profile;u='|cat:$moderator.id|cat:'">'|cat:$moderator.name|cat:'</a>'}
           {/foreach}
-          <dt>
-            <strong>{$T.membergroups_members_group_moderators}:</strong>
-          </dt>
-          <dd>
-            {', '|implode:$moderators}
-          </dd>
+          <strong>{$T.membergroups_members_group_moderators}:</strong>
+          {', '|implode:$moderators}
         {/if}
-      </dl>
     </div>
   </div>
   <br>
-  <div class="cat_bar">
-    <h3>{$T.membergroups_members_group_members}</h3>
-  </div>
+  <h1 class="bigheader secondary indent">{$T.membergroups_members_group_members}</h1>
   <div class="pagelinks">{$C.page_index}</div>
   <table class="table_grid" style="width:100%;">
     <thead>
@@ -63,11 +45,12 @@
     <tbody>
     {if empty($C.members)}
     <tr>
-      <td  class="orange_container mediumpadding" colspan="6" align="center">{$T.membergroups_members_no_members}</td>
+      <td class="orange_container mediumpadding norounded cleantop" colspan="6" align="center">{$T.membergroups_members_no_members}</td>
     </tr>
     {/if}
+    {$alternate = 0}
     {foreach $C.members as $member}
-      <tr class="windowbg2">
+      <tr class="{($alternate) ? 'tablerow alternate' : 'tablerow'}">
         <td>{$member.name}</td>
         <td class="centertext">
         {if $member.show_email == 'no'}
@@ -80,13 +63,14 @@
           <a href="mailto:{$member.email}">{$member.email}</a>
         {/if}
         </td>
-        <td class="windowbg">{$member.last_online}</td>
-        <td class="windowbg">{$member.registered}</td>
+        <td>{$member.last_online}</td>
+        <td>{$member.registered}</td>
         <td{(empty($C.group.assignable)) ? ' colspan="2"' : ''}>{$member.posts}</td>
         {if !empty($C.group.assignable)}
-          <td align="center" style="width:4%;"><input type="checkbox" name="rem[]" value="{$member.id}" class="input_check" {($C.user.id == $member.id and $C.group.id == 1) ? ('onclick="if (this.checked) return confirm(\''|cat:$T.membergroups_members_deadmin_confirm|cat:'\')" ') : ''} /></td>
+          <td class="centertext" style="width:4%;"><input type="checkbox" name="rem[]" value="{$member.id}" class="input_check" {($C.user.id == $member.id and $C.group.id == 1) ? ('onclick="if (this.checked) return confirm(\''|cat:$T.membergroups_members_deadmin_confirm|cat:'\')" ') : ''} /></td>
         {/if}
       </tr>
+      {$alternate = !$alternate}
     {/foreach}
     </tbody>
   </table>
@@ -98,9 +82,7 @@
   </div>
   <br>
   {if !empty($C.group.assignable)}
-    <div class="cat_bar">
-      <h3>{$T.membergroups_members_add_title}</h3>
-    </div>
+    <h1 class="bigheader secondary indent">{$T.membergroups_members_add_title}</h1>
     <div class="blue_container">
       <div class="content">
         <strong>{$T.membergroups_members_add_desc}:</strong>
