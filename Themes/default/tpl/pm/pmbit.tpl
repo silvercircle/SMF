@@ -87,7 +87,7 @@
         {$shown = false}
         {foreach from=$message.member.custom_fields item=custom}
           {if $custom.placement == 1 and !empty($custom.value)}
-            {if shown == false}
+            {if $shown == false}
               {$shown = true}
               <li class="im_icons">
               <ul>
@@ -141,8 +141,10 @@
           {/if}
           <li>{$custom.value}</li>
         {/foreach}
+        {if $shown}
           </ul>
         </div>
+        {/if}
       {/if}
       {if !empty($message.member.signature) and empty($O.show_no_signatures) and $C.signature_enabled}
         <br>
