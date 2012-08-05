@@ -29,8 +29,8 @@
         {$alternate = 0}
         {$seq = 0}
         {foreach $C.members as $member}
-          <tr class="windowbg{($alternate) ? '2' : ''}">
-            <td style="width:60%;" class="nowrap">
+          <tr class="topicrow{($alternate) ? ' alternate' : ''}">
+            <td style="width:60%;">
             {if $member.is_guest == 0 and !empty($member.online)}
               <span class="contact_info floatright">
                 {($C.can_send_pm) ? ('<a href="{$member.online.href}" title="{$member.online.label}">') : ''} {($S.use_image_buttons) ? ('<img src="'|cat:$member.online.image_href|cat: '" alt="'|cat: $member.online.text|cat:'" />') : $member.online.text}{($C.can_send_pm) ? '</a>' : ''}

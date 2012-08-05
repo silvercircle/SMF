@@ -241,6 +241,7 @@
     <a href="{$C.query_string};sbtoggle" data-class="{$C.sidebar_class}" onclick="sbToggle($(this));return(false);" id="sbtoggle" class="{($sidebar_vis) ? 'collapse' : 'expand'}">&nbsp;</a>
   {/if}
   {* Show the navigation tree. *}
+  {if $C.can_search}
   <div style="position:relative;">
     <form onmouseout="return false;" onsubmit="submitSearchBox();" class="floatright" id="search_form" action="{$SCRIPTURL}?action=search2" method="post" accept-charset="UTF-8">
       <div id="adv_search" style="width:246px;padding:0;" class="smalltext">
@@ -272,6 +273,7 @@
         </noscript>
     </form>
   </div>
+  {/if}
   <div class="clear cContainer_end"></div>
   {$C.template_hooks.global.above}
   {$C.additional_admin_errors}

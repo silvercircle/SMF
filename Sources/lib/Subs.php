@@ -1070,7 +1070,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			parsed_tags_allowed: an array restricting what BBC can be in the
 			  parsed_equals parameter, if desired.
 		*/
-
 		$codes = array(
 			array(
 				'tag' => 'abbr',
@@ -1125,33 +1124,12 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'tag' => 'code',
 				'type' => 'unparsed_content',
 				'content' => '<div class="codeheader">' . $txt['code'] . ': </div><pre class="prettyprint lang-php linenums:1">$1</pre>',
-				// @todo Maybe this can be simplified?
-				/*'validate' => isset($disabled['code']) ? null : function(&$tag, &$data, $disabled) {
-					global $context;
-
-					if (!isset($disabled['code']))
-					{
-						$php_parts = preg_split('~(&lt;\?php|\?&gt;)~', $data, -1, PREG_SPLIT_DELIM_CAPTURE);
-						$data = str_replace("<pre style=\"display: inline;\">\t</pre>", "\t", implode('', $php_parts));
-						$data = str_replace("\t", "<span style=\"white-space: pre;\">\t</span>", $data);
-					}
-				},*/
 				'block_level' => true,
 			),
 			array(
 				'tag' => 'code',
 				'type' => 'unparsed_equals_content',
 				'content' => '<div class="codeheader">' . $txt['code'] . ': ($2)</div><pre class="prettyprint lang-$2 linenums:1">$1</pre>',
-				/*'validate' => isset($disabled['code']) ? null : function(&$tag, &$data, $disabled) {
-					global $context;
-
-					if (!isset($disabled['code']))
-					{
-						$php_parts = preg_split('~(&lt;\?php|\?&gt;)~', $data[0], -1, PREG_SPLIT_DELIM_CAPTURE);
-						$data[0] = str_replace("<pre style=\"display: inline;\">\t</pre>", "\t", implode('', $php_parts));
-						$data[0] = str_replace("\t", "<span style=\"white-space: pre;\">\t</span>", $data[0]);
-					}
-				},*/
 				'block_level' => true,
 			),		
 			array(
@@ -1548,7 +1526,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'disabled_after' => ' ($1)',
 			),
 		);
-
 		// Let mods add new BBC without hassle.
 		HookAPI::callHook('bbc_codes', array(&$codes));
 
