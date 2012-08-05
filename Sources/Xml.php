@@ -128,11 +128,12 @@ function GetMcard()
 
     	if(!empty($context['member']['gender']['name']))
       		$context['member']['loc'][0] = $context['member']['gender']['image'] . $context['member']['gender']['name'];
-      
+
     	if(isset($context['member']['birth_date']) && !empty($context['member']['birth_date'])) {
-      		$l = idate('Y', time()) - intval($context['member']['birth_date']);
-      		if($l < 100)
-        		$context['member']['loc'][1] = $l;
+		list ($birth_year, $birth_month, $birth_day) = sscanf($context['member']['birth_date'], '%d-%d-%d');
+		$datearray = getdate(forum_time());
+		if($birth_year > 5)
+			$context['member']['loc'][1] = $datearray['year'] - $birth_year - (($datearray['mon'] > $birth_month || ($datearray['mon'] == $birth_month && $datearray['mday'] >= $birth_day)) ? 0 : 1);
     	}
     	
     	if(!empty($context['member']['location']))

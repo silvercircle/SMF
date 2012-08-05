@@ -9,4 +9,3 @@
 	$txt['you_liker'] = "Dir";
 	$txt['like_label'] = "Gefällt mir";
 	$txt['unlike_label'] = "Gefällt mir nicht";
-?>

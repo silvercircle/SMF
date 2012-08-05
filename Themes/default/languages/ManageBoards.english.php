@@ -104,4 +104,3 @@ $txt['mboards_desc'] = 'Description';
 $txt['mboards_desc_desc'] = 'Description for this category';
 $txt['tidy_child_display_columns'] = 'Number of columns to use for displaying child boards.';
 $txt['child_board_desc_shortened'] = 'Shorten description of child boards to that many characters (set to 0 to display descriptions at full length)';
-?>

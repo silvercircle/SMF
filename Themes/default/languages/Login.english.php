@@ -146,4 +146,3 @@ $txt['authenticate_password'] = 'Password';
 $txt['authenticate_openid'] = 'OpenID';
 $txt['authenticate_openid_url'] = 'OpenID Authentication URL';
 
-?>

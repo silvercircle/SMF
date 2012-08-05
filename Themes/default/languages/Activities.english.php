@@ -81,4 +81,3 @@ $txt['acfmt_post_quoted_3'] = '<a href="@URL_MEMBER@">%member_name$s</a> quoted 
 
 $txt['acfmt_user_tagged_1'] = 'You were mentioned in <a class="_m" href="@SCRIPTURL@?topic=%id_topic$s.msg%id_content$s@NM@#msg%id_content$s">a message</a> posted by <a href="@URL_MEMBER@">%member_name$s</a>.';
 
-?>

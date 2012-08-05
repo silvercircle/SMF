@@ -155,4 +155,3 @@ $txt['spider_stats_select_month'] = 'Jump To Month';
 $txt['spider_stats_page_hits'] = 'Page Hits';
 $txt['spider_stats_no_entries'] = 'There are currently no spider statistics available.';
 
-?>
