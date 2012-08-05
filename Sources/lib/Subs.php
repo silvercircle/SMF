@@ -1362,6 +1362,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'before' => '<div class="quoteheader">' . $txt['quote'] . '</div><blockquote>',
 				'after' => '</blockquote><div class="quotefooter"></div>',
 				'block_level' => true,
+				'disallow_children' => array('yt'),
 			),
 			array(
 				'tag' => 'quote',
@@ -1371,6 +1372,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'before' => '<div class="quoteheader">{author} '.$txt['said'].':</div><blockquote>',
 				'after' => '</blockquote><div class="quotefooter"></div>',
 				'block_level' => true,
+				'disallow_children' => array('yt'),
 			),
 			array(
 				'tag' => 'quote',
@@ -1381,6 +1383,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				// Don't allow everything to be embedded with the author name.
 				'parsed_tags_allowed' => array('url', 'iurl', 'ftp'),
 				'block_level' => true,
+				'disallow_children' => array('yt'),
 			),
 			array(
 				'tag' => 'quote',
@@ -1392,6 +1395,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'before' => '<div class="quoteheader"><a href="' . $scripturl . '?{link}">{author} ' . $txt['said'] . ', {date}</a></div><blockquote>',
 				'after' => '</blockquote><div class="quotefooter"></div>',
 				'block_level' => true,
+				'disallow_children' => array('yt'),
 			),
 			array(
 				'tag' => 'quote',
@@ -1401,6 +1405,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'before' => '<div class="quoteheader">{author} '.$txt['said'].':</div><blockquote>',
 				'after' => '</blockquote><div class="quotefooter"></div>',
 				'block_level' => true,
+				'disallow_children' => array('yt'),
 			),
 			array(
 				'tag' => 'rtl',
