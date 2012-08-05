@@ -743,4 +743,3 @@ $txt['ratings_help'] = '
 	<li>Points is a positive or negative number that specifies the number of reputation points a member will receive for this rating. When left empty, the rating is considered a neutral one and no points will be granted. <b>NOTE: THIS IS CURRENTLY UNIMPLEMENTED.</b></li>
 	</ul>
 	';
-?>

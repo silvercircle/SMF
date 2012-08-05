@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<document>
+{extends "base_xml.tpl"}
+{block xml_content}
  <response open="default_overlay" width="50%" />
  <content>
  <![CDATA[ <!-- > -->
@@ -26,4 +26,4 @@
 	{/if}
  ]]>
  </content>
-</document>
+{/block}

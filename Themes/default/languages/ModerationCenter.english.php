@@ -142,4 +142,3 @@ $txt['mc_prefs_notify_approval'] = 'Notify of items awaiting approval';
 $txt['mc_click_add_note'] = 'Add a new note';
 $txt['mc_add_note'] = 'Add';
 
-?>

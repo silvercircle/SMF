@@ -194,4 +194,3 @@ $txt['pm_readable_label'] = 'apply label &quot;{LABEL}&quot;';
 $txt['pm_readable_delete'] = 'delete the message';
 $txt['pm_readable_then'] = '<strong>then</strong>';
 
-?>

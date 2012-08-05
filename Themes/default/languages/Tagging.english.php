@@ -49,4 +49,3 @@ $txt['smftags_views'] = 'Views';
 $txt['smftags_guest'] = 'Guest';
 
 $txt['smftags_topictag'] = 'Tag';
-?>

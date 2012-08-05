@@ -1059,4 +1059,3 @@ We hope this message brought you cheer, and make it last, until same time same p
 		'author' => '<a href="http://www.simplemachines.org/community/?action=profile;u=63186">karlbenson</a>',
 	),
 );
-?>

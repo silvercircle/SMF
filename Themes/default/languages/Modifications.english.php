@@ -59,4 +59,3 @@ $txt['relatedTopicsCount'] = 'How many related topics to show';
 $txt['no_methods_selected'] = 'You haven\'t selected which methods to use to determine related topics';
 
 $txt['related_topics'] = 'Related Topics';      
-?>

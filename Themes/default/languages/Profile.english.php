@@ -497,4 +497,3 @@ $txt['dismissed_news_items'] = 'Dismissed board notices';
 $txt['dismissed_news_item_explain'] = 'Board notices you have previously dismissed can be reviewed on this page. If you wish to re-activate them to make them appear in their assigned location(s), use the link at the bottom of this page.';
 $txt['no_dismissed_news_items'] = 'You have no dismissed board notices';
 $txt['news_items_reactivate'] = 'Reactivate all dismissed board notices';
-?>
