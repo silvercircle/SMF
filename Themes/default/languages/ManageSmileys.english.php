@@ -92,4 +92,3 @@ $txt['icons_location_first_icon'] = 'As First Icon';
 $txt['icons_location_after'] = 'After';
 $txt['icons_filename_all_gif'] = 'All files must be &quot;gif&quot; files';
 $txt['icons_no_entries'] = 'There are currently no message icons configured.';
-?>

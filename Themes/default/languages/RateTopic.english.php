@@ -13,4 +13,3 @@ $txt['rateTopic'] = array(
 	'given_to' => 'Given to:'
 	);
 
-?>

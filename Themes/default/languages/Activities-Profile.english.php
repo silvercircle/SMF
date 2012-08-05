@@ -22,4 +22,3 @@ $txt['ndesc_user_tagged'] = 'You will receive a notification when someone mentio
 
 $txt['showActivitiesSettings'] = 'Activities and notifications - Settings';
 $txt['showActivitiesSettings_desc'] = 'Here you can customize the activity types that should be recorded from your forum activities as well as the notifications you want to receive.';
-?>

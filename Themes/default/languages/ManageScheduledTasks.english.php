@@ -53,4 +53,3 @@ $txt['scheduled_log_time_run'] = 'Time Run';
 $txt['scheduled_log_time_taken'] = 'Time taken';
 $txt['scheduled_log_time_taken_seconds'] = '%1$d seconds';
 $txt['scheduled_log_empty_log'] = 'Empty Log';
-?>

@@ -41,4 +41,3 @@ $txt['ssi_write_comment'] = 'Write Comment';
 $txt['ssi_no_guests'] = 'You cannot specify a board that doesn\'t allow guests.  Please check the board ID before trying again.';
 $txt['xml_rss_desc'] = 'Live information from ' . $context['forum_name'];
 
-?>

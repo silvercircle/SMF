@@ -124,4 +124,3 @@ $txt['duplicates'] = 'Duplicates';
 
 $txt['not_activated'] = 'Not activated';
 $txt['groupColorsFromTheme'] = 'Define group colors in the theme\'s style sheet';
-?>
