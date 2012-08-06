@@ -137,16 +137,21 @@ function template_folder()
 <form style="padding-right:5px;" action="', $scripturl, '?action=pm;sa=pmactions;', $context['display_mode'] == 2 ? 'conversation;' : '', 'f=', $context['folder'], ';start=', $context['start'], $context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '', '" method="post" accept-charset="UTF-8" name="pmFolder">';
 
 	// If we are not in single display mode show the subjects on the top!
-	if ($context['display_mode'] != 0)
+	if ($context['display_mode'] == 2)
 	{
 		template_subject_list();
 		echo '<div class="clear"><br /></div>';
 	}
 	else
 		echo '
-	<div class="floatright tinytext smallpadding">
-	 <a href="', $scripturl, '?action=pm;view;f=', $context['folder'], ';start=', $context['start'], ';sort=', $context['sort_by'], ($context['sort_direction'] == 'up' ? '' : ';desc'), ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : ''), '"><span class="button">',$txt['pm_change_view'],'</span></a>
-	</div>
+	<div class="cat_bar2">
+		<div class="floatright tinytext">
+	 		<a href="', $scripturl, '?action=pm;view;f=', $context['folder'], ';start=', $context['start'], ';sort=', $context['sort_by'], ($context['sort_direction'] == 'up' ? '' : ';desc'), ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : ''), '">',$txt['pm_change_view'],'</a>
+		</div>
+		<h3>',CommonAPI::ucfirst($context['folder']),'</h3>
+	</div';
+
+	echo '
 	<div class="clear"></div>';
 
 	// Got some messages to display?
@@ -226,10 +231,15 @@ function template_subject_list()
 {
 	global $context, $options, $settings, $modSettings, $txt, $scripturl;
 
+	if($context['display_mode'] != 1)
 	echo '
-	<div class="floatright tinytext smallpadding">
-	 <a href="', $scripturl, '?action=pm;view;f=', $context['folder'], ';start=', $context['start'], ';sort=', $context['sort_by'], ($context['sort_direction'] == 'up' ? '' : ';desc'), ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : ''), '">',$txt['pm_change_view'],'</a>
-	</div>
+	<div class="cat_bar2">
+		<div class="floatright tinytext">
+	 		<a href="', $scripturl, '?action=pm;view;f=', $context['folder'], ';start=', $context['start'], ';sort=', $context['sort_by'], ($context['sort_direction'] == 'up' ? '' : ';desc'), ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : ''), '">',$txt['pm_change_view'],'</a>
+	 	</div>
+		<h3>',CommonAPI::ucfirst($context['folder']),'</h3>
+	</div>';
+	echo '
 	<div class="clear"></div>
 	<div class="framed_region">
 	<table width="100%" class="topic_table">
@@ -263,7 +273,7 @@ function template_subject_list()
 	while ($message = $context['get_pmessage']('subject'))
 	{
 		echo '
-		<tr class="', $next_alternate ? 'windowbg' : 'windowbg2', '">
+		<tr class="', $next_alternate ? 'tablerow' : 'tablerow alternate', '">
 			<td class="centertext" style="width:4%;">
 			<script type="text/javascript"><!-- // --><![CDATA[
 				currentLabels[', $message['id'], '] = {';
@@ -282,7 +292,7 @@ function template_subject_list()
 		echo '
 				};
 			// ]]></script>
-				', $message['is_replied_to'] ? '<img src="' . $settings['images_url'] . '/icons/pm_replied.gif" style="margin-right: 4px;" alt="' . $txt['pm_replied'] . '" />' : '<img src="' . $settings['images_url'] . '/icons/pm_read.gif" style="margin-right: 4px;" alt="' . $txt['pm_read'] . '" />', '</td>
+				', $message['is_replied_to'] ? '<img src="' . $settings['images_url'] . '/icons/pm_replied.png" style="margin-right: 4px;" alt="' . $txt['pm_replied'] . '" />' : '<img src="' . $settings['images_url'] . '/icons/pm_read.png" style="margin-right: 4px;" alt="' . $txt['pm_read'] . '" />', '</td>
 			<td>', $message['time'], '</td>
 			<td>', ($context['display_mode'] != 0 && $context['current_pm'] == $message['id'] ? '<img src="' . $settings['images_url'] . '/selected.gif" alt="*" />' : ''), '<a href="', ($context['display_mode'] == 0 || $context['current_pm'] == $message['id'] ? '' : ($scripturl . '?action=pm;pmid=' . $message['id'] . ';kstart;f=' . $context['folder'] . ';start=' . $context['start'] . ';sort=' . $context['sort_by'] . ($context['sort_direction'] == 'up' ? ';' : ';desc') . ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : ''))), '#msg', $message['id'], '">', $message['subject'], '</a>', $message['is_unread'] ? '&nbsp;<img src="' . $settings['images_url'] . '/new.png" alt="' . $txt['new'] . '" />' : '', '</td>
 			<td>', ($context['from_or_to'] == 'from' ? $message['member']['link'] : (empty($message['recipients']['to']) ? '' : implode(', ', $message['recipients']['to']))), '</td>

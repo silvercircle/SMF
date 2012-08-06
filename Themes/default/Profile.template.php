@@ -538,7 +538,7 @@ function template_editBuddies()
 						<strong>', $txt['who_member'], ':</strong>
 					</label>
 					<input type="text" name="new_buddy" id="new_buddy" size="40" class="input_text" />
-					<input type="submit" value="', $txt['buddy_add_button'], '" class="button_submit" />
+					<input type="submit" value="', $txt['buddy_add_button'], '" class="default" />
 				</div>
 			</div>
 		</div>
@@ -616,7 +616,7 @@ function template_editIgnoreList()
 						<strong>', $txt['who_member'], ':</strong>
 					</label>
 					<input type="text" name="new_ignore" id="new_ignore" size="40" class="input_text" />
-					<input type="submit" value="', $txt['ignore_add_button'], '" class="button_submit" />
+					<input type="submit" value="', $txt['ignore_add_button'], '" class="default" />
 				</div>
 			</div>
 		</div>
@@ -706,7 +706,7 @@ function template_trackIP()
 		</div>
 		<div class="blue_container cleantop">
 			<form action="', $context['base_url'], '" method="post" accept-charset="UTF-8">
-				<div class="padding">', $txt['enter_ip'], ':&nbsp;&nbsp;<input type="text" name="searchip" value="', $context['ip'], '" class="input_text" />&nbsp;&nbsp;<input type="submit" value="', $txt['trackIP'], '" class="button_submit" /></div>
+				<div class="padding">', $txt['enter_ip'], ':&nbsp;&nbsp;<input type="text" name="searchip" value="', $context['ip'], '" class="input_text" />&nbsp;&nbsp;<input type="submit" value="', $txt['trackIP'], '" class="default" /></div>
 			</form>
 		</div>
 		<br />';
@@ -1275,10 +1275,10 @@ function template_edit_options()
 	// The button shouldn't say "Change profile" unless we're changing the profile...
 	if (!empty($context['submit_button_text']))
 		echo '
-						<input type="submit" value="', $context['submit_button_text'], '" class="button_submit" />';
+						<input type="submit" value="', $context['submit_button_text'], '" class="default" />';
 	else
 		echo '
-						<input type="submit" value="', $txt['change_profile'], '" class="button_submit" />';
+						<input type="submit" value="', $txt['change_profile'], '" class="default" />';
 
 	echo '
 						<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
@@ -1602,8 +1602,8 @@ function template_notification()
 							<option value="4"', $context['member']['notify_types'] == 4 ? ' selected="selected"' : '', '>', $txt['notify_send_type_nothing'], '</option>
 						</select><br class="clear" />
 
-						<div>
-							<input id="notify_submit" type="submit" value="', $txt['notify_save'], '" class="button_submit floatright" />
+						<div class="floatright smallpadding">
+							<input id="notify_submit" type="submit" value="', $txt['notify_save'], '" class="default" />
 							<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 							<input type="hidden" name="u" value="', $context['id_member'], '" />
 							<input type="hidden" name="sa" value="', $context['menu_item_selected'], '" />
@@ -1656,7 +1656,7 @@ function template_groupMembership()
 					<textarea name="reason" rows="4" style="' . ($context['browser']['is_ie8'] ? 'width: 635px; max-width: 99%; min-width: 99%' : 'width: 99%') . ';"></textarea>
 					<div class="righttext" style="margin: 0.5em 0.5% 0 0.5%;">
 						<input type="hidden" name="gid" value="', $context['group_request']['id'], '" />
-						<input type="submit" name="req" value="', $txt['submit_request'], '" class="button_submit" />
+						<input type="submit" name="req" value="', $txt['submit_request'], '" class="default" />
 					</div>
 				</div></div>
 			</div>';
@@ -1708,7 +1708,7 @@ function template_groupMembership()
 		if ($context['can_edit_primary'])
 			echo '
 			<div class="padding righttext">
-				<input type="submit" value="', $txt['make_primary'], '" class="button_submit" />
+				<input type="submit" value="', $txt['make_primary'], '" class="default" />
 			</div>';
 
 		// Any groups they can join?
@@ -2151,7 +2151,7 @@ function template_issueWarning()
 				</dl>
 				<div class="righttext">
 					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-					<input type="submit" name="save" value="', $context['user']['is_owner'] ? $txt['change_profile'] : $txt['profile_warning_issue'], '" class="button_submit" />
+					<input type="submit" name="save" value="', $context['user']['is_owner'] ? $txt['change_profile'] : $txt['profile_warning_issue'], '" class="default" />
 				</div>
 			</div>
 			<span class="botslice"><span></span></span>
@@ -2263,7 +2263,7 @@ function template_deleteAccount()
 					<div>
 						<strong', (isset($context['modify_error']['bad_password']) || isset($context['modify_error']['no_password']) ? ' class="error"' : ''), '>', $txt['current_password'], ': </strong>
 						<input type="password" name="oldpasswrd" size="20" class="input_password" />&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="submit" value="', $txt['yes'], '" class="button_submit" />
+						<input type="submit" value="', $txt['yes'], '" class="default" />
 						<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 						<input type="hidden" name="u" value="', $context['id_member'], '" />
 						<input type="hidden" name="sa" value="', $context['menu_item_selected'], '" />
@@ -2292,7 +2292,7 @@ function template_deleteAccount()
 						<label for="deleteAccount"><input type="checkbox" name="deleteAccount" id="deleteAccount" value="1" class="input_check" onclick="if (this.checked) return confirm(\'', $txt['deleteAccount_confirm'], '\');" /> ', $txt['deleteAccount_member'], '.</label>
 					</div>
 					<div>
-						<input type="submit" value="', $txt['delete'], '" class="button_submit" />
+						<input type="submit" value="', $txt['delete'], '" class="default" />
 						<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 						<input type="hidden" name="u" value="', $context['id_member'], '" />
 						<input type="hidden" name="sa" value="', $context['menu_item_selected'], '" />
@@ -2329,7 +2329,7 @@ function template_profile_save()
 
 	echo '
 					<div class="righttext">
-						<input type="submit" value="', $txt['change_profile'], '" class="button_submit" />
+						<input type="submit" value="', $txt['change_profile'], '" class="default" />
 						<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 						<input type="hidden" name="u" value="', $context['id_member'], '" />
 						<input type="hidden" name="sa" value="', $context['menu_item_selected'], '" />
@@ -2852,7 +2852,7 @@ echo '
 						<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 						<input type="hidden" name="u" value="', $context['id_member'], '" />
 						<input type="hidden" name="sa" value="', $context['menu_item_selected'], '" />
-						<input type="submit" value="', $txt['change_profile'], '" class="button_submit" />
+						<input type="submit" value="', $txt['change_profile'], '" class="default" />
 					</div>
 				</div>
 				<span class="botslice"><span></span></span>

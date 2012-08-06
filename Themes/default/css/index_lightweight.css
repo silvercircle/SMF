@@ -1824,11 +1824,7 @@ ul.plainbuttonlist li a {
 	padding: 0 6px 1px 6px;
 	cursor: pointer;
 }
-span.button:hover, ul.buttonlist li a:hover {
-	background: white;
-}
-
-ul.buttonlist li a, span.button {
+ul.buttonlist li a, span.button, input[type=button], input[type=submit] {
 	font-size: 11px !important;
 	text-shadow: 1px 1px 1px #fff;
 	float: left;
@@ -1836,68 +1832,47 @@ ul.buttonlist li a, span.button {
 	line-height:19px !important;
 	text-decoration: none;
 	padding: 0 6px 1px 6px;
-	color: #777;
-	border: 1px solid #ccc;
+	color: #222;
+	border: 1px solid white;
 	cursor: pointer;
-	background: #f2f2f2;
+	background: #e2e2e2;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	font-family:Tahoma,sans-serif;
+	vertical-align: center;
+	outline: 1px solid #999;
 }
-span.button.default, ul.buttonlist li a.active {
+input[type=button], input[type=submit] {
+	float:none;
+	padding-bottom: 2px;
+	margin-left:2px;
+}
+span.button.default, ul.buttonlist li a.active, input[type=submit].default {
 	background: #4685cc;
 	color:white;
 	text-shadow: none;
 	border:1px solid white;
 	outline: 1px solid #4685cc;
 }
-span.button.default:hover {
-	background: #336195;
-}
 span.button.centered {
 	display:inline-block;
 	float:none;
 }
-input[type=button], .button_submit, .button_reset {
-	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;
-	color:white !important;
-	border:2px solid #888;
-	border-radius:2px;
-	margin:0 5px;
-	height:21px !important;
-	line-height:21px !important;
-	max-height: 21px;
-	font-size:11px !important;
-	cursor: pointer;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	padding:0 6px 0 6px;
+span.button:hover, ul.buttonlist li a:hover, input[type=submit]:hover {
+	background: #ccc;
+	border:1px solid orange !important;
 }
-input.button_reset {
-	background: rgb(169,3,41);
-	background: -moz-linear-gradient(top, rgba(169,3,41,1) 0%, rgba(143,2,34,1) 44%, rgba(109,0,25,1) 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(169,3,41,1)), color-stop(44%,rgba(143,2,34,1)), color-stop(100%,rgba(109,0,25,1)));
-	background: -webkit-linear-gradient(top, rgba(169,3,41,1) 0%,rgba(143,2,34,1) 44%,rgba(109,0,25,1) 100%);
-	background: -o-linear-gradient(top, rgba(169,3,41,1) 0%,rgba(143,2,34,1) 44%,rgba(109,0,25,1) 100%);
-	background: -ms-linear-gradient(top, rgba(169,3,41,1) 0%,rgba(143,2,34,1) 44%,rgba(109,0,25,1) 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a90329', endColorstr='#6d0019',GradientType=0 );
-	border:2px solid #ff6666;
-}
-input.button_submit:hover, input.button_reset:hover {
-	border:2px solid orange !important;
-	background: #aaa !important;
-	color:black;
+input[type=submit].default:hover, span.button.default:hover, ul.buttonlist li a.active:hover {
+	border:1px solid orange !important;
+	background: #2665ac !important;
+	color:white;
 }
 span.button {
 	margin: 0 0.3em;
 }
 span.button.icon {
 	padding-left:22px;
-}
-span.button.icon:hover {
-	background-color:#f0f0f0;
 }
 span.button.notify {
 	font-size: 10px !important;
@@ -2508,7 +2483,7 @@ li.cat_desc > h3 {
 	border: 1px solid #ddd;
 	padding: 5px;
 	overflow: hidden;
-	background-color: #f6f6f6;
+	/*background-color: #f6f6f6;*/
 }
 
 tr.windowbg td, tr.windowbg2 td, tr.approvebg td, tr.highlight2 td {

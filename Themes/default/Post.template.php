@@ -932,7 +932,7 @@ function template_announce()
 						</li>
 					</ul>
 					<div id="confirm_buttons">
-						<input type="submit" value="', $txt['post'], '" class="button_submit" />
+						<input type="submit" value="', $txt['post'], '" class="default" />
 						<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
 						<input type="hidden" name="topic" value="', $context['current_topic'], '" />
 						<input type="hidden" name="move" value="', $context['move'], '" />
