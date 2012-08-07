@@ -89,7 +89,7 @@
             </fieldset>
           {/if}
           <div class="righttext padding">
-            <input type="submit" name="post" value="{$T.save}" onclick="return submitThisOnce(this);" accesskey="s" class="button_submit" />
+            <input type="submit" name="post" value="{$T.save}" onclick="return submitThisOnce(this);" accesskey="s" class="default" />
           </div>
         </div>
       </div>

@@ -1542,8 +1542,6 @@ smc_BBCButtonBox.prototype.init = function ()
 
 					oCurControl.oImg = document.getElementById(this.opt.sUniqueId.php_htmlspecialchars() + '_button_' + iButtonRowIndex.toString() + '_' + iButtonIndex.toString());
 					oCurControl.oImg.style.cursor = 'pointer';
-					if ('sButtonBackgroundImage' in this.opt)
-						oCurControl.oImg.style.backgroundImage = 'url(' + this.opt.sButtonBackgroundImage + ')';
 
 					oCurControl.oImg.instanceRef = this;
 					oCurControl.oImg.onmouseover = function () {
@@ -1587,6 +1585,7 @@ smc_BBCButtonBox.prototype.handleButtonMouseOut = function (oButtonImg)
 
 smc_BBCButtonBox.prototype.updateButtonStatus = function (oButtonImg)
 {
+/*
 	var sNewURL = '';
 	if (oButtonImg.bHover && oButtonImg.bIsActive && 'sActiveButtonBackgroundImageHover' in this.opt)
 		sNewURL = 'url(' + this.opt.sActiveButtonBackgroundImageHover + ')';
@@ -1599,6 +1598,7 @@ smc_BBCButtonBox.prototype.updateButtonStatus = function (oButtonImg)
 
 	if (oButtonImg.style.backgroundImage != sNewURL)
 		oButtonImg.style.backgroundImage = sNewURL;
+*/
 }
 
 smc_BBCButtonBox.prototype.handleButtonClick = function (oButtonImg)

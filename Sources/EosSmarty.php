@@ -13,7 +13,7 @@
  *
  * this implements smarty template handling.
  */
-if (!defined('SMF'))
+if (!defined('EOSA'))
 	die('No access.');
 
 class EoS_Smarty {
@@ -484,6 +484,7 @@ class EoS_Smarty_Template_Support {
 		$context['template_copyright'] = sprintf($forum_copyright, $forum_version);
   		$context['inline_footer_script'] .= $txt['jquery_timeago_loc'];
 		$context['show_load_time'] = !empty($modSettings['timeLoadPageEnable']);
+		$context['hidden_sid_input'] = '<input type="hidden" name="' . $context['session_var'] . '" value="' . $context['session_id'] . '" />';
 
 		if (isset($settings['use_default_images']) && $settings['use_default_images'] == 'defaults' && isset($settings['default_template']))
 		{
@@ -569,4 +570,3 @@ class EoS_Smarty_Template_Support {
 		}
 	}
 }
-?>

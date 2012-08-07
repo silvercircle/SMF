@@ -40,7 +40,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 // No Direct Access!
-if (!defined('SMF'))
+if (!defined('EOSA'))
     die('No access');
 
 /**

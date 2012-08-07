@@ -49,7 +49,7 @@
           {/if}
         </dl>
         <div class="centertext">
-          <p><input type="submit" value="{$T.login}" class="button_submit" /></p>
+          <p><input type="submit" value="{$T.login}" class="default" /></p>
           <p class="smalltext"><a href="{$SCRIPTURL}?action=reminder">{$T.forgot_your_password}</a></p>
           <input type="hidden" name="hash_passwrd" value="" />
         </div>

@@ -193,4 +193,6 @@ $txt['pm_readable_buddy'] = 'sender is a buddy';
 $txt['pm_readable_label'] = 'apply label &quot;{LABEL}&quot;';
 $txt['pm_readable_delete'] = 'delete the message';
 $txt['pm_readable_then'] = '<strong>then</strong>';
-
+$txt['pm_conversation_view'] = 'Conversation view';
+$txt['pm_single_view'] = 'Single message view';
+$txt['pm_flat_view'] = 'Flat view';

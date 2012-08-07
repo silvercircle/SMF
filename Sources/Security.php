@@ -11,7 +11,7 @@
  *
  * @version 1.0pre
  */
-if (!defined('SMF'))
+if (!defined('EOSA'))
 	die('Hacking attempt...');
 
 /*	This file has the very important job of insuring forum security.  This
@@ -1157,5 +1157,3 @@ function constructBanQueryIP($fullip)
 
 	return $ban_query;
 }
-
-?>

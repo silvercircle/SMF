@@ -55,7 +55,6 @@
       var sideBarWidth = 250;
       var sidebar_disabled = {$U.smf_sidebar_disabled};
       var cookie = readCookie('SMF_textsize');
-      var fb_appid = '{$M.fb_appid}';
       var ssp_imgpath = '{$S.images_url}/share';
       var textsize = cookie ? parseInt(cookie) : textSizeDefault;
       var anchor = document.getElementsByTagName('SCRIPT')[0];
@@ -241,7 +240,7 @@
     <a href="{$C.query_string};sbtoggle" data-class="{$C.sidebar_class}" onclick="sbToggle($(this));return(false);" id="sbtoggle" class="{($sidebar_vis) ? 'collapse' : 'expand'}">&nbsp;</a>
   {/if}
   {* Show the navigation tree. *}
-  {if $C.can_search}
+  {if isset($C.can_search) and !empty($C.can_search)}
   <div style="position:relative;">
     <form onmouseout="return false;" onsubmit="submitSearchBox();" class="floatright" id="search_form" action="{$SCRIPTURL}?action=search2" method="post" accept-charset="UTF-8">
       <div id="adv_search" style="width:246px;padding:0;" class="smalltext">

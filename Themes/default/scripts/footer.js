@@ -21,8 +21,7 @@
         var defaults = {
             'services' : {
                 'facebook' : {
-                    'status'            : fb_appid.length > 0 ? 'on' : 'off',
-                    'app_id'            : fb_appid,
+                    'status'            : 'on',
                     'dummy_img'         : ssp_imgpath + '/dummy_facebook_en.png',
                     'txt_info'          : '2 clicks for more privacy: The first click activates the Facebook connection and allows you to submit your recommendation.',
                     'txt_fb_off'        : 'not connected to Facebook',
@@ -30,7 +29,8 @@
                     'perma_option'      : 'on',
                     'display_name'      : 'Facebook',
                     'referrer_track'    : '',
-                    'language'          : 'en_US'
+                    'language'          : 'en_US',
+                    'action'            : 'recommend'
                 }, 
                 'twitter' : {
                     'status'            : 'on', 
@@ -67,7 +67,7 @@
         // Standardwerte des Plug-Ings mit den vom User angegebenen Optionen ueberschreiben
         var options = $.extend(true, defaults, options);
 
-        if((options.services.facebook.status == 'on' && options.services.facebook.app_id != '__FB_APP-ID__') || options.services.twitter.status == 'on' || options.services.gplusone.status == 'on'){
+        if(options.services.facebook.status == 'on' || options.services.twitter.status == 'on' || options.services.gplusone.status == 'on'){
             //$('head').append('<link rel="stylesheet" type="text/css" href="'+options.css_path+'" />');
             $(this).prepend('<ul class="social_share_privacy_area"></ul>');
             var context = $('.social_share_privacy_area', this);
@@ -124,35 +124,25 @@
         return this.each(function(){
             // Facebook
             if(options.services.facebook.status == 'on'){
-                // Kontrolle ob Facebook App-ID hinterlegt ist, da diese noetig fuer den Empfehlen-Button ist
-                if(options.services.facebook.app_id != '__FB_APP-ID__'){
-                    var fb_enc_uri = encodeURIComponent(uri+options.services.facebook.referrer_track);
-                    var fb_code = '<iframe src="http://www.facebook.com/plugins/like.php?locale='+options.services.facebook.language+'&amp;app_id='+options.services.facebook.app_id+'&amp;href='+fb_enc_uri+'&amp;send=false&amp;layout=button_count&amp;width=240&amp;show_faces=false&amp;action=recommend&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden;" allowTransparency="true"></iframe>';
-                    var fb_dummy_btn = '<img src="'+options.services.facebook.dummy_img+'" alt="Facebook &quot;Like&quot;-Dummy" class="fb_like_privacy_dummy" />';
+                var fb_enc_uri = encodeURIComponent(uri + options.services.facebook.referrer_track);
+                var fb_code = '<iframe src="http://www.facebook.com/plugins/like.php?locale=' + options.services.facebook.language + '&amp;href=' + fb_enc_uri + '&amp;send=false&amp;layout=button_count&amp;width=120&amp;show_faces=false&amp;action=' + options.services.facebook.action + '&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:145px; height:21px;" allowTransparency="true"></iframe>';
+                var fb_dummy_btn = '<img src="' + options.services.facebook.dummy_img + '" alt="Facebook &quot;Like&quot;-Dummy" class="fb_like_privacy_dummy" />';
 
-                    context.append('<li class="facebook help_info"><span class="info">'+options.services.facebook.txt_info+'</span><span class="switch off">'+options.services.facebook.txt_fb_off+'</span><div class="fb_like dummy_btn">'+fb_dummy_btn+'</div></li>');
+                context.append('<li class="facebook help_info"><span class="info">' + options.services.facebook.txt_info + '</span><span class="switch off">' + options.services.facebook.txt_fb_off + '</span><div class="fb_like dummy_btn">' + fb_dummy_btn + '</div></li>');
 
-                    var $container_fb = $('li.facebook', context);
+                var $container_fb = $('li.facebook', context);
 
-                    $('li.facebook div.fb_like img.fb_like_privacy_dummy,li.facebook span.switch', context).live('click', function(){
-                        if($container_fb.find('span.switch').hasClass('off')){
-                            $container_fb.addClass('info_off');
-                            $container_fb.find('span.switch').addClass('on').removeClass('off').html(options.services.facebook.txt_fb_on);
-                            $container_fb.find('img.fb_like_privacy_dummy').replaceWith(fb_code);
-                        }
-                        else{
-                            $container_fb.removeClass('info_off');
-                            $container_fb.find('span.switch').addClass('off').removeClass('on').html(options.services.facebook.txt_fb_off);
-                            $container_fb.find('.fb_like').html(fb_dummy_btn);
-                        }
-                    });
-                }
-                else{
-                    try{
-                        console.log('Fehler: Es ist keine Facebook App-ID hinterlegt.');
+                $('li.facebook div.fb_like img.fb_like_privacy_dummy,li.facebook span.switch', context).live('click', function () {
+                    if ($container_fb.find('span.switch').hasClass('off')) {
+                        $container_fb.addClass('info_off');
+                        $container_fb.find('span.switch').addClass('on').removeClass('off').html(options.services.facebook.txt_fb_on);
+                        $container_fb.find('img.fb_like_privacy_dummy').replaceWith(fb_code);
+                    } else {
+                        $container_fb.removeClass('info_off');
+                        $container_fb.find('span.switch').addClass('off').removeClass('on').html(options.services.facebook.txt_fb_off);
+                        $container_fb.find('.fb_like').html(fb_dummy_btn);
                     }
-                    catch(e){ }
-                }
+                });
             }
 
             // Twitter
@@ -228,7 +218,7 @@
 
             // Menue zum dauerhaften Einblenden der aktiven Dienste via Cookie einbinden
             // Die IE7 wird hier ausgenommen, da er kein JSON kann und die Cookies hier ueber JSON-Struktur abgebildet werden
-            if(((options.services.facebook.status == 'on' && options.services.facebook.perma_option == 'on' && options.services.facebook.app_id != '__FB_APP-ID__') || (options.services.twitter.status == 'on' && options.services.twitter.perma_option == 'on') || (options.services.gplus.status == 'on' && options.services.gplus.perma_option == 'on')) && (($.browser.msie && $.browser.version > 7.0) || !$.browser.msie)){
+            if(((options.services.facebook.status == 'on' && options.services.facebook.perma_option == 'on') || (options.services.twitter.status == 'on' && options.services.twitter.perma_option == 'on') || (options.services.gplus.status == 'on' && options.services.gplus.perma_option == 'on')) && (($.browser.msie && $.browser.version > 7.0) || !$.browser.msie)){
                 // Cookies abrufen
                 var cookie_list = document.cookie.split(';');
                 var cookies = '{';
@@ -267,7 +257,7 @@
                 $container_settings_info.find('.settings_info_menu').append('<span class="settings">Settings</span><form><fieldset><legend>'+options.settings_perma+'</legend></fieldset></form>');
 
                 // Die Dienste mit <input> und <label>, sowie checked-Status laut Cookie, schreiben
-                if(options.services.facebook.status == 'on' && options.services.facebook.perma_option == 'on' && options.services.facebook.app_id != '__FB_APP-ID__'){
+                if(options.services.facebook.status == 'on' && options.services.facebook.perma_option == 'on'){
                     var perma_status_facebook = '';
                     cookies.socialSharePrivacy_facebook == 'perma_on' ? perma_status_facebook = ' checked="checked"' : perma_status_facebook = '';
                     $container_settings_info.find('form fieldset').append('<input type="checkbox" name="perma_status_facebook" id="perma_status_facebook"'+perma_status_facebook+' /><label for="perma_status_facebook">'+options.services.facebook.display_name+'</label>');
@@ -318,7 +308,7 @@
                 });
 
                 // Dienste automatisch einbinden, wenn entsprechendes Cookie vorhanden ist
-                if(options.services.facebook.status == 'on' && options.services.facebook.perma_option == 'on' && cookies.socialSharePrivacy_facebook == 'perma_on' && options.services.facebook.app_id != '__FB_APP-ID__'){
+                if(options.services.facebook.status == 'on' && options.services.facebook.perma_option == 'on' && cookies.socialSharePrivacy_facebook == 'perma_on'){
                     $('li.facebook span.switch', context).click();
                 }
                 if(options.services.twitter.status == 'on' && options.services.twitter.perma_option == 'on' && cookies.socialSharePrivacy_twitter == 'perma_on'){

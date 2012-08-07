@@ -81,7 +81,7 @@ $context['template_hooks']['global'] = array(
 	'header' => ''
 );
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
-$context['jsver'] = '?v=1574';
+$context['jsver'] = '?v=1575';
 $context['jquery_version'] = '1.7.2';
 $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();
@@ -143,7 +143,6 @@ function smf_main()
 		header('Content-Type: image/gif');
 		die("\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00\x00\x00\x00\x21\xF9\x04\x01\x00\x00\x00\x00\x2C\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3B");
 	}
-
 	// Load the user's cookie (or set as guest) and load their settings.
 	loadUserSettings();
 
@@ -152,6 +151,7 @@ function smf_main()
 
 	// Load the current user's permissions.
 	loadPermissions();
+	$context['can_search'] = allowedTo('search_posts');
 	$context['additional_admin_errors'] .= CacheAPI::verifyFileCache();
 
 	// Attachments don't require the entire theme to be loaded.
@@ -176,7 +176,6 @@ function smf_main()
 	$context['can_see_hidden_level1'] = allowedTo('see_hidden1');
 	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
 	$context['can_see_hidden_level2'] = allowedTo('see_hidden2');
-	$context['can_search'] = allowedTo('search_posts');
 
 	// If we are in a topic and don't have permission to approve it then duck out now.
 	if (!empty($topic) && empty($board_info['cur_topic_approved']) && !allowedTo('approve_posts') && ($user_info['id'] != $board_info['cur_topic_starter'] || $user_info['is_guest']))

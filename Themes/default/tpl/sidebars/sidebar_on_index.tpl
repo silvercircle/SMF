@@ -84,10 +84,9 @@
           </div>
         {/if}
         <label for="cookielength" class="aligned">{$T.always_logged_in}</label><input id="cookielength" type="checkbox" class="input_check aligned" name="cookielength" value="-1" />
-        <input style="width:90%;margin-left:5%;margin-top:10px;" type="submit" value="{$T.login}" class="button_submit" /><br />
+        <input style="width:90%;margin-left:5%;margin-top:10px;margin-bottom:10px;" type="submit" value="{$T.login}" class="default" /><br />
         <input type="hidden" name="hash_passwrd" value="" />
     </form>
-    <br>
     {if !(!empty($M.registration_method) and $M.registration_method == 3)}
         {$T.login_or_register}
     {else}

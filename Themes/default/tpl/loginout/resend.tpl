@@ -23,7 +23,7 @@
         <dd><input type="text" name="code" size="30" class="input_text" /></dd>
       </dl>
     {/if}
-    <p><input type="submit" value="{$T.invalid_activation_resend}" class="button_submit" /></p>
+    <p><input type="submit" value="{$T.invalid_activation_resend}" class="default" /></p>
   </div>
 </form>
 {/block}

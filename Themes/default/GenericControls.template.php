@@ -60,7 +60,7 @@ function template_control_richedit($editor_id, $smileyContainer = null, $bbcCont
 			echo ' ]
 					},
 					sSmileyBoxTemplate: ', JavaScriptEscape('
-						%smileyRows% %moreSmileys%
+						%smileyRows%
 					'), ',
 					sSmileyRowTemplate: ', JavaScriptEscape('
 						<div>%smileyRow%</div>

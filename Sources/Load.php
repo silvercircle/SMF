@@ -1699,6 +1699,9 @@ function loadTheme($id_theme = 0, $initialize = true)
 	if ($context['theme_variant'] == '' || !in_array($context['theme_variant'], $settings['theme_variants']))
 		$context['theme_variant'] = !empty($settings['default_variant']) && in_array($settings['default_variant'], $settings['theme_variants']) ? $settings['default_variant'] : $settings['theme_variants'][0];
 
+	if(!in_array($context['theme_variant'], $settings['theme_variants']))
+		$context['theme_variant'] = 'default';
+	
 	// Do this to keep things easier in the templates.
 	$context['theme_variant'] = '_' . $context['theme_variant'];
 	$context['theme_variant_url'] = $context['theme_variant'] . '/';
@@ -2734,6 +2737,7 @@ function logSpider()
 		);
 	}
 }
+
 /*
  * left here for compatibility...
  */

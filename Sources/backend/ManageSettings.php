@@ -200,7 +200,7 @@ function ModifySocialSettingsGeneral()
 			array('check', 'embed_GA'),
 			array('text', "GA_tracker_id"),
 			array('text', 'GA_domain_name'),
-			array('text', 'fb_appid'),
+			//array('text', 'fb_appid'),
 			array('text', 'twitter_id'),
 			array('check', 'embed_piwik'),
 			array('text', 'piwik_uri'),

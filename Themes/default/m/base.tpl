@@ -49,7 +49,6 @@
       var sideBarWidth = 250;
       var sidebar_content_loaded = 0;
       var cookie = readCookie('SMF_textsize');
-      var fb_appid = '{$M.fb_appid}';
       var ssp_imgpath = '{$S.images_url}/share';
       var textsize = cookie ? parseInt(cookie) : textSizeDefault;
       var anchor = document.getElementsByTagName('SCRIPT')[0];

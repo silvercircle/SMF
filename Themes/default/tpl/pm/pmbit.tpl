@@ -95,35 +95,7 @@
     {if !empty($message.is_replied_to)}
       <div style="margin:3px;" class="tinytext lowcontrast">{$T.pm_is_replied_to}</div>
     {/if}
-    <div class="post">
-      {if $C.folder != 'sent' and !empty($C.currently_using_labels) and $C.display_mode}
-        <div class="labels righttext floatright">
-        {if !empty($C.currently_using_labels)}
-          <select name="pm_actions[{$message.id}]" onchange="if (this.options[this.selectedIndex].value) form.submit();">
-            <option value="">{$T.pm_msg_label_title}:</option>
-            <option value="" disabled="disabled">---------------</option>
-            {if !$message.fully_labeled}
-              <option value="" disabled="disabled">{$T.pm_msg_label_apply}:</option>
-              {foreach $C.labels as $label}
-                {$this_id = $label.id}
-                {if !isset($message.labels.$this_id)}
-                  <option value="{$label.id}">&nbsp;{$label.name}</option>
-                {/if}
-              {/foreach}
-            {/if}
-            {if !empty($message.labels) and (count($message.labels) > 1 or !isset($message['labels'][-1]))}
-              <option value="" disabled="disabled">{$T.pm_msg_label_remove}:</option>
-              {foreach $message.labels as $label}
-                <option value="{$label.id}">&nbsp;{$label.name}</option>
-              {/foreach}
-            {/if}
-          </select>
-          <noscript>
-            <input type="submit" value="{$T.pm_apply}" class="button_submit" />
-          </noscript>
-        {/if}
-        </div>
-      {/if}
+    <div class="post pm">
       <div class="inner" id="msg_{$message.id}">
         {$message.body}
       </div>
@@ -154,7 +126,35 @@
     </div>
    </div>
   <div class="post_bottom">
-    <ul class="floatright plainbuttonlist">
+    {if $C.folder != 'sent' and !empty($C.currently_using_labels) and $C.display_mode}
+      <div class="labels righttext floatright">
+      {if !empty($C.currently_using_labels)}
+        <select style="margin:0;padding:2px;height:20px;" name="pm_actions[{$message.id}]" onchange="if (this.options[this.selectedIndex].value) form.submit();">
+          <option value="">{$T.pm_msg_label_title}:</option>
+          <option value="" disabled="disabled">---------------</option>
+          {if !$message.fully_labeled}
+            <option value="" disabled="disabled">{$T.pm_msg_label_apply}:</option>
+            {foreach $C.labels as $label}
+              {$this_id = $label.id}
+              {if !isset($message.labels.$this_id)}
+                <option value="{$label.id}">&nbsp;{$label.name}</option>
+              {/if}
+            {/foreach}
+          {/if}
+          {if !empty($message.labels) and (count($message.labels) > 1 or !isset($message['labels'][-1]))}
+            <option value="" disabled="disabled">{$T.pm_msg_label_remove}:</option>
+            {foreach $message.labels as $label}
+              <option value="{$label.id}">&nbsp;{$label.name}</option>
+            {/foreach}
+          {/if}
+        </select>
+        <noscript>
+          <input type="submit" value="{$T.pm_apply}" class="button_submit" />
+        </noscript>
+      {/if}
+      </div>
+    {/if}
+    <ul class="floatright plainbuttonlist" style="margin-top:2px;">
     {if $C.can_send_pm}
       {$label = ($C.current_label_id != -1) ? (';l='|cat:$C.current_label_id) : ''}
       {if !$message.member.is_guest}

@@ -15,7 +15,7 @@
       <strong>{$T.password}:</strong>
       <input type="password" name="admin_pass" size="24" class="input_password" />
       <a href="{$SCRIPTURL}?action=helpadmin;help=securityDisable_why" onclick="return reqWin(this.href);" class="help"><strong>[{$T.help}]&nbsp;&nbsp;</strong></a><br />
-      <input type="submit" style="margin-top: 1em;" value="{$T.login}" class="button_submit" />
+      <input type="submit" style="margin-top: 1em;" value="{$T.login}" class="default" />
       {$C.post_data}
     </div>
   </div>

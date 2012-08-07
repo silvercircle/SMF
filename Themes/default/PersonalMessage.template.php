@@ -45,7 +45,7 @@ function template_pm_below()
 	global $context, $settings, $options;
 
 	echo '
-	</div></div>';
+	</div>';
 }
 
 function template_folder()
@@ -148,8 +148,8 @@ function template_folder()
 		<div class="floatright tinytext">
 	 		<a href="', $scripturl, '?action=pm;view;f=', $context['folder'], ';start=', $context['start'], ';sort=', $context['sort_by'], ($context['sort_direction'] == 'up' ? '' : ';desc'), ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : ''), '">',$txt['pm_change_view'],'</a>
 		</div>
-		<h3>',CommonAPI::ucfirst($context['folder']),'</h3>
-	</div';
+		<h3>',$context['pmboxname'],' (', $context['display_mode'] == 1 ? $txt['pm_single_view'] : $txt['pm_flat_view'], ')</h3>
+	</div>';
 
 	echo '
 	<div class="clear"></div>';
@@ -204,9 +204,6 @@ function template_folder()
 			echo '
 	</div>';
 		}
-
-		echo '
-		<br />';
 	}
 	else 
 		echo '
@@ -237,7 +234,7 @@ function template_subject_list()
 		<div class="floatright tinytext">
 	 		<a href="', $scripturl, '?action=pm;view;f=', $context['folder'], ';start=', $context['start'], ';sort=', $context['sort_by'], ($context['sort_direction'] == 'up' ? '' : ';desc'), ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : ''), '">',$txt['pm_change_view'],'</a>
 	 	</div>
-		<h3>',CommonAPI::ucfirst($context['folder']),'</h3>
+		<h3>',$context['pmboxname'],' (',$txt['pm_conversation_view'], ')</h3>
 	</div>';
 	echo '
 	<div class="clear"></div>
@@ -305,9 +302,9 @@ function template_subject_list()
 	</tbody>
 	</table>
 	</div>
-	<div class="pagesection">
-		<div class="floatleft">', $txt['pages'], ': ', $context['page_index'], '</div>
-		<div class="floatright">&nbsp;';
+	<div class="pagesection pagelinks">
+		', $context['page_index'], '
+	<div class="floatright">&nbsp;';
 
 	if ($context['show_delete'])
 	{
@@ -1388,9 +1385,9 @@ function template_add_rule()
 			<div id="ruletext">', $txt['pm_rule_js_disabled'], '</div>
 		</div>
 		<br>
-		<div class="righttext">
+		<div class="righttext smallpadding">
 			<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
-			<input type="submit" name="save" value="', $txt['pm_rule_save'], '" class="button_submit" />
+			<input type="submit" name="save" value="', $txt['pm_rule_save'], '" class="default" />
 		</div>
 	</form>';
 

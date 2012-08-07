@@ -66,7 +66,6 @@ function template_html_above()
     var timeOffsetMember = {$timeoff};
     var sidebar_disabled = {$user_info['smf_sidebar_disabled']};
 	var cookie = readCookie('SMF_textsize');
-	var fb_appid = '{$modSettings['fb_appid']}';
 	var ssp_imgpath = '{$settings['images_url']}/share';
 	var textsize = cookie ? parseInt(cookie) : textSizeDefault;
 	var anchor = document.getElementsByTagName('SCRIPT')[0];
@@ -283,7 +282,7 @@ function template_body_above()
 		echo '
     		<a href="',$context['query_string'],';sbtoggle" data-class="',$context['sidebar_class'],'" onclick="sbToggle($(this));return(false);" id="sbtoggle" class="',($sidebar_vis ? 'collapse' : 'expand'),'">&nbsp;</a>';
 	// Show the navigation tree.
-	if($context['can_search']) {
+	if(isset($context['can_search']) && !empty($context['can_search'])) {
 	echo '<div style="position:relative;">
 		  <form onmouseout="return false;" onsubmit="submitSearchBox();" class="floatright" id="search_form" action="', $scripturl, '?action=search2" method="post" accept-charset="UTF-8">';
 			// Search within current topic?

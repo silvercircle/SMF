@@ -113,7 +113,6 @@ function MessageMain()
 	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	loadLanguage('PersonalMessage');
-	loadTemplate('PersonalMessage');
 
 	$context['need_synhlt'] = true;
 	// Load up the members maximum message capacity.
@@ -271,10 +270,17 @@ function MessageMain()
 		'settings' => 'MessageSettings',
 	);
 
-	if (!isset($_REQUEST['sa']) || !isset($subActions[$_REQUEST['sa']]))
+	if (!isset($_REQUEST['sa']) || !isset($subActions[$_REQUEST['sa']])) {
 		MessageFolder();
+		EoS_Smarty::loadTemplate('pm/folder');
+	}
 	else
-	{
+	{	
+		$sa = $_REQUEST['sa'];
+		if($sa == 'send' || $sa == 'send2')
+			EoS_Smarty::loadTemplate('pm/send');
+		else
+			loadTemplate('PersonalMessage');
 		messageIndexBar($_REQUEST['sa']);
 		$subActions[$_REQUEST['sa']]();
 	}
@@ -421,9 +427,10 @@ function messageIndexBar($area)
 // A folder, ie. inbox/sent etc.
 function MessageFolder()
 {
-	global $txt, $scripturl, $modSettings, $context, $subjects_request, $output;
+	global $txt, $scripturl, $modSettings, $context, $subjects_request;
 	global $messages_request, $user_info, $recipients, $options, $smcFunc, $memberContext, $user_settings;
 
+	$_ctx = new PMContext();
 	// Changing view?
 	if (isset($_GET['view']))
 	{
@@ -446,8 +453,6 @@ function MessageFolder()
 			array('member' => $user_info['id'], 'type' => 6));
 		invalidateMemberData($user_info['id']);
 	}
-	EoS_Smarty::getConfigInstance()->assignGlobals();
-	EoS_Smarty::getSmartyInstance()->assignByRef('message', $output);
 
 	// Set up some basic theme stuff.
 	$context['from_or_to'] = $context['folder'] != 'sent' ? 'from' : 'to';
@@ -537,7 +542,9 @@ function MessageFolder()
 
 	// Only show the button if there are messages to delete.
 	$context['show_delete'] = $max_messages > 0;
-
+	$last = end($context['linktree']);
+	reset($context['linktree']);
+	$context['pmboxname'] = $last['name'];
 	// Start on the last page.
 	if (!is_numeric($_GET['start']) || $_GET['start'] >= $max_messages)
 		$_GET['start'] = ($max_messages - 1) - (($max_messages - 1) % $modSettings['defaultMaxMessages']);
@@ -853,6 +860,11 @@ function MessageFolder()
 	$context['sub_template'] = 'folder';
 	$context['page_title'] = $txt['pm_inbox'];
 
+    $context['conversation_buttons'] = array(
+        'reply' => array('text' => 'reply_to_all', 'image' => 'reply.gif', 'lang' => true, 'url' => $scripturl . '?action=pm;sa=send;f=' . $context['folder'] . ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '') . ';pmsg=' . $context['current_pm'] . ';u=all', 'active' => true),
+        'delete' => array('text' => 'delete_conversation', 'image' => 'delete.gif', 'lang' => true, 'url' => $scripturl . '?action=pm;sa=pmactions;pm_actions[' . $context['current_pm'] . ']=delete;conversation;f=' . $context['folder'] . ';start=' . $context['start'] . ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '') . ';' . $context['session_var'] . '=' . $context['session_id'], 'custom' => 'onclick="return confirm(\'' . addslashes($txt['remove_message']) . '?\');"'),
+    );
+
 	// Finally mark the relevant messages as read.
 	if ($context['folder'] != 'sent' && !empty($context['labels'][(int) $context['current_label_id']]['unread_messages']))
 	{
@@ -869,7 +881,7 @@ function MessageFolder()
 function prepareMessageContext($type = 'subject', $reset = false)
 {
 	global $txt, $scripturl, $modSettings, $context, $messages_request, $memberContext, $recipients, $output;
-	global $user_info, $subjects_request;
+	global $user_info, $subjects_request, $settings;
 
 	// Count the current message number....
 	static $counter = null;
@@ -913,9 +925,12 @@ function prepareMessageContext($type = 'subject', $reset = false)
 			'is_replied_to' => &$context['message_replied'][$subject['id_pm']],
 			'is_unread' => &$context['message_unread'][$subject['id_pm']],
 			'is_selected' => !empty($temp_pm_selected) && in_array($subject['id_pm'], $temp_pm_selected),
+			'subject_row' => ($context['display_mode'] != 0 && $context['current_pm'] == $subject['id_pm'] ? '<img src="' . $settings['images_url'] . '/selected.gif" alt="*" />' : '') . 
+				'<a href="' . ($context['display_mode'] == 0 || $context['current_pm'] == $subject['id_pm'] ? '' : ($scripturl . '?action=pm;pmid=' . $subject['id_pm'] . ';kstart;f=' . $context['folder'] . ';start=' . $context['start'] . ';sort=' . $context['sort_by'] . ($context['sort_direction'] == 'up' ? ';' : ';desc') . ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '') . '#msg' . $subject['id_pm'])) . '">' . $subject['subject'] . '</a>' . 
+				($context['message_unread'][$subject['id_pm']] ? '&nbsp;<img src="' . $settings['images_url'] . '/new.png" alt="' . $txt['new'] . '" />' : ''),
 		);
 
-		return $output;
+		return true;
 	}
 
 	// Bail if it's false, ie. no messages.
@@ -985,7 +1000,7 @@ function prepareMessageContext($type = 'subject', $reset = false)
 
 	$counter++;
 
-	return $output;
+	return true;
 }
 
 function MessageSearch()
@@ -1525,8 +1540,8 @@ function MessagePost()
 
 	loadLanguage('PersonalMessage');
 	// Just in case it was loaded from somewhere else.
-	loadTemplate('PersonalMessage');
-	$context['sub_template'] = 'send';
+	//loadTemplate('PersonalMessage');
+	//EoS_Smarty::loadTemplate('pm/send');
 
 	// Extract out the spam settings - cause it's neat.
 	list ($modSettings['max_pm_recipients'], $modSettings['pm_posts_verification'], $modSettings['pm_posts_per_hour']) = explode(',', $modSettings['pm_spam_settings']);
@@ -1763,7 +1778,7 @@ function MessagePost()
 	$editorOptions = array(
 		'id' => 'message',
 		'value' => $context['message'],
-		'height' => '175px',
+		'height' => '300px',
 		'width' => '100%',
 		'labels' => array(
 			'post_button' => $txt['send_message'],
@@ -3560,4 +3575,24 @@ function isAccessiblePM($pmID, $validFor = 'in_or_outbox')
 	}
 }
 
-?>
+/**
+ * helper class to implement pm-specific message callback function
+ * same method as in Search.php
+ * make $PMCONTEXT->getPmMessage() available in the template as callback
+ * function
+ */
+class PMContext
+{
+	public function __construct()
+	{
+		global $output;
+
+		EoS_Smarty::getSmartyInstance()->assignByRef('PMCONTEXT', $this);
+		EoS_Smarty::getSmartyInstance()->assignByRef('message', $output);
+	}
+
+	public function getPmMessage($get_what = 'subject', $reset = false)
+	{
+		return prepareMessageContext($get_what, $reset);
+	}
+}

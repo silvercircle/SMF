@@ -13,7 +13,7 @@
     <dt>{$T.invalid_activation_retry}:</dt>
     <dd><input type="text" name="code" size="30" class="input_text" /></dd>
   </dl>
-  <p><input type="submit" value="{$T.invalid_activation_submit}" class="button_submit" /></p>
+  <p><input type="submit" value="{$T.invalid_activation_submit}" class="default" /></p>
   </div>
 </form>
 {/block}

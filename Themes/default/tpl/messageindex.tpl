@@ -135,7 +135,7 @@
               {foreach from=$C.move_to_boards item=cat}
                 <optgroup label="{$cat.name}">
                 {foreach from=$cat.boards item=board}
-                  <option value="{$board.id}"{($board.selected) ? ' selected="selected"' : ''}>{($board.child_level > 0) ? (("=="|str_repeat:$board.child_level - 1)|cat:'=&gt;') : ''} {$board.name}</option>
+                  <option value="{$board.id}"{($board.selected) ? ' selected="selected"' : ''}>{($board.child_level > 0) ? (("=="|str_repeat:($board.child_level - 1))|cat:'=&gt;') : ''} {$board.name}</option>
                 {/foreach}
               </optgroup>
               {/foreach}
@@ -162,10 +162,8 @@
   {include 'linktree.tpl'}
   
   <div class="tborder" id="topic_icons">
-    <div class="description">
-      <p class="floatright" id="message_index_jump_to">&nbsp;</p>
-      <br class="clear" />
-    </div>
+    <div class="floatright smallpadding" id="message_index_jump_to">&nbsp;</div>
+    <div class="clear"></div>
   </div>
 </div>
 {/block}

@@ -61,7 +61,6 @@ function template_html_above()
     var timeOffsetMember = {$timeoff};
     var sidebar_disabled = {$user_info['smf_sidebar_disabled']};
 	var cookie = readCookie('SMF_textsize');
-	var fb_appid = '{$modSettings['fb_appid']}';
 	var ssp_imgpath = '{$settings['images_url']}/share';
 	var textsize = cookie ? parseInt(cookie) : textSizeDefault;
 	var anchor = document.getElementsByTagName('SCRIPT')[0];

@@ -38,6 +38,7 @@ form {
     position: absolute;
     visibility: hidden;
     padding:4px;
+    background: white;
 }
 .auto_suggest_item
 {
@@ -109,7 +110,7 @@ div.popup_wrapper {
 }
 input[type="text"], input[type="password"], select {
 	color: #000;
-	border: 1px solid #ddd;
+	border: 1px solid #aac;
 	background-color: #fff;
 	border-radius: 3px;
 	padding-left:4px;
@@ -119,7 +120,7 @@ input[type="text"], input[type="password"], select {
 	font-size: 11px !important;
 	line-height:11px !important;
 	padding:4px;
-	box-shadow: 0 0 10px 0px #ddd inset;
+	box-shadow: 0 0 5px 0px #ddd inset;
 }
 input.aligned, span.cblabel, label.aligned {
 	height:20px;
@@ -458,11 +459,14 @@ span.xtag:hover {
 	background-color: #fff2f2;
 }
 /* Posts and personal messages displayed throughout the forum. */
-.post, .personalmessage {
+.post {
 	line-height: 1.3em;
 	padding: 0.5em 1.0em 0 1.0em;
 	overflow:hidden;
 	min-height: 100px;
+}
+.post.pm {
+	min-height: 40px;
 }
 .post p {
 	margin:0;
@@ -1341,7 +1345,7 @@ ol.commonlist.category {
 	padding-top:0;
 	margin: 0;
 }
-.gradient_darken_down, div.keyinfo.std, div.keyinfo.lean, div.keyinfo.pm, div.avatar.pm {
+.gradient_darken_down, div.keyinfo.std, div.keyinfo.lean, div.keyinfo.pm, div.avatar.pm, span.button, ul.buttonlist a, input[type=button], input[type=submit], .bbc_editor_button:hover {
 	background-image: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
 	background-image: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
 	background-image: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
@@ -1556,6 +1560,8 @@ div#whoisviewing {
 	/*background-color: #f5f5f5;*/
 	padding:0;
 	background: #fafafa;
+	outline: 1px solid #ddd;
+	border:1px solid white;
 	/*background: -moz-linear-gradient(left,  #e5e5e5 1%, #eaeaea 180px, #eaeaea 250px, #ffffff 90%);
 	background: -webkit-gradient(linear, left top, right top, color-stop(1%,#e5e5e5), color-stop(33%,#f5f5f5));
 	background: -webkit-linear-gradient(left,  #e5e5e5 1%,#f5f5f5 33%);
@@ -1564,9 +1570,10 @@ div#whoisviewing {
 	background: linear-gradient(left,  #e5e5e5 1%,#f5f5f5 33%);
 	*/
 	/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ececec', endColorstr='#f0f0f0',GradientType=1 );*/
-	margin-bottom:4px;
-	border:1px solid #ddd;
+	margin-bottom:10px;
+	/*border:1px solid #ddd;*/
 	/*box-shadow: 0 0 5px 0 #ccc;*/
+	border-radius:6px;
 }
 .post_wrapper.alternate {
 	background:#f2f8ff;
@@ -1640,6 +1647,7 @@ div.userbit_compact_textpart.small {
 .post_content.lean {
 	margin-left: 10px !important;
 	margin-right: 10px !important;
+	min-height:10px;
 }
 .post_content.std {
 	/*margin-right:10px;*/
@@ -1826,7 +1834,7 @@ ul.plainbuttonlist li a {
 }
 ul.buttonlist li a, span.button, input[type=button], input[type=submit] {
 	font-size: 11px !important;
-	text-shadow: 1px 1px 1px #fff;
+	text-shadow: 1px 1px 1px #eee;
 	float: left;
 	height:21px !important;
 	line-height:19px !important;
@@ -3747,8 +3755,14 @@ div.bmbar > div.title {
 .share_digg {
 	background: #D8DFEA url(../images/theme/sprite.png) 0 -422px no-repeat !important;
 }
+.bbc_editor_button {
+	padding:3px;
+	border:1px solid #f2f2f2;
+	border-radius: 3px;
+}
 .bbc_editor_button:hover {
-	background-color: #888;
+	border:1px solid #ccc;
+	background-color:#eee;
 }
 table.fnotes {
 	width: 100%;
