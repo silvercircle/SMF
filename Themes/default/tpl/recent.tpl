@@ -59,22 +59,22 @@
       <table class="topic_table">
       <thead>
         <tr>
-          <th scope="col" style="width:2%;" class="glass cleantop first_th" colspan="2">&nbsp;</th>
-          <th class="glass cleantop" scope="col">
+          <th scope="col" style="width:2%;" class="glass cleantopr first_th" colspan="2">&nbsp;</th>
+          <th class="glass cleantopr" scope="col">
             {$C.subject_sort_header}
           </th>
-          <th scope="col" style="width:14%;" class="glass centertext cleantop">
+          <th scope="col" style="width:14%;" class="glass centertext cleantopr">
             {$C.views_sort_header}
           </th>
           {if $showCheckboxes}
-            <th scope="col" style="width:22%;" class="glass cleantop">
+            <th scope="col" style="width:22%;" class="glass cleantopr">
               {$C.lastpost_sort_header}
             </th>
-            <th class="glass cleantop last_th">
-              <input type="checkbox" onclick="invertAll(this, this.form, \'topics[]\');" class="input_check" />
+            <th class="glass cleantopr last_th">
+              <input type="checkbox" onclick="invertAll(this, this.form, 'topics[]');" class="input_check" />
             </th>
           {else}
-            <th scope="col" class="glass cleantop smalltext last_th" style="width:22%;">
+            <th scope="col" class="glass cleantopr smalltext last_th" style="width:22%;">
               {$C.lastpost_sort_header}
             </th>
           {/if}
@@ -119,6 +119,7 @@
 {function unread_replies}
   <div id="recent">
   {$showCheckboxes = !empty($O.display_quick_mod) and $S.show_mark_read}
+  {$C.can_quick_mod = $showCheckboxes}
   {if $showCheckboxes}
     <form action="{$SCRIPTURL}?action=quickmod" method="post" accept-charset="UTF-8" name="quickModForm" id="quickModForm" style="margin: 0;">
       <input type="hidden" name="{$C.session_var}" value="{$C.session_id}" />
@@ -136,22 +137,22 @@
       <table class="table_grid mlist">
       <thead>
         <tr>
-          <th scope="col" class="glass cleantop first_th" style="width:8%;" colspan="2">&nbsp;</th>
+          <th scope="col" class="glass cleantopr first_th" style="width:8%;" colspan="2">&nbsp;</th>
           <th class="glass cleantopr" scope="col">
             {$C.subject_sort_header}
           </th>
-          <th class="blue_container centertext" scope="col" style="width:14%;">
+          <th class="glass centertext cleantopr" scope="col" style="width:14%;">
             {$C.views_sort_header}
           </th>
           {if $showCheckboxes}
-            <th class="blue_container" scope="col" style="width:22%;">
+            <th scope="col" style="width:22%;" class="glass cleantopr">
               {$C.lastpost_sort_header}
             </th>
-            <th class="blue_container last_th">
-              <input type="checkbox" onclick="invertAll(this, this.form, \'topics[]\');" class="input_check" />
+            <th class="glass cleantopr last_th">
+              <input type="checkbox" onclick="invertAll(this, this.form, 'topics[]');" class="input_check" />
             </th>
           {else}
-            <th scope="col" class="blue_container last_th" style="width:22%;">
+            <th scope="col" class="glass cleantopr smalltext last_th" style="width:22%;">
               {$C.lastpost_sort_header}
             </th>
           {/if}

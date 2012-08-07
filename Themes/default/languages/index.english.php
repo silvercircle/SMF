@@ -649,6 +649,7 @@ $txt['split_reset_selection'] = 'reset selection';
 
 $txt['modify_cancel'] = 'Cancel';
 $txt['mark_read_short'] = 'Mark Read';
+$txt['mark_replies_read'] = 'Mark ALL unread replies as read';
 
 $txt['pm_short'] = 'My Messages';
 $txt['pm_menu_read'] = 'Read my messages';

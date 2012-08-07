@@ -150,7 +150,7 @@
         {elseif empty($col_header.class) && $i == $header_count}
           {$col_header.class = 'last_th'}
         {/if}
-        <th scope="col" {(empty($col_header.class)) ? ' class="glass nowrap"' : (' class="glass nowrap '|cat:$col_header.class|cat:'"')} {(empty($col_header.style)) ? '' : (' style="'|cat:$col_header.style|cat:'"')} {(empty($col_header.colspan)) ? '' : (' colspan="'|cat:$col_header.colspan|cat:'"')}>{(empty($col_header.href)) ? '' : ('<a href="'|cat:$col_header.href|cat:'" rel="nofollow">')}{(empty($col_header.label)) ? '&nbsp;' : $col_header.label}{(empty($col_header.href)) ? '' : '</a>'}{(empty($col_header.sort_image)) ? '' : (' <img src="'|cat:$S.images_url|cat:'/sort_'|cat:$col_header.sort_image|cat:'.gif" alt="" />')}</th>
+        <th scope="col" {(empty($col_header.class)) ? ' class="glass cleantopr nowrap"' : (' class="glass cleantopr nowrap '|cat:$col_header.class|cat:'"')} {(empty($col_header.style)) ? '' : (' style="'|cat:$col_header.style|cat:'"')} {(empty($col_header.colspan)) ? '' : (' colspan="'|cat:$col_header.colspan|cat:'"')}>{(empty($col_header.href)) ? '' : ('<a href="'|cat:$col_header.href|cat:'" rel="nofollow">')}{(empty($col_header.label)) ? '&nbsp;' : $col_header.label}{(empty($col_header.href)) ? '' : '</a>'}{(empty($col_header.sort_image)) ? '' : (' <img src="'|cat:$S.images_url|cat:'/sort_'|cat:$col_header.sort_image|cat:'.gif" alt="" />')}</th>
       {/foreach}
       </tr>
     </thead>

@@ -1364,9 +1364,16 @@ function UnreadTopics()
 	$context['mark_read_buttons'] = '';
 
   	if($settings['show_mark_read']) {
-    	$context['mark_read_buttons'] = array(
-      		'markread' => array('text' => !empty($context['no_board_limits']) ? 'mark_as_read' : 'mark_read_short', 'image' => 'markread.gif', 'lang' => true, 'url' => $scripturl . '?action=markasread;sa=' . (!empty($context['no_board_limits']) ? 'all' : 'board' . $context['querystring_board_limits']) . ';' . $context['session_var'] . '=' . $context['session_id']),
-    	);
+  		if($is_topics) {
+    		$context['mark_read_buttons'] = array(
+      			'markread' => array('text' => !empty($context['no_board_limits']) ? 'mark_as_read' : 'mark_read_short', 'image' => 'markread.gif', 'lang' => true, 'url' => $scripturl . '?action=markasread;sa=' . (!empty($context['no_board_limits']) ? 'all' : 'board' . $context['querystring_board_limits']) . ';' . $context['session_var'] . '=' . $context['session_id'])
+    		);
+    	}
+    	else {
+    		$context['mark_read_buttons'] = array(
+      			'markread' => array('text' => 'mark_replies_read', 'image' => 'markread.gif', 'lang' => true, 'url' => $scripturl . '?action=markasread;sa=unreadreplies;' . $context['session_var'] . '=' . $context['session_id'])
+    		);
+    	}
 
     	if (!empty($options['display_quick_mod']))
       		$context['mark_read_buttons']['markselectread'] = array(

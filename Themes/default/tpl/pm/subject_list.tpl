@@ -6,24 +6,24 @@
     <h3>{$C.pmboxname} ({$T.pm_conversation_view})</h3>
   </div>
 {/if}
-<div class="clear"></div>
+<div class="spacer_h"></div>
 <div class="framed_region">
   <table width="100%" class="topic_table">
   <thead>
     <tr>
-      <th class="centertext glass cleantop first_th" style="width:4%;">
+      <th class="centertext glass cleantopr first_th" style="width:4%;">
         <a href="{$SCRIPTURL}?action=pm;view;f={$C.folder};start={$C.start};sort={$C.sort_by}{($C.sort_direction == 'up') ? '' : ';desc'}{($C.current_label_id != -1) ? (';l='|cat:$C.current_label_id) : ''}"></a>
       </th>
-      <th class="glass cleantop lefttext" style="width:22%;">
+      <th class="glass cleantopr lefttext" style="width:22%;">
         <a href="{$SCRIPTURL}?action=pm;f={$C.folder};start={$C.start};sort=date{($C.sort_by == 'date' and $C.sort_direction == 'up') ? ';desc' : ''}{($C.current_label_id != -1) ? (';l='|cat:$C.current_label_id) : ''}">{$T.date}{($C.sort_by == 'date') ? (' <img src="'|cat:$S.images_url|cat:'/sort_'|cat:$C.sort_direction|cat:'.gif" alt="" />') : ''}</a>
       </th>
-      <th class="glass cleantop lefttext" style="width:46%;">
+      <th class="glass cleantopr lefttext" style="width:46%;">
         <a href="{$SCRIPTURL}?action=pm;f={$C.folder};start={$C.start};sort=subject{($C.sort_by == 'subject' and $C.sort_direction == 'up') ? ';desc' : ''}{($C.current_label_id != -1) ? (';l='|cat:$C.current_label_id) : ''}">{$T.subject}{($C.sort_by == 'subject') ? (' <img src="'|cat:$S.images_url|cat:'/sort_'|cat:$C.sort_direction|cat:'.gif" alt="" />') : ''}</a>
       </th>
-      <th class="glass cleantop lefttext">
+      <th class="glass cleantopr lefttext">
         <a href="{$SCRIPTURL}?action=pm;f={$C.folder};start={$C.start};sort=name{($C.sort_by == 'name' and $C.sort_direction == 'up') ? ';desc' : ''}{($C.current_label_id != -1) ? (';l='|cat:$C.current_label_id) : ''}">{($C.from_or_to == 'from') ? $T.from : $T.to}{($C.sort_by == 'name') ? (' <img src="'|cat:$S.images_url|cat:'/sort_'|cat:$C.sort_direction|cat:'.gif" alt="" />') : ''}</a>
       </th>
-      <th class="centertext glass cleantop last_th" style="width:4%;">
+      <th class="centertext glass cleantopr last_th" style="width:4%;">
         <input type="checkbox" onclick="invertAll(this, this.form);" class="input_check" />
       </th>
     </tr>
