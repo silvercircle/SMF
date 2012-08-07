@@ -59,10 +59,11 @@
         <input type=\"hidden\" name=\"topic\" value=\"{$C.current_topic}\" />
         <input type=\"hidden\" name=\"msg\" value=\"%msg_id%\" />
         <input type=\"hidden\" style=\"width: 50%;\" name=\"subject\" value=\"%subject%\" size=\"50\" maxlength=\"80\" tabindex=\"{$tabindex++}\" class=\"input_text\" />
-        <div class=\"righttext\">
+        <div class=\"righttext mediummargin\">
           <span class=\"button floatright\" onclick=\"return oQuickModify.goAdvanced('{$C.session_id}', '{$C.session_var}');\" />{$T.go_advanced}</a></span>
           <span class=\"button floatright\" onclick=\"return oQuickModify.modifyCancel();\" >{$T.modify_cancel}</span>
-          <span class=\"button floatright\" onclick=\"return oQuickModify.modifySave('{$C.session_id}', '{$C.session_var}');\" accesskey=\"s\">{$T.save}</span>
+          <span class=\"button default floatright\" onclick=\"return oQuickModify.modifySave('{$C.session_id}', '{$C.session_var}');\" accesskey=\"s\">{$T.save}</span>
+          <div class=\"clear\"></div>
         </div>
         </div>")},
       sTemplateSubjectEdit: {$SUPPORT->JavaScriptEscape('<input type="text" style="width: 50%;" name="subject_edit" value="%subject%" size="50" maxlength="80" tabindex="'|cat:$tabindex|cat:'" class="input_text" />')},

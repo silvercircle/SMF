@@ -17,7 +17,7 @@
           </noscript>
         </div>
       </div>
-      <table class="table_grid">
+      <table class="table_grid" style="width:100%;">
         <thead>
           <tr>
             <th scope="col" class="centertext glass"><a href="{$SCRIPTURL}?action=who;start={$C.start};show={$C.show_by};sort=user{($C.sort_direction != 'down' and $C.sort_by == 'user') ? '' : ';asc'}" rel="nofollow">{$T.who_user} {($C.sort_by == 'user') ? "<img src=\"{$S.images_url}/sort_{$C.sort_direction}.gif\" alt=\"\" />" : ''}</a></th>
@@ -30,7 +30,7 @@
         {$seq = 0}
         {foreach $C.members as $member}
           <tr class="topicrow{($alternate) ? ' alternate' : ''}">
-            <td style="width:60%;">
+            <td style="width:30%;">
             {if $member.is_guest == 0 and !empty($member.online)}
               <span class="contact_info floatright">
                 {($C.can_send_pm) ? ('<a href="'|cat:$member.online.href|cat:'" title="'|cat:$member.online.label|cat:'">') : ''} {($S.use_image_buttons) ? ('<img src="'|cat:$member.online.image_href|cat: '" alt="'|cat: $member.online.text|cat:'" />') : $member.online.text}{($C.can_send_pm) ? '</a>' : ''}
@@ -45,7 +45,7 @@
               <div class="tinytext" style="display:none;" id="tip_{$seq}">{$member.user_agent}</div>
             {/if}
             </td>
-            <td class="nowrap">{$member.time}</td>
+            <td style="width:20%;" class="nowrap">{$member.time}</td>
             <td style="width:100%;">{$member.action}</td>
           </tr>
           {$alternate = !$alternate}

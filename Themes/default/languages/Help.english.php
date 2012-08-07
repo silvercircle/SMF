@@ -378,7 +378,6 @@ $helptxt['oldTopicDays'] = 'If this option is enabled a warning will be displaye
 $helptxt['edit_wait_time'] = 'Number of seconds allowed for a post to be edited before logging the last edit date.';
 $helptxt['edit_disable_time'] = 'Number of minutes allowed to pass before a user can no longer edit a post they have made. Set to 0 disable. <br /><br /><em>Note: This will not affect any user who has permission to edit other people\'s posts.</em>';
 $helptxt['posts_require_captcha'] = 'This setting will force users to pass anti-spam bot verification each time they make a post to a board. Only users with a post count below the number set will need to enter the code - this should help combat automated spamming scripts.';
-$helptxt['enableSpellChecking'] = 'Enable spell checking. You MUST have the pspell library installed on your server and your PHP configuration set up to use the pspell library. Your server ' . (function_exists('pspell_new') ? 'DOES' : 'DOES NOT') . ' appear to have this set up.';
 $helptxt['disable_wysiwyg'] = 'This setting disallows all users from using the WYSIWYG (&quot;What You See Is What You Get&quot;) editor on the post page.';
 $helptxt['post_cache_cutoff'] = 'This setting largely depends on how busy your forum is. If threads die off quickly, you may set this to something like 10 days, otheriwse set it higher. This setting helps to preserve database space on large forums';
 $helptxt['enableUserTagging'] = 'If enabled, members can mention other members in posts, using a simple @Name1,name2: syntax.<br><br>

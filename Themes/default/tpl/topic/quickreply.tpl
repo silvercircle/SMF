@@ -46,7 +46,7 @@
           <label class="aligned" for="want_automerge">{$T.want_automerge}</label>
         {/if}
       </div>
-      <div class="righttext padding">
+      <div class="righttext smallpadding">
         <input type="submit" name="post" value="{$T.post}" onclick="return submitThisOnce(this);" accesskey="s" tabindex="{$tabindex++}" class="default" />
         <input type="submit" name="preview" value="{$T.go_advanced}" onclick="return submitThisOnce(this);" accesskey="p" tabindex="{$tabindex++}" class="button_submit" />
         <input type="submit" name="cancel" value="Cancel" onclick="return(oQuickReply.cancel());" accesskey="p" tabindex="{$tabindex++}" class="button_submit" />

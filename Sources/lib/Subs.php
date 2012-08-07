@@ -663,7 +663,6 @@ function constructPageIndex($base_url, &$start, $max_value, $num_per_page, $flex
 		$pageindex .= '<span style="font-weight: bold;" onclick="' . htmlspecialchars('expandPages(this, ' . JavaScriptEscape(($flexible_start ? $base_url : strtr($base_url, array('%' => '%%')) . ';start=%1$d')) . ', ' . $num_per_page . ', ' . ($start - $num_per_page * $PageContiguous) . ', ' . $num_per_page . ');') . '" onmouseover="this.style.cursor = \'pointer\';"> ... </span>';
 		$need_direct_input = true;
 	}
-
 	// Show the pages before the current one. (1 ... >6 7< [8] 9 10 ... 15)
 	for ($nCont = $PageContiguous; $nCont >= 1; $nCont--)
 		if ($start >= $num_per_page * $nCont)
@@ -703,10 +702,10 @@ function constructPageIndex($base_url, &$start, $max_value, $num_per_page, $flex
 		$data_url = strtr($base_url, array('%1$d' => '[[PAGE]]'));		// [[PAGE]] is the placeholder for the JS code to generate the final URL
 		if(false === strstr($data_url, '[[PAGE]]'))			// non-pretty url, append the ;start=
 			$data_url = $base_url . ';start=[[PAGE]]';
-		$prefix = sprintf('<span data-perpage="'.$num_per_page.'" data-urltemplate="'.$data_url.'" class="prefix'.(isset($need_direct_input) ? ' drop" title="Click to enter page number"' : '"').'>'.$txt['page_x_of_n'].'</span>', $start / $num_per_page + 1, $max_value / $num_per_page + 1);
+		$prefix = sprintf('<span data-perpage="'.$num_per_page.'" data-urltemplate="'.$data_url.'" class="prefix'.(isset($need_direct_input) ? ' drop" title="Click to enter page number"' : '"').'>'.$txt['page_x_of_n'].'</span>', $start / $num_per_page + 1, ($max_value - 1) / $num_per_page + 1);
 		$first = $start / $num_per_page > 1 ? sprintf($base_link, 0, $txt['page_first']) : '';
 		$prev = $start > 0 ? sprintf($base_link, $start - $num_per_page, '&lt;') : '';
-		$next = $start <= $max_value - $num_per_page ? sprintf($base_link, $start + $num_per_page, '&gt;') : '';
+		$next = $start < $max_value - $num_per_page ? sprintf($base_link, $start + $num_per_page, '&gt;') : '';
 		$last = $start <= $max_value - 2 *  $num_per_page ? sprintf($base_link, $tmpMaxPages, $txt['page_last']) : '';
 		if(isset($need_direct_input))
 			$context['need_pager_script_fragment'] = true;
@@ -940,7 +939,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	static $bbc_codes = array(), $itemcodes = array(), $no_autolink_tags = array();
 	static $disabled;
 
-	if(stripos($cache_id, '|'))
+	if($cache_id != '' && stripos($cache_id, '|'))
 		list($cache_id, $cache_unique) = explode('|', $cache_id);
 	else
 		$cache_unique = &$message;
@@ -2664,6 +2663,19 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 	if ($from_fatal_error)
 		$has_fatal_error = true;
 
+	// Custom templates to load, or just default?
+	/*$is_admin = isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin';
+	$templates = array('index');
+
+	// Load each template...
+	foreach ($templates as $template) {
+		if(!$is_admin)
+			loadTemplate($template);
+		else
+			loadAdminTemplate($template);
+	}
+	$context['template_layers'] = array('html', 'body');
+	*/
 	// Clear out the stat cache.
 	trackStats();
 
@@ -3326,8 +3338,8 @@ function db_debug_junk()
 
 	echo preg_replace('~</body>\s*</html>~', '', $temp), '
 <div class="smalltext" style="text-align: left; margin: 1ex;">
-	', $txt['debug_templates'], count($context['debug']['templates']), ': <em>', implode('</em>, <em>', $context['debug']['templates']), '</em>.<br />
-	', $txt['debug_subtemplates'], count($context['debug']['sub_templates']), ': <em>', implode('</em>, <em>', $context['debug']['sub_templates']), '</em>.<br />
+	', (isset($context['debug']['templates']) ? ($txt['debug_templates'] . count($context['debug']['templates']) . ': <em>' . implode('</em>, <em>', $context['debug']['templates']) . '</em>.<br />') : ''),'
+	', (isset($context['debug']['sub_templates']) ? ($txt['debug_subtemplates'] . count($context['debug']['sub_templates']) . ': <em>' . implode('</em>, <em>', $context['debug']['sub_templates']) . '</em>.<br />') : ''),'
 	', $txt['debug_language_files'], count($context['debug']['language_files']), ': <em>', implode('</em>, <em>', $context['debug']['language_files']), '</em>.<br />
 	', $txt['debug_stylesheets'], count($context['debug']['sheets']), ': <em>', implode('</em>, <em>', $context['debug']['sheets']), '</em>.<br />
 	', $txt['debug_files_included'], count($files), ' - ', round($total_size / 1024), $txt['debug_kb'], ' (<a href="javascript:void(0);" onclick="document.getElementById(\'debug_include_info\').style.display = \'inline\'; this.style.display = \'none\'; return false;">', $txt['debug_show'], '</a><span id="debug_include_info" style="display: none;"><em>', implode('</em>, <em>', $files), '</em></span>)<br />',

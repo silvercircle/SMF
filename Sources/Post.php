@@ -2737,7 +2737,7 @@ function getTopic()
 	// If you're modifying, get only those posts before the current one. (otherwise get all.)
 	$request = smf_db_query( '
 		SELECT
-			IFNULL(mem.real_name, m.poster_name) AS poster_name, m.poster_time,
+			IFNULL(mem.real_name, m.poster_name) AS poster_name, m.poster_time, m.modified_time,
 			m.body, m.smileys_enabled, m.id_msg, m.id_member
 		FROM {db_prefix}messages AS m
 			LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = m.id_member)
@@ -2756,7 +2756,7 @@ function getTopic()
 	{
 		// Censor, BBC, ...
 		censorText($row['body']);
-		$row['body'] = parse_bbc($row['body'], $row['smileys_enabled'], $row['id_msg']);
+		$row['body'] = parse_bbc($row['body'], $row['smileys_enabled'], $row['id_msg'] . '|' . $row['modified_time']);
         parse_bbc_stage2($row['body']);
 		// ...and store.
 		$context['previous_posts'][] = array(
@@ -3120,7 +3120,7 @@ function JavaScriptModify()
 			censorText($context['message']['subject']);
 			censorText($context['message']['body']);
 
-			$context['message']['body'] = parse_bbc($context['message']['body'], $row['smileys_enabled'], $row['id_msg']);
+			$context['message']['body'] = parse_bbc($context['message']['body'], $row['smileys_enabled'], $row['id_msg'] . '|' . $context['message']['modified']['time']);
             parse_bbc_stage2($context['message']['body']);
 		}
 		// Topic?

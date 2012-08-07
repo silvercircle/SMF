@@ -844,6 +844,7 @@ function openAdvSearch(e)
 {
 	$('#search_form').css({overflow: 'auto', height: 'auto', 'padding-bottom': '10px'});
 	$('#search_form').addClass('search_form_active');
+    $('#search_form input.default').show();
 }
 
 function submitSearchBox()
@@ -861,6 +862,7 @@ function submitSearchBox()
 }
 
 $('#adv_search').live('mouseleave',function(event) {
+    $('#search_form input.default').hide();
 	$('#search_form').css({overflow: 'hidden', height: '24px', 'padding-bottom': '0'});
 	$('#search_form').removeClass('search_form_active');
 });

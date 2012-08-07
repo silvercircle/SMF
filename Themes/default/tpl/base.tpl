@@ -263,12 +263,12 @@
             <input type="hidden" id="s_board" name="brd[{$C.current_board}]" value="{$C.current_board}" />
         </div>
         {/if}
-          <input style="width:100%;margin:10px 0;" type="submit" name="submit" value="Search now" class="button_submit" />
+          <input style="width:100%;margin:5px 0;display:none;" type="submit" name="submit" value="Search now" class="default" />
           {$url = $SCRIPTURL|cat:'?action=search'}
           <div class="centertext"><a href="{$SUPPORT->url_action($url)}" >{$T.search_advanced}</a></div>
         </div>
         <noscript>
-        <input style="margin:0;" type="submit" name="submit" value="{$T.go}" class="button_submit" />
+        <input style="margin:0;" type="submit" name="submit" value="{$T.go}" class="default" />
         </noscript>
     </form>
   </div>

@@ -304,7 +304,7 @@ function template_body_above()
 						<input type="radio" name="type" id="i_site" class="input_radio" />',$txt['search_all_boards'],'
 						<input type="hidden" id="s_board" name="brd[', $context['current_board'], ']" value="', $context['current_board'], '" /></div>';
 				}
-				echo '<input style="width:100%;margin:10px 0;" type="submit" name="submit" value="', 'Search now', '" class="button_submit" />
+				echo '<input style="width:100%;margin:10px 0;display:none;" type="submit" name="submit" value="', 'Search now', '" class="default" />
 			 	  <div class="centertext"><a href="',url::action($scripturl.'?action=search'),'" >',$txt['search_advanced'],'</a></div>';
 				echo '</div>
 				<noscript>

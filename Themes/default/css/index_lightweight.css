@@ -1871,7 +1871,7 @@ span.button:hover, ul.buttonlist li a:hover, input[type=submit]:hover {
 	background: #ccc;
 	border:1px solid orange !important;
 }
-input[type=submit].default:hover, span.button.default:hover, ul.buttonlist li a.active:hover {
+input[type=submit].default:hover, span.button.default:hover, ul.buttonlist li a.active:hover, input[type=submit].default:active {
 	border:1px solid orange !important;
 	background: #2665ac !important;
 	color:white;

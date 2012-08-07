@@ -1639,12 +1639,10 @@ function loadTheme($id_theme = 0, $initialize = true)
 	}
 	else
 	{
+		loadLanguage('index+Modifications');
 		// Custom templates to load, or just default?
 		$is_admin = isset($_REQUEST['action']) && $_REQUEST['action'] === 'admin';
-		if (isset($settings['theme_templates']))
-			$templates = explode(',', $settings['theme_templates']);
-		else
-			$templates = array('index');
+		$templates = array('index');
 
 		// Load each template...
 		foreach ($templates as $template) {
@@ -1653,15 +1651,7 @@ function loadTheme($id_theme = 0, $initialize = true)
 			else
 				loadAdminTemplate($template);
 		}
-		// ...and attempt to load their associated language files.
-		$required_files = implode('+', array_merge($templates, array('Modifications')));
-		loadLanguage($required_files, '', false);
-
-		// Custom template layers?
-		if (isset($settings['theme_layers']))
-			$context['template_layers'] = explode(',', $settings['theme_layers']);
-		else
-			$context['template_layers'] = array('html', 'body');
+		$context['template_layers'] = array('html', 'body');
 	}
 
 	if(isset($db_show_debug) && !empty($db_show_debug))
@@ -1671,9 +1661,6 @@ function loadTheme($id_theme = 0, $initialize = true)
 		@require_once($settings['theme_dir'] . '/theme_support.php');
 	else
 		@require_once($settings['default_theme_dir'] . '/theme_support.php');
-
-	// Initialize the theme.
-	loadSubTemplate('init', 'ignore');
 
 	// Guests may still need a name.
 	if ($context['user']['is_guest'] && empty($context['user']['name']))

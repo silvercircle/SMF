@@ -34,7 +34,6 @@ $txt['spamWaitTime'] = 'Seconds required between posts from the same IP';
 $txt['edit_wait_time'] = 'Courtesy edit wait time';
 $txt['failed_login_threshold'] = 'Failed login threshold';
 $txt['lastActive'] = 'User online time threshold';
-$txt['enableSpellChecking'] = 'Enable spell checking<div class="smalltext">(this does not work on all servers!)</div>';
 $txt['trackStats'] = 'Track daily statistics';
 $txt['hitStats'] = 'Track daily hits (must have stats enabled)';
 $txt['enableCompressedOutput'] = 'Enable compressed output';

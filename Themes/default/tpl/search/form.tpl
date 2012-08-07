@@ -32,7 +32,7 @@
           <br>
           {$SUPPORT->template_control_verification($C.visual_verification_id, 'all')}
           <br>
-          <input id="submit" type="submit" name="submit" value="{$T.search}" class="button_submit" />
+          <input id="submit" type="submit" name="submit" value="{$T.search}" class="default" />
         </div>
         {/if}
         <a href="{$SCRIPTURL}?action=search;advanced" onclick="this.href += ';search=' + escape(document.forms.searchform.search.value);">{$T.search_advanced}</a>
@@ -115,7 +115,7 @@
         </div>
       {/if}
   {/if}
-  <input style="margin-top:5px;" type="submit" name="submit" value="{$T.search}" class="button_submit floatright" />
+  <input type="submit" name="submit" value="{$T.search}" class="default floatright mediummargin" />
   <div class="clear"></div>
   </div>
 </form>
