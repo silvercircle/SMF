@@ -270,7 +270,7 @@ function getBoardIndex($boardIndexOptions)
 			'topic' => $row_board['id_topic'],
 			'prefix' => !empty($row_board['topic_prefix']) ? html_entity_decode($row_board['topic_prefix']) . '&nbsp;' : ''
 		);
-		$row_board['short_subject'] = shorten_subject($row_board['first_subject'], 50);
+		$row_board['short_subject'] = shorten_subject($row_board['subject'], 50);
 		$this_last_post['subject'] = $row_board['short_subject'];
 
 		$this_first_post = array(
