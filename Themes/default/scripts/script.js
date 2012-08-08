@@ -76,8 +76,9 @@ function getXMLDocument(sUrl, funcCallback)
 
 function centerElement(el, yOff)
 {
-	el.css({'top': (($(window).height() - el.outerHeight()) / 2) + yOff + 'px',
-			'left': (($(window).width() - el.outerWidth()) / 2) + 'px'});
+	alert(yOff);
+	el.css({'top': ((window.innerHeight - el.outerHeight()) / 2) + yOff + 'px',
+			'left': ((window.innerWidth - el.outerWidth()) / 2) + 'px'});
 
 }
 // Send a post form to the server using XMLHttpRequest.

@@ -30,18 +30,11 @@ define('SMF', 1);
 define('EOSA', 1);
 define('__APICOMPAT__', 0);			// if set to 1, smcFunc[] will be populated like in SMF 2
 
-if (function_exists('set_magic_quotes_runtime'))
-	@set_magic_quotes_runtime(0);
 error_reporting(defined('E_STRICT') ? E_ALL | E_STRICT : E_ALL);
 $time_start = microtime();
 
 // This makes it so headers can be sent!
 ob_start();
-
-// Do some cleaning, just in case.
-foreach (array('db_character_set', 'cachedir') as $variable)
-	if (isset($GLOBALS[$variable]))
-		unset($GLOBALS[$variable]);
 
 // Load the settings...
 require_once(dirname(__FILE__) . '/Settings.php');
@@ -81,7 +74,7 @@ $context['template_hooks']['global'] = array(
 	'header' => ''
 );
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
-$context['jsver'] = '?v=1575';
+$context['jsver'] = '?v=1577';
 $context['jquery_version'] = '1.7.2';
 $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();
