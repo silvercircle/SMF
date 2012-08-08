@@ -61,8 +61,12 @@
       </table>
       <div class="glass">
         {$url = "?action=profile;u="|cat:$member.id}
-        <div class="floatright"><a href="{$SUPPORT->url_parse($url)}">{$T.view_full_profile}</a>
+        <div class="floatright">
+          <a href="{$SUPPORT->url_parse($url)}">{$T.view_full_profile}</a>
         </div>
+        {if $C.can_send_pm}
+          <a href="{$C.pm_contact_link}"><img src="{$S.images_url}/icons/pm_read.png" alt="*" title="{$T.profileSendIm}" /></a>
+        {/if}
         <div class="clear"></div>
       </div>
     {/if}

@@ -399,7 +399,7 @@ function template_main()
 
 	// Show the actual posting area...
 	echo '<div id="editor_main_content">
-		<div class="floatright">
+		<div class="floatright" style="margin:10px 10px 0 0;">
 		 <div id="smiley_popup_anchor" style="position:relative;">
 		 <span id="editor_main_content_zoom" class="button">',$txt['zoom_editor'],'</span>
 		 <span onclick="popupSmileySelector($(this));return(false);" id="editor_main_smiley_popup" class="button">Smileys</span>

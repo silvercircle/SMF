@@ -1052,17 +1052,32 @@ function createCookie(name,value,days) {
 	document.cookie = name+"="+value+expires+"; path=/";
 }
 
-function setTextSize(_s)
+function setTextSize(_s, init)
 {
     textsize = _s;
 
 	if(textsize < textSizeMin || textsize > textSizeMax)
    		textsize = textSizeDefault;
-	$('.post_wrapper .post').css('font-size', _s + 'pt');
+
+   	if(init)
+   		$('head').append('<style>div.post_wrapper div.post {font-size:' + _s + 'pt;}</style>');
+   		//$('<style>div.post {font-size:8pt;}</style>').insertAfter('body');
+   	else
+		$('div.post_wrapper div.post').css('font-size', _s + 'pt');
 	createCookie('SMF_textsize', _s, 500);
-	$('#curfontsize').html(textsize + 'pt');
 }
 
+function toggleFontStyle()
+{
+	var cookie = readCookie('EOS_Fontstyle');
+	var _current = parseInt(cookie) || 0;
+
+	$('div.post').removeClass('fontstyle_' + _current);
+	_current = _current ? 0 : 1;
+	$('div.post').addClass('fontstyle_' + _current);
+	createCookie('EOS_Fontstyle', _current, 360);
+	return(false);
+}
 /*
  * timeago: a jQuery plugin, version: 0.9.3 (2011-01-21)
  * @requires jQuery v1.2.3 or later

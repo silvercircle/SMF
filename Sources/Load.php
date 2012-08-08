@@ -520,6 +520,7 @@ function loadUserSettings()
 		);
 		updateSettings(array('log_online_today' => @serialize($modSettings['online_today'])));
 	}
+	$user_info['font_class'] = isset($_COOKIE['EOS_Fontstyle']) ? $_COOKIE['EOS_Fontstyle'] : '0';
 	HookAPI::callHook('load_userdata', array(&$user_info, &$user_settings));
 }
 

@@ -58,6 +58,7 @@
         <input type=\"hidden\" name=\"{$C.session_var}\" value=\"{$C.session_id}\" />
         <input type=\"hidden\" name=\"topic\" value=\"{$C.current_topic}\" />
         <input type=\"hidden\" name=\"msg\" value=\"%msg_id%\" />
+        <input type=\"hidden\" name=\"autopreview\" value=\"0\" />    
         <input type=\"hidden\" style=\"width: 50%;\" name=\"subject\" value=\"%subject%\" size=\"50\" maxlength=\"80\" tabindex=\"{$tabindex++}\" class=\"input_text\" />
         <div class=\"righttext mediummargin\">
           <span class=\"button floatright\" onclick=\"return oQuickModify.goAdvanced('{$C.session_id}', '{$C.session_var}');\" />{$T.go_advanced}</a></span>

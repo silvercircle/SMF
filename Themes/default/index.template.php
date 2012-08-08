@@ -225,9 +225,9 @@ function template_body_above()
 		<div class="notibar">
 			<div class="notibar right">
 			<div class="floatright">
-			<span id="curfontsize"></span>
-			<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
-			<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
+			<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1,0);return(false);" class="fontinc">&nbsp;</span>
+			<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1,0);return(false);" class="fontdec">&nbsp;</span>
+			<span title="',$txt['toggle_font_style'], '" onclick="toggleFontStyle();return(false);" class="fontstyle">&nbsp;</span>
 			</div>
       		<div class="floatright"><a style="',($alerts > 0 ? '' : 'display:none; '),'position:relative;top:-12px;right:12px;z-index:9999;" id="alerts">',$alerts, '</a></div>
       		<div class="floatright nowrap" id="notification_target">

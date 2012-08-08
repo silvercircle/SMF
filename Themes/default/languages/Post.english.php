@@ -74,7 +74,7 @@ $txt['font_size'] = 'Font Size';
 $txt['font_face'] = 'Font Face';
 $txt['toggle_view'] = 'Toggle View';
 $txt['unformat_text'] = 'Remove Formatting';
-
+$txt['zoom_editor'] = 'Toogle full-window editor';
 $txt['rich_edit_wont_work'] = 'Your browser does not support Rich Text editing.';
 $txt['rich_edit_function_disabled'] = 'Your browser does not support this function.';
 
@@ -193,8 +193,6 @@ $txt['digest_mod_act_move'] = '"%1$s" was moved';
 $txt['digest_mod_act_merge'] = '"%1$s" was merged';
 $txt['digest_mod_act_split'] = '"%1$s" was split';
 
-$txt['zoom_editor'] = 'Zoom editor';
-$txt['restore_editor'] = 'Restore editor';
 $txt['first_post_sticky'] = 'Make first post appear on every page';
 $txt['first_post_layout'] = 'First post uses alternate postbit layout';
 $txt['no_activity_record'] = 'Do not record in my activity stream';

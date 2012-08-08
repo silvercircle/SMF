@@ -14,6 +14,7 @@
       <input type="hidden" name="not_approved" value="{!$C.can_reply_approved}" />
       <input type="hidden" name="goback" value="{(empty($O.return_to_post)) ? '0' : '1'}" />
       <input type="hidden" name="last_msg" value="{$C.topic_last_message}" />
+      <input type="hidden" name="autopreview" value="0" />
       <input type="hidden" name="{$C.session_var}" value="{$C.session_id}" />
       <input type="hidden" name="seqnum" value="{$C.form_sequence_number}" />
       {* Guests just need more. *}
@@ -48,7 +49,7 @@
       </div>
       <div class="righttext smallpadding">
         <input type="submit" name="post" value="{$T.post}" onclick="return submitThisOnce(this);" accesskey="s" tabindex="{$tabindex++}" class="default" />
-        <input type="submit" name="preview" value="{$T.go_advanced}" onclick="return submitThisOnce(this);" accesskey="p" tabindex="{$tabindex++}" class="button_submit" />
+        <input type="submit" name="preview" value="{$T.go_advanced}" onclick="oQuickReply.goAdvanced(); return submitThisOnce(this);" accesskey="p" tabindex="{$tabindex++}" class="button_submit" />
         <input type="submit" name="cancel" value="Cancel" onclick="return(oQuickReply.cancel());" accesskey="p" tabindex="{$tabindex++}" class="button_submit" />
       </div>
     </div>

@@ -1838,6 +1838,7 @@ function createPost(&$msgOptions, &$topicOptions, &$posterOptions)
 				
 			smf_db_query( 'DELETE FROM {db_prefix}messages_cache WHERE id_msg = {int:id_msg}',
 				array('id_msg' => $msg_to_update));
+			CacheAPI::clearCacheByPrefix('parse:' . trim($msg_to_update) . '-');
 
 			if(count($tagged_users) > 0)
 				notifyTaggedUsers($tagged_users, array('id_topic' => $topicOptions['id'], 'id_message' => $msgOptions['id']));
@@ -2558,6 +2559,7 @@ function modifyPost(&$msgOptions, &$topicOptions, &$posterOptions)
 	if(isset($msgOptions['body'])) {
 		smf_db_query( 'DELETE FROM {db_prefix}messages_cache WHERE id_msg = {int:id_msg}',
 			array('id_msg' => $msgOptions['id']));
+		CacheAPI::clearCacheByPrefix('parse:' . trim($msgOptions['id']) . '-');
 	}
 	else
 		$context['no_astream'] = true;

@@ -939,7 +939,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	static $bbc_codes = array(), $itemcodes = array(), $no_autolink_tags = array();
 	static $disabled;
 
-	if($cache_id != '' && stripos($cache_id, '|'))
+	if($cache_id != '' && stripos($cache_id, '|') > 0)
 		list($cache_id, $cache_unique) = explode('|', $cache_id);
 	else
 		$cache_unique = &$message;
@@ -1576,7 +1576,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	{
 		// It's likely this will change if the message is modified.
 		$cache_key = 'parse:' . $cache_id . '-' . md5(md5($cache_unique) . '-' . $smileys . (empty($disabled) ? '' : implode(',', array_keys($disabled))) . $txt['lang_locale'] . $user_info['time_offset'] . $user_info['time_format']);
-
 		if (($temp = CacheAPI::getCache($cache_key, 1200)) != null)
 			return $temp;
 
@@ -2350,7 +2349,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 	HookAPI::callHook('parse_bbc_after', array(&$message, &$parse_tags, &$smileys));
 
 	// Cache the output if it took some time...
-	if (isset($cache_key, $cache_t) && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.01)
+	if (isset($cache_key, $cache_t) && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.0001)
 	//if (isset($cache_key)) // && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
 		CacheAPI::putCache($cache_key, $message, 1200);
 

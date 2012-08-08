@@ -163,9 +163,9 @@
     {/if}
     {* Output any remaining HTML headers. (from mods, maybe?) *}
     {$C.html_headers}
-    <style>
-      {*#main_content_section { max-width: {(!empty($O.content_width)) ? $O.content_width : '95%'}; }*}
-    </style>
+    {*<style>
+      #main_content_section { max-width: {(!empty($O.content_width)) ? $O.content_width : '95%'}; }
+    </style>*}
   </head>
   <body>
   {$alerts = ($U.notify_count > 0) ? $U.notify_count : ''}
@@ -190,9 +190,9 @@
     <div class="notibar">
       <div class="notibar right">
       <div class="floatright">
-      <span id="curfontsize"></span>
-      <span title="{$T.font_increase}" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
-      <span title="{$T.font_decrease}" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
+      <span title="{$T.font_increase}" onclick="setTextSize(textsize + 1, 0);return(false);" class="fontinc">&nbsp;</span>
+      <span title="{$T.font_decrease}" onclick="setTextSize(textsize - 1, 0);return(false);" class="fontdec">&nbsp;</span>
+      <span title="{$T.toggle_font_style}" onclick="toggleFontStyle();return(false);" class="fontstyle">&nbsp;</span>
       </div>
       {if $M.astream_active}
         <div class="floatright"><a style="{($alerts > 0) ? '' : 'display:none; '}position:relative;top:-12px;right:12px;z-index:9999;" id="alerts">{$alerts}</a></div>
@@ -225,7 +225,7 @@
   </nav>
   <script>
     // <![CDATA[
-      setTextSize(textsize);
+      setTextSize(textsize, 1);
     // ]]>
   </script>
   </div>

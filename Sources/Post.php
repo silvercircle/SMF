@@ -90,6 +90,7 @@ function Post()
 	loadLanguage('Tagging');
 	$context['tagging_ui'] = '';
 
+	$context['auto_preview'] = isset($_REQUEST['autopreview']) && $_REQUEST['autopreview'] ? 1 : 0;
 	$context['can_tag_users'] = allowedTo('tag_users');
 	/* todo: drafts should be a plugin
 	if(in_array('dr', $context['admin_features'])) {
@@ -1291,7 +1292,7 @@ function Post()
 
 	// Finally, load the template.
 	if (!isset($_REQUEST['xml']))
-		loadTemplate('Post');
+		EoS_Smarty::loadTemplate('post/main');
 }
 
 function Post2()
@@ -1308,6 +1309,7 @@ function Post2()
 	else*/
 		$context['have_drafts'] = false;
 
+	$context['auto_preview'] = isset($_REQUEST['autopreview']) && $_REQUEST['autopreview'] ? 1 : 0;
 	$context['need_synhlt'] = true;
 	$context['no_astream'] = (isset($_REQUEST['noactivity']) && (int)$_REQUEST['noactivity'] == 1);
 	$context['can_tag_users'] = allowedTo('tag_users');
@@ -1463,9 +1465,8 @@ function Post2()
 			{
 				if (isset($_REQUEST['xml']))
 					draftXmlReturn($draft);
-				loadTemplate('Post');
+				EoS_Smarty::loadTemplate('post/draft_saved');
 				$context['page_title'] = $txt['draft_saved_short'];
-				$context['sub_template'] = 'draft_saved';
 				return;
 			}
 		}
@@ -1506,14 +1507,11 @@ function Post2()
 		$_POST['lock_draft'] = !empty($_POST['lock']) ? 1 : 0;
 		if($context['have_drafts']) {
 			$draft = saveDraft();
-			if (!empty($draft) && !in_array('session_timeout', $post_errors))
-			{
+			if (!empty($draft) && !in_array('session_timeout', $post_errors)) {
 				if (isset($_REQUEST['xml']))
 					draftXmlReturn($draft);
-
-				loadTemplate('Post');
+				EoS_Smarty::loadTemplate('post/draft_saved');
 				$context['page_title'] = $txt['draft_saved_short'];
-				$context['sub_template'] = 'draft_saved';
 				return;
 			}
 		}
@@ -1610,13 +1608,11 @@ function Post2()
 		}
 		if($context['have_drafts']) {
 			$draft = saveDraft();
-			if (!empty($draft) && !in_array('session_timeout', $post_errors))
-			{
+			if (!empty($draft) && !in_array('session_timeout', $post_errors)) {
 				if (isset($_REQUEST['xml']))
 					draftXmlReturn($draft);
-				loadTemplate('Post');
+				EoS_Smarty::loadTemplate('post/draft_saved');
 				$context['page_title'] = $txt['draft_saved_short'];
-				$context['sub_template'] = 'draft_saved';
 				return;
 			}		
 		}
@@ -2363,7 +2359,6 @@ function AnnounceTopic()
 		fatal_lang_error('topic_gone', false);
 
 	loadLanguage('Post');
-	loadTemplate('Post');
 
 	$subActions = array(
 		'selectgroup' => 'AnnouncementSelectMembergroup',
@@ -2448,7 +2443,7 @@ function AnnouncementSelectMembergroup()
 	$context['move'] = isset($_REQUEST['move']) ? 1 : 0;
 	$context['go_back'] = isset($_REQUEST['goback']) ? 1 : 0;
 
-	$context['sub_template'] = 'announce';
+	EoS_Smarty::loadTemplate('post/announce');
 }
 
 // Send the announcement in chunks.
@@ -2566,7 +2561,8 @@ function AnnouncementSend()
 	$context['move'] = empty($_REQUEST['move']) ? 0 : 1;
 	$context['go_back'] = empty($_REQUEST['goback']) ? 0 : 1;
 	$context['membergroups'] = implode(',', $_POST['who']);
-	$context['sub_template'] = 'announcement_send';
+
+	EoS_Smarty::loadTemplate('post/announce_send');
 
 	// Go back to the correct language for the user ;).
 	if (!empty($modSettings['userLanguage']))
@@ -2784,7 +2780,7 @@ function QuoteFast()
 
 	loadLanguage('Post');
 	if (!isset($_REQUEST['xml']))
-		loadTemplate('Post');
+		EoS_Smarty::loadTemplate('post/quotefast_response');
 
 	include_once($sourcedir . '/lib/Subs-Post.php');
 
@@ -3120,7 +3116,8 @@ function JavaScriptModify()
 			censorText($context['message']['subject']);
 			censorText($context['message']['body']);
 
-			$context['message']['body'] = parse_bbc($context['message']['body'], $row['smileys_enabled'], $row['id_msg'] . '|' . $context['message']['modified']['time']);
+			$cache_key = isset($msgOptions['modify_time']) ? ($row['id_msg'] . '|' . $msgOptions['modify_time']) : $row['id_msg'];
+			$context['message']['body'] = parse_bbc($context['message']['body'], $row['smileys_enabled'], $cache_key);
             parse_bbc_stage2($context['message']['body']);
 		}
 		// Topic?

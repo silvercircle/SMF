@@ -114,7 +114,7 @@ function bbc_to_html($text)
 	}
 
 	// What tags do we allow?
-	$allowed_tags = array('b', 'u', 'i', 's', 'hr', 'list', 'li', 'font', 'size', 'color', 'img', 'left', 'center', 'right', 'url', 'email', 'ftp', 'sub', 'sup');
+	$allowed_tags = array('b', 'u', 'i', 's', 'hr', 'list', 'li', 'font', 'size', 'color', 'img', 'left', 'center', 'right', 'align', 'url', 'email', 'ftp', 'sub', 'sup');
 
 	$text = parse_bbc($text, true, '', $allowed_tags);
 
@@ -301,18 +301,18 @@ function html_to_bbc($text)
 						case 'text-align':
 							if ($style_value == 'left')
 							{
-								$curCloseTags .= '[/left]';
-								$replacement .= '[left]';
+								$curCloseTags .= '[/align]';
+								$replacement .= '[align=left]';
 							}
 							elseif ($style_value == 'center')
 							{
-								$curCloseTags .= '[/center]';
-								$replacement .= '[center]';
+								$curCloseTags .= '[/align]';
+								$replacement .= '[align=center]';
 							}
 							elseif ($style_value == 'right')
 							{
-								$curCloseTags .= '[/right]';
-								$replacement .= '[right]';
+								$curCloseTags .= '[/align]';
+								$replacement .= '[align=right]';
 							}
 						break;
 
@@ -1516,26 +1516,33 @@ function create_control_richedit($editorOptions)
 			array(
 				'image' => 'left',
 				'code' => 'left',
-				'before' => '[left]',
-				'after' => '[/left]',
+				'before' => '[align=left]',
+				'after' => '[/align]',
 				'description' => $txt['left_align']
 			),
 			array(
 				'image' => 'center',
 				'code' => 'center',
-				'before' => '[center]',
-				'after' => '[/center]',
+				'before' => '[align=center]',
+				'after' => '[/align]',
 				'description' => $txt['center']
 			),
 			array(
 				'image' => 'right',
 				'code' => 'right',
-				'before' => '[right]',
-				'after' => '[/right]',
+				'before' => '[align=right]',
+				'after' => '[/align]',
 				'description' => $txt['right_align']
 			),
 		);
 		$context['bbc_tags'][] = array(
+			array(
+				'image' => 'emoticon',
+				'code' => 'showemoticons',
+				'before' => '',
+				'description' => $txt['more_smileys_pick'],
+			),
+			array(),
 			array(
 				'image' => 'flash',
 				'code' => 'flash',
@@ -1651,6 +1658,13 @@ function create_control_richedit($editorOptions)
 				'description' => $txt['toggle_view'],
 			);
 		}
+		$context['bbc_tags'][count($context['bbc_tags']) - 1][] = array();
+		$context['bbc_tags'][count($context['bbc_tags']) - 1][] = array(
+			'image' => 'zoom',
+			'code' => 'zoom',
+			'before' => '',
+			'description' => $txt['zoom_editor'],
+		);
 		foreach ($context['bbc_tags'] as $row => $tagRow)
 			$context['bbc_tags'][$row][count($tagRow) - 1]['isLast'] = true;
 	}

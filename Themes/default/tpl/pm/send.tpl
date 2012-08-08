@@ -78,12 +78,6 @@
     </dl>
     <hr class="clear">
     <div id="editor_main_content">
-      <div class="floatright">
-        <div id="smiley_popup_anchor" style="position:relative;">
-          <span id="editor_main_content_zoom" class="button">{$T.zoom_editor}</span>
-          <span onclick="popupSmileySelector($(this));return(false);" id="editor_main_smiley_popup" class="button">Smileys</span>
-        </div>
-      </div>
       {if $C.show_bbc}
         <div id="bbcBox_message"></div>
       {/if}
@@ -133,8 +127,6 @@
 <script type="text/javascript" src="{$S.default_theme_url}/scripts/PersonalMessage.js?fin20"></script>
 <script type="text/javascript" src="{$S.default_theme_url}/scripts/suggest.js?fin20"></script>
 <script type="text/javascript"><!-- // --><![CDATA[
-  var txtlabel_zoom = "{$T.zoom_editor}";
-  var txtlabel_restore = "{$T.restore_editor}";
   var oPersonalMessageSend = new smf_PersonalMessageSend( {
         sSelf: 'oPersonalMessageSend',
         sSessionId: "{$C.session_id}",

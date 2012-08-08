@@ -120,6 +120,15 @@ function QuickReply(oOptions)
 	this.iMultiQuoteLimit = 10;
 }
 
+QuickReply.prototype.goAdvanced = function()
+{
+	var form = document.forms.quickModForm;
+
+	if(form.elements['message'].value != '')
+		form.elements['autopreview'].value = 1;
+
+	return(true);
+}
 QuickReply.prototype.addForMultiQuote = function(_mid)
 {
 	var mid = parseInt(_mid);
@@ -386,6 +395,8 @@ QuickModify.prototype.goAdvanced = function (sSessionId, sSessionVar)
 	var act_new = form.getAttribute('data-alt').replace(/%id_msg%/g, form.elements['msg'].value);
 	form.elements['subject'].value = form.elements['subject_edit'].value;
 	form.action = act_new;
+	if(form.elements['message'].value != '')
+		form.elements['autopreview'].value = 1;
 	form.submit();
 	return(false);
 }

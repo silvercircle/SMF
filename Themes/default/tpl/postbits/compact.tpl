@@ -63,7 +63,7 @@
   </div>
   </div>
   {/if}
-  <div class="post" id="msg_{$ID}">
+  <div class="post fontstyle_{$U.font_class}" id="msg_{$ID}">
   {if isset($message.approved)}
     {if !$message.approved and $message.member.id != 0 and $message.member.id == $C.user.id}
     <div class="approve_post">

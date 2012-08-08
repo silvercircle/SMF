@@ -131,7 +131,7 @@
   {$message.template_hook.poster_details}
 </div>
 <div class="post_content std">
-<div class="post" id="msg_{$ID}">
+<div class="post fontstyle_{$U.font_class}" id="msg_{$ID}">
 <article>
 {$message.body}
 </article>
@@ -229,7 +229,7 @@
   <div class="clear"></div>
   </div>
   <div class="post_content lean">
-  <div class="post clear_left" style="padding:10px 20px;" id="msg_{$ID}">
+  <div class="post clear_left fontstyle_{$U.font_class}" style="padding:10px 20px;" id="msg_{$ID}">
     <article>
       {$message.body}
     </article>
@@ -324,7 +324,7 @@
       {$T.post_awaiting_approval}&nbsp;&nbsp;<a onclick="$('#msg_{$ID}').show();return(false);" href="#!">Show me the message</a>
     </div>
 {/if}
-<div class="post" id="msg_{$ID}" {($message.approved) ? '' : ' style="display:none;"'}>
+<div class="post fontstyle_{$U.font_class}" id="msg_{$ID}" {($message.approved) ? '' : ' style="display:none;"'}>
   <article>
     {$message.body}
   </article>

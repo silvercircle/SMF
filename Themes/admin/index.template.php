@@ -153,7 +153,6 @@ function template_body_above()
 		<div class="notibar">
 			<div class="notibar right">
 			<div class="floatright">
-			<span id="curfontsize"></span>
 			<span title="',$txt['font_increase'], '" onclick="setTextSize(textsize + 1);return(false);" class="fontinc">&nbsp;</span>
 			<span title="',$txt['font_decrease'], '" onclick="setTextSize(textsize - 1);return(false);" class="fontdec">&nbsp;</span>
 			</div>

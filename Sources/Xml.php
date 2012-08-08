@@ -105,7 +105,7 @@ function ListMessageIcons()
  
 function GetMcard()
 {
-	global $memberContext, $context, $txt;
+	global $memberContext, $context, $txt, $user_info;
 
 	$is_xmlreq = $_REQUEST['action'] == 'xmlhttp' ? true : false;
 	
@@ -138,6 +138,9 @@ function GetMcard()
     	
     	if(!empty($context['member']['location']))
       		$context['member']['loc'][2] = 'from ' . $context['member']['location'];
+
+      	$context['can_send_pm'] = allowedTo('pm_send') && $uid != $user_info['id'];
+      	$context['pm_contact_link'] = $context['can_send_pm'] ? URL::parse('?action=pm;sa=send;u=' . $context['member']['id']) : '';
 	}
 	else
 		AjaxErrorMsg($txt['no_access'], $txt['error_occured']);

@@ -95,7 +95,7 @@
     {if !empty($message.is_replied_to)}
       <div style="margin:3px;" class="tinytext lowcontrast">{$T.pm_is_replied_to}</div>
     {/if}
-    <div class="post pm">
+    <div class="post pm fontstyle_{$U.font_class}">
       <div class="inner" id="msg_{$message.id}">
         {$message.body}
       </div>
