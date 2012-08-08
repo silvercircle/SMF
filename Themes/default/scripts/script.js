@@ -76,10 +76,9 @@ function getXMLDocument(sUrl, funcCallback)
 
 function centerElement(el, yOff)
 {
-	alert(yOff);
+	el.css({'max-height': el.outerHeight() + 'px'});
 	el.css({'top': ((window.innerHeight - el.outerHeight()) / 2) + yOff + 'px',
 			'left': ((window.innerWidth - el.outerWidth()) / 2) + 'px'});
-
 }
 // Send a post form to the server using XMLHttpRequest.
 function sendXMLDocumentWithAnchor(sUrl, sContent, funcCallback, ele)

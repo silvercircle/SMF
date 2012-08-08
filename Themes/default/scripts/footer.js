@@ -610,6 +610,7 @@ function mcardClose()
 {
 	$('#mcard').hide();
 	$('#mcard').css('position', 'static');
+    $('#mcard').css('max-height', 'none');
 	$('#mcard_inner').html('');
 	setDimmed(0);
 	return(false);
