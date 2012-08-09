@@ -632,31 +632,31 @@
     function onDocReceived(XMLDoc)
     {
       var text = '';
-        for (var i = 0, n = XMLDoc.getElementsByTagName('quote')[0].childNodes.length; i < n; i++)
-          text += XMLDoc.getElementsByTagName('quote')[0].childNodes[i].nodeValue;
-        oEditorHandle_{$C.post_box_name}.insertText(text, false, true);
+      for (var i = 0, n = XMLDoc.getElementsByTagName('quote')[0].childNodes.length; i < n; i++)
+        text += XMLDoc.getElementsByTagName('quote')[0].childNodes[i].nodeValue;
+      oEditorHandle_{$C.post_box_name}.insertText(text, false, true);
+    }
+    
+    var this_post = {(empty($C.quoted_id)) ? 0 : $C.quoted_id};
+    function getMultiQuotes()
+    {
+      var _c = readCookie("mquote") || "";
+      if(_c.length > 1) {
+        var _s = _c.split(",");
+        for (var i = 0; i < _s.length; i++)
+          loadMultiQuoteById(_s[i]);
+        createCookie("mquote", "", -1);
       }
-      
-      var this_post = {(empty($C.quoted_id)) ? 0 : $C.quoted_id};
-      function getMultiQuotes()
-      {
-        var _c = readCookie("mquote") || "";
-        if(_c.length > 1) {
-          var _s = _c.split(",");
-          for (var i = 0; i < _s.length; i++)
-            loadMultiQuoteById(_s[i]);
-          createCookie("mquote", "", -1);
-        }
-      }
-      function loadMultiQuoteById(mid)
-      {
-         var message_id = parseInt(mid);
-        if(parseInt(message_id) != parseInt(this_post))
-          insertQuoteFast(message_id);
-      }
-      $(document).ready(function() {
-        getMultiQuotes();
-      });
+    }
+    function loadMultiQuoteById(mid)
+    {
+      var message_id = parseInt(mid);
+      if(parseInt(message_id) != parseInt(this_post))
+        insertQuoteFast(message_id);
+    }
+    $(document).ready(function() {
+      getMultiQuotes();
+    });
     // ]]></script>
 {/if}
 {/block}

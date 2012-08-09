@@ -243,8 +243,7 @@
 {* Show the lower breadcrumbs *}
 {include '../linktree.tpl'}
 <div class="floatright smallpadding" id="display_jump_to">&nbsp;</div>
-<br>
-<div id="moderationbuttons" class="smallpadding">{$SUPPORT->button_strip($C.mod_buttons, 'left', $C.mod_buttons_style)}</div>
+<div id="moderationbuttons" class="mediumpadding floatleft nowrap">{$SUPPORT->button_strip($C.mod_buttons, 'left', $C.mod_buttons_style)}</div>
 {/block}
 {block footerscripts}
 {include 'topic/topic_js.tpl'}

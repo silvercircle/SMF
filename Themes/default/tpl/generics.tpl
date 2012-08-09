@@ -85,6 +85,7 @@
 {/function}
 {function topicbit}
   <tr>
+    {$is_new = $topic.new and $C.user.is_logged}
     {$color_class = 'topicrow'|cat:$topic.class|cat:(($C.alt_row) ? ' alternate' : '')}
     <td class="{$color_class}">
     {if !empty($S.show_user_images) and $O.show_no_avatars == 0}
@@ -99,7 +100,6 @@
       {/if}
       </span>
     {/if}
-    {$is_new = $topic.new and $C.user.is_logged}
     </td>
     <td class="{$color_class}">
       <img src="{$topic.first_post.icon_url}" alt="" />

@@ -1425,6 +1425,7 @@ function prepareDisplayContext($reset = false)
 		'icon_url' => getPostIcon($message['icon']),
 		'subject' => $message['subject'],
 		'time' => timeformat($message['poster_time']),
+		'timestamp' => $message['poster_time'],
 		'counter' => $counter,
 //		'permalink' => isset($_REQUEST['perma']) ? $txt['view_in_thread'] : ($counter ? ($txt['reply_noun'].' #'.$counter) : $txt['permalink']),
 		'permalink' => isset($_REQUEST['perma']) ? $txt['view_in_thread'] : ' #' . ($counter + 1),

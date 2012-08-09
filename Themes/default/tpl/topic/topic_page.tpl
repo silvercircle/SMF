@@ -71,15 +71,18 @@
 {/if} {* C.linked_calendar_events *}
   <form data-alt="{$SCRIPTURL}?action=post;msg=%id_msg%;topic={$topic}.{$C.start}" action="{$SCRIPTURL}?action=quickmod2;topic={$topic}.{$C.start}" method="post" accept-charset="UTF-8" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave('{$C.session_id}', '{$C.session_var}') : false">
   {* Get all the messages... *}
-  {$C.alternate = 0}
+  {$C.alternate = 1}
   {foreach from=$C.message_ids item=msg}
     {$SUPPORT->getMessage()}
     {call 'postbit_'|cat:$message.postbit_template_class}
     {$C.alternate = !$C.alternate}
     {if $message.id == $C.first_message}
       {if !empty($C.use_share)}
-        <div class="title">{$T.share_topic}:</div>
-        <div id="socialshareprivacy"></div><div class="clear"></div>
+        <div class="bmbar gradient_darken_down">
+          <div class="title">{$T.share_topic}:</div>
+          <div id="socialshareprivacy"></div>
+          <div class="clear"></div>
+        </div>
       {/if}
       {if !empty($C.tags_active)}
         <div id="tagstrip" class="tinytext">
@@ -101,8 +104,7 @@
         </div>
         <br>
       {/if} {* tags_active *}
-      {$C.num_replies} Replies
-      <div class="clear"></div>
+      <div id="replies_start" class="clear"></div>
       <div class="posts_container commentstyle" id="posts_container">
     {/if}
   {/foreach}
@@ -135,8 +137,7 @@
 </div>
 {include '../linktree.tpl'}
 <div class="plainbox floatright" id="display_jump_to">&nbsp;</div>
-<br>
-<div id="moderationbuttons">
+<div id="moderationbuttons" class="smallpadding floatleft">
   {$SUPPORT->button_strip($C.mod_buttons, 'bottom', $C.mod_buttons_style)}
 </div>
 {/block}  

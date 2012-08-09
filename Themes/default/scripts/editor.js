@@ -1035,7 +1035,7 @@ smc_Editor.prototype.zoomEditor = function()
 		// set new position and styles for the editor section and its relevant children
 		// add some padding to make it look nice.
 			el.css({"position": 'fixed', 'padding': '10px', 'width': $(window).width() -20 + 'px',
-				'height': $(window).height() -20 + 'px', 'top':0, 'left': 0, 'z-index':9999});
+				'height': $(window).height() -20 + 'px', 'top':0, 'left': 0, 'z-index':10000});
 		$('.editor').css('height', $(window).height() - 130 + 'px');
 		$('.rich_editor_frame').css('height', $(window).height() - 130 + 'px');
 		is_zoomed = true;
@@ -1649,7 +1649,7 @@ smc_BBCButtonBox.prototype.handleButtonMouseOut = function (oButtonImg)
 
 smc_BBCButtonBox.prototype.updateButtonStatus = function (oButtonImg)
 {
-/*
+
 	var sNewURL = '';
 	if (oButtonImg.bHover && oButtonImg.bIsActive && 'sActiveButtonBackgroundImageHover' in this.opt)
 		sNewURL = 'url(' + this.opt.sActiveButtonBackgroundImageHover + ')';
@@ -1662,7 +1662,6 @@ smc_BBCButtonBox.prototype.updateButtonStatus = function (oButtonImg)
 
 	if (oButtonImg.style.backgroundImage != sNewURL)
 		oButtonImg.style.backgroundImage = sNewURL;
-*/
 }
 
 smc_BBCButtonBox.prototype.handleButtonClick = function (oButtonImg)

@@ -291,11 +291,11 @@
       {$T.show_ignore_user_post}
    </div>
 {/if}
-<div id="msg{$ID}" class="post_wrapper{($message.is_ignored) ? ' ignored' : ''}{($C.alternate) ? ' alternate' : ''}" data-mid="{$ID}">
+<div id="msg{$ID}" class="post_wrapper{($message.is_ignored) ? ' ignored' : ''}{($C.alternate) ? ' alternate' : ''} comment" data-mid="{$ID}">
 {if $ID != $C.first_message}
   {($message.first_new) ? '<a id="new"></a>' : ''}
 {/if}
-<div class="keyinfo commentstyle">
+<div class="keyinfo comment">
   <div class="floatleft " style="max-width:65px;">
     <ul class="reset smalltext" id="msg_{$ID}_extra_info">
     {if !empty($message.member.avatar.image)}
@@ -309,8 +309,8 @@
     {/if}
     </ul>
   </div>
-  <div>
-    {$message.member.link} said<span class="smalltext">&nbsp;{$message.time}</span>&nbsp;-&nbsp;{$message.subject}
+  <div class="poster comment">
+    {$message.member.link}, <span class="smalltext">&nbsp;{$message.time}</span><br><span class="smalltext"><strong>{$message.subject}</strong></span>
     {if $message.new}
       <span class="newindicator"><span> </span>{$T.new}</span>
     {/if}
@@ -318,13 +318,13 @@
     <div id="msg_{$ID}_quick_mod"></div>
   </div>
 </div>
-<div class="post_content commentstyle">
+<div class="post_content comment" style="margin-top:-10px;">
 {if $message.approved == 0 and $message.member.id != 0}
     <div class="red_container mediumpadding mediummargin">
       {$T.post_awaiting_approval}&nbsp;&nbsp;<a onclick="$('#msg_{$ID}').show();return(false);" href="#!">Show me the message</a>
     </div>
 {/if}
-<div class="post fontstyle_{$U.font_class}" id="msg_{$ID}" {($message.approved) ? '' : ' style="display:none;"'}>
+<div class="post comment fontstyle_{$U.font_class}" id="msg_{$ID}" {($message.approved) ? '' : ' style="display:none;"'}>
   <article>
     {$message.body}
   </article>
@@ -347,7 +347,7 @@
   {/if}
 </div>
 </div>
-<div class="post_bottom">
+<div class="post_bottom comment">
   <div class="reportlinks">
     {call quickbuttons}
   </div>
@@ -358,28 +358,34 @@
 
 {function postbit_a}
 {$ID = $message.id}
-{if $message.is_ignored}
-  <div onclick="$('div.post_wrapper[data-mid={$ID}]').show();return(false);" class="orange_container ignoringpost norounded">
-      {$T.ignoring_user}&nbsp;
-      {$T.show_ignore_user_post}
-   </div>
-{/if}
-<div id="msg{$ID}" data-mid="{$ID}">
+<div class="post_wrapper article" id="msg{$ID}" data-mid="{$ID}">
 {if $ID != $C.first_message}
   {($message.first_new) ? '<a id="new"></a>' : ''}
 {/if}
 <div class="keyinfo clean">
   <div>
-    <span class="tinytext floatright"><a onclick="getIntralink($(this), {$ID});return(false);" href="{$message.permahref}" rel="nofollow">{$message.permalink}</a></span>
-    Posted by: {$message.member.link}&nbsp;
-    <span class="smalltext">{$message.time}</span>
+    <span class="tinytext floatright righttext">
+      <a onclick="getIntralink($(this), {$ID});return(false);" href="{$message.permahref}" rel="nofollow">{$message.permalink}</a><br>
+      <span class="tinytext"><a href="#replies_start">{$C.num_replies} {$T.replies}</a></span>
+    </span>
+    <div class="datewidget">
+      <span class="month">{'M'|date:$message.timestamp}</span>
+      <span class="day">
+        {'d'|date:$message.timestamp}
+        <br>
+        <span class="tinytext lowcontrast" style="font-weight:normal;">{'Y'|date:$message.timestamp}</span>
+      </span>
+    </div>
+    <div class="poster article">
+    <span id="subject_{$ID}">
+      <h1 class="bigheader borderless nopadding">{$message.subject}</h1>
+    </span>
+    <span class="tinytext">{$message.time} | {$T.by} {$message.member.link}</span>
+    </div>
   </div>
-  <span style="display:none;" id="subject_{$ID}">
-    {$message.subject}
-  </span>
 </div>
 <div id="msg_{$ID}_quick_mod"></div>
-  <div class="post clear_left" style="margin:0;padding:0;" id="msg_{$ID}">
+  <div class="post clear_left fontstyle_{$U.font_class}" style="margin:0;padding:0;" id="msg_{$ID}">
   {if $message.approved == 0 and $message.member.id != 0 and $message.member.id == $C.user.id}
     <div class="approve_post">
       {$T.post_awaiting_approval}

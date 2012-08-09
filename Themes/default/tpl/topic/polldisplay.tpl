@@ -38,7 +38,7 @@
         {/foreach}
         </ul>
         <div class="submitbutton">
-          <input type="submit" value="{$T.poll_vote}" class="button_submit" />
+          <input type="submit" value="{$T.poll_vote}" class="default" />
           <input type="hidden" name="{$C.session_var}" value="{$C.session_id}" />
         </div>
         </form>
@@ -49,6 +49,7 @@
     </div>
   </div>
 </div>
-<div id="pollmoderation">
+<div id="pollmoderation mediumpadding">
   {$SUPPORT->button_strip($C.poll_buttons)}
 </div>
+<div class="clear"></div>

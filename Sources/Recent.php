@@ -1371,7 +1371,7 @@ function UnreadTopics()
     	}
     	else {
     		$context['mark_read_buttons'] = array(
-      			'markread' => array('text' => 'mark_replies_read', 'image' => 'markread.gif', 'lang' => true, 'url' => $scripturl . '?action=markasread;sa=unreadreplies;' . $context['session_var'] . '=' . $context['session_id'])
+      			'markread' => array('text' => 'mark_replies_read', 'image' => 'markread.gif', 'lang' => true, 'url' => $scripturl . '?action=markasread;sa=unreadreplies;topics=' . $context['topics_to_mark'] . ';' . $context['session_var'] . '=' . $context['session_id'])
     		);
     	}
 
