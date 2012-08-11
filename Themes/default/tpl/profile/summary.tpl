@@ -125,7 +125,7 @@
 				{/if}
 				{if !empty($C.activate_message) || !empty($C.member.bans)}
 					{if !empty($C.activate_message)}
-						<dt class="clear"><span class="alert">', $context['activate_message'], '</span>&nbsp;(<a href="' . $scripturl . '?action=profile;save;area=activateaccount;u=' . $context['id_member'] . ';' . $context['session_var'] . '=' . $context['session_id'] . '"', ($context['activate_type'] == 4 ? ' onclick="return confirm(\'' . $txt['profileConfirm'] . '\');"' : ''), '>', $context['activate_link_text'], '</a>)</dt>
+						<dt class="clear"><span class="alert">{$C.activate_message}</span>&nbsp;(<a href="{$SCRIPTURL}?action=profile;save;area=activateaccount;u={$C.id_member};{$C.session_var}={$C.session_id}"{($C.activate_type == 4) ? (' onclick="return confirm(\''|cat:$T.profileConfirm|cat:'\');"') : ''}>{$C.activate_link_text}</a>)</dt>
 					{/if}
 					{if !empty($C.member.bans)}
 						<dt class="clear"><span class="alert">{$T.user_is_banned}</span>&nbsp;[<a href="#" onclick="document.getElementById('ban_info').style.display = document.getElementById('ban_info').style.display == 'none' ? '' : 'none';return false;">{$T.view_ban}</a>]</dt>

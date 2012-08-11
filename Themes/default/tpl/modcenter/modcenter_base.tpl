@@ -17,5 +17,8 @@
 {include 'generics/menu_above.tpl'}
 {block 'modcenter_content'}
 {/block}
+{if isset($C._template_include)}
+	{include $C._template_include|cat:'.tpl'}
+{/if}
 {include 'generics/menu_below.tpl'}
 {/block}

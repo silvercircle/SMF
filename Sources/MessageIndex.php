@@ -228,11 +228,9 @@ function MessageIndex()
 
 		$request = smf_db_query( '
 			SELECT
-				lo.id_member, lo.log_time, mem.real_name, mem.member_name, mem.show_online,
-				mg.online_color, mg.id_group, mg.group_name
+				lo.id_member, lo.log_time, mem.real_name, mem.member_name, mem.show_online, mem.id_group, mem.id_post_group
 			FROM {db_prefix}log_online AS lo
 				LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = lo.id_member)
-				LEFT JOIN {db_prefix}membergroups AS mg ON (mg.id_group = CASE WHEN mem.id_group = {int:reg_member_group} THEN mem.id_post_group ELSE mem.id_group END)
 			WHERE INSTR(lo.url, {string:in_url_string}) > 0 OR lo.session = {string:session}',
 			array(
 				'reg_member_group' => 0,
@@ -245,14 +243,13 @@ function MessageIndex()
 			if (empty($row['id_member']))
 				continue;
 
-			if (!empty($row['online_color']))
-				$link = '<a href="' . $scripturl . '?action=profile;u=' . $row['id_member'] . '" style="color: ' . $row['online_color'] . ';">' . $row['real_name'] . '</a>';
-			else
-				$link = '<a href="' . $scripturl . '?action=profile;u=' . $row['id_member'] . '">' . $row['real_name'] . '</a>';
+			$class = 'member group_' . (empty($row['id_group']) ? $row['id_post_group'] : $row['id_group']) . (in_array($row['id_member'], $user_info['buddies']) ? ' buddy' : '');
+			$href = URL::user($row['id_member'], $row['real_name']);
 
-			$is_buddy = in_array($row['id_member'], $user_info['buddies']);
-			if ($is_buddy)
-				$link = '<strong>' . $link . '</strong>';
+			if($row['id_member'] == $user_info['id'])
+				$link = '<strong>'.$txt['you'].'</strong>';
+			else
+				$link = '<a onclick="getMcard('.$row['id_member'].');return(false);" class="'.$class.'" href="' . $href . '">' . $row['real_name'] . '</a>';
 
 			if (!empty($row['show_online']) || allowedTo('moderate_forum'))
 				$context['view_members_list'][$row['log_time'] . $row['member_name']] = empty($row['show_online']) ? '<em>' . $link . '</em>' : $link;
@@ -261,9 +258,8 @@ function MessageIndex()
 				'username' => $row['member_name'],
 				'name' => $row['real_name'],
 				'group' => $row['id_group'],
-				'href' => $scripturl . '?action=profile;u=' . $row['id_member'],
+				'href' => $href,
 				'link' => $link,
-				'is_buddy' => $is_buddy,
 				'hidden' => empty($row['show_online']),
 			);
 

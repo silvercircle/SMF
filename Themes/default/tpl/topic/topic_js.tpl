@@ -54,7 +54,7 @@
       iTopicId: {$C.current_topic},
       sTemplateBodyEdit: {$SUPPORT->JavaScriptEscape("<div id=\"quick_edit_body_container\">
         <div id=\"error_box\" style=\"padding: 4px;\" class=\"error\"></div>
-        <textarea class=\"editor\" name=\"message\" rows=\"20\" style=\"{($C.browser.is_ie8) ? 'width: 635px; max-width: 100%; min-width: 100%' : 'width: 100%'}; margin-bottom: 10px;\" tabindex=\"{$tabindex++}\">%body%</textarea><br>
+        <textarea id=\"quickModifyMessage\" class=\"editor\" name=\"message\" rows=\"4\" style=\"{($C.browser.is_ie8) ? 'width: 635px; max-width: 100%; min-width: 100%' : 'width: 100%'}; margin-bottom: 10px;\" tabindex=\"{$tabindex++}\">%body%</textarea><br>
         <input type=\"hidden\" name=\"{$C.session_var}\" value=\"{$C.session_id}\" />
         <input type=\"hidden\" name=\"topic\" value=\"{$C.current_topic}\" />
         <input type=\"hidden\" name=\"msg\" value=\"%msg_id%\" />

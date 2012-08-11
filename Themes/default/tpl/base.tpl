@@ -18,7 +18,8 @@
 {include 'generics.tpl'}
 <html id="_S_">
   <head>
-    <link rel="stylesheet" type="text/css" href="{$S.primary_css}" />
+    <link rel="stylesheet" type="text/css" href="{$S.theme_url}/css/base.css{$C.jsver}" />
+    <link rel="stylesheet" type="text/css" href="{$S.primary_css}.css{$C.jsver}" />
     {if $C.right_to_left > 0}
       <link rel="stylesheet" type="text/css" href="{$S.theme_url}/css/rtl.css" />
     {/if}

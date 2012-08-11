@@ -1540,6 +1540,10 @@ function template_profile_theme_settings()
 								</select>
 							</li>
 							<li>
+								<label for="editor_height">', $txt['editor_height'], '</label>
+								<input size="5" type="text" name="default_options[editor_height]" id="editor_height" value="',empty($context['member']['options']['editor_height']) ? '250' : $context['member']['options']['editor_height'], '" />
+							</li>
+							<li>
 								<label for="content_width">', $txt['content_width'], '</label>
 								<input type="text" name="default_options[content_width]" id="content_width" value="',empty($context['member']['options']['content_width']) ? '95%' : $context['member']['options']['content_width'], '" />
 							</li>

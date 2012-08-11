@@ -21,7 +21,8 @@ function template_html_above()
 <html id="_S_" lang="en-US">
 <head>';
 	echo '
-	<link rel="stylesheet" type="text/css" href="', $settings['primary_css'],'" />';
+	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'],'/css/base.css',$context['jsver'], '" />
+	<link rel="stylesheet" type="text/css" href="', $settings['primary_css'],'.css',$context['jsver'], '" />';
 	if (isset($context['need_synhlt']))
 		echo '
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'],'/css/secondary.css',$context['jsver'],'" />';

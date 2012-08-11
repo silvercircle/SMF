@@ -1,5 +1,3 @@
-{extends "modcenter/modcenter_base.tpl"}
-{block modcenter_content}
 <div id="modcenter">
   <div class="cat_bar2">
     <h3>{$T.moderation_center}</h3>
@@ -13,4 +11,3 @@
   {$SUPPORT->displayHook('modcenter_blocks')}
 </div>
 <br class="clear" />
-{/block}

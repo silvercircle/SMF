@@ -76,7 +76,7 @@ function getXMLDocument(sUrl, funcCallback)
 
 function centerElement(el, yOff)
 {
-	el.css({'max-height': el.outerHeight() + 'px'});
+	el.css({'max-height': el.outerHeight() + 50 + 'px'});
 	el.css({'top': ((window.innerHeight - el.outerHeight()) / 2) + yOff + 'px',
 			'left': ((window.innerWidth - el.outerWidth()) / 2) + 'px'});
 }

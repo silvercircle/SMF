@@ -198,7 +198,8 @@ function ModerationHome()
 {
 	global $txt, $context, $scripturl, $modSettings, $user_info, $user_settings;
 
-	EoS_Smarty::loadTemplate('modcenter/main');
+	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
+	$context['_template_include'] = 'modcenter/main';
 	//loadTemplate('ModerationCenter');
 
 	$context['page_title'] = $txt['moderation_center'];
@@ -543,8 +544,8 @@ function ReportedPosts()
 	if (!empty($_REQUEST['report']))
 		return ModReport();
 
-	EoS_Smarty::loadTemplate('modcenter/reported_posts');
-	//loadTemplate('ModerationCenter');
+	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
+	$context['_template_include'] = 'modcenter/reported_posts';
 
 	// Set up the comforting bits...
 	$context['page_title'] = $txt['mc_reported_posts'];
@@ -1007,7 +1008,8 @@ function ModReport()
 
 	// Finally we are done :P
 	//loadTemplate('ModerationCenter');
-	EoS_Smarty::loadTemplate('modcenter/viewmodreport');
+	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
+	$context['_template_include'] = 'modcenter/viewmodreport';
 	$context['page_title'] = sprintf($txt['mc_viewmodreport'], $context['report']['subject'], $context['report']['author']['name']);
 	$context['sub_template'] = 'viewmodreport';
 
@@ -1054,7 +1056,8 @@ function ViewWatchedUsers()
 	$context['view_posts'] = isset($_GET['sa']) && $_GET['sa'] == 'post';
 	$context['start'] = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
 
-	EoS_Smarty::loadTemplate('modcenter/watched_users');
+	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
+	$context['_template_include'] = 'modcenter/watched_users';
 	//loadTemplate('ModerationCenter');
 
 	// Get some key settings!
@@ -1466,7 +1469,8 @@ function ViewWarningLog()
 	$context['page_title'] = $txt['mc_warning_log_title'];
 
 	require_once($sourcedir . '/lib/Subs-List.php');
-	EoS_Smarty::loadTemplate('modcenter/warnings');
+	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
+	$context['_template_include'] = 'modcenter/warnings';
 
 	// This is all the information required for a watched user listing.
 	$listOptions = array(
@@ -1660,7 +1664,8 @@ function ViewWarningTemplates()
 
 	// Setup context as always.
 	$context['page_title'] = $txt['mc_warning_templates_title'];
-	EoS_Smarty::loadTemplate('modcenter/warnings');
+	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
+	$context['_template_include'] = 'modcenter/warnings';
 	require_once($sourcedir . '/lib/Subs-List.php');
 
 	// This is all the information required for a watched user listing.
@@ -1817,7 +1822,8 @@ function ModifyWarningTemplate()
 {
 	global $context, $txt, $user_info, $sourcedir;
 
-	EoS_Smarty::loadTemplate('modcenter/edit_warning');
+	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
+	$context['_template_include'] = 'modcenter/edit_warning';
 	
 	$context['id_template'] = isset($_REQUEST['tid']) ? (int) $_REQUEST['tid'] : 0;
 	$context['is_edit'] = $context['id_template'];
@@ -1951,7 +1957,8 @@ function ModerationSettings()
 	global $context, $smcFunc, $txt, $sourcedir, $scripturl, $user_settings, $user_info;
 
 	// Some useful context stuff.
-	EoS_Smarty::loadTemplate('modcenter/settings');
+	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
+	$context['_template_include'] = 'modcenter/settings';
 	$context['page_title'] = $txt['mc_settings'];
 
 	// What blocks can this user see?

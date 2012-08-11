@@ -1,5 +1,3 @@
-{extends "modcenter/modcenter_base.tpl"}
-{block modcenter_content}
   <div id="modcenter">
     <form action="{$SCRIPTURL}?action=moderate;area=warnings;sa=templateedit;tid={$C.id_template}" method="post" accept-charset="UTF-8">
       <div class="cat_bar">
@@ -34,11 +32,13 @@
               <span class="smalltext">{$T.mc_warning_template_personal_desc}</span>
               <br>
           {/if}
-          <input type="submit" name="save" value="{$C.page_title}" class="button_submit" />
+          <div class="floatright mediumpadding">
+            <input type="submit" name="save" value="{$C.page_title}" class="default" />
+          </div>
+          <div class="clear"></div>
         </div>
       </div>
       <input type="hidden" name="{$C.session_var}" value="{$C.session_id}" />
     </form>
   </div>
-  <br class="clear" />
-{/block}
+  <br class="clear">

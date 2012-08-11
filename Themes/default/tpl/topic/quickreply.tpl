@@ -41,7 +41,7 @@
         {($C.oldTopicError) ? "<div><span class=\"alert tinytext\">{$T.error_old_topic|sprintf:$M.oldTopicDays}</span></div>" : ''}
         {($C.can_reply_approved) ? '' : "<em>{$T.wait_for_approval}</em>"}
         {(!$C.can_reply_approved and $C.require_verification) ? '<br>' : ''}
-        <textarea id="quickReplyMessage" style="width:99%;" rows="18" name="message" tabindex="{$tabindex++}"></textarea>
+        <textarea id="quickReplyMessage" rows="5" style="width:99%;min-height:100px;max-height:800px;" name="message" tabindex="{$tabindex++}"></textarea>
         {if $C.automerge}
           <input class="aligned" type="checkbox" name="want_automerge" id="want_automerge" checked="checked" value="1" />
           <label class="aligned" for="want_automerge">{$T.want_automerge}</label>
@@ -49,8 +49,8 @@
       </div>
       <div class="righttext smallpadding">
         <input type="submit" name="post" value="{$T.post}" onclick="return submitThisOnce(this);" accesskey="s" tabindex="{$tabindex++}" class="default" />
-        <input type="submit" name="preview" value="{$T.go_advanced}" onclick="oQuickReply.goAdvanced(); return submitThisOnce(this);" accesskey="p" tabindex="{$tabindex++}" class="button_submit" />
-        <input type="submit" name="cancel" value="Cancel" onclick="return(oQuickReply.cancel());" accesskey="p" tabindex="{$tabindex++}" class="button_submit" />
+        <input id="qr_goadvanced" type="submit" name="preview" value="{$T.go_advanced}" onclick="oQuickReply.goAdvanced(); return submitThisOnce(this);" accesskey="p" tabindex="{$tabindex++}" class="button_submit" />
+        <input id="qr_cancel" type="submit" name="cancel" value="Cancel" accesskey="p" tabindex="{$tabindex++}" class="button_submit" />
       </div>
     </div>
     <br>

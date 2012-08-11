@@ -302,7 +302,7 @@ $txt['display_quick_mod_none'] = 'don\'t show.';
 $txt['display_quick_mod_check'] = 'checkboxes.';
 $txt['display_quick_mod_image'] = 'icons.';
 $txt['content_width'] = 'Width of the content section';
-
+$txt['editor_height'] = 'Height of the post editor in pixels.<br> If not set, a default value of 300 will be used.';
 $txt['whois_title'] = 'Look up IP on a regional whois-server';
 $txt['whois_afrinic'] = 'AfriNIC (Africa)';
 $txt['whois_apnic'] = 'APNIC (Asia Pacific region)';

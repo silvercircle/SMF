@@ -49,7 +49,7 @@
     </div>
   </div>
 </div>
-<div id="pollmoderation mediumpadding">
+<div class="mediumpadding">
   {$SUPPORT->button_strip($C.poll_buttons)}
 </div>
 <div class="clear"></div>

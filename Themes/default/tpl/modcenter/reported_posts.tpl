@@ -1,5 +1,3 @@
-{extends "modcenter/modcenter_base.tpl"}
-{block modcenter_content}
 <form action="{$SCRIPTURL}?action=moderate;area=reports{($C.view_closed) ? ';sa=closed' : ''};start={$C.start}" method="post" accept-charset="UTF-8">
   <div class="cat_bar">
     <h3>
@@ -52,5 +50,4 @@
   </div>
   <input type="hidden" name="{$C.session_var}" value="{$C.session_id}" />
 </form>
-<br class="clear" />
-{/block}
+<br class="clear">

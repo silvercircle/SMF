@@ -1,5 +1,3 @@
-{extends "modcenter/modcenter_base.tpl"}
-{block modcenter_content}
   <div id="modcenter">
     <form action="{$SCRIPTURL}?action=moderate;area=settings" method="post" accept-charset="UTF-8">
       <div class="cat_bar2">
@@ -56,4 +54,3 @@
     </form>
   </div>
   <br class="clear" />
-{/block}

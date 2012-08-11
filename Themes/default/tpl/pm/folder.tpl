@@ -1,5 +1,3 @@
-{extends 'pm/base.tpl'}
-{block 'pm_content'}
 <script type="text/javascript"><!-- // --><![CDATA[
   var allLabels = {};
   var currentLabels = {};
@@ -124,4 +122,3 @@
   {/if}
   {$C.hidden_sid_input}
 </form>
-{/block}

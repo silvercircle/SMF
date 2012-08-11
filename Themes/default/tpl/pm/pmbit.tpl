@@ -117,7 +117,7 @@
         </div>
         {/if}
       {/if}
-      {if !empty($message.member.signature) and empty($O.show_no_signatures) and $C.signature_enabled}
+      {if !empty($message.member.signature) and empty($O.show_no_signatures) and isset($C.signature_enabled) and $C.signature_enabled}
         <br>
         <div class="signature">
           {$message.member.signature}
@@ -158,7 +158,7 @@
     {if $C.can_send_pm}
       {$label = ($C.current_label_id != -1) ? (';l='|cat:$C.current_label_id) : ''}
       {if !$message.member.is_guest}
-        {if $message.number_recipients > 1 and $C.display_mode != 2}
+        {if isset($message.number_recipients) and $message.number_recipients > 1 and $C.display_mode != 2}
           <li>
             <a href="{$SCRIPTURL}?action=pm;sa=send;f={$C.folder}{$label};pmsg={$message.id};quote;u=all">{$T.reply_to_all}</a>
           </li>

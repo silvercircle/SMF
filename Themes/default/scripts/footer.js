@@ -443,7 +443,7 @@ jQuery(document).ready(function() {
 	
 	// this kills the pure CSS hover effect from the dropdown menus so they will
 	// only react on DOM events.
-	$('html > head').append('<style>.menu li:hover ul { display: none; }</style>');
+	$('html > head').append('<style>ul.dropmenu li:hover ul { display: none; }</style>');
 	// pull down menu handlers
 	jQuery('.menu ul').hover(function() {
 	}, function() {

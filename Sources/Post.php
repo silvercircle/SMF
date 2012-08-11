@@ -1202,7 +1202,8 @@ function Post()
 			'post_button' => $context['submit_label'],
 		),
 		// add height and width for the editor
-		'height' => '300px',
+		'rows' => '10',
+		'height' => (isset($options['editor_height']) && $options['editor_height'] > 150 && $options['editor_height'] < 800 ? $options['editor_height'] : 250) . 'px',
 		'width' => '100%',
 		// We do XML preview here.
 		'preview_type' => 2,

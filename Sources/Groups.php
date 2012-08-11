@@ -102,8 +102,10 @@ function GroupList()
 {
 	global $txt, $scripturl, $user_profile, $user_info, $context, $settings, $modSettings, $smcFunc, $sourcedir;
 
-	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'moderate')
-		EoS_Smarty::loadTemplate('modcenter/list_groups');
+	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'moderate') {
+		EoS_Smarty::loadTemplate('modcenter/modcenter_base');
+		$context['_template_include'] = 'modcenter/list_groups';
+	}
 
 	// Yep, find the groups...
 	$request = smf_db_query( '
@@ -626,8 +628,10 @@ function MembergroupMembers()
 		);
 	}
 	mysql_free_result($request);
-	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'moderate')
-		EoS_Smarty::loadTemplate('modcenter/group_members');
+	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'moderate') {
+		EoS_Smarty::loadTemplate('modcenter/modcenter_base');
+		$context['_template_include'] = 'admin/group_list_members';
+	}
 	else
 		$context['sub_template'] = 'group_members';
 	$context['page_title'] = $txt['membergroups_members_title'] . ': ' . $context['group']['name'];
@@ -639,7 +643,8 @@ function GroupRequests()
 	global $txt, $context, $scripturl, $user_info, $sourcedir, $smcFunc, $modSettings, $language;
 
 	//if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'moderate')
-		EoS_Smarty::loadTemplate('modcenter/list_groups');
+	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
+	$context['_template_include'] = 'modcenter/list_groups';
 
 	// Set up the template stuff...
 	$context['page_title'] = $txt['mc_group_requests'];

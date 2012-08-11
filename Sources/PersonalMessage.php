@@ -272,15 +272,16 @@ function MessageMain()
 
 	if (!isset($_REQUEST['sa']) || !isset($subActions[$_REQUEST['sa']])) {
 		MessageFolder();
-		EoS_Smarty::loadTemplate('pm/folder');
+		EoS_Smarty::loadTemplate('pm/base');
+		$context['_template_include'] = 'pm/folder';
 	}
 	else
 	{	
 		$sa = $_REQUEST['sa'];
-		if($sa == 'send' || $sa == 'send2')
-			EoS_Smarty::loadTemplate('pm/send');
-		else
-			loadTemplate('PersonalMessage');
+		if($sa == 'send' || $sa == 'send2') {
+			EoS_Smarty::loadTemplate('pm/base');
+			$context['_template_include'] = 'pm/send';
+		}
 		messageIndexBar($_REQUEST['sa']);
 		$subActions[$_REQUEST['sa']]();
 	}
@@ -1068,11 +1069,12 @@ function MessageSearch()
 
 	$context['simple_search'] = isset($context['search_params']['advanced']) ? empty($context['search_params']['advanced']) : !empty($modSettings['simpleSearch']) && !isset($_REQUEST['advanced']);
 	$context['page_title'] = $txt['pm_search_title'];
-	$context['sub_template'] = 'search';
 	$context['linktree'][] = array(
 		'url' => $scripturl . '?action=pm;sa=search',
 		'name' => $txt['pm_search_bar_title'],
 	);
+	EoS_Smarty::loadTemplate('pm/base');
+	$context['_template_include'] = 'pm/search_form';
 }
 
 function MessageSearch2()
@@ -1522,7 +1524,8 @@ function MessageSearch2()
 
 	// Finish off the context.
 	$context['page_title'] = $txt['pm_search_title'];
-	$context['sub_template'] = 'search_results';
+	EoS_Smarty::loadTemplate('pm/base');
+	$context['_template_include'] = 'pm/search_results';
 	$context['menu_data_' . $context['pm_menu_id']]['current_area'] = 'search';
 	$context['linktree'][] = array(
 		'url' => $scripturl . '?action=pm;sa=search',
@@ -1534,7 +1537,7 @@ function MessageSearch2()
 function MessagePost()
 {
 	global $txt, $sourcedir, $scripturl, $modSettings;
-	global $context, $options, $smcFunc, $language, $user_info;
+	global $context, $options, $language, $user_info;
 
 	isAllowedTo('pm_send');
 
@@ -1778,7 +1781,8 @@ function MessagePost()
 	$editorOptions = array(
 		'id' => 'message',
 		'value' => $context['message'],
-		'height' => '300px',
+		'height' => (isset($options['editor_height']) && $options['editor_height'] > 150 && $options['editor_height'] < 800 ? $options['editor_height'] : 250) . 'px',
+		'rows' => 10,
 		'width' => '100%',
 		'labels' => array(
 			'post_button' => $txt['send_message'],
@@ -2441,7 +2445,8 @@ function MessageKillAllQuery()
 	global $txt, $context;
 
 	// Only have to set up the template....
-	$context['sub_template'] = 'ask_delete';
+	EoS_Smarty::loadTemplate('pm/base');
+	$context['_template_include'] = 'pm/delete_ask';
 	$context['page_title'] = $txt['delete_all'];
 	$context['delete_all'] = $_REQUEST['f'] == 'all';
 
@@ -2530,8 +2535,8 @@ function MessagePrune()
 		'url' => $scripturl . '?action=pm;sa=prune',
 		'name' => $txt['pm_prune']
 	);
-
-	$context['sub_template'] = 'prune';
+	EoS_Smarty::loadTemplate('pm/base');
+	$context['_template_include'] = 'pm/prune';
 	$context['page_title'] = $txt['pm_prune'];
 }
 

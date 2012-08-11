@@ -1320,14 +1320,13 @@ function detectBrowser()
 		$context['mobile'] = true;
 		define('MOBILE', true);
 		define('MOBILE_SUBDIR', '/m');
-		define('CSS_PRIMARY_BASE', 'mobile');
 	}
 	else {
 		$context['mobile'] = false;
 		define('MOBILE', false);
 		define('MOBILE_SUBDIR', '');
-		define('CSS_PRIMARY_BASE', 'index');
 	}
+	define('CSS_PRIMARY_BASE', 'skin');
 }
 
 // Load a theme, by ID.
@@ -1772,7 +1771,7 @@ function loadTheme($id_theme = 0, $initialize = true)
 		}
 	}
 
-	$settings['primary_css'] = $settings['theme_url'] . MOBILE_SUBDIR . '/css/' . CSS_PRIMARY_BASE . $context['theme_variant'] . '.css' . $context['jsver'];
+	$settings['primary_css'] = $settings['theme_url'] . MOBILE_SUBDIR . '/css/' . CSS_PRIMARY_BASE . $context['theme_variant'];
 
 	$context['theme_scripts'] = array();
 	$context['inline_footer_script'] = '';

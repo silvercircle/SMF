@@ -22,7 +22,6 @@ function smc_Editor(oOptions)
 
 	// These hold the breadcrumb.
 	this.oBreadHandle = null;
-	this.oResizerElement = null;
 
 	// Kinda holds all the useful stuff.
 	this.aKeyboardShortcuts = new Array();
@@ -161,7 +160,6 @@ smc_Editor.prototype.init = function()
 		shortcutCheck: function(oEvent) {return oCaller.shortcutCheck(oEvent);},
 		editorBlur: function(oEvent) {return oCaller.editorBlur(oEvent);},
 		editorFocus: function(oEvent) {return oCaller.editorFocus(oEvent);},
-		startResize: function(oEvent) {return oCaller.startResize(oEvent);},
 		resizeOverDocument: function(oEvent) {return oCaller.resizeOverDocument(oEvent);},
 		endResize: function(oEvent) {return oCaller.endResize(oEvent);},
 		resizeOverIframe: function(oEvent) {return oCaller.resizeOverIframe(oEvent);}
@@ -360,19 +358,6 @@ smc_Editor.prototype.init = function()
 
 	// Make sure we set the message mode correctly.
 	document.getElementById(this.opt.sUniqueId + '_mode').value = this.bRichTextEnabled ? 1 : 0;
-
-	// Show the resizer.
-	if (document.getElementById(this.opt.sUniqueId + '_resizer') && (!is_opera || is_opera95up) && !(is_chrome && !this.bRichTextEnabled))
-	{
-		// Currently nothing is being resized...I assume!
-		window.smf_oCurrentResizeEditor = null;
-
-		this.oResizerElement = document.getElementById(this.opt.sUniqueId + '_resizer');
-		this.oResizerElement.style.display = '';
-
-		createEventListener(this.oResizerElement);
-		this.oResizerElement.addEventListener('mousedown', this.aEventWrappers.startResize, false);
-	}
 
 	// Set the text - if WYSIWYG is enabled that is.
 	if (this.bRichTextEnabled)
@@ -1039,16 +1024,14 @@ smc_Editor.prototype.zoomEditor = function()
 		$('.editor').css('height', $(window).height() - 130 + 'px');
 		$('.rich_editor_frame').css('height', $(window).height() - 130 + 'px');
 		is_zoomed = true;
-		$('#message_resizer').hide();
 	}
 	else {
 		// revert the process from above
 		$('body').css('overflow', 'auto');
-			el.css({"position": 'static', 'padding':0, 'width': old_width, 'height': old_height});
+		el.css({"position": 'static', 'padding':0, 'width': old_width, 'height': 'auto'});
 		$('.editor').css({'height': old_editor_height, 'width': old_editor_width});
 		$('.rich_editor_frame').css('height', old_rich_editor_height);
 		is_zoomed = false;
-		$('#message_resizer').show();
 	}
 	$(window).resize(function() {
 		if(is_zoomed) {
@@ -1190,30 +1173,6 @@ smc_Editor.prototype.onSpellCheckCompleteDataReceived = function(oXMLDoc)
 	this.setFocus();
 }
 
-smc_Editor.prototype.resizeTextArea = function(newHeight, newWidth, is_change)
-{
-	// Work out what the new height is.
-	if (is_change)
-	{
-		// We'll assume pixels but may not be.
-		newHeight = this._calculateNewDimension(this.oTextHandle.style.height, newHeight);
-		if (newWidth)
-			newWidth = this._calculateNewDimension(this.oTextHandle.style.width, newWidth);
-	}
-
-	// Do the HTML editor - but only if it's enabled!
-	if (this.bRichTextPossible)
-	{
-		this.oFrameHandle.style.height = newHeight;
-		if (newWidth)
-			this.oFrameHandle.style.width = newWidth;
-	}
-	// Do the text box regardless!
-	this.oTextHandle.style.height = newHeight;
-	if (newWidth)
-		this.oTextHandle.style.width = newWidth;
-}
-
 // A utility instruction to save repetition when trying to work out what to change on a height/width.
 smc_Editor.prototype._calculateNewDimension = function(old_size, change_size)
 {
@@ -1342,107 +1301,6 @@ smc_Editor.prototype.shortcutCheck = function(oEvent)
 	}
 
 	return true;
-}
-
-// This is the method called after clicking the resize bar.
-smc_Editor.prototype.startResize = function(oEvent)
-{
-	if ('event' in window)
-		oEvent = window.event;
-
-	if (!oEvent || window.smf_oCurrentResizeEditor != null)
-		return true;
-
-	window.smf_oCurrentResizeEditor = this.iArrayPosition;
-
-	var aCurCoordinates = smf_mousePose(oEvent);
-	this.osmc_EditorCurrentResize.old_y = aCurCoordinates[1];
-	this.osmc_EditorCurrentResize.old_rel_y = null;
-	this.osmc_EditorCurrentResize.cur_height = parseInt(this.oTextHandle.style.height);
-
-	// Set the necessary events for resizing.
-	var oResizeEntity = is_ie ? document : window;
-	oResizeEntity.addEventListener('mousemove', this.aEventWrappers.resizeOverDocument, false);
-
-	if (this.bRichTextPossible)
-		this.oFrameDocument.addEventListener('mousemove', this.aEventWrappers.resizeOverIframe, false);
-
-	document.addEventListener('mouseup', this.aEventWrappers.endResize, true);
-
-	if (this.bRichTextPossible)
-		this.oFrameDocument.addEventListener('mouseup', this.aEventWrappers.endResize, true);
-
-	return false;
-}
-
-// This is kind of a cheat, as it only works over the IFRAME.
-smc_Editor.prototype.resizeOverIframe = function(oEvent)
-{
-	if ('event' in window)
-		oEvent = window.event;
-
-	if (!oEvent || window.smf_oCurrentResizeEditor == null)
-		return true;
-
-	var newCords = smf_mousePose(oEvent);
-
-	if (this.osmc_EditorCurrentResize.old_rel_y == null)
-		this.osmc_EditorCurrentResize.old_rel_y = newCords[1];
-	else
-	{
-		var iNewHeight = newCords[1] - this.osmc_EditorCurrentResize.old_rel_y + this.osmc_EditorCurrentResize.cur_height;
-		if (iNewHeight < 0)
-			this.endResize();
-		else
-			this.resizeTextArea(iNewHeight + 'px', 0, false);
-	}
-
-	return false;
-}
-
-// This resizes an editor.
-smc_Editor.prototype.resizeOverDocument = function (oEvent)
-{
-	if ('event' in window)
-		oEvent = window.event;
-
-	if (!oEvent || window.smf_oCurrentResizeEditor == null)
-		return true;
-
-	var newCords = smf_mousePose(oEvent);
-
-	var iNewHeight = newCords[1] - this.osmc_EditorCurrentResize.old_y + this.osmc_EditorCurrentResize.cur_height;
-	if (iNewHeight < 0)
-		this.endResize();
-	else
-		this.resizeTextArea(iNewHeight + 'px', 0, false);
-
-	return false;
-}
-
-smc_Editor.prototype.endResize = function (oEvent)
-{
-	if ('event' in window)
-		oEvent = window.event;
-
-	if (window.smf_oCurrentResizeEditor == null)
-		return true;
-
-	window.smf_oCurrentResizeEditor = null;
-
-	// Remove the event...
-	var oResizeEntity = is_ie ? document : window;
-	oResizeEntity.removeEventListener('mousemove', this.aEventWrappers.resizeOverDocument, false);
-
-	if (this.bRichTextPossible)
-		this.oFrameDocument.removeEventListener('mousemove', this.aEventWrappers.resizeOverIframe, false);
-
-	document.removeEventListener('mouseup', this.aEventWrappers.endResize, true);
-
-	if (this.bRichTextPossible)
-		this.oFrameDocument.removeEventListener('mouseup', this.aEventWrappers.endResize, true);
-
-	return false;
 }
 
 // *** smc_SmileyBox class.

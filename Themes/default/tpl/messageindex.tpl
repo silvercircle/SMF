@@ -93,12 +93,14 @@
       {if !empty($S.display_who_viewing)}
         <tr class="whos_viewing mediumpadding">
           <td colspan="{($can_quickmod) ? '6' : '5'}" class="smalltext">
+          <div class="blue_container norounded mediummargin">
           {if $S.display_who_viewing == 1}
             {count($C.view_members)} {(count($C.view_members) == 1) ? $T.who_member : $T.members}
           {else}
             {$C.full_members_viewing_list}
           {/if}
-            {$T.who_and}{$C.view_num_guests} {($C.view_num_guests == 1) ? $T.guest : $T.guests}{$T.who_viewing_board}
+          {$T.who_and}{$C.view_num_guests} {($C.view_num_guests == 1) ? $T.guest : $T.guests}{$T.who_viewing_board}
+          </div>
           </td>
         </tr>
       {/if}

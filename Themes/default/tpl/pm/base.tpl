@@ -16,6 +16,9 @@
 {block content}
 {include 'generics/menu_above.tpl'}
 {include 'pm/above.tpl'}
+{if isset($C._template_include)}
+	{include $C._template_include|cat:'.tpl'}
+{/if}
 {block 'pm_content'}
 {/block}
 {include 'pm/below.tpl'}

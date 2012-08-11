@@ -131,7 +131,7 @@
       </div>
     {/if}
     {if isset($C.$lid.additional_rows.above_column_headers)}
-      <div class="floatright">
+      <div class="floatright mediumpadding">
         {call list_additional_rows row_position='above_column_headers' cur_list=$lid}
       </div>
     {/if}
@@ -181,12 +181,12 @@
       </div>
     {/if}
     {if isset($C.$lid.additional_rows.below_table_data)}
-      <div class="floatright">
+      <div class="floatright mediumpadding">
         {call list_additional_rows row_position='below_table_data' cur_list=$lid}
       </div>
     {/if}
     {if isset($C.$lid.additional_rows.bottom_of_list)}
-      <div class="floatright">
+      <div class="floatright mediumpadding">
         {call list_additional_rows row_position='bottom_of_list' cur_list=$lid}
       </div>
     {/if}

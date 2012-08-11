@@ -1,5 +1,3 @@
-{extends 'pm/base.tpl'}
-{block 'pm_content'}
 {include 'generics/editor_control.tpl'}
 {if !empty($context.send_log)}
   <div class="cat_bar">
@@ -158,4 +156,3 @@
         sShowBccLinkTemplate: {$SUPPORT->JavaScriptEscape('<a href="#" id="bcc_link">'|cat:$T.make_bcc|cat:'</a> <a href="'|cat:$SCRIPTURL|cat:'?action=helpadmin;help=pm_bcc" onclick="return reqWin(this.href);">(?)</a>')}
       } );
     // ]]></script>
-{/block}

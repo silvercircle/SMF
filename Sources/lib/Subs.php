@@ -2350,7 +2350,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 
 	// Cache the output if it took some time...
 	if (isset($cache_key, $cache_t) && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.03)
-	//if (isset($cache_key)) // && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
+	//if (isset($cache_key, $cache_t)) // && array_sum(explode(' ', microtime())) - array_sum(explode(' ', $cache_t)) > 0.05)
 		CacheAPI::putCache($cache_key, $message, 1200);
 
 	// If this was a force parse revert if needed.

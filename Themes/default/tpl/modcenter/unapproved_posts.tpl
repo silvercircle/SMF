@@ -1,5 +1,3 @@
-{extends "modcenter/modcenter_base.tpl"}
-{block modcenter_content}
 <div id="modcenter">
   <form action="', $scripturl, '?action=moderate;area=postmod;start=', $context['start'], ';sa=', $context['current_view'], '" method="post" accept-charset="UTF-8">
     <div class="cat_bar">
@@ -59,5 +57,4 @@
     <input type="hidden" name="{$C.session_var}" value="{$C.session_id}" />
   </form>
   </div>
-  <br class="clear" />
-{/block}
+  <br class="clear">

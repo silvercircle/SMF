@@ -2,6 +2,130 @@ var cur_topic_id, cur_msg_id, buff_subject, cur_subject_div, in_edit_mode = 0;
 var hide_prefixes = Array();
 var _inModify = false;
 
+// Autosize 1.11 - jQuery plugin for textareas
+// (c) 2012 Jack Moore - jacklmoore.com
+// license: www.opensource.org/licenses/mit-license.php
+
+(function ($) {
+	var
+	hidden = 'hidden',
+	borderBox = 'border-box',
+	lineHeight = 'lineHeight',
+	copy = '<textarea tabindex="-1" style="position:absolute; top:-9999px; left:-9999px; right:auto; bottom:auto; -moz-box-sizing:content-box; -webkit-box-sizing:content-box; box-sizing:content-box; word-wrap:break-word; height:0 !important; min-height:0 !important; overflow:hidden;">',
+	// line-height is omitted because IE7/IE8 doesn't return the correct value.
+	copyStyle = [
+		'fontFamily',
+		'fontSize',
+		'fontWeight',
+		'fontStyle',
+		'letterSpacing',
+		'textTransform',
+		'wordSpacing',
+		'textIndent'
+	],
+	oninput = 'oninput',
+	onpropertychange = 'onpropertychange',
+	test = $(copy)[0];
+
+	test.setAttribute(oninput, "return");
+
+	if ($.isFunction(test[oninput]) || onpropertychange in test) {
+
+		$(test).css(lineHeight, '99px');
+		if ($(test).css(lineHeight) === '99px') {
+			copyStyle.push(lineHeight);
+		}
+
+		$.fn.autosize = function (className) {
+			return this.each(function () {
+				var
+				ta = this,
+				$ta = $(ta),
+				mirror,
+				minHeight = $ta.height(),
+				maxHeight = parseInt($ta.css('maxHeight'), 10),
+				active,
+				i = copyStyle.length,
+				resize,
+				boxOffset = 0;
+
+				if ($ta.css('box-sizing') === borderBox || $ta.css('-moz-box-sizing') === borderBox || $ta.css('-webkit-box-sizing') === borderBox){
+					boxOffset = $ta.outerHeight() - $ta.height();
+				}
+
+				if ($ta.data('mirror') || $ta.data('ismirror')) {
+					return;
+				} else {
+					mirror = $(copy).data('ismirror', true).addClass(className || 'autosizejs')[0];
+
+					resize = $ta.css('resize') === 'none' ? 'none' : 'horizontal';
+
+					$ta.data('mirror', $(mirror)).css({
+						overflow: hidden,
+						overflowY: hidden,
+						wordWrap: 'break-word',
+						resize: resize
+					});
+				}
+
+				maxHeight = maxHeight && maxHeight > 0 ? maxHeight : 9e4;
+
+				function adjust() {
+					var height, overflow;
+
+					if (!active) {
+						active = true;
+						mirror.value = ta.value;
+						mirror.style.overflowY = ta.style.overflowY;
+						mirror.style.width = $ta.css('width');
+
+						mirror.scrollTop = 0;
+						mirror.scrollTop = 9e4;
+
+						height = mirror.scrollTop;
+						overflow = hidden;
+						if (height > maxHeight) {
+							height = maxHeight;
+							overflow = 'scroll';
+						} else if (height < minHeight) {
+							height = minHeight;
+						}
+						ta.style.overflowY = overflow;
+
+						ta.style.height = height + boxOffset + 'px';		
+						setTimeout(function () {
+							active = false;
+						}, 1);
+					}
+				}
+				while (i--) {
+					mirror.style[copyStyle[i]] = $ta.css(copyStyle[i]);
+				}
+				$('body').append(mirror);
+				if (onpropertychange in ta) {
+					if (oninput in ta) {
+						ta[oninput] = ta.onkeyup = adjust;
+					} else {
+						ta[onpropertychange] = adjust;
+					}
+				} else {
+					ta[oninput] = adjust;
+				}
+				$(window).resize(adjust);
+				$ta.bind('autosize', adjust);
+				$ta.text($ta.text());
+				adjust();
+			});
+		};
+	} else {
+		// Makes no changes for older browsers (FireFox3- and Safari4-)
+		$.fn.autosize = function () {
+			return this;
+		};
+	}
+
+}(jQuery));
+
 function modify_topic(topic_id, first_msg_id)
 {
 	if (!('XMLHttpRequest' in window))
@@ -246,6 +370,7 @@ QuickReply.prototype.onQuoteReceived = function (oXMLDoc)
 	//replaceText(sQuoteText, document.forms.postmodify.message);
 	replaceText(sQuoteText, document.forms.quickModForm.message);
 
+	$('#quickReplyMessage').trigger('autosize');
 	setBusy(false);
 }
 
@@ -343,6 +468,9 @@ QuickModify.prototype.onMessageReceived = function (XMLDoc)
 
 	setInnerHTML(this.oCurSubjectDiv, this.opt.sTemplateSubjectEdit.replace(/%subject%/, sSubjectText).replace(/\{&dollarfix;\$\}/g, '$'));
 
+	$('#quickModifyMessage').autosize();
+	$('#quickModifyMessage').trigger('autosize');
+	$('#quickModifyMessage').focus();
 	return true;
 }
 
@@ -607,31 +735,13 @@ InTopicModeration.prototype.handleSubmit = function (sSubmitType)
 	return true;
 }
 
-
-// *** Other functions...
-function expandThumb(thumbID)
-{
-	var img = document.getElementById('thumb_' + thumbID);
-	var link = document.getElementById('link_' + thumbID);
-	var tmp = img.src;
-	img.src = link.href;
-	link.href = tmp;
-	img.style.width = '';
-	img.style.height = '';
-	return false;
-}
-
-function hltColumn(el, state)
-{
-	el.parent().parent().children('td').each(function() {
-		if(state)
-			$(this).addClass('inline_highlight');
-		else
-			$(this).removeClass('inline_highlight');
-	});
-}
-
 $(document).ready(function() {
+	if($('#quickReplyMessage').length > 0) {
+		$('#quickReplyMessage').autosize();
+		$('#qr_cancel').click(function() {
+			return(oQuickReply.cancel());
+		});
+	}
 	$('.iconrequest').click(function() {
 		setBusy(1);
 		var m = $(this).attr('id').substr(6);

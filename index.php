@@ -74,7 +74,7 @@ $context['template_hooks']['global'] = array(
 	'header' => ''
 );
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
-$context['jsver'] = '?v=1577';
+$context['jsver'] = '?v=1580';
 $context['jquery_version'] = '1.7.2';
 $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();
@@ -311,7 +311,6 @@ function smf_main()
 		'like' => array('Ratings.php', 'LikeDispatch'),
 		'tags' => array('Tagging.php', 'TagsMain'),
 		'astream' => array('Activities.php', 'aStreamDispatch'),
-		'processlink' => array('Display.php', 'ProcessLink'),
 		'dismissnews' => array('Profile-Actions.php', 'DismissNews'),
 		'whatsnew' => array('Recent.php', 'WhatsNew'),
 	);

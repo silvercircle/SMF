@@ -295,7 +295,8 @@ function ViewModlog()
 		),
 	);
 
-	EoS_Smarty::loadTemplate('modcenter/modlog');
+	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
+	$context['_template_include'] = 'modcenter/modlog';
 	// Create the watched user list.
 	createList($listOptions);
 
