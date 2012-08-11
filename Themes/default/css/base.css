@@ -1,0 +1,990 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
+table {
+	empty-cells: show;
+	border-spacing: 1px;
+}
+
+/* global containers for basic site layout */
+div#wrap {
+	margin: 0 auto;
+	padding-bottom: 10px;
+	min-width:800px;
+}
+div#content_section {
+	padding: 10px 20px 5px 20px;
+	margin-left:30px;
+	margin-right:30px;
+}
+div#header {
+	margin-left:30px;
+	margin-right:30px;
+}
+div#upper_section {
+	height: 67px;
+	max-height: 67px;
+	min-height: 67px;
+	font-size: 12px;
+	padding-left:10px;
+}
+
+/* inner content section, defines the width for the forum itself (but not the header or footer)*/
+div#main_content_section {
+	width: auto;
+	min-height: 200px;
+	margin: 0 auto 20px auto;
+	padding: 10px;
+	padding-top:0;
+}
+div#sidebar, div#sbar {
+	float: right;
+	padding: 0 3px;
+}
+
+form {
+	padding: 0;
+	margin: 0;
+}
+div.auto_suggest_div {
+    position: absolute;
+    visibility: hidden;
+    padding:4px;
+}
+div.auto_suggest_item
+{
+	padding:0 4px;
+}
+div.auto_suggest_item_hover
+{
+	padding:0 4px;
+}
+
+img.icon {
+	vertical-align: middle;
+	padding: 0;
+	margin: 0 3px;
+	border: 0;
+	height: 16px;
+}
+
+#search_form {
+	position: absolute;
+	top: -60px;
+	right: 30px;
+	padding: 5px 10px 0 10px;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	margin-bottom: -70px;
+	height: 24px;
+	overflow: hidden;
+	z-index: 1000;
+}
+.search_form_active {
+	padding-bottom:10px;
+}
+div.notifications {
+	width: 280px;
+}
+div.popup_wrapper {
+	z-index: 9999;
+	position: absolute;
+}
+input[type="text"], input[type="password"], select {
+	padding:4px;
+}
+input.aligned, span.cblabel, label.aligned {
+	height:20px;
+	line-height:20px;
+	vertical-align:middle;
+	margin:0 2px;
+}
+select {
+	padding:3px;
+}
+select option {
+	padding: 0;
+}
+h3.catbg input.input_check {
+	margin: 9px 7px 0 7px;
+}
+hr {
+	height: 1px;
+	border: 0;
+}
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+	padding: 0;
+}
+fieldset {
+	padding: 1em;
+	margin: 10px;
+}
+fieldset legend {
+	padding: 0 5px;
+}
+a img {
+	border: 0;
+}
+.borderbox {
+   -moz-box-sizing:    border-box;
+   -webkit-box-sizing: border-box;
+   -ms-box-sizing:     border-box;
+    box-sizing:        border-box;	
+}
+.floatright {
+	float: right !important;
+}
+.floatleft {
+	float: left !important;
+}
+.nofloat {
+	float:none !important;
+}
+.flow_auto {
+	overflow: auto;
+}
+.flow_hidden {
+	overflow: hidden;
+}
+.flow_hidden .windowbg, .flow_hidden .windowbg2 {
+	margin-top: 2px;
+}
+.clear {
+	clear: both;
+}
+.clear_left {
+	clear: left !important;
+}
+.clear_right {
+	clear: right !important;
+}
+ul.reset, ul.reset li {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+/* bbcodes */
+blockquote.bbc_standard_quote, blockquote.bbc_alternate_quote {
+	line-height: 1.4em;
+	padding: 1.1em 1.4em;
+	margin: 0 10px 0.8em 10px;
+	overflow:hidden;
+}
+.bbc_img {
+	max-width: 100%;
+	width: auto;
+	height: auto;
+	padding:2px;
+}
+div.bbc_img_resizer {
+	padding: 3px 0;
+	cursor: pointer;
+}
+.bbc_table td {
+	vertical-align: top;
+}
+.bbc_list {
+	text-align: left;
+	padding-left:10px;
+	margin-left:10px;
+}
+div.quoteheader, div.codeheader, div.spoiler.head {
+	margin: 10px 10px 0 20px;
+}
+div.codeheader, div.spoiler.head {
+	margin: 10px 0 0 0;
+	padding: 0.15em 1em;
+}
+
+.help {
+	cursor: help;
+}
+.glass {
+	border: 0 !important;
+	margin: 0 !important;
+	line-height:24px !important;
+	padding:1px 10px 0 10px !important;
+	text-shadow: white 1px 1px 1px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.glass > div {
+	padding:0 !important;
+}
+div.pagesection {
+	padding: 0.2em;
+	overflow: hidden;
+	margin: 3px 0;
+}
+div.pagesection .buttonlist {
+	clear: right;
+}
+div.pagesection div.floatright input {
+	margin-top: 3px;
+}
+div#tagstrip {
+	float: right;
+	padding: 0;
+}
+div#tagstrip a.tag {
+	padding-left:20px;
+}
+span.xtag {
+	width: 14px;
+	min-width: 16px;
+	max-width: 16px;
+	cursor: pointer;
+	display: inline-block;
+	margin-right: 4px;
+	margin-left: 2px;
+}
+/* posts and personal messages */
+div#forumposts {
+	clear: both;
+}
+div.posts_container {
+	padding:5px;
+	padding-top:0;
+	margin:5px 0;
+}
+div.post {
+	line-height: 1.3em;
+	padding: 0.5em 1.0em 0 1.0em;
+	overflow:hidden;
+	min-height: 100px;
+}
+div.post.pm {
+	min-height: 40px;
+}
+div.post p {
+	margin:0;
+}
+div.post.comment {
+	min-height: 0;
+	padding: 0 1.0em 0 1.0em;
+}
+div.post_wrapper {
+	width: auto;
+	padding:0;
+	margin-bottom:10px;
+}
+div.post_wrapper.comment {
+	border:0;
+	outline: 0;
+	margin-bottom:0;
+}
+div.post_wrapper.article {
+	padding:0;
+	margin:0;
+	border:0;
+	outline:0;
+}
+div.post_wrapper.ignored {
+	display:none;
+}
+div.post_bottom {
+	padding: 3px 10px 2px 10px;
+	clear: both;
+}
+div.post_content {
+	margin-left: 220px;
+	padding-bottom:5px;
+	min-height:130px;
+}
+div.post_content.lean {
+	margin-left: 10px !important;
+	margin-right: 10px !important;
+	min-height:10px;
+}
+div.post_content.comment {
+	margin-left:50px;
+	min-height:0 !important;
+}
+div.keyinfo {
+	padding: 0 10px 0 0;
+	min-height: 26px;
+	max-height: 26px;
+	line-height: 26px;
+}
+div.keyinfo.pm {
+	min-height: 40px;
+	max-height: 40px;
+}
+div.keyinfo.lean {
+	height:auto !important;
+	max-height:50px !important;
+	padding: 0 10px 5px 10px;
+}
+div.keyinfo.comment {
+	padding:0;
+	margin:0;
+	padding-right:10px;
+	line-height: 18px;
+	min-height:76px;
+}
+div.keyinfo .messageicon {
+	float: left;
+	margin:0 0.5em 0 0;
+	max-height:26px;
+}
+div.keyinfo .messageicon img {
+	padding: 0;
+	width: 16px;
+	height: 16px;
+	margin-top:5px;
+	box-sizing: content-box;
+}
+/* poster info in posts and pms */
+div.poster.std {
+	float: left;
+	width: 220px;
+	max-width: 220px;
+	min-width: 220px;
+	text-align: center;
+	margin:0 0 10px 0;
+	padding:0 5px;
+	overflow:hidden;
+}
+div.poster.comment {
+	margin-left:65px;
+	padding: 5px 0;
+}
+div.poster.article {
+	margin-left:60px;
+}
+div.poster h4, div.poster ul {
+	padding: 0;
+}
+h4.poster {
+	padding: 0 5px;
+	line-height:26px;
+	width:220px;
+	min-width:220px;
+	max-width:220px;
+	overflow:hidden;
+}
+div.poster ul ul {
+	margin: 0.3em 1em 0 0;
+	padding: 0;
+}
+div.poster ul ul li {
+	display: inline;
+}
+div.poster li.stars, div.poster li.avatar, div.poster li.blurb, li.postcount {
+	margin-top: 0.5em;
+}
+div.poster li.avatar {
+	overflow: hidden;
+}
+div.poster li.warning {
+	line-height: 1.2em;
+	padding-top: 1em;
+}
+div.poster li.warning a img {
+	vertical-align: bottom;
+	padding: 0 0.2em;
+}
+
+/* avatars */
+.avatar img, div#mcard_inner img.avatar, div#basicinfo img.avatar {
+	width: auto;
+	height: auto;
+	padding: 2px;
+	max-width: 100px;
+}
+span.small_avatar img, li.medium_avatar img {
+	height: 32px;
+	width: 32px;
+	padding: 2px;
+}
+
+div.custom_fields_above_signature {
+	width: 98%;
+	clear: right;
+	padding: 1em 0 3px 0;
+	line-height: 1.4em;
+}
+ol.post_attachments, ol.tiles {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+ol.post_attachments li, ol.tiles li {
+	float: left;
+	width: 40%;
+	height: 60px;
+	margin-right: 10px;
+	margin-top: 5px;
+	padding: 2px 4px;
+}
+ol.tiles li {
+	width: 50%;
+	height: 60px;
+	padding: 3px 0;
+	margin:0;
+}
+ol.post_attachments li img, ol.tiles li img.avatar {
+	max-height: 56px;
+	max-width: 90px;
+	padding: 1px;
+	height: auto;
+	width: auto;
+	float: left;
+	margin-right: 5px;
+}
+ol.tiles li img.avatar {
+	max-width: 60px;
+	max-height: 50px;
+	float: none;
+}
+div.signature, div.attachments {
+	width:98%;
+	overflow: auto;
+	clear: right;
+	margin: 0 1.5em;
+	line-height: 1.4em;
+	font-size: 0.85em;
+	padding-top:5px;
+	margin-bottom:5px;
+}
+div.signature {
+	overflow: hidden;
+	font-size: 0.95em;
+}
+/* button strips and quick buttons */
+ul.buttonlist li, ul.plainbuttonlist li {
+	float: left;
+	display: inline;
+	margin: 0 3px 0 3px;
+	padding: 0;
+	cursor: pointer;
+}
+ul.plainbuttonlist {
+	margin:0;
+	height:18px;
+	line-height:18px;
+	padding:0;
+}
+ul.buttonlist {
+	z-index: 100;
+	margin: 0 0.2em 5px 0;
+	padding:0;
+}
+ul.plainbuttonlist li a {
+	font-size: 11px !important;
+	float: left;
+	text-decoration: none;
+	padding: 0 6px 1px 6px;
+	cursor: pointer;
+}
+ul.buttonlist li a, span.button, input[type=button], input[type=submit] {
+	float: left;
+	height:21px !important;
+	line-height:19px !important;
+	padding: 0 6px 1px 6px;
+	cursor: pointer;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	vertical-align: center;
+}
+input[type=button], input[type=submit] {
+	float:none;
+	padding-bottom: 2px;
+	margin-left:2px;
+}
+span.button.centered {
+	display:inline-block;
+	float:none;
+}
+span.button {
+	margin: 0 0.3em;
+}
+span.button.icon {
+	padding-left:22px;
+}
+
+/* definition lists */
+
+dl.input {
+	line-height:26px;
+}
+dl.input dt {
+	float: left;
+	text-align: right;
+	width:44%;
+	margin:0;
+	margin-bottom:10px;
+}
+
+dl.input dd {
+	text-align: left;
+	width:54%;
+	float:right;
+	margin:0;
+	margin-bottom:10px;
+}
+dl.common {
+	clear: right;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+}
+
+dl.common dt {
+	width: 49%;
+	float: left;
+	margin: 0;
+	padding: 0;
+	clear: both;
+	white-space: nowrap;
+}
+
+dl.common dd {
+	width: 49%;
+	float: right;
+	margin: 0;
+	padding: 0;
+	white-space: nowrap;
+	text-overflow:ellipsis;
+}
+
+dl.common.left dt {
+	width: auto;
+	margin-bottom: 10px;
+	text-align: right;
+	vertical-align: middle;
+}
+
+dl.common.left dd {
+	width: auto;
+	margin-bottom: 10px;
+}
+
+/* Lists with settings use these a lot.
+------------------------------------------------------- */
+dl.settings {
+	clear: right;
+	overflow: auto;
+	margin: 0 0 10px 0;
+	padding: 0;
+}
+
+dl.settings dt {
+	width: 40%;
+	float: left;
+	margin: 0 0 10px 0;
+	padding: 0;
+	clear: both;
+}
+
+dl.settings dt.settings_title {
+	width: 100%;
+	float: none;
+	margin: 0 0 10px 0;
+	padding: 5px 0 0 0;
+	font-weight: bold;
+	clear: both;
+}
+
+dl.settings dt.windowbg {
+	width: 98%;
+	float: left;
+	margin: 0 0 3px 0;
+	padding: 0 0 5px 0;
+	clear: both;
+}
+
+dl.settings dd {
+	width: 56%;
+	float: right;
+	overflow: auto;
+	margin: 0 0 3px 0;
+	padding: 0;
+}
+
+dl.settings img {
+	margin: 0 10px 0 0;
+}
+
+dl.settings dt a img {
+	position: relative;
+	top: 2px;
+}
+
+/* boardlisting (list of check boxes to select boards) */
+div.boardlisting {
+	width:50%;
+}
+div.boardlisting.left {
+	float:left;
+}
+div.boardlisting.right {
+	float:right;
+}
+div.boardlisting ul {
+	list-style: none;
+	padding-left:10px;
+	padding-right:10px;
+}
+div.boardlisting ul li {
+	height:20px;
+	line-height: 20px;
+}
+div.boardlisting ul li.category {
+	height:25px;
+	border: 0 !important;
+	margin: 0 !important;
+	line-height:24px !important;
+	padding:1px 10px 0 10px !important;
+}
+
+/* title bars */
+.cat_bar2 img, .cat_bar img, .cContainer_header img {
+	padding:0;
+	margin:5px 2px;
+}
+.cat_bar2 img.icon, .cat_bar img.icon {
+	float:left;
+	height:16px;
+}
+.cContainer_header, .cat_bar2, .cat_bar {
+	margin-bottom: 0;
+	height:25px !important;
+	line-height:25px;
+	padding: 0 10px;
+}
+.cat_bar2 h3 {
+	height:24px;
+}
+h4.catbg, h4.catbg2, h3.catbg, h3.catbg2, .table_list tbody.header td.catbg {
+	padding-right: 9px;
+}
+
+/* pulldown menus */
+
+#main_menu {
+	padding: 0 0.5em;
+	padding-left:30px;
+	border-top-left-radius: 6px;
+}
+ul.dropmenu, ul.dropmenu ul {
+	list-style: none;
+	line-height: 1em;
+	padding: 0;
+	margin: 0;
+}
+ul.dropmenu {
+	padding: 0 0.5em;
+}
+ul.dropmenu  > li > a {
+	float: left;
+}
+ul.dropmenu a span {
+	display: block;
+	padding: 0 6px;
+}
+ul.dropmenu li a.firstlevel {
+	padding: 0 5px;
+	height:26px;
+	line-height:26px;
+}
+ul.dropmenu li a.firstlevel.compact {
+	height:24px;
+	line-height: 24px;
+}
+ul.dropmenu > li {
+	float: left;
+	padding: 0;
+	margin: 0;
+	position: relative;
+}
+ul.dropmenu li ul {
+	z-index: 90;
+	display: none;
+	position: absolute;
+	top: 24px;
+	padding: 0;
+	width: 20em;
+}
+ul.dropmenu li li {
+	margin: 2px 0;
+	padding: 0;
+}
+ul.dropmenu li li a {
+	display: block !important;
+}
+ul.dropmenu li li a span {
+	display: block;
+	padding: 5px;
+	white-space: nowrap;
+}
+ul.dropmenu li ul ul {
+	margin: -1.8em 0 0 13em;
+}
+ul.dropmenu li.active {
+	margin-top:-2px;
+}
+ul.dropmenu.compact li.active {
+	border-top:0;
+}
+ul.dropmenu li:hover {
+	cursor: pointer;
+}
+ul.dropmenu li:hover ul ul, ul.dropmenu li:hover ul ul ul {
+	top: -999em;
+}
+ul.dropmenu li li:hover ul {
+	top: auto;
+}
+ul.dropmenu li:hover ul {
+	display: block;
+}
+div.menuline {
+	padding-top:2px;
+}
+span.m_downarrow {
+	padding: 2px 4px 2px 0;
+	width: 14px;
+	margin-left: -8px;
+	height: 22px;
+}
+span.m_downarrow.compact {
+	height:20px;
+}
+
+/* Styles for sidebar menus. (profile, moderation center) */
+ul.left_admmenu, ul.left_admmenu ul, ul.left_admmenu li {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+ul.left_admmenu li {
+	padding: 1px 1px 2px 12px;
+	margin: 1px 0 1px 4px;
+}
+ul.left_admmenu li.active {
+	padding: 4px 4px 4px 4px;
+	position: relative;
+	border-right: 0;
+	right: -2px;
+	z-index: 11;
+}
+div#left_admsection {
+	width: 200px;
+	position: relative;
+	right: -1px;
+	float: left;
+	margin-top: 15px;
+	z-index: 10;
+	min-height: 600px;
+}
+
+/* generic table styles */
+
+table.table_list a.collapse {
+	margin: 0 5px 0 1em;
+}
+.table_grid th.last_th input {
+	margin: 0 2px;
+}
+
+.table_grid th.lefttext {
+	padding: 0 0.7em;
+}
+table.table_grid {
+	margin-top: 0.1em;
+	border-collapse: separate;
+	border-spacing: 0 0;
+	border-top:0;
+}
+table.table_grid td {
+	padding: 3px;
+}
+
+/* personal messages */
+div#personal_messages .capacity_bar {
+	display: block;
+	margin: 0.5em 0 0 1em;
+	height: 1em;
+	width: 10em;
+}
+div#personal_messages .capacity_bar span {
+	display: block;
+	height: 1em;
+}
+
+/* member card */
+div#mcard, .tcard {
+	padding: 0;
+	text-align: left;
+	max-width: 100%;
+	width: auto;
+}
+#mcard .title_bar {
+	padding: 3px 9px;
+	height: 20px;
+	overflow: hidden;
+}
+#mcard h1 {
+	height: 20px;
+	line-height: 20px;
+}
+div#mcard_inner, .tcard_inner {
+	padding: 0;
+	width: auto;
+}
+#mcard_inner pre, #mcard_inner code {
+	max-width: 672px;
+	overflow: hidden !important;
+}
+#mcard_inner div.bbc_img_cnt {
+	display: none;
+}
+div#mcard_close, div#tcard_close {
+	float: right;
+	padding: 5px;
+	margin-right: 10px;
+	position: absolute;
+	top: -4px;
+	right: -13px;
+	cursor: pointer;
+	z-index: 10;
+}
+span.mcard {
+	width: 11px;
+	min-width: 11px;
+	max-width: 11px;
+	cursor: pointer;
+	display: inline-block;
+	margin-left: 4px;
+}
+
+/* polls */
+div#poll {
+	overflow: hidden;
+}
+div#poll .content {
+	padding: 0 1em;
+}
+h4#pollquestion {
+	padding: 0 0 0.5em 2em;
+}
+#poll_options ul.options {
+	padding: 1em 2.5em 0 2em;
+	margin: 0 0 1em 0;
+}
+#poll_options div.submitbutton {
+	clear: both;
+	padding: 0 0 1em 2em;
+	margin: 0 0 1em 0;
+}
+#poll_options dl.options {
+	padding: 1em 2.5em 1em 2em;
+	margin: 0 1em 1em 0;
+	line-height: 1.1em !important;
+}
+#poll_options dl.options dt {
+	padding: 0.3em 0;
+	width: 30%;
+	float: left;
+	margin: 0;
+	clear: left;
+}
+#poll_options dl.options dd {
+	margin: 0 0 0 2em;
+	padding: 0.1em 0 0 0;
+	width: 60%;
+	max-width: 450px;
+	float: left;
+}
+#poll_options dl.options .percentage {
+	display: block;
+	float: right;
+	padding: 0.2em 0 0.3em 0;
+}
+#poll_options p {
+	margin: 0 1.5em 0.2em 1.5em;
+	padding: 0 0.5em 0.5em 0.5em;
+}
+
+/* boardindex related */
+a.brd_rsslink, span.brd_moderators {
+	width: 20px;
+	height: 20px;
+	float: right;
+}
+span.brd_moderators {
+	cursor: pointer;
+}
+
+span.brd_moderators_chld {
+	padding: 4px;
+	position: absolute;
+	z-index:1000;
+}
+
+/* generic classes */
+.mediumpadding {
+	padding: 10px !important;
+}
+.largepadding {
+	padding: 20px !important;
+}
+.smallpadding {
+	padding: 5px !important;
+}
+.tinypadding {
+	padding: 2px !important;
+}
+.minpadding {
+	padding: 1px !important;
+}
+.nopadding {
+	padding: 0 !important;
+}
+.mediummargin {
+	margin: 5px;
+}
+.verticalclear {
+	margin: 3px 0;
+}
+.hspaced {
+	margin-left:5px;
+	margin-right:5px;
+}
+.nowrap {
+	white-space: nowrap;
+}
+.forcedwrap {
+	white-space: pre-line;
+}
+.blue_container, .cContainer_body, .orange_container, .yellow_container, .flat_container {
+	padding: 2px 4px;
+}
+.blue_container div.content, .orange_container div.content, .yellow_container div.content, .cContainer_body div.content {
+	margin:-2px -4px;
+	padding:6px;
+}
+img.cContainer_c {
+	cursor: pointer;
+}
+div.cContainer_end, div.spacer_h {
+	height: 10px;
+}
+.blue_container.cleantop, .orange_container.cleantop, .red_container.cleantop, .yellow_container.cleantop {
+	border-top:0;
+	border-radius:0 !important;
+}
+
+
+div.bbc_dropcaps:first-letter {
+	float:left;
+	position:relative;
+	margin:0.13em 0.1em 0 0;
+	line-height:0.7;
+}
