@@ -73,11 +73,18 @@ function issueWarning($memID)
 	global $txt, $scripturl, $modSettings, $user_info, $mbname;
 	global $context, $cur_profile, $memberContext, $smcFunc, $sourcedir;
 
+	if(!isset($context['profile_template_support_context']))
+		$context['profile_template_support_context'] = new ProfileContext();
+	
 	// Get all the actual settings.
 	list ($modSettings['warning_enable'], $modSettings['user_limit']) = explode(',', $modSettings['warning_settings']);
 
+	EoS_Smarty::loadTemplate('profile/profile_base');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/issuewarning');
 	// This stores any legitimate errors.
 	$issueErrors = array();
+
+	$context['replace_helper_array'] = array('"' => "'", "\n" => '\\n', "\r" => '');
 
 	// Doesn't hurt to be overly cautious.
 	if (empty($modSettings['warning_enable']) || ($context['user']['is_owner'] && !$cur_profile['warning']) || !allowedTo('issue_warning'))

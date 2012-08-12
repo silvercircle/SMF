@@ -2966,9 +2966,6 @@ function MessageSettings()
 
 	loadLanguage('Profile');
 
-	EoS_Smarty::loadTemplate('profile/profile_base');
-	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/edit_options');
-
 	$context['page_title'] = $txt['pm_settings'];
 	$context['user']['is_owner'] = true;
 	$context['id_member'] = $user_info['id'];

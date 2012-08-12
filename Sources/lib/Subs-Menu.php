@@ -202,6 +202,7 @@ function createMenu($menuData, $menuOptions = array())
 
 	// Should we use a custom base url, or use the default?
 	$menu_context['base_url'] = isset($menuOptions['base_url']) ? $menuOptions['base_url'] : $scripturl . '?action=' . $menu_context['current_action'];
+	$menu_context['base_url_sef'] = isset($menuOptions['base_url_sef']) ? $menuOptions['base_url_sef'] : '?action=' . $menu_context['current_action'];
 	//$menu_context['base_url'] = isset($menuOptions['base_url']) ? $menuOptions['base_url'] : $boardurl . '/' . $menu_context['current_action'];
 
 	// What about the toggle url?

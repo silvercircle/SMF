@@ -51,11 +51,11 @@
       {/if}
       {if !empty($tab.is_selected)}
         <li class="active">
-          <a class="firstlevel" href="{(isset($tab.url)) ? $tab.url : ($menu_context.base_url|cat:';area='|cat:$menu_context.current_area|cat:';sa='|cat:$sa)}{$menu_context.extra_parameters}{(isset($tab.add_params)) ? $tab.add_params : ''}"><span class="firstlevel">{$tab.label}</span></a>
+          <a class="firstlevel" href="{(isset($tab.url)) ? $tab.url : ($SUPPORT->url_parse($menu_context.base_url_sef|cat:';area='|cat:$menu_context.current_area|cat:';sa='|cat:$sa))}{$menu_context.extra_parameters}{(isset($tab.add_params)) ? $tab.add_params : ''}"><span class="firstlevel">{$tab.label}</span></a>
         </li>
       {else}
         <li>
-          <a class="firstlevel" href="{(isset($tab.url)) ? $tab.url : ($menu_context.base_url|cat:';area='|cat:$menu_context.current_area|cat:';sa='|cat:$sa)}{$menu_context.extra_parameters}{(isset($tab.add_params)) ? $tab.add_params : ''}"><span class="firstlevel">{$tab.label}</span></a>
+          <a class="firstlevel" href="{(isset($tab.url)) ? $tab.url : ($SUPPORT->url_parse($menu_context.base_url_sef|cat:';area='|cat:$menu_context.current_area|cat:';sa='|cat:$sa))}{$menu_context.extra_parameters}{(isset($tab.add_params)) ? $tab.add_params : ''}"><span class="firstlevel">{$tab.label}</span></a>
         </li>
       {/if}
     {/foreach}

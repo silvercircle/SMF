@@ -817,4 +817,32 @@ function loadCustomFields($memID, $area = 'summary')
 	}
 	mysql_free_result($request);
 }
-?>
+
+class ProfileContext
+{
+	public function __construct()
+	{
+		EoS_Smarty::getSmartyInstance()->assignByRef('PROFILECONTEXT', $this);
+	}
+
+	public function loadWarningVariables()
+	{
+		global $modSettings, $context;
+
+		$context['warningBarWidth'] = 200;
+		// Setup the colors - this is a little messy for theming.
+		$context['colors'] = array(
+			0 => 'green',
+			$modSettings['warning_watch'] => 'darkgreen',
+			$modSettings['warning_moderate'] => 'orange',
+			$modSettings['warning_mute'] => 'red',
+		);
+
+		// Work out the starting color.
+		$context['current_color'] = $context['colors'][0];
+		foreach ($context['colors'] as $limit => $color)
+			if ($context['member']['warning'] >= $limit)
+				$context['current_color'] = $color;
+			
+	}
+}

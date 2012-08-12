@@ -70,7 +70,7 @@
     </a>
   {/if}
   {if $C.can_issue_warning and $message.is_message_author == 0 and $message.member.is_guest == 0}
-    <a href="{$SCRIPTURL}?action=profile;area=issuewarning;u={$message.member.id }};msg={$ID}">
+    <a href="{$SCRIPTURL}?action=profile;area=issuewarning;u={$message.member.id};msg={$ID}">
       <div class="csrcwrapper16px floatleft padded"><img class="clipsrc warning" src="{$imgsrc}" alt="{$T.issue_warning}" title="{$T.issue_warning}" /></div>
     </a>
   {/if}

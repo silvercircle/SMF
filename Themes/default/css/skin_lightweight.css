@@ -191,7 +191,7 @@ div.bbc_dropcaps:first-letter {
 	font-size: 1.1em;
 }
 .highlight2 {
-	background-color: #D1E1EF;
+	background-color: #D1E1EF !important;
 	color: #000 !important;
 }
 .glass {
@@ -401,16 +401,17 @@ span.m_downarrow:hover {
 }
 ul.left_admmenu li.active {
 	background-color: #e2e2e2;
-	background: -moz-linear-gradient(left,  #ddd 1%, white 80%);
-	background: -webkit-linear-gradient(left,  #ddd 1%,white 80%);
-	background: -o-linear-gradient(left,  #ddd 1%,white 80%);
-	background: -ms-linear-gradient(left,  #ddd 1%,white 80%);
-	background: linear-gradient(left,  #ddd 1%,white 80%);
+	background: -moz-linear-gradient(left,  #ddd 1%, #f5f5f5 80%);
+	background: -webkit-linear-gradient(left,  #ddd 1%,#f5f5f5 80%);
+	background: -o-linear-gradient(left,  #ddd 1%,#f5f5f5 80%);
+	background: -ms-linear-gradient(left,  #ddd 1%,#f5f5f5 80%);
+	background: linear-gradient(left,  #ddd 1%,#f5f5f5 80%);
 	border: 1px solid #ccc;
+	border-right:0;
 	font-weight:bold;
 }
 div#left_admsection {
-	background: white;
+	background: #f5f5f5;
 	border-right: 1px solid #ddd;
 }
 

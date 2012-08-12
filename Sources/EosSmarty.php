@@ -587,6 +587,7 @@ class EoS_Smarty_Template_Support {
 	}
 	public function _eval($_arg)
 	{
+		global $context, $txt, $modSettings, $settings, $options;
 		return eval($_arg);
 	}
 }

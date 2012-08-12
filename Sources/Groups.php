@@ -76,6 +76,11 @@ function Groups()
 	{
 		if(isset($_REQUEST['group']))
 			redirectexit(URL::parse('?action=moderate;area=viewgroups;sa=members;group=' . $_REQUEST['group']));
+		else if(isset($_REQUEST['sa']) && $_REQUEST['sa'] == 'requests' && isset($_POST[$context['session_var']])) {
+			require_once($sourcedir . '/ModerationCenter.php');
+			$_GET['area'] = $_REQUEST['sa'] == 'requests' ? 'groups' : 'viewgroups';
+			ModerationMain(true);
+		}
 		else
 			redirectexit(URL::parse('?action=moderate;area=viewgroups'));
 		//require_once($sourcedir . '/ModerationCenter.php');
@@ -645,7 +650,6 @@ function GroupRequests()
 	//if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'moderate')
 	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
 	EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/list_groups');
-
 	// Set up the template stuff...
 	$context['page_title'] = $txt['mc_group_requests'];
 	//$context['sub_template'] = 'show_list';
@@ -662,7 +666,6 @@ function GroupRequests()
 	if (isset($_POST[$context['session_var']]) && !empty($_POST['groupr']) && !empty($_POST['req_action']))
 	{
 		checkSession('post');
-
 		// Clean the values.
 		foreach ($_POST['groupr'] as $k => $request)
 			$_POST['groupr'][$k] = (int) $request;
