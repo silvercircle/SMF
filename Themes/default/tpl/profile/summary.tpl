@@ -12,8 +12,6 @@
  * 
  * profile summary template
  *}
-{extends 'profile/profile_base.tpl'}
-{block 'profile_content'}
 <div id="profileview">
 	<div class="cat_bar2">
 		<h3>
@@ -187,4 +185,3 @@
 	</div>
 <div class="clear"></div>
 </div>
-{/block}

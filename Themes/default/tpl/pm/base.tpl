@@ -16,11 +16,7 @@
 {block content}
 {include 'generics/menu_above.tpl'}
 {include 'pm/above.tpl'}
-{if isset($C._template_include)}
-	{include $C._template_include|cat:'.tpl'}
-{/if}
-{block 'pm_content'}
-{/block}
+{$SUPPORT->displayHook('pm_content_area')}
 {include 'pm/below.tpl'}
 {include 'generics/menu_below.tpl'}
 {/block}

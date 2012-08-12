@@ -70,7 +70,8 @@ function summary($memID)
 {
 	global $context, $memberContext, $txt, $modSettings, $user_profile, $sourcedir, $scripturl;
 
-	EoS_Smarty::loadTemplate('profile/summary');
+	EoS_Smarty::loadTemplate('profile/profile_base');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/summary');
 	// Attempt to load the member's profile data.
 	if (!loadMemberContext($memID) || !isset($memberContext[$memID]))
 		fatal_lang_error('not_a_user', false);

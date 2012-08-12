@@ -199,7 +199,7 @@ function ModerationHome()
 	global $txt, $context, $scripturl, $modSettings, $user_info, $user_settings;
 
 	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
-	$context['_template_include'] = 'modcenter/main';
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/main');
 	//loadTemplate('ModerationCenter');
 
 	$context['page_title'] = $txt['moderation_center'];
@@ -545,8 +545,7 @@ function ReportedPosts()
 		return ModReport();
 
 	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
-	$context['_template_include'] = 'modcenter/reported_posts';
-
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/reported_posts');
 	// Set up the comforting bits...
 	$context['page_title'] = $txt['mc_reported_posts'];
 	$context['sub_template'] = 'reported_posts';
@@ -1009,7 +1008,7 @@ function ModReport()
 	// Finally we are done :P
 	//loadTemplate('ModerationCenter');
 	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
-	$context['_template_include'] = 'modcenter/viewmodreport';
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/viewmodreport');
 	$context['page_title'] = sprintf($txt['mc_viewmodreport'], $context['report']['subject'], $context['report']['author']['name']);
 	$context['sub_template'] = 'viewmodreport';
 
@@ -1057,8 +1056,7 @@ function ViewWatchedUsers()
 	$context['start'] = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
 
 	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
-	$context['_template_include'] = 'modcenter/watched_users';
-	//loadTemplate('ModerationCenter');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/watched_users');
 
 	// Get some key settings!
 	$modSettings['warning_watch'] = empty($modSettings['warning_watch']) ? 1 : $modSettings['warning_watch'];
@@ -1470,7 +1468,7 @@ function ViewWarningLog()
 
 	require_once($sourcedir . '/lib/Subs-List.php');
 	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
-	$context['_template_include'] = 'modcenter/warnings';
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/warnings');
 
 	// This is all the information required for a watched user listing.
 	$listOptions = array(
@@ -1665,7 +1663,7 @@ function ViewWarningTemplates()
 	// Setup context as always.
 	$context['page_title'] = $txt['mc_warning_templates_title'];
 	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
-	$context['_template_include'] = 'modcenter/warnings';
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/warnings');
 	require_once($sourcedir . '/lib/Subs-List.php');
 
 	// This is all the information required for a watched user listing.
@@ -1823,7 +1821,7 @@ function ModifyWarningTemplate()
 	global $context, $txt, $user_info, $sourcedir;
 
 	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
-	$context['_template_include'] = 'modcenter/edit_warning';
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/edit_warning');
 	
 	$context['id_template'] = isset($_REQUEST['tid']) ? (int) $_REQUEST['tid'] : 0;
 	$context['is_edit'] = $context['id_template'];
@@ -1958,7 +1956,7 @@ function ModerationSettings()
 
 	// Some useful context stuff.
 	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
-	$context['_template_include'] = 'modcenter/settings';
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/settings');
 	$context['page_title'] = $txt['mc_settings'];
 
 	// What blocks can this user see?

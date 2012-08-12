@@ -15,10 +15,6 @@
 {extends 'base.tpl'}
 {block content}
 {include 'generics/menu_above.tpl'}
-{block 'modcenter_content'}
-{/block}
-{if isset($C._template_include)}
-	{include $C._template_include|cat:'.tpl'}
-{/if}
+{$SUPPORT->displayHook('modcenter_content_area')}
 {include 'generics/menu_below.tpl'}
 {/block}

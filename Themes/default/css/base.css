@@ -125,6 +125,10 @@ fieldset {
 fieldset legend {
 	padding: 0 5px;
 }
+fieldset select {
+	margin-top:3px;
+	margin-bottom: 3px;
+}
 a img {
 	border: 0;
 }

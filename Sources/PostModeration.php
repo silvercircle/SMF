@@ -54,7 +54,7 @@ function UnapprovedPosts()
 	$context['current_view'] = isset($_GET['sa']) && $_GET['sa'] == 'topics' ? 'topics' : 'replies';
 	$context['page_title'] = $txt['mc_unapproved_posts'];
 	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
-	$context['_template_include'] = 'modcenter/unapproved_posts';
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/unapproved_posts');
 
 	// Work out what boards we can work in!
 	$approve_boards = boardsAllowedTo('approve_posts');
@@ -458,8 +458,8 @@ function UnapprovedAttachments()
 	mysql_free_result($request);
 
 	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
-	$context['_template_include'] = 'modcenter/unapproved_attachments';
-  	// The ever popular approve button, with the massively unpopular delete.
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/unapproved_attachments');
+	// The ever popular approve button, with the massively unpopular delete.
   	$context['approve_button'] = create_button('approve', 'approve');
   	$context['remove_button'] = create_button('remove_message', 'remove');
 }

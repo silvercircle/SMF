@@ -113,7 +113,7 @@ function MessageMain()
 	require_once($sourcedir . '/lib/Subs-Post.php');
 
 	loadLanguage('PersonalMessage');
-
+	EoS_Smarty::setActive();
 	$context['need_synhlt'] = true;
 	// Load up the members maximum message capacity.
 	if ($user_info['is_admin'])
@@ -273,14 +273,14 @@ function MessageMain()
 	if (!isset($_REQUEST['sa']) || !isset($subActions[$_REQUEST['sa']])) {
 		MessageFolder();
 		EoS_Smarty::loadTemplate('pm/base');
-		$context['_template_include'] = 'pm/folder';
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('pm_content_area', 'pm/folder');
 	}
 	else
 	{	
 		$sa = $_REQUEST['sa'];
 		if($sa == 'send' || $sa == 'send2') {
 			EoS_Smarty::loadTemplate('pm/base');
-			$context['_template_include'] = 'pm/send';
+			EoS_Smarty::getConfigInstance()->registerHookTemplate('pm_content_area', 'pm/send');
 		}
 		messageIndexBar($_REQUEST['sa']);
 		$subActions[$_REQUEST['sa']]();
@@ -858,7 +858,6 @@ function MessageFolder()
 		$messages_request = false;
 
 	$context['can_send_pm'] = allowedTo('pm_send');
-	$context['sub_template'] = 'folder';
 	$context['page_title'] = $txt['pm_inbox'];
 
     $context['conversation_buttons'] = array(
@@ -1074,7 +1073,7 @@ function MessageSearch()
 		'name' => $txt['pm_search_bar_title'],
 	);
 	EoS_Smarty::loadTemplate('pm/base');
-	$context['_template_include'] = 'pm/search_form';
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('pm_content_area', 'pm/search_form');
 }
 
 function MessageSearch2()
@@ -1525,7 +1524,7 @@ function MessageSearch2()
 	// Finish off the context.
 	$context['page_title'] = $txt['pm_search_title'];
 	EoS_Smarty::loadTemplate('pm/base');
-	$context['_template_include'] = 'pm/search_results';
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('pm_content_area', 'pm/search_results');
 	$context['menu_data_' . $context['pm_menu_id']]['current_area'] = 'search';
 	$context['linktree'][] = array(
 		'url' => $scripturl . '?action=pm;sa=search',
@@ -1817,7 +1816,6 @@ function messagePostError($error_types, $named_recipients, $recipient_ids = arra
 
 	$context['menu_data_' . $context['pm_menu_id']]['current_area'] = 'send';
 
-	$context['sub_template'] = 'send';
 	$context['page_title'] = $txt['send_message'];
 
 	// Got some known members?
@@ -2446,7 +2444,7 @@ function MessageKillAllQuery()
 
 	// Only have to set up the template....
 	EoS_Smarty::loadTemplate('pm/base');
-	$context['_template_include'] = 'pm/delete_ask';
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('pm_content_area', 'pm/delete_ask');
 	$context['page_title'] = $txt['delete_all'];
 	$context['delete_all'] = $_REQUEST['f'] == 'all';
 
@@ -2536,7 +2534,7 @@ function MessagePrune()
 		'name' => $txt['pm_prune']
 	);
 	EoS_Smarty::loadTemplate('pm/base');
-	$context['_template_include'] = 'pm/prune';
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('pm_content_area', 'pm/prune');
 	$context['page_title'] = $txt['pm_prune'];
 }
 
@@ -2744,6 +2742,9 @@ function ManageLabels()
 {
 	global $txt, $context, $user_info, $scripturl, $smcFunc;
 
+	EoS_Smarty::loadTemplate('pm/base');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('pm_content_area', 'pm/manage_labels');
+	
 	// Build the link tree elements...
 	$context['linktree'][] = array(
 		'url' => $scripturl . '?action=pm;sa=manlabels',
@@ -3021,7 +3022,8 @@ function ReportMessage()
 	// If we're here, just send the user to the template, with a few useful context bits.
 	if (!isset($_POST['report']))
 	{
-		$context['sub_template'] = 'report_message';
+		EoS_Smarty::loadTemplate('pm/base');
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('pm_content_area', 'pm/report');
 
 		// !!! I don't like being able to pick who to send it to.  Favoritism, etc. sucks.
 		// Now, get all the administrators.
@@ -3162,8 +3164,8 @@ function ReportMessage()
 		if (!empty($modSettings['userLanguage']))
 			loadLanguage('PersonalMessage', '', false);
 
-		// Leave them with a template.
-		$context['sub_template'] = 'report_message_complete';
+		EoS_Smarty::loadTemplate('pm/base');
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('pm_content_area', 'pm/report_done');
 	}
 }
 
@@ -3178,8 +3180,9 @@ function ManageRules()
 		'name' => $txt['pm_manage_rules']
 	);
 
+	$_ctx = new PMContext();
 	$context['page_title'] = $txt['pm_manage_rules'];
-	$context['sub_template'] = 'rules';
+	EoS_Smarty::loadTemplate('pm/base');
 
 	// Load them... load them!!
 	LoadRules();
@@ -3223,7 +3226,7 @@ function ManageRules()
 	if (isset($_GET['add']))
 	{
 		$context['rid'] = isset($_GET['rid']) && isset($context['rules'][$_GET['rid']])? (int) $_GET['rid'] : 0;
-		$context['sub_template'] = 'add_rule';
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('pm_content_area', 'pm/add_rule');
 
 		// Current rule information...
 		if ($context['rid'])
@@ -3258,6 +3261,9 @@ function ManageRules()
 				'actions' => array(),
 				'logic' => 'and',
 			);
+
+		$context['rule']['criteria'][] = array('t' => '', 'v' => '');
+		$context['rule']['actions'][] = array('t' => '', 'v' => '');
 	}
 	// Saving?
 	elseif (isset($_GET['save']))
@@ -3390,6 +3396,7 @@ function ManageRules()
 
 		redirectexit('action=pm;sa=manrules');
 	}
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('pm_content_area', 'pm/manage_rules');
 }
 
 // This will apply rules to all unread messages. If all_messages is set will, clearly, do it to all!
@@ -3599,5 +3606,180 @@ class PMContext
 	public function getPmMessage($get_what = 'subject', $reset = false)
 	{
 		return prepareMessageContext($get_what, $reset);
+	}
+
+	public function rulesJS()
+	{
+
+		global $context, $settings, $options, $txt, $scripturl;
+
+		echo '
+		<script type="text/javascript"><!-- // --><![CDATA[
+				var criteriaNum = 0;
+				var actionNum = 0;
+				var groups = new Array()
+				var labels = new Array()';
+
+		foreach ($context['groups'] as $id => $title)
+			echo '
+				groups[', $id, '] = "', addslashes($title), '";';
+
+		foreach ($context['labels'] as $label)
+			if ($label['id'] != -1)
+				echo '
+				labels[', ($label['id'] + 1), '] = "', addslashes($label['name']), '";';
+
+		echo '
+				function addCriteriaOption()
+				{
+					if (criteriaNum == 0)
+					{
+						for (var i = 0; i < document.forms.addrule.elements.length; i++)
+							if (document.forms.addrule.elements[i].id.substr(0, 8) == "ruletype")
+								criteriaNum++;
+					}
+					criteriaNum++
+
+					setOuterHTML(document.getElementById("criteriaAddHere"), \'<br /><select name="ruletype[\' + criteriaNum + \']" id="ruletype\' + criteriaNum + \'" onchange="updateRuleDef(\' + criteriaNum + \'); rebuildRuleDesc();"><option value="">', addslashes($txt['pm_rule_criteria_pick']), ':<\' + \'/option><option value="mid">', addslashes($txt['pm_rule_mid']), '<\' + \'/option><option value="gid">', addslashes($txt['pm_rule_gid']), '<\' + \'/option><option value="sub">', addslashes($txt['pm_rule_sub']), '<\' + \'/option><option value="msg">', addslashes($txt['pm_rule_msg']), '<\' + \'/option><option value="bud">', addslashes($txt['pm_rule_bud']), '<\' + \'/option><\' + \'/select>&nbsp;<span id="defdiv\' + criteriaNum + \'" style="display: none;"><input type="text" name="ruledef[\' + criteriaNum + \']" id="ruledef\' + criteriaNum + \'" onkeyup="rebuildRuleDesc();" value="" class="input_text" /><\' + \'/span><span id="defseldiv\' + criteriaNum + \'" style="display: none;"><select name="ruledefgroup[\' + criteriaNum + \']" id="ruledefgroup\' + criteriaNum + \'" onchange="rebuildRuleDesc();"><option value="">', addslashes($txt['pm_rule_sel_group']), '<\' + \'/option>';
+
+		foreach ($context['groups'] as $id => $group)
+			echo '<option value="', $id, '">', strtr($group, array("'" => "\'")), '<\' + \'/option>';
+
+		echo '<\' + \'/select><\' + \'/span><span id="criteriaAddHere"><\' + \'/span>\');
+				}
+
+				function addActionOption()
+				{
+					if (actionNum == 0)
+					{
+						for (var i = 0; i < document.forms.addrule.elements.length; i++)
+							if (document.forms.addrule.elements[i].id.substr(0, 7) == "acttype")
+								actionNum++;
+					}
+					actionNum++
+
+					setOuterHTML(document.getElementById("actionAddHere"), \'<br /><select name="acttype[\' + actionNum + \']" id="acttype\' + actionNum + \'" onchange="updateActionDef(\' + actionNum + \'); rebuildRuleDesc();"><option value="">', addslashes($txt['pm_rule_sel_action']), ':<\' + \'/option><option value="lab">', addslashes($txt['pm_rule_label']), '<\' + \'/option><option value="del">', addslashes($txt['pm_rule_delete']), '<\' + \'/option><\' + \'/select>&nbsp;<span id="labdiv\' + actionNum + \'" style="display: none;"><select name="labdef[\' + actionNum + \']" id="labdef\' + actionNum + \'" onchange="rebuildRuleDesc();"><option value="">', addslashes($txt['pm_rule_sel_label']), '<\' + \'/option>';
+
+		foreach ($context['labels'] as $label)
+			if ($label['id'] != -1)
+				echo '<option value="', ($label['id'] + 1), '">', addslashes($label['name']), '<\' + \'/option>';
+
+		echo '<\' + \'/select><\' + \'/span><span id="actionAddHere"><\' + \'/span>\');
+				}
+
+				function updateRuleDef(optNum)
+				{
+					if (document.getElementById("ruletype" + optNum).value == "gid")
+					{
+						document.getElementById("defdiv" + optNum).style.display = "none";
+						document.getElementById("defseldiv" + optNum).style.display = "";
+					}
+					else if (document.getElementById("ruletype" + optNum).value == "bud" || document.getElementById("ruletype" + optNum).value == "")
+					{
+						document.getElementById("defdiv" + optNum).style.display = "none";
+						document.getElementById("defseldiv" + optNum).style.display = "none";
+					}
+					else
+					{
+						document.getElementById("defdiv" + optNum).style.display = "";
+						document.getElementById("defseldiv" + optNum).style.display = "none";
+					}
+				}
+
+				function updateActionDef(optNum)
+				{
+					if (document.getElementById("acttype" + optNum).value == "lab")
+					{
+						document.getElementById("labdiv" + optNum).style.display = "";
+					}
+					else
+					{
+						document.getElementById("labdiv" + optNum).style.display = "none";
+					}
+				}
+
+				// Rebuild the rule description!
+				function rebuildRuleDesc()
+				{
+					// Start with nothing.
+					var text = "";
+					var joinText = "";
+					var actionText = "";
+					var hadBuddy = false;
+					var foundCriteria = false;
+					var foundAction = false;
+					var curNum, curVal, curDef;
+
+					for (var i = 0; i < document.forms.addrule.elements.length; i++)
+					{
+						if (document.forms.addrule.elements[i].id.substr(0, 8) == "ruletype")
+						{
+							if (foundCriteria)
+								joinText = document.getElementById("logic").value == \'and\' ? ', JavaScriptEscape(' ' . $txt['pm_readable_and'] . ' '), ' : ', JavaScriptEscape(' ' . $txt['pm_readable_or'] . ' '), ';
+							else
+								joinText = \'\';
+							foundCriteria = true;
+
+							curNum = document.forms.addrule.elements[i].id.match(/\d+/);
+							curVal = document.forms.addrule.elements[i].value;
+							if (curVal == "gid")
+								curDef = document.getElementById("ruledefgroup" + curNum).value.php_htmlspecialchars();
+							else if (curVal != "bud")
+								curDef = document.getElementById("ruledef" + curNum).value.php_htmlspecialchars();
+							else
+								curDef = "";
+
+							// What type of test is this?
+							if (curVal == "mid" && curDef)
+								text += joinText + ', JavaScriptEscape($txt['pm_readable_member']), '.replace("{MEMBER}", curDef);
+							else if (curVal == "gid" && curDef && groups[curDef])
+								text += joinText + ', JavaScriptEscape($txt['pm_readable_group']), '.replace("{GROUP}", groups[curDef]);
+							else if (curVal == "sub" && curDef)
+								text += joinText + ', JavaScriptEscape($txt['pm_readable_subject']), '.replace("{SUBJECT}", curDef);
+							else if (curVal == "msg" && curDef)
+								text += joinText + ', JavaScriptEscape($txt['pm_readable_body']), '.replace("{BODY}", curDef);
+							else if (curVal == "bud" && !hadBuddy)
+							{
+								text += joinText + ', JavaScriptEscape($txt['pm_readable_buddy']), ';
+								hadBuddy = true;
+							}
+						}
+						if (document.forms.addrule.elements[i].id.substr(0, 7) == "acttype")
+						{
+							if (foundAction)
+								joinText = ', JavaScriptEscape(' ' . $txt['pm_readable_and'] . ' '), ';
+							else
+								joinText = "";
+							foundAction = true;
+
+							curNum = document.forms.addrule.elements[i].id.match(/\d+/);
+							curVal = document.forms.addrule.elements[i].value;
+							if (curVal == "lab")
+								curDef = document.getElementById("labdef" + curNum).value.php_htmlspecialchars();
+							else
+								curDef = "";
+
+							// Now pick the actions.
+							if (curVal == "lab" && curDef && labels[curDef])
+								actionText += joinText + ', JavaScriptEscape($txt['pm_readable_label']), '.replace("{LABEL}", labels[curDef]);
+							else if (curVal == "del")
+								actionText += joinText + ', JavaScriptEscape($txt['pm_readable_delete']), ';
+						}
+					}
+
+					// If still nothing make it default!
+					if (text == "" || !foundCriteria)
+						text = "', $txt['pm_rule_not_defined'], '";
+					else
+					{
+						if (actionText != "")
+							text += ', JavaScriptEscape(' ' . $txt['pm_readable_then'] . ' '), ' + actionText;
+						text = ', JavaScriptEscape($txt['pm_readable_start']), ' + text + ', JavaScriptEscape($txt['pm_readable_end']), ';
+					}
+
+					// Set the actual HTML!
+					setInnerHTML(document.getElementById("ruletext"), text);
+				}
+		// ]]></script>';
 	}
 }

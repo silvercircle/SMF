@@ -104,7 +104,7 @@ function GroupList()
 
 	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'moderate') {
 		EoS_Smarty::loadTemplate('modcenter/modcenter_base');
-		$context['_template_include'] = 'modcenter/list_groups';
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/list_groups');
 	}
 
 	// Yep, find the groups...
@@ -630,7 +630,7 @@ function MembergroupMembers()
 	mysql_free_result($request);
 	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'moderate') {
 		EoS_Smarty::loadTemplate('modcenter/modcenter_base');
-		$context['_template_include'] = 'admin/group_list_members';
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/list_members');
 	}
 	else
 		$context['sub_template'] = 'group_members';
@@ -644,7 +644,7 @@ function GroupRequests()
 
 	//if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'moderate')
 	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
-	$context['_template_include'] = 'modcenter/list_groups';
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/list_groups');
 
 	// Set up the template stuff...
 	$context['page_title'] = $txt['mc_group_requests'];

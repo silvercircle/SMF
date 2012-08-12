@@ -17,8 +17,7 @@
 {block content}
 {include 'generics/menu_above.tpl'}
 {include 'profile/above.tpl'}
-{block 'profile_content'}
-{/block}
+{$SUPPORT->displayHook('profile_content_area')}
 {include 'profile/below.tpl'}
 {include 'generics/menu_below.tpl'}
 {/block}

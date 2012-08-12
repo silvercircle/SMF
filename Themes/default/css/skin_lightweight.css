@@ -734,7 +734,7 @@ ol.commonlist.category {
 	margin: 0;
 }
 
-.gradient_darken_down, span.button, ul.buttonlist a, input[type=button], input[type=submit], .bbc_editor_button:hover, div.keyinfo.std, div.keyinfo.lean, div.keyinfo.pm, div.avatar.pm, #bbcBox_message {
+.gradient_darken_down, span.button, ul.buttonlist a, input[type=button], input[type=submit], .bbc_editor_button:hover, div.keyinfo.std, div.keyinfo.lean, div.keyinfo.pm, div.avatar.pm, #bbcBox_message, .orange_container {
 	background-image: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
 	background-image: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
 	background-image: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
