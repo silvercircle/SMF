@@ -492,8 +492,8 @@ function loadProfileFields($force_reload = false)
 		),
 		// This does ALL the pm settings
 		'pm_prefs' => array(
-			'type' => 'callback',
-			'callback_func' => 'pm_settings',
+			'type' => 'callback_template',
+			'callback_name' => 'pm/settings',
 			'permission' => 'pm_read',
 			'preload' => create_function('', '
 				global $context, $cur_profile;
@@ -1561,7 +1561,6 @@ function pmprefs($memID)
 	loadThemeOptions($memID);
 	loadCustomFields($memID, 'pmprefs');
 
-	$context['sub_template'] = 'edit_options';
 	$context['page_desc'] = $txt['pm_settings_desc'];
 
 	setupProfileContext(

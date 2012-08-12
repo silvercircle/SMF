@@ -2744,7 +2744,7 @@ function ManageLabels()
 
 	EoS_Smarty::loadTemplate('pm/base');
 	EoS_Smarty::getConfigInstance()->registerHookTemplate('pm_content_area', 'pm/manage_labels');
-	
+
 	// Build the link tree elements...
 	$context['linktree'][] = array(
 		'url' => $scripturl . '?action=pm;sa=manlabels',
@@ -2965,7 +2965,9 @@ function MessageSettings()
 	$cur_profile = $user_profile[$user_info['id']];
 
 	loadLanguage('Profile');
-	loadTemplate('Profile');
+
+	EoS_Smarty::loadTemplate('profile/profile_base');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/edit_options');
 
 	$context['page_title'] = $txt['pm_settings'];
 	$context['user']['is_owner'] = true;

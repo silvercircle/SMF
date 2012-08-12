@@ -540,8 +540,6 @@ class EoS_Smarty_Template_Support {
 	}
 
 	/**
-	 * @static
-	 * 
 	 * return formatted list of registered hooks. Used for debugging purposes
 	 * only
 	 *
@@ -556,7 +554,6 @@ class EoS_Smarty_Template_Support {
 		return !empty($parts) ? ('<span style="font-size:1.1em;color:red;"><strong>Hook templates:</strong></span><br>' . implode('<br>', $parts)) : '';
 	}
 	/**
-	 * @static
 	 * @param $position - string. 
 	 * 
 	 * output all chained template fragments for the given hook position.
@@ -568,5 +565,28 @@ class EoS_Smarty_Template_Support {
 			foreach($this->_hook_templates[$position] as $the_template)
 				$this->_smarty_instance->display($the_template);
 		}
+	}
+
+	/**
+	 * @param $_func - string
+	 *
+	 * allows a template to call a custom callback function. $_func must point
+	 * to a callable function.
+	 */
+	public function callbackFunc($_func)
+	{
+		if(is_callable($_func))
+			return $_func();
+
+		return false;
+	}
+
+	public function callbackTemplate($_name)
+	{
+		$this->_smarty_instance->Display($_name . '.tpl');
+	}
+	public function _eval($_arg)
+	{
+		return eval($_arg);
 	}
 }

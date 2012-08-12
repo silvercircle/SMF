@@ -630,7 +630,7 @@ function MembergroupMembers()
 	mysql_free_result($request);
 	if(isset($_REQUEST['action']) && $_REQUEST['action'] === 'moderate') {
 		EoS_Smarty::loadTemplate('modcenter/modcenter_base');
-		EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/list_members');
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'admin/group_list_members');
 	}
 	else
 		$context['sub_template'] = 'group_members';
