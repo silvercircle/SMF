@@ -93,10 +93,8 @@
         </fieldset>
       </div>
     </div><br class="clear">
-    <div class="cat_bar">
-      <h3>{$T.pm_rule_description}</h3>
-    </div>
-    <div class="blue_container cleantop mediumpadding">
+    <h1 class="bigheader secondary indent borderless">{$T.pm_rule_description}</h1>
+    <div class="blue_container mediumpadding">
       <div id="ruletext">{$T.pm_rule_js_disabled}</div>
     </div>
     <br>

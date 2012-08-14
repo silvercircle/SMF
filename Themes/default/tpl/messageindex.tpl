@@ -91,9 +91,9 @@
         </tr>
         </thead>
       {if !empty($S.display_who_viewing)}
-        <tr class="whos_viewing mediumpadding">
+        <tr class="tablerow mediumpadding">
           <td colspan="{($can_quickmod) ? '6' : '5'}" class="smalltext">
-          <div class="blue_container norounded mediummargin">
+          <div class="flat_container borderless smallpadding">
           {if $S.display_who_viewing == 1}
             {count($C.view_members)} {(count($C.view_members) == 1) ? $T.who_member : $T.members}
           {else}

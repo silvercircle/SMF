@@ -2985,20 +2985,20 @@ function determineTopicClass(&$topic)
 		$iconlegend .= '<div class="csrcwrapper16px floatleft"><img class="clipsrc unapproved" src="'.$imgsrc.'" alt="" title="'.$txt['awaiting_approval'].'" /></div>';
 	}
 	elseif($topic['is_sticky'] || $topic['is_locked'])
-		$class = $topic['is_sticky'] ? ' sticky' : ' locked';
+		$class .= (($topic['is_sticky'] ? ' sticky' : '') . ($topic['is_locked'] ? ' locked' : ''));
 
+	/*
 	if($topic['is_locked'])
 		$iconlegend .= '<div class="csrcwrapper16px floatleft"><img class="clipsrc locked" src="'.$imgsrc.'" alt="" title="'.$txt['locked_topic'].'" /></div>';
 
 	if($topic['is_sticky'])
 		$iconlegend .= '<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc sticky" src="'.$imgsrc.'" alt="" title="'.$txt['sticky_topic'].'" /></div>';
-
 	if($topic['is_poll'])
 		$iconlegend .= '<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc poll" src="'.$imgsrc.'" alt="" title="'.$txt['poll'].'" /></div>';
 
 	if(isset($topic['is_posted_in']))
 		$iconlegend .= '<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc postedin" src="'.$imgsrc.'" alt="" title="'.$txt['participation_caption'].'" /></div>';
-
+	*/
 	if(isset($topic['is_very_hot']))
 		$iconlegend .= '<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc veryhot" src="'.$imgsrc.'" alt="" title="'.$context['very_hot_topic_message'].'" /></div>';
 	elseif(isset($topic['is_hot']))

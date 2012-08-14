@@ -138,7 +138,7 @@
     {if !empty($C.can_quick_mod)}
       <td class="{$color_class} moderation topicrow" style="text-align:center;">
         {if $O.display_quick_mod}
-          <input type="checkbox" name="topics[]" value="{$topic.id}" class="input_check cb_inline" />
+          <input type="checkbox" name="{(isset($topic.checkbox_name)) ? $topic.checkbox_name : 'topics[]'}" value="{$topic.id}" class="input_check cb_inline" />
         {/if}
       </td>
     {/if}
