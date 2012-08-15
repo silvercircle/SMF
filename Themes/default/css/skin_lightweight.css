@@ -134,6 +134,10 @@ input[disabled].input_text {
 .lowcontrast {
 	color:#888;
 }
+dl.common {
+	font-size:90%;
+	line-height: 150%;
+}
 blockquote.bbc_standard_quote, blockquote.bbc_alternate_quote {
 	font-size: 90%;
 	font-style: italic;
@@ -538,6 +542,10 @@ h1.bigheader.secondary {
 	border-bottom: 1px solid #cce;
 	color: #88a;
 	padding: 2px 0;
+}
+h1.bigheader.secondary.title {
+	background: #e5e5f0;
+	border-bottom: 2px solid orange;
 }
 h1.bigheader.indent {
 	text-indent: 10px;
@@ -1883,23 +1891,6 @@ div#profile_success {
 	background: #efe;
 }
 
-/* Profile statistics */
-#generalstats div.content dt {
-	width: 50%;
-	float: left;
-	margin: 0 0 3px 0;
-	padding: 0;
-	font-weight: bold;
-	clear: both;
-}
-
-#generalstats div.content dd {
-	width: 50%;
-	float: left;
-	margin: 0 0 3px 0;
-	padding: 0;
-}
-
 /* Activity by time */
 #activitytime {
 	margin: 6px 0;
@@ -2108,33 +2099,6 @@ div#profile_success {
 #stats_right, #top_boards, #top_topics_views, #most_online {
 	float: right;
 	width: 49.5%;
-}
-
-dl.stats {
-	clear: both;
-	overflow: hidden;
-	margin: 0;
-	padding: 0;
-}
-
-dl.stats dt {
-	width: 49%;
-	float: left;
-	margin: 0 0 4px 0;
-	line-height: 16px;
-	padding: 0;
-	clear: both;
-	font-size: 1em;
-}
-
-dl.stats dd {
-	text-align: right;
-	width: 50%;
-	font-size: 1em;
-	float: right;
-	margin: 0 0 4px 0;
-	line-height: 16px;
-	padding: 0;
 }
 
 .statsbar div.bar {
@@ -2900,15 +2864,21 @@ img.clipsrc.unapproved {
 }
 
 /* members */
-a.member.group_1 {
+a.member.group_1, span.member.group_1 {
 	color:red;
 	font-weight:bold;
 }
-a.member.group_2 {
+a.member.group_2, span.member.group_2 {
 	color:purple;
 }
-a.member.group_6, a.member.group_11 {
+a.member.group_6, a.member.group_11, span.member.group_6, span.member.group_11 {
 	color:green;
+}
+span.member.online {
+	color:green;
+}
+span.member.offline {
+	color:red;
 }
 .social_share_privacy_area {
 	list-style-type: none;

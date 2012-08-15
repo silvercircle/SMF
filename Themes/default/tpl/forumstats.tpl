@@ -11,7 +11,7 @@
     <div class="flow_hidden">
       <div id="stats_left">
           <div class="content top_row">
-            <dl class="stats">
+            <dl class="common leftbalance">
               <dt>{$T.total_members}:</dt>
               <dd>{($C.show_member_list) ? ('<a href="'|cat:$SCRIPTURL|cat:'?action=mlist">'|cat:$C.num_members|cat:'</a>') : $C.num_members}</dd>
               <dt>{$T.total_posts}:</dt>
@@ -36,7 +36,7 @@
       </div>
       <div id="stats_right">
           <div class="content top_row">
-            <dl class="stats">
+            <dl class="common leftbalance">
               <dt>{$T.average_members}:</dt>
               <dd>{$C.average_members}</dd>
               <dt>{$T.average_posts}:</dt>
@@ -69,7 +69,7 @@
         </div>
           <div class="blue_container cleantop">
             <div class="content">
-              <dl class="stats">
+              <dl class="common leftbalance">
               {foreach $C.top_posters as $poster}
                 <dt>
                   {$poster.link}
@@ -94,7 +94,7 @@
         </div>
           <div class="blue_container cleantop">
             <div class="content">
-              <dl class="stats">
+              <dl class="common leftbalance">
               {foreach $C.top_boards as $board}
                 <dt>
                   {$board.link}
@@ -122,7 +122,7 @@
         </div>
           <div class="blue_container cleantop">
             <div class="content">
-              <dl class="stats">
+              <dl class="common leftbalance">
               {foreach $C.top_topics_replies as $topic}
                 <dt>
                   {$topic.link}
@@ -147,7 +147,7 @@
         </div>
         <div class="blue_container cleantop">
           <div class="content">
-            <dl class="stats">
+            <dl class="common leftbalance">
             {foreach $C.top_topics_views as $topic}
               <dt>{$topic.link}</dt>
               <dd class="statsbar">
@@ -173,7 +173,7 @@
         </div>
         <div class="blue_container cleantop">
           <div class="content">
-            <dl class="stats">
+            <dl class="common leftbalance">
             {foreach $C.top_starters as $poster}
               <dt>
                 {$poster.link}
@@ -198,7 +198,7 @@
         </div>
         <div class="blue_container cleantop">
           <div class="content">
-            <dl class="stats">
+            <dl class="common leftbalance">
             {foreach $C.top_time_online as $poster}
               <dt>
                 {$poster.link}

@@ -37,6 +37,7 @@ function ModifyProfile($post_errors = array())
 		loadLanguage('Profile');
 	loadTemplate('Profile');
 
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('sidemenu_top', 'profile/menu_top_content');
 	//$context['sef_full_rewrite'] = true;
 
 	require_once($sourcedir . '/lib/Subs-Menu.php');

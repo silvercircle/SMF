@@ -48,7 +48,7 @@
           </td>
         {/if}
         <td>
-          <label for="primary_{$group.id}"><strong>{(empty($group.color)) ? $group.name : ('<span style="color: '|cat:$group.color|cat:'">'|cat:$group.name|cat:'</span>')}</strong>{(!empty($group.desc)) ? ('<br /><span class="smalltext">'|cat:$group.desc|cat:'</span>') : ''}</label>
+          <label for="primary_{$group.id}"><strong><span class="member group_{$group.id}">{$group.name}</span></strong>{(!empty($group.desc)) ? ('<br /><span class="smalltext">'|cat:$group.desc|cat:'</span>') : ''}</label>
         </td>
         <td style="width:15%;" class="righttext">
           {if $group.can_leave}
@@ -80,10 +80,10 @@
         {$alternate = true}
         {foreach $C.groups.available as $group}
           <tr class="tablerow{($alternate) ? ' alternate' : ''}">
-            <td>
-              <strong>{(empty($group.color)) ? $group.name : ('<span style="color: '|cat:$group.color|cat:'">'|cat:$group.name|cat:'</span>')}</strong>{(!empty($group.desc)) ? ('<br><span class="smalltext">'|cat:$group.desc|cat:'</span>') : ''}
+            <td class="lefttext nowrap">
+              <strong><span class="member group_{$group.id}">{$group.name}</span></strong>{(!empty($group.desc)) ? ('<br><span class="smalltext">'|cat:$group.desc|cat:'</span>') : ''}
             </td>
-            <td width="15%" class="lefttext">
+            <td class="righttext nowrap">
             {if $group.type == 3}
               <ul class="buttonlist"><li><a href="{$SCRIPTURL}?action=profile;save;u={$C.id_member};area=groupmembership;{$C.session_var}={$C.session_id};gid={$group.id},6">{$T.join_group}</a></li></ul>
             {elseif $group.type == 2 and $group.pending}

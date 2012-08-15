@@ -13,52 +13,12 @@
  * profile summary template
  *}
 <div id="profileview">
-	<div class="cat_bar2">
-		<h3>
-			{$T.summary}
-		</h3>
-	</div>
-	<div id="basicinfo">
-		<div class="blue_container cleantop">
-			<div class="content flow_auto">
-				<div class="username"><h4>{$C.member.name}<span class="position">{(!empty($C.member.group)) ? $C.member.group : $C.member.post_group}</span></h4></div>
-				{if !empty($C.member.avatar.image)}
-					{$C.member.avatar.image}
-				{else}
-        	<img class="avatar" src="{$S.images_url}/unknown.png" alt="avatar" />
-				{/if}
-				<ul class="reset">
-				{if $C.member.show_email === 'yes' || $C.member.show_email === 'no_through_forum' || $C.member.show_email === 'yes_permission_override'}
-					<li><a href="{$SCRIPTURL}?action=emailuser;sa=email;uid={$C.member.id}" title="{($C.member.show_email == 'yes' || $C.member.show_email == 'yes_permission_override') ? $C.member.email : ''}" rel="nofollow">{$T.send_email}</a></li>
-				{/if}
-				{if !empty($C.custom_fields)}
-					{foreach $C.custom_fields as $field}
-						{if ($field.placement == 1 || empty($field.output_html)) && !empty($field.value)}
-							<li class="custom_field">{$field.output_html}</li>
-						{/if}
-					{/foreach}
-				{/if}
-				</ul>
-				<span id="userstatus">{($C.can_send_pm) ? ('<a href="'|cat:$C.member.online.href|cat:'" title="'|cat:$C.member.online.label|cat:'" rel="nofollow">') : ''}{$C.member.online.text}{($C.can_send_pm) ? '</a>' : ''}
-				{if !empty($C.can_have_buddy) && !$C.user.is_owner}
-					{$index = ($C.member.is_buddy) ? 'buddy_remove' : 'buddy_add'}
-					<br><a href="{$SCRIPTURL}?action=buddy;u={$C.id_member};{$C.session_var}={$C.session_id}">[{$T.$index}]</a>
-				{/if}
-				</span>
-				<p id="infolinks">';
-				{if !$C.user.is_owner && $C.can_send_pm}
-					<a href="{$SCRIPTURL}?action=pm;sa=send;u={$C.id_member}">{$T.profile_sendpm_short}</a><br>
-				{/if}
-					<a href="{$SCRIPTURL}?action=profile;area=showposts;u={$C.id_member}">{$T.showPosts}</a><br>
-					<a href="{$SCRIPTURL}?action=profile;area=statistics;u={$C.id_member}">{$T.statPanel}</a>
-				</p>
-			</div>
-		</div>
-		{$SUPPORT->displayHook('profile_summary_basicinfo')}
-	</div>
-	<div id="detailedinfo"><br />
-		<div class="yellow_container">
-			<div class="content inset_shadow mediumpadding">
+	<div id="detailedinfo">
+		<h1 class="bigheader secondary title indent">
+			{$T.member_about} {($C.user.is_owner) ? $T.you_member : $C.member.name}
+		</h1>
+		<div class="yellow_container cleantop">
+			<div class="content mediumpadding">
 				<dl>
 				{if $C.user.is_owner || $C.user.is_admin}
 					<dt>{$T.username}</dt>

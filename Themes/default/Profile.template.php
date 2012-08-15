@@ -944,7 +944,7 @@ function template_statPanel()
 				</h3>
 			</div>
 			<div class="content blue_container cleantop mediumpadding">
-				<dl>
+				<dl class="common">
 					<dt>', $txt['statPanel_total_time_online'], ':</dt>
 					<dd>', $context['time_logged_in'], '</dd>
 					<dt>', $txt['statPanel_total_posts'], ':</dt>

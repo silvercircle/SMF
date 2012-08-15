@@ -404,6 +404,12 @@ div.poster li.warning a img {
 	padding: 2px;
 	max-width: 100px;
 }
+div.avatar.big {
+	width: auto;
+	height: auto;
+	max-width: 150px;
+	max-height: 150px;
+}
 span.small_avatar img, li.medium_avatar img {
 	height: 32px;
 	width: 32px;
@@ -596,7 +602,18 @@ dl.common.left dd {
 	width: auto;
 	margin-bottom: 10px;
 }
-
+dl.common.leftbalance dt {
+	width:59%;
+}
+dl.common.leftbalance dd {
+	width:39%;
+}
+dl.common.rightbalance dt {
+	width:39%;
+}
+dl.common.rightbalance dd {
+	width:59%;
+}
 /* Lists with settings use these a lot.
 ------------------------------------------------------- */
 dl.settings {

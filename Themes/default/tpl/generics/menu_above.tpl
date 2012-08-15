@@ -1,17 +1,20 @@
 <div id="main_container">
   <div id="left_admsection"><span id="admin_menu"></span>
-
+  {$SUPPORT->displayHook('sidemenu_top')}
   {$C.cur_menu_id = (isset($C.cur_menu_id)) ? $C.cur_menu_id + 1 : 1}
   {$context_id = 'menu_data_'|cat:$C.cur_menu_id}
   {$menu_context = $C.$context_id}
   {$firstSection = true}
   {foreach $menu_context.sections as $section}
     <div class="flat_container minpadding" style="margin-bottom:15px;border-right:0;border-radius:3px 0 0 3px;">
-      <div class="cat_bar2">
+      {*<div class="cat_bar2">
         <h3>
           {$section.title}
         </h3>
-      </div>
+      </div>*}
+      <h1 class="bigheader secondary indent title">
+          {$section.title}
+      </h1>
       <ul class="smalltext left_admmenu" style="padding:5px 0;">
       {foreach $section.areas as $i => $area}
         {if empty($area.label)}

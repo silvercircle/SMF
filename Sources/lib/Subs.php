@@ -2999,12 +2999,12 @@ function determineTopicClass(&$topic)
 	if(isset($topic['is_posted_in']))
 		$iconlegend .= '<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc postedin" src="'.$imgsrc.'" alt="" title="'.$txt['participation_caption'].'" /></div>';
 	*/
-	if(isset($topic['is_very_hot']))
+	if(!empty($topic['is_very_hot']))
 		$iconlegend .= '<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc veryhot" src="'.$imgsrc.'" alt="" title="'.$context['very_hot_topic_message'].'" /></div>';
-	elseif(isset($topic['is_hot']))
+	elseif(!empty($topic['is_hot']))
 		$iconlegend .= '<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc hot" src="'.$imgsrc.'" alt="" title="'.$context['hot_topic_message'].'" /></div>';
 
-	if(isset($topic['is_old']))
+	if(!empty($topic['is_old']))
 		$iconlegend .= '<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc old" src="'.$imgsrc.'" alt="" title="'.$context['old_topic_message'].'" /></div>';
 
 	$topic['iconlegend'] = $iconlegend;

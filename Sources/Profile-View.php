@@ -1027,6 +1027,8 @@ function statPanel($memID)
 
 	// Put it in the right order.
 	ksort($context['posts_by_time']);
+	EoS_Smarty::loadTemplate('profile/profile_base');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/stats');
 }
 
 function tracking($memID)

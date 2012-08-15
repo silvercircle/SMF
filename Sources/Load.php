@@ -956,9 +956,9 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 			mem.real_name, mem.email_address, mem.hide_email, mem.date_registered,
 			mem.birthdate, mem.member_ip, mem.member_ip2, mem.posts, mem.last_login,
 			mem.id_post_group, mem.lngfile, mem.id_group, mem.time_offset, mem.show_online,
-			mem.buddy_list, mg.online_color AS member_group_color, IFNULL(mg.group_name, {string:blank_string}) AS member_group,
+			mem.buddy_list, IFNULL(mg.group_name, {string:blank_string}) AS member_group,
 			mem.likes_received AS liked, mem.likes_given AS likesgiven,
-			pg.online_color AS post_group_color, IFNULL(pg.group_name, {string:blank_string}) AS post_group, mem.is_activated, mem.warning,
+			IFNULL(pg.group_name, {string:blank_string}) AS post_group, mem.is_activated, mem.warning,
 			CASE WHEN mem.id_group = 0 OR mg.stars = {string:blank_string} THEN pg.stars ELSE mg.stars END AS stars' . (!empty($modSettings['titlesEnable']) ? ',
 			mem.usertitle' : '');
 		$select_tables = '
@@ -978,8 +978,8 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 			mem.pm_ignore_list, mem.pm_email_notify, mem.pm_receive_from, mem.time_offset' . (!empty($modSettings['titlesEnable']) ? ', mem.usertitle' : '') . ',
 			mem.time_format, mem.secret_question, mem.is_activated, mem.additional_groups, mem.smiley_set, mem.show_online,
 			mem.total_time_logged_in, mem.id_post_group, mem.notify_announcements, mem.notify_regularity, mem.notify_send_body,
-			mem.notify_types, lo.url, mg.online_color AS member_group_color, IFNULL(mg.group_name, {string:blank_string}) AS member_group,
-			pg.online_color AS post_group_color, likes_received AS liked, likes_given AS likesgiven, IFNULL(pg.group_name, {string:blank_string}) AS post_group, mem.ignore_boards, mem.warning,
+			mem.notify_types, lo.url, IFNULL(mg.group_name, {string:blank_string}) AS member_group,
+			likes_received AS liked, likes_given AS likesgiven, IFNULL(pg.group_name, {string:blank_string}) AS post_group, mem.ignore_boards, mem.warning,
 			CASE WHEN mem.id_group = 0 OR mg.stars = {string:blank_string} THEN pg.stars ELSE mg.stars END AS stars, mem.password_salt, mem.pm_prefs';
 		$select_tables = '
 			LEFT JOIN {db_prefix}log_online AS lo ON (lo.id_member = mem.id_member)
@@ -991,7 +991,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 	{
 		$select_columns = '
 			mem.id_member, mem.member_name, mem.real_name, mem.email_address, mem.hide_email, mem.date_registered,
-			mem.posts, mem.last_login, mem.member_ip, mem.member_ip2, mem.lngfile, mem.id_group, mem.act_optout, mem.notify_optout';
+			mem.posts, mem.last_login, mem.member_ip, mem.member_ip2, mem.lngfile, mem.id_group, mem.id_post_group, mem.act_optout, mem.notify_optout';
 		$select_tables = '';
 	}
 	else
@@ -1071,8 +1071,6 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 			// If the Moderator group has no color or stars, but their group does... don't overwrite.
 			if (!empty($row['stars']))
 				$user_profile[$id]['stars'] = $row['stars'];
-			if (!empty($row['member_group_color']))
-				$user_profile[$id]['member_group_color'] = $row['member_group_color'];
 		}
 	}
 
@@ -1181,10 +1179,9 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'options' => $profile['options'],
 		'is_guest' => false,
 		'group' => $profile['member_group'],
-		'group_color' => $profile['member_group_color'],
 		'group_id' => $profile['id_group'],
+		'post_group_id' => $profile['id_post_group'],
 		'post_group' => $profile['post_group'],
-		'post_group_color' => $profile['post_group_color'],
 		'group_stars' => str_repeat('<img src="' . str_replace('$language', $context['user']['language'], isset($profile['stars'][1]) ? $settings['images_url'] . '/' . $profile['stars'][1] : '') . '" alt="*" />', empty($profile['stars'][0]) || empty($profile['stars'][1]) ? 0 : $profile['stars'][0]),
 		'warning' => $profile['warning'],
 		'warning_status' => !empty($modSettings['warning_mute']) && $modSettings['warning_mute'] <= $profile['warning'] ? 'mute' : (!empty($modSettings['warning_moderate']) && $modSettings['warning_moderate'] <= $profile['warning'] ? 'moderate' : (!empty($modSettings['warning_watch']) && $modSettings['warning_watch'] <= $profile['warning'] ? 'watch' : (''))),

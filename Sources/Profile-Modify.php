@@ -312,8 +312,8 @@ function loadProfileFields($force_reload = false)
 			'input_validate' => 'profileSaveGroups',
 		),
 		'id_theme' => array(
-			'type' => 'callback',
-			'callback_func' => 'theme_pick',
+			'type' => 'callback_template',
+			'callback_name' => 'profile/theme_pick',
 			'permission' => 'profile_extra',
 			'enabled' => $modSettings['theme_allow'] || allowedTo('admin_forum'),
 			'preload' => function() {
@@ -376,24 +376,24 @@ function loadProfileFields($force_reload = false)
 			'preload' => 'profileLoadLanguages',
 			'enabled' => !empty($modSettings['userLanguage']),
 			'value' => empty($cur_profile['lngfile']) ? $language : $cur_profile['lngfile'],
-			'input_validate' => create_function('&$value', '
+			'input_validate' => function(&$value) {
 				global $context, $cur_profile;
 
 				// Load the languages.
 				profileLoadLanguages();
 
-				if (isset($context[\'profile_languages\'][$value]))
+				if (isset($context['profile_languages'][$value]))
 				{
-					if ($context[\'user\'][\'is_owner\'])
-						$_SESSION[\'language\'] = $value;
+					if ($context['user']['is_owner'])
+						$_SESSION['language'] = $value;
 					return true;
 				}
 				else
 				{
-					$value = $cur_profile[\'lngfile\'];
+					$value = $cur_profile['lngfile'];
 					return false;
 				}
-			'),
+			},
 		),
 		'location' => array(
 			'type' => 'text',
@@ -410,30 +410,30 @@ function loadProfileFields($force_reload = false)
 			'log_change' => true,
 			'permission' => 'profile_identity',
 			'prehtml' => allowedTo('admin_forum') && isset($_GET['changeusername']) ? '<div class="alert">' . $txt['username_warning'] . '</div>' : '',
-			'input_validate' => create_function('&$value', '
+			'input_validate' => function(&$value) {
 				global $sourcedir, $context, $user_info, $cur_profile;
 
-				if (allowedTo(\'admin_forum\'))
+				if (allowedTo('admin_forum'))
 				{
 					// We\'ll need this...
-					require_once($sourcedir . \'/lib/Subs-Auth.php\');
+					require_once($sourcedir . '/lib/Subs-Auth.php');
 
 					// Maybe they are trying to change their password as well?
 					$resetPassword = true;
-					if (isset($_POST[\'passwrd1\']) && $_POST[\'passwrd1\'] != \'\' && isset($_POST[\'passwrd2\']) && $_POST[\'passwrd1\'] == $_POST[\'passwrd2\'] && validatePassword($_POST[\'passwrd1\'], $value, array($cur_profile[\'real_name\'], $user_info[\'username\'], $user_info[\'name\'], $user_info[\'email\'])) == null)
+					if (isset($_POST['passwrd1']) && $_POST['passwrd1'] != '' && isset($_POST['passwrd2']) && $_POST['passwrd1'] == $_POST['passwrd2'] && validatePassword($_POST['passwrd1'], $value, array($cur_profile['real_name'], $user_info['username'], $user_info['name'], $user_info['email'])) == null)
 						$resetPassword = false;
 
 					// Do the reset... this will send them an email too.
 					if ($resetPassword)
-						resetPassword($context[\'id_member\'], $value);
+						resetPassword($context['id_member'], $value);
 					elseif ($value !== null)
 					{
-						validateUsername($context[\'id_member\'], $value);
-						updateMemberData($context[\'id_member\'], array(\'member_name\' => $value));
+						validateUsername($context['id_member'], $value);
+						updateMemberData($context['id_member'], array('member_name' => $value));
 					}
 				}
 				return false;
-			'),
+			},
 		),
 		'passwrd1' => array(
 			'type' => 'password',
@@ -445,29 +445,29 @@ function loadProfileFields($force_reload = false)
 			'permission' => 'profile_identity',
 			'save_key' => 'passwd',
 			// Note this will only work if passwrd2 also exists!
-			'input_validate' => create_function('&$value', '
+			'input_validate' => function(&$value) {
 				global $sourcedir, $user_info, $smcFunc, $cur_profile;
 
 				// If we didn\'t try it then ignore it!
-				if ($value == \'\')
+				if ($value == '')
 					return false;
 
 				// Do the two entries for the password even match?
-				if (!isset($_POST[\'passwrd2\']) || $value != $_POST[\'passwrd2\'])
-					return \'bad_new_password\';
+				if (!isset($_POST['passwrd2']) || $value != $_POST['passwrd2'])
+					return 'bad_new_password';
 
 				// Let\'s get the validation function into play...
-				require_once($sourcedir . \'/lib/Subs-Auth.php\');
-				$passwordErrors = validatePassword($value, $cur_profile[\'member_name\'], array($cur_profile[\'real_name\'], $user_info[\'username\'], $user_info[\'name\'], $user_info[\'email\']));
+				require_once($sourcedir . '/lib/Subs-Auth.php');
+				$passwordErrors = validatePassword($value, $cur_profile['member_name'], array($cur_profile['real_name'], $user_info['username'], $user_info['name'], $user_info['email']));
 
 				// Were there errors?
 				if ($passwordErrors != null)
-					return \'password_\' . $passwordErrors;
+					return 'password_' . $passwordErrors;
 
 				// Set up the new password variable... ready for storage.
-				$value = sha1(strtolower($cur_profile[\'member_name\']) . un_htmlspecialchars($value));
+				$value = sha1(strtolower($cur_profile['member_name']) . un_htmlspecialchars($value));
 				return true;
-			'),
+			},
 		),
 		'passwrd2' => array(
 			'type' => 'password',
@@ -491,26 +491,26 @@ function loadProfileFields($force_reload = false)
 			'type' => 'callback_template',
 			'callback_name' => 'pm/settings',
 			'permission' => 'pm_read',
-			'preload' => create_function('', '
+			'preload' => function() {
 				global $context, $cur_profile;
 
-				$context[\'display_mode\'] = $cur_profile[\'pm_prefs\'] & 3;
-				$context[\'send_email\'] = $cur_profile[\'pm_email_notify\'];
-				$context[\'receive_from\'] = !empty($cur_profile[\'pm_receive_from\']) ? $cur_profile[\'pm_receive_from\'] : 0;
+				$context['display_mode'] = $cur_profile['pm_prefs'] & 3;
+				$context['send_email'] = $cur_profile['pm_email_notify'];
+				$context['receive_from'] = !empty($cur_profile['pm_receive_from']) ? $cur_profile['pm_receive_from'] : 0;
 
 				return true;
-			'),
-			'input_validate' => create_function('&$value', '
+			},
+			'input_validate' => function(&$value) {
 				global $cur_profile, $profile_vars;
 
 				// Simple validate and apply the two "sub settings"
 				$value = max(min($value, 2), 0);
 
-				$cur_profile[\'pm_email_notify\'] = $profile_vars[\'pm_email_notify\'] = max(min((int) $_POST[\'pm_email_notify\'], 2), 0);
-				$cur_profile[\'pm_receive_from\'] = $profile_vars[\'pm_receive_from\'] = max(min((int) $_POST[\'pm_receive_from\'], 4), 0);
+				$cur_profile['pm_email_notify'] = $profile_vars['pm_email_notify'] = max(min((int) $_POST['pm_email_notify'], 2), 0);
+				$cur_profile['pm_receive_from'] = $profile_vars['pm_receive_from'] = max(min((int) $_POST['pm_receive_from'], 4), 0);
 
 				return true;
-			'),
+			},
 		),
 		'posts' => array(
 			'type' => 'int',
@@ -531,23 +531,23 @@ function loadProfileFields($force_reload = false)
 			'input_attr' => array('maxlength="60"'),
 			'permission' => 'profile_identity',
 			'enabled' => !empty($modSettings['allow_editDisplayName']) || allowedTo('moderate_forum'),
-			'input_validate' => create_function('&$value', '
+			'input_validate' => function(&$value) {
 				global $context, $smcFunc, $sourcedir, $cur_profile;
 
-				$value = trim(preg_replace(\'~[\s]~\' . ($context[\'utf8\'] ? \'u\' : \'\'), \' \', $value));
+				$value = trim(preg_replace('~[\s]~' . ($context['utf8'] ? 'u' : ''), ' ', $value));
 
-				if (trim($value) == \'\')
-					return \'no_name\';
+				if (trim($value) == '')
+					return 'no_name';
 				elseif (CommonAPI::strlen($value) > 60)
-					return \'name_too_long\';
-				elseif ($cur_profile[\'real_name\'] != $value)
+					return 'name_too_long';
+				elseif ($cur_profile['real_name'] != $value)
 				{
-					require_once($sourcedir . \'/lib/Subs-Members.php\');
-					if (isReservedName($value, $context[\'id_member\']))
-						return \'name_taken\';
+					require_once($sourcedir . '/lib/Subs-Members.php');
+					if (isReservedName($value, $context['id_member']))
+						return 'name_taken';
 				}
 				return true;
-			'),
+			},
 		),
 		'secret_question' => array(
 			'type' => 'text',
@@ -564,10 +564,10 @@ function loadProfileFields($force_reload = false)
 			'postinput' => '<span class="smalltext" style="margin-left: 4ex;"><a href="' . $scripturl . '?action=helpadmin;help=secret_why_blank" onclick="return reqWin(this.href);">' . $txt['secret_why_blank'] . '</a></span>',
 			'value' => '',
 			'permission' => 'profile_identity',
-			'input_validate' => create_function('&$value', '
-				$value = $value != \'\' ? md5($value) : \'\';
+			'input_validate' => function(&$value) {
+				$value = $value != '' ? md5($value) : '';
 				return true;
-			'),
+			},
 		),
 		'signature' => array(
 			'type' => 'callback_template',
@@ -584,90 +584,90 @@ function loadProfileFields($force_reload = false)
 			'enabled' => !empty($modSettings['allow_hideOnline']) || allowedTo('moderate_forum'),
 		),
 		'smiley_set' => array(
-			'type' => 'callback',
-			'callback_func' => 'smiley_pick',
+			'type' => 'callback_template',
+			'callback_name' => 'profile/smiley_pick',
 			'enabled' => !empty($modSettings['smiley_sets_enable']),
 			'permission' => 'profile_extra',
-			'preload' => create_function('', '
+			'preload' => function() {
 				global $modSettings, $context, $txt, $cur_profile;
 
-				$context[\'member\'][\'smiley_set\'][\'id\'] = empty($cur_profile[\'smiley_set\']) ? \'\' : $cur_profile[\'smiley_set\'];
-				$context[\'smiley_sets\'] = explode(\',\', \'none,,\' . $modSettings[\'smiley_sets_known\']);
-				$set_names = explode("\n", $txt[\'smileys_none\'] . "\n" . $txt[\'smileys_forum_board_default\'] . "\n" . $modSettings[\'smiley_sets_names\']);
-				foreach ($context[\'smiley_sets\'] as $i => $set)
+				$context['member']['smiley_set']['id'] = empty($cur_profile['smiley_set']) ? '' : $cur_profile['smiley_set'];
+				$context['smiley_sets'] = explode(',', 'none,,' . $modSettings['smiley_sets_known']);
+				$set_names = explode("\n", $txt['smileys_none'] . "\n" . $txt['smileys_forum_board_default'] . "\n" . $modSettings['smiley_sets_names']);
+				foreach ($context['smiley_sets'] as $i => $set)
 				{
-					$context[\'smiley_sets\'][$i] = array(
-						\'id\' => htmlspecialchars($set),
-						\'name\' => htmlspecialchars($set_names[$i]),
-						\'selected\' => $set == $context[\'member\'][\'smiley_set\'][\'id\']
+					$context['smiley_sets'][$i] = array(
+						'id' => htmlspecialchars($set),
+						'name' => htmlspecialchars($set_names[$i]),
+						'selected' => $set == $context['member']['smiley_set']['id']
 					);
 
-					if ($context[\'smiley_sets\'][$i][\'selected\'])
-						$context[\'member\'][\'smiley_set\'][\'name\'] = $set_names[$i];
+					if ($context['smiley_sets'][$i]['selected'])
+						$context['member']['smiley_set']['name'] = $set_names[$i];
 				}
 				return true;
-			'),
-			'input_validate' => create_function('&$value', '
+			},
+			'input_validate' => function(&$value) {
 				global $modSettings;
 
-				$smiley_sets = explode(\',\', $modSettings[\'smiley_sets_known\']);
-				if (!in_array($value, $smiley_sets) && $value != \'none\')
-					$value = \'\';
+				$smiley_sets = explode(',', $modSettings['smiley_sets_known']);
+				if (!in_array($value, $smiley_sets) && $value != 'none')
+					$value = '';
 				return true;
-			'),
+			},
 		),
 		// Pretty much a dummy entry - it populates all the theme settings.
 		'theme_settings' => array(
-			'type' => 'callback',
-			'callback_func' => 'theme_settings',
+			'type' => 'callback_template',
+			'callback_name' => 'profile/theme_settings',
 			'permission' => 'profile_extra',
 			'is_dummy' => true,
-			'preload' => create_function('', '
-				loadLanguage(\'Settings\');
+			'preload' => function() {
+				loadLanguage('Settings');
 				return true;
-			'),
+			}
 		),
 		'time_format' => array(
-			'type' => 'callback',
-			'callback_func' => 'timeformat_modify',
+			'type' => 'callback_template',
+			'callback_name' => 'profile/timeformat_modify',
 			'permission' => 'profile_extra',
-			'preload' => create_function('', '
+			'preload' => function() {
 				global $context, $user_info, $txt, $cur_profile, $modSettings;
 
-				$context[\'easy_timeformats\'] = array(
-					array(\'format\' => \'\', \'title\' => $txt[\'timeformat_default\']),
-					array(\'format\' => \'%B %d, %Y, %I:%M:%S %p\', \'title\' => $txt[\'timeformat_easy1\']),
-					array(\'format\' => \'%B %d, %Y, %H:%M:%S\', \'title\' => $txt[\'timeformat_easy2\']),
-					array(\'format\' => \'%Y-%m-%d, %H:%M:%S\', \'title\' => $txt[\'timeformat_easy3\']),
-					array(\'format\' => \'%d %B %Y, %H:%M:%S\', \'title\' => $txt[\'timeformat_easy4\']),
-					array(\'format\' => \'%d-%m-%Y, %H:%M:%S\', \'title\' => $txt[\'timeformat_easy5\'])
+				$context['easy_timeformats'] = array(
+					array('format' => '', 'title' => $txt['timeformat_default']),
+					array('format' => '%B %d, %Y, %I:%M:%S %p', 'title' => $txt['timeformat_easy1']),
+					array('format' => '%B %d, %Y, %H:%M:%S', 'title' => $txt['timeformat_easy2']),
+					array('format' => '%Y-%m-%d, %H:%M:%S', 'title' => $txt['timeformat_easy3']),
+					array('format' => '%d %B %Y, %H:%M:%S', 'title' => $txt['timeformat_easy4']),
+					array('format' => '%d-%m-%Y, %H:%M:%S', 'title' => $txt['timeformat_easy5'])
 				);
 
-				$context[\'member\'][\'time_format\'] = $cur_profile[\'time_format\'];
-				$context[\'current_forum_time\'] = strftime($modSettings[\'time_format\'], forum_time(false)) . \' \' . date_default_timezone_get();
-				$context[\'current_forum_time_js\'] = strftime(\'%Y,\' . ((int) strftime(\'%m\', time() + $modSettings[\'time_offset\'] * 3600) - 1) . \',%d,%H,%M,%S\', time() + $modSettings[\'time_offset\'] * 3600);
-				$context[\'current_forum_time_hour\'] = (int) strftime(\'%H\', forum_time(false));
+				$context['member']['time_format'] = $cur_profile['time_format'];
+				$context['current_forum_time'] = strftime($modSettings['time_format'], forum_time(false)) . ' ' . date_default_timezone_get();
+				$context['current_forum_time_js'] = strftime('%Y,' . ((int) strftime('%m', time() + $modSettings['time_offset'] * 3600) - 1) . ',%d,%H,%M,%S', time() + $modSettings['time_offset'] * 3600);
+				$context['current_forum_time_hour'] = (int) strftime('%H', forum_time(false));
 				return true;
-			'),
+			}
 		),
 		'time_offset' => array(
-			'type' => 'callback',
-			'callback_func' => 'timeoffset_modify',
+			'type' => 'callback_template',
+			'callback_name' => 'profile/timeoffset_modify',
 			'permission' => 'profile_extra',
-			'preload' => create_function('', '
+			'preload' => function() {
 				global $context, $cur_profile;
-				$context[\'member\'][\'time_offset\'] = $cur_profile[\'time_offset\'];
+				$context['member']['time_offset'] = $cur_profile['time_offset'];
 				return true;
-			'),
-			'input_validate' => create_function('&$value', '
+			},
+			'input_validate' => function(&$value) {
 				// Validate the time_offset...
-				$value = (float) strtr($value, \',\', \'.\');
+				$value = (float) strtr($value, ',', '.');
 
 				if ($value < -23.5 || $value > 23.5)
-					return \'bad_offset\';
+					return 'bad_offset';
 
 				return true;
-			'),
+			},
 		),
 		'usertitle' => array(
 			'type' => 'text',
@@ -1541,7 +1541,6 @@ function forumProfile($memID)
 
 	EoS_Smarty::loadTemplate('profile/profile_base');
 	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/edit_options');
-	//$context['sub_template'] = 'edit_options';
 	$context['page_desc'] = $txt['forumProfile_info'];
 
 	setupProfileContext(
@@ -1659,7 +1658,9 @@ function theme($memID)
 	if (allowedTo(array('profile_extra_own', 'profile_extra_any')))
 		loadCustomFields($memID, 'theme');
 
-	$context['sub_template'] = 'edit_options';
+	EoS_Smarty::loadTemplate('profile/profile_base');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/edit_options');
+	//$context['sub_template'] = 'edit_options';
 	$context['page_desc'] = $txt['theme_info'];
 
 	setupProfileContext(
@@ -2934,7 +2935,7 @@ function groupMembership($memID)
 
 	// Get all the membergroups they can join.
 	$request = smf_db_query( '
-		SELECT mg.id_group, mg.group_name, mg.description, mg.group_type, mg.online_color, mg.hidden,
+		SELECT mg.id_group, mg.group_name, mg.description, mg.group_type, mg.hidden,
 			IFNULL(lgr.id_member, 0) AS pending
 		FROM {db_prefix}membergroups AS mg
 			LEFT JOIN {db_prefix}log_group_requests AS lgr ON (lgr.id_member = {int:selected_member} AND lgr.id_group = mg.id_group)
@@ -2970,7 +2971,6 @@ function groupMembership($memID)
 			'id' => $row['id_group'],
 			'name' => $row['group_name'],
 			'desc' => $row['description'],
-			'color' => $row['online_color'],
 			'type' => $row['group_type'],
 			'pending' => $row['pending'],
 			'is_primary' => $row['id_group'] == $context['primary_group'],
