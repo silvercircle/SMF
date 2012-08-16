@@ -136,6 +136,24 @@ fieldset select {
 a img {
 	border: 0;
 }
+h1.bigheader, div.bigheader {
+	display: block;
+	padding: 4px 20px;
+	margin-bottom: 2px;
+}
+h1.bigheader.topic {
+	padding: 0;
+	border:0;
+}
+h1.bigheader.secondary {
+	padding: 2px 0;
+}
+h1.bigheader.secondary.title {
+	margin-bottom: 0;
+}
+h1.bigheader.indent {
+	text-indent: 10px;
+}
 .borderbox {
    -moz-box-sizing:    border-box;
    -webkit-box-sizing: border-box;
@@ -846,7 +864,6 @@ table.table_list a.collapse {
 	padding: 0 0.7em;
 }
 table.table_grid {
-	margin-top: 0.1em;
 	border-collapse: separate;
 	border-spacing: 0 0;
 	border-top:0;

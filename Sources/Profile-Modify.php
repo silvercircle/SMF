@@ -518,10 +518,10 @@ function loadProfileFields($force_reload = false)
 			'log_change' => true,
 			'size' => 7,
 			'permission' => 'moderate_forum',
-			'input_validate' => create_function('&$value', '
-				$value = $value != \'\' ? strtr($value, array(\',\' => \'\', \'.\' => \'\', \' \' => \'\')) : 0;
+			'input_validate' => function(&$value) {
+				$value = $value != '' ? strtr($value, array(',' => '', '.' => '', ' ' => '')) : 0;
 				return true;
-			'),
+			},
 		),
 		'real_name' => array(
 			'type' => !empty($modSettings['allow_editDisplayName']) || allowedTo('moderate_forum') ? 'text' : 'label',
@@ -1514,10 +1514,12 @@ function account($memID)
 	global $context, $txt;
 
 	loadThemeOptions($memID);
+	EoS_Smarty::loadTemplate('profile/profile_base');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/edit_options');
+	
 	if (allowedTo(array('profile_identity_own', 'profile_identity_any')))
 		loadCustomFields($memID, 'account');
 
-	$context['sub_template'] = 'edit_options';
 	$context['page_desc'] = $txt['account_info'];
 
 	setupProfileContext(

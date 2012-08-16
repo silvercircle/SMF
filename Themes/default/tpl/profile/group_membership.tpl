@@ -1,11 +1,9 @@
 <form action="{$SUPPORT->url_parse('?action=profile;area=groupmembership;save')}" method="post" accept-charset="UTF-8" name="creator" id="creator">
-  <div class="cat_bar">
-    <h3>
-      <span class="ie6_header floatleft">{$T.profile}</span>
-    </h3>
-  </div>
+  <h1 class="bigheader secondary indent title bordered">
+    {$T.profile}
+  </h1>
   <div class="orange_container cleantop mediumpadding">{$T.groupMembership_info}</div>
-  <br>
+  <div class="spacer_h"></div>
   {if !empty($C.update_message)}
     <div id="profile_success">
       {$C.update_message}
@@ -13,15 +11,11 @@
   {/if}
   {if !empty($C.group_request)}
     <div class="groupmembership">
-      <div class="cat_bar">
-        <h3>{$T.request_group_membership}</h3>
-      </div>
-      <div class="orange_container cleantop norounded mediumpadding">
-        {$T.request_group_membership_desc}
-      </div>
-      <br>
       <div class="blue_container">
         <div class="content">
+          <h1 class="bigheader secondary indent">{$T.request_group_membership}</h1>
+          <div class="smalltext smallpadding">{$T.request_group_membership_desc}</div>
+          <br>
           <textarea name="reason" rows="4" style="{($C.browser.is_ie8) ? 'width: 635px; max-width: 99%; min-width: 99%' : 'width: 99%'};"></textarea>
           <div class="righttext" style="margin: 0.5em 0.5% 0 0.5%;">
             <input type="hidden" name="gid" value="{$C.group_request.id}" />

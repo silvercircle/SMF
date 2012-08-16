@@ -523,17 +523,12 @@ h1.forumtitle {
 }
 
 h1.bigheader, div.bigheader {
-	display: block;
 	font-size: 16px;
 	font-weight: bold;
 	border-bottom: 3px solid #ccc;
-	padding: 4px 20px;
-	margin-bottom: 2px;
 	color: #888;
 }
 h1.bigheader.topic {
-	padding: 0;
-	border:0;
 	font-weight: normal;
 }
 h1.bigheader.secondary {
@@ -541,14 +536,15 @@ h1.bigheader.secondary {
 	font-weight:bold;
 	border-bottom: 1px solid #cce;
 	color: #88a;
-	padding: 2px 0;
 }
 h1.bigheader.secondary.title {
 	background: #e5e5f0;
 	border-bottom: 2px solid orange;
 }
-h1.bigheader.indent {
-	text-indent: 10px;
+h1.bigheader.title.bordered {
+	border-left:1px solid #ddd;
+	border-top:1px solid #ddd;
+	border-right:1px solid #ddd;
 }
 div.spoiler.content {
 	padding:2px 5px !important;

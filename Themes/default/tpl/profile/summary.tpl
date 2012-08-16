@@ -14,10 +14,10 @@
  *}
 <div id="profileview">
 	<div id="detailedinfo">
-		<h1 class="bigheader secondary title indent">
+		<h1 class="bigheader secondary title indent bordered">
 			{$T.member_about} {($C.user.is_owner) ? $T.you_member : $C.member.name}
 		</h1>
-		<div class="yellow_container cleantop">
+		<div class="blue_container cleantop">
 			<div class="content mediumpadding">
 				<dl>
 				{if $C.user.is_owner || $C.user.is_admin}

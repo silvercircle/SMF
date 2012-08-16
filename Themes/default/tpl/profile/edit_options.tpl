@@ -1,17 +1,15 @@
 <form action="{(!empty($C.profile_custom_submit_url)) ? $C.profile_custom_submit_url : ($SCRIPTURL|cat:'?action=profile;area='|cat:$C.menu_item_selected|cat:';u='|cat:$C.id_member|cat:';save')}" method="post" accept-charset="UTF-8" name="creator" id="creator" enctype="multipart/form-data" onsubmit="return checkProfileSubmit();">
-  <div class="cat_bar">
-    <h3>
+    <h1 class="bigheader secondary indent title bordered">
     {if !empty($C.profile_header_text)}
       {$C.profile_header_text}
     {else}
       {$T.profile}
     {/if}
-    </h3>
-  </div>
+    </h1>
   {if $C.page_desc}
-    <div class="orange_container cleantop norunded mediumpadding">{$C.page_desc}</div><br>
+    <div class="orange_container cleantop norunded mediumpadding">{$C.page_desc}</div>
   {/if}
-  <div class="blue_container">
+  <div class="blue_container cleantop">
     <div class="content">
     {if !empty($C.profile_prehtml)}
       <div>{$C.profile_prehtml}</div>

@@ -1866,8 +1866,9 @@ function showPermissions($memID)
 
 	loadLanguage('ManagePermissions');
 	loadLanguage('Admin');
-	loadAdminTemplate('ManageMembers');
-
+	//loadAdminTemplate('ManageMembers');
+	EoS_Smarty::loadTemplate('profile/profile_base');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/permissions');
 	// Load all the permission profiles.
 	require_once($sourcedir . '/' . $backend_subdir . '/ManagePermissions.php');
 	loadPermissionProfiles();

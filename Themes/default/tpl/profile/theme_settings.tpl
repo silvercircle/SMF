@@ -63,9 +63,13 @@
           <label for="wysiwyg_default"><input type="checkbox" name="default_options[wysiwyg_default]" id="wysiwyg_default" value="1"{(!empty($C.member.options.wysiwyg_default)) ? ' checked="checked"' : ''} class="input_check" /> {$T.wysiwyg_default}</label>
         </li>
       {/if}
+      </ul>
+      <dl>
       {if empty($M.disableCustomPerPage)}
-        <li>
-          <label for="topics_per_page">{$T.topics_per_page}</label>
+        <dt>
+          <label for="topics_per_page"><strong>{$T.topics_per_page}</strong></label>
+        </dt>
+        <dd>
           <select name="default_options[topics_per_page]" id="topics_per_page">
             <option value="0"{(empty($C.member.options.topics_per_page)) ? ' selected="selected"' : ''}>{$T.per_page_default} ({$M.defaultMaxTopics})</option>
             <option value="5"{(!empty($C.member.options.topics_per_page) and $C.member.options.topics_per_page == 5 ) ? ' selected="selected"' : ''}>5</option>
@@ -73,9 +77,11 @@
             <option value="25"{(!empty($C.member.options.topics_per_page) and $C.member.options.topics_per_page == 25) ? ' selected="selected"' : ''}>25</option>
             <option value="50"{(!empty($C.member.options.topics_per_page) and $C.member.options.topics_per_page == 50) ? ' selected="selected"' : ''}>50</option>
           </select>
-        </li>
-        <li>
-          <label for="messages_per_page">{$T.messages_per_page}</label>
+        </dd>
+        <dt>
+          <label for="messages_per_page"><strong>{$T.messages_per_page}</strong></label>
+        </dt>
+        <dd>
           <select name="default_options[messages_per_page]" id="messages_per_page">
             <option value="0"{(empty($C.member.options.messages_per_page)) ? ' selected="selected"' : ''}>{$T.per_page_default} ({$M.defaultMaxMessages})</option>
             <option value="5"{(!empty($C.member.options.messages_per_page) and $C.member.options.messages_per_page == 5) ? ' selected="selected"' : ''}>5</option>
@@ -83,41 +89,51 @@
             <option value="25"{(!empty($C.member.options.messages_per_page) and $C.member.options.messages_per_page == 25) ? ' selected="selected"' : ''}>25</option>
             <option value="50"{(!empty($C.member.options.messages_per_page) and $C.member.options.messages_per_page == 50) ? ' selected="selected"' : ''}>50</option>
           </select>
-        </li>
+        </dd>
       {/if}
       {if !empty($M.cal_enabled)}
-        <li>
-          <label for="calendar_start_day">{$T.calendar_start_day}:</label>
+        <dt>
+          <label for="calendar_start_day"><strong>{$T.calendar_start_day}</strong>:</label>
+        </dt>
+        <dd>
           <select name="default_options[calendar_start_day]" id="calendar_start_day">
             <option value="0"{(empty($C.member.options.calendar_start_day)) ? ' selected="selected"' : ''}>{$T.days.0}</option>
             <option value="1"{(!empty($C.member.options.calendar_start_day) and $C.member.options.calendar_start_day == 1) ? ' selected="selected"' : ''}>{$T.days.1}</option>
             <option value="6"{(!empty($C.member.options.calendar_start_day) and $C.member.options.calendar_start_day == 6) ? ' selected="selected"' : ''}>{$T.days.6}</option>
           </select>
-        </li>
+        </dd>
       {/if}
-      <li>
-        <label for="display_quick_reply">{$T.display_quick_reply}</label>
+      <dt>
+        <label for="display_quick_reply"><strong>{$T.display_quick_reply}</strong></label>
+      </dt>
+      <dd>
         <select name="default_options[display_quick_reply]" id="display_quick_reply">
           <option value="0"{(empty($C.member.options.display_quick_reply)) ? ' selected="selected"' : ''}>{$T.display_quick_reply1}</option>
           <option value="1"{(!empty($C.member.options.display_quick_reply)) ? ' selected="selected"' : ''}>{$T.display_quick_reply2}</option>
         </select>
-      </li>
-      <li>
-        <label for="display_quick_mod">{$T.display_quick_mod}</label>
+      </dd>
+      <dt>
+        <label for="display_quick_mod"><strong>{$T.display_quick_mod}</strong></label>
+      </dt>
+      <dd>
         <select name="default_options[display_quick_mod]" id="display_quick_mod">
           <option value="0"{(empty($C.member.options.display_quick_mod)) ? ' selected="selected"' : ''}>{$T.display_quick_mod_none}</option>
           <option value="1"{(!empty($C.member.options.display_quick_mod) and $C.member.options.display_quick_mod == 1) ? ' selected="selected"' : ''}>{$T.display_quick_mod_check}</option>
         </select>
-      </li>
-      <li>
-        <label for="editor_height">{$T.editor_height}</label>
+      </dd>
+      <dt>
+        <label for="editor_height"><strong>{$T.editor_height}</strong></label>
+      </dt>
+      <dd>
         <input size="5" type="text" name="default_options[editor_height]" id="editor_height" value="{(empty($C.member.options.editor_height)) ? '250' : $C.member.options.editor_height}" />
-      </li>
-      <li>
-        <label for="content_width">{$T.content_width}</label>
+      </dd>
+      <dt>
+        <label for="content_width"><strong>{$T.content_width}</strong></label>
+      </dt>
+      <dd>
         <input type="text" name="default_options[content_width]" id="content_width" value="{(empty($C.member.options.content_width)) ? '95%' : $C.member.options.content_width}" />
-      </li>
-    </ul>
+      </dd>
+      </dl>
     <dl>
 <dd></dd>
 
