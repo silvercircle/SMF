@@ -27,8 +27,8 @@
     </div>
   </div>
   <br>
-  <h1 class="bigheader secondary indent">{$T.membergroups_members_group_members}</h1>
-  <div class="pagelinks">{$C.page_index}</div>
+  <h1 class="bigheader section_header">{$T.membergroups_members_group_members}</h1>
+  <div class="pagelinks pagesection">{$C.page_index}</div>
   <table class="table_grid" style="width:100%;">
     <thead>
       <tr>
@@ -52,7 +52,7 @@
     {foreach $C.members as $member}
       <tr class="{($alternate) ? 'tablerow alternate' : 'tablerow'}">
         <td>{$member.name}</td>
-        <td class="centertext">
+        <td>
         {if $member.show_email == 'no'}
           <em>{$T.hidden}</em>
         {elseif $member.show_email == 'yes_permission_override'}
@@ -75,15 +75,15 @@
     </tbody>
   </table>
   <div class="pagesection">
-    <div class="pagelinks floatleft">{$C.page_index}</div>
+    <div class="pagelinks pagesection">{$C.page_index}</div>
     {if !empty($C.group.assignable)}
       <div class="floatright"><input type="submit" name="remove" value="{$T.membergroups_members_remove}" class="button_submit" /></div>
     {/if}
   </div>
   <br>
   {if !empty($C.group.assignable)}
-    <h1 class="bigheader secondary indent">{$T.membergroups_members_add_title}</h1>
-    <div class="blue_container">
+    <h1 class="bigheader section_header bordered">{$T.membergroups_members_add_title}</h1>
+    <div class="blue_container cleantop">
       <div class="content">
         <strong>{$T.membergroups_members_add_desc}:</strong>
         <input size="80" type="text" name="toAdd" id="toAdd" value="" class="input_text" />

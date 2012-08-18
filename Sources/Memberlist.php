@@ -52,11 +52,9 @@ function Memberlist()
 	// Make sure they can view the memberlist.
 	isAllowedTo('view_mlist');
 
-	loadTemplate('Memberlist');
-	loadTemplate('GenericBits');
 	$context['listing_by'] = !empty($_GET['sa']) ? $_GET['sa'] : 'all';
 	$context['show_sidebar'] = true;
-	$context['sidebar_context_output'] = 'template_sidebar_memberlist';
+	$context['sidebar_template'] = 'sidebars/sidebar_memberlist.tpl';
 	MLSearch();
 	// $subActions array format:
 	// 'subaction' => array('label', 'function', 'is_selected')
@@ -129,6 +127,8 @@ function Memberlist()
 		$subActions[$context['listing_by']][1]();
 	else
 		$subActions['all'][1]();
+
+	Eos_Smarty::loadTemplate('memberlist');
 }
 
 // List all members, page by page.

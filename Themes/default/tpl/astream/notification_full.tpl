@@ -6,8 +6,10 @@
   </div>
   {if $C.act_results}
     <ol id="notifylist" class="commonlist notifications">
+      {$C.alt_row = false}
       {foreach $C.activities as $activity}
         {call activitybit a=$activity}
+        {$C.alt_row = !$C.alt_row}
       {/foreach}
     </ol>
   {else}

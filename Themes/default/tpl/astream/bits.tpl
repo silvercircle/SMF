@@ -1,6 +1,6 @@
 {function activitybit}
   {if isset($a.member)}
-    <li class="{($a.unread) ? 'unread' : 'read'}" id="_nn_{$a.id_act}" data-id="{$a.id_act}">
+    <li class="tablerow{($C.alt_row) ? ' alternate' : ''}{($a.unread) ? ' unread' : ' read'}" id="_nn_{$a.id_act}" data-id="{$a.id_act}">
       <div class="floatleft" style="margin-right:10px;">
        <span class="small_avatar">
         {if !empty($a.member.avatar.image)}

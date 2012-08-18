@@ -1273,6 +1273,7 @@ function Post()
 		require_once($sourcedir . '/lib/Subs-Editor.php');
 		$verificationOptions = array(
 			'id' => 'post',
+			'skip_template' => true
 		);
 		$context['require_verification'] = create_control_verification($verificationOptions);
 		$context['visual_verification_id'] = $verificationOptions['id'];
@@ -1358,6 +1359,7 @@ function Post2()
 		require_once($sourcedir . '/lib/Subs-Editor.php');
 		$verificationOptions = array(
 			'id' => 'post',
+			'skip_template' => true
 		);
 		$context['require_verification'] = create_control_verification($verificationOptions, true);
 		if (is_array($context['require_verification']))

@@ -840,7 +840,7 @@ class SimpleSEF {
     public static function ModifyAdvancedSettings() {
         global $scripturl, $txt, $context, $modSettings, $settings;
 
-        loadTemplate('SimpleSEF');
+        loadAdminTemplate('SimpleSEF');
         $config_vars = array(
             array('check', 'simplesef_lowercase', 'subtext' => $txt['simplesef_lowercase_desc']),
             array('large_text', 'simplesef_strip_words', 'size' => 6, 'subtext' => $txt['simplesef_strip_words_desc']),
@@ -908,7 +908,7 @@ class SimpleSEF {
     public static function ModifyAliasSettings() {
         global $scripturl, $context, $modSettings;
 
-        loadTemplate('SimpleSEF');
+        loadAdminTemplate('SimpleSEF');
         $context['sub_template'] = 'alias_settings';
 
         $context['simplesef_aliases'] = !empty($modSettings['simplesef_aliases']) ? unserialize($modSettings['simplesef_aliases']) : array();

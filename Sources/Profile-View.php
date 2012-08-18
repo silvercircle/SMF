@@ -1409,7 +1409,6 @@ function TrackIP($memID = 0)
 	if ($memID == 0)
 	{
 		$context['ip'] = $user_info['ip'];
-		loadTemplate('Profile');
 		loadLanguage('Profile');
 		$context['sub_template'] = 'trackIP';
 		$context['page_title'] = $txt['profile'];

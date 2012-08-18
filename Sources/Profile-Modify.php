@@ -1758,7 +1758,6 @@ function notification($memID)
 
 	// Gonna want this for the list.
 	require_once($sourcedir . '/lib/Subs-List.php');
-	//loadTemplate('GenericBits');
 	EoS_Smarty::loadTemplate('profile/profile_base');
 	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/notifications');
 	// Fine, start with the board list.

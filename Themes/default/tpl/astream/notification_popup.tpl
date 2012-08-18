@@ -8,8 +8,10 @@
   {if $C.act_results}
     <ol id="notifylist" class="commonlist notifications" style="max-height:400px;overflow:auto;">
       <li class="header"><h1 class="bigheader secondary smallpadding">{$T.act_recent_notifications}</h1></li>
+      {$C.alt_row = false}
       {foreach $C.activities as $activity}
         {call activitybit a=$activity}
+        {$C.alt_row = !$C.alt_row}
       {/foreach}
     </ol>
   {else if $C.unread_pm == 0 and $C.open_mod_reports == 0}

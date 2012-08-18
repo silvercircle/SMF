@@ -1426,7 +1426,6 @@ function create_control_richedit($editorOptions)
 		$settings['smileys_url'] = $modSettings['smileys_url'] . '/' . $user_info['smiley_set'];
 
 		// This really has some WYSIWYG stuff.
-		loadTemplate('GenericControls', $context['browser']['is_ie'] ? 'editor_ie' : 'editor');
 		$context['html_headers'] .= '
 		<script type="text/javascript"><!-- // --><![CDATA[
 			var smf_smileys_url = \'' . $settings['smileys_url'] . '\';
@@ -1838,7 +1837,8 @@ function create_control_verification(&$verificationOptions, $do_test = false)
 	if (empty($context['controls']['verification']))
 	{
 		// The template
-		loadTemplate('GenericControls');
+		if(!isset($verificationOptions['skip_template']))
+			loadTemplate('GenericControls');
 
 		// Some javascript ma'am?
 		if (!empty($verificationOptions['override_visual']) || (!empty($modSettings['visual_verification_type']) && !isset($verificationOptions['override_visual'])))

@@ -25,9 +25,9 @@
   {if !empty($C.first_message) and $message['id'] != $C.first_message}
     <a id="msg{$ID}"></a>{($message.first_new) ? '<a id="new"></a>' : ''}
   {/if}
-  <div class="cContainer_header">
+  <div class="keyinfo std">
     <div class="messageicon floatleft">
-      <img src="{$message.icon_url}" alt="" />&nbsp;&nbsp;
+      &nbsp;&nbsp;<img src="{$message.icon_url}" alt="" />&nbsp;&nbsp;
     </div>
     <h3 style="display:inline;" id="subject_{$ID}">
       {$message.subject}
@@ -38,8 +38,8 @@
   </div>
   <div class="post_content lean">
   {if !empty($message.member)}
-    <div class="blue_container cleantop cleanvert">
-    <div class="content inset_shadow smalltext" style="line-height:19px;">
+    <div class="spacer_h"></div>
+    <div class="smalltext" style="line-height:19px;">
     {if !empty($message.sequence_number)}
       <div class="floatright"><strong style="font-size:1.5em;">#{$message.counter}</strong></div>
     {/if}
@@ -61,7 +61,7 @@
     {/if}
     <div class="clear"></div>
   </div>
-  </div>
+  <hr class="dashed" />
   {/if}
   <div class="post fontstyle_{$U.font_class}" id="msg_{$ID}">
   {if isset($message.approved)}

@@ -288,7 +288,8 @@ function showActivitiesProfile($memID)
 
 	$context['user']['is_owner'] = $memID == $user_info['id'];
 	require_once($sourcedir . '/lib/Subs-Activities.php');
-	loadTemplate('Activities');
+	Eos_Smarty::loadTemplate('profile/profile_base');
+
 	loadLanguage('Activities');
 
 	$sa = isset($_GET['sa']) ? $_GET['sa'] : 'activities';
@@ -297,6 +298,7 @@ function showActivitiesProfile($memID)
 	if($sa == 'settings')
 		return(showActivitiesProfileSettings($memID));
 	
+	Eos_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/activities_display');
 	$context['page_title'] = $txt['showActivities'] . ' - ' . $user_profile[$memID]['real_name'];
 	$context['pageindex_multiplier'] = commonAPI::getMessagesPerPage();
 	$context['act_results'] = 0;
@@ -322,7 +324,6 @@ function showActivitiesProfile($memID)
 
 	$context['act_global'] = true;
 
-	$context['sub_template'] = 'showactivity_profile';
 	aStreamOutput($result);
 	$context['titletext'] = $context['page_title'];
 }
@@ -344,7 +345,7 @@ function showActivitiesProfileSettings($memID)
 	if(empty($modSettings['astream_active']) || ($user_info['id'] != $memID && !$user_info['is_admin']))
 		fatal_lang_error ('no_access');
 
-	$context['sub_template'] = 'showactivity_settings';
+	Eos_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/astream_settings');
 	$context['submiturl'] = $scripturl . '?action=profile;area=activities;sa=settings;save;u=' . $memID;
 	
 	$context['page_title'] = $txt['showActivities'] . ' - ' . $user_profile[$memID]['real_name'];

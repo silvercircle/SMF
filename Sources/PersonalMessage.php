@@ -1799,6 +1799,7 @@ function MessagePost()
 	{
 		$verificationOptions = array(
 			'id' => 'pm',
+			'skip_template' => true
 		);
 		$context['require_verification'] = create_control_verification($verificationOptions);
 		$context['visual_verification_id'] = $verificationOptions['id'];
@@ -1945,6 +1946,7 @@ function messagePostError($error_types, $named_recipients, $recipient_ids = arra
 		require_once($sourcedir . '/lib/Subs-Editor.php');
 		$verificationOptions = array(
 			'id' => 'pm',
+			'skip_template' => true
 		);
 		$context['require_verification'] = create_control_verification($verificationOptions);
 		$context['visual_verification_id'] = $verificationOptions['id'];
@@ -2138,6 +2140,7 @@ function MessagePost2()
 		require_once($sourcedir . '/lib/Subs-Editor.php');
 		$verificationOptions = array(
 			'id' => 'pm',
+			'skip_template' => true
 		);
 		$context['require_verification'] = create_control_verification($verificationOptions, true);
 

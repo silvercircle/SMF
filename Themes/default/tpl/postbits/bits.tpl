@@ -78,6 +78,8 @@
           <img src="{$S.images_url}/unknown.png" alt="avatar" />
         </li>
       {/if}
+    {else}
+      <br>
     {/if}
     <li class="membergroup">{$message.member.group_stars}</li>
     {if !empty($message.member.title)}

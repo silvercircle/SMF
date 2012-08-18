@@ -83,6 +83,7 @@ function PlushSearch1()
 		require_once($sourcedir . '/lib/Subs-Editor.php');
 		$verificationOptions = array(
 			'id' => 'search',
+			'skip_template' => true
 		);
 		$context['require_verification'] = create_control_verification($verificationOptions);
 		$context['visual_verification_id'] = $verificationOptions['id'];
@@ -793,6 +794,7 @@ function PlushSearch2()
 			require_once($sourcedir . '/lib/Subs-Editor.php');
 			$verificationOptions = array(
 				'id' => 'search',
+				'skip_template' => true
 			);
 			$context['require_verification'] = create_control_verification($verificationOptions, true);
 

@@ -21,7 +21,8 @@ function template_html_above()
 <html id="_S_" lang="en-US">
 <head>';
 	echo '
-	<link rel="stylesheet" type="text/css" href="', $boardurl,'/Themes/admin/css/admin.css',$context['jsver'],'" />';
+	<link rel="stylesheet" type="text/css" href="', $boardurl,'/Themes/admin/css/base.css',$context['jsver'],'" />
+	<link rel="stylesheet" type="text/css" href="', $boardurl,'/Themes/admin/css/skin.css',$context['jsver'],'" />';
 	if ($context['right_to_left'])
 		echo '
 	<link rel="stylesheet" type="text/css" href="', $settings['theme_url'], '/css/rtl.css" />';

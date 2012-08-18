@@ -32,10 +32,10 @@ function ModifyProfile($post_errors = array())
 	global $txt, $scripturl, $user_info, $context, $sourcedir, $user_profile, $cur_profile;
 	global $modSettings, $memberContext, $profile_vars, $post_errors, $user_settings;
 
+	EoS_Smarty::setActive();
 	// Don't reload this as we may have processed error strings.
 	if (empty($post_errors))
 		loadLanguage('Profile');
-	loadTemplate('Profile');
 
 	EoS_Smarty::getConfigInstance()->registerHookTemplate('sidemenu_top', 'profile/menu_top_content');
 	//$context['sef_full_rewrite'] = true;
