@@ -4,7 +4,7 @@
   <div>
     <div>
       <div id="smileyBox_message" class="blue_container"></div>
-          <textarea class="editor" name="{$editor_id}" id="{$editor_id}" rows="{$editor_context.rows}" cols="600" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onchange="storeCaret(this);" tabindex="{$C.tabindex}" style="height: {$editor_context.height}; {(isset($C.post_error.no_message) or isset($C.post_error.long_message)) ? 'border: 1px solid red;' : ''}">{$editor_context.value}</textarea>
+          <textarea class="editor" name="{$editor_id}" id="{$editor_id}" rows="{$editor_context.rows}" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onchange="storeCaret(this);" tabindex="{$C.tabindex}" style="max-width:100%; width:99%; height: {$editor_context.height}; {(isset($C.post_error.no_message) or isset($C.post_error.long_message)) ? 'border: 1px solid red;' : ''}">{$editor_context.value}</textarea>
         </div>
         {*<div id="{$editor_id}_resizer" class="richedit_resize"></div>*}
       </div>
