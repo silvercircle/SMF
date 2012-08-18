@@ -50,6 +50,7 @@
   {
     var oQuickModify = new QuickModify( { 
       sScriptUrl: smf_scripturl,
+      bDisabled: {(isset($O.disable_quick_modify) and !empty($O.disable_quick_modify)) ? 'true' : 'false'},
       bShowModify: {($S.show_modify) ? 'true' : 'false'},
       iTopicId: {$C.current_topic},
       sTemplateBodyEdit: {$SUPPORT->JavaScriptEscape("<div id=\"quick_edit_body_container\">

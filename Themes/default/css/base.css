@@ -76,13 +76,13 @@ img.icon {
 
 #search_form {
 	position: absolute;
-	top: -60px;
+	top: -65px;
 	right: 30px;
 	padding: 5px 10px 0 10px;
 	border-top-left-radius: 6px;
 	border-top-right-radius: 6px;
-	margin-bottom: -70px;
-	height: 24px;
+	margin-bottom: -65px;
+	height: 26px;
 	overflow: hidden;
 	z-index: 1000;
 }
@@ -145,13 +145,13 @@ h1.bigheader.topic {
 	padding: 0;
 	border:0;
 }
-h1.bigheader.secondary {
+h1.bigheader.secondary, h1.bigheader.section_header {
 	padding: 2px 0;
 }
-h1.bigheader.secondary.title {
+h1.bigheader.secondary.title, h1.bigheader.section_header {
 	margin-bottom: 0;
 }
-h1.bigheader.indent {
+h1.bigheader.indent, h1.bigheader.section_header {
 	text-indent: 10px;
 }
 .borderbox {
@@ -798,6 +798,7 @@ ul.dropmenu li.active {
 }
 ul.dropmenu.compact li.active {
 	border-top:0;
+	margin-top:0;
 }
 ul.dropmenu li:hover {
 	cursor: pointer;
@@ -1091,6 +1092,39 @@ img.fourtyeight {
 img.twentyfour {
 	width: 24px !important;
 	height: 24px !important;
+}
+
+/* editor related (smiley box, editor buttons...) */
+#bbcBox_message {
+	margin: 0.75em 0.5em;
+	padding: 0.4em;
+}
+#bbcBox_message div {
+	margin: 0.2em 0;
+	vertical-align: top;
+}
+#bbcBox_message div img {
+	margin: 0 1px 0 0;
+	vertical-align: top;
+}
+#bbcBox_message select {
+	margin: 0 2px;
+}
+#smileyBox_message {
+	margin: 0.5em;
+	margin: 1.0em;
+	max-width:600px !important;
+	position:absolute;
+	display: none;
+	overflow-y:auto !important;
+}
+#smileyBox_message div {
+	display: inline;
+}
+div.smiley_wrapper {
+	display:inline-block !important;
+	width:24px;
+	height:24px;
 }
 
 

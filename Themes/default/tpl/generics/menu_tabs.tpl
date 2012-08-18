@@ -2,8 +2,7 @@
    * menu_context is defined in generic_menu_above.tpl 
    *}
   {$tab_context = $menu_context.tab_data}
-  <div class="cat_bar2">
-    <h3>
+  <h1 class="bigheader section_header bordered">
     {foreach $C.tabs as $id => $tab}
       {if !empty($tab.disabled)}
         {$tab_context.tabs.$id.disabled = true}
@@ -37,9 +36,8 @@
       {/if}
     {/foreach}
     {$tab_context.title}
-    </h3>
-  </div>
-  <div class="orange_container cleantop mediumpadding gradient_darken_down">
+  </h3>
+  <div class="orange_container cleantop smallpadding smalltext">
     {(!empty($selected_tab.description)) ? $selected_tab.description : $tab_context.description}
   </div>
   <br>

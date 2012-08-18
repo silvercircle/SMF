@@ -63,6 +63,14 @@
           <label for="wysiwyg_default"><input type="checkbox" name="default_options[wysiwyg_default]" id="wysiwyg_default" value="1"{(!empty($C.member.options.wysiwyg_default)) ? ' checked="checked"' : ''} class="input_check" /> {$T.wysiwyg_default}</label>
         </li>
       {/if}
+      <li>
+        <input type="hidden" name="default_options[display_quick_reply]" value="0" />
+        <label for="display_quick_reply"><input type="checkbox" name="default_options[display_quick_reply]" id="display_quick_reply" value="1"{(!empty($C.member.options.display_quick_reply)) ? ' checked="checked"' : ''} class="input_check" /> {$T.display_quick_reply}</label>
+      </li>
+      <li>
+        <input type="hidden" name="default_options[disable_quick_modify]" value="0" />
+        <label for="disable_quick_modify"><input type="checkbox" name="default_options[disable_quick_modify]" id="disable_quick_modify" value="1"{(!empty($C.member.options.disable_quick_modify)) ? ' checked="checked"' : ''} class="input_check" /> {$T.disable_quick_modify}</label>
+      </li>
       </ul>
       <dl>
       {if empty($M.disableCustomPerPage)}
@@ -103,15 +111,6 @@
           </select>
         </dd>
       {/if}
-      <dt>
-        <label for="display_quick_reply"><strong>{$T.display_quick_reply}</strong></label>
-      </dt>
-      <dd>
-        <select name="default_options[display_quick_reply]" id="display_quick_reply">
-          <option value="0"{(empty($C.member.options.display_quick_reply)) ? ' selected="selected"' : ''}>{$T.display_quick_reply1}</option>
-          <option value="1"{(!empty($C.member.options.display_quick_reply)) ? ' selected="selected"' : ''}>{$T.display_quick_reply2}</option>
-        </select>
-      </dd>
       <dt>
         <label for="display_quick_mod"><strong>{$T.display_quick_mod}</strong></label>
       </dt>

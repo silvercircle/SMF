@@ -109,17 +109,15 @@
       <div class="generic_list">
   {/if}
   {if !empty($C.$lid.title)}
-    <div class="cat_bar2">
-      <h3>
-        {$C.$lid.title}
-      </h3>
-    </div>
+    <h1 class="bigheader section_header bordered">
+      {$C.$lid.title}
+    </h1>
   {/if}
   {if isset($C.$lid.additional_rows.top_of_list)}
     {call list_additional_rows row_position='top_of_list' cur_list=$lid}
   {/if}
   {if isset($C.$lid.additional_rows.after_title)}
-    <div class="orange_container cleantop gradient_darken_down">
+    <div class="orange_container cleantop smallpadding">
       {call list_additional_rows row_position='after_title' cur_list=$lid}
     </div>
   {/if}
@@ -127,7 +125,7 @@
     <div class="flow_auto">
     {if !empty($C.$lid.items_per_page)}
       <div class="floatleft">
-        <div class="pagelinks">{$C.$lid.page_index}</div>
+        <div class="pagelinks pagesection">{$C.$lid.page_index}</div>
       </div>
     {/if}
     {if isset($C.$lid.additional_rows.above_column_headers)}
@@ -177,7 +175,7 @@
     <div class="flow_auto">
     {if !empty($C.$lid.items_per_page)}
       <div class="floatleft">
-        <div class="pagelinks">{$C.$lid.page_index}</div>
+        <div class="pagelinks pagesection">{$C.$lid.page_index}</div>
       </div>
     {/if}
     {if isset($C.$lid.additional_rows.below_table_data)}

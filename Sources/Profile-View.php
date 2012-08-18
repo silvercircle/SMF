@@ -252,6 +252,8 @@ function showPosts($memID)
 	global $txt, $user_info, $scripturl, $modSettings;
 	global $context, $user_profile, $sourcedir, $board, $memberContext, $options;
 
+	EoS_Smarty::loadTemplate('profile/profile_base');
+
 	$context['need_synhlt'] = true;
 
 	// Some initial context.
@@ -286,6 +288,7 @@ function showPosts($memID)
 		return(LikesByUser($memID));
 	}
 
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/show_content');
 	$boards_hidden_1  = boardsAllowedTo('see_hidden1');
 	$boards_hidden_2  = boardsAllowedTo('see_hidden2');
 	$boards_hidden_3  = boardsAllowedTo('see_hidden3');
@@ -440,7 +443,7 @@ function showPosts($memID)
 		if(count($topicids))
 			$request = smf_db_query( '
 				SELECT
-					b.id_board, b.name AS bname, t.id_member_started, t.id_first_msg, t.id_last_msg, t.id_prefix, t.is_sticky, t.locked, t.num_views, t.num_replies, t.id_poll,
+					b.id_board, b.name AS board_name, t.id_member_started, t.id_first_msg, t.id_last_msg, t.id_prefix, t.is_sticky, t.locked, t.num_views, t.num_replies, t.id_poll,
 					t.approved, t.unapproved_posts, m.id_member, m.subject AS first_subject, m.poster_time, m.id_topic, m.id_msg, m.icon,
 					m2.poster_name AS last_member_name, m2.id_member AS last_id_member, m2.poster_time AS last_post_time,
 					IFNULL(meml.real_name, m2.poster_name) AS last_display_name, m2.subject AS last_subject, m2.icon AS last_icon,
@@ -515,7 +518,6 @@ function showPosts($memID)
 
 	$time_now = time();
 	if($context['is_topics']) {
-		loadTemplate('GenericBits');
 		$context['topics_per_page'] = empty($modSettings['disableCustomPerPage']) && !empty($options['topics_per_page']) ? $options['topics_per_page'] : $modSettings['defaultMaxTopics'];
 		$context['messages_per_page'] = commonAPI::getMessagesPerPage();
 		if(count($topicids)) {
@@ -590,6 +592,15 @@ function showPosts($memID)
 					'approved' => $row['approved'],
 					'unapproved_posts' => $row['unapproved_posts'],
 					'is_old' => !empty($modSettings['oldTopicDays']) ? (($context['time_now'] - $row['last_post_time']) > ($modSettings['oldTopicDays'] * 86400)) : false,
+					'board' => isset($row['id_board']) && !empty($row['id_board']) ? array(
+						'name' => $row['board_name'],
+						'id' => $row['id_board'],
+						'href' => URL::board($row['id_board'], $row['board_name'])
+					) : array(
+						'name' => '',
+						'id' => 0,
+						'href' => ''
+					)
 				);
 				determineTopicClass($context['topics'][$row['id_topic']]);
 			}
@@ -597,7 +608,6 @@ function showPosts($memID)
 		}
 	}
 	else {
-		loadTemplate('PostbitExtra');
 		loadMemberContext($memID);
 		while ($row = mysql_fetch_assoc($request))
 		{
@@ -1066,7 +1076,6 @@ function tracking($memID)
 	$context['page_title'] = $txt['trackUser'] . ' - ' . $subActions[$context['tracking_area']][1] . ' - ' . $user_profile[$memID]['real_name'];
 
 	// Pass on to the actual function.
-	$context['sub_template'] = $subActions[$context['tracking_area']][0];
 	$subActions[$context['tracking_area']][0]($memID);
 }
 
@@ -1077,6 +1086,9 @@ function trackActivity($memID)
 
 	// Verify if the user has sufficient permissions.
 	isAllowedTo('moderate_forum');
+
+	EoS_Smarty::loadTemplate('profile/profile_base');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/track_activity');
 
 	$context['last_ip'] = $user_profile[$memID]['member_ip'];
 	if ($context['last_ip'] != $user_profile[$memID]['member_ip2'])
@@ -1155,7 +1167,6 @@ function trackActivity($memID)
 				'position' => 'after_title',
 				'value' => $txt['errors_desc'],
 				'class' => 'smalltext',
-				'style' => 'padding: 2ex;',
 			),
 		),
 	);
@@ -1392,6 +1403,9 @@ function TrackIP($memID = 0)
 	// Can the user do this?
 	isAllowedTo('moderate_forum');
 
+	EoS_Smarty::loadTemplate('profile/profile_base');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/track_ip');
+
 	if ($memID == 0)
 	{
 		$context['ip'] = $user_info['ip'];
@@ -1520,7 +1534,6 @@ function TrackIP($memID = 0)
 				'position' => 'after_title',
 				'value' => $txt['messages_from_ip_desc'],
 				'class' => 'smalltext',
-				'style' => 'padding: 2ex;',
 			),
 		),
 	);
@@ -1609,7 +1622,6 @@ function TrackIP($memID = 0)
 				'position' => 'after_title',
 				'value' => $txt['errors_from_ip_desc'],
 				'class' => 'smalltext',
-				'style' => 'padding: 2ex;',
 			),
 		),
 	);
@@ -1753,8 +1765,8 @@ function trackEdits($memID)
 
 	// Create the error list.
 	createList($listOptions);
-
-	$context['sub_template'] = 'show_list';
+	EoS_Smarty::loadTemplate('profile/profile_base');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/track_edits');
 	$context['default_list'] = 'edit_list';
 }
 

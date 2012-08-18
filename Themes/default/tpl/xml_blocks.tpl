@@ -166,7 +166,7 @@
           <hr>
           <div class="centertext tinytext" style="line-height:110%;">
             <div class="lefttext" style="margin-bottom:4px;">{$T.rating_attach_comment}</div>
-            <input type="text" size="30" name="ratingcomment" id="ratingcomment" />
+            <input type="text" size="20" style="max-width:200px;" name="ratingcomment" id="ratingcomment" />
           </div>
         {/if}
         <div class="centertext smallpadding">

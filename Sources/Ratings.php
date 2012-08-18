@@ -227,6 +227,6 @@ function LikesByUser($memID)
 				sprintf($txt['liked_a_post'], $like['id_user'] == $user_info['id'] ? $txt['you_liker'] : $like['member']['link'], $memberContext[$memID]['name'], $like['post']['href'], $like['topic']['link'], $modSettings['ratings'][$like['rtype']]['text']));
 	}
 	mysql_free_result($request);
-	$context['sub_template'] = 'showlikes';
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'ratings/profile_display');
 }
 ?>

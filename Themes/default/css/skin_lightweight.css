@@ -1,7 +1,7 @@
 body {
 	background: #e2e2e2;
-	font-family: "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
-	font-size: 14px;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Segoe UI", "Tahoma", "Arial", sans-serif;
+	font-size: 13px;
 }
 a:link, a:visited {
 	color: #437d96;
@@ -81,7 +81,6 @@ div.auto_suggest_item_hover
 input.searchfield {
 	background: #fff url(../images/theme/sicon.png) 3px center no-repeat;
 	font-weight: bold;
-	font-size: 11px;
 	border: 1px solid #A3B2D0;
 }
 div.inlinePopup {
@@ -89,7 +88,6 @@ div.inlinePopup {
 	box-shadow: 0 0 7px 2px #666;
 	border: 2px solid #888;
 	border-radius: 0 0 4px 4px;
-	font-family: "Segoe UI", "Verdana", "Arial", helvetica, sans-serif;
 	font-size: 10pt;
 }
 div.inlinePopup.dark {
@@ -100,15 +98,15 @@ input[type="text"], input[type="password"], select {
 	border: 1px solid #aac;
 	background-color: #fff;
 	border-radius: 3px;
-	font-family:"Segoe UI", Tahoma,sans-serif;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Segoe UI", "Tahoma", "Arial", sans-serif;
 	font-size: 11px !important;
 	line-height:11px !important;
 	box-shadow: 0 0 5px 0px #ddd inset;
 }
 textarea {
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Segoe UI", "Tahoma", "Arial", sans-serif;
 	border: 1px solid #6b81ab;
-	font-family:"Segoe UI", Tahoma,sans-serif;
-	font-size:10pt;
+	font-size:100%;
 }
 input[type="text"]:focus, textarea:focus, select:focus {
 	border: 1px solid orange;
@@ -117,10 +115,10 @@ input[disabled].input_text {
 	background-color: #eee;
 }
 .smalltext {
-	font-size: 9pt;
+	font-size: 95%;
 }
 .tinytext {
-	font-size:11px;
+	font-size:85%;
 }
 .centertext {
 	text-align: center;
@@ -332,8 +330,7 @@ div.content {
 /* the pulldown menus */
 #main_menu {
 	background:#222;
-	font-size: 13px;
-	text-shadow: 1px 1px 5px #ddd;
+	font-size: 90%;
 }
 ul.dropmenu, ul.dropmenu ul {
 	background-color: #f2f2f2;
@@ -345,10 +342,14 @@ ul.dropmenu li a {
 ul.dropmenu.highcontrast li a {
 	color: #777;
 }
+ul.dropmenu li a.firstlevel {
+	text-shadow: 1px 1px 1px #aaa;
+}
 ul.dropmenu li a.firstlevel.compact {
 	font-weight: normal;
 	font-size:11px;
 	color:white;
+	text-shadow: 1px 1px 1px #aaa;
 }
 ul.dropmenu li ul {
 	background-color: #f2f2f2;
@@ -379,6 +380,9 @@ ul.dropmenu li:hover {
 	cursor: pointer;
 	text-decoration: none;
 }
+ul.dropmenu li:hover > a {
+	color:black;
+}
 ul.dropmenu li li a:hover, ul.dropmenu li li:hover>a {
 	background: #d4dbe4;
 	color: #000;
@@ -393,10 +397,10 @@ div.menuline {
 	border-bottom: 2px solid orange;
 }
 span.m_downarrow {
-	background: transparent url(../images/theme/sprite.png) 0 9px no-repeat;
+	background: transparent url(../images/theme/sprite.png) 2px 9px no-repeat;
 }
 span.m_downarrow.compact {
-	background: transparent url(../images/theme/sprite.png) 0 7px no-repeat;
+	background: transparent url(../images/theme/sprite.png) 2px 7px no-repeat;
 }
 span.m_downarrow:hover {
 	background-color: green !important;
@@ -531,17 +535,17 @@ h1.bigheader, div.bigheader {
 h1.bigheader.topic {
 	font-weight: normal;
 }
-h1.bigheader.secondary {
+h1.bigheader.secondary, h1.bigheader.section_header {
 	font-size: 14px;
 	font-weight:bold;
 	border-bottom: 1px solid #cce;
 	color: #88a;
 }
-h1.bigheader.secondary.title {
+h1.bigheader.secondary.title, h1.bigheader.section_header {
 	background: #e5e5f0;
 	border-bottom: 2px solid orange;
 }
-h1.bigheader.title.bordered {
+h1.bigheader.title.bordered, h1.bigheader.section_header.bordered {
 	border-left:1px solid #ddd;
 	border-top:1px solid #ddd;
 	border-right:1px solid #ddd;
@@ -828,7 +832,6 @@ ol.category > li > div.info.fullwidth {
 }
 ol.category > li > div.info h3, h3.subcatlink {
 	display: inline;
-	font-size: 105%;
 }
 ol.category > li > div.info.subcat {
 	padding-right:0;
@@ -990,10 +993,10 @@ div.post_wrapper div.post {
 	font-size:11pt;
 }
 div.post.fontstyle_0 {
-	font-family: "Cambria", "Georgia", serif;
+	font-family: "Georgia", "Times new Roman", serif;
 }
 div.post.fontstyle_1 {
-	font-family: "Segoe UI", Verdana, Tahoma, sans-serif;
+	font-family: "Lucida Grande", "Segoe UI", "Verdana", sans-serif;
 }
 /* avatars */
 .avatar img, div#mcard_inner img.avatar, div#basicinfo img.avatar {
@@ -1214,40 +1217,8 @@ ul.post_options li {
 }
 /* The BBC buttons */
 #bbcBox_message {
-	margin: 0.75em 0.5em;
-	padding: 0.4em;
 	border:1px dotted #ddd;
 	background-color:#eaeaea !important;
-}
-
-#bbcBox_message div {
-	margin: 0.2em 0;
-	vertical-align: top;
-}
-
-#bbcBox_message div img {
-	margin: 0 1px 0 0;
-	vertical-align: top;
-}
-
-#bbcBox_message select {
-	margin: 0 2px;
-}
-#smileyBox_message {
-	margin: 0.5em;
-	margin: 1.0em;
-	max-width:100% !important;
-	position:absolute;
-	display: none;
-	overflow-y:auto !important;
-}
-#smileyBox_message div {
-	display: inline;
-}
-div.smiley_wrapper {
-	display:inline-block !important;
-	width:24px;
-	height:24px;
 }
 #post_event #event_main input {
 	margin: 0 0 1em 0;
@@ -1558,7 +1529,6 @@ dl.register_form dd {
 	border-bottom:1px solid orange;
 	background:#dadada;
 	border-radius:2px 2px 0 0;
-	font-family: "Segoe UI", "Tahoma", "Arial", sans-serif;	
 	color:white;
 	font-size: 14px;
 	font-weight:bold;
@@ -1636,12 +1606,10 @@ table.table_grid td {
 /* the subject column */
 .topic_table td.subject {
 	width: 100%;
-	font-size: 1.0em;
 }
 a.boardlink, span.topiclink a {
 	color:#333;
-	font-size: 1.1em;
-	font-family: "Segoe UI", "Lucida Grande", "Tahoma", "Arial", sans-serif;
+	font-size: 115%;
 	line-height:130%;
 }
 a.boardlink { font-weight:normal;/*text-shadow: 0 0 1px rgba(150, 150, 150, 0.9);*/}

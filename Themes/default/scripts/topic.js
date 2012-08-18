@@ -416,11 +416,14 @@ QuickModify.prototype.isXmlHttpCapable = function ()
 QuickModify.prototype.modifyMsg = function (iMessageId)
 {
 	if (!this.bXmlHttpCapable)
-		return;
+		return(true);
 
 	// First cancel if there's another message still being edited.
 	if (this.bInEditMode)
 		this.modifyCancel();
+
+	if (this.opt.bDisabled)
+		return(true);
 
 	// At least NOW we're in edit mode
 	this.bInEditMode = _inModify = true;
@@ -432,6 +435,7 @@ QuickModify.prototype.modifyMsg = function (iMessageId)
 	this.tmpMethod = getXMLDocument;
 	this.tmpMethod(smf_prepareScriptUrl(this.opt.sScriptUrl) + 'action=quotefast;quote=' + iMessageId + ';modify;xml', this.onMessageReceived);
 	delete this.tmpMethod;
+	return(false);
 }
 
 // The callback function used for the XMLhttp request retrieving the message.

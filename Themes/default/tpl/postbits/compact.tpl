@@ -33,7 +33,7 @@
       {$message.subject}
     </h3>
     <span class="smalltext">&nbsp;{$message.time}</span>
-    <span class="tinytext permalink_old"><a href="{$message.permahref}" rel="nofollow">{$message.permalink}</a></span>
+    <span class="tinytext floatright"><a href="{$message.permahref}" rel="nofollow">{$message.permalink}</a></span>
     <div id="msg_{$ID}_quick_mod"></div>
   </div>
   <div class="post_content lean">
