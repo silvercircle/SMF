@@ -32,9 +32,10 @@
       {/if}
       <span class="smalltext">{$T.contact_member} {$C.member.name}: {' | '|implode:$parts}</span>
     </span>
-    {$real_gid = (empty($C.member.group_id)) ? $C.member.post_group_id : $C.member.group_id}
+    {$real_primary_gid = (isset($C.member.orig_group_id)) ? $C.member.orig_group_id : $C.member.group_id}
+    {$real_gid = (empty($real_primary_gid)) ? $C.member.post_group_id : $real_primary_gid}
     <h1 style="font-size:130%;"><span class="member group_{$real_gid}">{$C.member.name}</span></h1>
-    <a href="{$SUPPORT->url_parse('?action=groups;sa=members;group='|cat:$real_gid)}">{(!empty($C.member.group_id)) ? $C.member.group : $C.member.post_group}</a>
+    <a href="{$SUPPORT->url_parse('?action=groups;sa=members;group='|cat:$real_gid)}">{(!empty($real_primary_gid)) ? $C.member.group : $C.member.post_group}</a>
     <div class="clear"></div>
   </div>
 </div>

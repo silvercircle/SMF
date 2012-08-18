@@ -422,7 +422,7 @@ div.poster li.warning a img {
 	padding: 2px;
 	max-width: 100px;
 }
-div.avatar.big {
+div.avatar.big, div.avatar.big img {
 	width: auto;
 	height: auto;
 	max-width: 150px;

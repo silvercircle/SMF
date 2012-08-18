@@ -304,8 +304,8 @@ function loadProfileFields($force_reload = false)
 		),
 		// Selecting group membership is a complicated one so we treat it separate!
 		'id_group' => array(
-			'type' => 'callback',
-			'callback_func' => 'group_manage',
+			'type' => 'callback_template',
+			'callback_name' => 'profile/group_manage',
 			'permission' => 'manage_membergroups',
 			'preload' => 'profileLoadGroups',
 			'log_change' => true,
@@ -731,7 +731,7 @@ function setupProfileContext($fields)
 				continue;
 
 			// If this is anything but complex we need to do more cleaning!
-			if ($cur_field['type'] != 'callback' && $cur_field['type'] != 'hidden')
+			if ($cur_field['type'] != 'callback' && $cur_field['type'] != 'callback_template' && $cur_field['type'] != 'hidden')
 			{
 				if (!isset($cur_field['label']))
 					$cur_field['label'] = isset($txt[$field]) ? $txt[$field] : $field;
@@ -2138,7 +2138,7 @@ function profileLoadLanguages()
 // Load all the group info for the profile.
 function profileLoadGroups()
 {
-	global $cur_profile, $txt, $context, $smcFunc, $user_settings;
+	global $cur_profile, $txt, $context, $user_settings;
 
 	$context['member_groups'] = array(
 		0 => array(
@@ -2182,6 +2182,8 @@ function profileLoadGroups()
 		);
 	}
 	mysql_free_result($request);
+
+	$context['member']['orig_group_id'] = $context['member']['group_id'];
 
 	$context['member']['group_id'] = $user_settings['id_group'];
 
@@ -3281,7 +3283,9 @@ function groupMembership2($profile_vars, $post_errors, $memID)
 function profileManageBoardNews($memID)
 {
 	global $context, $user_info, $scripturl, $txt;
-	$context['sub_template'] = 'manage_boardnews';
+
+	EoS_Smarty::loadTemplate('profile/profile_base');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'profile/manage_news');
 
 	$start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
 
@@ -3320,5 +3324,5 @@ function profileManageBoardNews($memID)
 		mysql_free_result($request);
 	}
 	$context['have_items'] = count($context['dismissed_items']);
-	$context['reactivate_link'] = $context['have_items'] ? '<a href="' . $scripturl . '?action=profile;area=boardnews;sa=reactivateall;u=' . $memID . '">' . $txt['news_items_reactivate'] . '</a>' : '';
+	$context['reactivate_link'] = $context['have_items'] ? '<a class="active" href="' . $scripturl . '?action=profile;area=boardnews;sa=reactivateall;u=' . $memID . '">' . $txt['news_items_reactivate'] . '</a>' : '';
 }
