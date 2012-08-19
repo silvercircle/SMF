@@ -8,7 +8,7 @@
 {if !empty($C.post_errors)}
   {include 'profile/error_message.tpl'}
 {/if}
-{if !empty($Cprofile_updated)}
+{if !empty($C.profile_updated)}
   <div class="windowbg" id="profile_success">
     {$C.profile_updated}
   </div>
