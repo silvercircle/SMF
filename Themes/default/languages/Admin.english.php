@@ -741,3 +741,40 @@ $txt['ratings_help'] = '
 	<li>Points is a positive or negative number that specifies the number of reputation points a member will receive for this rating. When left empty, the rating is considered a neutral one and no points will be granted. <b>NOTE: THIS IS CURRENTLY UNIMPLEMENTED.</b></li>
 	</ul>
 	';
+$txt['sphinx_test_passed'] = 'All tests successfully passed. It appears your sphinx search daemon is running and can accept connections and search queries.';
+$txt['sphinx_test_connect_failed'] = 'Unable to contact the search daemon. Make sure it is running and configured properly.<br><span class="error">Warning: Search will not work until you fix the problem</span>';
+$txt['sphinx_test_ql_connect_failed'] = 'Unable to access SphinxQL. Make sure, your sphinx.conf has a separate listen directive for the SphinxQL port.<br><span class="error">Warning: Search will not work until you fix the problem</span>';
+$txt['sphinx_test_api_missing'] = 'The sphinxapi.php file is missing in your Sources directory. You need to copy this file from the sphinx distribution.';
+$txt['sphinx_settings_explain'] = 'The admin panel only allows to switch between search indexes. To adjust further Sphinx settings, select the <strong>Configure Sphinx</strong> tab.';
+$txt['sphinx_explain_config'] = 'On this page you can configure access to your <strong>Sphinx</strong> search daemon and create a sphinx configuration file suitable for your
+		current forum configuration.
+		<br><br>
+		It is assumed that you have completed the installation of the Sphinx software on your server. If unsure, ask your hosting provider for assistance
+		or consult the support available on the <a href="http://sphinxsearch.com/">Sphinx project site.</a>
+		<br /><br />
+		First, you must fill out the required settings below. The defaults are suitable for many different systems, but they assume that Sphinx software was installed to /usr/local, 
+		using /var/sphinx for the search index data storage.
+		Please verify ALL the settings and save them at least once before you click the <strong>Create configuration file</strong> button. This will create a sphinx configuration file which you need to
+		upload to your server and save it in the sphinx configuration directory (typically /usr/local/etc, but that depends on your server configuration).
+		<br><br>
+		If you want or must use Sphinx for more than just your forum or multiple forum installations, you must merge the configuration into a existing sphinx.conf. <br><br>
+		<span class="error">You must also make sure to set up the required cron jobs on your server to update the indexes on a regular base, otherwise new or deleted content will not be reflected in your search queries.</span>';
+$txt['sphinx_index_data_path'] = 'Index data path:';
+$txt['sphinx_index_data_path_desc'] = 'This is the path that will be containing the search index files used by Sphinx.<br />It <strong>must</strong> exist and be accessible for reading and writing by the Sphinx indexer and search daemon.';
+$txt['sphinx_log_file_path'] = 'Log file path:';
+$txt['sphinx_log_file_path_desc'] = 'Server path that will contain the log files created by Sphinx.<br />This directory must exist on your server and must be writable by the sphinx search daemon and indexer.';
+$txt['sphinx_stop_word_path'] = 'Stopword path:';
+$txt['sphinx_stop_word_path_desc'] = 'The server path to the stopword list (leave empty for no stopword list).';
+$txt['sphinx_memory_limit'] = 'Sphinx indexer memory limit:';
+$txt['sphinx_memory_limit_desc'] = 'The maximum amount of (RAM) memory the indexer is allowed to use.';
+$txt['sphinx_searchd_server'] = 'Search deamon server:';
+$txt['sphinx_searchd_server_desc'] = 'Address of the server running the search daemon. This must be a valid host name or IP address.<br>If not set, localhost will be used.';
+$txt['sphinx_searchd_port'] = 'Search deamon port:';
+$txt['sphinx_searchd_port_desc'] = 'Port on which the search deamon will listen.';
+$txt['sphinx_searchd_qlport'] = 'Sphinx QL deamon port:';
+$txt['sphinx_searchd_qlport_desc'] = 'Port on which the search deamon will listen for SphinxQL queries.';
+$txt['sphinx_max_matches'] = 'Maximum # matches:';
+$txt['sphinx_max_matches_desc'] = 'Maximum amount of matches the search deamon will return.';
+$txt['sphinx_save_warning'] = 'Before creating the configuration file, you <strong>must save</strong> the settings at least once.';
+$txt['sphinx_create_config'] = 'Create Sphinx config';
+$txt['sphinx_test_connection'] = 'Test connection to Sphinx search daemon';

@@ -3,7 +3,7 @@
 {include "generics/boardlisting.tpl"}
 <form action="{$SCRIPTURL}?action=search2" method="post" accept-charset="UTF-8" name="searchform" id="searchform">
   <div class="bigheader">
-    {if isset($M.search_index) and $M.search_index == 'sphinx'}
+    {if isset($M.search_index) and ($M.search_index == 'sphinx' or $M.search_index == 'sphinxql')}
       <div class="floatright">
         Powered by: <a href="http://sphinxsearch.com"><img src="{$S.images_url}/theme/sphinx.jpg" alt="sphinxlogo" style="vertical-align:middle;" /></a>
       </div>

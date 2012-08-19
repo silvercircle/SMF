@@ -104,7 +104,7 @@ input[type="text"], input[type="password"], select {
 	box-shadow: 0 0 5px 0px #ddd inset;
 }
 textarea {
-	font-family: "Lucida Grande", "Lucida Sans Unicode", "Segoe UI", "Tahoma", "Arial", sans-serif;
+	font-family: "Lucida Sans Unicode", "Segoe UI", "Tahoma", "Arial", sans-serif;
 	border: 1px solid #6b81ab;
 	font-size:100%;
 }
@@ -1908,7 +1908,7 @@ dl {
 }
 
 /* Simple feedback messages */
-div#profile_error, div#profile_success {
+div#profile_error, div#profile_success, div.message_success {
 	margin: 0 0 1em 0;
 	padding: 1em 2em;
 	border: 1px solid;
@@ -1924,7 +1924,7 @@ div#profile_error span {
 	text-decoration: underline;
 }
 
-div#profile_success {
+div#profile_success, div.message_success {
 	border-color: green;
 	color: green;
 	background: #efe;

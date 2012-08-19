@@ -245,7 +245,7 @@ function EditSearchMethod()
 	{
 		checkSession();
 		updateSettings(array(
-			'search_index' => empty($_POST['search_index']) || (!in_array($_POST['search_index'], array('custom', 'sphinx')) && !isset($context['search_apis'][$_POST['search_index']])) ? '' : $_POST['search_index'],
+			'search_index' => empty($_POST['search_index']) || (!in_array($_POST['search_index'], array('custom', 'sphinx', 'sphinxql')) && !isset($context['search_apis'][$_POST['search_index']])) ? '' : $_POST['search_index'],
 			'search_force_index' => isset($_POST['search_force_index']) ? '1' : '0',
 			'search_match_words' => isset($_POST['search_match_words']) ? '1' : '0',
 		));
@@ -595,8 +595,8 @@ function loadSearchAPIs()
 				$header = fread($fp, 4096);
 				fclose($fp);
 
-				if (strpos($header, '* SearchAPI-' . $matches[1] . '.php') !== false)
-				{
+				//if (strpos($header, '* SearchAPI-' . $matches[1] . '.php') !== false)
+				//{
 					loadClassFile($file);
 
 					$index_name = strtolower($matches[1]);
@@ -614,7 +614,7 @@ function loadSearchAPIs()
 						'label' => $index_name && isset($txt['search_index_' . $index_name]) ? $txt['search_index_' . $index_name] : '',
 						'desc' => $index_name && isset($txt['search_index_' . $index_name . '_desc']) ? $txt['search_index_' . $index_name . '_desc'] : '',
 					);
-				}
+				//}
 			}
 		}
 	}
@@ -636,13 +636,14 @@ function ManageSphinx()
 			'sphinx_indexer_mem' => (int) $_REQUEST['sphinx_indexer_mem'],
 			'sphinx_searchd_server' => $_REQUEST['sphinx_searchd_server'],
 			'sphinx_searchd_port' => (int) $_REQUEST['sphinx_searchd_port'],
+			'sphinxql_searchd_port' => (int) $_REQUEST['sphinxql_searchd_port'],
 			'sphinx_max_results' => (int) $_REQUEST['sphinx_max_results'],
 		));
 		redirectexit('action=admin;area=managesearch;sa=managesphinx;' . $context['session_var'] . '=' . $context['session_id']);
 	}
 	else if(isset($_REQUEST['checkconnect'])) {
 		//checkSession();
-		$context['checkresult']['message'] = 'All tests successfully passed. It appears your sphinx search daemon is running and can accept connections and search queries.';
+		$context['checkresult']['message'] = $txt['sphinx_test_passed']; 
 		$context['checkresult']['result'] = true;
 		if(@file_exists($sourcedir . '/contrib/sphinxapi.php')) {
 			include_once($sourcedir . '/contrib/sphinxapi.php');
@@ -655,12 +656,18 @@ function ManageSphinx()
 			$request = $mySphinx->Query('test', 'smf_index');
 			if ($request === false) {
 				$context['checkresult']['result'] = false;
-				$context['checkresult']['message'] = 'Unable to contact the search daemon. Make sure it is running and configured properly.<br><span class="error">Warning: Search will not work until you fix the problem</span>';
+				$context['checkresult']['message'] = $txt['sphinx_test_connect_failed'];
 			}
 		}
 		else {
 			$context['checkresult']['result'] = false;
-			$context['checkresult']['message'] = 'The sphinxapi.php file is missing in your Sources directory. You need to copy this file from the sphinx distribution.';
+			$context['checkresult']['message'] = $txt['sphinx_test_api_missing'];
+		}
+		// try to connect via SphinxQL
+		$result = mysql_connect(($modSettings['sphinx_searchd_server'] == 'localhost' ? '127.0.0.1' : $modSettings['sphinx_searchd_server']) . ':' . (int) $modSettings['sphinxql_searchd_port']);
+		if(false === $result) {
+			$context['checkresult']['result'] = false;
+			$context['checkresult']['message'] = $txt['sphinx_test_ql_connect_failed'];
 		}
 	}
 	$context['page_title'] = $txt['search_managesphinx'];
@@ -798,7 +805,8 @@ indexer
 
 searchd
 {
-	port = ', (int) $modSettings['sphinx_searchd_port'], '
+	listen = ', (int) $modSettings['sphinx_searchd_port'], '
+	listen = ', (int) $modSettings['sphinxql_searchd_port'], ':mysql41
 	log = ', $modSettings['sphinx_log_path'], '/searchd.log
 	query_log = ', $modSettings['sphinx_log_path'], '/query.log
 	read_timeout = 5

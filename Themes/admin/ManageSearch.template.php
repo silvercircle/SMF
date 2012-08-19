@@ -169,15 +169,6 @@ function template_select_search_method()
 								</span>
 							</dd>';
 
-	echo '
-							<dt>
-								<input type="radio" name="search_index" value="sphinx"', !empty($modSettings['search_index']) && $modSettings['search_index'] == 'sphinx' ? ' checked="checked"' : '', $context['custom_index'] ? '' : ' onclick="alert(\'' . $txt['search_index_custom_warning'] . '\'); selectRadioByName(this.form.search_method, \'1\');"', ' class="input_radio" />
-								Sphinx
-							</dt>
-							<dd>
-								<span class="smalltext">The admin panel only allows to switch between search indexes. To adjust further Sphinx settings, use the sphinx_config.php tool.</span>
-							</dd>';
-
 	foreach ($context['search_apis'] as $api)
 	{
 		if (empty($api['label']) || $api['has_template'])
@@ -417,90 +408,90 @@ function template_manage_sphinx()
 			<h3>',$txt['search_managesphinx'],'</h3>
 		</div>';
 		if(isset($context['checkresult'])) {
-			echo '<div class="',$context['checkresult']['result'] ? 'ok ' : 'errorbox ', 'mediumpadding mediummargin centertext">',
-			$context['checkresult']['message'],'</div>';
+			echo '<div class="blue_container cleantop mediumpadding"><div class="',$context['checkresult']['result'] ? 'message_success ' : 'errorbox ', 'smallpadding centertext">',
+			$context['checkresult']['message'],'</div></div>';
 		}
-		echo '<div class="red_container">
-		On this page you can configure access to your <strong>Sphinx</strong> search daemon and create a sphinx configuration file suitable for your
-		current forum configuration.
-		<br /><br />
-		It is assumed that you have completed the installation of the Sphinx software on your server. If unsure, ask your hosting provider for assistance
-		or consult the support available on the <a href="http://sphinxsearch.com/">Sphinx project site.</a>
-		<br /><br />
-		First, you must fill out the required settings below. The defaults are suitable for many different systems, but they assume that Sphinx software was installed to /usr/local, 
-		using /var/sphinx for the search index data storage.
-		Please verify ALL the settings and save them at least once before you click the <strong>Create configuration file</strong> button. This will create a sphinx configuration file which you need to
-		upload to your server and save it the sphinx main configuration directory (typically /usr/local/etc, but that depends on your server
-		configuration).
-		<br /><br />
-		If you want or must use Sphinx for more than just your forum or multiple forum installations, you must merge the configuration into a existing sphinx.conf. <br />
-		<span class="error">You must also make sure to set up the required cron jobs on your server to update the indexes on a regular base, otherwise new or deleted content will not be reflected in your search queries.</span>
+		echo '<div class="orange_container cleantop smalltext mediumpadding">',$txt['sphinx_explain_config'],'
 		</div>
-		<br />
-		<div class="blue_container">
+		<div class="blue_container mediumpadding cleantop">
 		<form action="', $scripturl, '?action=admin;area=managesearch;sa=managesphinx;save=1" method="post" accept-charset="UTF-8" name="create_index">
 			<table style="margin-bottom: 2ex;width:100%;">
-				<tr>
-					<td class="textbox"><label for="sphinx_data_path_input">Index data path:</label></td>
+				<tr style="vertical-align:top;" class="mediumpadding">
+					<td><label for="sphinx_data_path_input"><strong>',$txt['sphinx_index_data_path'],'</strong></label></td>
 					<td>
 						<input type="text" name="sphinx_data_path" id="sphinx_data_path_input" value="', isset($modSettings['sphinx_data_path']) ? $modSettings['sphinx_data_path'] : '/var/sphinx/data', '" size="65" />
-						<div style="font-size: smaller; margin-bottom: 2ex;">This is the path that will be containing the search index files used by Sphinx.<br />It <strong>must</strong> exist and be accessible for reading and writing by the Sphinx indexer and search daemon.</div>
+						<div class="tinytext">',$txt['sphinx_index_data_path_desc'],'</div><br>
 					</td>
-				</tr><tr>
-					<td class="textbox"><label for="sphinx_log_path_input">Log path:</label></td>
+				</tr>
+				<tr style="vertical-align:top;" class="mediumpadding">
+					<td class="textbox"><label for="sphinx_log_path_input"><strong>',$txt['sphinx_log_file_path'],'</strong></label></td>
 					<td>
 						<input type="text" name="sphinx_log_path" id="sphinx_log_path_input" value="', isset($modSettings['sphinx_log_path']) ? $modSettings['sphinx_log_path'] : '/var/sphinx/log', '" size="65" />
-						<div style="font-size: smaller; margin-bottom: 2ex;">Server path that will contain the log files created by Sphinx.<br />This directory must exist on your server.</div>
+						<div class="tinytext">',$txt['sphinx_log_file_path_desc'],'</div><br>
 					</td>
-				</tr><tr>
-					<td class="textbox"><label for="sphinx_stopword_path_input">Stopword path:</label></td>
+				</tr>
+				<tr style="vertical-align:top;" class="mediumpadding">
+					<td class="textbox"><label for="sphinx_stopword_path_input"><strong>',$txt['sphinx_stop_word_path'],'</strong></label></td>
 					<td>
 						<input type="text" name="sphinx_stopword_path" id="sphinx_stopword_path_input" value="', isset($modSettings['sphinx_stopword_path']) ? $modSettings['sphinx_stopword_path'] : '', '" size="65" />
-						<div style="font-size: smaller; margin-bottom: 2ex;">The server path to the stopword list (leave empty for no stopword list).</div>
+						<div class="tinytext">',$txt['sphinx_stop_word_path_desc'],'</div><br>
 					</td>
-				</tr><tr>
-					<td class="textbox"><label for="sphinx_indexer_mem_input">Memory limit indexer:</label></td>
+				</tr>
+				<tr style="vertical-align:top;" class="mediumpadding">
+					<td class="textbox"><label for="sphinx_indexer_mem_input"><strong>',$txt['sphinx_memory_limit'],'</strong></label></td>
 					<td>
 						<input type="text" name="sphinx_indexer_mem" id="sphinx_indexer_mem_input" value="', isset($modSettings['sphinx_indexer_mem']) ? $modSettings['sphinx_indexer_mem'] : '32', '" size="4" /> MB
-						<div style="font-size: smaller; margin-bottom: 2ex;">The maximum amount of (RAM) memory the indexer is allowed to be using.</div>
+						<div class="tinytext">',$txt['sphinx_memory_limit_desc'],'</div><br>
 					</td>
-				</tr><tr>
-					<td class="textbox"><label for="sphinx_searchd_server_input">Search deamon server:</label></td>
+				</tr>
+				<tr style="vertical-align:top;" class="mediumpadding">
+					<td class="textbox"><label for="sphinx_searchd_server_input"><strong>',$txt['sphinx_searchd_server'],'</strong></label></td>
 					<td>
 						<input type="text" name="sphinx_searchd_server" id="sphinx_searchd_server_input" value="', isset($modSettings['sphinx_searchd_server']) ? $modSettings['sphinx_searchd_server'] : 'localhost', '" size="65" />
-						<div style="font-size: smaller; margin-bottom: 2ex;">Server the Sphinx search deamon resides on.</div>
+						<div class="tinytext">',$txt['sphinx_searchd_server_desc'],'</div><br>
 					</td>
-				</tr><tr>
-					<td class="textbox"><label for="sphinx_searchd_port_input">Search deamon port:</label></td>
+				</tr>
+				<tr style="vertical-align:top;" class="mediumpadding">
+					<td class="textbox"><label for="sphinx_searchd_port_input"><strong>',$txt['sphinx_searchd_port'],'</strong></label></td>
 					<td>
 						<input type="text" name="sphinx_searchd_port" id="sphinx_searchd_port_input" value="', isset($modSettings['sphinx_searchd_port']) ? $modSettings['sphinx_searchd_port'] : '3312', '" size="4" />
-						<div style="font-size: smaller; margin-bottom: 2ex;">Port on which the search deamon will listen.</div>
+						<div class="tinytext">',$txt['sphinx_searchd_port_desc'],'</div><br>
 					</td>
 				</tr><tr>
-					<td class="textbox"><label for="sphinx_max_results_input">Maximum # matches:</label></td>
+				</tr>
+				<tr style="vertical-align:top;" class="mediumpadding">
+					<td class="textbox"><label for="sphinxql_searchd_port_input"><strong>',$txt['sphinx_searchd_qlport'],'</strong></label></td>
+					<td>
+						<input type="text" name="sphinxql_searchd_port" id="sphinxql_searchd_port_input" value="', isset($modSettings['sphinxql_searchd_port']) ? $modSettings['sphinxql_searchd_port'] : '3313', '" size="4" />
+						<div class="tinytext">',$txt['sphinx_searchd_qlport_desc'],'</div><br>
+					</td>
+				</tr>
+				<tr style="vertical-align:top;" class="mediumpadding">
+					<td class="textbox"><label for="sphinx_max_results_input"><strong>',$txt['sphinx_max_matches'],'</strong></label></td>
 					<td>
 						<input type="text" name="sphinx_max_results" id="sphinx_max_results_input" value="', isset($modSettings['sphinx_max_results']) ? $modSettings['sphinx_max_results'] : '2000', '" size="4" />
-						<div style="font-size: smaller; margin-bottom: 2ex;">Maximum amount of matches the search deamon will return.</div>
+						<div class="tinytext">',$txt['sphinx_max_matches_desc'],'</div><br>
 					</td>
 				</tr>
 			</table>
-			<div style="margin: 1ex; text-align: ', empty($txt['lang_rtl']) ? 'right' : 'left', ';">
-				<input type="submit" value="Save" class="button_submit" />
+			<div class="floatright mediumpadding">
+				<input type="submit" value="',$txt['save'],'" class="default" />
 				<input type="hidden" name="sc" value="', $context['session_id'], '" />
 			</div>
+			<div class="clear"></div>
 		</form>
 		</div>
 		<br />
 		<div class="orange_container centertext mediumpadding">
-		<span class="error">Before creating the configuration file, you must SAVE the settings at least once.</span>
-		<form action="',$scripturl,'?action=admin;area=managesearch;sa=sphinxconfig" method="post">
-			<input type="submit" class="button_submit" value="Create Sphinx config" />
+		<span class="error">',$txt['sphinx_save_warning'],'</span>
+		<form class="mediumpadding" action="',$scripturl,'?action=admin;area=managesearch;sa=sphinxconfig" method="post">
+			<input type="submit" class="default" value="',$txt['sphinx_create_config'],'" />
 		</form>
 		</div>
 		<br>
-		<div class="orange_container centertext mediumpadding">
+		<div class="blue_container centertext mediumpadding">
 		<form action="', $scripturl, '?action=admin;area=managesearch;sa=managesphinx;checkconnect=1" method="post" accept-charset="UTF-8">
-			<input type="submit" class="button_submit" value="Test connection to Sphinx search daemon" />
+			<input type="submit" class="button_submit" value="',$txt['sphinx_test_connection'],'" />
 		</form>
 		</div>
 		</div>';

@@ -48,9 +48,9 @@
   {foreach $topic.matches as $message}
     {$ID = $message.id}
     <div class="post_wrapper" data-mid="{$ID}">
-    <div class="cContainer_header">
+    <div class="keyinfo std">
       <div class="messageicon floatleft">
-        <img src="{$message.icon_url}" alt="" />&nbsp;&nbsp;
+        &nbsp;&nbsp;<img src="{$message.icon_url}" alt="" />&nbsp;&nbsp;
       </div>
       <h3 style="display:inline;" id="subject_{$ID}">
         {$message.subject}
@@ -60,8 +60,8 @@
     </div>
     <div class="post_content lean">
     {if !empty($message.member)}
-      <div class="blue_container cleantop cleanvert">
-      <div class="content inset_shadow smalltext" style="line-height:19px;">
+      <div class="spacer_h"></div>
+      <div class="smalltext" style="line-height:19px;">
       {if !empty($message.sequence_number)}
         <div class="floatright"><strong style="font-size:1.5em;">#{$message.counter}</strong></div>
       {/if}
@@ -82,8 +82,8 @@
         &nbsp;{$T.board}:&nbsp;<strong>{$topic.board.link}</strong><br>
       {/if}
       <div class="clear"></div>
-    </div>
-    </div>
+      </div>
+      <hr class="dashed" />
     {/if}
     <div class="post" id="msg_{$ID}">
     {if isset($message.approved)}

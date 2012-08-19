@@ -151,7 +151,7 @@ class sphinx_search
 
 			// Can a connection to the deamon be made?
 			if ($request === false)
-				fatal_error('Unable to access the search deamon.');
+				fatal_lang_error('error_no_search_daemon');
 
 			// Get the relevant information from the search results.
 			$cached_results = array(
