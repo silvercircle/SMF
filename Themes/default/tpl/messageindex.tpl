@@ -74,13 +74,13 @@
       {if !empty($C.topics)}
         <thead>
         <tr class="mediumpadding">
-          <th scope="col" colspan="2" class="first_th glass cleantopr" style="width:8%;">&nbsp;</th>
-          <th scope="col" class="lefttext nowrap glass cleantopr">{$C.subject_sort_header}</th>
-          <th scope="col" class="nowrap glass cleantopr">{$C.views_sort_header}</th>
-          <th scope="col" class="centertext nowrap glass cleantopr">{$C.lastpost_sort_header}</th>
+          <th scope="col" colspan="2" class="first_th glass" style="width:8%;">&nbsp;</th>
+          <th scope="col" class="lefttext nowrap glass">{$C.subject_sort_header}</th>
+          <th scope="col" class="nowrap glass">{$C.views_sort_header}</th>
+          <th scope="col" class="centertext nowrap glass">{$C.lastpost_sort_header}</th>
           {* Show a "select all" box for quick moderation? *}
           {if $can_quickmod}
-            <th scope="col" class="glass cleantopr last_th" style="width:24px;"><input type="checkbox" class="input_check cb_invertall" /></th>
+            <th scope="col" class="glass valign last_th" style="width:24px;"><input type="checkbox" class="input_check cb_invertall aligned" /></th>
           {/if}
       {else}
         {* No topics.... just say, "sorry bub". *}

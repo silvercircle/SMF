@@ -2987,12 +2987,13 @@ function determineTopicClass(&$topic)
 	elseif($topic['is_sticky'] || $topic['is_locked'])
 		$class .= (($topic['is_sticky'] ? ' sticky' : '') . ($topic['is_locked'] ? ' locked' : ''));
 
-	/*
+	
 	if($topic['is_locked'])
 		$iconlegend .= '<div class="csrcwrapper16px floatleft"><img class="clipsrc locked" src="'.$imgsrc.'" alt="" title="'.$txt['locked_topic'].'" /></div>';
 
 	if($topic['is_sticky'])
 		$iconlegend .= '<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc sticky" src="'.$imgsrc.'" alt="" title="'.$txt['sticky_topic'].'" /></div>';
+	/*
 	if($topic['is_poll'])
 		$iconlegend .= '<div class="csrcwrapper16px floatleft hspaced"><img class="clipsrc poll" src="'.$imgsrc.'" alt="" title="'.$txt['poll'].'" /></div>';
 

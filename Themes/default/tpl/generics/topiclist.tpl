@@ -23,7 +23,7 @@
       <th scope="col" class="nowrap glass"><a rel="nofollow" href="{$C.$id.baseurl};start={$C.start};sort=replies{($C.sort_by == 'replies' and $C.sort_direction == 'down') ? ';desc' : ''}">{$T.replies} {($C.sort_by == 'replies') ? (' <img src="'|cat:$S.images_url|cat:'/sort_'|cat:$C.sort_direction|cat:'.gif" alt="" />') : ''}</a> / <a href="{$C.$id.baseurl};start={$C.start};sort=views{($C.sort_by == 'views' and $C.sort_direction == 'down') ? ';desc' : ''}">{$T.views} {($C.sort_by == 'views') ? (' <img src="'|cat:$S.images_url|cat:'/sort_'|cat:$C.sort_direction|cat:'.gif" alt="" />') : ''}</a></th>
       <th scope="col" class="centertext nowrap glass"><a rel="nofollow" href="{$C.$id.baseurl};start={$C.start};sort=last_post{($C.sort_by == 'last_post' and $C.sort_direction == 'down') ? ';desc' : ''}">{$T.last_post} {($C.sort_by == 'last_post') ? (' <img src="'|cat:$S.images_url|cat:'/sort_'|cat:$C.sort_direction|cat:'.gif" alt="" />') : ''}</a></th>
       {if !empty($C.can_quick_mod)}
-        <th scope="col" class="glass last_th" style="width:24px;"><input type="checkbox" class="input_check cb_invertall" /></th>
+        <th scope="col" class="glass valign last_th" style="width:24px;"><input type="checkbox" class="input_check cb_invertall aligned" /></th>
       {/if}
   {else}
     <thead>

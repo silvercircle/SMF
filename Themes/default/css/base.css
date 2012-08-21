@@ -190,6 +190,9 @@ h1.bigheader.indent, h1.bigheader.section_header {
 .clear_right {
 	clear: right !important;
 }
+td.valign, th.valign {
+	vertical-align: middle;
+}
 ul.reset, ul.reset li {
 	padding: 0;
 	margin: 0;

@@ -59,19 +59,19 @@
       <table class="topic_table">
       <thead>
         <tr>
-          <th scope="col" style="width:2%;" class="glass cleantopr first_th" colspan="2">&nbsp;</th>
-          <th class="glass cleantopr" scope="col">
+          <th scope="col" style="width:2%;" class="glass first_th" colspan="2">&nbsp;</th>
+          <th class="glass" scope="col">
             {$C.subject_sort_header}
           </th>
-          <th scope="col" style="width:14%;" class="glass centertext cleantopr">
+          <th scope="col" style="width:14%;" class="glass centertext">
             {$C.views_sort_header}
           </th>
           {if $showCheckboxes}
-            <th scope="col" style="width:22%;" class="glass cleantopr">
+            <th scope="col" style="width:22%;" class="glass">
               {$C.lastpost_sort_header}
             </th>
-            <th class="glass cleantopr last_th">
-              <input type="checkbox" onclick="invertAll(this, this.form, 'topics[]');" class="input_check" />
+            <th class="glass valign last_th">
+              <input type="checkbox" onclick="invertAll(this, this.form, 'topics[]');" class="input_check aligned" />
             </th>
           {else}
             <th scope="col" class="glass cleantopr smalltext last_th" style="width:22%;">
@@ -137,22 +137,22 @@
       <table class="table_grid mlist">
       <thead>
         <tr>
-          <th scope="col" class="glass cleantopr first_th" style="width:8%;" colspan="2">&nbsp;</th>
+          <th scope="col" class="glass first_th" style="width:8%;" colspan="2">&nbsp;</th>
           <th class="glass cleantopr" scope="col">
             {$C.subject_sort_header}
           </th>
-          <th class="glass centertext cleantopr" scope="col" style="width:14%;">
+          <th class="glass centertext" scope="col" style="width:14%;">
             {$C.views_sort_header}
           </th>
           {if $showCheckboxes}
-            <th scope="col" style="width:22%;" class="glass cleantopr">
+            <th scope="col" style="width:22%;" class="glass">
               {$C.lastpost_sort_header}
             </th>
-            <th class="glass cleantopr last_th">
-              <input type="checkbox" onclick="invertAll(this, this.form, 'topics[]');" class="input_check" />
+            <th class="glass valign last_th">
+              <input type="checkbox" onclick="invertAll(this, this.form, 'topics[]');" class="input_check aligned" />
             </th>
           {else}
-            <th scope="col" class="glass cleantopr smalltext last_th" style="width:22%;">
+            <th scope="col" class="glass smalltext last_th" style="width:22%;">
               {$C.lastpost_sort_header}
             </th>
           {/if}
