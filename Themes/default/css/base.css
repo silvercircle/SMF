@@ -1015,7 +1015,6 @@ span.brd_moderators_chld {
 /* pagelinks (pagination) */
 
 div.pagelinks {
-	height: 24px;
 	line-height: 24px;
 }
 a.navPages, .pagelinks span.current, .pagelinks span.prefix {
