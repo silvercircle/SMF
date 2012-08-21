@@ -1,5 +1,3 @@
-{extends "base.tpl"}
-{block content}
 {include "generics/boardlisting.tpl"}
 <form action="{$SCRIPTURL}?action=search2" method="post" accept-charset="UTF-8" name="searchform" id="searchform">
   <div class="bigheader">
@@ -139,4 +137,3 @@
   }
 // ]]>
 </script>
-{/block}

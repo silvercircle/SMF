@@ -644,6 +644,11 @@ dl.common.rightbalance dt {
 dl.common.rightbalance dd {
 	width:59%;
 }
+dl.common.input dt, dl.common.input dd
+{
+	padding:5px;
+	line-height:26px;
+}
 /* Lists with settings use these a lot.
 ------------------------------------------------------- */
 dl.settings {

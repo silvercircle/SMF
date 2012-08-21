@@ -59,7 +59,7 @@ function Register($reg_errors = array())
 		redirectexit();
 
 	loadLanguage('Login');
-	loadTemplate('Register');
+	EoS_Smarty::loadTemplate('register/base');
 
 	// Do we need them to agree to the registration agreement, first?
 	$context['require_agreement'] = !empty($modSettings['requireAgreement']);
@@ -101,7 +101,8 @@ function Register($reg_errors = array())
 		$current_step = 1;
 
 	// Show the user the right form.
-	$context['sub_template'] = $current_step == 1 ? 'registration_agreement' : 'registration_form';
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('register_content_area', $current_step == 1 ? 'register/agreement' : 'register/form');
+	//$context['sub_template'] = $current_step == 1 ? 'registration_agreement' : 'registration_form';
 	$context['page_title'] = $current_step == 1 ? $txt['registration_agreement'] : $txt['registration_form'];
 
 	// Add the register chain to the link tree.
@@ -152,7 +153,6 @@ function Register($reg_errors = array())
 
 		// Setup some important context.
 		loadLanguage('Profile');
-		loadTemplate('Profile');
 
 		$context['user']['is_owner'] = true;
 
@@ -489,12 +489,12 @@ function Register2($verifiedOpenID = false)
 	// Basic template variable setup.
 	elseif (!empty($modSettings['registration_method']))
 	{
-		loadTemplate('Register');
+		EoS_Smarty::loadTemplate('register/base');
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('register_content_area', 'register/done');
 
 		$context += array(
 			'page_title' => $txt['register'],
 			'title' => $txt['registration_successful'],
-			'sub_template' => 'after',
 			'description' => $modSettings['registration_method'] == 2 ? $txt['approval_after_registration'] : $txt['activate_after_registration']
 		);
 	}
@@ -675,7 +675,7 @@ function CoppaForm()
 	global $context, $modSettings, $txt;
 
 	loadLanguage('Login');
-	loadTemplate('Register');
+	EoS_Smarty::loadTemplate('register/base');
 
 	// No User ID??
 	if (!isset($_GET['member']))
@@ -709,7 +709,7 @@ function CoppaForm()
 			// Shortcut for producing underlines.
 			$context['ul'] = '<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>';
 			$context['template_layers'] = array();
-			$context['sub_template'] = 'coppa_form';
+			EoS_Smarty::getConfigInstance()->registerHookTemplate('register_content_area', 'register/coppa_form');
 			$context['page_title'] = $txt['coppa_form_title'];
 			$context['coppa_body'] = str_replace(array('{PARENT_NAME}', '{CHILD_NAME}', '{USER_NAME}'), array($context['ul'], $context['ul'], $username), $txt['coppa_form_body']);
 		}
@@ -736,8 +736,8 @@ function CoppaForm()
 	{
 		$context += array(
 			'page_title' => $txt['coppa_title'],
-			'sub_template' => 'coppa',
 		);
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('register_content_area', 'register/coppa_info');
 
 		$context['coppa'] = array(
 			'body' => str_replace('{MINIMUM_AGE}', $modSettings['coppaAge'], $txt['coppa_after_registration']),
@@ -769,10 +769,9 @@ function VerificationCode()
 	elseif (isset($_REQUEST['sound']))
 	{
 		loadLanguage('Login');
-		loadTemplate('Register');
 
+		EoS_Smarty::loadTemplate('generics/verification_sound');
 		$context['verification_sound_href'] = $scripturl . '?action=verificationcode;rand=' . md5(mt_rand()) . ($verification_id ? ';vid=' . $verification_id : '') . ';format=.wav';
-		$context['sub_template'] = 'verification_sound';
 		$context['template_layers'] = array();
 
 		obExit();

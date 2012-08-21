@@ -1231,7 +1231,7 @@ function Display()
 	$context['can_delete_replies'] = allowedTo('delete_replies');
 	$context['can_delete_own'] = allowedTo('delete_own');
 	
-	$context['use_share'] = allowedTo('use_share') && ($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar']));
+	$context['use_share'] = !$user_info['possibly_robot'] && allowedTo('use_share') && ($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar']));
 	
 	$context['can_lock'] |= $context['can_manage_own'];
 	$context['can_sticky'] |= $context['can_manage_own'];

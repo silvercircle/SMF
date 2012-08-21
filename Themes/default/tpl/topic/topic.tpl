@@ -115,7 +115,9 @@
   {if $C.can_send_topic}
     <a href="{$SCRIPTURL}?action=emailuser;sa=sendtopic;topic={$topic}.0">{$T.email_topic}</a><br>
   {/if}
-  <a rel="nofollow" href="{$SCRIPTURL}?action=printpage;topic={$topic}.0">{$T.view_printable}</a>
+  {if !$U.possibly_robot}
+    <a rel="nofollow" href="{$SCRIPTURL}?action=printpage;topic={$topic}.0">{$T.view_printable}</a>
+  {/if}
   </div>
   {if $C.use_share}
     <div class="title">{$T.share_topic}:</div>

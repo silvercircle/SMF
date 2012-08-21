@@ -40,7 +40,7 @@ class sphinxql_search
 	{
 		global $db_type, $txt, $modSettings;
 		$txt['search_index_sphinxql'] = 'SphinxQL';
-		$txt['search_index_sphinxql_desc'] = 'The admin panel only allows to switch between search indexes. To adjust further SphinxQL settings, use the sphinx_config.php tool.';
+		$txt['search_index_sphinxql_desc'] = 'The admin panel only allows to switch between search indexes. To adjust further Sphinx settings, select the <strong>Configure Sphinx</strong> tab.';
 
 		// Is this database supported?
 		if (empty($modSettings['sphinxql_searchd_port']))

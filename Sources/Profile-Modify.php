@@ -2898,10 +2898,11 @@ function profileSendActivation()
 	$context['user']['is_guest'] = true;
 
 	// Send them to the done-with-registration-login screen.
-	loadTemplate('Register');
+	EoS_Smarty::resetTemplates();
+	EoS_Smarty::loadTemplate('register/base');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('register_content_area', 'register/done');
 
 	$context['page_title'] = $txt['profile'];
-	$context['sub_template'] = 'after';
 	$context['title'] = $txt['activate_changed_email_title'];
 	$context['description'] = $txt['activate_changed_email_desc'];
 

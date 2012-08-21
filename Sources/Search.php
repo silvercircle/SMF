@@ -63,8 +63,10 @@ function PlushSearch1()
 
 	loadLanguage('Search');
 	// Don't load this in XML mode.
-	if (!isset($_REQUEST['xml']))
-		EoS_Smarty::loadTemplate('search/form');
+	if (!isset($_REQUEST['xml'])) {
+		EoS_Smarty::loadTemplate('search/base');
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('search_content_area', 'search/form');
+	}
 	// Check the user's permissions.
 	isAllowedTo('search_posts');
 
@@ -572,10 +574,11 @@ function PlushSearch2()
 
 	$context['compact'] = !$search_params['show_complete'];
 
+	EoS_Smarty::loadTemplate('search/base');
 	if (!isset($_REQUEST['xml']))
-		EoS_Smarty::loadTemplate($context['compact'] ? 'search/results_compact' : 'search/results_as_messages');
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('search_content_area', $context['compact'] ? 'search/results_compact' : 'search/results_as_messages');
 	else
-		$context['sub_template'] = 'results';
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('search_content_area', 'search/results_xml');
 
 	// Get the sorting parameters right. Default to sort by relevance descending.
 	$sort_columns = array(

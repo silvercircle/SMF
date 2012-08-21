@@ -1429,16 +1429,6 @@ login p {
 
 /* Styles for the registration section.
 ------------------------------------------------------- */
-.register_error {
-	border: 1px dashed red;
-	padding: 5px;
-	margin: 0 1ex 1ex 1ex;
-}
-
-.register_error span {
-	text-decoration: underline;
-}
-
 /* Additional profile fields */
 dl.register_form {
 	margin: 0;
@@ -2295,8 +2285,9 @@ span.hidelink {
 	border-radius: 3px;
 }
 .blue_container div.content, .orange_container div.content, .yellow_container div.content, .cContainer_body div.content {
-	border: 3px solid white;
-	border-radius: 1px;
+	border: 2px solid #e6e6e6;
+	background: #f2f2f2;
+	margin:1px 0;
 }
 .cContainer_body {
 	border-top: 0;

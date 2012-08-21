@@ -1,5 +1,3 @@
-{extends "base.tpl"}
-{block content}
 {if isset($C.did_you_mean) or empty($C.topics)}
   <div id="search_results">
     <div class="cat_bar">
@@ -138,5 +136,5 @@
       sCatPrefix: "",
       sGoButtonLabel: "{$T.quick_mod_go}"
     } );
-    // ]]></script>
-{/block}
+  // ]]>
+</script>
