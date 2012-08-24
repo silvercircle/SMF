@@ -1685,6 +1685,7 @@ function prepareSearchContext($reset = false)
 
 		$message['body'] = strtr($message['body'], array("\n" => ' ', '<br />' => "\n"));
 		$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
+		parse_bbc_stage2($message['body'], $message['id_msg']);
 		$message['body'] = strip_tags(strtr($message['body'], array('</div>' => '<br />', '</li>' => '<br />')), '<br>');
 
 		if (commonAPI::strlen($message['body']) > $charLimit)
@@ -1728,6 +1729,7 @@ function prepareSearchContext($reset = false)
 	{
 		// Run BBC interpreter on the message.
 		$message['body'] = parse_bbc($message['body'], $message['smileys_enabled'], $message['id_msg']);
+		parse_bbc_stage2($message['body'], $message['id_msg']);
 	}
 
 	// Make sure we don't end up with a practically empty message body.
