@@ -1140,7 +1140,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'buddies' => $buddy_list,
 		'title' => !empty($modSettings['titlesEnable']) ? $profile['usertitle'] : '',
 		'href' => $m_href,
-		'link' => '<a class="member group_'.(empty($profile['id_group']) ? $profile['id_post_group'] : $profile['id_group']).'" onclick="getMcard('.$profile['id_member'].');return(false);" href="' . $m_href . '" title="' . $txt['profile_of'] . ' ' . $profile['real_name'] . '">' . $profile['real_name'] . '</a>',
+		'link' => '<a class="member group_'.(empty($profile['id_group']) ? $profile['id_post_group'] : $profile['id_group']).'" attr-mid="'.$profile['id_member'].'" href="' . $m_href . '" title="' . $txt['profile_of'] . ' ' . $profile['member_name'] . '">' . $profile['real_name'] . '</a>',
 		'email' => $profile['email_address'],
 		'show_email' => showEmailAddress(!empty($profile['hide_email']), $profile['id_member']),
 		'registered' => empty($profile['date_registered']) ? $txt['not_applicable'] : timeformat($profile['date_registered']),
