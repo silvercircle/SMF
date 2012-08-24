@@ -2398,7 +2398,7 @@ function parse_bbc_stage2(&$message, $mid = 0, $is_for_editor = false)
 			}
 		}
 	}
-	HookAPI::callHook('bbc_stage2', array(&$message, &$is_for_editor));
+	HookAPI::callHook('bbc_stage2', array(&$message, &$is_for_editor, $mid));
 }
 
 // Parse smileys in the passed message.
