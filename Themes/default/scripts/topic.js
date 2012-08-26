@@ -1,6 +1,6 @@
 var cur_topic_id, cur_msg_id, buff_subject, cur_subject_div, in_edit_mode = 0;
 var hide_prefixes = Array();
-var _inModify = false;
+var _inModify = _inReply = false;
 
 // Autosize 1.11 - jQuery plugin for textareas
 // (c) 2012 Jack Moore - jacklmoore.com
@@ -304,7 +304,7 @@ QuickReply.prototype.clearAllMultiquote = function(_tid)
 QuickReply.prototype.cancel = function()
 {
 	this.bMessageInitiated = 0;
-	this.bInReplyMode = false;
+	this.bInReplyMode = _inReply = false;
 
 	$('#quickModForm').attr('onsubmit', $('#quickModForm').attr('data-onsubmit'));
 	$('#quickModForm').attr('action', $('#quickModForm').attr('data-action'));
@@ -334,7 +334,7 @@ QuickReply.prototype.quote = function (iMessageId)
 		$('#quickReplyMessage').focus();
 		$('#quickModForm').attr('data-onsubmit', $('#quickModForm').attr('onsubmit'));
 		$('#quickModForm').attr('onsubmit', '');
-		this.bInReplyMode = true;
+		this.bInReplyMode = _inReply = true;
 		this.bMessageInitiated = iMessageId;
 		$('#quickModForm').attr('data-action', $('#quickModForm').attr('action'));
 		$('#quickModForm').attr('action', smf_scripturl + '?board=' + $('input[name=_qr_board]').val() + ';action=post2');
@@ -385,6 +385,7 @@ function QuickModify(oOptions)
 	this.sMessageBuffer = '';
 	this.sSubjectBuffer = '';
 	this.bXmlHttpCapable = this.isXmlHttpCapable();
+	this.anchorElement = null;
 
 	// Show the edit buttons
 	if (this.bXmlHttpCapable)
@@ -413,7 +414,7 @@ QuickModify.prototype.isXmlHttpCapable = function ()
 }
 
 // Function called when a user presses the edit button.
-QuickModify.prototype.modifyMsg = function (iMessageId)
+QuickModify.prototype.modifyMsg = function (iMessageId, element)
 {
 	if (!this.bXmlHttpCapable)
 		return(true);
@@ -425,6 +426,15 @@ QuickModify.prototype.modifyMsg = function (iMessageId)
 	if (this.opt.bDisabled)
 		return(true);
 
+	this.anchorElement = element;
+	if (_inReply) {
+		if(confirm(this.opt.sInProgressWarning)) {
+			this.anchorElement.attr('target', '_blank');
+			return(true);
+		}
+		else
+			return(false);
+	}
 	// At least NOW we're in edit mode
 	this.bInEditMode = _inModify = true;
 
@@ -490,7 +500,7 @@ QuickModify.prototype.modifyCancel = function ()
 
 	// No longer in edit mode, that's right.
 	this.bInEditMode = _inModify = false;
-
+	this.anchorElement = null;
 	return false;
 }
 

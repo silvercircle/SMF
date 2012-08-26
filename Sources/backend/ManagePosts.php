@@ -440,7 +440,7 @@ function ModifyPrefixSettings()
 					$groups = normalizeCommaDelimitedList($_POST['groups_'.$id]);
 					smf_db_query( '
 						UPDATE {db_prefix}prefixes SET name = {string:name}, boards = {string:boards}, groups = {string:groups} WHERE id_prefix = {int:id_prefix}',
-						array('id_prefix' => $id, 'name' => htmlentities($_POST['name_'.$id]),
+						array('id_prefix' => $id, 'name' => htmlspecialchars($_POST['name_'.$id]),
 						'boards' => $boards, 'groups' => $groups));
 				}
 			}
@@ -521,9 +521,9 @@ function ModifyRatingSettings()
 		for($i = 1; $i <= 10; $i++) {
 			if(isset($_REQUEST['rating_id_' . $i]) && (int)$_REQUEST['rating_id_' . $i] >= 1 && (int)$_REQUEST['rating_id_' . $i] <= 10 && isset($_REQUEST['rating_label_' . $i]) && !empty($_REQUEST['rating_label_' . $i])) {
 				$new_ratings[$i] = array(
-					'desc' => htmlentities(isset($_REQUEST['rating_desc_' . $i]) ? strip_tags($_REQUEST['rating_desc_' . $i]) : ''),
+					'desc' => (isset($_REQUEST['rating_desc_' . $i]) ? strip_tags($_REQUEST['rating_desc_' . $i]) : ''),
 					'format' => htmlentities(isset($_REQUEST['rating_format_' . $i]) ? $_REQUEST['rating_format_' . $i] : '<span>%s</span>'),
-					'label' => htmlentities(isset($_REQUEST['rating_label_' . $i]) ? $_REQUEST['rating_label_' . $i] : 'No label'),
+					'label' => htmlspecialchars(isset($_REQUEST['rating_label_' . $i]) ? $_REQUEST['rating_label_' . $i] : 'No label'),
 					'localized' => htmlentities(isset($_REQUEST['rating_localized_' . $i]) ? $_REQUEST['rating_localized_' . $i] : ''),
 					'groups' => isset($_REQUEST['rating_groups_' . $i]) && !empty($_REQUEST['rating_groups_' . $i]) ? explode(',', normalizeCommaDelimitedList($_REQUEST['rating_groups_' . $i])) : array(),
 					'groups_denied' => isset($_REQUEST['rating_groups_denied_' . $i]) && !empty($_REQUEST['rating_groups_denied_' . $i]) ? explode(',', normalizeCommaDelimitedList($_REQUEST['rating_groups_denied_' . $i])) : array(),

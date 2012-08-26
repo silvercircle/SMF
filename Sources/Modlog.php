@@ -119,7 +119,7 @@ function ViewModlog()
 	);
 
 	if (!isset($search_params['string']) || (!empty($_REQUEST['search']) && $search_params['string'] != $_REQUEST['search']))
-		$search_params_string = empty($_REQUEST['search']) ? '' : htmlspecialchars($_REQUEST['search']);
+		$search_params_string = empty($_REQUEST['search']) ? '' : $_REQUEST['search'];
 	else
 		$search_params_string = $search_params['string'];
 
@@ -137,7 +137,7 @@ function ViewModlog()
 	// Setup the search context.
 	$context['search_params'] = empty($search_params['string']) ? '' : base64_encode(serialize($search_params));
 	$context['search'] = array(
-		'string' => $search_params['string'],
+		'string' => htmlspecialchars($search_params['string']),
 		'type' => $search_params['type'],
 		'label' => $searchTypes[$search_params_type]['label'],
 	);

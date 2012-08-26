@@ -38,7 +38,7 @@
       </a></li>
   {/if}
   {if $message.can_modify}
-    <li><a rel="nofollow" onclick="return(oQuickModify.modifyMsg({$ID}));" href="{$SCRIPTURL}?action=post;msg={$ID};topic={$t_href}">
+    <li><a rel="nofollow" onclick="return(oQuickModify.modifyMsg({$ID}, $(this)));" href="{$SCRIPTURL}?action=post;msg={$ID};topic={$t_href}">
       <div class="csrcwrapper16px"><img class="clipsrc modify" src="{$imgsrc}" alt="{$T.modify}" title="{$T.modify}" /></div>
     </a></li>
   {/if}

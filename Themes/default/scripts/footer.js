@@ -481,7 +481,7 @@ jQuery(document).ready(function() {
 			else
 				$(this).removeClass('inline_highlight');
 		});
-		return(false);
+		return(true);
 	});
 	$('table.table_grid th .input_check, table.topic_table th .input_check').change(function() {
 		var cbox = this;
@@ -494,7 +494,7 @@ jQuery(document).ready(function() {
 					$(this).removeClass('inline_highlight');
 			});
 		});
-		return(false);
+		return(true);
 	});
 
 	$('input.it_check').change(function() {

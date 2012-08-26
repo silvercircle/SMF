@@ -777,5 +777,6 @@ $txt['whatsnew_menu'] = 'What\'s new';
 $txt['view_recent_activity'] = 'View recent activity';
 $txt['post_ratings_disabled'] = 'The ratings system is disabled.';
 $txt['inline_edit_inprogress'] = 'You are editing a message. Please cancel your current action first.';
+$txt['quick_reply_inprogress'] = 'Quick reply is active for the current topic.\n\nClick ok to modify the message in a new tab or window, cancel to stop edit mode.';
 $txt['inbox'] = 'Inbox';
 $txt['is'] = 'is';

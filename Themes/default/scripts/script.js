@@ -1555,6 +1555,8 @@ function Eos_Confirm(title, msg, callback)
 	centerElement(el, -200);
 	$('#jsconfirm .jsconfirm.title').html(title != '' ? title : 'Please confirm action');
 	$('#jsconfirm #c_yes').click(function() {
+		$('#jsconfirm').jqmHide();
+		$('#jsconfirm').css('position', 'static');
 		typeof callback == 'string' ? window.location.href = callback : callback();
 	});
 	$('#jsconfirm #c_no').click(function() {
@@ -1563,6 +1565,7 @@ function Eos_Confirm(title, msg, callback)
 	});
 	return(false);
 }
+
 function Clear_Cookies()
 {
 	var allcookies = new Array(_cname, _mqcname, 'SMF_textsize', 'smf_topicstart', 'usemobile', 'SF_collapsed', 'smf_sidebar_disabled', 'PHPSESSID');

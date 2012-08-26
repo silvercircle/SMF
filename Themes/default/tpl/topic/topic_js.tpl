@@ -53,6 +53,7 @@
       bDisabled: {(isset($O.disable_quick_modify) and !empty($O.disable_quick_modify)) ? 'true' : 'false'},
       bShowModify: {($S.show_modify) ? 'true' : 'false'},
       iTopicId: {$C.current_topic},
+      sInProgressWarning: "{$T.quick_reply_inprogress}",
       sTemplateBodyEdit: {$SUPPORT->JavaScriptEscape("<div id=\"quick_edit_body_container\">
         <div id=\"error_box\" style=\"padding: 4px;\" class=\"error\"></div>
         <textarea id=\"quickModifyMessage\" class=\"editor\" name=\"message\" rows=\"4\" style=\"{($C.browser.is_ie8) ? 'width: 635px; max-width: 100%; min-width: 100%' : 'width: 100%'}; margin-bottom: 10px;\" tabindex=\"{$tabindex++}\">%body%</textarea><br>
