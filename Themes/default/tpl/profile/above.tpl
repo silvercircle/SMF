@@ -14,7 +14,7 @@
   </div>
 {/if}
 {$SUPPORT->displayHook('profile_above')}
-{if !$C.user.is_owner}
+{if (isset($C.user.is_owner) and !$C.user.is_owner) and isset($C.member)}
 <div class="blue_container">
 	<div class="content">
     <span class="floatright righttext">

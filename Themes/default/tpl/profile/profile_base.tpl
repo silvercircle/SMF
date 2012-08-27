@@ -35,9 +35,13 @@
   <input type="hidden" name="sa" value="{$C.menu_item_selected}" />
 </div>
 {/function}
-{include 'generics/menu_above.tpl'}
+{if isset($C.member)}
+  {include 'generics/menu_above.tpl'}
+{/if}
 {include 'profile/above.tpl'}
 {$SUPPORT->displayHook('profile_content_area')}
 {include 'profile/below.tpl'}
-{include 'generics/menu_below.tpl'}
+{if isset($C.member)}
+  {include 'generics/menu_below.tpl'}
+{/if}
 {/block}
