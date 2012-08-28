@@ -902,9 +902,7 @@ div.posts_container {
 }
 div.post_wrapper {
 	background: #fafafa;
-	outline: 1px solid #ddd;
-	border:1px solid white;
-	border-radius:6px;
+	border:1px solid #ddd;
 }
 div.post_wrapper.alternate {
 	background:#f2f8ff;

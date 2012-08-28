@@ -115,7 +115,7 @@
     <![CDATA[ <!-- > -->
     <div class="flat_container">
     {if !empty($C.likes)}
-    <div class="glass centertext" style="font-size:1.1em;">
+    <div class="glass centertext nowrap">
       {$C.rating_title}
     </div>
     <ol class="commonlist">

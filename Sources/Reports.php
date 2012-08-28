@@ -116,7 +116,8 @@ function ReportsMain()
 	isAllowedTo('admin_forum');
 
 	// Let's get our things running...
-	loadTemplate('Reports');
+	//loadTemplate('Reports');
+	Eos_Smarty::setActive();
 	loadLanguage('Reports');
 
 	$context['page_title'] = $txt['generate_reports'];
@@ -144,9 +145,16 @@ function ReportsMain()
 	if (empty($_REQUEST['rt']) || !isset($context['report_types'][$_REQUEST['rt']]))
 	{
 		$context['sub_template'] = 'report_type';
+		Eos_Smarty::loadTemplate('reports/base');
+		Eos_Smarty::getConfigInstance()->registerHookTemplate('reports_content_area', 'reports/choose_type');
 		return;
 	}
 	$context['report_type'] = $_REQUEST['rt'];
+
+  	$context['report_buttons'] = array(
+      'generate_reports' => array('text' => 'generate_reports', 'image' => 'print.gif', 'lang' => true, 'url' => $scripturl . '?action=admin;area=reports', 'active' => true),
+      'print' => array('text' => 'print', 'image' => 'print.gif', 'lang' => true, 'url' => $scripturl . '?action=admin;area=reports;rt=' . $context['report_type']. ';st=print', 'custom' => 'target="_blank"'),
+    );
 
 	// What are valid templates for showing reports?
 	$reportTemplates = array(
@@ -161,11 +169,15 @@ function ReportsMain()
 	// Specific template? Use that instead of main!
 	if (isset($_REQUEST['st']) && isset($reportTemplates[$_REQUEST['st']]))
 	{
-		$context['sub_template'] = $_REQUEST['st'];
-
 		// Are we disabling the other layers - print friendly for example?
-		if ($reportTemplates[$_REQUEST['st']]['layers'] !== null)
+		if ($reportTemplates[$_REQUEST['st']]['layers'] !== null) {
+			Eos_Smarty::loadTemplate('reports/print');
 			$context['template_layers'] = $reportTemplates[$_REQUEST['st']]['layers'];
+		}
+	}
+	else {
+		Eos_Smarty::loadTemplate('reports/base');
+		Eos_Smarty::getConfigInstance()->registerHookTemplate('reports_content_area', 'reports/main');
 	}
 
 	// Make the page title more descriptive.
@@ -180,10 +192,10 @@ function ReportsMain()
 // Standard report about what settings the boards have.
 function BoardReport()
 {
-	global $context, $txt, $sourcedir, $smcFunc;
+	global $context, $txt, $sourcedir, $smcFunc, $backend_subdir;
 
 	// Load the permission profiles.
-	require_once($sourcedir . '/ManagePermissions.php');
+	require_once($sourcedir . '/' . $backend_subdir . '/ManagePermissions.php');
 	loadLanguage('ManagePermissions');
 	loadPermissionProfiles();
 
