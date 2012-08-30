@@ -780,3 +780,6 @@ $txt['inline_edit_inprogress'] = 'You are editing a message. Please cancel your 
 $txt['quick_reply_inprogress'] = 'Quick reply is active for the current topic.\n\nClick ok to modify the message in a new tab or window, cancel to stop edit mode.';
 $txt['inbox'] = 'Inbox';
 $txt['is'] = 'is';
+$txt['member_is_topic_banned'] = 'Member is banned from posting in this topic';
+$txt['member_ban_from_topic'] = 'Ban this member from participating in this topic';
+$txt['topic_banned_notice'] = '<div class="errorbox smalltext smallpadding">You cannot post or reply, because you have been banned from participating in this topic</div>';

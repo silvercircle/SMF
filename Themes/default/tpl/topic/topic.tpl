@@ -157,10 +157,11 @@
   {$SUPPORT->button_strip($C.normal_buttons, 'right')}
   <div class="pagelinks floatleft">{$C.page_index}{$C.menu_separator}&nbsp;&nbsp;<a class="navPages topdown" href="#lastPost">{$T.go_down}</a></div>
 </div>
+{$C.banned_notice}
 {* Show the topic information - icon, subject, etc. *}
 <div id="forumposts">
   <form data-alt="{$SCRIPTURL}?action=post;msg=%id_msg%;topic={$topic}.{$C.start}" action="{$SCRIPTURL}?action=quickmod2;topic={$topic}.{$C.start}" method="post" accept-charset="UTF-8" name="quickModForm" id="quickModForm" style="margin: 0;" onsubmit="return oQuickModify.bInEditMode ? oQuickModify.modifySave('{$C.session_id}', '{$C.session_var}') : false">
-    <div class="posts_container nopadding" id="posts_container">
+    <div class="posts_container std" id="posts_container">
       {* Get all the messages... *}
       {$C.alternate = 0}
       {foreach from=$C.message_ids item=msg}
@@ -187,6 +188,7 @@
   <div class="pagelinks floatleft">{$C.page_index}{$C.menu_separator}&nbsp;&nbsp;<a class="navPages topdown" href="#top">{$T.go_up}</a></div>
   <div class="nextlinks_bottom">{$C.previous_next}</div>
 </div>
+{$C.banned_notice}
 {* Added by Related Topics *}
 {if !empty($C.related_topics)}
   <h1 class="bigheader">{$T.related_topics}</h1>

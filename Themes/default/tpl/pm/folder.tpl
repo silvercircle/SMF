@@ -86,13 +86,13 @@
   </div>
 {/if}
 <div class="clear"></div>
-  <div class="posts_container">
   {if $PMCONTEXT->getPmMessage('message', true) == true}
     {if $C.display_mode == 2}
       <div class="pagesection">
         {$SUPPORT->button_strip($C.conversation_buttons, 'right')}
       </div>
     {/if}
+    <div class="posts_container pm">
     {section name=items start=0 loop=100}
       {$result = $PMCONTEXT->getPmMessage('message')}
       {if $result == false}
@@ -100,6 +100,7 @@
       {/if}
       {include "pm/pmbit.tpl"}
     {/section}
+    </div>
     {if empty($C.display_mode)}
       <div class="pagesection">
         <div class="floatleft pagelinks">{$C.page_index}</div>
@@ -109,13 +110,12 @@
       <div class="pagesection">
         {$SUPPORT->button_strip($C.conversation_buttons, 'right')}
       </div>
-    {/if}
+    {/if}  
   {else}
     <div class="red_container norounded mediumpadding">
       {$T.pm_no_messages}
     </div>
   {/if}
-  </div>
   {if $C.display_mode == 1}
     {include "pm/subject_list.tpl"}
     <br>

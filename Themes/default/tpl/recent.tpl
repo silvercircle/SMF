@@ -21,7 +21,7 @@
     <div class="pagelinks mediumpadding">
       <span>{$C.page_index}</span>
     </div>
-    <div class="posts_container">
+    <div class="posts_container std">
     {foreach $C.posts as $message}
       {call postbit_compact}
     {/foreach}

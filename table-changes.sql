@@ -180,6 +180,16 @@ CREATE TABLE {$db_prefix}log_online_today (
   PRIMARY KEY (id_member)
 ) ENGINE=MyISAM;
 
+CREATE TABLE {$db_prefix}topicbans (
+  id_topic MEDIUMINT(8) unsigned NOT NULL default '0',
+  id_member MEDIUMINT(8) UNSIGNED NOT NULL default '0',
+  updated INT(10) UNSIGNED NOT NULL default '0',
+  expires INT(10) UNSIGNED NOT NULL default '0',
+  PRIMARY KEY (id_topic, id_member),
+  KEY updated (id_topic, updated),
+  KEY updated1 (id_member, updated)
+) ENGINE=MyISAM;
+
 # now the changes to stock smf 2 tables
 
 ALTER TABLE {$db_prefix}messages ADD locked tinyint(2) NOT NULL default '0';

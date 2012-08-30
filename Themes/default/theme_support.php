@@ -16,14 +16,12 @@ global $settings;
 
 echo $context['current_theme_variant'];
 
-$settings['theme_variants'] = array('default', 'lightweight');
+$settings['theme_variants'] = array('default');
 $settings['clip_image_src'] = array(
 	'_default' => 'clipsrc.png',
-    '_lightweight' => 'clipsrc_l.png',
 );
 $settings['sprite_image_src'] = array(
 	'_default' => 'theme/sprite.png',
-	'_lightweight' => 'theme/sprite.png',
 );
 
 /**

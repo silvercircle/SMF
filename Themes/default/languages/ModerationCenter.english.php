@@ -141,4 +141,20 @@ $txt['mc_prefs_notify_approval'] = 'Notify of items awaiting approval';
 // Use entities in the below string.
 $txt['mc_click_add_note'] = 'Add a new note';
 $txt['mc_add_note'] = 'Add';
-
+$txt['mc_topic_bans'] = 'Topic bans';
+$txt['mc_lift_topic_ban'] = 'Lift topic ban';
+$txt['mc_issue_topic_ban'] = 'Issue a topic ban';
+$txt['mc_lift_topic_ban_desc'] = 'You can issue a new topic ban or lift an existing ban here. A topic ban will prevent the member from participating in a specific topic only and will not affect any of his/hers permissions.';
+$txt['mc_lift_topic_ban_missing_data'] = 'Missing topic or board information.';
+$txt['mc_lift_topic_ban_not_allowed'] = 'No permission to modify this topic ban';
+$txt['mc_lift_topic_ban_invalid_member'] = 'Invalid member id';
+$txt['mc_lift_ban_message'] = 'Do you want lift %s\'s ban for topic <a href="%s">%s</a>, issued %s?';
+$txt['mc_topicban_message'] = 'Do you want to ban %s from the topic <a href="%s">%s</a>?';
+$txt['mc_lift_ban_not_found'] = 'The specified topic ban does not exist';
+$txt['mc_lift_ban'] = 'Lift this ban';
+$txt['mc_issue_ban'] = 'Issue this ban';
+$txt['mc_lift_ban_backtotopic'] = 'Go back to topic';
+$txt['mc_topicban_duplicate'] = 'This ban already exists';
+$txt['mc_topicban_not_bannable'] = 'This member cannot be banned from a topic. The member is either a administrator, global moderator or board moderator.';
+$txt['mc_topicban_expire'] = 'Automatic expiration (in days):';
+$txt['mc_topicban_expire_explain'] = 'Set to 0 for no expiration. Note that ban expiration runs in daily maintenance around midnight so the actual ban time could be up to one day longer than specified.';

@@ -279,9 +279,11 @@ div#forumposts {
 	clear: both;
 }
 div.posts_container {
-	padding:5px;
-	padding-top:0;
-	margin:5px 0;
+	padding:0;
+	margin:0;
+}
+div.posts_container.std, div.posts_container.pm {
+	padding:0 4px 4px 4px;
 }
 div.post {
 	line-height: 1.3em;
@@ -302,7 +304,7 @@ div.post.comment {
 div.post_wrapper {
 	width: auto;
 	padding:0;
-	margin-bottom:10px;
+	/*margin-bottom:10px;*/
 }
 div.post_wrapper.comment {
 	border:0;
@@ -357,6 +359,13 @@ div.keyinfo.comment {
 	padding-right:10px;
 	line-height: 18px;
 	min-height:76px;
+}
+div.keyinfo.std, div.keyinfo.lean, div.keyinfo.pm {
+	margin-left:-4px;
+	margin-right:-4px;
+}
+div.keyinfo.pm {
+	padding:4px 6px;
 }
 div.keyinfo .messageicon {
 	float: left;
@@ -462,8 +471,6 @@ span.avatar_overlay img {
 	height: 18px;
 	padding: 0;
 }
-
-
 div.custom_fields_above_signature {
 	width: 98%;
 	clear: right;
@@ -635,22 +642,27 @@ dl.common.left dd {
 	width: auto;
 	margin-bottom: 10px;
 }
-dl.common.leftbalance dt {
-	width:59%;
-}
-dl.common.leftbalance dd {
-	width:39%;
-}
-dl.common.rightbalance dt {
-	width:39%;
-}
-dl.common.rightbalance dd {
-	width:59%;
-}
 dl.common.input dt, dl.common.input dd
 {
 	padding:5px;
 	line-height:26px;
+}
+#creator dl {
+	margin: 0;
+}
+
+#creator dt, dl.std dt{
+	width: 40%;
+	float: left;
+	clear: both;
+	margin: 0 0 10px 0;
+}
+
+#creator dd, dl.std dd {
+	float: right;
+	width: 55%;
+	margin: 0 0 10px 2px;
+	overflow: hidden;
 }
 /* Lists with settings use these a lot.
 ------------------------------------------------------- */
@@ -697,10 +709,21 @@ dl.settings dd {
 dl.settings img {
 	margin: 0 10px 0 0;
 }
-
 dl.settings dt a img {
 	position: relative;
 	top: 2px;
+}
+dl.leftbalance dt {
+	width:59%;
+}
+dl.leftbalance dd {
+	width:39%;
+}
+dl.rightbalance dt {
+	width:39%;
+}
+dl.rightbalance dd {
+	width:59%;
 }
 
 /* boardlisting (list of check boxes to select boards) */
@@ -1152,4 +1175,229 @@ div.bbc_dropcaps:first-letter {
 	position:relative;
 	margin:0.13em 0.1em 0 0;
 	line-height:0.7;
+}
+/* category and list styles */
+ol.commonlist.category li.boardrow {
+	padding:5px 10px;
+}
+ol.commonlist.category li.subcatrow {
+	padding:2px;
+}
+ol.category > li div.lastpost {
+	min-width: 300px;
+	max-width: 300px;
+	white-space: nowrap;
+	margin-left: 5px;
+	overflow:hidden;
+	position:absolute;
+	right:0;
+	top:0;
+	line-height:16px;
+	/*text-overflow:ellipsis; todo: this is sloooooooow on firefox :/ */
+}
+ol.category > li div.stats {
+	float: right;
+	white-space: nowrap;
+	padding: 0 2px;
+	width: 60px;
+	text-align: right;
+	line-height:16px;
+}
+
+ol.category > li > div.info {
+	line-height: 110%;
+	padding-right:310px;
+	position:relative;
+	min-height:36px;
+}
+ol.category > li > div.info.fullwidth {
+	padding-right:0;
+}
+ol.category > li > div.info h3, h3.subcatlink {
+	display: inline;
+}
+ol.category > li > div.info.subcat {
+	padding-right:0;
+}
+
+
+/* CSS sprites */
+/* clip:rect(top, right, bottom, left) (yes, weird, but that's how it is...) */
+img.clipsrc {
+	position: absolute;
+	top: 0;
+	left: 0;
+	border:0;
+}
+div.csrcwrapper24px {
+	position: relative;
+	height: 24px;
+	width: 24px;
+}
+
+div.csrcwrapper16px {
+	position:relative;
+	height: 16px;
+	width: 16px;
+	overflow:hidden;
+}
+.csrcwrapper16px.padded {
+	margin-right:10px;
+}
+
+img.clipsrc._child_new {
+	clip: rect(706px 10px 723px 0);
+	top:-706px;
+}
+img.clipsrc._child_old {
+	clip: rect(734px 10px 751px 0);
+	top: -734px;
+}
+img.clipsrc._on {
+	clip: rect(1px 25px 25px 1px);
+}
+
+img.clipsrc._off {
+	clip: rect(1px 54px 25px 30px);
+	left: -30px;
+}
+
+img.clipsrc._redirect {
+	clip: rect(1px 83px 25px 59px);
+	left: -59px;
+}
+img.clipsrc._subcat {
+	clip: rect(31px 129px 55px 106px);
+	left: -106px;
+	top: -31px;
+}
+img.clipsrc._page {
+	clip: rect(1px 112px 25px 88px);
+	left: -88px;
+}
+
+img.clipsrc._expand {
+	clip: rect(1px 129px 14px 117px);
+	left: -117px;
+}
+
+img.clipsrc._collapse {
+	clip: rect(1px 145px 14px 133px);
+	left: -133px;
+}
+
+img.clipsrc.reply {
+	clip: rect(200px 17px 216px 1px);
+	top:-200px;
+	left:-1px;
+}
+img.clipsrc.mquote_add {
+	clip: rect(200px 34px 216px 18px);
+	top:-200px;
+	left:-18px;
+}
+img.clipsrc.mquote_remove {
+	clip: rect(200px 51px 216px 35px);
+	top:-200px;
+	left:-35px;
+}
+img.clipsrc.modify {
+	clip: rect(200px 68px 216px 52px);
+	top:-200px;
+	left:-52px;
+}
+img.clipsrc.split {
+	clip: rect(200px 85px 216px 69px);
+	top:-200px;
+	left:-69px;
+}
+img.clipsrc.remove {
+	clip: rect(200px 102px 216px 86px);
+	top:-200px;
+	left:-86px;
+}
+img.clipsrc.unapprove {
+	clip: rect(200px 119px 216px 103px);
+	top:-200px;
+	left:-103px;
+}
+img.clipsrc.approve {
+	clip: rect(200px 136px 216px 120px);
+	top:-200px;
+	left:-120px;
+}
+img.clipsrc.reporttm {
+	clip: rect(200px 170px 216px 154px);
+	top:-200px;
+	left:-154px;
+}
+img.clipsrc.warning {
+	clip: rect(200px 153px 216px 137px);
+	top:-200px;
+	left:-137px;
+}
+img.clipsrc.network {
+	clip: rect(200px 187px 216px 171px);
+	top:-200px;
+	left:-171px;
+}
+img.clipsrc.subscribe {
+	clip: rect(200px 204px 216px 188px);
+	top:-200px;
+	left:-188px;
+}
+img.clipsrc.unsubscribe {
+	clip: rect(200px 221px 216px 205px);
+	top:-200px;
+	left:-205px;
+}
+img.clipsrc.locked {
+	clip: rect(217px 17px 233px 1px);
+	top:-217px;
+	left:-1px;
+}
+img.clipsrc.sticky {
+	clip: rect(217px 34px 233px 18px);
+	top:-217px;
+	left:-18px;
+}
+img.clipsrc.poll {
+	clip: rect(217px 51px 233px 35px);
+	top:-217px;
+	left:-35px;
+}
+img.clipsrc.postedin {
+	clip: rect(217px 68px 233px 52px);
+	top:-217px;
+	left:-52px;
+}
+img.clipsrc.veryhot {
+	clip: rect(217px 85px 233px 69px);
+	top:-217px;
+	left:-69px;
+}
+img.clipsrc.hot {
+	clip: rect(217px 102px 233px 86px);
+	top:-217px;
+	left:-86px;
+}
+img.clipsrc.old {
+	clip: rect(217px 119px 233px 103px);
+	top:-217px;
+	left:-103px;
+}
+img.clipsrc.unapproved {
+	clip: rect(217px 136px 233px 120px);
+	top:-217px;
+	left:-120px;
+}
+img.clipsrc.ban_topic {
+	clip: rect(217px 153px 233px 137px);
+	top:-217px;
+	left:-137px;
+}
+img.clipsrc.unban_topic {
+	clip: rect(217px 170px 233px 154px);
+	top:-217px;
+	left:-154px;
 }

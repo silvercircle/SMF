@@ -1,10 +1,10 @@
   <a id="quickreply"></a>
   <div class="clear"></div>
   <div style="display:none;overflow:hidden;" id="quickreplybox">
-    <div class="cat_bar">
+    <h1 class="bigheader section_header">
       <strong>{$T.post_reply}</strong>&nbsp;&nbsp;<a href="{$SCRIPTURL}?action=helpadmin;help=quickreply_help" onclick="return reqWin(this.href);" class="help tinytext">{$T.post_reply_help}</a>
-    </div>
-    <div class="flat_container mediumpadding">
+    </h1>
+    <div class="mediumpadding">
       <input type="hidden" name="_qr_board" value="{$C.current_board}" />
       <input type="hidden" name="topic" value="{$topic}" />
       <input type="hidden" name="subject" value="{$C.response_prefix}{$C.subject}" />

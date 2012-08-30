@@ -13,7 +13,8 @@
 {function postbit_compact}
   {$ID = $message.id}
   {$imgsrc = $C.clip_image_src}
-  <div class="post_wrapper" data-mid="{$ID}">
+  <div class="post_wrapper std" data-mid="{$ID}">
+  <div class="post_inner_wrapper std">
   {if !empty($C.is_display_std)}
     {$message.can_quote = $C.can_quote}
     {$message.can_reply = $C.can_reply}
@@ -119,5 +120,6 @@
     <div class="clear"></div>
   </div>
   <div class="clear"></div>
+</div>
 </div>
 {/function}

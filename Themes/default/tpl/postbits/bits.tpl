@@ -42,7 +42,8 @@
       {$T.show_ignore_user_post}
    </div>
 {/if}
-<div id="msg{$ID}" class="post_wrapper{($message.is_ignored) ? ' ignored' : ''}{($C.alternate) ? ' alternate' : ''}" data-mid="{$ID}">
+<div id="msg{$ID}" class="post_wrapper std{($message.is_ignored) ? ' ignored' : ''}{($C.alternate) ? ' alternate' : ''}" data-mid="{$ID}">
+<div class="post_inner_wrapper std">
 {if $ID != $C.first_message}
   {($message.first_new) ? '<a id="new"></a>' : ''}
 {/if}
@@ -179,13 +180,14 @@
   </div>
   <div class="clear_left"></div>
 </div>
-<div class="post_bottom{($message.mq_marked) ? ' mq' : ''}">
+<div class="post_bottom std{($message.mq_marked) ? ' mq' : ''}">
   <div class="reportlinks lefttext">
     {call quickbuttons}
   </div>
 </div>
 {$SUPPORT->displayHook('postbit_below')}
 {$message.template_hook.postbit_below}
+</div>
 </div>
 {/function}
 
@@ -197,7 +199,8 @@
       {$T.show_ignore_user_post}
    </div>
 {/if}
-<div id="msg{$ID}" class="post_wrapper{($message.is_ignored) ? ' ignored' : ''}{($C.alternate) ? ' alternate' : ''}" data-mid="{$ID}">
+<div id="msg{$ID}" class="post_wrapper lean{($message.is_ignored) ? ' ignored' : ''}{($C.alternate) ? ' alternate' : ''}" data-mid="{$ID}">
+<div class="post_inner_wrapper lean">
 {if $ID != $C.first_message}
   {($message.first_new) ? '<a id="new"></a>' : ''}
 {/if}
@@ -276,11 +279,12 @@
   {/if}
   </div>
 </div>
-<div class="post_bottom">
+<div class="post_bottom lean">
   <div class="reportlinks">
   {call quickbuttons}
   </div>
   <div class="clear"></div>
+</div>
 </div>
 </div>
 {/function}
@@ -293,7 +297,8 @@
       {$T.show_ignore_user_post}
    </div>
 {/if}
-<div id="msg{$ID}" class="post_wrapper{($message.is_ignored) ? ' ignored' : ''}{($C.alternate) ? ' alternate' : ''} comment" data-mid="{$ID}">
+<div id="msg{$ID}" class="post_wrapper comment{($message.is_ignored) ? ' ignored' : ''}{($C.alternate) ? ' alternate' : ''}" data-mid="{$ID}">
+<div class="post_inner_wrapper comment">
 {if $ID != $C.first_message}
   {($message.first_new) ? '<a id="new"></a>' : ''}
 {/if}
@@ -354,6 +359,7 @@
     {call quickbuttons}
   </div>
   <div class="clear"></div>
+</div>
 </div>
 </div>
 {/function}

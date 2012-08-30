@@ -1,5 +1,5 @@
 <!DOCTYPE html >
-<html {($C.ight_to_left) ? ' dir="rtl"' : ''}>
+<html {($C.right_to_left) ? ' dir="rtl"' : ''}>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>{$C.page_title}</title>
