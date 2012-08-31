@@ -222,10 +222,9 @@ function Display()
 		$context['topic_tags'] = $context['tags_active'] = 0;
 	
 	// Get all the important topic info.
-	$request = smf_db_query( '
-		SELECT
+	$request = smf_db_query('SELECT
 			t.num_replies, t.num_views, t.locked, ms.poster_name, ms.subject, ms.poster_email, ms.poster_time AS first_post_time, t.is_sticky, t.id_poll,
-			t.id_member_started, t.id_first_msg, t.id_last_msg, t.approved, t.unapproved_posts, t.id_layout,
+			t.id_member_started, t.id_first_msg, t.id_last_msg, t.approved, t.unapproved_posts, t.id_layout, 
 			' . ($user_info['is_guest'] ? 't.id_last_msg + 1' : 'IFNULL(lt.id_msg, IFNULL(lmr.id_msg, -1)) + 1') . ' AS new_from
 			' . (!empty($modSettings['recycle_board']) && $modSettings['recycle_board'] == $board ? ', id_previous_board, id_previous_topic' : '') . ',
 			p.name AS prefix_name, ms1.poster_time AS last_post_time, ms1.modified_time AS last_modified_time, IFNULL(b.automerge, 0) AS automerge
@@ -235,7 +234,7 @@ function Display()
 			INNER JOIN {db_prefix}messages AS ms ON (ms.id_msg = t.id_first_msg)' . ($user_info['is_guest'] ? '' : '
 			LEFT JOIN {db_prefix}log_topics AS lt ON (lt.id_topic = {int:current_topic} AND lt.id_member = {int:current_member})
 			LEFT JOIN {db_prefix}log_mark_read AS lmr ON (lmr.id_board = {int:current_board} AND lmr.id_member = {int:current_member})') . '
-			LEFT JOIN {db_prefix}prefixes as p ON p.id_prefix = t.id_prefix
+			LEFT JOIN {db_prefix}prefixes as p ON p.id_prefix = t.id_prefix 
 		WHERE t.id_topic = {int:current_topic}
 		LIMIT 1',
 		array(
@@ -246,7 +245,7 @@ function Display()
 	);
 	if (mysql_num_rows($request) == 0)
 		fatal_lang_error('not_a_topic', false);
-		
+
 	// Added by Related Topics
 	if (isset($modSettings['have_related_topics']) && $modSettings['have_related_topics'] && !empty($modSettings['relatedTopicsEnabled'])) {
 		require_once($sourcedir . '/lib/Subs-Related.php');
@@ -256,6 +255,14 @@ function Display()
 	$topicinfo = mysql_fetch_assoc($request);
 	mysql_free_result($request);
 
+	$context['topic_banned_members'] = array();
+	$request = smf_db_query('SELECT id_member FROM {db_prefix}topicbans WHERE id_topic = {int:topic}', array('topic' => $topic));
+	if(mysql_num_rows($request) != 0) {
+		while($row = mysql_fetch_row($request))
+			$context['topic_banned_members'][] = $row[0];
+	}
+	mysql_free_result($request);
+	$context['topic_banned_members_count'] = count($context['topic_banned_members']);
 
 	$context['topic_last_modified'] = max($topicinfo['last_post_time'], $topicinfo['last_modified_time']);		// todo: considering - make post cutoff time for the cache depend on the modification time of the topic's last post
 	$context['real_num_replies'] = $context['num_replies'] = $topicinfo['num_replies'];
@@ -1240,6 +1247,8 @@ function Display()
 	$context['can_profile_view_any'] = allowedTo('profile_view_any');
 	$context['can_profile_view_own'] = allowedTo('profile_view_own');
 	
+	$context['is_banned_from_topic'] = !$user_info['is_admin'] && !$context['can_moderate_forum'] && !$context['can_moderate_board'] && (!empty($context['topic_banned_members']) ? in_array($user_info['id'], $context['topic_banned_members']) : false);
+	$context['banned_notice'] = $context['is_banned_from_topic'] ? $txt['topic_banned_notice'] : '';
 	// Cleanup all the permissions with extra stuff...
 	
 	$context['can_mark_notify'] &= !$context['user']['is_guest'];
@@ -1265,6 +1274,8 @@ function Display()
 	$context['can_restore_topic'] &= !empty($modSettings['recycle_enable']) && $modSettings['recycle_board'] == $board && !empty($topicinfo['id_previous_board']);
 	$context['can_restore_msg'] &= !empty($modSettings['recycle_enable']) && $modSettings['recycle_board'] == $board && !empty($topicinfo['id_previous_topic']);
 
+	if($context['is_banned_from_topic'])
+		$context['can_add_tags'] = $context['can_delete_tags'] = $context['can_manage_own'] = $context['can_modify_any'] = $context['can_modify_replies'] = $context['can_modify_own'] = $context['can_delete_any'] = $context['can_delete_replies'] = $context['can_delete_own'] = $context['can_lock'] = $context['can_sticky'] = $context['calendar_post'] = $context['can_add_poll'] = $context['can_remove_poll'] = $context['can_reply'] = $context['can_reply_unapproved'] = $context['can_quote'] = $context['can_remove_post'] = false;
 	// Load up the "double post" sequencing magic.
 	if (!empty($options['display_quick_reply']))
 	{
@@ -1280,6 +1291,9 @@ function Display()
 	enqueueThemeScript('topic', 'scripts/topic.js', true);
 	if($context['can_autosave_draft'])
 		enqueueThemeScript('drafts', 'scripts/drafts.js', true);
+
+	$context['can_moderate_member'] = $context['can_issue_warning'] || $context['can_moderate_board'];
+	$context['topic_has_banned_members_msg'] = $context['topic_banned_members_count'] > 0 && $context['can_moderate_board'] ? sprintf($txt['topic_has_bans_msg'], URL::parse('?action=moderate;area=topicbans;sa=bytopic')) : '';
 
 	if(EoS_Smarty::isActive()) {
 		if(isset($context['poll'])) {
@@ -1375,12 +1389,14 @@ function prepareDisplayContext($reset = false)
 		$memberContext[$message['id_member']]['email'] = $message['poster_email'];
 		$memberContext[$message['id_member']]['show_email'] = showEmailAddress(true, 0);
 		$memberContext[$message['id_member']]['is_guest'] = true;
+		$memberContext[$message['id_member']]['is_banned_from_topic'] = false;
 	}
 	else
 	{
 		$memberContext[$message['id_member']]['can_view_profile'] = $context['can_profile_view_any'] || ($message['id_member'] == $user_info['id'] && $context['can_profile_view_own']);
 		$memberContext[$message['id_member']]['is_topic_starter'] = $message['id_member'] == $context['topic_starter_id'];
 		$memberContext[$message['id_member']]['can_see_warning'] = !isset($context['disabled_fields']['warning_status']) && $memberContext[$message['id_member']]['warning_status'] && ($context['user']['can_mod'] || (!$user_info['is_guest'] && !empty($modSettings['warning_show']) && ($modSettings['warning_show'] > 1 || $message['id_member'] == $user_info['id'])));
+		$memberContext[$message['id_member']]['is_banned_from_topic'] = !empty($context['topic_banned_members']) ? in_array($message['id_member'], $context['topic_banned_members']) : false;
 	}
 
 	$memberContext[$message['id_member']]['ip'] = $message['poster_ip'];
@@ -1427,7 +1443,6 @@ function prepareDisplayContext($reset = false)
 		'time' => timeformat($message['poster_time']),
 		'timestamp' => $message['poster_time'],
 		'counter' => $counter,
-//		'permalink' => isset($_REQUEST['perma']) ? $txt['view_in_thread'] : ($counter ? ($txt['reply_noun'].' #'.$counter) : $txt['permalink']),
 		'permalink' => isset($_REQUEST['perma']) ? $txt['view_in_thread'] : ' #' . ($counter + 1),
 		'modified' => array(
 			'time' => timeformat($message['modified_time']),
@@ -1451,6 +1466,7 @@ function prepareDisplayContext($reset = false)
 		'postbit_callback' => $message['approved'] ? ($message['id_msg'] == $context['first_message'] ? $context['postbit_callbacks']['firstpost'] : $context['postbit_callbacks']['post']) : 'template_postbit_comment',
 		'postbit_template_class' => $message['approved'] ? ($message['id_msg'] == $context['first_message'] ? $context['postbit_template_class']['firstpost'] : $context['postbit_template_class']['post']) : 'c',
 		'mq_marked' => in_array($message['id_msg'], $context['multiquote_posts']),
+		'header_class' => $context['can_moderate_member'] && ($memberContext[$message['id_member']]['is_banned_from_topic'] || $memberContext[$message['id_member']]['can_see_warning']) ? ' watched' : ''
 	);
 
 	if($context['can_see_like'])

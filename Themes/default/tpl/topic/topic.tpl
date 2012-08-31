@@ -248,6 +248,11 @@
 {include '../linktree.tpl'}
 <div class="floatright smallpadding" id="display_jump_to">&nbsp;</div>
 <div id="moderationbuttons" class="mediumpadding floatleft nowrap">{$SUPPORT->button_strip($C.mod_buttons, 'left', $C.mod_buttons_style)}</div>
+{if !empty($C.topic_has_banned_members_msg)}
+  <div class="orange_container norounded smallpadding tinytext clear">
+    {$C.topic_has_banned_members_msg}
+  </div>
+{/if}
 {/block}
 {block footerscripts}
 {include 'topic/topic_js.tpl'}

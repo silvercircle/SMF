@@ -47,7 +47,7 @@
 {if $ID != $C.first_message}
   {($message.first_new) ? '<a id="new"></a>' : ''}
 {/if}
-<div class="keyinfo std">
+<div class="keyinfo std{$message.header_class}">
   <div class="floatleft" style="width:230px;text-align:center;" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">
     <h4 class="poster borderbox">{$message.member.link}</h4>
   </div>
@@ -204,7 +204,7 @@
 {if $ID != $C.first_message}
   {($message.first_new) ? '<a id="new"></a>' : ''}
 {/if}
-  <div class="keyinfo lean">
+  <div class="keyinfo lean{$message.header_class}">
   {if !empty($S.show_user_images) and empty($O.show_no_avatars)}
     {if !empty($message.member.avatar.image)}
       <span class="small_avatar floatleft" style="margin-top:5px;margin-right:10px">
@@ -302,7 +302,7 @@
 {if $ID != $C.first_message}
   {($message.first_new) ? '<a id="new"></a>' : ''}
 {/if}
-<div class="keyinfo comment">
+<div class="keyinfo comment{$message.header_class}">
   <div class="floatleft " style="max-width:65px;">
     <ul class="reset smalltext" id="msg_{$ID}_extra_info">
     {if !empty($message.member.avatar.image)}

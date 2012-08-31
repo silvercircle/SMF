@@ -140,6 +140,11 @@
 <div id="moderationbuttons" class="smallpadding floatleft">
   {$SUPPORT->button_strip($C.mod_buttons, 'bottom', $C.mod_buttons_style)}
 </div>
+{if !empty($C.topic_has_banned_members_msg)}
+  <div class="orange_container norounded smallpadding tinytext clear">
+    {$C.topic_has_banned_members_msg}
+  </div>
+{/if}
 {/block}  
 {block footerscripts}
 {include 'topic/topic_js.tpl'}

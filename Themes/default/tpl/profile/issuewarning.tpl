@@ -125,7 +125,7 @@
     </h3>
   </div>
   {if !$C.user.is_owner}
-    <div class="orange_container cleantop mediumpadding">{$T.profile_warning_desc}</div>
+    <div class="orange_container cleantop mediumpadding smalltext">{$T.profile_warning_desc}</div>
     <br>
     <div class="blue_container">
   {else}
@@ -182,6 +182,30 @@
       </dl>
       <hr>
       <dl class="settings">
+        {if $C.can_issue_topicban or !empty($C.warning_data.topicban_id_topic)}
+          <dt>
+            <strong>{$T.profile_warning_issue_topicban}:</strong>
+          </dt>
+          <dd>
+            <input type="checkbox" name="warn_topicban" id="warn_topicban" {($C.warning_data.topicban) ? 'checked="checked"' : ''} class="input_check" />
+            <input type="hidden" name="warn_topicban_id_topic" value="{$C.warning_data.topicban_id_topic}" />
+          </dd>
+          <dt>
+            <strong>{$T.profile_warning_topicban_expire}:</strong>
+            <br>
+            <span class="tinytext">{$T.profile_warning_topicban_expire_desc}</span>
+          </dt>
+          <dd>
+            <input type="text" name="warn_topicban_expire" id="warn_topicban_expire" value="{$C.warning_data.topicban_expire}" class="input_text" size="5" />
+          </dd>       
+        {/if}
+        {if isset($C.member_is_topic_banned)}
+          <dt>
+            <strong><span class="alert">{$T.profile_warning_is_topic_banned}</span></strong>
+          </dt>
+          <dd>
+          </dd>
+        {/if}
         <dt>
           <strong>{$T.profile_warning_notify}:</strong>
         </dt>

@@ -69,10 +69,25 @@
       <div class="csrcwrapper16px floatleft padded"><img class="clipsrc reporttm" src="{$imgsrc}" alt="{$T.report}" title="{$T.report}" /></div>
     </a>
   {/if}
-  {if $C.can_issue_warning and $message.is_message_author == 0 and $message.member.is_guest == 0}
-    <a href="{$SCRIPTURL}?action=profile;area=issuewarning;u={$message.member.id};msg={$ID}">
-      <div class="csrcwrapper16px floatleft padded"><img class="clipsrc warning" src="{$imgsrc}" alt="{$T.issue_warning}" title="{$T.issue_warning}" /></div>
-    </a>
+  {if $C.can_moderate_member and $message.is_message_author == 0 and $message.member.is_guest == 0}
+    {if $C.can_issue_warning}
+      <a href="{$SCRIPTURL}?action=profile;area=issuewarning;u={$message.member.id};msg={$ID}">
+        <div class="csrcwrapper16px floatleft padded"><img class="clipsrc warning" src="{$imgsrc}" alt="{$T.issue_warning}" title="{$T.issue_warning}" /></div>
+      </a>
+    {/if}
+    {if $message.member.is_banned_from_topic}
+      <a rel="nofollow" href="{$SUPPORT->url_parse('?action=moderate;area=topicbans;sa=unban;topic='|cat:$C.current_topic|cat:';m='|cat:$message.id_member|cat:';mid='|cat:$message.id)}">
+        <div class="csrcwrapper16px floatleft padded">
+          <img class="clipsrc unban_topic" src="{$imgsrc}" alt="{$T.issue_warning}" title="{$T.member_is_topic_banned}" />
+        </div>
+      </a>
+    {else}
+      <a rel="nofollow" href="{$SUPPORT->url_parse('?action=moderate;area=topicbans;sa=ban;topic='|cat:$C.current_topic|cat:';m='|cat:$message.id_member|cat:';mid='|cat:$message.id)}">
+        <div class="csrcwrapper16px floatleft padded">
+          <img class="clipsrc ban_topic" src="{$imgsrc}" alt="{$T.issue_warning}" title="{$T.member_ban_from_topic}" />
+        </div>
+      </a>
+    {/if}
   {/if}
   {if $C.can_moderate_forum and !empty($message.member.ip)}
     <a href="{$SCRIPTURL}?action={($message.member.is_guest) ? 'trackip' : ('profile;area=tracking;sa=ip;u='|cat:$message.member.id|cat:';searchip='|cat:$message.member.ip)}">

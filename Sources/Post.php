@@ -148,11 +148,12 @@ function Post()
 			SELECT
 				t.locked, IFNULL(ln.id_topic, 0) AS notify, t.is_sticky, t.id_poll, t.id_last_msg, mf.id_member,
 				t.id_first_msg, mf.subject,
-				CASE WHEN ml.poster_time > ml.modified_time THEN ml.poster_time ELSE ml.modified_time END AS last_post_time
+				CASE WHEN ml.poster_time > ml.modified_time THEN ml.poster_time ELSE ml.modified_time END AS last_post_time, ba.id_topic AS banned_from_topic
 			FROM {db_prefix}topics AS t
 				LEFT JOIN {db_prefix}log_notify AS ln ON (ln.id_topic = t.id_topic AND ln.id_member = {int:current_member})
 				LEFT JOIN {db_prefix}messages AS mf ON (mf.id_msg = t.id_first_msg)
 				LEFT JOIN {db_prefix}messages AS ml ON (ml.id_msg = t.id_last_msg)
+				LEFT JOIN {db_prefix}topicbans AS ba ON (ba.id_topic = {int:current_topic} AND ba.id_member = {int:current_member})
 			WHERE t.id_topic = {int:current_topic}
 			LIMIT 1',
 			array(
@@ -160,8 +161,11 @@ function Post()
 				'current_topic' => $topic,
 			)
 		);
-		list ($locked, $context['notify'], $sticky, $pollID, $context['topic_last_message'], $id_member_poster, $id_first_msg, $first_subject, $lastPostTime) = mysql_fetch_row($request);
+		list ($locked, $context['notify'], $sticky, $pollID, $context['topic_last_message'], $id_member_poster, $id_first_msg, $first_subject, $lastPostTime, $banned_from_topic) = mysql_fetch_row($request);
 		mysql_free_result($request);
+
+		if($banned_from_topic && !$user_info['is_admin'] && !allowedTo('moderate_board') && !allowedTo('moderate_forum')) 
+			fatal_lang_error('banned_from_topic');
 
 		// If this topic already has a poll, they sure can't add another.
 		if (isset($_REQUEST['poll']) && $pollID > 0)
@@ -1374,13 +1378,15 @@ function Post2()
 	{
 		$request = smf_db_query( '
 			SELECT t.locked, t.is_sticky, t.id_poll, t.approved, t.id_first_msg, t.id_last_msg, t.id_member_started, t.id_member_updated,
-				t.id_board, t.id_prefix, t.id_layout, t.num_replies, b.automerge
+				t.id_board, t.id_prefix, t.id_layout, t.num_replies, b.automerge, ba.id_topic AS banned_from_topic
 			FROM {db_prefix}topics AS t
 			LEFT JOIN {db_prefix}boards AS b on b.id_board = t.id_board 
-			WHERE id_topic = {int:current_topic}
+			LEFT JOIN {db_prefix}topicbans AS ba ON (ba.id_topic = {int:current_topic} AND ba.id_member = {int:current_member})
+			WHERE t.id_topic = {int:current_topic}
 			LIMIT 1',
 			array(
 				'current_topic' => $topic,
+				'current_member' => $user_info['id']
 			)
 		);
 		$topic_info = mysql_fetch_assoc($request);
@@ -1393,6 +1399,9 @@ function Post2()
 		// Did this topic suddenly move? Just checking...
 		if ($topic_info['id_board'] != $board)
 			fatal_lang_error('not_a_topic');
+
+		if($topic_info['banned_from_topic'] != 0 && !$user_info['is_admin'] && !allowedTo('moderate_board') && !allowedTo('moderate_forum')) 
+			fatal_lang_error('banned_from_topic');
 	}
 
 	// Replying to a topic?
@@ -2918,9 +2927,10 @@ function JavaScriptModify()
 			SELECT
 				t.locked, t.num_replies, t.id_member_started, t.id_first_msg,
 				m.id_msg, m.id_member, m.poster_time, m.subject, m.smileys_enabled, m.body, m.icon,
-				m.modified_time, m.modified_name, m.approved
+				m.modified_time, m.modified_name, m.approved, ba.id_topic AS banned_from_topic
 			FROM {db_prefix}messages AS m
 				INNER JOIN {db_prefix}topics AS t ON (t.id_topic = {int:current_topic})
+				LEFT JOIN {db_prefix}topicbans AS ba ON (ba.id_topic = {int:current_topic} AND ba.id_member = {int:current_member})
 			WHERE m.id_msg = {raw:id_msg}
 				AND m.id_topic = {int:current_topic}' . (allowedTo('approve_posts') ? '' : (!$modSettings['postmod_active'] ? '
 				AND (m.id_member != {int:guest_id} AND m.id_member = {int:current_member})' : '
@@ -2958,6 +2968,10 @@ function JavaScriptModify()
 			isAllowedTo('modify_replies');
 		else
 			isAllowedTo('modify_any');
+
+		// check topic bans
+		if($row['banned_from_topic'] != 0 && !$user_info['is_admin'] && !allowedTo('moderate_board') && !allowedTo('moderate_forum')) 
+			fatal_lang_error('banned_from_topic');
 
 		// Only log this action if it wasn't your message.
 		$moderationAction = $row['id_member'] != $user_info['id'];

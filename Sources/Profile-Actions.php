@@ -132,6 +132,9 @@ function issueWarning($memID)
 		'notify' => '',
 		'notify_subject' => '',
 		'notify_body' => '',
+		'topicban' => '',
+		'topicban_expire' => 0,
+		'topicban_id_topic' => 0
 	);
 
 	// Are we saving?
@@ -220,6 +223,19 @@ function issueWarning($memID)
 
 			// Leave a lovely message.
 			$context['profile_updated'] = $context['user']['is_owner'] ? $txt['profile_updated_own'] : $txt['profile_warning_success'];
+			// if we want to issue a topicban, do it now
+			if(isset($_POST['warn_topicban']) && !empty($_POST['warn_topicban']) && isset($_POST['warn_topicban_id_topic']) && !empty($_POST['warn_topicban_id_topic'])) {
+				$ban_expires = isset($_POST['warn_topicban_expire']) && !empty($_POST['warn_topicban_expire']) ? $context['time_now'] + 86400 * (int)$_POST['warn_topicban_expire'] : 0;
+				smf_db_insert('', '{db_prefix}topicbans',
+					array(
+						'id_topic' => 'int', 'id_member' => 'int', 'updated' => 'int', 'expires' => 'int'
+					),
+					array(
+						$_POST['warn_topicban_id_topic'], $memID, $context['time_now'], $ban_expires
+					),
+					array('id_topic')		
+				);
+			}
 		}
 		else
 		{
@@ -238,6 +254,9 @@ function issueWarning($memID)
 				'notify' => !empty($_POST['warn_notify']),
 				'notify_subject' => isset($_POST['warn_sub']) ? $_POST['warn_sub'] : '',
 				'notify_body' => isset($_POST['warn_body']) ? $_POST['warn_body'] : '',
+				'topicban' => isset($_POST['warn_topicban']) && !empty($_POST['warn_topicban']) ? 1 : 0,
+				'topicban_expire' => isset($_POST['warn_topicban_expire']) && !empty($_POST['warn_topicban_expire']) ? (int)$_POST['warn_topicban_expire'] : 0,
+				'topicban_id_topic' => isset($_POST['warn_topicban_id_topic']) ? (int)$_POST['warn_topicban_id_topic'] : 0
 			);
 		}
 
@@ -271,10 +290,11 @@ function issueWarning($memID)
 	$context['previous_warnings'] = list_getUserWarnings($context['start'], $perPage, 'log_time DESC', $memID);
 
 	// Are they warning because of a message?
+	$context['warned_message_subject'] = '';
 	if (isset($_REQUEST['msg']) && 0 < (int) $_REQUEST['msg'])
 	{
 		$request = smf_db_query( '
-			SELECT subject
+			SELECT subject, id_topic
 			FROM {db_prefix}messages AS m
 				INNER JOIN {db_prefix}boards AS b ON (b.id_board = m.id_board)
 			WHERE id_msg = {int:message}
@@ -287,19 +307,34 @@ function issueWarning($memID)
 		if (mysql_num_rows($request) != 0)
 		{
 			$context['warning_for_message'] = (int) $_REQUEST['msg'];
-			list ($context['warned_message_subject']) = mysql_fetch_row($request);
+			list ($context['warned_message_subject'], $context['warning_for_topic']) = mysql_fetch_row($request);
 		}
 		mysql_free_result($request);
-
 	}
+	if(isset($_POST['warn_topicban_id_topic']))
+		$context['warning_for_message'] = (int)$_POST['warn_topicban_id_topic'];
 
 	// Didn't find the message?
 	if (empty($context['warning_for_message']))
 	{
-		$context['warning_for_message'] = 0;
+		$context['warning_for_message'] = $context['warning_for_topic'] = 0;
 		$context['warned_message_subject'] = '';
 	}
-
+	// we can issue a topic ban, now check if the member doesn't have one already
+	if(isset($context['warning_for_topic'])) {
+		$context['can_issue_topicban'] = $context['warning_for_topic'];
+		$request = smf_db_query('SELECT id_member FROM {db_prefix}topicbans WHERE id_topic = {int:topic} AND id_member = {int:member}',
+			array('topic' => $context['warning_for_topic'], 'member' => $memID));
+		if(mysql_num_rows($request) > 0) {
+			$context['warning_for_topic'] = $context['can_issue_topicban'] = 0;
+			$context['member_is_topic_banned'] = true;
+		}
+		else 
+			$context['warning_data']['topicban_id_topic'] = $context['warning_for_topic'];
+		mysql_free_result($request);
+	}
+	else
+		$context['can_issue_topicban'] = 0;
 	// Any custom templates?
 	$context['notification_templates'] = array();
 

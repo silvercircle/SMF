@@ -752,6 +752,9 @@ ol.commonlist.category {
 div.keyinfo.std, div.keyinfo.lean, div.keyinfo.pm {
 	background-color: #e5e5e5 !important;
 }
+div.keyinfo.watched {
+	border-bottom:2px solid red !important;
+}
 .topicrow, .tablerow {
 	background: #f5f5f5;
 }

@@ -47,6 +47,8 @@ function ModerationMain($dont_call = false)
 	$context['robot_no_index'] = true;
 
 	// This is the menu structure - refer to Subs-Menu.php for the details.
+	$direct_topicban = isset($_REQUEST['sa']) && ($_REQUEST['sa'] === 'ban' || $_REQUEST['sa'] === 'unban');
+
 	$moderation_areas = array(
 		'main' => array(
 			'title' => $txt['mc_main'],
@@ -83,6 +85,15 @@ function ModerationMain($dont_call = false)
 						'member' => array($txt['mc_watched_users_member']),
 						'post' => array($txt['mc_watched_users_post']),
 					),
+				),
+				'topicbans' => array(
+					'label' => $txt['mc_topic_bans'],
+					'enabled' => $context['can_moderate_boards'],
+					'function' => 'TopicBans',
+					'subsections' => !$direct_topicban ? array(
+						'bymember' => array($txt['mc_topicbans_by_member']),
+						'bytopic' => array($txt['mc_topicbans_by_topic']),
+					) : array(),
 				),
 			),
 		),
@@ -2038,4 +2049,118 @@ function ModerationSettings()
 	);
 }
 
-?>
+function TopicBans()
+{
+	global $context, $board_info, $topic, $txt, $memberContext, $user_info;
+
+	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
+	if(isset($_REQUEST['sa']) && ($_REQUEST['sa'] === 'unban' || $_REQUEST['sa'] === 'ban')) {
+		$is_ban = $_REQUEST['sa'] === 'ban' ? 1 : 0;
+
+		$context['page_title'] = $is_ban ? $txt['mc_issue_topic_ban'] : $txt['mc_lift_topic_ban'];
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/topicban_issue_or_lift');
+
+		$context['op_errors'] = array();
+		$member = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
+		if(!isset($topic) || empty($topic) || !isset($board_info) || empty($board_info) || 0 == $member)
+			$context['op_errors'][] = $txt['mc_lift_topic_ban_missing_data'];
+		if(!allowedTo('moderate_board'))
+			$context['op_errors'][] = $txt['mc_lift_topic_ban_not_allowed'];
+
+		if(loadMemberData($member) != false) {
+			loadMemberContext($member);
+			$context['banned_member'] = &$memberContext[$member];
+		}
+		else
+			$context['op_errors'][] = $txt['mc_lift_topic_ban_invalid_member'];
+
+		$context['ban_row'] = array();
+		// do not check this for admins - they can do whatever they want and even ban a moderator in his own board. Yes, admins are >> all :)
+		if($is_ban && !$user_info['is_admin']) {
+			if(isUserAllowedTo('moderate_forum', 0, $member) || isUserAllowedTo('moderate_board', $board_info['id'], $member))
+				$context['op_errors'][] = $txt['mc_topicban_not_bannable'];
+		}
+		$request = smf_db_query('SELECT t.id_topic, ba.id_member, ba.updated, m.subject FROM {db_prefix}topics AS t
+			LEFT JOIN {db_prefix}topicbans AS ba ON (ba.id_topic = t.id_topic AND ba.id_member = {int:member}) 
+			LEFT JOIN {db_prefix}messages AS m ON (m.id_msg = t.id_first_msg)
+			WHERE t.id_topic = {int:topic}', 
+			array('topic' => $topic, 'member' => $member));
+
+		if(mysql_num_rows($request) > 0) {
+			$row = mysql_fetch_assoc($request);
+			$context['ban_row'] = array(
+				'id_member' => $row['id_member'],
+				'id_topic' => $row['id_topic'],
+				'subject' => $row['subject'],
+				'ban_time' => timeformat($row['updated']),
+				'href' => URL::topic($topic, $row['subject']),
+				'is_banned' => $row['id_member']
+			);
+
+			if($_REQUEST['sa'] == 'ban' && $context['ban_row']['is_banned'])
+				$context['op_errors'][] = $txt['mc_topicban_duplicate'];
+			elseif($_REQUEST['sa'] == 'unban' && $context['ban_row']['is_banned'] == 0)
+				$context['op_errors'][] = $txt['mc_lift_ban_not_found'];
+		}
+		else
+			$context['op_errors'][] = $txt['mc_lift_ban_not_found'];
+		mysql_free_result($request);
+
+		$mid = isset($_REQUEST['mid']) ? (int)$_REQUEST['mid'] : 0;
+		// save it
+		$back_to_topic = URL::topic($topic, $context['ban_row']['subject'], 0, false, '.msg' . (int)$_REQUEST['mid'], '#msg' . (int)$_REQUEST['mid']);
+		if(empty($context['op_errors'])) {
+			if(isset($_REQUEST['save'])) {
+				checkSession();
+				$context['success'] = 'Success';
+				$context['back_url'] = $back_to_topic;
+				$context['back_label'] = $txt['mc_lift_ban_backtotopic'];
+				if($is_ban) {
+					$ban_expire = isset($_REQUEST['mc_expire']) && !empty($_REQUEST['mc_expire']) ? (int)$_REQUEST['mc_expire'] * 86400 : 0;
+					smf_db_insert('',
+						'{db_prefix}topicbans',
+						array(
+							'id_topic' => 'int', 'id_member' => 'int', 'updated' => 'int', 'expires' => 'int'
+						),
+						array(
+							$topic, $member, $context['time_now'], $ban_expire ? $context['time_now'] + $ban_expire : 0
+						),
+						array('id_topic')
+					);
+				}
+				else {
+					smf_db_query('DELETE FROM {db_prefix}topicbans WHERE id_topic = {int:topic} AND id_member = {int:member}', 
+						array('topic' => $topic, 'member' => $member));
+				}
+			}
+			else {
+				$context['submit_url'] = URL::parse('?action=moderate;area=topicbans;sa='. ($is_ban ? 'ban' : 'unban') . ';topic=' . $topic . ';m=' . $member . ';save' . ';mid=' . $mid);
+				$context['back_url'] = $back_to_topic;
+				$context['back_label'] = $txt['mc_lift_ban_backtotopic'];
+				$context['submit_label'] = $is_ban ? $txt['mc_issue_ban'] : $txt['mc_lift_ban'];
+				$context['topicban_message'] = $is_ban ? sprintf($txt['mc_topicban_message'], $context['banned_member']['link'], $context['ban_row']['href'], $context['ban_row']['subject']) : sprintf($txt['mc_lift_ban_message'], $context['banned_member']['link'], $context['ban_row']['href'], $context['ban_row']['subject'], $context['ban_row']['ban_time']);
+				$context['submit'] = true;
+				$context['is_ban'] = $is_ban;
+			}
+		}
+		else {
+			$context['back_url'] = $back_to_topic;
+			$context['back_label'] = $txt['mc_lift_ban_backtotopic'];
+		}
+	}
+	// create a list of topicbans, either by topic id
+	else {
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/topicbans_list');
+		if($user_info['is_admin'] || allowedTo('moderate_forum'))
+			$board_query = '1=1';
+		else {
+			$boards = boardsAllowedTo('moderate_board');
+			$board_query = 'b.id_board IN ({array_int:boards})';
+		}
+		$context['page_title'] = $txt['mc_topicbans_view'];
+		$context[$context['moderation_menu_name']]['tab_data'] = array(
+			'title' => $txt['mc_topicbans_view'],
+			'description' => $txt['mc_topicbans_view_desc']
+		);
+	}
+}

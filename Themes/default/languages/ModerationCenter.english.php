@@ -158,3 +158,7 @@ $txt['mc_topicban_duplicate'] = 'This ban already exists';
 $txt['mc_topicban_not_bannable'] = 'This member cannot be banned from a topic. The member is either a administrator, global moderator or board moderator.';
 $txt['mc_topicban_expire'] = 'Automatic expiration (in days):';
 $txt['mc_topicban_expire_explain'] = 'Set to 0 for no expiration. Note that ban expiration runs in daily maintenance around midnight so the actual ban time could be up to one day longer than specified.';
+$txt['mc_topicbans_by_member'] = 'By member';
+$txt['mc_topicbans_by_topic'] = 'By topic';
+$txt['mc_topicbans_view'] = 'View topic bans';
+$txt['mc_topicbans_view_desc'] = 'Browse existing topic bans';

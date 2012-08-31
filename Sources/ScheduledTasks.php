@@ -500,6 +500,8 @@ function scheduled_daily_maintenance()
 		DELETE FROM {db_prefix}messages_cache WHERE updated < {int:cutoff}',
 		array('cutoff' => time() - $modSettings['post_cache_cutoff'] * 86400));
 
+	// auto-expire topicbans (expires == 0 means the ban is permanent until lifted manually, so do not expire them)
+	smf_db_query('DELETE FROM {db_prefix}topicbans WHERE expires <> 0 AND expires <= UNIX_TIMESTAMP(NOW())');
 	HookAPI::callHook('sys_daily_maint');
 	// Log we've done it...
 	return true;

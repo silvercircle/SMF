@@ -61,14 +61,14 @@
 </div>
 <a id="lastPost"></a>
 {$C.template_hooks.display.below_posts}
-<div id="moderationbuttons">{$SUPPORT->button_strip($C.mod_buttons, 'right', $C.mod_buttons_style)}</div>
 {if $C.can_reply and !empty($O.display_quick_reply)}
 {/if} {* quick reply *}
   {include 'topic/quickreply.tpl'}
 {$C.template_hooks.display.footer}
 {* Show the lower breadcrumbs *}
 {include '../linktree.tpl'}
-<div class="plainbox" id="display_jump_to">&nbsp;</div>
+<div class="floatright smallpadding" id="display_jump_to">&nbsp;</div>
+<div id="moderationbuttons" class="mediumpadding floatleft nowrap">{$SUPPORT->button_strip($C.mod_buttons, 'left', $C.mod_buttons_style)}</div>
 {/block}
 {block footerscripts}
 {include 'topic/topic_js.tpl'}
