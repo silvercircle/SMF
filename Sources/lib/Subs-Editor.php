@@ -1837,8 +1837,8 @@ function create_control_verification(&$verificationOptions, $do_test = false)
 	if (empty($context['controls']['verification']))
 	{
 		// The template
-		if(!isset($verificationOptions['skip_template']))
-			loadTemplate('GenericControls');
+		//if(!isset($verificationOptions['skip_template']))
+		//	loadTemplate('GenericControls');
 
 		// Some javascript ma'am?
 		if (!empty($verificationOptions['override_visual']) || (!empty($modSettings['visual_verification_type']) && !isset($verificationOptions['override_visual'])))
