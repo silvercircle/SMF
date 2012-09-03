@@ -41,9 +41,11 @@
   </span>
   {$T.mlist_search_results}:&nbsp;{$C.search_params.search}
 </h1>
-<div class="pagesection pagelinks">
-  {$C.page_index}
-</div>
+{if isset($C.page_index)}
+  <div class="pagesection pagelinks">
+    {$C.page_index}
+  </div>
+{/if}
 {section name=items start=0 loop=100}
   {$_s = $SEARCHCONTEXT->getTopic()}
   {if $_s == false}
@@ -82,7 +84,7 @@
     </div>
   </div>
 {/section}
-{if !empty($C.topics)}
+{if !empty($C.topics) && !empty($C.page_index)}
   <div class="pagesection pagelinks">
     {$C.page_index}
   </div>

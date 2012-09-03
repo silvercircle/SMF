@@ -31,13 +31,16 @@
 <h1 class="bigheader">
   {$T.mlist_search_results}: {$C.search_params.search}
 </h1>
-<div class="pagesection pagelinks">
-  <span>{$C.page_index}</span>
-</div>
+{if isset($C.page_index)}
+  <div class="pagesection pagelinks">
+    <span>{$C.page_index}</span>
+  </div>
+{/if}
 {if empty($C.topics)}
   <div class="blue_container">({$T.search_no_results})</div>
 {/if}
 {$imgsrc = $C.clip_image_src}
+<div class="posts_container std">
 {section name=items start=0 loop=100}
   {$topic = $SEARCHCONTEXT->getTopic()}
   {if $topic == false}
@@ -83,7 +86,7 @@
       </div>
       <hr class="dashed" />
     {/if}
-    <div class="post" id="msg_{$ID}">
+    <div class="post fontstyle_{$U.font_class}" id="msg_{$ID}">
     {if isset($message.approved)}
       {if !$message.approved and $message.member.id != 0 and $message.member.id == $C.user.id}
       <div class="approve_post">
@@ -135,16 +138,20 @@
   </div>
   {/foreach}
 {/section}
-<div class="pagesection pagelinks">
-  <span>{$C.page_index}</span>
 </div>
+{if isset($C.page_index)}
+  <div class="pagesection pagelinks">
+    <span>{$C.page_index}</span>
+  </div>
+{/if}
 <br class="clear">
+{if isset($C.jump_to)}
 <div class="smalltext righttext" id="search_jump_to">&nbsp;</div>
 <script type="text/javascript"><!-- // --><![CDATA[
   if (typeof(window.XMLHttpRequest) != "undefined")
     aJumpTo[aJumpTo.length] = new JumpTo({
       sContainerId: "search_jump_to",
-      sJumpToTemplate: "<label class=\"smalltext\" for=\"%select_id%\">{$C.jump_to.label}:<" + "/label> %dropdown_list%",
+      sJumpToTemplate: '<label class="smalltext" for="%select_id%">{$C.jump_to.label}:<' + '/label> %dropdown_list%',
       iCurBoardId: 0,
       iCurBoardChildLevel: 0,
       sCurBoardName: "{$C.jump_to.board_name}",
@@ -156,3 +163,4 @@
     } );
     // ]]>
 </script>
+{/if}
