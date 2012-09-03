@@ -53,9 +53,7 @@ function EmailUser()
 	// Don't index anything here.
 	$context['robot_no_index'] = true;
 
-	// Load the template.
-	loadTemplate('SendTopic');
-
+	EoS_Smarty::loadTemplate('topic/send_or_report');
 	$sub_actions = array(
 		'email' => 'CustomEmail',
 		'sendtopic' => 'SendTopic',
@@ -75,6 +73,7 @@ function SendTopic()
 	// Check permissions...
 	isAllowedTo('send_topic');
 
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('send_report_content_area', 'topic/sendtopic');
 	// We need at least a topic... go away if you don't have one.
 	if (empty($topic))
 		fatal_lang_error('not_a_topic', false);
@@ -169,6 +168,7 @@ function CustomEmail()
 {
 	global $context, $modSettings, $user_info, $smcFunc, $txt, $scripturl, $sourcedir;
 
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('send_report_content_area', 'topic/custom_mail');
 	// Can the user even see this information?
 	if ($user_info['is_guest'] && !empty($modSettings['guest_hideContacts']))
 		fatal_lang_error('no_access', false);
