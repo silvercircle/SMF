@@ -341,7 +341,8 @@ function ReportToModerator()
 
 	// Show the inputs for the comment, etc.
 	loadLanguage('Post');
-	loadTemplate('SendTopic');
+	EoS_Smarty::loadTemplate('topic/send_or_report');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('send_report_content_area', 'topic/reporttm');
 
 	$context['comment_body'] = !isset($_POST['comment']) ? '' : trim($_POST['comment']);
 	$context['email_address'] = !isset($_POST['email']) ? '' : trim($_POST['email']);
