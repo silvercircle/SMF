@@ -38,7 +38,13 @@
             <span class="tinytext">{$T.mc_topicban_expire_explain}</span>
           </dt>
           <dd>
-            <input type="text" size="5" name="mc_expire" value="0" class="input_text" />
+            <input type="text" size="5" name="mc_expire" value="{$C.ban_data.expire}" class="input_text" />
+          </dd>
+          <dt>
+            <strong>{$T.mc_topicban_reason}</strong>
+          </dt>
+          <dd>
+            <input type="text" size="50" name="mc_reason" value="{$C.ban_data.reason}" class="input_text" />        
           </dd>
         </dl>
       {/if}

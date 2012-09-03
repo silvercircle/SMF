@@ -90,10 +90,10 @@ function ModerationMain($dont_call = false)
 					'label' => $txt['mc_topic_bans'],
 					'enabled' => $context['can_moderate_boards'],
 					'function' => 'TopicBans',
-					'subsections' => !$direct_topicban ? array(
+					/*'subsections' => !$direct_topicban ? array(
 						'bymember' => array($txt['mc_topicbans_by_member']),
 						'bytopic' => array($txt['mc_topicbans_by_topic']),
-					) : array(),
+					) : array(),*/
 				),
 			),
 		),
@@ -2074,13 +2074,22 @@ function TopicBans()
 		else
 			$context['op_errors'][] = $txt['mc_lift_topic_ban_invalid_member'];
 
+		// defaults
+		$context['ban_data'] = array(
+			'expire' => 0,
+			'reason' => ''
+		);
+		if(isset($_REQUEST['save'])) {
+			$context['ban_data']['expire'] = !empty($_POST['mc_expire']) ? (int)$_POST['mc_expire'] : 0;
+			$context['ban_data']['reason'] = !empty($_POST['mc_reason']) ? htmlspecialchars($_POST['mc_reason']) : '';
+		}
 		$context['ban_row'] = array();
 		// do not check this for admins - they can do whatever they want and even ban a moderator in his own board. Yes, admins are >> all :)
 		if($is_ban && !$user_info['is_admin']) {
 			if(isUserAllowedTo('moderate_forum', 0, $member) || isUserAllowedTo('moderate_board', $board_info['id'], $member))
 				$context['op_errors'][] = $txt['mc_topicban_not_bannable'];
 		}
-		$request = smf_db_query('SELECT t.id_topic, ba.id_member, ba.updated, m.subject FROM {db_prefix}topics AS t
+		$request = smf_db_query('SELECT t.id_topic, ba.id_member, ba.updated, ba.reason, m.subject FROM {db_prefix}topics AS t
 			LEFT JOIN {db_prefix}topicbans AS ba ON (ba.id_topic = t.id_topic AND ba.id_member = {int:member}) 
 			LEFT JOIN {db_prefix}messages AS m ON (m.id_msg = t.id_first_msg)
 			WHERE t.id_topic = {int:topic}', 
@@ -2088,13 +2097,21 @@ function TopicBans()
 
 		if(mysql_num_rows($request) > 0) {
 			$row = mysql_fetch_assoc($request);
+			if(!empty($row['reason']) && strpos($row['reason'], '|'))
+				list($msg, $reason) = explode('|', $row['reason']);
+			else {
+				$msg = 0;
+				$reason = '';
+			}
 			$context['ban_row'] = array(
 				'id_member' => $row['id_member'],
 				'id_topic' => $row['id_topic'],
 				'subject' => $row['subject'],
 				'ban_time' => timeformat($row['updated']),
 				'href' => URL::topic($topic, $row['subject']),
-				'is_banned' => $row['id_member']
+				'is_banned' => $row['id_member'],
+				'msg' => $msg,
+				'reason' => $reason
 			);
 
 			if($_REQUEST['sa'] == 'ban' && $context['ban_row']['is_banned'])
@@ -2110,22 +2127,26 @@ function TopicBans()
 		// save it
 		$back_to_topic = URL::topic($topic, $context['ban_row']['subject'], 0, false, '.msg' . (int)$_REQUEST['mid'], '#msg' . (int)$_REQUEST['mid']);
 		if(empty($context['op_errors'])) {
-			if(isset($_REQUEST['save'])) {
+			if(isset($_REQUEST['save']) && $is_ban && empty($_POST['mc_reason']))
+				$context['op_errors'][] = $txt['mc_topicban_missing_reason'];
+			
+			if(isset($_REQUEST['save']) && empty($context['op_errors'])) {
 				checkSession();
 				$context['success'] = 'Success';
 				$context['back_url'] = $back_to_topic;
 				$context['back_label'] = $txt['mc_lift_ban_backtotopic'];
 				if($is_ban) {
 					$ban_expire = isset($_REQUEST['mc_expire']) && !empty($_REQUEST['mc_expire']) ? (int)$_REQUEST['mc_expire'] * 86400 : 0;
+					$ban_reason = (isset($_REQUEST['mid']) && !empty($_REQUEST['mid']) ? (int)$_REQUEST['mid'] : 0) . '|' . htmlspecialchars($_POST['mc_reason']);
 					smf_db_insert('',
 						'{db_prefix}topicbans',
 						array(
-							'id_topic' => 'int', 'id_member' => 'int', 'updated' => 'int', 'expires' => 'int'
+							'id_topic' => 'int', 'id_member' => 'int', 'updated' => 'int', 'expires' => 'int', 'reason' => 'string-255'
 						),
 						array(
-							$topic, $member, $context['time_now'], $ban_expire ? $context['time_now'] + $ban_expire : 0
+							$topic, $member, $context['time_now'], $ban_expire ? $context['time_now'] + $ban_expire : 0, $ban_reason
 						),
-						array('id_topic')
+						array('id')
 					);
 				}
 				else {
@@ -2150,17 +2171,114 @@ function TopicBans()
 	}
 	// create a list of topicbans, either by topic id
 	else {
-		EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/topicbans_list');
-		if($user_info['is_admin'] || allowedTo('moderate_forum'))
+		global $user_info, $context;
+		$boards = array();
+		if($user_info['is_admin'] || allowedTo('moderate_forum'))	// admins and global moderator can see all topic bans
 			$board_query = '1=1';
 		else {
 			$boards = boardsAllowedTo('moderate_board');
+			if(empty($boards))
+				fatal_lang_error('no_access', true);		// we cannot moderate any board, so we have no business in being here
 			$board_query = 'b.id_board IN ({array_int:boards})';
 		}
+		$member = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
+		$topic = isset($_REQUEST['t']) ? (int)$_REQUEST['t'] : 0;
+		$start = isset($_REQUEST['start']) ? (int)$_REQUEST['start'] : 0;
+		$mode = isset($_REQUEST['sa']) ? $_REQUEST['sa'] : 'all';
+		$perpage = 25;
+
+		if($mode !== 'bymember' && $mode !== 'bytopic' && $mode !== 'all')
+			$mode = 'all';
+
+		$base_query = '1=1';
+		if($mode === 'bymember')
+			$base_query = $member ? 'ba.id_member = {int:member}' : $base_query;
+		else
+			$base_query = $topic ? 'ba.id_topic = {int:topic}' : $base_query;
+
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/topicbans_list');
 		$context['page_title'] = $txt['mc_topicbans_view'];
 		$context[$context['moderation_menu_name']]['tab_data'] = array(
 			'title' => $txt['mc_topicbans_view'],
 			'description' => $txt['mc_topicbans_view_desc']
 		);
+
+		$context['topicban_view_desc'] = $txt['mc_view_topicbans_all'];
+		if($mode === 'bytopic' && $topic == 0) {
+			$context['error'] = $txt['mc_topicbans_notopic'];
+			return;
+		}
+		else if($mode === 'bymember' && $member == 0) {
+			$context['error'] = $txt['mc_topicbans_nomember'];
+			return;	
+		}
+		$request = smf_db_query('SELECT COUNT(ba.id_topic) FROM {db_prefix}topicbans AS ba
+				LEFT JOIN {db_prefix}topics AS t ON(t.id_topic = ba.id_topic)
+				LEFT JOIN {db_prefix}boards AS b ON(b.id_board = t.id_board)
+				WHERE ' . $base_query . ' AND ' . $board_query,
+			array('member' => $member, 'topic' => $topic, 'boards' => $boards)
+		);
+		list($context['total_items']) = mysql_fetch_row($request);
+		mysql_free_result($request);
+
+		$pages_base = URL::parse('?action=moderate;area=topicbans;sa=' . $mode);
+		$pages_base = URL::addParam($pages_base, 'start=%1$d', true);
+
+		$context['pages'] = $context['total_items'] ? constructPageIndex($pages_base, $start, $context['total_items'], $perpage, true) : '';
+
+		$request = smf_db_query('SELECT ba.*, mem.real_name, m.subject FROM {db_prefix}topicbans AS ba
+				LEFT JOIN {db_prefix}topics AS t ON(t.id_topic = ba.id_topic)
+				LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = ba.id_member)
+				LEFT JOIN {db_prefix}messages AS m ON(m.id_msg = t.id_first_msg)
+				LEFT JOIN {db_prefix}boards AS b ON(b.id_board = t.id_board)
+				WHERE ' . $base_query . ' AND ' . $board_query . ' LIMIT {int:start}, {int:perpage}',
+			array('member' => $member, 'topic' => $topic, 'boards' => $boards, 'start' => $start, 'perpage' => $perpage)
+		);
+		$desc_done = 0;
+
+		while($row = mysql_fetch_assoc($request)) {
+			if(!$desc_done) {
+				switch($mode) {
+					case 'bymember':
+						$link = '<a href="' . URL::user($member, $row['real_name']) . '" onclick="getMcard(' . $member . ');return(false)">' . $row['real_name'] . '</a>';
+						$context['topicban_view_desc'] = sprintf($txt['mc_view_topicbans_bymember'], $link);
+						break;
+					case 'bytopic':
+						$link = '<a href="' . URL::topic($topic, $row['subject'], 0, false) . '">' . $row['subject'] . '</a>';
+						$context['topicban_view_desc'] = sprintf($txt['mc_view_topicbans_bytopic'], $link);
+						break;
+				}
+				$desc_done = true;
+			}
+			$m_href = URL::user($row['id_member'], $row['real_name']);
+			$t_href = URL::topic($row['id_topic'], $row['subject'], 0, false);
+			
+			if(!empty($row['reason']) && strpos($row['reason'], '|'))
+				list($msg, $reason) = explode('|', $row['reason']);
+			else
+				$reason = '';
+
+			$timediff = $row['expires'] - $context['time_now'];
+			$context['topicbans'][] = array(
+				'id' => $row['id'],
+				'id_member' => $row['id_member'],
+				'member' => array(
+					'id' => $row['id_member'],
+					'name' => $row['real_name'],
+					'href' => $m_href,
+					'link' => '<a href="' . $m_href . '" onclick="getMcard(' . $row['id_member'] . ');return(false)">' . $row['real_name'] . '</a>'
+				),
+				'topic' => array(
+					'href' => $t_href,
+					'subject' => $row['subject'],
+					'id' => $row['id_topic'],
+					'link' => '<a href="' . $t_href . '">' . $row['subject'] . '</a>'
+				),
+				'reason' => $txt['mc_topicban_reason'] . ': ' . $reason . ' (<a href="' . URL::parse('?msg=' . trim($msg) . ';perma') . '">' . $txt['mc_topicban_reason_see'] . '</a>)',
+				'issue_time' => timeformat($row['updated']),
+				'expires' => empty($row['expires']) ? $txt['mc_topicban_is_perma'] : ($timediff > 0 ? (int)($timediff / 3600) . ' ' . $txt['mc_topicban_hours_left'] : $txt['mc_topicban_expires'])
+			);
+		}
+		mysql_free_result($request);
 	}
 }

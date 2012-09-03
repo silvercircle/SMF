@@ -178,6 +178,9 @@
       </dt>
       <dd>
         <input type="text" name="warn_reason" id="warn_reason" value="{$C.warning_data.reason}" size="50" style="width: 80%;" class="input_text" />
+        {if isset($C.warning_data.msg) and !empty($C.warning_data.msg)}
+          <input type="hidden" name="warn_msg" id="warn_msg" value="{$C.warning_data.msg}" size="10" style="width: 80%;" class="input_text" />
+        {/if}
       </dd>
       </dl>
       <hr>

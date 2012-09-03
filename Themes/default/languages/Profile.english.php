@@ -387,6 +387,7 @@ $txt['profile_error_signature_max_smileys'] = 'You are not allowed to use more t
 $txt['profile_error_signature_disabled_bbc'] = 'The following BBC is not allowed within your signature: %1$s';
 
 $txt['profile_view_warnings'] = 'View Warnings';
+$txt['profile_view_topicbans'] = 'View topic bans';
 $txt['profile_issue_warning'] = 'Issue a Warning';
 $txt['profile_warning_level'] = 'Warning Level';
 $txt['profile_warning_desc'] = 'From this section you can adjust the user\'s warning level and issue them with a written warning if necessary. You can also track their warning history and view the effects of their current warning level as determined by the administrator.<br><br>Additionally, if this warning is attached to a message posted by the member, you may issue a topic ban.';

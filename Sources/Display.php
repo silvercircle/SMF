@@ -1293,7 +1293,7 @@ function Display()
 		enqueueThemeScript('drafts', 'scripts/drafts.js', true);
 
 	$context['can_moderate_member'] = $context['can_issue_warning'] || $context['can_moderate_board'];
-	$context['topic_has_banned_members_msg'] = $context['topic_banned_members_count'] > 0 && $context['can_moderate_board'] ? sprintf($txt['topic_has_bans_msg'], URL::parse('?action=moderate;area=topicbans;sa=bytopic')) : '';
+	$context['topic_has_banned_members_msg'] = $context['topic_banned_members_count'] > 0 && $context['can_moderate_board'] ? sprintf($txt['topic_has_bans_msg'], URL::parse('?action=moderate;area=topicbans;sa=bytopic;t=' . $topic)) : '';
 
 	if(EoS_Smarty::isActive()) {
 		if(isset($context['poll'])) {

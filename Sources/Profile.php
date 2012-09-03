@@ -32,6 +32,9 @@ function ModifyProfile($post_errors = array())
 	global $txt, $scripturl, $user_info, $context, $sourcedir, $user_profile, $cur_profile;
 	global $modSettings, $memberContext, $profile_vars, $post_errors, $user_settings;
 
+	$boards = boardsAllowedTo('moderate_board');
+	$is_mod = !empty($boards) || $user_info['is_admin'] || allowedTo('moderate_forum');
+
 	EoS_Smarty::setActive();
 	// Don't reload this as we may have processed error strings.
 	if (empty($post_errors))
@@ -181,6 +184,16 @@ function ModifyProfile($post_errors = array())
 					'permission' => array(
 						'own' => 'profile_view_own',
 						'any' => 'issue_warning',
+					),
+				),
+				'view_topicbans' => array(
+					'label' => $txt['profile_view_topicbans'],
+					'enabled' => $is_mod,
+					'file' => 'Profile.php',
+					'function' => 'viewTopicBans',
+					'permission' => array(
+						'own' => 'profile_view_any',
+						'any' => 'profile_view_any',
 					),
 				),
 			),
@@ -817,6 +830,12 @@ function loadCustomFields($memID, $area = 'summary')
 		);
 	}
 	mysql_free_result($request);
+}
+
+
+function viewTopicBans($memID)
+{
+	redirectexit('action=moderate;area=topicbans;sa=bymember;m=' . $memID);
 }
 
 class ProfileContext

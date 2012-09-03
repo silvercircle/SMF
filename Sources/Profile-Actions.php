@@ -225,15 +225,16 @@ function issueWarning($memID)
 			$context['profile_updated'] = $context['user']['is_owner'] ? $txt['profile_updated_own'] : $txt['profile_warning_success'];
 			// if we want to issue a topicban, do it now
 			if(isset($_POST['warn_topicban']) && !empty($_POST['warn_topicban']) && isset($_POST['warn_topicban_id_topic']) && !empty($_POST['warn_topicban_id_topic'])) {
+				$ban_reason = (isset($_REQUEST['warn_msg']) ? (int)$_REQUEST['warn_msg'] : 0) . '|' . $_POST['warn_reason'];
 				$ban_expires = isset($_POST['warn_topicban_expire']) && !empty($_POST['warn_topicban_expire']) ? $context['time_now'] + 86400 * (int)$_POST['warn_topicban_expire'] : 0;
 				smf_db_insert('', '{db_prefix}topicbans',
 					array(
-						'id_topic' => 'int', 'id_member' => 'int', 'updated' => 'int', 'expires' => 'int'
+						'id_topic' => 'int', 'id_member' => 'int', 'updated' => 'int', 'expires' => 'int', 'reason' => 'string'
 					),
 					array(
-						$_POST['warn_topicban_id_topic'], $memID, $context['time_now'], $ban_expires
+						$_POST['warn_topicban_id_topic'], $memID, $context['time_now'], $ban_expires, $ban_reason
 					),
-					array('id_topic')		
+					array('id')		
 				);
 			}
 		}
@@ -256,7 +257,8 @@ function issueWarning($memID)
 				'notify_body' => isset($_POST['warn_body']) ? $_POST['warn_body'] : '',
 				'topicban' => isset($_POST['warn_topicban']) && !empty($_POST['warn_topicban']) ? 1 : 0,
 				'topicban_expire' => isset($_POST['warn_topicban_expire']) && !empty($_POST['warn_topicban_expire']) ? (int)$_POST['warn_topicban_expire'] : 0,
-				'topicban_id_topic' => isset($_POST['warn_topicban_id_topic']) ? (int)$_POST['warn_topicban_id_topic'] : 0
+				'topicban_id_topic' => isset($_POST['warn_topicban_id_topic']) ? (int)$_POST['warn_topicban_id_topic'] : 0,
+				'msg' => isset($_POST['warn_msg']) && !empty($_POST['warn_msg']) ? (int)$_POST['warn_msg'] : 0
 			);
 		}
 
@@ -307,6 +309,7 @@ function issueWarning($memID)
 		if (mysql_num_rows($request) != 0)
 		{
 			$context['warning_for_message'] = (int) $_REQUEST['msg'];
+			$context['warning_data']['msg'] = $context['warning_for_message'];
 			list ($context['warned_message_subject'], $context['warning_for_topic']) = mysql_fetch_row($request);
 		}
 		mysql_free_result($request);

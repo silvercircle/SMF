@@ -181,10 +181,12 @@ CREATE TABLE {$db_prefix}log_online_today (
 ) ENGINE=MyISAM;
 
 CREATE TABLE {$db_prefix}topicbans (
+  id int(10) unsigned NOT NULL auto_increment,
   id_topic MEDIUMINT(8) unsigned NOT NULL default '0',
   id_member MEDIUMINT(8) UNSIGNED NOT NULL default '0',
   updated INT(10) UNSIGNED NOT NULL default '0',
   expires INT(10) UNSIGNED NOT NULL default '0',
+  reason VARCHAR(255) NOT NULL default '',
   PRIMARY KEY (id_topic, id_member),
   KEY updated (id_topic, updated),
   KEY updated1 (id_member, updated)
