@@ -198,8 +198,6 @@ $txt['permissionname_delete_replies'] = 'Delete replies to own topics';
 $txt['permissionhelp_delete_replies'] = 'This permission allows a user that started a topic to remove all replies to their topic.';
 $txt['permissionname_announce_topic'] = 'Announce topic';
 $txt['permissionhelp_announce_topic'] = 'This allows a user to send an announcement e-mail about a topic to all members or to a few membergroups.';
-$txt['permissionname_manage_own_topic'] = 'Manage own topic';
-$txt['permissionhelp_manage_own_topic'] = 'This permission allows a user to manage his own topics. When granted, a user is allowed to stick/lock or remove own topics. He can also delete and modify posts made by others in such a topic. Use with care!<br><br>If you allow this, it might be a good idea to have a topic and post recycle forum so that moderators and administrators could revert deletions made by a user.';
 
 $txt['permissiongroup_post'] = 'Posts';
 $txt['permissionname_delete'] = 'Delete posts';

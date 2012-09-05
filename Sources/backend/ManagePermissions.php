@@ -1519,7 +1519,6 @@ function loadAllPermissions($loadType = 'classic')
 			'modify_replies' => array(false, 'topic', 'moderate'),
 			'delete_replies' => array(false, 'topic', 'moderate'),
 			'announce_topic' => array(false, 'topic', 'moderate'),
-			'manage_own_topic' => array(false, 'topic', 'moderate'),
 			'delete' => array(true, 'post', 'modify', 'moderate'),
 			'modify' => array(true, 'post', 'modify', 'moderate'),
 			'report_any' => array(false, 'post', 'participate'),

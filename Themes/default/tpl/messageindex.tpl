@@ -14,7 +14,7 @@
 {block content}
 {include 'generics.tpl'}
 {include 'boardbits.tpl'}
-{$widgetstyle = 'framed_region cleantop tinypadding'}
+{$widgetstyle = 'cleantop nopadding borderless'}
 <div id="messageindex">
 <a id="top"></a>
 <h1 class="bigheader">{$C.name}</h1>
@@ -26,7 +26,7 @@
 {if !empty($C.boards) and (!empty($O.show_children) or $C.start == 0)}
   <br>
   {call collapser id=$C.current_board|cat:'_childboards' title=$T.parent_boards widgetstyle=$widgetstyle}
-  <div class="framed_region smallpadding">
+  <div class="framed_region child_boards">
     <ol id="board_{$C.current_board}_children" class="commonlist category">
     {$C.alt_row = false}
     {foreach from=$C.boards item=board}

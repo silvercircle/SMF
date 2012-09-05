@@ -8,7 +8,7 @@
   </div>
   {$bodyclass = 'cContainer_body'}
   {$bodystyle = ''}
-  <div id="{$id}_body" class="{$bodyclass}" {$bodystyle}>
+  <div id="{$id}_body" class="{$bodyclass} {$widgetstyle}" {$bodystyle}>
   <script>
   // <![CDATA[
 

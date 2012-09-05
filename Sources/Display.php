@@ -1229,7 +1229,6 @@ function Display()
 
 	$context['can_add_tags'] = (($context['user']['started'] && allowedTo('smftags_add')) || allowedTo('smftags_manage'));
 	$context['can_delete_tags'] = (($context['user']['started'] && allowedTo('smftags_del')) || allowedTo('smftags_manage'));
-	$context['can_manage_own'] = ($context['user']['started'] && allowedTo('manage_own_topics'));
 	$context['can_moderate_board'] = allowedTo('moderate_board');
 	$context['can_modify_any'] = allowedTo('modify_any');
 	$context['can_modify_replies'] = allowedTo('modify_replies');
@@ -1239,9 +1238,6 @@ function Display()
 	$context['can_delete_own'] = allowedTo('delete_own');
 	
 	$context['use_share'] = !$user_info['possibly_robot'] && allowedTo('use_share') && ($context['user']['is_guest'] || (empty($options['use_share_bar']) ? 1 : !$options['use_share_bar']));
-	
-	$context['can_lock'] |= $context['can_manage_own'];
-	$context['can_sticky'] |= $context['can_manage_own'];
 	
 	$context['can_unapprove'] = $context['can_approve'] && !empty($modSettings['postmod_active']);
 	$context['can_profile_view_any'] = allowedTo('profile_view_any');
@@ -1275,7 +1271,7 @@ function Display()
 	$context['can_restore_msg'] &= !empty($modSettings['recycle_enable']) && $modSettings['recycle_board'] == $board && !empty($topicinfo['id_previous_topic']);
 
 	if($context['is_banned_from_topic'])
-		$context['can_add_tags'] = $context['can_delete_tags'] = $context['can_manage_own'] = $context['can_modify_any'] = $context['can_modify_replies'] = $context['can_modify_own'] = $context['can_delete_any'] = $context['can_delete_replies'] = $context['can_delete_own'] = $context['can_lock'] = $context['can_sticky'] = $context['calendar_post'] = $context['can_add_poll'] = $context['can_remove_poll'] = $context['can_reply'] = $context['can_reply_unapproved'] = $context['can_quote'] = $context['can_remove_post'] = false;
+		$context['can_add_tags'] = $context['can_delete_tags'] = $context['can_modify_any'] = $context['can_modify_replies'] = $context['can_modify_own'] = $context['can_delete_any'] = $context['can_delete_replies'] = $context['can_delete_own'] = $context['can_lock'] = $context['can_sticky'] = $context['calendar_post'] = $context['can_add_poll'] = $context['can_remove_poll'] = $context['can_reply'] = $context['can_reply_unapproved'] = $context['can_quote'] = $context['can_remove_post'] = false;
 	// Load up the "double post" sequencing magic.
 	if (!empty($options['display_quick_reply']))
 	{
@@ -1376,7 +1372,7 @@ function prepareDisplayContext($reset = false)
 	$message['subject'] = $message['subject'] != '' ? $message['subject'] : $txt['no_subject'];
 
 	// Are you allowed to remove at least a single reply?
-	$context['can_remove_post'] |= $context['can_delete_own'] && (empty($modSettings['edit_disable_time']) || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 >= time()) && ($message['id_member'] == $user_info['id'] || $context['can_manage_own']);
+	$context['can_remove_post'] |= $context['can_delete_own'] && (empty($modSettings['edit_disable_time']) || $message['poster_time'] + $modSettings['edit_disable_time'] * 60 >= time()) && ($message['id_member'] == $user_info['id']);
 
 	// If it couldn't load, or the user was a guest.... someday may be done with a guest table.
 	if (!loadMemberContext($message['id_member'], true))
@@ -1389,7 +1385,7 @@ function prepareDisplayContext($reset = false)
 		$memberContext[$message['id_member']]['email'] = $message['poster_email'];
 		$memberContext[$message['id_member']]['show_email'] = showEmailAddress(true, 0);
 		$memberContext[$message['id_member']]['is_guest'] = true;
-		$memberContext[$message['id_member']]['is_banned_from_topic'] = false;
+		$memberContext[$message['id_member']]['is_banned_from_topic'] = $memberContext[$message['id_member']]['can_see_warning'] = false;
 	}
 	else
 	{

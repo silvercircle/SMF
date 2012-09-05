@@ -741,6 +741,8 @@ ol.commonlist.category {
 	background-color:#f5f5f5;
 	padding-top:0;
 	margin: 0;
+	border:1px solid #dde;
+	border-top:0;
 }
 
 .gradient_darken_down, span.button, ul.buttonlist a, input[type=button], input[type=submit], .bbc_editor_button:hover, div.keyinfo.std, div.keyinfo.lean, div.keyinfo.pm, div.avatar.pm, #bbcBox_message, .orange_container {
@@ -757,6 +759,9 @@ div.keyinfo.watched {
 }
 .topicrow, .tablerow {
 	background: #f5f5f5;
+}
+li.boardrow {
+	border-bottom: 0 !important;
 }
 .topicrow.alternate, .boardrow.alternate, .tablerow.alternate {
 	background: #eaecf2;
@@ -2284,12 +2289,13 @@ table.cleantop {
 	background:#f5f5f5;
 }
 #boardindex .framed_region {
-	padding:0 4px 4px 4px;
+	padding:0 0 4px 0;
 }
 #boardindex .framed_region.root_cat {
-	padding:2px;
 	border-top:1px solid #ddd;
-	border-bottom:1px solid #ddd;
+}
+div.framed_region.child_boards {
+	padding:0 !important;
 }
 span.arrow {
 	line-height: 16px;
@@ -2358,13 +2364,13 @@ div.td_children {
 
 div.td_children table {
 	border: 0;
-	background:#ededed;
+	/*background:#ededed;*/
 	padding:1px 3px;
-	border:1px dotted #ddd;
+	/*border:1px dotted #ddd;*/
 }
 li.boardrow.alternate div.td_children table {
-	background:#e1e3e7;
-	border:1px dotted #ccc;
+	/*background:#e1e3e7;
+	border:1px dotted #ccc;*/
 }
 div.td_children td {
 	vertical-align: top;

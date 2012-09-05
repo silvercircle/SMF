@@ -296,7 +296,7 @@
       </div>
     {/if}
     <br>
-    {call collapser id='editor_options' title=$T.post_additionalopt}
+    {call collapser id='editor_options' title=$T.post_additionalopt widgetstyle=''}
     <div id="postMoreOptions" class="smalltext">
       <ul class="post_options">
         {if $C.can_notify}
