@@ -52,8 +52,8 @@ function Notify()
 	// What do we do?  Better ask if they didn't say..
 	if (empty($_GET['sa']))
 	{
-		// Load the template, but only if it is needed.
-		loadTemplate('Notify');
+		Eos_Smarty::loadTemplate('generic_skeleton');
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('generic_content_area', 'notify/notify_topic');
 
 		// Find out if they have notification set for this topic already.
 		$request = smf_db_query( '
@@ -125,7 +125,8 @@ function BoardNotify()
 	if (empty($_GET['sa']))
 	{
 		// We're gonna need the notify template...
-		loadTemplate('Notify');
+		Eos_Smarty::loadTemplate('generic_skeleton');
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('generic_content_area', 'notify/notify_board');
 
 		// Find out if they have notification set for this topic already.
 		$request = smf_db_query( '
@@ -146,7 +147,6 @@ function BoardNotify()
 		$context['board_href'] = $scripturl . '?board=' . $board . '.' . $_REQUEST['start'];
 		$context['start'] = $_REQUEST['start'];
 		$context['page_title'] = $txt['notification'];
-		$context['sub_template'] = 'notify_board';
 
 		return;
 	}

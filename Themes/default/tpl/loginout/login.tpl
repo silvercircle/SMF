@@ -1,5 +1,3 @@
-{extends "base.tpl"}
-{block content}
 <script type="text/javascript" src="{$S.default_theme_url}/scripts/sha1.js"></script>
   <form action="{$SCRIPTURL}?action=login2" name="frmLogin" id="frmLogin" method="post" accept-charset="UTF-8" {(empty($C.disable_login_hashing)) ? " onsubmit=\"hashLoginPassword(this, '{$C.session_id}');\" " : ''}>
     <div class="login">
@@ -62,4 +60,3 @@
       document.forms.frmLogin.{(isset($C.default_username) and $C.default_username != '') ? 'passwrd' : 'user'}.focus();
     // ]]>
   </script>
-{/block}

@@ -267,7 +267,8 @@ function setPassword2()
 
 	HookAPI::callHook('integrate_reset_pass', array($username, $username, $_POST['passwrd1']));
 
-	EoS_Smarty::loadTemplate('loginout/login');
+	EoS_Smarty::loadTemplate('generic_skeleton');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('generic_content_area', 'loginout/login');
 	$context += array(
 		'page_title' => $txt['reminder_password_set'],
 		'default_username' => $username,
@@ -386,7 +387,8 @@ function SecretAnswer2()
 	HookAPI::callHook('integrate_reset_pass', array($row['member_name'], $row['member_name'], $_POST['passwrd1']));
 
 	// Tell them it went fine.
-	EoS_Smarty::loadTemplate('loginout/login');
+	EoS_Smarty::loadTemplate('generic_skeleton');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('generic_content_area', 'loginout/login');
 	$context += array(
 		'page_title' => $txt['reminder_password_set'],
 		'default_username' => $row['member_name'],

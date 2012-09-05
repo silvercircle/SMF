@@ -1,5 +1,3 @@
-{extends "base.tpl"}
-{block content}
 <script type="text/javascript" src="{$S.default_theme_url}/scripts/sha1.js"></script>
 <form action="{$SCRIPTURL}{$C.get_data}" method="post" accept-charset="UTF-8" name="frmLogin" id="frmLogin" onsubmit="hashAdminPassword(this, {'\''|cat:$C.user.username|cat:'\', \''|cat:$C.session_id|cat:'\');'}">
   <div class="login" id="admin_login">
@@ -26,4 +24,3 @@
     document.forms.frmLogin.admin_pass.focus();
   // ]]>
 </script>
-{/block}

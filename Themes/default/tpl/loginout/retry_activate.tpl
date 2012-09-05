@@ -1,5 +1,3 @@
-{extends "base.tpl"}
-{block content}
 <form action="{$SCRIPTURL}?action=activate;u={$C.member_id}" method="post" accept-charset="UTF-8">
   <div class="cat_bar">
     <h3>{$C.page_title}</h3>
@@ -16,4 +14,3 @@
   <p><input type="submit" value="{$T.invalid_activation_submit}" class="default" /></p>
   </div>
 </form>
-{/block}

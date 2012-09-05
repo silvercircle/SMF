@@ -96,7 +96,7 @@
         </div>
       </fieldset>
       {if empty($C.search_params.topic)}
-          {call collapser id='search_boards' title=$T.choose_board bodyclass='flat_container'}
+          {call collapser id='search_boards' title=$T.choose_board bodyclass='flat_container' widgetstyle=''}
           <fieldset class="flow_hidden">
             <div>
               <div class="flow_auto" id="searchBoardsExpand">

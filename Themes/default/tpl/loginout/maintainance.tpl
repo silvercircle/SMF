@@ -1,5 +1,3 @@
-{extends "base.tpl"}
-{block content}
 <script type="text/javascript" src="{$S.default_theme_url}/scripts/sha1.js"></script>
 <form action="{$SCRIPTURL}?action=login2" method="post" accept-charset="UTF-8" {(empty($C.disable_login_hashing)) ? " onsubmit=\"hashLoginPassword(this, '{$C.session_id}');\" " : ''}>
   <div class="login" id="maintenance_mode">
@@ -31,4 +29,3 @@
     <input type="hidden" name="hash_passwrd" value="" />
   </div>
 </form>
-{/block}

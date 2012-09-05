@@ -521,7 +521,8 @@ function Activate()
 			fatal_lang_error('no_access', false);
 
 		$context['member_id'] = 0;
-		EoS_Smarty::loadTemplate('loginout/resend');
+		EoS_Smarty::loadTemplate('generic_skeleton');
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('generic_content_area', 'loginout/resend');
 		$context['page_title'] = $txt['invalid_activation_resend'];
 		$context['can_activate'] = empty($modSettings['registration_method']) || $modSettings['registration_method'] == 1;
 		$context['default_username'] = isset($_GET['user']) ? $_GET['user'] : '';
@@ -545,7 +546,8 @@ function Activate()
 	// Does this user exist at all?
 	if (mysql_num_rows($request) == 0)
 	{
-		EoS_Smarty::loadTemplate('loginout/retry_activate');
+		EoS_Smarty::loadTemplate('generic_skeleton');
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('generic_content_area', 'loginout/retry_activate');
 		$context['page_title'] = $txt['invalid_userid'];
 		$context['member_id'] = 0;
 
@@ -626,8 +628,8 @@ function Activate()
 			fatal_error($txt['registration_not_approved'] . ' <a href="' . $scripturl . '?action=activate;user=' . $row['member_name'] . '">' . $txt['here'] . '</a>.', false);
 		}
 
-		EoS_Smarty::loadTemplate('loginout/retry_activate');
-		//$context['sub_template'] = 'retry_activate';
+		EoS_Smarty::loadTemplate('generic_skeleton');
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('generic_content_area', 'loginout/retry_activate');
 		$context['page_title'] = $txt['invalid_activation_code'];
 		$context['member_id'] = $row['id_member'];
 
@@ -657,8 +659,8 @@ function Activate()
 		}
 		adminNotify('activation', $row['id_member'], $row['member_name'], $actid, ACT_NEWMEMBER);
 	}
-
-	EoS_Smarty::loadTemplate('loginout/login');
+	EoS_Smarty::loadTemplate('generic_skeleton');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('generic_content_area', 'loginout/login');
 	$context += array(
 		'page_title' => $txt['registration_successful'],
 		'sub_template' => 'login',

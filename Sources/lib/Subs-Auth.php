@@ -206,8 +206,8 @@ function KickGuest()
 	global $txt, $context;
 
 	loadLanguage('Login');
-	EoS_Smarty::loadTemplate('loginout/login');
-
+	EoS_Smarty::loadTemplate('generic_skeleton');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('generic_content_area', 'loginout/login');
 	// Never redirect to an attachment
 	if (strpos($_SERVER['REQUEST_URL'], 'dlattach') === false)
 		$_SESSION['login_url'] = $_SERVER['REQUEST_URL'];
@@ -222,7 +222,8 @@ function InMaintenance()
 	global $txt, $mtitle, $mmessage, $context;
 
 	loadLanguage('Login');
-	EoS_Smarty::loadTemplate('loginout/maintainance');
+	EoS_Smarty::loadTemplate('generic_skeleton');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('generic_content_area', 'loginout/maintainance');
 
 	// Send a 503 header, so search engines don't bother indexing while we're in maintenance mode.
 	header('HTTP/1.1 503 Service Temporarily Unavailable');
@@ -238,7 +239,8 @@ function adminLogin()
 	global $context, $scripturl, $txt, $user_info, $user_settings;
 
 	loadLanguage('Admin');
-	EoS_Smarty::loadTemplate('loginout/adminlogin');
+	EoS_Smarty::loadTemplate('generic_skeleton');
+	EoS_Smarty::getConfigInstance()->registerHookTemplate('generic_content_area', 'loginout/adminlogin');
 
 	// They used a wrong password, log it and unset that.
 	if (isset($_POST['admin_hash_pass']) || isset($_POST['admin_pass']))

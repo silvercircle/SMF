@@ -124,6 +124,7 @@
 {/if}
 <br class="clear">
 <div class="smalltext righttext" id="search_jump_to">&nbsp;</div>
+{if isset($C.jump_to)}
 <script type="text/javascript"><!-- // --><![CDATA[
   if (typeof(window.XMLHttpRequest) != "undefined")
     aJumpTo[aJumpTo.length] = new JumpTo({
@@ -140,3 +141,4 @@
     } );
   // ]]>
 </script>
+{/if}
