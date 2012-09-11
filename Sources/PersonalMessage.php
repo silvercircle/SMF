@@ -860,10 +860,13 @@ function MessageFolder()
 	$context['can_send_pm'] = allowedTo('pm_send');
 	$context['page_title'] = $txt['pm_inbox'];
 
-    $context['conversation_buttons'] = array(
-        'reply' => array('text' => 'reply_to_all', 'image' => 'reply.gif', 'lang' => true, 'url' => $scripturl . '?action=pm;sa=send;f=' . $context['folder'] . ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '') . ';pmsg=' . $context['current_pm'] . ';u=all', 'active' => true),
-        'delete' => array('text' => 'delete_conversation', 'image' => 'delete.gif', 'lang' => true, 'url' => $scripturl . '?action=pm;sa=pmactions;pm_actions[' . $context['current_pm'] . ']=delete;conversation;f=' . $context['folder'] . ';start=' . $context['start'] . ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '') . ';' . $context['session_var'] . '=' . $context['session_id'], 'custom' => 'onclick="return confirm(\'' . addslashes($txt['remove_message']) . '?\');"'),
-    );
+    if(isset($context['current_pm']))
+    	$context['conversation_buttons'] = array(
+        	'reply' => array('text' => 'reply_to_all', 'image' => 'reply.gif', 'lang' => true, 'url' => $scripturl . '?action=pm;sa=send;f=' . $context['folder'] . ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '') . ';pmsg=' . $context['current_pm'] . ';u=all', 'active' => true),
+        	'delete' => array('text' => 'delete_conversation', 'image' => 'delete.gif', 'lang' => true, 'url' => $scripturl . '?action=pm;sa=pmactions;pm_actions[' . $context['current_pm'] . ']=delete;conversation;f=' . $context['folder'] . ';start=' . $context['start'] . ($context['current_label_id'] != -1 ? ';l=' . $context['current_label_id'] : '') . ';' . $context['session_var'] . '=' . $context['session_id'], 'custom' => 'onclick="return confirm(\'' . addslashes($txt['remove_message']) . '?\');"'),
+    	);
+    else
+    	$context['conversation_buttons'] = array();
 
 	// Finally mark the relevant messages as read.
 	if ($context['folder'] != 'sent' && !empty($context['labels'][(int) $context['current_label_id']]['unread_messages']))

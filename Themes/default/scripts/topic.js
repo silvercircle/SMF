@@ -70,9 +70,13 @@ var _inModify = _inReply = false;
 
 				maxHeight = maxHeight && maxHeight > 0 ? maxHeight : 9e4;
 
+				function forceAdjust() {
+					active = false;
+					adjust();
+				}
+
 				function adjust() {
 					var height, overflow;
-
 					if (!active) {
 						active = true;
 						mirror.value = ta.value;
@@ -113,7 +117,9 @@ var _inModify = _inReply = false;
 				}
 				$(window).resize(adjust);
 				$ta.bind('autosize', adjust);
-				$ta.text($ta.text());
+				$ta.bind('forcesize', forceAdjust);
+				if(!is_ie)
+					$ta.text($ta.text());
 				adjust();
 			});
 		};
@@ -349,12 +355,17 @@ QuickReply.prototype.quote = function (iMessageId)
 		setBusy(true);
 		getXMLDocument(smf_prepareScriptUrl(this.opt.sScriptUrl) + 'action=quotefast;quote=' + iMessageId + ';xml', this.onQuoteReceived);
 	}
+	else
+		$('#quickReplyMessage').trigger('forcesize');
 
 	// Move the view to the quick reply box.
 	if (navigator.appName == 'Microsoft Internet Explorer')
 		window.location.hash = this.opt.sJumpAnchor;
 	else
 		window.location.hash = '#' + this.opt.sJumpAnchor;
+
+	if(parseInt(iMessageId) == 0)
+		$('#quickReplyMessage').focus();
 
 	return false;
 }
@@ -370,7 +381,12 @@ QuickReply.prototype.onQuoteReceived = function (oXMLDoc)
 	//replaceText(sQuoteText, document.forms.postmodify.message);
 	replaceText(sQuoteText, document.forms.quickModForm.message);
 
-	$('#quickReplyMessage').trigger('autosize');
+	if(is_ie) {
+		$('#quickReplyMessage').trigger('forcesize');
+		$('#quickReplyMessage').focus();
+	}
+	else
+		$('#quickReplyMessage').trigger('autosize');
 	setBusy(false);
 }
 
@@ -483,7 +499,7 @@ QuickModify.prototype.onMessageReceived = function (XMLDoc)
 	setInnerHTML(this.oCurSubjectDiv, this.opt.sTemplateSubjectEdit.replace(/%subject%/, sSubjectText).replace(/\{&dollarfix;\$\}/g, '$'));
 
 	$('#quickModifyMessage').autosize();
-	$('#quickModifyMessage').trigger('autosize');
+	//$('#quickModifyMessage').trigger('autosize');
 	$('#quickModifyMessage').focus();
 	return true;
 }

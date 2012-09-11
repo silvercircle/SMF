@@ -345,13 +345,13 @@ ul.dropmenu.highcontrast li a {
 	color: #777;
 }
 ul.dropmenu li a.firstlevel {
-	text-shadow: 1px 1px 1px #aaa;
+	text-shadow: 0 0 2px #555;
 }
 ul.dropmenu li a.firstlevel.compact {
 	font-weight: normal;
 	font-size:11px;
 	color:white;
-	text-shadow: 1px 1px 1px #aaa;
+	text-shadow: 0 0 2px #555;
 }
 ul.dropmenu li ul {
 	background-color: #f2f2f2;
@@ -375,7 +375,7 @@ ul.dropmenu.compact li.active a {
 ul.dropmenu li.active > a {
 	color: black;
 	font-weight: bold;
-	text-shadow: 2px 2px 4px white;
+	text-shadow:none;
 }
 ul.dropmenu li:hover {
 	background-color: #F0C20F;
@@ -389,7 +389,7 @@ ul.dropmenu li li a:hover, ul.dropmenu li li:hover>a {
 	background: #d4dbe4;
 	color: #000;
 	text-decoration: none;
-	text-shadow: 2px 2px 4px white;
+	text-shadow: 1px 1px 2px white;
 }
 ul.dropmenu li li.additional_items {
 	background-color: #98AABA;
@@ -869,6 +869,9 @@ div.table_frame .table_list {
 div.posts_container {
 	background: #eaeaea;
 }
+div.posts_container.commentstyle {
+	background: transparent;
+}
 div.post_wrapper {
 	background: #fafafa;
 	/*border:1px solid #ddd;*/
@@ -881,11 +884,11 @@ div.post_wrapper.approval, div.approval .post_content {
 }
 div.post_wrapper.comment {
 	background:transparent;
-	border-bottom:2px solid #ccc;
+	border-bottom:1px solid #ccc;
 	border-radius: 0;
 }
 div.post_wrapper.comment.alternate {
-	background:#eaeaea;
+	background:#f2f2f2;
 }
 div.ignoringpost {
 	cursor:pointer;

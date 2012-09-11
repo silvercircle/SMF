@@ -110,7 +110,7 @@
       <div></div>
     {/if}
     {if !empty($board.last_post.id)}
-      <div class="tinytext nowrap righttext" style="position:static;max-width:auto;">
+      <div class="tinytext righttext">
       <a class="lp_link" title="{$T.last_post}" href="{$board.last_post.href}">{$board.last_post.time}</a><span class="tinytext lowcontrast">{$T.last_post} in: </span>{$board.last_post.prefix}{$board.last_post.topiclink}
       &nbsp;<span class="tinytext lowcontrast">{$T.by}&nbsp;</span>{$board.last_post.member.link}&nbsp;
     </div>
