@@ -303,36 +303,36 @@
           <li><input type="hidden" name="notify" value="0" /><label class="aligned" for="check_notify"><input type="checkbox" name="notify" id="check_notify" {($C.notify or !empty($O.auto_notify)) ? ' checked="checked"' : ''} value="1" class="input_check aligned" /> {$T.notify_replies}</label></li>
         {/if}
         {if $C.can_lock}
-          <li><input type="hidden" name="lock" value="0" /><label for="check_lock"><input type="checkbox" name="lock" id="check_lock" {($C.locked) ? ' checked="checked"' : ''} value="1" class="input_check" /> {$T.lock_topic}</label></li>
+          <li><input type="hidden" name="lock" value="0" /><label class="aligned" for="check_lock"><input type="checkbox" name="lock" id="check_lock" {($C.locked) ? ' checked="checked"' : ''} value="1" class="input_check aligned" /> {$T.lock_topic}</label></li>
         {/if}
         {if isset($C.can_lock_message) and !empty($C.can_lock_message)}
-          <li><label for="lock_message"><input type="checkbox" name="lock_message" class="input_check" value="1" {($C.message_locked) ? ' checked="checked"' : ''} /> {$T.lock_message}</label></li>
+          <li><label class="aligned" for="lock_message"><input type="checkbox" name="lock_message" class="input_check aligned" value="1" {($C.message_locked) ? ' checked="checked"' : ''} /> {$T.lock_message}</label></li>
         {/if}
-        <li><label for="check_back"><input type="checkbox" name="goback" id="check_back" {($C.back_to_topic or !empty($O.return_to_post)) ? ' checked="checked"' : ''} value="1" class="input_check" /> {$T.back_to_topic}</label></li>
+        <li><label class="aligned" for="check_back"><input type="checkbox" name="goback" id="check_back" {($C.back_to_topic or !empty($O.return_to_post)) ? ' checked="checked"' : ''} value="1" class="input_check aligned" /> {$T.back_to_topic}</label></li>
         {if $C.can_sticky}
-          <li><input type="hidden" name="sticky" value="0" /><label for="check_sticky"><input type="checkbox" name="sticky" id="check_sticky" {($C.sticky) ? ' checked="checked"' : ''} value="1" class="input_check" /> {$T.sticky_after}</label></li>
+          <li><input type="hidden" name="sticky" value="0" /><label class="aligned" for="check_sticky"><input type="checkbox" name="sticky" id="check_sticky" {($C.sticky) ? ' checked="checked"' : ''} value="1" class="input_check aligned" /> {$T.sticky_after}</label></li>
         {/if}
-        <li><label for="check_smileys"><input type="checkbox" name="ns" id="check_smileys" {($C.use_smileys) ? '' : ' checked="checked"'} value="NS" class="input_check" /> {$T.dont_use_smileys}</label></li>
+        <li><label class="aligned" for="check_smileys"><input type="checkbox" name="ns" id="check_smileys" {($C.use_smileys) ? '' : ' checked="checked"'} value="NS" class="input_check aligned" /> {$T.dont_use_smileys}</label></li>
         {if $C.can_move}
-          <li><input type="hidden" name="move" value="0" /><label for="check_move"><input type="checkbox" name="move" id="check_move" value="1" class="input_check" {(!empty($C.move)) ? ' checked="checked" ' : ''} /> {$T.move_after2}</label></li>
+          <li><input type="hidden" name="move" value="0" /><label class="aligned" for="check_move"><input type="checkbox" name="move" id="check_move" value="1" class="input_check aligned" {(!empty($C.move)) ? ' checked="checked" ' : ''} /> {$T.move_after2}</label></li>
         {/if}
         {if $C.can_announce and $C.is_first_post}
-          <li><label for="check_announce"><input type="checkbox" name="announce_topic" id="check_announce" value="1" class="input_check" {(!empty($C.announce)) ? 'checked="checked" ' : ''} /> {$T.announce_topic}</label></li>
+          <li><label class="aligned" for="check_announce"><input type="checkbox" name="announce_topic" id="check_announce" value="1" class="input_check aligned" {(!empty($C.announce)) ? 'checked="checked" ' : ''} /> {$T.announce_topic}</label></li>
         {/if}
         {if $C.show_approval}
-          <li><label for="approve"><input type="checkbox" name="approve" id="approve" value="2" class="input_check" {($C.show_approval === 2) ? 'checked="checked"' : ''} /> {$T.approve_this_post}</label></li>
+          <li><label class="aligned" for="approve"><input type="checkbox" name="approve" id="approve" value="2" class="input_check aligned" {($C.show_approval === 2) ? 'checked="checked"' : ''} /> {$T.approve_this_post}</label></li>
         {/if}
         {if isset($C.can_stick_firstpost) and !empty($C.can_stick_firstpost)}
-          <li><label for="stickfirst"><input type="checkbox" name="stickfirst" id="stickfirst" value="1" class="input_check" {(isset($C.first_is_sticky) and !empty($C.first_is_sticky)) ? 'checked="checked"' : ''} /> {$T.first_post_sticky}</label></li>
+          <li><label class="aligned" for="stickfirst"><input type="checkbox" name="stickfirst" id="stickfirst" value="1" class="input_check aligned" {(isset($C.first_is_sticky) and !empty($C.first_is_sticky)) ? 'checked="checked"' : ''} /> {$T.first_post_sticky}</label></li>
         {/if}
         {if $C.can_merge_with_last}
-          <li><label for="want_automerge"><input type="checkbox" name="want_automerge" id="want_automerge" class="input_check" checked="checked" value="1" class="input_check" /> {$T.want_automerge}</label></li>
+          <li><label class="aligned" for="want_automerge"><input type="checkbox" name="want_automerge" id="want_automerge" class="input_check aligned" checked="checked" value="1" class="input_check" /> {$T.want_automerge}</label></li>
         {/if}
         {if $M.astream_active}
-          <li><label for="noactivity"><input type="checkbox" name="noactivity" id="noactivity" value="1" class="input_check" />{$T.no_activity_record}</label></li>
+          <li><label class="aligned" for="noactivity"><input type="checkbox" name="noactivity" id="noactivity" value="1" class="input_check aligned" /> {$T.no_activity_record}</label></li>
         {/if}
         {if $C.can_tag_users}
-          <li><label for="allowtags"><input type="checkbox" name="allowtags" id="allowtags" value="1" class="input_check" />{$T.disable_user_tagging}</label></li>
+          <li><label class="aligned" for="allowtags"><input type="checkbox" name="allowtags" id="allowtags" value="1" class="input_check aligned" /> {$T.disable_user_tagging}</label></li>
         {/if}
       </ul>
       {if isset($C.can_stick_firstpost) and $C.can_stick_firstpost and isset($C.first_has_layout)}

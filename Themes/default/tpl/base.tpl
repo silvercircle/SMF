@@ -246,27 +246,32 @@
     <form onmouseout="return false;" onsubmit="submitSearchBox();" class="floatright" id="search_form" action="{$SCRIPTURL}?action=search2" method="post" accept-charset="UTF-8">
       <div id="adv_search" style="width:246px;padding:0;" class="smalltext">
         <input style="width:215px;padding-left:26px;margin:0;" onclick="var s_event = arguments[0] || window.event;openAdvSearch(s_event);return(false);" type="text" onfocus="if(!this._haschanged) { this.value='' } ;this._haschanged=true;" name="search" value="{$search_label}" class="searchfield" />
-        <br><br><h3 class="bbc_head l2">{$T.search_by_member}</h3>
-        <div style="text-align:center;margin-bottom:10px;">
+        <div class="spacer_h"></div>
+        <span class="smalltext">&nbsp;&nbsp;&nbsp;<strong>{$T.search_by_member}</strong></span>
+        <div style="text-align:center;margin: 1px 0 5px 0;">
           <input style="width:90%;" class="input_text" type="text" name="userspec" id="userspec" value="*" />
         </div>
-        <input class="input_check floatleft" type="checkbox" name="show_complete" id="show_complete" value="1" />&nbsp;<h3 class="bbc_head l2" style="margin-left:0;">{$T.search_show_complete_messages}</h3><br class="clear">
+        <hr class="dashed" />
+        <label class="aligned" for="show_complete"><input class="input_check aligned" type="checkbox" name="show_complete" id="show_complete" value="1" /> {$T.search_show_complete_messages}</label><br class="clear">
         {if $scope == 2}
-        <div style="padding-left:20px;"><input type="radio" name="type" id="i_topic" class="input_radio" checked="checked" />{$T.search_topic}<br>
-            <input type="radio" name="type" id="i_board" class="input_radio" />{$T.search_board}<br>
-            <input type="radio" name="type" id="i_site" class="input_radio" />{$T.search_all_boards}
-            <input type="hidden" id="s_topic" name="topic" value="{$C.current_topic}" />
-            <input type="hidden" id="s_board" name="brd[{$C.current_board}]" value="{$C.current_board}" />
+        <div style="padding-left:2px;">
+          <label for="i_topic" class="aligned"><input type="radio" name="type" id="i_topic" class="input_radio aligned" checked="checked" /> {$T.search_topic}</label><br>
+          <label for="i_board" class="aligned"><input type="radio" name="type" id="i_board" class="input_radio aligned" /> {$T.search_board}</label><br>
+          <label for="i_site" class="aligned"><input type="radio" name="type" id="i_site" class="input_radio aligned" /> {$T.search_all_boards}</label>
+          <input type="hidden" id="s_topic" name="topic" value="{$C.current_topic}" />
+          <input type="hidden" id="s_board" name="brd[{$C.current_board}]" value="{$C.current_board}" />
         </div>
         {elseif $scope == 1}
-        <div style="padding-left:20px;"><input name="type" type="radio" id="i_board" checked="checked" class="input_radio" />{$T.search_board}<br />
-            <input type="radio" name="type" id="i_site" class="input_radio" />{$T.search_all_boards}
-            <input type="hidden" id="s_board" name="brd[{$C.current_board}]" value="{$C.current_board}" />
+        <div style="padding-left:2px;">
+          <label for="i_board" class="aligned"><input name="type" type="radio" id="i_board" checked="checked" class="input_radio aligned" /> {$T.search_board}</label><br>
+          <label for="i_site" class="aligned"><input type="radio" name="type" id="i_site" class="input_radio aligned" /> {$T.search_all_boards}</label>
+          <input type="hidden" id="s_board" name="brd[{$C.current_board}]" value="{$C.current_board}" />
         </div>
         {/if}
-          <input style="width:100%;margin:5px 0;display:none;" type="submit" name="submit" value="Search now" class="default" />
-          {$url = $SCRIPTURL|cat:'?action=search'}
-          <div class="centertext"><a href="{$SUPPORT->url_action($url)}" >{$T.search_advanced}</a></div>
+        <hr class="dashed" />
+        <input style="width:100%;margin:5px 0;display:none;" type="submit" name="submit" value="Search now" class="default" />
+        {$url = $SCRIPTURL|cat:'?action=search'}
+        <div class="centertext"><a href="{$SUPPORT->url_action($url)}" >{$T.search_advanced}</a></div>
         </div>
         <noscript>
         <input style="margin:0;" type="submit" name="submit" value="{$T.go}" class="default" />

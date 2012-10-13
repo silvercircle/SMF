@@ -849,6 +849,7 @@ function PlushSearch2()
 	if (!empty($context['search_errors']))
 	{
 		$_REQUEST['params'] = $context['params'];
+		EoS_Smarty::resetTemplates();
 		return PlushSearch1();
 	}
 
@@ -1329,6 +1330,7 @@ function PlushSearch2()
 					{
 						$context['search_errors']['query_not_specific_enough'] = true;
 						$_REQUEST['params'] = $context['params'];
+						EoS_Smarty::resetTemplates();
 						return PlushSearch1();
 					}
 					elseif (!empty($indexedResults))

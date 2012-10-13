@@ -119,7 +119,7 @@ class EoS_Smarty {
 	 * todo: add some debugging support to assist plugin authors (e.g. check whether
 	 * the directory does actually exist).
 	 */
-	public static function addTemplateDir($_dir)
+	public static function addTemplateDir($_dir = '')
 	{
 		/*
 		 * since this function could - in theory - been called before the init()
@@ -127,7 +127,8 @@ class EoS_Smarty {
 		 * of the list, we just remember them here. it will also make things faster, because
 		 * we can add all template directories with a single call to Smarty::addTemplateDir()
 		 */
-		self::$_additional_template_dirs[] = $_dir;
+		if(!empty($_dir))
+			self::$_additional_template_dirs[] = $_dir;
 	}
 	/**
 	 * does absolutely nothing
@@ -174,7 +175,6 @@ class EoS_Smarty {
 	}
 
 	// Ends execution.  Takes care of template loading and remembering the previous URL.
-	// this is for twig templates ONLY
 	public static function obExit($header = null, $do_footer = null, $from_index = false, $from_fatal_error = false)
 	{
 		global $context, $modSettings;
@@ -583,7 +583,7 @@ class EoS_Smarty_Template_Support {
 
 	public function callbackTemplate($_name)
 	{
-		$this->_smarty_instance->Display($_name . '.tpl');
+		$this->_smarty_instance->display($_name . '.tpl');
 	}
 	public function _eval($_arg)
 	{
