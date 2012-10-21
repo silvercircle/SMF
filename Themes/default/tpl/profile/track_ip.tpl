@@ -6,6 +6,7 @@
 	</div>
 </form>
 <br>
+{$SUPPORT->displayHook('track_ip_top')}
 {if $C.single_ip}
 	<h1 class="bigheader section_header bordered">{$T.whois_title} {$C.ip}</h1>
 	<div class="blue_container cleantop">

@@ -283,7 +283,7 @@ div.posts_container {
 	margin:0;
 }
 div.posts_container.std, div.posts_container.pm {
-	padding:0 4px 4px 4px;
+	padding:0 1px 1px 1px;
 }
 div.post {
 	line-height: 1.3em;
@@ -361,8 +361,8 @@ div.keyinfo.comment {
 	min-height:76px;
 }
 div.keyinfo.std, div.keyinfo.lean, div.keyinfo.pm {
-	margin-left:-4px;
-	margin-right:-4px;
+	margin-left:-1px;
+	margin-right:-1px;
 }
 div.keyinfo.pm {
 	padding:4px 6px;
@@ -766,7 +766,7 @@ div.boardlisting ul li.category {
 	margin-bottom: 0;
 	height:25px !important;
 	line-height:25px;
-	padding: 0 10px;
+	padding: 1px 10px;
 }
 .cat_bar2 h3 {
 	height:24px;

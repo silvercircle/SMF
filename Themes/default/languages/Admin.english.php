@@ -714,6 +714,7 @@ $txt['hidden_content_bbc_settings'] = "Hidden content BBCode settings";
 
 $txt['plugins_title'] = 'Plugins';
 $txt['browse_plugins'] = 'List plugins';
+$txt['plugins_cannot_install_reason'] = 'The plugin cannot be activated because of the following reason: ';
 $txt['browse_hooks'] = 'Hooks';
 $txt['rating_classes'] = 'Rating classes';
 $txt['rating_other'] = 'General settings';

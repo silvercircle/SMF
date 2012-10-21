@@ -1038,9 +1038,24 @@ class Topiclist {
 class EoS_Plugin
 {
 	protected $plugindir;
+	protected $installError = 'OK';
 
 	public function __construct() {
 		$this->plugindir = HookAPI::getAddonsDir() . $this->productShortName;
+	}
+
+	/**
+	 * plugins can override this function to check for pre-requisites and return
+	 * false if the plugin cannot be activated
+	 */
+	public function canInstall()
+	{
+		return true;
+	}
+
+	public function getInstallErrorReason()
+	{
+		return $this->installError;
 	}
 
 	public function installHooks()

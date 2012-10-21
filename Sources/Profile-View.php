@@ -1671,6 +1671,8 @@ function TrackIP($memID = 0)
 				$context['auto_whois_server'] = $whois;
 		}
 	}
+
+	HookAPI::callHook('track_ip');
 }
 
 function trackEdits($memID)

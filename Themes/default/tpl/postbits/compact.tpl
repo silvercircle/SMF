@@ -30,9 +30,9 @@
     <div class="messageicon floatleft">
       &nbsp;&nbsp;<img src="{$message.icon_url}" alt="" />&nbsp;&nbsp;
     </div>
-    <h3 style="display:inline;" id="subject_{$ID}">
+    <h5 style="display:inline;" id="subject_{$ID}">
       {$message.subject}
-    </h3>
+    </h5>
     <span class="smalltext">&nbsp;{$message.time}</span>
     <span class="tinytext floatright"><a href="{$message.permahref}" rel="nofollow">{$message.permalink}</a></span>
     <div id="msg_{$ID}_quick_mod"></div>

@@ -90,6 +90,21 @@ class TestPlugin extends EoS_Plugin
 
 	public function __construct() { parent::__construct(); }	// mandatory
 
+	/**
+	 * canInstall() is called by the plugin installer/activater to determine whether the plugin
+	 * can be activated or not. If your plugin must check certain pre-requisites, this is the right 
+	 * place for doing so. The default implementation in class EoS_Plugin just returns true,
+	 * so this function is optional.
+	 * 
+	 * if your plugin cannot be activated for whatever reason, this function MUST return false
+	 * and the protected member variable $installError should contain the reason for why the
+	 * plugin cannot be used. 
+	 * 
+	 */
+	public function canInstall()
+	{
+		return true;
+	}
 	/*
 	 * runs in messageindex.php
 	 * 1) fetch our data

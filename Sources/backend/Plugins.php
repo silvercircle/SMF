@@ -29,6 +29,8 @@ class EoS_Plugin_Loader
 
 		if(is_callable($autoloader)) {
 			$pluginInstance = $autoloader();
+			if(false === $pluginInstance->canInstall())
+				return false;
 			$pluginInstance->installHooks();
 			$installedPlugins[$product] = array(
 				'name' => $pluginInstance->Name,
@@ -144,6 +146,8 @@ class EoS_Plugin_Loader
 						$context['plugins'][$file]['desc'] = $pluginInstance->Description;
 						$context['plugins'][$file]['is_installed'] = isset($data['installedPlugins'][$file]) ? true : false;
 						$context['plugins'][$file]['install_link'] = isset($data['installedPlugins'][$file]) ? ('<a href="' . $scripturl . '?action=admin;area=plugins;sa=uninstall;p=' . $file . ';' . $context['session_var'] . '=' . $context['session_id'] . '">' . $txt['uninstall_plugin'] . '</a>') : ('<a href="' . $scripturl . '?action=admin;area=plugins;sa=install;p=' . $file . ';'. $context['session_var'] . '=' .$context['session_id'] . '">' . $txt['install_plugin'] . '</a>');
+						$context['plugins'][$file]['can_install'] = isset($data['installedPlugins'][$file]) ? true : $pluginInstance->canInstall();
+						$context['plugins'][$file]['install_error'] = $pluginInstance->getInstallErrorReason();
 					}
 				}
 			}, $userdata);
