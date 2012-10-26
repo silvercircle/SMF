@@ -53,6 +53,7 @@
 					<dt>{$T.location}:</dt>
 					<dd>{$C.member.location}</dd>
 				{/if}
+				{$SUPPORT->displayHook('profile_summary_extend_basic')}
 				</dl>
 				{if !empty($C.custom_fields)}
 					{$shown = false}
@@ -134,6 +135,7 @@
 						</div>
 					{/if}
 				{/if}
+				{$SUPPORT->displayHook('profile_summary_extend_advanced')}
 				{if $C.signature_enabled && !empty($C.member.signature)}
 					<div class="signature">
 						<h5>{$T.signature}:</h5>

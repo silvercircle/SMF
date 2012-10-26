@@ -283,7 +283,7 @@ div.posts_container {
 	margin:0;
 }
 div.posts_container.std, div.posts_container.pm {
-	padding:0 1px 1px 1px;
+	padding:0;
 }
 div.post {
 	line-height: 1.3em;
@@ -305,6 +305,9 @@ div.post_wrapper {
 	width: auto;
 	padding:0;
 	/*margin-bottom:10px;*/
+}
+div.post_wrapper.std {
+	padding:5px;
 }
 div.post_wrapper.comment {
 	border:0;

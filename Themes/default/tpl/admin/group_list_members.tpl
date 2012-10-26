@@ -1,9 +1,7 @@
 <div id="admincenter">
 {$area = (isset($C.admin_area)) ? (';area='|cat:$C.admin_area) : ''}
 <form action="{$SCRIPTURL}?action={$C.current_action}{$area};sa=members;group={$C.group.id}" method="post" accept-charset="UTF-8">
-  <div class="cat_bar">
-    <h3>{$C.page_title}</h3>
-  </div>
+  <h1 class="bigheader section_header">{$C.page_title}</h1>
   <div class="blue_container smalltext cleantop">
     <div class="content">
         <div class="floatright">

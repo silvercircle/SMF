@@ -1,8 +1,6 @@
   <div id="modcenter">
     <form action="{$SCRIPTURL}?action=moderate;area=settings" method="post" accept-charset="UTF-8">
-      <div class="cat_bar2">
-        <h3>{$T.mc_prefs_title}</h3>
-      </div>
+      <h1 class="bigheader section_header">{$T.mc_prefs_title}</h1>
       <div class="orange_container cleantop mediumpadding gradient_darken_down">
         {$T.mc_prefs_desc}
       </div>

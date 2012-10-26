@@ -747,13 +747,13 @@ ol.commonlist.category {
 	border-radius: 4px;
 }
 
-.gradient_darken_down, span.button, ul.buttonlist a, input[type=button], input[type=submit], .bbc_editor_button:hover, div.avatar.pm, #bbcBox_message, .orange_container {
+.gradient_darken_down, span.button, ul.buttonlist a, input[type=button], input[type=submit], .bbc_editor_button:hover, div.avatar.pm, #bbcBox_message, .orange_container, div.keyinfo.pm, div.keyinfo.std {
 	background-image: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
 	background-image: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
 	background-image: -o-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
 	background-image: -ms-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 60%, rgba(0,0,0,0.08) 100%) !important;
 }
-.gradient_dark, .cat_bar2, .cContainer_header, div.keyinfo.std, div.keyinfo.lean, div.keyinfo.pm {
+.gradient_dark, .cat_bar2, .cContainer_header {
 	background: #606c88;
 	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzYwNmM4OCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzZjRjNmIiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
 	background: -moz-linear-gradient(top, #606c88 0%, #3f4c6b 100%);
@@ -885,9 +885,12 @@ div.posts_container {
 div.posts_container.commentstyle {
 	background: transparent;
 }
+
 div.post_wrapper {
 	background: #fafafa;
 	/*border:1px solid #ddd;*/
+	margin-bottom:5px;
+	border:1px solid #ddd;
 }
 div.post_wrapper.alternate {
 	background:#f2f8ff;
@@ -1010,21 +1013,21 @@ div.keyinfo.comment {
 	color:#444;
 }
 div.keyinfo h5 {
-	font-weight:bold;
 	font-size:11px;
-	color:white;
-	text-shadow: black 1px 1px 0;
+	color:black;
 }
 div.keyinfo.commentstyle h5 {
 	color:#444;
 }
 div.keyinfo .timeago {
 	color: #d69538;
-	font-weight: bold;
-	text-shadow: black 1px 1px 0;
+	font-size:11px;
 }
-.keyinfo a {
-	color:#888;
+div.keyinfo.clean .timeago {
+	text-shadow: none;
+}
+div.keyinfo a, div.keyinfo h4.poster {
+	color:black;
 }
 div#quickreplybox {
 	background:#f5f5f5;

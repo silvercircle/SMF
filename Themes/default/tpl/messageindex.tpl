@@ -17,9 +17,9 @@
 {$widgetstyle = 'cleantop nopadding borderless'}
 <div id="messageindex">
 <a id="top"></a>
-<h1 class="bigheader">{$C.name}</h1>
+<h1 class="bigheader section_header">{$C.name}</h1>
 {if !empty($O.show_board_desc) and !empty($C.description)}
-  <div class="smalltext">{$C.description}</div>
+  <div class="orange_container cleantop smalltext mediumpadding">{$C.description}</div>
 {/if}
 
 {* the child boards (if we have one and want them to be visible) *}

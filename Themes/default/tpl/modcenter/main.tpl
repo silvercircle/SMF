@@ -1,7 +1,5 @@
 <div id="modcenter">
-  <div class="cat_bar2">
-    <h3>{$T.moderation_center}</h3>
-  </div>
+  <h1 class="bigheader section_header">{$T.moderation_center}</h1>
   <div class="orange_container cleantop mediumpadding gradient_darken_down">
     <strong>{$T.hello_guest} {$C.user.name}</strong>
     {$T.mc_description}

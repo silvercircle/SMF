@@ -243,6 +243,7 @@ function summary($memID)
 	}
 
 	loadCustomFields($memID);
+	HookAPI::callHook('profile_summary', array(&$memID, &$user_profile));
 }
 
 // !!! This function needs to be split up properly.

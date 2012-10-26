@@ -76,11 +76,9 @@
 </script>
 <form action="{$SCRIPTURL}?action={$C.destination};{(empty($C.current_board)) ? '' : ('board='|cat:$C.current_board)}" method="post" accept-charset="UTF-8" name="postmodify" id="postmodify" class="flow_hidden" onsubmit="{($C.becomes_approved) ? '' : 'alert(\''|cat:$T.js_post_will_require_approval|cat:'\');'} submitonce(this);smc_saveEntities('postmodify', ['subject', '{$C.post_box_name}', 'guestname', 'evtitle', 'question'], 'options');" enctype="multipart/form-data">
 <div id="preview_section"{(isset($C.preview_message)) ? '' : ' style="display: none;"'}>
-  <div class="cat_bar">
-    <h3>
+  <h1 class="bigheader section_header">
       <span id="preview_subject">{(empty($C.preview_subject)) ? '' : $C.preview_subject} ({$T.preview})</span>
-    </h3>
-  </div>
+  </h1>
   <div class="post_wrapper blue_container cleantop">
     <div id="preview_body" class="post fontstyle_{$U.font_class}">
       {(empty($C.preview_message)) ? '' : $C.preview_message}
@@ -91,7 +89,7 @@
 {if $C.make_event and (!$C.event.new or !empty($C.current_board))}
   <input type="hidden" name="eventid" value="{$C.event.id}" />
 {/if}
-<h1 class="bigheader">{$C.page_title}</h1>
+<h1 class="bigheader section_header">{$C.page_title}</h1>
 <div class="generic_container">
   <br>
   <div class="blue_container" style="margin:0 auto;padding:10px;max-width:900px;">{(isset($C.current_topic)) ? ('<input type="hidden" name="topic" value="'|cat:$C.current_topic|cat:'" />') : ''}

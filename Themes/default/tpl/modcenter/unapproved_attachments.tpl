@@ -1,10 +1,8 @@
   <div id="modcenter">
     <form action="{$SCRIPTURL}?action=moderate;area=attachmod;sa=attachments;start={$C.start}" method="post" accept-charset="UTF-8">
-      <div class="cat_bar">
-        <h3>{$T.mc_unapproved_attachments}</h3>
-      </div>
+      <h1 class="bigheader section_header">{$T.mc_unapproved_attachments}</h1>
       {if empty($C.unapproved_items)}
-        <div class="orange_container cleantop">
+        <div class="flat_container cleantop">
           <div class="content">
             <p class="centertext">{$T.mc_unapproved_attachments_none_found}</p>
           </div>
