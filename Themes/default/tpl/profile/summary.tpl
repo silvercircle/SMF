@@ -115,7 +115,7 @@
 					<dd>{$C.member.language}</dd>
 				{/if}
 				<dt>{$T.lastLoggedIn}: </dt>
-				<dd>{$C.member.last_login}</dd>
+				<dd>{$C.member.last_login}{$C.member.current_action}</dd>
 				</dl>
 				{if !empty($C.custom_fields)}
 					{$shown = false}
