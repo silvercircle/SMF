@@ -206,6 +206,8 @@ function Register($reg_errors = array())
 	if (!empty($reg_errors))
 		foreach ($reg_errors as $error)
 			$context['registration_errors'][] = $error;
+
+	HookAPI::callHook('register_before');
 }
 
 // Actually register the member.
@@ -475,6 +477,7 @@ function Register2($verifiedOpenID = false)
 	// Do our spam protection now.
 	spamProtection('register');
 
+	HookAPI::callHook('register_process');
 	// We'll do custom fields after as then we get to use the helper function!
 	if (!empty($_POST['customfield']))
 	{

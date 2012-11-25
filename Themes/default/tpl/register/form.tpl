@@ -63,9 +63,7 @@
   </div>
 {/if}
 <form action="{$SUPPORT->url_parse('?action=register2')}" method="post" accept-charset="UTF-8" name="registration" id="registration" onsubmit="return verifyAgree();">
-  <div class="cat_bar">
-    <h3>{$T.registration_form}</h3>
-  </div>
+  <h1 class="bigheader section_header">{$T.registration_form}</h1>
   <div class="blue_container cleantop">
     <div class="content">
       <h1 class="bigheader secondary indent">{$T.required_info}</h1>
@@ -208,12 +206,11 @@
     </fieldset>
   {/if} 
       </div>
+      {$SUPPORT->displayHook('register_form_extend')}
     </div>
   {if $C.visual_verification}
     <br>
-    <div class="cat_bar">
-      <h3>{$T.verification}</h3>
-    </div>
+    <h1 class="bigheader section_header">{$T.verification}</h1>
     <div class="blue_container cleantop">
       <div class="content">
         <fieldset class="content centertext">

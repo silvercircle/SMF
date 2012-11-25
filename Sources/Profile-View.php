@@ -244,18 +244,13 @@ function summary($memID)
 	}
 	$url_data = array();
 	/* load activity for the current member */
-	$request = smf_db_query( '
-		SELECT
-			lo.log_time, lo.id_member, lo.url, INET_NTOA(lo.ip) AS ip, mem.real_name,
-			lo.session, IFNULL(mem.show_online, 1) AS show_online, lo.id_spider
-		FROM {db_prefix}log_online AS lo
-			LEFT JOIN {db_prefix}members AS mem ON (lo.id_member = mem.id_member)
-		WHERE lo.id_member = {int:id_member} LIMIT 1',
+	$request = smf_db_query( 'SELECT lo.log_time, lo.id_member, lo.url
+			FROM {db_prefix}log_online AS lo
+			WHERE lo.id_member = {int:id_member} LIMIT 1',
 		array(
 			'id_member' => $memID
 		)
 	);
-
 	if(mysql_num_rows($request) && $context['member']['online']['is_online']) {
 		$row = mysql_fetch_assoc($request);
 		$url_data[0] = array($row['url'], $memID);

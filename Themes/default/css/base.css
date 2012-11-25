@@ -151,6 +151,9 @@ h1.bigheader.topic {
 h1.bigheader.secondary, h1.bigheader.section_header {
 	padding: 2px 0;
 }
+h1.bigheader.section_header {
+	padding: 4px 0;
+}
 h1.bigheader.secondary.title, h1.bigheader.section_header {
 	margin-bottom: 0;
 }

@@ -87,7 +87,7 @@ $txt['profileConfirm'] = 'Do you really want to delete this member?';
 
 $txt['custom_title'] = 'Custom Title';
 
-$txt['lastLoggedIn'] = 'Last Active';
+$txt['lastLoggedIn'] = 'Last activity';
 
 $txt['notify_settings'] = 'Notification Settings:';
 $txt['notify_save'] = 'Save settings';
