@@ -37,7 +37,8 @@ class EoS_GeoIP extends EoS_Plugin
 	protected $installableHooks = array(
 		'load_userdata' => array('file' => 'main.php', 'callable' => 'EoS_GeoIP::load_data'),
 		'track_ip' => array('file' => 'main.php', 'callable' => 'EoS_GeoIP::track_ip'),
-		'profile_summary' => array('file' => 'main.php', 'callable' => 'EoS_GeoIP::profile_summary')
+		'profile_summary' => array('file' => 'main.php', 'callable' => 'EoS_GeoIP::profile_summary'),
+		'register_before' => array('file' => 'main.php', 'callable' => 'EoS_GeoIP::register_check')
 	);
 
 	/*
@@ -103,6 +104,19 @@ class EoS_GeoIP extends EoS_Plugin
 			$context['region_info'] = self::getLocationRecord($user_profile[$memID]['member_ip']);
 			EoS_Smarty::addTemplateDir(dirname(__FILE__));
 			EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_summary_extend_basic', 'geoip_profile_summary');
+		}
+	}
+
+	public static function register_check()
+	{
+		global $user_info;
+
+		EoS_Smarty::addTemplateDir(dirname(__FILE__));
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('register_agreement_form', 'geoip_agreement_form');
+		if(is_callable('geoip_db_avail')) {
+			$region = geoip_record_by_name($user_info['ip']);
+			if(!empty($region['country_code']) && $region['country_code'] === 'CN')
+				die("E_GOAWAY");
 		}
 	}
 }

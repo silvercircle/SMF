@@ -836,7 +836,7 @@ function SetThemeSettings()
 
 		// Invalidate the cache.
 		updateSettings(array('settings_updated' => time()));
-
+		Eos_Smarty::getSmartyInstance()->clearCompiledTemplate();
 		redirectexit('action=admin;area=theme;sa=settings;th=' . $_GET['th'] . ';' . $context['session_var'] . '=' . $context['session_id']);
 	}
 
