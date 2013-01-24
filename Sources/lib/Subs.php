@@ -1500,7 +1500,7 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 					'id' => array('match' => '(\d+)', 'value' => '$1'),
 					//'name' => array('match' => '([\w\s\d]+)', 'validate' => 'urlencode'),
 				),
-				'content' => '<a onclick="getMcard({id},$(this));return(false);" href="' . $scripturl . '?action=profile;u={id}">$1</a>',
+				'content' => '<a class="member" attr-mid="{id}" href="' . $scripturl . '?action=profile;u={id}">$1</a>',
 			),
 			array(
 				'tag' => 'url',
@@ -2398,7 +2398,7 @@ function parse_bbc_stage2(&$message, $mid = 0, $is_for_editor = false)
 			}
 		}
 	}
-	HookAPI::callHook('bbc_stage2', array(&$message, &$is_for_editor));
+	HookAPI::callHook('bbc_stage2', array(&$message, &$is_for_editor, $mid));
 }
 
 // Parse smileys in the passed message.

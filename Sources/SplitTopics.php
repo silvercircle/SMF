@@ -415,6 +415,7 @@ function SplitSelectTopics()
 		censorText($row['body']);
 
 		$row['body'] = parse_bbc($row['body'], $row['smileys_enabled'], $row['id_msg']);
+		parse_bbc_stage2($row['body'], $row['id_msg']);
 
 		$context['not_selected']['messages'][$row['id_msg']] = array(
 			'id' => $row['id_msg'],
