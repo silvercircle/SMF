@@ -483,7 +483,7 @@ function Display()
 			if($row['id_member'] == $user_info['id'])
 				$link = '<strong>'.$txt['you'].'</strong>';
 			else
-				$link = '<a onclick="getMcard('.$row['id_member'].');return(false);" class="'.$class.'" href="' . $href . '">' . $row['real_name'] . '</a>';
+				$link = '<a data-mid="'.$row['id_member'].'" class="'.$class.'" href="' . $href . '">' . $row['real_name'] . '</a>';
 			// Add them both to the list and to the more detailed list.
 			if (!empty($row['show_online']) || allowedTo('moderate_forum'))
 				$context['view_members_list'][$row['log_time'] . $row['member_name']] = empty($row['show_online']) ? '<em>' . $link . '</em>' : $link;

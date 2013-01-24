@@ -192,9 +192,9 @@ class Ratings {
 				if(isset($modSettings['ratings'][$key]) && isset($the_like['members'])) {
 					$parts[$key] = '<span data-rtype="'.$key.'" class="number">' . $the_like['count'] . '</span>&nbsp;' . $modSettings['ratings'][$key]['text'] . '&nbsp;';
 					if($the_like['count'] > 1)
-						$parts[$key] .= (in_array($key, $types) ? sprintf($the_like['count'] > 2 ? $txt['you_and_others'] : $txt['you_and_other'], $the_like['count'] - 1) : '(<a rel="nofollow" onclick="getMcard('.$the_like['members'][0]['id'].', $(this));return(false);" class="mcard" href="'.URL::user($the_like['members'][0]['id'], $the_like['members'][0]['name']) .'">'.$the_like['members'][0]['name'].'</a>&nbsp;' . sprintf($the_like['count'] > 2 ? $txt['and_others'] : $txt['and_other'], $the_like['count'] - 1));
+						$parts[$key] .= (in_array($key, $types) ? sprintf($the_like['count'] > 2 ? $txt['you_and_others'] : $txt['you_and_other'], $the_like['count'] - 1) : '(<a rel="nofollow" data-mid="'.$the_like['members'][0]['id'].'" class="mcard" href="'.URL::user($the_like['members'][0]['id'], $the_like['members'][0]['name']) .'">'.$the_like['members'][0]['name'].'</a>&nbsp;' . sprintf($the_like['count'] > 2 ? $txt['and_others'] : $txt['and_other'], $the_like['count'] - 1));
 					else
-						$parts[$key] .= (in_array($key, $types) ? $txt['rated_you'] : '(<a rel="nofollow" onclick="getMcard('.$the_like['members'][0]['id'].', $(this));return(false);" class="mcard" href="'.URL::user($the_like['members'][0]['id'], $the_like['members'][0]['name']) .'">'.$the_like['members'][0]['name'].'</a>)');
+						$parts[$key] .= (in_array($key, $types) ? $txt['rated_you'] : '(<a rel="nofollow" data-mid="'.$the_like['members'][0]['id'].'" class="mcard" href="'.URL::user($the_like['members'][0]['id'], $the_like['members'][0]['name']) .'">'.$the_like['members'][0]['name'].'</a>)');
 				}
 			}
 		}

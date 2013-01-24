@@ -264,7 +264,7 @@ function getBoardIndex($boardIndexOptions)
 				'username' => $row_board['poster_name'] != '' ? $row_board['poster_name'] : $txt['not_applicable'],
 				'name' => $row_board['real_name'],
 				'href' => $mhref,
-				'link' => $row_board['poster_name'] != '' ? (!empty($row_board['id_member']) ? '<a onclick="getMcard('.$row_board['id_member'].', $(this));return(false);" href="'.$mhref.'">' . $row_board['real_name'] . '</a>' : $row_board['real_name']) : $txt['not_applicable'],
+				'link' => $row_board['poster_name'] != '' ? (!empty($row_board['id_member']) ? '<a class="mcard" data-mid="'.$row_board['id_member'].'" href="'.$mhref.'">' . $row_board['real_name'] . '</a>' : $row_board['real_name']) : $txt['not_applicable'],
 			),
 			'start' => 'msg' . $row_board['new_from'],
 			'topic' => $row_board['id_topic'],

@@ -125,7 +125,7 @@ function getMembersOnlineStats($membersOnlineOptions)
 		if($row['id_member'] == $user_info['id'])
 			$link = '<strong>'.$txt['you'].'</strong>';
 		else
-			$link = '<a onclick="getMcard('.$row['id_member'].');return(false);" class="'.$class.'" href="' . $href . '">' . $row['real_name'] . '</a>';
+			$link = '<a class="'.$class.'" data-mid="'.$row['id_member'].'" href="' . $href . '">' . $row['real_name'] . '</a>';
 
 		// A lot of useful information for each member.
 		$membersOnlineStats['users_online'][$row[$membersOnlineOptions['sort']] . $row['member_name']] = array(

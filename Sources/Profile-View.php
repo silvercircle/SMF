@@ -572,7 +572,7 @@ function showPosts($memID)
 							'name' => $memberContext[$memID]['name'],
 							'id' => $memID,
 							'href' => $f_post_mem_href,
-							'link' => !empty($row['first_id_member']) ? '<a onclick="getMcard('.$row['id_member_started'].', $(this));return(false);" href="' . $f_post_mem_href . '" title="' . $txt['profile_of'] . ' ' . $row['first_display_name'] . '">' . $row['first_display_name'] . '</a>' : $memberContext[$memID]['name'],
+							'link' => !empty($row['first_id_member']) ? '<a class="mcard" data-mid="'.$row['id_member_started'].'" href="' . $f_post_mem_href . '" title="' . $txt['profile_of'] . ' ' . $row['first_display_name'] . '">' . $row['first_display_name'] . '</a>' : $memberContext[$memID]['name'],
 							'avatar' => &$memberContext[$memID]['avatar']['image'],
 						),
 						'icon_url' => getPostIcon($row['icon']),
@@ -588,7 +588,7 @@ function showPosts($memID)
 							'name' => $row['last_display_name'],
 							'id' => $row['last_id_member'],
 							'href' => $l_post_mem_href,
-							'link' => !empty($row['last_id_member']) ? '<a onclick="getMcard('.$row['last_id_member'].', $(this));return(false);" href="' . $l_post_mem_href . '">' . $row['last_display_name'] . '</a>' : $row['last_display_name']
+							'link' => !empty($row['last_id_member']) ? '<a class="mcard" data-mid="'.$row['last_id_member'].'" href="' . $l_post_mem_href . '">' . $row['last_display_name'] . '</a>' : $row['last_display_name']
 						),
 						'time' => timeformat($row['last_post_time']),
 						'timestamp' => forum_time(true, $row['last_post_time']),

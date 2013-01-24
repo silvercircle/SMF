@@ -2240,7 +2240,7 @@ function TopicBans()
 			if(!$desc_done) {
 				switch($mode) {
 					case 'bymember':
-						$link = '<a href="' . URL::user($member, $row['real_name']) . '" onclick="getMcard(' . $member . ');return(false)">' . $row['real_name'] . '</a>';
+						$link = '<a class="mcard" href="' . URL::user($member, $row['real_name']) . '" data-mid="'.$member.'">' . $row['real_name'] . '</a>';
 						$context['topicban_view_desc'] = sprintf($txt['mc_view_topicbans_bymember'], $link);
 						break;
 					case 'bytopic':
@@ -2266,7 +2266,7 @@ function TopicBans()
 					'id' => $row['id_member'],
 					'name' => $row['real_name'],
 					'href' => $m_href,
-					'link' => '<a href="' . $m_href . '" onclick="getMcard(' . $row['id_member'] . ');return(false)">' . $row['real_name'] . '</a>'
+					'link' => '<a class="mcard" href="' . $m_href . '" data-mid="'.$row['id_member'].'">' . $row['real_name'] . '</a>'
 				),
 				'topic' => array(
 					'href' => $t_href,

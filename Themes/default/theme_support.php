@@ -28,12 +28,9 @@ $settings['sprite_image_src'] = array(
  * this css will be loaded after the main css and can hold css overrides and custom styles
  * you need one per theme variant.
  */
-/*
 $settings['additional_css'] = array(
-	'_default' => 'foo.css',
-	'_lightweight' => 'foo_lightweight.css'
+	'_default' => 'override_default',
 );
-*/
 
 function theme_support_autoload($smarty_instance)
 {

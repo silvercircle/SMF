@@ -1263,7 +1263,7 @@ function UnreadTopics()
 					'name' => $row['first_poster_name'],
 					'id' => $row['id_first_member'],
 					'href' => $f_user_href,
-					'link' => !empty($row['id_first_member']) ? '<a onclick="getMcard('.$row['id_first_member'].', $(this));return(false);" href="' . $f_user_href . '" title="' . $txt['profile_of'] . ' ' . $row['first_poster_name'] . '">' . $row['first_poster_name'] . '</a>' : $row['first_poster_name'],
+					'link' => !empty($row['id_first_member']) ? '<a class="mcard" data-mid="'.$row['id_first_member'].'" href="' . $f_user_href . '" title="' . $txt['profile_of'] . ' ' . $row['first_poster_name'] . '">' . $row['first_poster_name'] . '</a>' : $row['first_poster_name'],
 
 				),
 				'time' => timeformat($row['first_poster_time']),
@@ -1281,7 +1281,7 @@ function UnreadTopics()
 					'name' => $row['last_poster_name'],
 					'id' => $row['id_last_member'],
 					'href' => $l_user_href,
-					'link' => !empty($row['id_last_member']) ? '<a onclick="getMcard('.$row['id_last_member'].', $(this));return(false);" href="' . $l_user_href . '">' . $row['last_poster_name'] . '</a>' : $row['last_poster_name']
+					'link' => !empty($row['id_last_member']) ? '<a class="mcard" data-mid="'.$row['id_last_member'].'" href="' . $l_user_href . '">' . $row['last_poster_name'] . '</a>' : $row['last_poster_name']
 				),
 				'time' => timeformat($row['last_poster_time']),
 				'timestamp' => forum_time(true, $row['last_poster_time']),

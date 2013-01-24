@@ -111,13 +111,16 @@ class EoS_GeoIP extends EoS_Plugin
 	{
 		global $user_info;
 
+		/*
 		EoS_Smarty::addTemplateDir(dirname(__FILE__));
 		EoS_Smarty::getConfigInstance()->registerHookTemplate('register_agreement_form', 'geoip_agreement_form');
+		// experimental: get rid of some spammers :)
 		if(is_callable('geoip_db_avail')) {
 			$region = geoip_record_by_name($user_info['ip']);
 			if(!empty($region['country_code']) && $region['country_code'] === 'CN')
 				die("E_GOAWAY");
 		}
+		*/
 	}
 }
 ?>

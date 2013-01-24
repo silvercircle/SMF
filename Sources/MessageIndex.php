@@ -249,7 +249,7 @@ function MessageIndex()
 			if($row['id_member'] == $user_info['id'])
 				$link = '<strong>'.$txt['you'].'</strong>';
 			else
-				$link = '<a onclick="getMcard('.$row['id_member'].');return(false);" class="'.$class.'" href="' . $href . '">' . $row['real_name'] . '</a>';
+				$link = '<a data-mid="'.$row['id_member'].'" class="'.$class.'" href="' . $href . '">' . $row['real_name'] . '</a>';
 
 			if (!empty($row['show_online']) || allowedTo('moderate_forum'))
 				$context['view_members_list'][$row['log_time'] . $row['member_name']] = empty($row['show_online']) ? '<em>' . $link . '</em>' : $link;
@@ -447,7 +447,7 @@ function MessageIndex()
 						'name' => $row['first_display_name'],
 						'id' => $row['first_id_member'],
 						'href' => $f_post_mem_href,
-						'link' => !empty($row['first_id_member']) ? '<a onclick="getMcard('.$row['first_id_member'].', $(this));return(false);" href="' . $f_post_mem_href . '" title="' . $txt['profile_of'] . ' ' . $row['first_display_name'] . '">' . $row['first_display_name'] . '</a>' : $row['first_display_name'],
+						'link' => !empty($row['first_id_member']) ? '<a class="mcard" data-mid="'.$row['first_id_member'].'" href="' . $f_post_mem_href . '" title="' . $txt['profile_of'] . ' ' . $row['first_display_name'] . '">' . $row['first_display_name'] . '</a>' : $row['first_display_name'],
 					),
 					'time' => timeformat($row['first_poster_time']),
 					'timestamp' => forum_time(true, $row['first_poster_time']),
@@ -464,7 +464,7 @@ function MessageIndex()
 						'name' => $row['last_display_name'],
 						'id' => $row['last_id_member'],
 						'href' => $l_post_mem_href,
-						'link' => !empty($row['last_id_member']) ? '<a onclick="getMcard('.$row['last_id_member'].', $(this));return(false);" href="' . $l_post_mem_href . '">' . $row['last_display_name'] . '</a>' : $row['last_display_name']
+						'link' => !empty($row['last_id_member']) ? '<a class="mcard" data-mid="'.$row['last_id_member'].'" href="' . $l_post_mem_href . '">' . $row['last_display_name'] . '</a>' : $row['last_display_name']
 					),
 					'time' => timeformat($row['last_poster_time']),
 					'timestamp' => forum_time(true, $row['last_poster_time']),

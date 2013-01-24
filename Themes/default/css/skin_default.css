@@ -765,7 +765,7 @@ ol.commonlist.category {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#606c88', endColorstr='#3f4c6b',GradientType=0 );	
 }
 div.keyinfo.std, div.keyinfo.lean, div.keyinfo.pm {
-	/*background-color: #e5e5e5 !important;*/
+	/*background-color: #b0b0b0 !important;*/
 }
 div.keyinfo.watched {
 	border-bottom:2px solid red !important;

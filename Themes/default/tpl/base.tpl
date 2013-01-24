@@ -28,12 +28,12 @@
     {/if}
     {if isset($S.additional_css)}
       {$variant = $C.theme_variant}
-      <link rel="stylesheet" type="text/css" href="{$S.theme_url}/css/{$S.additional_css.$variant}" />
+      <link rel="stylesheet" type="text/css" href="{$S.theme_url}/css/{$S.additional_css.$variant}.css" />
     {/if}    
     {if $M.jQueryFromGoogleCDN}
       <script type="text/javascript" src="{($C.is_https) ? 'https://' : 'http://'}ajax.googleapis.com/ajax/libs/jquery/{$C.jquery_version}/jquery.min.js"></script>
     {else}
-      <script type="text/javascript" src="{$S.default_theme_url}/scripts/min/jquery.js?v=172"></script>
+      <script type="text/javascript" src="{$S.default_theme_url}/scripts/min/jquery.js?v=190"></script>
     {/if}
     <script type="text/javascript" src="{$S.default_theme_url}/scripts/script.js{$C.jsver}"></script>
     <script type="text/javascript">

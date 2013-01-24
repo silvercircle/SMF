@@ -74,7 +74,7 @@ $context['template_hooks']['global'] = array(
 	'header' => ''
 );
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
-$context['jsver'] = '?v=1588';
+$context['jsver'] = '?v=1590';
 $context['jquery_version'] = '1.7.2';
 $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();

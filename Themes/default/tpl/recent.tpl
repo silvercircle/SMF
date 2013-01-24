@@ -45,7 +45,7 @@
     <form action="{$SCRIPTURL}?action=quickmod" method="post" accept-charset="UTF-8" name="quickModForm" id="quickModForm" style="margin: 0;">
       <input type="hidden" name="{$C.session_var}" value="{$C.session_id}" />
       <input type="hidden" name="qaction" value="markread" />
-      <input type="hidden" name="redirect_url" value="action=unread{(!empty($C.showing_all_topics)) ? ';all' : ''}{$C.querystring_board_limits}" />
+      <input type="hidden" name="redirect_url" value="action=unread{(isset($C.showing_all_topics) and !empty($C.showing_all_topics)) ? ';all' : ''}{$C.querystring_board_limits}" />
   {/if}
 
   {if !empty($C.topics)}

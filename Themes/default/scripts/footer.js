@@ -549,6 +549,27 @@ jQuery(document).ready(function() {
 		sendRequest('action=like;sa=getlikes;m=' + parseInt($(this).parent().attr('data-mid'))  + ';r=' + parseInt($(this).attr('data-rtype')), null);
 		return(false);
 	});
+    // member cards
+    var clicks = 0;
+    var singleClickTimer = false;
+    $('a.member, a.mcard').on('click',function(event) {
+        var mid = $(this).attr('data-mid');
+        if(typeof(mid) !== "undefined") {
+            // Already got a click? This is dblclick then, just pass through
+            if(clicks == 1) {
+                if(singleClickTimer)
+                    clearTimeout(singleClickTimer);
+                return true;
+            }
+            // Show mcard with a slight delay
+            singleClickTimer = setTimeout(function() {
+                getMcard(mid);
+                clicks = 0;
+            }, 250);
+            clicks = 1;
+            return false;
+        }
+    });    
 	bbc_refresh();
 });
 

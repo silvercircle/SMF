@@ -940,7 +940,7 @@ class Topiclist {
 						'name' => $row['first_member_name'],
 						'id' => empty($row['id_member']) ? 0 : $row['id_member'],
 						'href' => $f_post_mem_href,
-						'link' => !empty($row['id_member']) ? '<a onclick="getMcard('.$row['id_member'].', $(this));return(false);" href="' . $f_post_mem_href . '" title="' . $txt['profile_of'] . ' ' . $row['first_member_name'] . '">' . $row['first_member_name'] . '</a>' : $row['first_member_name'],
+						'link' => !empty($row['id_member']) ? '<a class="mcard" data-mid="'.$row['id_member'].'" href="' . $f_post_mem_href . '" title="' . $txt['profile_of'] . ' ' . $row['first_member_name'] . '">' . $row['first_member_name'] . '</a>' : $row['first_member_name'],
 					),
 					'time' => timeformat($row['first_poster_time']),
 					'timestamp' => forum_time(true, $row['first_poster_time']),
@@ -957,7 +957,7 @@ class Topiclist {
 						'name' => $row['last_real_name'],
 						'id' => $row['id_member_updated'],
 						'href' => $l_post_mem_href,
-						'link' => !empty($row['id_member_updated']) ? '<a onclick="getMcard('.$row['id_member_updated'].', $(this));return(false);" href="' . $l_post_mem_href . '">' . $row['last_real_name'] . '</a>' : $row['last_real_name']
+						'link' => !empty($row['id_member_updated']) ? '<a class="mcard" data-mid="'.$row['id_member'].'" href="' . $l_post_mem_href . '">' . $row['last_real_name'] . '</a>' : $row['last_real_name']
 					),
 					'time' => timeformat($row['last_post_time']),
 					'timestamp' => forum_time(true, $row['last_post_time']),

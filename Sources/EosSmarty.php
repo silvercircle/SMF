@@ -60,7 +60,7 @@ class EoS_Smarty {
 				self::$_smartyInstance->addTemplateDir($dir . '/tpl');
 			$firstdir++;
 		}
-		self::$_smartyInstance->setCompileDir(rtrim($boarddir, '/') . '/template_cache');		// TODO: make this customizable
+		self::$_smartyInstance->setCompileDir(rtrim($boarddir, '/') . '/template_cache/themeid_' . $settings['theme_id']);		// TODO: make this customizable
 
 		$context['clip_image_src'] = $settings['images_url'] . '/' . $settings['clip_image_src'][$context['theme_variant']];
 		$context['sprite_image_src'] = $settings['images_url'] . '/' . $settings['sprite_image_src'][$context['theme_variant']];
