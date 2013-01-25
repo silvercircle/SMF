@@ -570,7 +570,7 @@ ul.buttonlist li a, span.button, input[type=button], input[type=submit] {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	vertical-align: center;
+	vertical-align: middle;
 }
 ul.buttonlist.vertical li a {
 	float:none;

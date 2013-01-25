@@ -312,7 +312,7 @@ function smf_main()
 		'tags' => array('Tagging.php', 'TagsMain'),
 		'astream' => array('Activities.php', 'aStreamDispatch'),
 		'dismissnews' => array('Profile-Actions.php', 'DismissNews'),
-		'whatsnew' => array('Recent.php', 'WhatsNew'),
+		'whatsnew' => array('Recent.php', 'WhatsNew')
 	);
 	// Allow modifying $actionArray easily.
 	HookAPI::callHook('integrate_actions', array(&$actionArray));

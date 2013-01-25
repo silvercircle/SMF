@@ -80,7 +80,7 @@ if (!defined('SMF'))
 // Mark a board or multiple boards read.
 function markBoardsRead($boards, $unread = false)
 {
-	global $user_info, $modSettings, $smcFunc;
+	global $user_info, $modSettings;
 
 	// Force $boards to be an array.
 	if (!is_array($boards))
@@ -188,7 +188,7 @@ function markBoardsRead($boards, $unread = false)
 // Mark one or more boards as read.
 function MarkRead()
 {
-	global $board, $topic, $user_info, $board_info, $modSettings, $smcFunc;
+	global $board, $topic, $user_info, $board_info, $modSettings;
 
 	// No Guests allowed!
 	is_not_guest();
@@ -446,8 +446,6 @@ function MarkRead()
 // Get the id_member associated with the specified message.
 function getMsgMemberID($messageID)
 {
-	global $smcFunc;
-
 	// Find the topic and make sure the member still exists.
 	$result = smf_db_query( '
 		SELECT IFNULL(mem.id_member, 0)
@@ -472,7 +470,7 @@ function getMsgMemberID($messageID)
 // Modify the settings and position of a board.
 function modifyBoard($board_id, &$boardOptions)
 {
-	global $sourcedir, $cat_tree, $boards, $boardList, $modSettings, $smcFunc;
+	global $cat_tree, $boards;
 
 	// Get some basic information about all boards and categories.
 	getBoardTree();
@@ -665,7 +663,7 @@ function modifyBoard($board_id, &$boardOptions)
 
 	// Do the updates (if any).
 	if (!empty($boardUpdates))
-		$request = smf_db_query( '
+		smf_db_query( '
 			UPDATE {db_prefix}boards
 			SET
 				' . implode(',
@@ -754,7 +752,7 @@ function modifyBoard($board_id, &$boardOptions)
 // Create a new board and set its properties and position.
 function createBoard($boardOptions)
 {
-	global $boards, $modSettings, $smcFunc;
+	global $boards;
 
 	// Trigger an error if one of the required values is not set.
 	if (!isset($boardOptions['board_name']) || trim($boardOptions['board_name']) == '' || !isset($boardOptions['move_to']) || !isset($boardOptions['target_category']))
@@ -844,7 +842,7 @@ function createBoard($boardOptions)
 // Remove one or more boards.
 function deleteBoards($boards_to_remove, $moveChildrenTo = null)
 {
-	global $sourcedir, $boards, $smcFunc;
+	global $sourcedir, $boards;
 
 	// No boards to delete? Return!
 	if (empty($boards_to_remove))
@@ -976,7 +974,7 @@ function deleteBoards($boards_to_remove, $moveChildrenTo = null)
 // Put all boards in the right order.
 function reorderBoards()
 {
-	global $cat_tree, $boardList, $boards, $smcFunc;
+	global $cat_tree, $boardList, $boards;
 
 	getBoardTree();
 
@@ -1010,8 +1008,6 @@ function reorderBoards()
 // Fixes the children of a board by setting their child_levels to new values.
 function fixChildren($parent, $newLevel, $newParent)
 {
-	global $smcFunc;
-
 	// Grab all children of $parent...
 	$result = smf_db_query( '
 		SELECT id_board
@@ -1046,7 +1042,7 @@ function fixChildren($parent, $newLevel, $newParent)
 // Load a lot of useful information regarding the boards and categories.
 function getBoardTree()
 {
-	global $cat_tree, $boards, $boardList, $txt, $modSettings, $smcFunc;
+	global $cat_tree, $boards, $boardList;
 
 	// Getting all the board and category information you'd ever wanted.
 	$request = smf_db_query( '
@@ -1185,5 +1181,3 @@ function isChildOf($child, $parent)
 
 	return isChildOf($boards[$child]['parent'], $parent);
 }
-
-?>

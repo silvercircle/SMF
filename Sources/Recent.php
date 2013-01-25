@@ -418,7 +418,7 @@ function RecentPosts()
 			'likelink' => ''
 		);
 		if($context['can_see_like'])
-			Ratings::addContent($context['posts'][$row['id_msg']], $context['can_give_like'], $context['time_now']);
+			Ratings::addContent($context['posts'][$row['id_msg']], $context['can_give_like']);
 
 		if ($user_info['id'] == $row['id_first_member'])
 			$board_ids['own'][$row['id_board']][] = $row['id_msg'];

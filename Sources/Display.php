@@ -1346,7 +1346,6 @@ function prepareDisplayContext($reset = false)
 	global $txt, $modSettings, $options, $user_info, $output;
 	global $memberContext, $context, $messages_request;
 	static $counter = null;
-	static $seqnr = 0;
 
 	// If the query returned false, bail.
 	if ($messages_request == false)
@@ -1466,7 +1465,7 @@ function prepareDisplayContext($reset = false)
 	);
 
 	if($context['can_see_like'])
-		Ratings::addContent($output, $context['can_give_like'], $context['time_cutoff_ref']);
+		Ratings::addContent($output, $context['can_give_like']);
 	else
 		$output['likes_count'] = 0;
 	// Is this user the message author?
@@ -1731,7 +1730,7 @@ function Download()
 
 function loadAttachmentContext($id_msg)
 {
-	global $attachments, $modSettings, $txt, $scripturl, $topic, $sourcedir, $backend_subdir;
+	global $attachments, $modSettings, $txt, $scripturl, $topic, $sourcedir;
 
 	// Set up the attachment info - based on code by Meriadoc.
 	$attachmentData = array();

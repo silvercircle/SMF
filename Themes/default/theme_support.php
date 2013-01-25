@@ -14,8 +14,6 @@
 
 global $settings;
 
-echo $context['current_theme_variant'];
-
 $settings['theme_variants'] = array('default');
 $settings['clip_image_src'] = array(
 	'_default' => 'clipsrc.png',
@@ -59,13 +57,13 @@ class DefaultTheme extends EoS_Smarty_Template_Support
 
 	public function testfunction($param)
 	{
-		global $context, $txt;
+		//global $context, $txt;
 		echo "We are in test function and this is our param: ", $param;
 
 		/*
 		 * display a custom theme template from overrides/
 		 */
-		$this->_smarty_instance->display('overrides/foo.tpl');
+		//$this->_smarty_instance->display('overrides/foo.tpl');
 	}
 
 	/**

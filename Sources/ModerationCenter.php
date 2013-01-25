@@ -21,7 +21,7 @@ if (!defined('SMF'))
 // Entry point for the moderation center.
 function ModerationMain($dont_call = false)
 {
-	global $txt, $context, $scripturl, $sc, $modSettings, $user_info, $settings, $sourcedir, $options, $smcFunc;
+	global $txt, $context, $scripturl, $modSettings, $user_info, $sourcedir, $options;
 
 	EoS_Smarty::setActive();
 	// Don't run this twice... and don't conflict with the admin bar.
@@ -47,7 +47,7 @@ function ModerationMain($dont_call = false)
 	$context['robot_no_index'] = true;
 
 	// This is the menu structure - refer to Subs-Menu.php for the details.
-	$direct_topicban = isset($_REQUEST['sa']) && ($_REQUEST['sa'] === 'ban' || $_REQUEST['sa'] === 'unban');
+	//$direct_topicban = isset($_REQUEST['sa']) && ($_REQUEST['sa'] === 'ban' || $_REQUEST['sa'] === 'unban');
 
 	$moderation_areas = array(
 		'main' => array(
@@ -207,7 +207,7 @@ function ModerationMain($dont_call = false)
 // This function basically is the home page of the moderation center.
 function ModerationHome()
 {
-	global $txt, $context, $scripturl, $modSettings, $user_info, $user_settings;
+	global $txt, $context, $user_settings;
 
 	EoS_Smarty::loadTemplate('modcenter/modcenter_base');
 	EoS_Smarty::getConfigInstance()->registerHookTemplate('modcenter_content_area', 'modcenter/main');
@@ -264,7 +264,7 @@ function ModBlockLatestNews()
 // Show a list of the most active watched users.
 function ModBlockWatchedUsers()
 {
-	global $context, $smcFunc, $scripturl, $modSettings;
+	global $context, $scripturl, $modSettings;
 
 	if (($watched_users = CacheAPI::getCache('recent_user_watches', 240)) === null)
 	{
@@ -305,7 +305,7 @@ function ModBlockWatchedUsers()
 // Show an area for the moderator to type into.
 function ModBlockNotes()
 {
-	global $context, $smcFunc, $scripturl, $txt, $user_info;
+	global $context, $scripturl, $txt, $user_info;
 
 	// Are we saving a note?
 	if (isset($_POST['makenote']) && isset($_POST['new_note']))
@@ -429,7 +429,7 @@ function ModBlockNotes()
 // Show a list of the most recent reported posts.
 function ModBlockReportedPosts()
 {
-	global $context, $user_info, $scripturl, $smcFunc;
+	global $context, $user_info, $scripturl;
 
 	// Got the info already?
 	$cachekey = md5(serialize($user_info['mod_cache']['bq']));
@@ -491,7 +491,7 @@ function ModBlockReportedPosts()
 // Show a list of all the group requests they can see.
 function ModBlockGroupRequests()
 {
-	global $context, $user_info, $scripturl, $smcFunc;
+	global $context, $user_info, $scripturl;
 
 	$context['group_requests'] = array();
 	// Make sure they can even moderate someone!
@@ -538,7 +538,7 @@ function ModBlockGroupRequests()
 // Browse all the reported posts...
 function ReportedPosts()
 {
-	global $txt, $context, $scripturl, $modSettings, $user_info, $smcFunc;
+	global $txt, $context, $scripturl, $user_info;
 
 	// Put the open and closed options into tabs, because we can...
 	$context[$context['moderation_menu_name']]['tab_data'] = array(
@@ -714,7 +714,7 @@ function ReportedPosts()
 //!!! As for most things in this file, this needs to be moved somewhere appropriate.
 function ModerateGroups()
 {
-	global $txt, $context, $scripturl, $modSettings, $user_info;
+	global $context, $user_info;
 
 	// You need to be allowed to moderate groups...
 	if ($user_info['mod_cache']['gq'] == '0=1')
@@ -740,7 +740,7 @@ function ModerateGroups()
 // How many open reports do we have?
 function recountOpenReports()
 {
-	global $user_info, $context, $smcFunc;
+	global $user_info, $context;
 
 	$request = smf_db_query( '
 		SELECT COUNT(*)
@@ -767,7 +767,7 @@ function recountOpenReports()
 
 function ModReport()
 {
-	global $user_info, $context, $sourcedir, $scripturl, $txt, $smcFunc;
+	global $user_info, $context, $sourcedir, $scripturl, $txt;
 
 	// Have to at least give us something
 	if (empty($_REQUEST['report']))
@@ -1031,7 +1031,7 @@ function ModReport()
 // Show a notice sent to a user.
 function ShowNotice()
 {
-	global $smcFunc, $txt, $context;
+	global $txt, $context;
 
 	$context['page_title'] = $txt['show_notice'];
 	EoS_Smarty::loadTemplate('modcenter/show_notice');
@@ -1059,7 +1059,7 @@ function ShowNotice()
 // View watched users.
 function ViewWatchedUsers()
 {
-	global $smcFunc, $modSettings, $context, $txt, $scripturl, $user_info, $sourcedir;
+	global $modSettings, $context, $txt, $scripturl, $sourcedir;
 
 	// Some important context!
 	$context['page_title'] = $txt['mc_watched_users_title'];
@@ -1170,11 +1170,11 @@ function ViewWatchedUsers()
 					'value' => $txt['mc_watched_users_warning'],
 				),
 				'data' => array(
-					'function' => create_function('$member', '
+					'function' => function($member) {
 						global $scripturl;
 
-						return allowedTo(\'issue_warning\') ? \'<a href="\' . $scripturl . \'?action=profile;area=issuewarning;u=\' . $member[\'id\'] . \'">\' . $member[\'warning\'] . \'%</a>\' : $member[\'warning\'] . \'%\';
-					'),
+						return allowedTo('issue_warning') ? '<a href="' . $scripturl . '?action=profile;area=issuewarning;u=' . $member['id'] . '">' . $member['warning'] . '%</a>' : $member['warning'] . '%';
+					},
 				),
 				'sort' => array(
 					'default' => 'warning',
@@ -1216,14 +1216,14 @@ function ViewWatchedUsers()
 					'value' => $txt['mc_watched_users_last_post'],
 				),
 				'data' => array(
-					'function' => create_function('$member', '
+					'function' => function($member) {
 						global $scripturl;
 
-						if ($member[\'last_post_id\'])
-							return \'<a href="\' . $scripturl . \'?msg=\' . $member[\'last_post_id\'] . \'">\' . $member[\'last_post\'] . \'</a>\';
+						if ($member['last_post_id'])
+							return '<a href="' . $scripturl . '?msg=' . $member['last_post_id'] . '">' . $member['last_post'] . '</a>';
 						else
-							return $member[\'last_post\'];
-					'),
+							return $member['last_post'];
+					},
 				),
 			),
 		),
@@ -1269,7 +1269,7 @@ function ViewWatchedUsers()
 
 function list_getWatchedUserCount($approve_query)
 {
-	global $smcFunc, $modSettings;
+	global $modSettings;
 
 	$request = smf_db_query( '
 		SELECT COUNT(*)
@@ -1287,7 +1287,7 @@ function list_getWatchedUserCount($approve_query)
 
 function list_getWatchedUsers($start, $items_per_page, $sort, $approve_query, $dummy)
 {
-	global $smcFunc, $txt, $scripturl, $modSettings, $user_info, $context;
+	global $txt, $modSettings, $user_info;
 
 	$request = smf_db_query( '
 		SELECT id_member, real_name, last_login, posts, warning
@@ -1381,7 +1381,7 @@ function list_getWatchedUsers($start, $items_per_page, $sort, $approve_query, $d
 
 function list_getWatchedUserPostsCount($approve_query)
 {
-	global $smcFunc, $modSettings, $user_info;
+	global $modSettings;
 
 	$request = smf_db_query( '
 		SELECT COUNT(*)
@@ -1403,7 +1403,7 @@ function list_getWatchedUserPostsCount($approve_query)
 
 function list_getWatchedUserPosts($start, $items_per_page, $sort, $approve_query, $delete_boards)
 {
-	global $smcFunc, $txt, $scripturl, $modSettings, $user_info;
+	global $scripturl, $modSettings;
 
 	$request = smf_db_query( '
 		SELECT m.id_msg, m.id_topic, m.id_board, m.id_member, m.subject, m.body, m.poster_time,
@@ -1472,7 +1472,7 @@ function ViewWarnings()
 // Simply put, look at the warning log!
 function ViewWarningLog()
 {
-	global $smcFunc, $modSettings, $context, $txt, $scripturl, $sourcedir;
+	global $modSettings, $context, $txt, $scripturl, $sourcedir;
 
 	// Setup context as always.
 	$context['page_title'] = $txt['mc_warning_log_title'];
@@ -1538,22 +1538,22 @@ function ViewWarningLog()
 					'value' => $txt['profile_warning_previous_reason'],
 				),
 				'data' => array(
-					'function' => create_function('$warning', '
+					'function' => function($warning) {
 						global $scripturl, $settings, $txt;
 
-						$output = \'
+						$output = '
 							<div class="floatleft">
-								\' . $warning[\'reason\'] . \'
-							</div>\';
+								' . $warning['reason'] . '
+							</div>';
 
-						if (!empty($warning[\'id_notice\']))
-							$output .= \'
+						if (!empty($warning['id_notice']))
+							$output .= '
 							<div class="floatright">
-								<a href="\' . $scripturl . \'?action=moderate;area=notice;nid=\' . $warning[\'id_notice\'] . \'" onclick="window.open(this.href, \\\'\\\', \\\'scrollbars=yes,resizable=yes,width=400,height=250\\\');return false;" target="_blank" class="new_win" title="\' . $txt[\'profile_warning_previous_notice\'] . \'"><img src="\' . $settings[\'default_images_url\'] . \'/filter.gif" alt="\' . $txt[\'profile_warning_previous_notice\'] . \'" /></a>
-							</div>\';
+								<a href="' . $scripturl . '?action=moderate;area=notice;nid=' . $warning['id_notice'] . '" onclick="window.open(this.href, \'\', \'scrollbars=yes,resizable=yes,width=400,height=250\');return false;" target="_blank" class="new_win" title="' . $txt['profile_warning_previous_notice'] . '"><img src="' . $settings['default_images_url'] . '/filter.gif" alt="' . $txt['profile_warning_previous_notice'] . '" /></a>
+							</div>';
 
 						return $output;
-					'),
+					},
 				),
 			),
 			'points' => array(
@@ -1575,8 +1575,6 @@ function ViewWarningLog()
 
 function list_getWarningCount()
 {
-	global $smcFunc, $modSettings;
-
 	$request = smf_db_query( '
 		SELECT COUNT(*)
 		FROM {db_prefix}log_comments
@@ -1593,7 +1591,7 @@ function list_getWarningCount()
 
 function list_getWarnings($start, $items_per_page, $sort)
 {
-	global $smcFunc, $txt, $scripturl, $modSettings, $user_info;
+	global $scripturl;
 
 	$request = smf_db_query( '
 		SELECT IFNULL(mem.id_member, 0) AS id_member, IFNULL(mem.real_name, lc.member_name) AS member_name_col,
@@ -1741,11 +1739,11 @@ function ViewWarningTemplates()
 					'style' => 'width: 4%;',
 				),
 				'data' => array(
-					'function' => create_function('$rowData', '
+					'function' => function($rowData) {
 						global $context, $txt, $scripturl;
 
-						return \'<input type="checkbox" name="deltpl[]" value="\' . $rowData[\'id_comment\'] . \'" class="input_check" />\';
-					'),
+						return '<input type="checkbox" name="deltpl[]" value="' . $rowData['id_comment'] . '" class="input_check" />';
+					},
 					'style' => 'text-align: center;',
 				),
 			),
@@ -1771,7 +1769,7 @@ function ViewWarningTemplates()
 
 function list_getWarningTemplateCount()
 {
-	global $smcFunc, $modSettings, $user_info;
+	global $user_info;
 
 	$request = smf_db_query( '
 		SELECT COUNT(*)
@@ -1792,7 +1790,7 @@ function list_getWarningTemplateCount()
 
 function list_getWarningTemplates($start, $items_per_page, $sort)
 {
-	global $smcFunc, $txt, $scripturl, $modSettings, $user_info;
+	global $scripturl, $user_info;
 
 	$request = smf_db_query( '
 		SELECT lc.id_comment, IFNULL(mem.id_member, 0) AS id_member,
@@ -1963,7 +1961,7 @@ function ModifyWarningTemplate()
 // Change moderation preferences.
 function ModerationSettings()
 {
-	global $context, $smcFunc, $txt, $sourcedir, $scripturl, $user_settings, $user_info;
+	global $context, $txt, $user_settings, $user_info;
 
 	// Some useful context stuff.
 	EoS_Smarty::loadTemplate('modcenter/modcenter_base');

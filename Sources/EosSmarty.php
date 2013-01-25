@@ -19,7 +19,13 @@ if (!defined('EOSA'))
 class EoS_Smarty {
 	private static $_template_names = array();
 	private static $_additional_template_dirs = array();
+	/**
+	 * @var Smarty our smarty instance object
+	 */
 	private static $_smartyInstance;
+	/**
+	 * @var EoS_Smarty_Template_Support the template support object
+	 */
 	private static $_configInstance;
 	private static $_is_BoardIndex = false;
 	private static $_is_Active = false;
@@ -148,10 +154,17 @@ class EoS_Smarty {
 		self::$_configInstance->footer_scripts();
 	}
 
+	/**
+	 * @return EoS_Smarty_Template_Support
+	 */
 	public static function &getConfigInstance()
 	{
 		return self::$_configInstance;
 	}
+
+	/**
+	 * @return Smarty
+	 */
 	public static function &getSmartyInstance()
 	{
 		return self::$_smartyInstance;
@@ -254,7 +267,7 @@ class EoS_Smarty {
 
 	public static function template_header()
 	{
-		global $txt, $modSettings, $context, $settings, $user_info, $boarddir, $cachedir;
+		global $txt, $context, $user_info, $boarddir;
 
 		setupThemeContext();
 
@@ -269,12 +282,9 @@ class EoS_Smarty {
 
 		header('Content-Type: text/' . (isset($_REQUEST['xml']) ? 'xml' : 'html') . '; charset=UTF-8');
 
-		$checked_securityFiles = false;
-		$showed_banned = false;
-
-		if (self::$_is_BoardIndex && allowedTo('admin_forum') && !$user_info['is_guest'] && !$checked_securityFiles)
+		if (self::$_is_BoardIndex && allowedTo('admin_forum') && !$user_info['is_guest'] && !isset($context['security_file_check_done']))
 		{
-			$checked_securityFiles = true;
+			$context['security_file_check_done'] = true;
 			$securityFiles = array('install.php', 'upgrade.php', 'repair_settings.php', 'Settings.php~', 'Settings_bak.php~');
 			foreach ($securityFiles as $i => $securityFile)
 			{
@@ -305,9 +315,9 @@ class EoS_Smarty {
 			}
 		}
 		// If the user is banned from posting inform them of it.
-		elseif (self::$_is_BoardIndex && isset($_SESSION['ban']['cannot_post']) && !$showed_banned)
+		elseif (self::$_is_BoardIndex && isset($_SESSION['ban']['cannot_post']) && !isset($context['showed_banned']))
 		{
-			$showed_banned = true;
+			$context['showed_banned'] = true;
 			echo '
 				<div class="windowbg alert" style="margin: 2ex; padding: 2ex; border: 2px dashed red;">
 					', sprintf($txt['you_are_post_banned'], $user_info['is_guest'] ? $txt['guest_title'] : $user_info['name']);
@@ -421,7 +431,7 @@ class EoS_Smarty_Template_Support {
 		global $context, $settings;
 
 		if(!empty($context['theme_scripts'])) {
-			foreach($context['theme_scripts'] as $type => $script) {
+			foreach($context['theme_scripts'] as $script) {
 				echo '
 		<script type="text/javascript" src="',($script['default'] ? $settings['default_theme_url'] : $settings['theme_url']) . '/' . $script['name'] . $context['jsver'], '"></script>';
 			}
@@ -474,7 +484,7 @@ class EoS_Smarty_Template_Support {
 	}
 	public function setupContext()
 	{
-		global $context, $settings, $modSettings, $options, $txt;
+		global $context, $settings, $modSettings, $txt;
 		global $forum_copyright, $forum_version;
 
   		$context['template_time_now'] = forum_time(false);
@@ -525,7 +535,7 @@ class EoS_Smarty_Template_Support {
 	 * @static
 	 * @param $position - string. indicates where the template fragment 
 	 *        should go.
-	 * @param $template_name a template file name. must be relative to the
+	 * @param $template_name - string. a template file name. must be relative to the
 	 *        one of the configured template directories. can be either
 	 *		  a string (single template) or an array of template fragments
 	 */

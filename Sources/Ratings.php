@@ -13,6 +13,9 @@
  *
  * implements UI features for the content - liking system.
  */
+
+global $sourcedir;
+
 require_once($sourcedir . '/lib/Subs-Ratings.php');
 
 function FixLikes()
@@ -30,15 +33,17 @@ function FixLikes()
 
 function LikeDispatch()
 {
-	global $context, $board, $memberContext, $txt, $user_info, $modSettings;
+	global $context, $board, $txt, $user_info, $modSettings;
 
 	$xml = isset($_REQUEST['xml']) ? true : false;
 	$action = isset($_REQUEST['sa']) ? $_REQUEST['sa'] : '';
 	
 	if($action === '')
 		$action = 'getlikes';
-	if($action === 'widget')
-		return GetRatingWidget();
+	if($action === 'widget') {
+		GetRatingWidget();
+		return;
+	}
 
 	$ctype = isset($_REQUEST['ctype']) ? $_REQUEST['ctype'] : 1;		// default to content type = 1 (post)
 	$mid = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
@@ -116,10 +121,10 @@ function GetRatingWidget()
 	else
 		EoS_Smarty::loadTemplate('ratings/widget');	// todo: allow rating without ajax / js
 
-	$request = smf_db_query('SELECT m.id_msg, m.id_topic, m.id_board FROM {db_prefix}messages AS m WHERE m.id_msg = {int:id} LIMIT 1',
+	$request = smf_db_query('SELECT m.id_board FROM {db_prefix}messages AS m WHERE m.id_msg = {int:id} LIMIT 1',
 		array('id' => $content_id));
 
-	list($id_msg, $id_topic, $id_board) = mysql_fetch_row($request);
+	list($id_board) = mysql_fetch_row($request);
 	mysql_free_result($request);
 
 	$context['result_count'] = 0;
@@ -229,4 +234,3 @@ function LikesByUser($memID)
 	mysql_free_result($request);
 	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'ratings/profile_display');
 }
-?>

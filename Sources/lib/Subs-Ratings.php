@@ -41,6 +41,11 @@ class Ratings {
 		self::$rate_bar = '<a onclick="ratingWidgetInvoke($(this));return(false);" rel="nofollow" href="!#" class="widgetanchor">' . $txt['rate_this'] . '</a>';
 	}
 
+	/**
+	 * @static
+	 * tell caller if ratings system is enabled
+	 * @return mixed true if ratings are enabled and available.
+	 */
 	public static function isValid()
 	{
 		return self::$is_valid;
@@ -87,15 +92,14 @@ class Ratings {
 	/**
 	 * @param $row - array, fully prepared message
 	 * @param $can_give_like - int, permission to use the ratings
-	 * @param $now - int, current unix time
-	 * 
+	 *
 	 * populates $row['likelink'] (all the links required to rate a post)
 	 * and $row['likers'] (the result of the like cache)
 	 * be used in a template. $can_give_like should be the result of a allowedTo('like_give') check.
 	 */
-	public static function addContent(&$row, $can_give_like, $now)
+	public static function addContent(&$row, $can_give_like)
 	{
-		global $user_info, $txt, $modSettings, $context;
+		global $user_info, $txt;
 		
 		$row['likers'] = '';
 
@@ -374,4 +378,3 @@ class Ratings {
 			array('id_msg' => $_mid, 'ctype' => $ctype));
 	}
 }
-?>

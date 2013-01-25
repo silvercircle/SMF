@@ -1040,7 +1040,7 @@ ul.buttonlist li a, span.button, input[type=button], input[type=submit] {
 	border: 1px solid white;
 	background: #e2e2e2;
 	font-family:Tahoma,sans-serif;
-	vertical-align: center;
+	vertical-align: middle;
 	outline: 1px solid #999;
 }
 span.button.default, ul.buttonlist li a.active, input[type=submit].default {
@@ -1408,7 +1408,7 @@ fieldset.merge_options {
 	width: 540px;
 	margin: 0 auto;
 }
-login p {
+.login p {
 	text-align: center;
 }
 

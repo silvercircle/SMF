@@ -705,7 +705,7 @@ function showPosts($memID)
 				'likelink' => ''
 			);
 			if($context['can_see_like'])
-				Ratings::addContent($context['posts'][$i], $context['can_give_like'], $time_now);
+				Ratings::addContent($context['posts'][$i], $context['can_give_like']);
 
 			if ($user_info['id'] == $row['id_member_started'])
 				$board_ids['own'][$row['id_board']][] = $counter;

@@ -31,7 +31,6 @@ function loadRelated($topic)
 	if (mysql_num_rows($request) == 0)
 	{
 		mysql_free_result($request);
-
 		return false;
 	}
 	$topics_ids = array();
@@ -57,8 +56,7 @@ function prepareTopicArray($topic_ids)
 	
 	$context['messages_per_page'] = commonAPI::getMessagesPerPage();
 
-	$result = smf_db_query('
-		SELECT
+	$result = smf_db_query('SELECT
 			t.id_topic, t.num_replies, t.locked, t.num_views, t.is_sticky, t.id_poll, t.id_previous_board,
 			' . ($user_info['is_guest'] ? '0' : 'IFNULL(lt.id_msg, IFNULL(lmr.id_msg, -1)) + 1') . ' AS new_from,
 			t.id_last_msg, t.approved, t.unapproved_posts, ml.poster_time AS last_poster_time,
@@ -361,5 +359,3 @@ function relatedAddRelatedTopic($topics, $source = '')
 		array('id_topic_first', 'id_topic_second')
 	);
 }
-
-?>

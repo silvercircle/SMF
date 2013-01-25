@@ -344,4 +344,3 @@ function aStreamRemoveByTopic(&$topic_ids)
 		WHERE a.id_topic IN ({array_int:topic_ids})',
 		array('topic_ids' => $_topic_ids));
 }
-?>
