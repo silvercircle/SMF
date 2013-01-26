@@ -11,13 +11,18 @@ on enduser usability.
 
 Some things that are already implemented or planned are:
 
-* A like system
-* A tagging system
+* Content rating system (can be a simple "like" system or something more
+  advanced).
+* A topic tagging system
 * A completely new theme, HTML 5 compliant and targeted at modern 
   browsers
-* Ajax enhancements for previewing member profiles, topics and more.
+* integrated the Smarty template engine for easier templating.
+* Template hooks allow inserting template fragments in many locations.
 * dynamic auto-refreshing relative time stamps.
-* sphinx search support
-* removed legacy code. This will be PHP5 and MySQL only
+* sphinx search support for fast fulltext searching.
+* Moderation enhancements: Topic bans allow to ban a single member from one
+  or more specific topic(s) only.
+* removed lots of legacy code. Needs PHP 5.3 and MySQL 5.0 (or any later version)
+* Plugin architecture that allows for mods w/o the need for code edits.
 
 You can follow the development here: http://forum.miranda.or.at
