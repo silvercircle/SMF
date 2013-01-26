@@ -45,11 +45,10 @@
     {$T.report_sent}
   </div>
 {/if}
-{$C.template_hooks.display.header}
 <a id="top"></a>
 {($C.first_new_message) ? '<a id="new"></a>' : ''}
 {* Is this topic also a poll? *}
-{$C.template_hooks.display.above_posts}
+{$SUPPORT->displayHook('topic_above')}
 {* Is this topic also a poll? *}
 {if $C.is_poll}
   {include "topic/polldisplay.tpl"}
@@ -135,6 +134,7 @@
   <div class="pagelinks floatleft">{$C.page_index} {($M.topbottomEnable) ? ($C.menu_separator|cat:' &nbsp;&nbsp;<a href="#top"><strong>'|cat:$T.go_up|cat:'</strong></a>') : ''}</div>
   <div class="nextlinks_bottom">{$C.previous_next}</div>
 </div>
+{$C.banned_notice}
 {include '../linktree.tpl'}
 <div class="plainbox floatright" id="display_jump_to">&nbsp;</div>
 <div id="moderationbuttons" class="smallpadding floatleft">

@@ -22,8 +22,10 @@
       <span>{$C.page_index}</span>
     </div>
     <div class="posts_container std">
+    {$C.alt_row = false}
     {foreach $C.posts as $message}
       {call postbit_compact}
+      {$C.alt_row = !$C.alt_row}
     {/foreach}
     </div>
     <div class="pagelinks mediumpadding">

@@ -29,11 +29,11 @@ class RelatedTopicsFulltext
 
 		return true;
 	}
-	
+
 	function updateTopics($topics)
 	{
 		global $context, $smcFunc;
-		
+
 		if (empty($topics))
 			return;
 
@@ -49,16 +49,16 @@ class RelatedTopicsFulltext
 				'ignored' => $context['rt_ignore'],
 			)
 		);
-		
+
 		$rows = array();
-	
+
 		while ($row = mysql_fetch_assoc($request))
 			$rows[] = array($row['id_topic'], $row['subject']);
 		mysql_free_result($request);
-		
+
 		if (empty($rows))
 			return true;
-		
+
 		// Insert to cache
 		smf_db_insert('replace',
 			'{db_prefix}related_subjects',
@@ -69,28 +69,28 @@ class RelatedTopicsFulltext
 			$rows,
 			array('id_topic')
 		);
-		
+
 		// Search for relations
 		$relatedRows = array();
-		
+
 		foreach ($rows as $id_topic)
 		{
 			list ($id_topic, $subject) = $id_topic;
-			
+
 			$relatedTopics = $this->__searchRelated($subject);
-			
+
 			foreach ($relatedTopics as $id_topic_rel)
 			{
 				list ($id_topic_rel, $score) = $id_topic_rel;
-				
+
 				if ($id_topic_rel == $id_topic)
 					continue;
-				
+
 				$relatedRows[] = array($id_topic, $id_topic_rel, $score);
 			}
 			unset($relatedTopics);
 		}
-		
+
 		relatedAddRelatedTopic($relatedRows, 'fulltext');
 
 		return true;
@@ -108,7 +108,7 @@ class RelatedTopicsFulltext
 			)
 		);
 
-		return true;		
+		return true;
 	}
 
 	private function __searchRelated($subject)
@@ -137,5 +137,3 @@ class RelatedTopicsFulltext
 		return $return;
 	}
 }
-
-?>

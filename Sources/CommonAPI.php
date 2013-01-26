@@ -14,9 +14,11 @@
  * this is what once was in $smcFunc[], a bit simplified for utf-8 only and entity check
  * always enforced.
  *
- * it also implements the Hook and Cache APIs.
+ * it also implements the Hook and Cache APIs and provides the base class for the plugin
+ * system which is always needed.
  */
-if (!defined('SMF'))
+
+if (!defined('EOSA'))
 	die('No access');
 
 class commonAPI {
@@ -179,11 +181,11 @@ class HookAPI {
 	 * This function is typically called from the install procedure of an addon.
 	 * It adds one file/function to a named hook.
 	 * 
-	 * @param type $hook     string - the name of the hook
-	 * @param type $product  string - a product name. This also defines the sub-folder in which the files of the addons must be
-	 * @param string $file   string - the file to include
-	 * @param type $function string - a function name to call
-	 * @return type			 bool   - true if all ok, false if the file or function could not be found.
+	 * @param $hook 	string - the name of the hook
+	 * @param $product  string - a product name. This also defines the sub-folder in which the files of the addons must be
+	 * @param $file   	string - the file to include
+	 * @param $function string - a function name to call
+	 * @return bool   - true if all ok, false if the file or function could not be found.
 	 */
 	public static function addHook($hook, $product, $file, $function)
 	{
@@ -1035,6 +1037,9 @@ class Topiclist {
 	}
 }
 
+/**
+ * base class for a EoS Alpha plugin.
+ */
 class EoS_Plugin
 {
 	protected $plugindir;
@@ -1045,6 +1050,8 @@ class EoS_Plugin
 	}
 
 	/**
+	 * @return bool
+	 *
 	 * plugins can override this function to check for pre-requisites and return
 	 * false if the plugin cannot be activated
 	 */
@@ -1053,21 +1060,52 @@ class EoS_Plugin
 		return true;
 	}
 
+	/**
+	 * @return bool
+	 *
+	 * custom install provides a method to install the prerequisites
+	 * for example, make changes to the database scheme.
+	 */
+	public function customInstall()
+	{
+		return true;
+	}
+
+	/**
+	 * @return string
+	 *
+	 * get the clear text reason for why a plugin failed to install
+	 */
 	public function getInstallErrorReason()
 	{
 		return $this->installError;
 	}
 
+	/**
+	 * install all the hooks for this plugin
+	 */
 	public function installHooks()
 	{
 		foreach($this->installableHooks as $hookName => $theHook)
 			HookAPI::addHook($hookName, $this->productShortName, $theHook['file'], $theHook['callable']);
-			//var_dump($theHook);
 	}
 
+	/**
+	 * remove the hooks for this plugin. This does merely "deactivate" the plugin
+	 * *not* uninstall.
+	 */
 	public function removeHooks()
 	{
 		HookAPI::removeAll($this->productShortName);
+	}
+
+	/**
+	 * call the uninstaller and remove all traces of the plugin,
+	 * including database changes.
+	 */
+	public function uninstall()
+	{
+
 	}
 
 	public function __get($property)

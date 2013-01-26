@@ -76,15 +76,7 @@ function Display()
 	$context['pcache_update_counter'] = !empty($modSettings['use_post_cache']) ? 0 : PCACHE_UPDATE_PER_VIEW + 1;
 	$context['time_cutoff_ref'] = time();
 
-	$context['template_hooks']['display'] = array(
-		'header' => '',
-	    'extend_topicheader' => '',
-		'above_posts' => '',
-		'below_posts' => '',
-		'footer' => ''
-	);
-	//EoS_Smarty::getConfigInstance()->registerHookTemplate('postbit_below', 'overrides/foo');
-	if(!empty($modSettings['karmaMode'])) 
+	if(!empty($modSettings['karmaMode']))
 		require_once($sourcedir . '/lib/Subs-Ratings.php');
 	else
 		$context['can_see_like'] = $context['can_give_like'] = false;
@@ -246,12 +238,6 @@ function Display()
 	if (mysql_num_rows($request) == 0)
 		fatal_lang_error('not_a_topic', false);
 
-	// Added by Related Topics
-	if (isset($modSettings['have_related_topics']) && $modSettings['have_related_topics'] && !empty($modSettings['relatedTopicsEnabled'])) {
-		require_once($sourcedir . '/lib/Subs-Related.php');
-		loadRelated($topic);
-	}
-	
 	$topicinfo = mysql_fetch_assoc($request);
 	mysql_free_result($request);
 
@@ -1331,7 +1317,7 @@ function Display()
 		$context['full_members_viewing_list'] = empty($context['view_members_list']) ? '0 ' . $txt['members'] : implode(', ', $context['view_members_list']) . ((empty($context['view_num_hidden']) || $context['can_moderate_forum']) ? '' : ' (+ ' . $context['view_num_hidden'] . ' ' . $txt['hidden'] . ')');
 	}
 	fetchNewsItems($board, $topic);
-	HookAPI::callHook('display_general', array());
+	HookAPI::callHook('display_general', array(&$topic));
 	/*
 	 * $message is always available in templates as global variable
 	 * prepareDisplayContext() just repopulates it and is called from

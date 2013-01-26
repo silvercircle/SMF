@@ -970,6 +970,9 @@ div.post_wrapper.alternate div.post_content {
 div.post_content.std {
 	border-top:0;
 }
+div.post_content.lean {
+	background: transparent !important;
+}
 div.post_content.comment {
 	background: transparent !important;
 }

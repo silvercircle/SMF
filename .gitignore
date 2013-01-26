@@ -5,8 +5,5 @@
 /sphinx_config.php
 /related_topics.php
 /Themes/default/scripts/drafts.js
-/Sources/RelatedTopics.php
-/Sources/Subs-Related.php
-/Sources/Subs-RelatedFulltext.php
 /*.tags*
 /sftp-config.json

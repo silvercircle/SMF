@@ -13,7 +13,7 @@
 {function postbit_compact}
   {$ID = $message.id}
   {$imgsrc = $C.clip_image_src}
-  <div class="post_wrapper std" data-mid="{$ID}">
+  <div class="post_wrapper std{($C.alt_row) ? ' alternate' : ''}" data-mid="{$ID}">
   <div class="post_inner_wrapper std">
   {if !empty($C.is_display_std)}
     {$message.can_quote = $C.can_quote}
@@ -26,7 +26,7 @@
   {if !empty($C.first_message) and $message['id'] != $C.first_message}
     <a id="msg{$ID}"></a>{($message.first_new) ? '<a id="new"></a>' : ''}
   {/if}
-  <div class="keyinfo std">
+  <div class="keyinfo compact">
     <div class="messageicon floatleft">
       &nbsp;&nbsp;<img src="{$message.icon_url}" alt="" />&nbsp;&nbsp;
     </div>
