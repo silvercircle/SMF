@@ -35,7 +35,7 @@ function TagsMain()
 
 function ViewTags()
 {
-	global $context, $txt, $mbname, $scripturl, $user_info, $smcFunc,  $modSettings;
+	global $context, $txt, $mbname, $scripturl, $modSettings;
 
 	if (isset($_REQUEST['tagid']))
 	{
@@ -168,7 +168,7 @@ function ViewTags()
  */
 function TaggingSystem_Add()
 {
-	global $context, $txt, $mbname, $user_info, $smcFunc;
+	global $context, $txt, $mbname, $user_info;
 
 	$ajaxrequest = $_REQUEST['action'] == 'xmlhttp' ? true : false;
 	
@@ -204,7 +204,7 @@ function TaggingSystem_Add()
 	$context['page_title'] = $mbname . ' - ' . $txt['smftags_addtag'];
 }
 
-function TagErrorMsg($msg, $isajax)
+function TagErrorMsg($msg, $isajax = false)
 {
 	if(!$isajax)
 		fatal_error($msg, false);
@@ -216,7 +216,7 @@ function TagErrorMsg($msg, $isajax)
 
 function RegenerateTagList($topic)
 {
-	global $smcFunc, $scripturl;
+	global $scripturl;
 	
 	// construct the new tag list and return it for DOM insertion
 	
@@ -225,7 +225,6 @@ function RegenerateTagList($topic)
        	WHERE t.id_tag = l.id_tag && l.id_topic = {int:topic}',
        	array('topic' => $topic));
         	
-	$tags = array();
     $output = '';
         
     while($row = mysql_fetch_assoc($result)) {
@@ -242,7 +241,7 @@ function RegenerateTagList($topic)
  */
 function TaggingSystem_Submit()
 {
-	global $txt, $modSettings, $smcFunc, $user_info;
+	global $txt, $modSettings, $user_info;
 
 	$isajax = $_REQUEST['action'] == 'xmlhttp' ? true : false;
 	
@@ -384,8 +383,6 @@ function TagsSettings2()
 
 function TagCleanUp($id_tag)
 {
-	global $smcFunc;
-
 	$result = smf_db_query( '
 		SELECT id FROM {db_prefix}tags_log WHERE id_tag = {int:id}',
 			array('id' => $id_tag));
@@ -395,4 +392,3 @@ function TagCleanUp($id_tag)
 			
 	mysql_free_result($result);
 }
-?>

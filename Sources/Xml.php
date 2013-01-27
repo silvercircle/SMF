@@ -176,7 +176,6 @@ function TopicPeek()
 		redirectexit();			// this action is XMLHttp - only
 		
 	if($tid) {
-		global $memberContext;
 		EoS_Smarty::loadTemplate('topic/preview');
 		loadLanguage('index');
 		loadLanguage('Errors');

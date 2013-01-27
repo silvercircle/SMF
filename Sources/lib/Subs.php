@@ -816,7 +816,6 @@ function timeformat_static($log_time, $show_today = true, $offset_type = false)
 	// Today and Yesterday?
 	// Get the current time.
 	$nowtime = forum_time();
-	$now = @getdate($nowtime);
 	if ($modSettings['todayMod'] >= 1 && $show_today === true)
 	{
 		$then = @getdate($time);
@@ -3015,7 +3014,7 @@ function determineTopicClass(&$topic)
 // Sets up the basic theme context stuff.
 function setupThemeContext($forceload = false)
 {
-	global $modSettings, $user_info, $scripturl, $context, $settings, $options, $txt, $maintenance, $user_settings;
+	global $modSettings, $user_info, $scripturl, $context, $txt, $maintenance, $user_settings;
 	static $loaded = false;
 
 	// Under SSI this function can be called more then once.  That can cause some problems.
@@ -3155,7 +3154,7 @@ function template_rawdata()
 
 function template_header()
 {
-	global $txt, $modSettings, $context, $settings, $user_info, $boarddir, $cachedir;
+	global $txt, $context, $settings, $user_info, $boarddir;
 
 	setupThemeContext();
 
@@ -3243,7 +3242,7 @@ function template_header()
 }
 
 // Show the copyright...
-function theme_copyright($get_it = false)
+function theme_copyright()
 {
 	global $forum_copyright, $forum_version;
 
@@ -3281,7 +3280,7 @@ function template_footer()
 // Debugging.
 function db_debug_junk()
 {
-	global $context, $scripturl, $boarddir, $modSettings, $boarddir;
+	global $context, $scripturl, $modSettings, $boarddir;
 	global $db_cache, $db_count, $db_show_debug, $cache_count, $cache_hits, $txt;
 
 	// Add to Settings.php if you want to show the debugging information.
@@ -3307,7 +3306,7 @@ function db_debug_junk()
 	$warnings = 0;
 	if (!empty($db_cache))
 	{
-		foreach ($db_cache as $q => $qq)
+		foreach ($db_cache as $qq)
 		{
 			if (!empty($qq['w']))
 				$warnings += count($qq['w']);

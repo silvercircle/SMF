@@ -287,8 +287,6 @@ class RelatedTopics extends EoS_Plugin
 	}
 }
 
-
-
 // Helper functions
 function initRelated()
 {

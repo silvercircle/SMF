@@ -197,8 +197,10 @@ class URLFactory {
 }
 
 class URL {
-	
-	private static $impl = 0;
+	/**
+	 * @var URLFactory
+	 */
+	private static $impl;
 	private static $is_sef = false;
 	private static $boardurl = '';
 	private static $scripturl = '';
@@ -206,9 +208,6 @@ class URL {
 	public static function init($b)
 	{
 		global $modSettings;
-
-		//if(isset($GLOBALS['force_disable_sef']) && !empty($GLOBALS['force_disable_sef']))
-		//	$modSettings['simplesef_enable'] = false;
 
 		if(!empty($modSettings['simplesef_enable'])) {
 			self::$impl = new URLFactory($b);
@@ -226,6 +225,7 @@ class URL {
 		if(self::$is_sef)
 			self::$impl->setSID();
 	}
+
 	public static function haveSID()
 	{
 		return self::$is_sef ? self::$impl->haveSID() : false;
@@ -465,7 +465,7 @@ class SimpleSEF {
 	 */
 	public static function ob_simplesef_light($buffer)
 	{
-		global $scripturl, $txt, $context;
+		global $scripturl;
 
 		self::benchmark('buffer');
 		$matches = array();
@@ -527,7 +527,7 @@ class SimpleSEF {
      * @return string Returns the altered buffer (or unaltered if the mod is disabled)
      */
     public static function ob_simplesef($buffer) {
-        global $scripturl, $boardurl, $txt, $modSettings, $context;
+        global $scripturl, $boardurl, $modSettings;
 
         if (empty($modSettings['simplesef_enable']))
             return $buffer;
@@ -1410,7 +1410,7 @@ class SimpleSEF {
 
 		return($string);
     }
-
+/*
 	public static function encodeTest($string)
 	{
 		global $modSettings, $sourcedir;
@@ -1431,7 +1431,6 @@ class SimpleSEF {
             if (($charInt & 0x80) == 0) {
                 $character = $charInt;
             }
-			/*
             // Two byte unicode character
             elseif (($charInt & 0xE0) == 0xC0) {
                 $temp1 = ord($string[$i++]);
@@ -1462,7 +1461,6 @@ class SimpleSEF {
             // More than four bytes... ? mark
             else
                 $character = 63;
-            */
             // Need to get the bank this character is in.
 
 	    	$charBank = $character >> 8;
@@ -1491,7 +1489,7 @@ class SimpleSEF {
             $string = strtolower($string);
         return $string;
 	}
-
+*/
     /**
      * Helper function to properly explode a CSV list (Accounts for quotes)
      *
@@ -1533,4 +1531,3 @@ class SimpleSEF {
     }
 
 }
-?>

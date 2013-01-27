@@ -139,7 +139,7 @@ function SplitTopics()
 // Part 1: General stuff.
 function SplitIndex()
 {
-	global $txt, $topic, $context, $smcFunc, $modSettings;
+	global $txt, $topic, $context, $modSettings;
 
 	// Validate "at".
 	if (empty($_GET['at']))
@@ -244,7 +244,7 @@ function SplitExecute()
 // Get a selective list of topics...
 function SplitSelectTopics()
 {
-	global $txt, $scripturl, $topic, $context, $modSettings, $original_msgs, $smcFunc, $options;
+	global $txt, $scripturl, $topic, $context, $modSettings, $original_msgs;
 
 	$context['page_title'] = $txt['split'] . ' - ' . $txt['select_split_posts'];
 
@@ -509,7 +509,7 @@ function SplitSelectTopics()
 // Actually and selectively split the topics out.
 function SplitSelectionExecute()
 {
-	global $txt, $board, $topic, $context, $user_info;
+	global $txt, $topic, $context;
 
 	// Make sure the session id was passed with post.
 	checkSession();
@@ -1571,5 +1571,3 @@ function MergeDone()
 	$context['page_title'] = $txt['merge'];
 	$context['sub_template'] = 'merge_done';
 }
-
-?>

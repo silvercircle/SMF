@@ -540,7 +540,7 @@ class cacheAPI {
 				break;
 		}
 
-		if (isset($db_show_debug) && $db_show_debug === true) {
+		if (self::$want_debug) {
 			self::$cache_hits[self::$cache_count]['t'] = array_sum(explode(' ', microtime())) - array_sum(explode(' ', $st));
 			self::$cache_hits[self::$cache_count]['s'] = isset($value) ? strlen($value) : 0;
 		}
@@ -630,7 +630,7 @@ class cacheAPI {
 				}
 				break;
 		}
-		if (isset($db_show_debug) && $db_show_debug === true)
+		if (self::$want_debug)
 			self::$cache_hits[self::$cache_count]['t'] = array_sum(explode(' ', microtime())) - array_sum(explode(' ', $st));
 	}
 

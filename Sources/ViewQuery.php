@@ -28,7 +28,7 @@ if (!defined('SMF'))
 // See the queries....
 function ViewQuery()
 {
-	global $scripturl, $user_info, $settings, $context, $db_connection, $modSettings, $boarddir, $smcFunc, $txt, $db_show_debug;
+	global $scripturl, $settings, $context, $db_connection, $boarddir, $txt, $db_show_debug;
 
 	// We should have debug mode enabled, as well as something to display!
 	if (!isset($db_show_debug) || $db_show_debug !== true || !isset($_SESSION['debug']))
@@ -187,5 +187,3 @@ function ViewQuery()
 
 	obExit(false);
 }
-
-?>

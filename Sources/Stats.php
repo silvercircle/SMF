@@ -38,7 +38,7 @@ if (!defined('SMF'))
 // Display some useful/interesting board statistics.
 function DisplayStats()
 {
-	global $txt, $scripturl, $modSettings, $user_info, $context, $smcFunc;
+	global $txt, $scripturl, $modSettings, $context;
 
 	isAllowedTo('view_stats');
 
@@ -640,7 +640,7 @@ function DisplayStats()
 
 function getDailyStats($condition_string, $condition_parameters = array())
 {
-	global $context, $smcFunc;
+	global $context;
 
 	// Activity by day.
 	$days_result = smf_db_query( '
@@ -737,5 +737,3 @@ function SMStats()
 	// Die.
 	die('OK');
 }
-
-?>

@@ -54,7 +54,7 @@ if (!defined('SMF'))
 // Who's online, and what are they doing?
 function Who()
 {
-	global $context, $scripturl, $user_info, $txt, $modSettings, $memberContext, $sourcedir;
+	global $context, $scripturl, $txt, $modSettings, $memberContext, $sourcedir;
 
 	// Permissions, permissions, permissions.
 	isAllowedTo('who_view');
@@ -274,7 +274,7 @@ function Who()
 
 function Credits($in_admin = false)
 {
-	global $context, $modSettings, $forum_copyright, $forum_version, $boardurl, $txt, $user_info;
+	global $context, $forum_copyright, $forum_version, $txt, $user_info;
 
 	// Don't blink. Don't even blink. Blink and you're dead.
 	loadLanguage('Who');
@@ -503,5 +503,3 @@ function Credits($in_admin = false)
 		$context['page_title'] = $txt['credits'];
 	}
 }
-
-?>

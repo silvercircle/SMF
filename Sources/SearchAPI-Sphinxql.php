@@ -38,7 +38,7 @@ class sphinxql_search
 	// Nothing to do...
 	public function __construct()
 	{
-		global $db_type, $txt, $modSettings;
+		global $txt, $modSettings;
 		$txt['search_index_sphinxql'] = 'SphinxQL';
 		$txt['search_index_sphinxql_desc'] = 'The admin panel only allows to switch between search indexes. To adjust further Sphinx settings, select the <strong>Configure Sphinx</strong> tab.';
 
@@ -81,7 +81,7 @@ class sphinxql_search
 	// This function compares the length of two strings plus a little.
 	public function searchSort($a, $b)
 	{
-		global $modSettings, $excludedWords;
+		global $excludedWords;
 
 		$x = strlen($a) - (in_array($a, $excludedWords) ? 1000 : 0);
 		$y = strlen($b) - (in_array($b, $excludedWords) ? 1000 : 0);
@@ -92,9 +92,7 @@ class sphinxql_search
 	// Do we have to do some work with the words we are searching for to prepare them?
 	public function prepareIndexes($word, &$wordsSearch, &$wordsExclude, $isExcluded)
 	{
-		global $modSettings;
-
-		$subwords = text2words($word, null, false);
+		$subwords = text2words($word, 0, false);
 
 		$fulltextWord = count($subwords) === 1 ? $word : '"' . $word . '"';
 		$wordsSearch['indexed_words'][] = $fulltextWord;
@@ -305,5 +303,3 @@ class sphinxql_search
 		return $string;
 	}
 }
-
-?>

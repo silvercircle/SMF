@@ -48,7 +48,7 @@ if (!defined('SMF'))
 // The main handling function for sending specialist (Or otherwise) emails to a user.
 function EmailUser()
 {
-	global $topic, $txt, $context, $scripturl, $sourcedir, $smcFunc;
+	global $context;
 
 	// Don't index anything here.
 	$context['robot_no_index'] = true;
@@ -68,7 +68,7 @@ function EmailUser()
 // Send a topic to a friend.
 function SendTopic()
 {
-	global $topic, $txt, $context, $scripturl, $sourcedir, $smcFunc, $modSettings;
+	global $topic, $txt, $context, $scripturl, $sourcedir, $modSettings;
 
 	// Check permissions...
 	isAllowedTo('send_topic');
@@ -166,7 +166,7 @@ function SendTopic()
 // Allow a user to send an email.
 function CustomEmail()
 {
-	global $context, $modSettings, $user_info, $smcFunc, $txt, $scripturl, $sourcedir;
+	global $context, $modSettings, $user_info, $txt, $scripturl, $sourcedir;
 
 	EoS_Smarty::getConfigInstance()->registerHookTemplate('send_report_content_area', 'topic/custom_mail');
 	// Can the user even see this information?
@@ -291,7 +291,7 @@ function CustomEmail()
 // Report a post to the moderator... ask for a comment.
 function ReportToModerator()
 {
-	global $txt, $topic, $sourcedir, $modSettings, $user_info, $context, $smcFunc;
+	global $txt, $topic, $sourcedir, $modSettings, $user_info, $context;
 
 	$context['robot_no_index'] = true;
 
@@ -358,7 +358,7 @@ function ReportToModerator()
 // Send the emails.
 function ReportToModerator2()
 {
-	global $txt, $scripturl, $topic, $board, $user_info, $modSettings, $sourcedir, $language, $context, $smcFunc;
+	global $txt, $scripturl, $topic, $board, $user_info, $modSettings, $sourcedir, $language, $context;
 
 	// You must have the proper permissions!
 	isAllowedTo('report_any');
@@ -583,5 +583,3 @@ function ReportToModerator2()
 	// Back to the post we reported!
 	redirectexit('reportsent;topic=' . $topic . '.msg' . $_POST['msg'] . '#msg' . $_POST['msg']);
 }
-
-?>

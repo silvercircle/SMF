@@ -470,7 +470,7 @@ function ModifyPrefixSettings()
  */
 function ModifyRatingSettings()
 {
-	global $txt, $scripturl, $context, $settings, $sc, $modSettings, $sourcedir;
+	global $scripturl, $context, $modSettings, $sourcedir;
 
 	@require_once($sourcedir . '/lib/Subs-Ratings.php');
 
@@ -583,4 +583,3 @@ function ModifyTagSettings()
 		redirectexit('action=admin;area=postsettings;sa=tags');
 	}
 }
-?>
