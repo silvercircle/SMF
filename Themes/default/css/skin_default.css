@@ -335,7 +335,7 @@ div.content {
 	font-size: 90%;
 }
 ul.dropmenu, ul.dropmenu ul {
-	background-color: #f2f2f2;
+	background-color: #222;
 }
 ul.dropmenu li a {
 	color: #eee;
@@ -345,7 +345,7 @@ ul.dropmenu.highcontrast li a {
 	color: #777;
 }
 ul.dropmenu li a.firstlevel {
-	text-shadow: 0 0 2px #555;
+	/*text-shadow: 0 0 2px #555;*/
 }
 ul.dropmenu li a.firstlevel.compact {
 	font-weight: normal;
@@ -354,11 +354,11 @@ ul.dropmenu li a.firstlevel.compact {
 	text-shadow: 0 0 2px #555;
 }
 ul.dropmenu li ul {
-	background-color: #f2f2f2;
+	background-color: #222;
 	box-shadow: 1px 3px 10px 1px #888;
 }
 ul.dropmenu li li a {
-	color:black;
+	color:#f0f0f0;
 }
 ul.dropmenu li.active {
 	background-color: #f5f5f5;
@@ -369,8 +369,9 @@ ul.dropmenu.compact li.active {
 	border-bottom:2px solid orange;
 	border-top:0;
 }
-ul.dropmenu.compact li.active a {
+ul.dropmenu.compact li.active > a {
 	color:black;
+	text-shadow: none;
 }
 ul.dropmenu li.active > a {
 	color: black;

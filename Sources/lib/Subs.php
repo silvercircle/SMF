@@ -3983,6 +3983,9 @@ function setupMenuContext()
 	elseif ($context['current_action'] == 'pm')
 		$current_action = 'inbox';
 
+	if($current_action === 'profile' && isset($_REQUEST['u']))
+		$current_action = $_REQUEST['u'] != $user_info['id'] ? 'home' : 'profile';
+
 	if(isset($context['usermenu_buttons'][$current_action]))
 		$context['usermenu_buttons'][$current_action]['active_button'] = true;
 	else
