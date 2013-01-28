@@ -61,3 +61,17 @@ h4.poster {
 	width: 210px;
 	min-width: 210px;
 }
+div.poster.std ul {
+	margin:0;
+	-webkit-margin-before:0;
+	width:120px;
+	max-width:120px;
+	margin-left:auto;
+	margin-right:auto;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	background: #ddd;
+}
+div.poster.std h4 a {
+	padding:2px 5px;
+}

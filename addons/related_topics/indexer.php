@@ -10,14 +10,13 @@ class RelatedTopicsFulltext
 {
 	function recreateIndexTables()
 	{
-		global $smcFunc, $db_prefix;
+		global $db_prefix;
 
-		smf_db_query( '
-			DROP TABLE IF EXISTS ' . $db_prefix . 'related_subjects',
+		smf_db_query('DROP TABLE IF EXISTS ' . $db_prefix . 'related_subjects',
 			array('security_override' => true)
 		);
 
-		smf_db_query( '
+		smf_db_query('
 			CREATE TABLE IF NOT EXISTS ' . $db_prefix . 'related_subjects (
 				id_topic int(10) unsigned NOT NULL,
 				subject tinytext NOT NULL,
@@ -32,7 +31,7 @@ class RelatedTopicsFulltext
 
 	function updateTopics($topics)
 	{
-		global $context, $smcFunc;
+		global $context;
 
 		if (empty($topics))
 			return;
@@ -98,11 +97,9 @@ class RelatedTopicsFulltext
 
 	function removeTopics($topics)
 	{
-		global $smcFunc;
-
-		smf_db_query( '
-			DELETE FROM {db_prefix}related_subjects
-			WHERE id_topic IN({array_int:topics})',
+		smf_db_query('
+				DELETE FROM {db_prefix}related_subjects
+				WHERE id_topic IN({array_int:topics})',
 			array(
 				'topics' => $topics,
 			)
@@ -113,14 +110,14 @@ class RelatedTopicsFulltext
 
 	private function __searchRelated($subject)
 	{
-		global $smcFunc, $modSettings;
+		global $modSettings;
 
 		$request = smf_db_query( '
-			SELECT rs.id_topic, MATCH(rs.subject) AGAINST({string:subject}) AS score
-			FROM {db_prefix}related_subjects AS rs
-			WHERE MATCH(rs.subject) AGAINST({string:subject})
-			ORDER BY MATCH(rs.subject) AGAINST({string:subject}) DESC
-			LIMIT {int:limitTopics}',
+				SELECT rs.id_topic, MATCH(rs.subject) AGAINST({string:subject}) AS score
+				FROM {db_prefix}related_subjects AS rs
+				WHERE MATCH(rs.subject) AGAINST({string:subject})
+				ORDER BY MATCH(rs.subject) AGAINST({string:subject}) DESC
+				LIMIT {int:limitTopics}',
 			array(
 				'subject' => $subject,
 				'limitTopics' => round((!empty($modSettings['relatedTopicsCount']) ? (int) $modSettings['relatedTopicsCount'] : 5) * 2.5),

@@ -160,6 +160,19 @@ function template_maintain_routine()
 				</form>
 			</div>
 		</div>
+		<br>
+		<div class="cat_bar">
+			<h3>', $txt['maintain_template_cache'], '</h3>
+		</div>
+		<div class="blue_container cleantop">
+			<div class="content">
+				<form action="', $scripturl, '?action=admin;area=maintain;sa=routine;activity=cleantemplatecache" method="post" accept-charset="UTF-8">
+					<p>', $txt['maintain_template_cache_info'], '</p>
+					<span><input type="submit" value="', $txt['maintain_run_now'], '" class="button_submit" /></span>
+					<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '" />
+				</form>
+			</div>
+		</div>
 	</div>
 	<br class="clear" />';
 }

@@ -142,6 +142,7 @@ function ManageMaintenance()
 				'recount' => 'AdminBoardRecount',
 				'logs' => 'MaintainEmptyUnimportantLogs',
 				'cleancache' => 'MaintainCleanCache',
+				'cleantemplatecache' => 'MaintainCleanTemplateCache'
 			),
 		),
 		'database' => array(
@@ -311,6 +312,15 @@ function MaintainCleanCache()
 	clean_cache();
 
 	$context['maintenance_finished'] = $txt['maintain_cache'];
+}
+
+function MaintainCleanTemplateCache()
+{
+	global $context, $txt;
+
+	Eos_Smarty::getSmartyInstance()->clearCompiledTemplate();
+
+	$context['maintenance_finished'] = $txt['maintain_template_cache'];
 }
 
 // Empties all uninmportant logs

@@ -28,7 +28,6 @@ $forum_version = 'EosAlpha 1.0pre';
 // Get everything started up...
 define('SMF', 1);
 define('EOSA', 1);
-define('__APICOMPAT__', 0);			// if set to 1, smcFunc[] will be populated like in SMF 2
 
 error_reporting(defined('E_STRICT') ? E_ALL | E_STRICT : E_ALL);
 $time_start = microtime();
