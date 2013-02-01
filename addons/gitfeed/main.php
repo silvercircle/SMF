@@ -46,6 +46,23 @@ class GitFeed extends EoS_Plugin
 
 	public function __construct() { parent::__construct(); }	// mandatory
 
+	public function canInstall(&$message = null)
+	{
+		$result = true;
+
+		if(!is_callable('curl_setopt_array')) {
+			$result = false;
+			$this->installError = 'PHP-CURL not available. Plugin cannot be activated. ';
+		}
+
+		if(!is_callable('json_decode')) {
+			$result = false;
+			$this->installError .= 'PHP-JSON not available. Plugin cannot be activated';
+		}
+
+		return $result;
+	}
+
 	/**
 	 * this shouldn't really be here, but just for convenience and I'm too lazy
 	 * to write another plugin for just a single menu entry (this is also a hint,
@@ -60,6 +77,7 @@ class GitFeed extends EoS_Plugin
 			'is_last' => true,
 		);
 	}
+
 	/*
 	 * runs in board index
 	 * 1) fetch our data (we cache this for a while...)

@@ -60,11 +60,9 @@
   </form>
 </div>
 <a id="lastPost"></a>
-{$C.template_hooks.display.below_posts}
 {if $C.can_reply and !empty($O.display_quick_reply)}
-{/if} {* quick reply *}
   {include 'topic/quickreply.tpl'}
-{$C.template_hooks.display.footer}
+{/if} {* quick reply *}
 {* Show the lower breadcrumbs *}
 {include '../linktree.tpl'}
 <div class="floatright smallpadding" id="display_jump_to">&nbsp;</div>

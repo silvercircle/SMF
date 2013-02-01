@@ -13,7 +13,6 @@
  * side bar template for the board index
  *}
 {$widgetstyle = 'framed_region cleantop tinypadding'}
-{$C.template_hooks.global.sidebar_top}
 {$SUPPORT->displayHook('sidebar_top')}
 <script>
 // <![CDATA[
@@ -228,5 +227,4 @@
     </div>
     <div class="cContainer_end"></div>
 {/if}
-{$C.template_hooks.global.sidebar_bottom}
 {$SUPPORT->displayHook('sidebar_bottom')}

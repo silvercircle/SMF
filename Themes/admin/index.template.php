@@ -148,7 +148,6 @@ function template_body_above()
 	<div id="header">
 	<div id="upper_section" class="smalltext">
 		<div class="floatleft" style="overflow:hidden;max-height:90px;"><img src="',$settings['images_url'],'/logo.png" alt="logo" /></div>
-		',$context['template_hooks']['global']['header'],'
 		<div class="clear"></div>
 	</div>
 		<div class="notibar">
@@ -240,9 +239,7 @@ function template_body_above()
 	echo '
 	</form>
 	</div>
-	<div class="clear cContainer_end"></div>
-	',$context['template_hooks']['global']['above'];
-
+	<div class="clear cContainer_end"></div>';
 	echo $context['additional_admin_errors'];
 	
 	echo '<aside>
@@ -310,7 +307,6 @@ EOT;
 	echo '
 	// ]]>
 	</script>
-	',$context['template_hooks']['global']['footer'],'
 	<footer>
 	<div class="clear" id="footer_section">';
 	
@@ -544,7 +540,6 @@ function template_sidebar_content_index()
 	global $context, $txt, $modSettings, $scripturl, $settings, $user_info, $options;
 
 	$widgetstyle = 'framed_region cleantop tinypadding';
-	echo $context['template_hooks']['global']['sidebar_top'];
 	$collapser = array('id' => 'user_panel', 'title' => 'User panel', 'bodyclass' => $widgetstyle);
 	echo '<script>
 		   // <![CDATA[
@@ -776,7 +771,6 @@ function template_sidebar_content_index()
 			<div class="cContainer_end"></div>
 			';
 	}
-	echo $context['template_hooks']['global']['sidebar_bottom'];
 }
 
 /*

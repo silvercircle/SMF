@@ -220,7 +220,6 @@ function template_body_above()
 	<div id="header">
 	<div id="upper_section" class="smalltext">
 		<div class="floatleft" style="overflow:hidden;max-height:90px;"><img src="',$settings['images_url'],'/logo.png" alt="logo" /></div>
-		',$context['template_hooks']['global']['header'],'
 		<div class="clear"></div>
 	</div>
 		<div class="notibar">
@@ -316,9 +315,7 @@ function template_body_above()
 	</div>';
 	}
 	echo '
-	<div class="clear cContainer_end"></div>
-	',$context['template_hooks']['global']['above'];
-
+	<div class="clear cContainer_end"></div>';
 	echo $context['additional_admin_errors'];
 	
 	if($context['news_item_count'])
@@ -406,9 +403,8 @@ EOT;
 	}
 	echo '
 	// ]]>
-	</script>
-	',$context['template_hooks']['global']['footer'],'
-	<footer>
+	</script>';
+	echo '<footer>
 	<div class="clear" id="footer_section">';
 	
 	// Show the load time?

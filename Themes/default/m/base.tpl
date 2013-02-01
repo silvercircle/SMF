@@ -199,7 +199,6 @@
   {include file = "linktree.tpl"}
   {* Show the navigation tree. *}
   <div class="clear cContainer_end"></div>
-  {$C.template_hooks.global.above}
   {$C.additional_admin_errors}
   
   {if $C.news_item_count}
@@ -260,7 +259,6 @@
   {/if}
   // ]]>
   </script>
-  {$C.template_hooks.global.footer}
   <footer>
   {* Show the load time? *}
   {if !empty($C.show_load_time)}

@@ -35,8 +35,10 @@
     </table>
   {else}
     <div class="posts_container">
+      {$C.alt_row = false}
       {foreach $C.posts as $post}
         {call postbit_compact message=$post}
+        {$C.alt_row = !$C.alt_row}
       {/foreach}
     </div>
   {/if}

@@ -32,16 +32,19 @@ class EoS_Smarty {
 	private static $_is_Debug = false;
 
 	/**
-	 * init smarty engine and custom theme support object
+	 * @param bool $debug - true enables the debug mode
 	 *
-	 * this is called once from index.php when ALL other initializations
-	 * are complete.
+	 * this initializes the smarty template system. Should be called early in index.php,
+	 * but after all settings have been loaded.
 	 */
 	public static function init($debug = false)
 	{
 		global $sourcedir, $settings, $boarddir, $context;
 
 		self::$_is_Debug = $debug;
+
+		$compiledir = rtrim($boarddir, '/') . '/template_cache/themeid_' . $settings['theme_id'];		// TODO: make this customizable
+
 		@require_once($sourcedir . '/lib/Smarty/Smarty.class.php');
 		self::$_smartyInstance = new Smarty();
 		self::$_smartyInstance->caching = 0;		// this is *STATIC* caching of generated pages, we don't want (or even need) this for a forum...
@@ -54,6 +57,7 @@ class EoS_Smarty {
 		if(MOBILE) {
 			self::$_smartyInstance->setTemplateDir($settings['default_theme_dir'] . '/m');
 			$firstdir++;
+			$compiledir .= '/m';
 		}
 		if($settings['allow_template_overrides']) {			// allow overrides (mod setting)
 			self::$_smartyInstance->setTemplateDir($settings['default_theme_dir'] . '/tpl/overrides');
@@ -66,7 +70,7 @@ class EoS_Smarty {
 				self::$_smartyInstance->addTemplateDir($dir . '/tpl');
 			$firstdir++;
 		}
-		self::$_smartyInstance->setCompileDir(rtrim($boarddir, '/') . '/template_cache/themeid_' . $settings['theme_id']);		// TODO: make this customizable
+		self::$_smartyInstance->setCompileDir($compiledir);
 
 		$context['clip_image_src'] = $settings['images_url'] . '/' . $settings['clip_image_src'][$context['theme_variant']];
 		$context['sprite_image_src'] = $settings['images_url'] . '/' . $settings['sprite_image_src'][$context['theme_variant']];
@@ -97,9 +101,11 @@ class EoS_Smarty {
 	}
 
 	/**
+	 * @static
 	 * clear all templates that have been loaded
 	 * this is needed in a few places (e.g. setup_fatal_error_context) when we have
-	 * to discard all previously loaded templates.
+	 * to discard all previously loaded templates and start with a new set of
+	 * templates.
 	 */
 	public static function resetTemplates()
 	{
@@ -142,9 +148,16 @@ class EoS_Smarty {
 	 */
 	public static function dummy() {}
 
+	/**
+	 * @return bool - true if smarty template system is active for the current context.
+	 */
 	public static function isActive() { return self::$_is_Active; }
 
+	/**
+	 *
+	 */
 	public static function setActive() { self::$_is_Active = true; }
+
 	/**
 	 * output all enqued footer scripts.
 	 * used as custom template function
@@ -461,6 +474,8 @@ class EoS_Smarty_Template_Support {
 	}
 	/*
 	 * make the url generation api available to templates
+	 * topic- and board URLs are not here. They should not be generated
+	 * in templates at all. It's the job of the backend.
 	 */
 	public function url_user($id, $name)
 	{

@@ -115,10 +115,6 @@ function BoardIndex()
 
 	$context['page_title'] = sprintf($txt['forum_index'], $context['forum_name']);
 
-	$context['template_hooks']['boardindex'] = array(
-		'above_boardlisting' => '',
-		'below_boardlisting' => ''
-	);
 	if (isset($context['show_who'])) {
 	    $bracketList = array();
 	    if ($context['show_buddies'])

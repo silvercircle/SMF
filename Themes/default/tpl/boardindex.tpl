@@ -16,7 +16,6 @@
 {extends "base.tpl"}
 {block 'content'}
   {include 'boardbits.tpl'}
-  {$C.template_hooks.boardindex.above_boardlisting}
   {$SUPPORT->displayHook('above_index')}
   <div id="boardindex">
   {foreach from=$C.categories item=category}
@@ -105,7 +104,6 @@
     </div>
   {/if}
   {* here goes the info center *}
-  {$C.template_hooks.boardindex.below_boardlisting}
   {$SUPPORT->displayHook('below_index')}
   <div class="clear_left"></div>
   {if isset($C.show_who)}

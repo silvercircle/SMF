@@ -4059,7 +4059,7 @@ function enqueueThemeScript($key, $script, $footer = true, $default = true)
 {
 	global $context;
 
-	$context['theme_scripts'][$key] = array('name' => $script, 'default' => $default, 'footer' => true);
+	$context['theme_scripts'][$key] = array('name' => $script, 'default' => $default, 'footer' => $footer);
 }
 
 /**

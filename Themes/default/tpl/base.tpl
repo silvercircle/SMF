@@ -280,7 +280,7 @@
   </div>
   {/if}
   <div class="clear cContainer_end"></div>
-  {$C.template_hooks.global.above}
+  {$SUPPORT->displayHook('above_content')}
   {$C.additional_admin_errors}
   {if $C.news_item_count}
     {include "notices_list.tpl"}
@@ -299,8 +299,8 @@
     $("#container").css("margin-right", {($sidebar_vis and $sidebar_allowed) ? 'sideBarWidth + 20 + "px"' : '"0"'});
   // ]]>
   </script>
-    {block 'content'}
-    {/block}
+  {block 'content'}
+  {/block}
   <div class="clear"></div>
   </div></div></div>
   {* Show the "Powered by" and "Valid" logos, as well as the copyright. Remember, the copyright must be somewhere! *}
@@ -358,7 +358,7 @@
   {/if}
   // ]]>
   </script>
-  {$C.template_hooks.global.footer}
+  {$SUPPORT->displayHook('below_content')}
   <footer>
   {* Show the load time? *}
   {if !empty($C.show_load_time)}

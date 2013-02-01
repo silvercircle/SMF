@@ -65,21 +65,16 @@ reloadSettings();
 // Clean the request variables, add slashes, etc.
 cleanRequest();
 $context = array();
-$context['template_hooks']['global'] = array(
-	'above' => '',
-	'sidebar_top' => '',
-	'sidebar_bottom' => '',
-	'footer' => '',
-	'header' => ''
-);
+//<editor-fold desc="Test">
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
-$context['jsver'] = '?v=1590';
+$context['jsver'] = '?v=1592';
 $context['jquery_version'] = '1.7.2';
 $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();
 $context['additional_admin_errors'] = '';
 $context['query_string'] = $boardurl . $_SERVER['REQUEST_URI'];
 $context['sidebar_class'] = '';
+//</editor-fold>
 
 // Seed the random generator.
 if (empty($modSettings['rand_seed']) || mt_rand(1, 250) == 69)

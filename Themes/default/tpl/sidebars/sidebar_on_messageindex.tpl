@@ -17,12 +17,10 @@
  *}
 <h1 class="bigheader">&nbsp;</h1>
 <br>
-{$C.template_hooks.global.sidebar_top}
 {$SUPPORT->displayHook('sidebar_top')}
 <script>
 // <![CDATA[
   sidebar_content_loaded = 1;
 // ]]>
 </script>
-{$C.template_hooks.global.sidebar_bottom}
 {$SUPPORT->displayHook('sidebar_bottom')}
