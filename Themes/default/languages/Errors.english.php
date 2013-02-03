@@ -229,6 +229,7 @@ $txt['register_only_once'] = 'Sorry, but you\'re not allowed to register multipl
 $txt['admin_setting_coppa_require_contact'] = 'You must enter either a postal or fax contact if parent/guardian approval is required.';
 
 $txt['error_long_name'] = 'The name you tried to use was too long.';
+$txt['error_short_name'] = 'The name you tried to use was too short.';
 $txt['error_no_name'] = 'No name was provided.';
 $txt['error_bad_name'] = 'The name you submitted cannot be used, because it is or contains a reserved name.';
 $txt['error_no_email'] = 'No email address was provided.';

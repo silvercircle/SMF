@@ -274,6 +274,7 @@ function ModifyRegistrationSettings($return_config = false)
 			array('check', 'notify_new_registration'),
 			array('check', 'send_welcomeEmail'),
 		'',
+			array('int', 'username_min_length', 'subtext' => $txt['setting_username_min_length_desc']),
 			array('int', 'coppaAge', 'subtext' => $txt['setting_coppaAge_desc'], 'onchange' => 'checkCoppa();'),
 			array('select', 'coppaType', array($txt['setting_coppaType_reject'], $txt['setting_coppaType_approval']), 'onchange' => 'checkCoppa();'),
 			array('large_text', 'coppaPost', 'subtext' => $txt['setting_coppaPost_desc']),
@@ -299,8 +300,12 @@ function ModifyRegistrationSettings($return_config = false)
 		// Post needs to take into account line breaks.
 		$_POST['coppaPost'] = str_replace("\n", '<br />', empty($_POST['coppaPost']) ? '' : $_POST['coppaPost']);
 
-		saveDBSettings($config_vars);
+		// validate min- and maximum lengths for a member's name.
 
+		if($_POST['username_min_length'] < 0 || $_POST['username_min_length'] >= 25)
+			$_POST['username_min_length'] = 0;
+
+		saveDBSettings($config_vars);
 		redirectexit('action=admin;area=regcenter;sa=settings');
 	}
 

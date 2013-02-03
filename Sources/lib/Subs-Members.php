@@ -523,6 +523,9 @@ function registerMember(&$regOptions, $return_errors = false)
 	if (commonAPI::strlen($regOptions['username']) > 25)
 		$reg_errors[] = array('lang', 'error_long_name');
 
+	if($modSettings['username_min_length'] > 0 && commonAPI::strlen($regOptions['username']) < $modSettings['username_min_length'])
+		$reg_errors[] = array('lang', 'error_short_name');
+
 	// Only these characters are permitted.
 	if (preg_match('~[<>&"\'=\\\\]~', preg_replace('~&#(?:\\d{1,7}|x[0-9a-fA-F]{1,6});~', '', $regOptions['username'])) != 0 || $regOptions['username'] == '_' || $regOptions['username'] == '|' || strpos($regOptions['username'], '[code') !== false || strpos($regOptions['username'], '[/code') !== false)
 		$reg_errors[] = array('lang', 'error_invalid_characters_username');

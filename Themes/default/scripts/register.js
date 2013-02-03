@@ -225,7 +225,7 @@ function smfRegister(formID, passwordDifficultyLevel, regTextStrings)
 			setBusy(true);
 
 		// Request a search on that username.
-		checkName = curUsername.php_to8bit().php_urlencode();
+		var checkName = curUsername.php_to8bit().php_urlencode();
 		getXMLDocument(smf_prepareScriptUrl(smf_scripturl) + 'action=register;sa=usernamecheck;xml;username=' + checkName, checkUsernameCallback);
 
 		return true;
@@ -234,6 +234,8 @@ function smfRegister(formID, passwordDifficultyLevel, regTextStrings)
 	// Callback for getting the username data.
 	function checkUsernameCallback(XMLDoc)
 	{
+		var isValid;
+
 		if (XMLDoc.getElementsByTagName("username"))
 			isValid = XMLDoc.getElementsByTagName("username")[0].getAttribute("valid");
 		else
@@ -244,6 +246,11 @@ function smfRegister(formID, passwordDifficultyLevel, regTextStrings)
 
 		verificationFields['username'][1].className = verificationFields['username'][5] + ' ' + (isValid == 1 ? 'valid_input' : 'invalid_input');
 		setVerificationImage(verificationFields['username'][2], isValid == 1, alt);
+
+		var el = isValid == 1 ? 'tooltip_good_username' : 'tooltip_bad_username';
+
+		$('div#image_anchor').attr('data-tip', el);
+		$('div#image_anchor').easyTooltip( {parentData: true} );
 
 		setBusy(false);
 	}
@@ -259,7 +266,6 @@ function smfRegister(formID, passwordDifficultyLevel, regTextStrings)
 		var curImage = imageIcon ? (imageIcon == 'check' ? 'field_check.gif' : 'field_valid.gif') : 'field_invalid.gif';
 		imageHandle.src = smf_images_url + '/icons/' + curImage;
 		imageHandle.alt = alt;
-		imageHandle.title = alt;
 
 		return true;
 	}

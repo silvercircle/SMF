@@ -823,7 +823,7 @@ function VerificationCode()
 // See if a username already exists.
 function RegisterCheckUsername()
 {
-	global $sourcedir, $context, $txt;
+	global $sourcedir, $context, $txt, $modSettings;
 
 	// This is XML!
 	loadTemplate('Xml');
@@ -850,6 +850,7 @@ function RegisterCheckUsername()
 		require_once($sourcedir . '/lib/Subs-Members.php');
 		$context['valid_username'] &= isReservedName($context['checked_username'], 0, false, false) ? 0 : 1;
 	}
-}
 
-?>
+	if((int)$modSettings['username_min_length'] > 0)
+		$context['valid_username'] &= (commonAPI::strlen($context['checked_username']) >= $modSettings['username_min_length'] ? true : false);
+}

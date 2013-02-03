@@ -75,9 +75,20 @@
           {$C.tabindex = $C.tabindex+1}
           <span id="smf_autov_username_div" style="display: none;">
           <a id="smf_autov_username_link" href="#">
-            <img id="smf_autov_username_img" src="{$S.images_url}/icons/field_check.gif" alt="*" />
+            <div data-tip="tooltip_click_to_verify" id="image_anchor" style="display:inline;">
+              <img id="smf_autov_username_img" src="{$S.images_url}/icons/field_check.gif" alt="*" />
+            </div>
           </a>
           </span>
+        <div id="tooltip_bad_username" style="display:none;">
+            {$T.tooltip_username_bad}
+        </div>
+        <div id="tooltip_good_username" style="display:none;">
+            {$T.tooltip_username_good}
+        </div>
+        <div id="tooltip_click_to_verify" style="display:none;">
+            Click to verify
+        </div>
         </dd>
         <dt><strong><label for="smf_autov_reserve1">{$T.email}:</label></strong></dt>
         <dd class="smallpadding">

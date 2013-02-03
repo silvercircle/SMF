@@ -93,6 +93,9 @@ $txt['setting_coppaPost_desc'] = 'Only applies if age restriction is in place';
 $txt['setting_coppaFax'] = 'Fax number to which approval forms should be faxed';
 $txt['setting_coppaPhone'] = 'Contact number for parents to contact with age restriction queries';
 
+$txt['setting_username_min_length'] = 'Minimum length of a member\'s name';
+$txt['setting_username_min_length_desc'] = 'Set to 0 to allow member names with a length of one or more characters.';
+
 $txt['admin_register'] = 'Registration of new member';
 $txt['admin_register_desc'] = 'From here you can register new members into the forum, and if desired, email them their details.';
 $txt['admin_register_username'] = 'New Username';
@@ -146,3 +149,5 @@ $txt['authenticate_password'] = 'Password';
 $txt['authenticate_openid'] = 'OpenID';
 $txt['authenticate_openid_url'] = 'OpenID Authentication URL';
 
+$txt['tooltip_username_good'] = 'This user name is valid and available. You can use it.';
+$txt['tooltip_username_bad'] = '<strong>This user name is not valid. Possible reasons why it cannot be used:</strong><br><ul><li>The name might already be taken by another member of this forum.</li><li>The name is either too long or too short.</li><li>The name contains one or more character(s) that are not allowed in user names.</li><li>The name has been reserved by the forum administrator(s) and cannot be used.</li><li>The name contains inappropriate language or a banned word.</li></ul>';
