@@ -1,15 +1,10 @@
 {include "generics/boardlisting.tpl"}
 <form action="{$SCRIPTURL}?action=search2" method="post" accept-charset="UTF-8" name="searchform" id="searchform">
-  <div class="bigheader">
-    {if isset($M.search_index) and ($M.search_index == 'sphinx' or $M.search_index == 'sphinxql')}
-      <div class="floatright">
-        Powered by: <a href="http://sphinxsearch.com"><img src="{$S.images_url}/theme/sphinx.jpg" alt="sphinxlogo" style="vertical-align:middle;" /></a>
-      </div>
-    {/if}
+  <h1 class="bigheader section_header">
     <span class="ie6_header floatleft">{$T.set_parameters}</span>
     <div class="clear"></div>
-  </div>
-  <div class="blue_container">
+  </h1>
+  <div class="blue_container cleantop">
   {if !empty($C.search_errors)}
     <p id="search_error" class="error">{'<br />'|implode:$C.search_errors.messages}</p>
   {/if}
@@ -113,9 +108,16 @@
         </div>
       {/if}
   {/if}
+
   <input type="submit" name="submit" value="{$T.search}" class="default floatright mediummargin" />
   <div class="clear"></div>
   </div>
+  {if isset($M.search_index) and ($M.search_index == 'sphinx' or $M.search_index == 'sphinxql')}
+    <br>
+    <div class="floatright">
+      Fulltext search powered by: <a href="http://sphinxsearch.com"><img src="{$S.images_url}/theme/sphinx.jpg" alt="sphinxlogo" style="vertical-align:middle;" /></a>
+    </div>
+  {/if}
 </form>
 <script type="text/javascript">
 <!-- // --><![CDATA[

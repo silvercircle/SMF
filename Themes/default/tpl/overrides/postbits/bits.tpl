@@ -56,7 +56,7 @@
   {/if}
   <span class="tinytext floatright"><a {($C.perma_request) ? '' : ('onclick="getIntralink($(this),'|cat:$ID|cat:');return(false);"')} href="{$message.permahref}" rel="nofollow">{$message.permalink}</a></span>
   <h5 id="subject_{$ID}">
-    {$message.subject},
+    {$message.subject}&nbsp;|
   </h5>
   <span class="tinytext">{$message.time}</span>
   <div id="msg_{$ID}_quick_mod"></div>

@@ -11,7 +11,7 @@
  *
  * @version 1.0pre
  */
-if (!defined('SMF'))
+if (!defined('EOSA'))
 	die('Hacking attempt...');
 
 /* This file contains some useful functions for members and membergroups.
@@ -82,7 +82,7 @@ if (!defined('SMF'))
 // Delete a group of/single member.
 function deleteMembers($users, $check_not_admin = false)
 {
-	global $sourcedir, $modSettings, $user_info, $backend_subdir;
+	global $sourcedir, $modSettings, $user_info;
 
 	// Try give us a while to sort this out...
 	@set_time_limit(600);
@@ -474,7 +474,7 @@ function deleteMembers($users, $check_not_admin = false)
 function registerMember(&$regOptions, $return_errors = false)
 {
 	global $scripturl, $txt, $modSettings, $context, $sourcedir;
-	global $user_info, $options, $settings, $smcFunc;
+	global $user_info;
 
 	loadLanguage('Login');
 
@@ -905,7 +905,7 @@ function registerMember(&$regOptions, $return_errors = false)
 // Check if a name is in the reserved words list. (name, current member id, name/username?.)
 function isReservedName($name, $current_ID_MEMBER = 0, $is_name = true, $fatal = true)
 {
-	global $modSettings, $context;
+	global $modSettings;
 
 	// No cheating with entities please.
 	$replaceEntities = create_function('$string', '
@@ -1005,7 +1005,7 @@ function isReservedName($name, $current_ID_MEMBER = 0, $is_name = true, $fatal =
 // Get a list of groups that have a given permission (on a given board).
 function groupsAllowedTo($permission, $board_id = null)
 {
-	global $modSettings, $board_info, $smcFunc;
+	global $board_info;
 
 	// Admins are allowed to do anything.
 	$member_groups = array(
@@ -1078,8 +1078,6 @@ function groupsAllowedTo($permission, $board_id = null)
 // Get a list of members that have a given permission (on a given board).
 function membersAllowedTo($permission, $board_id = null)
 {
-	global $smcFunc;
-
 	$member_groups = groupsAllowedTo($permission, $board_id);
 
 	$include_moderators = in_array(3, $member_groups['allowed']) && $board_id !== null;
@@ -1113,8 +1111,6 @@ function membersAllowedTo($permission, $board_id = null)
 // This function is used to reassociate members with relevant posts.
 function reattributePosts($memID, $email = false, $membername = false, $post_count = false)
 {
-	global $smcFunc;
-
 	// Firstly, if email and username aren't passed find out the members email address and name.
 	if ($email === false && $membername === false)
 	{
@@ -1210,8 +1206,6 @@ function BuddyListToggle()
 
 function list_getMembers($start, $items_per_page, $sort, $where, $where_params = array(), $get_duplicates = false)
 {
-	global $smcFunc;
-
 	$request = smf_db_query( '
 		SELECT
 			mem.id_member, mem.member_name, mem.real_name, mem.email_address, mem.member_ip, mem.member_ip2, mem.last_login,
@@ -1242,7 +1236,7 @@ function list_getMembers($start, $items_per_page, $sort, $where, $where_params =
 
 function list_getNumMembers($where, $where_params = array())
 {
-	global $smcFunc, $modSettings;
+	global $modSettings;
 
 	// We know how many members there are in total.
 	if (empty($where) || $where == '1')
@@ -1267,8 +1261,6 @@ function list_getNumMembers($where, $where_params = array())
 
 function populateDuplicateMembers(&$members)
 {
-	global $smcFunc;
-
 	// This will hold all the ip addresses.
 	$ips = array();
 	foreach ($members as $key => $member)
@@ -1382,7 +1374,7 @@ function populateDuplicateMembers(&$members)
 // Generate a random validation code.
 function generateValidationCode()
 {
-	global $smcFunc, $modSettings;
+	global $modSettings;
 
 	$request = smf_db_query('
 		SELECT RAND()',
@@ -1395,5 +1387,3 @@ function generateValidationCode()
 
 	return substr(preg_replace('/\W/', '', sha1(microtime() . mt_rand() . $dbRand . $modSettings['rand_seed'])), 0, 10);
 }
-
-?>

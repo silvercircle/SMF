@@ -11,7 +11,7 @@
  *
  * @version 1.0pre
  */
-if (!defined('SMF'))
+if (!defined('EOSA'))
 	die('Hacking attempt...');
 
 /*	This file helps the administrator setting registration settings and policy
@@ -55,7 +55,7 @@ if (!defined('SMF'))
 // Main handling function for the admin approval center
 function RegCenter()
 {
-	global $modSettings, $context, $txt, $scripturl;
+	global $context, $txt;
 
 	// Old templates might still request this.
 	if (isset($_REQUEST['sa']) && $_REQUEST['sa'] == 'browse')
@@ -106,7 +106,7 @@ function RegCenter()
 // This function allows the admin to register a new member by hand.
 function AdminRegister()
 {
-	global $txt, $context, $sourcedir, $scripturl, $smcFunc;
+	global $txt, $context, $sourcedir, $scripturl;
 
 	if (!empty($_POST['regSubmit']))
 	{
@@ -181,7 +181,7 @@ function AdminRegister()
 // I hereby agree not to be a lazy bum.
 function EditAgreement()
 {
-	global $txt, $boarddir, $context, $modSettings, $smcFunc, $settings;
+	global $txt, $boarddir, $context, $modSettings;
 
 	// By default we look at agreement.txt.
 	$context['current_agreement'] = '';
@@ -331,5 +331,3 @@ function ModifyRegistrationSettings($return_config = false)
 
 	prepareDBSettingContext($config_vars);
 }
-
-?>

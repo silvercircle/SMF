@@ -5,9 +5,9 @@
 <div id="edit_poll">
 <br>
   <form action="{$SCRIPTURL}?action=editpoll2{($C.is_edit) ? '' : ';add'};topic={$C.current_topic}.{$C.start}" method="post" accept-charset="UTF-8" onsubmit="submitonce(this); smc_saveEntities('postmodify', ['question'], 'options-');" name="postmodify" id="postmodify">
-    <div class="cat_bar">
-      <h3 class="catbg">{$C.page_title}</h3>
-    </div>
+    <h1 class="bigheader section_header">
+      {$C.page_title}
+    </h1>
     {if !empty($C.poll_error.messages)}
       <div class="errorbox">
         <dl class="poll_error">
@@ -21,7 +21,7 @@
       </div>
     {/if}
     <div>
-      <div class="blue_container">
+      <div class="blue_container cleantop">
         <input type="hidden" name="poll" value="{$C.poll.id}" />
           <fieldset id="poll_main">
             <legend><span {(isset($C.poll_error.no_question)) ? ' class="error"' : ''}>{$T.poll_question}:</span></legend>

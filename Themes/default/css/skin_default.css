@@ -521,12 +521,10 @@ div.boardlisting ul li.category {
 }
 /* the main title, always stay at 45 pixels in height! */
 h1.forumtitle {
-	line-height: 45px;
-	font-size: 1.8em;
-	font-family: Geneva, verdana, sans-serif;
+	font-size: 1.4em;
 	margin: 0;
 	padding: 0;
-	float: left;
+	font-weight: normal;
 }
 
 h1.bigheader, div.bigheader {
@@ -1523,6 +1521,17 @@ dl.register_form dd {
 	font-size:1.05em;
 	font-weight:normal;
 	text-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
+}
+.cContainer_header {
+	background: #e5e5f0;
+	border-radius: 4px 4px 0 0 !important;
+	border:1px solid #ddd;
+}
+.cContainer_header, .cContainer_header h3, .cContainer_header a {
+	color: #444;
+	text-shadow: 1px 1px 2px white;
+	font-size: 1.0em;
+	font-weight: bold;
 }
 li.cat_desc {
 	padding:0 5px 2px 5px;

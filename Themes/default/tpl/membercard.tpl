@@ -27,13 +27,13 @@
             {$T.posts}: <a class="important" href="{$SUPPORT->url_parse($url)}">{$member.posts}</a>
           </td>
           <td style="width:100%;vertical-align:top;" class="smallpadding">
-            <h1 style="position:relative;top:-28px;margin-bottom:-16px;">
+            <h1 style="position:relative;top:-28px;margin-bottom:-22px;">
               {$member.name}
             </h1>
             {if !empty($member.blurb)}
-              <div class="orange_container" style="padding:3px;margin-bottom:3px;"><strong>{$member.blurb}</strong></div>
+              <div class="orange_container norounded" style="padding:3px;margin-bottom:3px;"><strong>{$member.blurb}</strong></div>
             {/if}
-            <div class="blue_container inset_shadow smallpadding" style="margin-bottom:5px;">
+            <div class="blue_container norounded" style="margin-bottom:5px;">
               {if !empty($member.group)}
                 {$T.primary_membergroup}: <strong>{$member.group}</strong><br />
               {/if}
