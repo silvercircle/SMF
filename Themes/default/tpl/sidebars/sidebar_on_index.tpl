@@ -99,7 +99,7 @@
 {/if}
 </div>
 <div class="cContainer_end"></div>
-{$SUPPORT->displayHook('sidebar_below_userblock')}
+{hook name="sidebar_below_userblock"}
 {* Show statistical style information... *}
 {if $S.show_stats_index and !empty($C.show_stats)}
   {call collapser id='stats_panel' title=$T.forum_stats widgetstyle=$widgetstyle}

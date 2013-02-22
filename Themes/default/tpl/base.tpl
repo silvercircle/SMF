@@ -186,6 +186,7 @@
   <div id="mcard" style="display:none;"><div onclick="mcardClose();" id="mcard_close">X</div><div id="mcard_inner"></div></div>
   <div id="wrap" style="max-width: {($S.forum_width == 0)  ? '1400px;' : $S.forum_width};">
   <header>
+  {hook name='foo'}
   <div id="header">
     {include 'header.tpl'}
     <div class="notibar">
