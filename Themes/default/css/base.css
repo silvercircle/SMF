@@ -40,8 +40,7 @@ div#main_content_section {
 	width: auto;
 	min-height: 200px;
 	margin: 0 auto 20px auto;
-	padding: 10px;
-	padding-top:0;
+	padding: 0 10px 10px 10px;
 }
 div#sidebar, div#sbar {
 	float: right;
@@ -360,9 +359,8 @@ div.keyinfo.lean {
 	padding: 0 10px 5px 10px;
 }
 div.keyinfo.comment {
-	padding:0;
+	padding:0 10px 0 0;
 	margin:0;
-	padding-right:10px;
 	line-height: 18px;
 	min-height:76px;
 }
@@ -520,11 +518,10 @@ div.signature, div.attachments {
 	width:98%;
 	overflow: auto;
 	clear: right;
-	margin: 0 1.5em;
+	margin: 0 1.5em 5px 1.5em;
 	line-height: 1.4em;
 	font-size: 0.85em;
 	padding-top:5px;
-	margin-bottom:5px;
 }
 div.signature {
 	overflow: hidden;
@@ -601,16 +598,13 @@ dl.input dt {
 	float: left;
 	text-align: right;
 	width:44%;
-	margin:0;
-	margin-bottom:10px;
+	margin:0 0 10px 0;
 }
-
 dl.input dd {
 	text-align: left;
 	width:54%;
 	float:right;
-	margin:0;
-	margin-bottom:10px;
+	margin:0 0 10px 0;
 }
 dl.common {
 	clear: right;
@@ -784,8 +778,7 @@ h4.catbg, h4.catbg2, h3.catbg, h3.catbg2, .table_list tbody.header td.catbg {
 /* pulldown menus */
 
 #main_menu {
-	padding: 0 0.5em;
-	padding-left:30px;
+	padding: 0 0.5em 0 30px;
 	border-top-left-radius: 6px;
 }
 ul.dropmenu, ul.dropmenu ul {
@@ -1053,14 +1046,13 @@ a.navPages, .pagelinks span.current, .pagelinks span.prefix {
 	display:inline-block;
 	line-height:17px;
 	text-align:center;
-	margin:0;
 	white-space:nowrap;
 	padding:0 4px;
 	cursor: pointer;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	margin-right:-2px;
+	margin: 0 -2px 0 0;
 }
 div.pagelinks span.prefix {
 	margin-right:2px;
@@ -1159,7 +1151,6 @@ img.twentyfour {
 	margin: 0 2px;
 }
 #smileyBox_message {
-	margin: 0.5em;
 	margin: 1.0em;
 	max-width:600px !important;
 	position:absolute;

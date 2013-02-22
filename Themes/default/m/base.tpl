@@ -20,6 +20,7 @@
 <html id="_S_" lang="en-US">
   <head>
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=2.0; user-scalable=1;" />
+    <link rel="stylesheet" type="text/css" href="{$S.theme_url}/css/base.css{$C.jsver}" />
     <link rel="stylesheet" type="text/css" href="{$S.primary_css}.css{$C.jsver}" />
     {if $C.right_to_left > 0}
       <link rel="stylesheet" type="text/css" href="{$S.theme_url}/css/rtl.css" />
@@ -48,7 +49,7 @@
       var textSizeDefault = 10;
       var sideBarWidth = 250;
       var sidebar_content_loaded = 0;
-      var cookie = readCookie('SMF_textsize');
+      var cookie = readCookie('EOS_textsize');
       var ssp_imgpath = '{$S.images_url}/share';
       var textsize = cookie ? parseInt(cookie) : textSizeDefault;
       var anchor = document.getElementsByTagName('SCRIPT')[0];

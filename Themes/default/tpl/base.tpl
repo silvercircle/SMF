@@ -55,7 +55,7 @@
       var textSizeDefault = 11;
       var sideBarWidth = 250;
       var sidebar_disabled = {$U.smf_sidebar_disabled};
-      var cookie = readCookie('SMF_textsize');
+      var cookie = readCookie('EOS_textsize');
       var ssp_imgpath = '{$S.images_url}/share';
       var textsize = cookie ? parseInt(cookie) : textSizeDefault;
       var anchor = document.getElementsByTagName('SCRIPT')[0];

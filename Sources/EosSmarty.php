@@ -53,23 +53,16 @@ class EoS_Smarty {
 		else
 			self::$_configInstance = new EoS_Smarty_Template_Support(self::$_smartyInstance);
 
-		$firstdir = 0;
 		if(MOBILE) {
-			self::$_smartyInstance->setTemplateDir($settings['default_theme_dir'] . '/m');
-			$firstdir++;
+			self::$_smartyInstance->addTemplateDir($settings['default_theme_dir'] . '/m');
 			$compiledir .= '/m';
 		}
-		if($settings['allow_template_overrides']) {			// allow overrides (mod setting)
-			self::$_smartyInstance->setTemplateDir($settings['default_theme_dir'] . '/tpl/overrides');
-			$firstdir++;
-		}
-		foreach($settings['template_dirs'] as $dir) {
-			if(!$firstdir)
-				self::$_smartyInstance->setTemplateDir($dir . '/tpl');
-			else
-				self::$_smartyInstance->addTemplateDir($dir . '/tpl');
-			$firstdir++;
-		}
+		if($settings['allow_template_overrides']) 			// allow overrides (mod setting)
+			self::$_smartyInstance->addTemplateDir($settings['default_theme_dir'] . '/tpl/overrides');
+
+		foreach($settings['template_dirs'] as $dir)
+			self::$_smartyInstance->addTemplateDir($dir . '/tpl');
+
 		self::$_smartyInstance->setCompileDir($compiledir);
 
 		$context['clip_image_src'] = $settings['images_url'] . '/' . $settings['clip_image_src'][$context['theme_variant']];

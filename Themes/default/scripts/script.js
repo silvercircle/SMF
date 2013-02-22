@@ -1063,7 +1063,7 @@ function setTextSize(_s, init)
    		//$('<style>div.post {font-size:8pt;}</style>').insertAfter('body');
    	else
 		$('div.post_wrapper div.post').css('font-size', _s + 'pt');
-	createCookie('SMF_textsize', _s, 500);
+	createCookie('EOS_textsize', _s, 500);
 }
 
 function toggleFontStyle()
@@ -1568,7 +1568,7 @@ function Eos_Confirm(title, msg, callback)
 
 function Clear_Cookies()
 {
-	var allcookies = new Array(_cname, _mqcname, 'SMF_textsize', 'smf_topicstart', 'usemobile', 'SF_collapsed', 'smf_sidebar_disabled', 'PHPSESSID');
+	var allcookies = new Array(_cname, _mqcname, 'EOS_textsize', 'smf_topicstart', 'usemobile', 'SF_collapsed', 'smf_sidebar_disabled', 'PHPSESSID');
 
 	for(var i = 0; i < allcookies.length; i++)
 		createCookie(allcookies[i], '', -1);

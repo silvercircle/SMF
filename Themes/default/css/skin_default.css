@@ -454,7 +454,7 @@ ul#navigation li {
 }
 
 #adm_submenus li {
-	margin: 0 1px;
+	margin: 0 1px 0 1px;
 	color: black;
 	padding: 0 5px;
 	border: 1px solid #ccc;
@@ -464,7 +464,6 @@ ul#navigation li {
 	border-radius: 3px 3px 0 0;
 	overflow:hidden;
 	box-sizing:border-box;
-	margin-top:2px;
 }
 
 #adm_submenus li a {
@@ -487,7 +486,7 @@ ul#navigation li {
 #adm_submenus li.active {
 	background: #ddd;
 	margin-left: -3px;
-	margin-top:0px;
+	margin-top:0;
 	line-height:22px;
 	height:22px;
 	border-top:2px solid orange;
@@ -507,7 +506,6 @@ div.boardlisting ul li.category {
 	top: 5px;
 	width: 20px;
 	height: 40px;
-	background: white;
 	border-radius: 0 4px 4px 0;
 	cursor: pointer;
 	margin-bottom: -40px;
@@ -739,8 +737,7 @@ ol.commonlist > li:last-child {
 ol.commonlist.category {
 	background-color:#f5f5f5;
 	padding-top:0;
-	margin: 0;
-	margin-top:3px;
+	margin: 3px 0 0 0;
 	border:1px solid #dde;
 	/*border-top:0;*/
 	border-radius: 4px;
@@ -2416,7 +2413,6 @@ span.newindicator {
 	right:-14px;
 	top:6px;
 	font-size:10px;
-	border:1px solid red;
 	padding: 0 3px;
 	line-height:14px;
 	text-align: center;

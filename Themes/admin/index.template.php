@@ -61,7 +61,7 @@ function template_html_above()
 	var sideBarWidth = 250;
     var timeOffsetMember = {$timeoff};
     var sidebar_disabled = {$user_info['smf_sidebar_disabled']};
-	var cookie = readCookie('SMF_textsize');
+	var cookie = readCookie('EOS_textsize');
 	var ssp_imgpath = '{$settings['images_url']}/share';
 	var textsize = cookie ? parseInt(cookie) : textSizeDefault;
 	var anchor = document.getElementsByTagName('SCRIPT')[0];
