@@ -12,11 +12,9 @@
   // ]]>
 </script>
 <form action="{$SUPPORT->url_parse('?action=profile;area=ignoreboards;save')}" method="post" accept-charset="UTF-8" name="creator" id="creator">
-  <div class="cat_bar">
-    <h3>
-      <span class="ie6_header floatleft">{$T.ignoreboards}</span>
-    </h3>
-  </div>
+   <h1 class="bigheader section_header bordered">
+      {$T.ignoreboards}
+   </h1>
   <div class="orange_container smalltext cleantop norounded gradient_darken_down mediumpadding">{$T.ignoreboards_info}</div>
   <br>
   <div class="blue_container">

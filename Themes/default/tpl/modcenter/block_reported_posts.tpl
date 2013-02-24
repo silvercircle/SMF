@@ -1,9 +1,5 @@
 <div class="modblock_{($C.alternate) ? 'left' : 'right'}">
-<div class="cat_bar">
-  <h3>
-    <a href="{$SCRIPTURL}?action=moderate;area=reports">{$T.mc_recent_reports}</a>
-  </h3>
-</div>
+<h1 class="bigheader section_header bordered"><a href="{$SCRIPTURL}?action=moderate;area=reports">{$T.mc_recent_reports}</a></h1>
 <div class="blue_container cleantop">
   <div class="content modbox">
     <ul class="reset">

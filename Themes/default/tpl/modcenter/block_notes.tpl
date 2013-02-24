@@ -1,8 +1,6 @@
 <div class="modblock_{($C.alternate) ? 'left' : 'right'}">
 <form action="{$SCRIPTURL}?action=moderate;area=index" method="post">
-  <div class="cat_bar">
-    <h3>{$T.mc_notes}</h3>
-  </div>
+  <h1 class="bigheader section_header bordered">{$T.mc_notes}</h1>
   <div class="blue_container cleantop">
     <div class="content modbox">
     {if !empty($C.notes)}

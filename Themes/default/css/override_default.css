@@ -75,3 +75,8 @@ div.poster.std ul {
 div.poster.std h4 a {
 	padding:2px 5px;
 }
+
+a.prefix.req {
+	background: #70b8e5;
+	border:1px solid #527fe5;
+}

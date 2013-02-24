@@ -1,14 +1,10 @@
 <div id="modcenter">
   <form action="', $scripturl, '?action=moderate;area=postmod;start=', $context['start'], ';sa=', $context['current_view'], '" method="post" accept-charset="UTF-8">
-    <div class="cat_bar">
-      <h3>{$T.mc_unapproved_posts}</h3>
-    </div>
+    <br>
     {if empty($C.unapproved_items)}
-      <div class="windowbg2">
-        <div class="content">
-          {$index = 'mc_unapproved_'|cat:$C.current_view|cat:'_none_found'}
-          <p class="centertext">{$T.$index}</p>
-        </div>
+      <div class="red_container norounded smallpadding">
+        {$index = 'mc_unapproved_'|cat:$C.current_view|cat:'_none_found'}
+        <p class="centertext">{$T.$index}</p>
       </div>
     {else}
       <div class="pagesection">

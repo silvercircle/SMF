@@ -425,11 +425,13 @@ div#left_admsection {
 }
 
 a.prefix {
-	font-size:11px !important;
-	padding:0 5px;
+	font-size:10px !important;
+	padding: 1px 5px;
 	border:1px solid #ccc;
 	background-color:#ddd;
 	border-radius:3px;
+	height:1em;
+	line-height: 1em;
 }
 .align_top ul li a, .align_bottom ul li a {
 	margin: 0 12px 0 0;
@@ -454,16 +456,17 @@ ul#navigation li {
 }
 
 #adm_submenus li {
-	margin: 0 1px 0 1px;
+	margin: 0 1px;
 	color: black;
 	padding: 0 5px;
 	border: 1px solid #ccc;
+	border-top-width:2px;
 	border-bottom: 0;
-	line-height:20px;
-	height:20px;
+	line-height:22px;
+	height:22px;
 	border-radius: 3px 3px 0 0;
 	overflow:hidden;
-	box-sizing:border-box;
+	box-sizing: border-box;
 }
 
 #adm_submenus li a {
@@ -484,14 +487,10 @@ ul#navigation li {
 }
 
 #adm_submenus li.active {
-	background: #ddd;
-	margin-left: -3px;
-	margin-top:0;
-	line-height:22px;
-	height:22px;
+	background: #ccc;
+	border-bottom:0;
 	border-top:2px solid orange;
 }
-
 div.boardlisting ul li.category {
 	background: #fff url(../images/theme/sprite.png) 0 -614px repeat-x;
 	color: #666;

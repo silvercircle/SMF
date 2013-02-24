@@ -1,6 +1,6 @@
 {include "postbits/compact.tpl"}
 <br>
-<h1 class="bigheader secondary indent title">
+<h1 class="bigheader section_header bordered">
   {(!isset($C.attachments) and empty($C.is_topics)) ? $T.showMessages : ((!empty($C.is_topics)) ? $T.showTopics : $T.showAttachments)} {$T.by} {$C.member.name}
  </h1>
 {if $C.results_counter}

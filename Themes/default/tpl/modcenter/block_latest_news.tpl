@@ -1,9 +1,5 @@
 <div class="modblock_{($C.alternate) ? 'left' : 'right'}">
-<div class="cat_bar">
-  <h3>
-    <span class="ie6_header floatleft"><a href="{$SCRIPTURL}?action=helpadmin;help=live_news" onclick="return reqWin(this.href);" class="help"><strong>{$T.help}&nbsp;&nbsp;</strong></a>{$T.mc_latest_news}</span>
-  </h3>
-</div>
+<h1 class="bigheader section_header bordered"><a href="{$SCRIPTURL}?action=helpadmin;help=live_news" onclick="return reqWin(this.href);" class="help"><strong>{$T.help}&nbsp;&nbsp;</strong></a>{$T.mc_latest_news}</h1>
 <div class="blue_container cleantop">
   <div class="content">
     <div id="smfAnnouncements" class="smalltext">{$T.mc_cannot_connect_sm}</div>

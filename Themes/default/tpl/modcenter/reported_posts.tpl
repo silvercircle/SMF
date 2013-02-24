@@ -1,9 +1,8 @@
 <form action="{$SCRIPTURL}?action=moderate;area=reports{($C.view_closed) ? ';sa=closed' : ''};start={$C.start}" method="post" accept-charset="UTF-8">
-  <div class="cat_bar">
-    <h3>
+  <br>
+  <h1 class="bigheader secondary indent">
       {($C.view_closed) ? $T.mc_reportedp_closed : $T.mc_reportedp_active}
-    </h3>
-  </div>
+  </h1>
   <div class="pagesection">
     <div class="pagelinks">{$C.page_index}</div>
   </div>
@@ -36,7 +35,7 @@
     </div>
   {/foreach}
   {if empty($C.reports)}
-    <div class="orange_container mediumpadding">
+    <div class="red_container smallpadding norounded">
       <p class="centertext">{$T.mc_reportedp_none_found}</p>
     </div>
   {/if}
@@ -45,7 +44,7 @@
         {$C.page_index}
     </div>
     <div class="floatright">
-        {($C.view_closed) ? ('<input type="submit" name="close_selected" value="'|cat:$T.mc_reportedp_close_selected|cat:'" class="button_submit" />') : ''}
+        {($C.view_closed) ? ('<input type="submit" name="close_selected" value="'|cat:$T.mc_reportedp_close_selected|cat:'" class="button_submit default" />') : ''}
     </div>
   </div>
   <input type="hidden" name="{$C.session_var}" value="{$C.session_id}" />
