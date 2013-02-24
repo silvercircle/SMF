@@ -105,6 +105,8 @@ function GetRatingWidget()
 {
 	global $modSettings, $user_info, $context, $txt;
 
+	$pool_avail = Ratings::getPool();
+
 	if($user_info['is_guest'])
 		AjaxErrorMsg($txt['no_like_for_guests']);
 
@@ -135,16 +137,22 @@ function GetRatingWidget()
 				continue;
 			if(Ratings::isAllowed($key, $id_board)) {
 				$context['result_count']++;
+				$cost = isset($rating['cost']) ? $rating['cost'] : 0;
 				$context['ratings'][] = array(
 					'rtype' => (int)$key,
 					'label' => $rating['text'],
-					'unique' => $rating['unique']
+					'unique' => $rating['unique'],
+					'cost' => $cost,
+					'points' => isset($rating['points']) ? $rating['points'] : 0,
+					'avail' => $user_info['is_admin'] || $cost <= $pool_avail,
 				);
 			}
 		}
 	}
+	$context['pool_avail'] = $pool_avail;
 	$context['content_id'] = $content_id;
 	$context['json_data'] = htmlspecialchars(json_encode(array('id' => $content_id, 'error_text' => $txt['ratingwidget_error'])));
+	$context['widget_help_href'] = URL::parse('?action=helpadmin;help=ratingwidget_help');
 }
 
 /**

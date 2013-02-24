@@ -245,3 +245,5 @@ ALTER TABLE {$db_prefix}ban_items ADD ip_low7 smallint(255) unsigned NOT NULL de
 ALTER TABLE {$db_prefix}ban_items ADD ip_high7 smallint(255) unsigned NOT NULL default '0';
 ALTER TABLE {$db_prefix}ban_items ADD ip_low8 smallint(255) unsigned NOT NULL default '0';
 ALTER TABLE {$db_prefix}ban_items ADD ip_high8 smallint(255) unsigned NOT NULL default '0';
+
+ALTER TABLE {$db_prefix}membergroups ADD rating_pool int(10) unsigned NOT NULL default '0';

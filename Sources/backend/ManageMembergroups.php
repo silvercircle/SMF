@@ -371,11 +371,11 @@ function AddMembergroup()
 			'{db_prefix}membergroups',
 			array(
 				'id_group' => 'int', 'description' => 'string', 'group_name' => 'string-80', 'min_posts' => 'int',
-				'stars' => 'string', 'online_color' => 'string', 'group_type' => 'int',
+				'stars' => 'string', 'online_color' => 'string', 'group_type' => 'int', 'rating_pool' => 'int'
 			),
 			array(
 				$id_group, '', $_POST['group_name'], ($postCountBasedGroup ? (int) $_POST['min_posts'] : '-1'),
-				'1#star.gif', '', $_POST['group_type'],
+				'1#star.gif', '', $_POST['group_type'], $_POST['rating_pool']
 			),
 			array('id_group')
 		);
@@ -682,6 +682,7 @@ function EditMembergroup()
 		$_POST['group_type'] = !isset($_POST['group_type']) || $_POST['group_type'] < 0 || $_POST['group_type'] > 3 || ($_POST['group_type'] == 1 && !allowedTo('admin_forum')) ? 0 : (int) $_POST['group_type'];
 		$_POST['group_hidden'] = empty($_POST['group_hidden']) || $_POST['min_posts'] != -1 || $_REQUEST['group'] == 3 ? 0 : (int) $_POST['group_hidden'];
 		$_POST['group_inherit'] = $_REQUEST['group'] > 1 && $_REQUEST['group'] != 3 && (empty($inherit_type) || $inherit_type != 1) ? (int) $_POST['group_inherit'] : -2;
+		$_POST['rating_pool'] = abs($_POST['rating_pool']);
 
 		// !!! Don't set online_color for the Moderators group?
 
@@ -691,7 +692,7 @@ function EditMembergroup()
 			SET group_name = {string:group_name}, online_color = {string:online_color},
 				max_messages = {int:max_messages}, min_posts = {int:min_posts}, stars = {string:stars},
 				description = {string:group_desc}, group_type = {int:group_type}, hidden = {int:group_hidden},
-				id_parent = {int:group_inherit}
+				id_parent = {int:group_inherit}, rating_pool = {int:rating_pool}
 			WHERE id_group = {int:current_group}',
 			array(
 				'max_messages' => $_POST['max_messages'],
@@ -704,6 +705,7 @@ function EditMembergroup()
 				'online_color' => $_POST['online_color'],
 				'stars' => $_POST['stars'],
 				'group_desc' => $_POST['group_desc'],
+				'rating_pool' => $_POST['rating_pool']
 			)
 		);
 
@@ -939,7 +941,7 @@ function EditMembergroup()
 
 	// Fetch the current group information.
 	$request = smf_db_query( '
-		SELECT group_name, description, min_posts, online_color, max_messages, stars, group_type, hidden, id_parent
+		SELECT group_name, description, min_posts, online_color, max_messages, stars, group_type, hidden, id_parent, rating_pool
 		FROM {db_prefix}membergroups
 		WHERE id_group = {int:current_group}
 		LIMIT 1',
@@ -971,6 +973,7 @@ function EditMembergroup()
 		'allow_post_group' => $_REQUEST['group'] == 2 || $_REQUEST['group'] > 4,
 		'allow_delete' => $_REQUEST['group'] == 2 || $_REQUEST['group'] > 4,
 		'allow_protected' => allowedTo('admin_forum'),
+		'rating_pool' => $row['rating_pool']
 	);
 
 	// Get any moderators for this group

@@ -12,6 +12,7 @@ $txt['membergroups_regular'] = 'Regular groups';
 $txt['membergroups_post'] = 'Post count based groups';
 
 $txt['membergroups_group_name'] = 'Membergroup name';
+$txt['membergroups_group_rating_pool'] = 'Rating pool points per day';
 $txt['membergroups_new_board'] = 'Visible Boards';
 $txt['membergroups_new_board_desc'] = 'Boards the membergroup can see';
 $txt['membergroups_new_board_post_groups'] = '<em>Note: normally, post groups don\'t need access because the group the member is in will give them access.</em>';

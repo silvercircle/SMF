@@ -775,10 +775,10 @@ li.boardrow {
 	background: #eaecf2;
 }
 .topicrow.sticky {
-	background: #e0e0ea;
+	/*background: #e0e0ea;*/
 }
 .topicrow.locked {
-	background: #eae0e0;
+	/*background: #eae0e0;*/
 }
 ol.commonlist.notifications {
 	box-shadow: none !important;
@@ -2343,9 +2343,9 @@ div.spoiler.head {
 
 a.navPages, .pagelinks span.current, .pagelinks span.prefix {
 	font-size: 11px;
-	border: 1px solid #ddd;
+	border: 1px solid #9ebfdd;
 	cursor: pointer;
-	background:#f2f2f2;
+	background: #e5f2f0;
 	color: #777;
 	font-family:Tahoma,sans-serif;
 	font-style: normal !important;
@@ -2359,7 +2359,7 @@ a.navPages:hover {
 	background-color:#fff;
 }
 .pagelinks span.prefix.drop {
-	background: #f2f2f2 url(../images/theme/sprite.png) 0 4px no-repeat;
+	background: #e5f2f0 url(../images/theme/sprite.png) 0 4px no-repeat;
 }
 .pagelinks span.current {
 	background: #8f8f8f url(../images/clipsrc.png) 0 -63px repeat-x;
@@ -2455,6 +2455,21 @@ span.ratings .number {
 	font-weight:bold;
 	color:white;
 	cursor:pointer;
+}
+div.ratings.cost {
+	color:blue;
+	width:20px;
+	text-align: right;
+}
+div.ratings.points.positive {
+	color:green;
+	width:30px;
+	text-align: right;
+}
+div.ratings.points.negative {
+	color:red;
+	width:30px;
+	text-align: right;
 }
 div#ajaxbusy {
 	border: 2px solid white;

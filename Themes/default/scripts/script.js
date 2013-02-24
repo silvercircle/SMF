@@ -219,8 +219,8 @@ function reqWin(desktopURL, alternateWidth, alternateHeight, noScrollbars)
 {
 
 	var el = $('<div id="helpoverlay" class="jqmWindow jsconfirm" style="width:500px;"><div class="jqmWindow_container">\
-		 <div class="jsconfirm glass title">Help</div> <div class="jsconfirm content" id="help_content"></div>\
-		 <div class="smallpadding centertext">\
+		 <div class="jsconfirm glass title">Help</div> <div class="jsconfirm" id="help_content"></div>\
+		 <div class="smallpadding centertext ">\
 		  <span class="button default centered" id="helpclose">Close</span>\
 		 </div></div>\
 		</div>');

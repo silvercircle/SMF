@@ -9,7 +9,7 @@ function template_manage_ratings()
 	</div>
 	<div class="blue_container mediumpadding cleantop">',
 	$txt['ratings_help_intro'], '
-	<div id="rhelp" style="display:none;">',
+	<div id="rhelp" class="smalltext" style="display:none;">',
 	$txt['ratings_help'],'
 	</div>
 	<form method="post" accept-charset="UTF-8" action="',$context['post_url'],'">
@@ -76,8 +76,9 @@ function template_manage_ratings()
 						<span style="color:green;">&bull;</span><input style=margin-bottom:4px;" type="text" size="15" name="rating_boards_', $id, '" value="', $class['boards'], '" /><br>
 						<span style="color:red;">&bull;</span><input type="text" size="15" name="rating_boards_denied_', $id, '" value="', $class['boards_denied'], '" />
 					</td>
-					<td>
-						<input type="text" size="5" name="rating_points_', $id, '" value="', $class['points'], '" />
+					<td class="nowrap">
+						<input type="text" size="5" name="rating_points_', $id, '" value="', $class['points'], '" /><br>
+						<input type="text" size="5" name="rating_cost_', $id, '" value="', $class['cost'], '" />
 					</td>
 					<td>
 						<input type="checkbox" ',($class['unique'] ? 'checked="checked"' : ''),' name="rating_unique_', $id, '" value="1" />

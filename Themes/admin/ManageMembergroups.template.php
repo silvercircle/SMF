@@ -39,6 +39,12 @@ function template_new_group()
 						</dt>
 						<dd>
 							<input type="text" name="group_name" id="group_name_input" size="30" class="input_text" />
+						</dd>
+						<dt>
+							<label for="group_rating_pool_input"><strong>', $txt['membergroups_group_rating_pool'], ':</strong></label>
+						</dt>
+						<dd>
+							<input type="text" name="rating_pool" id="group_rating_pool_input" size="10" class="input_text" value="0" />
 						</dd>';
 	if ($context['undefined_group'])
 	{
@@ -295,7 +301,14 @@ function template_edit_group()
 						</dt>
 						<dd>
 							<input type="text" name="max_messages" id="max_messages_input" value="', $context['group']['id'] == 1 ? 0 : $context['group']['max_messages'], '" size="6"', $context['group']['id'] == 1 ? ' disabled="disabled"' : '', ' class="input_text" />
+						</dd>
+						<dt>
+							<label for="group_rating_pool_input"><strong>', $txt['membergroups_group_rating_pool'], ':</strong></label>
+						</dt>
+						<dd>
+							<input type="text" name="rating_pool" id="group_rating_pool_input" size="10" class="input_text" value="',$context['group']['rating_pool'],'" />
 						</dd>';
+
 	if (!empty($context['boards']))
 	{
 		echo '

@@ -489,6 +489,7 @@ function ModifyRatingSettings()
 				'label' => $rating['label'],
 				'localized' => isset($rating['localized']) ? $rating['localized'] : '',
 				'points' => isset($rating['points']) ? $rating['points'] : 0,
+				'cost' => isset($rating['cost']) ? $rating['cost'] : 0,
 				'groups' => isset($rating['groups']) && !empty($rating['groups']) ? implode(',', $rating['groups']) : '',
 				'boards' => isset($rating['boards']) && !empty($rating['boards']) ? implode(',', $rating['boards']) : '',
 				'boards_denied' => isset($rating['boards_denied']) && !empty($rating['boards_denied']) ? implode(',', $rating['boards_denied']) : '',
@@ -503,6 +504,7 @@ function ModifyRatingSettings()
 				'format' => '',
 				'label' => '',
 				'points' => '',
+				'cost' => '',
 				'groups' => '',
 				'boards' => '',
 				'boards_denied' => '',
@@ -530,6 +532,7 @@ function ModifyRatingSettings()
 					'boards' => isset($_REQUEST['rating_boards_' . $i]) && !empty($_REQUEST['rating_boards_' . $i]) ? explode(',', normalizeCommaDelimitedList($_REQUEST['rating_boards_' . $i])) : array(),
 					'boards_denied' => isset($_REQUEST['rating_boards_denied_' . $i]) && !empty($_REQUEST['rating_boards_denied_' . $i]) ? explode(',', normalizeCommaDelimitedList($_REQUEST['rating_boards_denied_' . $i])) : array(),
 					'points' => isset($_REQUEST['rating_points_' . $i]) && !empty($_REQUEST['rating_points_' . $i]) ? $_REQUEST['rating_points_' . $i] : 0,
+					'cost' => isset($_POST['rating_cost_' . $i]) && !empty($_POST['rating_cost_' . $i]) ? $_POST['rating_cost_' . $i] : 0,
 					'unique' => isset($_REQUEST['rating_unique_' . $i]) && $_REQUEST['rating_unique_' . $i] ? true : false,
 				);
 			}

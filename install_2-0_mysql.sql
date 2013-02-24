@@ -1179,6 +1179,7 @@ CREATE TABLE {$db_prefix}membergroups (
   group_type tinyint(3) NOT NULL default '0',
   hidden tinyint(3) NOT NULL default '0',
   id_parent smallint(5) NOT NULL default '-2',
+	rating_pool int(9) unsigned NOT NULL default '0',
   PRIMARY KEY (id_group),
   KEY min_posts (min_posts)
 ) ENGINE=MyISAM;

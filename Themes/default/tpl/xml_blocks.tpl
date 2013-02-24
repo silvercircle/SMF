@@ -14,7 +14,7 @@
  * small template blocks for ajax response handlers
  *}
 {function help_popup}
-  <div class="blue_container norounded content smalltext mediumpadding">
+  <div class="blue_container norounded smalltext mediumpadding">
     {$C.help_text}<br>
   </div>
 {/function}
@@ -142,17 +142,49 @@
   <response open="private_handler" fn="_create_rating_widget" />
   <content>
     <![CDATA[ <!-- > -->
-      <div class="blue_container light_shadow blue_topbar" id="ratingwidget" data-id="{$C.content_id}" style="position:absolute;right:0;float:right;z-index:9999;min-width:170px;">
+      <div class="blue_container light_shadow blue_topbar" id="ratingwidget" data-id="{$C.content_id}" style="position:absolute;right:0;float:right;z-index:9999;min-width:200px;">
+        <div class="floatright">
+          <a href="{$C.widget_help_href}" onclick="return reqWin(this.href);" class="help tinytext">Help</a>
+        </div>
         <h1 class="bigheader secondary">{$T.rate_this_post}</h1>
         <div class="tinypadding smalltext">
+        Pool avail: {$C.pool_avail}
         {if $C.result_count}
-          <ol class="commonlist" style="margin-bottom:0;">
+          <ol class="commonlist" style="margin:0;">
           {foreach $C.ratings as $rating}
             <li>
               {if $rating.unique}
-                <input class="rw_option aligned" name="RW" id="rtype_{$rating.rtype}" value="{$rating.rtype}" type="radio" /><label for="rtype_{$rating.rtype}" class="aligned">{$rating.label}</label>
+                <div class="floatright ratings cost">
+                  {$rating.cost}
+                </div>
+                <div class="floatright ratings points {($rating.points >= 0) ? 'positive' : 'negative'}">
+                  {if $rating.points != 0}
+                    {($rating.points >= 0) ? '+' : ''}{$rating.points}
+                  {else}
+                    &nbsp;
+                  {/if}
+                </div>
+                {if $rating.avail}
+                  <input class="rw_option aligned" name="RW" id="rtype_{$rating.rtype}" value="{$rating.rtype}" type="radio" /><label for="rtype_{$rating.rtype}" class="aligned">{$rating.label}</label>
+                {else}
+                  <label for="rtype_{$rating.rtype}" class="aligned" style="text-decoration: line-through;">{$rating.label}</label>
+                {/if}
               {else}
-                <input class="rw_option aligned" name="RW" id="rtype_{$rating.rtype}" value="{$rating.rtype}" type="checkbox" /><label for="rtype_{$rating.rtype}" class="aligned">{$rating.label}</label>
+                <div class="floatright ratings cost">
+                  {$rating.cost}
+                </div>
+                <div class="floatright ratings points {($rating.points >= 0) ? 'positive' : 'negative'}">
+                  {if $rating.points != 0}
+                    {($rating.points >= 0) ? '+' : ''}{$rating.points}
+                  {else}
+                    &nbsp;
+                  {/if}
+                </div>
+                {if $rating.avail}
+                  <input class="rw_option aligned" name="RW" id="rtype_{$rating.rtype}" value="{$rating.rtype}" type="checkbox" /><label for="rtype_{$rating.rtype}" class="aligned">{$rating.label}</label>
+                {else}
+                  <label for="rtype_{$rating.rtype}" class="aligned" style="text-decoration: line-through;">{$rating.label}</label>
+                {/if}
               {/if}
             </li>
           {/foreach}

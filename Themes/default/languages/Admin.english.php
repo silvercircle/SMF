@@ -723,7 +723,7 @@ $txt['rating_class_label'] = 'Label';
 $txt['rating_class_localized'] = 'Localized';
 $txt['rating_class_desc'] = 'Description';
 $txt['rating_class_format'] = 'Formatting';
-$txt['rating_class_points'] = 'Points';
+$txt['rating_class_points'] = 'Points/Cost';
 $txt['rating_class_groups_allowed'] = 'Member groups';
 $txt['rating_class_boards_allowed'] = 'Boards';
 $txt['rating_class_unique'] = 'U';
@@ -739,7 +739,7 @@ $txt['ratings_help'] = '
 	<li>Format can contain basic HTML tags like SPAN, DIV and style or class attributes. Format <b>MUST</b> contain a %s placeholder where the label should go.</li>
 	<li>Groups is a comma-delimited list of member group ids which are allowed (top field) and/or groups that should be disallowed (bottom field) to use this rating. Leave it empty to allow all members to use this rating.</li>
 	<li>Boards is a comma-delimited list of board ids where the rating should be available or blocked. Leave it empty to allow this rating in all boards. <b>Note: A denied board ID will override the allowed ones</b>.</li>
-	<li>Points is a positive or negative number that specifies the number of reputation points a member will receive for this rating. When left empty, the rating is considered a neutral one and no points will be granted. <b>NOTE: THIS IS CURRENTLY UNIMPLEMENTED.</b></li>
+	<li>The points/cost colum holds two values. The first (upper) one is a positive or negative number that specifies the number of reputation points a member will receive for this rating. When left empty, the rating is considered a neutral one and no points will be granted.<br><br>The second (lower) value is a positive integer that specifies how many points are subtracted from the rating member\'s rating pool when using this rating. A member cannot spend more than points on ratings than the pool allows for a given period of time. <br><strong>NOTE: THIS IS CURRENTLY UNIMPLEMENTED.</strong></li>
 	</ul>
 	';
 $txt['sphinx_test_passed'] = 'All tests successfully passed. It appears your sphinx search daemon is running and can accept connections and search queries.';

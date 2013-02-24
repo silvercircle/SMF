@@ -621,3 +621,6 @@ $helptxt['linkSecurity'] = 'When enabled, an additional permission will control 
 	Typically, you may want to grant link permissions to all your members except new and possibly banned ones. Also note that there are 2 permissions to control this. One general that controls how links from a member\'s signature are handled and one board permission that works like any other per board permission.';
 $helptxt['use_rating_widget'] = 'If enabled, direct links to rate a post will be replaced by a single "Rate It" link which will open a widget';
 $helptxt['groupColorsFromTheme'] = 'When enabled, the inline colors you have defined for each member group will not be used. Instead, you can define them in your theme\'s style sheet';
+$helptxt['ratingwidget_help'] = 'To rate a post select the rating and click the <strong>Submit</strong> button.<br><br>
+	Stricken ratings are unavailable, because you either do not have permission to use them or you do not have enough rating points left. You can see the cost (in rating points) for each rating in the rightmost column.<br><br>
+	The second column from the left shows the influence the rating will have on the reputation of the post\'s author. Green numbers have a positive influence while red numbers will give negative reputation.';

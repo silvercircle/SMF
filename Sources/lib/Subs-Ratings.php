@@ -10,6 +10,9 @@
  * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
  * @version 1.0pre
+ *
+ * class Ratings contains all the core functionality for the content
+ * rating system.
  */
 if (!defined('EOSA'))
 	die('No access');
@@ -17,10 +20,13 @@ if (!defined('EOSA'))
 Ratings::init();
 
 class Ratings {
-	protected static $perm_can_see, $perm_can_give;
-	protected static $rate_bar = '';
-	protected static $is_valid;
-	protected static $show_repair_link;
+	protected static 	$perm_can_see, $perm_can_give;
+	protected static 	$rate_bar = '';
+	protected static 	$is_valid;
+	protected static 	$show_repair_link;
+
+	const           	REFRESH = 1;
+	const				UPDATE = 2;
 
 	public static function init()
 	{
@@ -376,5 +382,68 @@ class Ratings {
 		smf_db_query('
 			DELETE FROM {db_prefix}like_cache WHERE id_msg IN ({array_int:id_msg}) AND ctype = {int:ctype}',
 			array('id_msg' => $_mid, 'ctype' => $ctype));
+	}
+
+	/**
+	 * @param $do_db 	boolean. if true, update the database.
+	 *
+	 * initialize or refresh a member's rating point pool
+	 */
+	public static function refreshPool($do_db = true)
+	{
+		global $user_info, $context;
+
+		$pool_avail = 0;
+		$request = smf_db_query('SELECT MAX(rating_pool) AS pool FROM {db_prefix}membergroups AS g WHERE g.id_group IN({array_int:groups})',
+			array('groups' => $user_info['groups']));
+
+		if(smf_db_affected_rows() > 0) {
+			$row = mysql_fetch_assoc($request);
+			$pool_avail = $row['pool'];
+		}
+
+		$user_info['meta']['rating_pool']['points'] = $pool_avail;
+		$user_info['meta']['rating_pool']['refresh'] = $context['time_now'];
+
+		if($do_db)
+			updateMemberData($user_info['id'], array('meta' => @serialize($user_info['meta'])));
+	}
+
+	/**
+	 * @return int  the number of available rating points in the member's pool
+	 *
+	 * get the member's rating pool points. If the pool has not been initialized yet, do it.
+	 */
+	public static function getPool()
+	{
+		global $user_info, $context;
+
+		if(!isset($user_info['meta']['rating_pool']['refresh']) || $context['time_now'] - $user_info['meta']['rating_pool']['refresh'] > 86400)
+			self::refreshPool();
+
+		return $user_info['meta']['rating_pool']['points'];
+	}
+
+	/**
+	 * @param $points   	int points to subtract from the pool
+	 * @param int $mode     mode. defaults to update, can also be a bitwise OR of UPDATE | REFRESH
+	 *
+	 * update the member's pool of available rating points.
+	 */
+	public static function updatePool($points, $mode = Ratings::UPDATE)
+	{
+		global $user_info;
+
+		if($mode & Ratings::REFRESH)
+			self::refreshPool($mode & Ratings::UPDATE ? false : true);		// avoid db update if we also do a update afterwards
+
+		if($mode & Ratings::UPDATE) {
+			if($points <= $user_info['meta']['rating_pool']['points'])
+				$user_info['meta']['rating_pool']['points'] -= $points;
+			else
+				$user_info['meta']['rating_pool']['points'] = 0;
+
+			updateMemberData($user_info['id'], array('meta' => @serialize($user_info['meta'])));
+		}
 	}
 }
