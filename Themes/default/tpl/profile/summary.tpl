@@ -142,6 +142,15 @@
 						{$C.member.signature}
 					</div>
 				{/if}
+                {if $C.user.is_owner}
+                    <br>
+                    <a href="#!" onclick="$('#metainfo').show();return false;">Show the meta info</a>
+                    <div id="metainfo" class="orange_container norounded" style="display:none;">
+                        <pre style="font-size: 10px;">
+                            {$U.meta|print_r:true}
+                        </pre>
+                    </div>
+                {/if}
 			</div>
 		</div>
 	</div>

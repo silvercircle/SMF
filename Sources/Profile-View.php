@@ -529,10 +529,12 @@ function showPosts($memID)
 		require_once($sourcedir . '/lib/Subs-Ratings.php');
 		$boards_like_see  = boardsAllowedTo('like_see');
 		$boards_like_give = boardsAllowedTo('like_give');
+		$boards_like_details = boardsAllowedTo('like_details');
 	}
 	else {
 		$boards_like_see  = array();
 		$boards_like_give = array();
+		$boards_like_details = array();
 		$context['can_see_like'] = $context['can_give_like'] = false;
 	}
 
@@ -640,6 +642,7 @@ function showPosts($memID)
 
 			$context['can_see_like'] = count(array_intersect($check_boards, $boards_like_see)) > 0;
 			$context['can_give_like'] = count(array_intersect($check_boards, $boards_like_give)) > 0;
+			$context['can_see_like_details'] = count(array_intersect($check_boards, $boards_like_details)) > 0;
 
 			// Censor....
 			censorText($row['body']);
@@ -705,7 +708,7 @@ function showPosts($memID)
 				'likelink' => ''
 			);
 			if($context['can_see_like'])
-				Ratings::addContent($context['posts'][$i], $context['can_give_like']);
+				Ratings::addContent($context['posts'][$i], $context['can_give_like'], $context['can_see_like_details']);
 
 			if ($user_info['id'] == $row['id_member_started'])
 				$board_ids['own'][$row['id_board']][] = $counter;

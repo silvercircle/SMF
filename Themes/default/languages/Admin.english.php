@@ -727,6 +727,7 @@ $txt['rating_class_points'] = 'Points/Cost';
 $txt['rating_class_groups_allowed'] = 'Member groups';
 $txt['rating_class_boards_allowed'] = 'Boards';
 $txt['rating_class_unique'] = 'U';
+$txt['rating_class_anon'] = 'A';
 $txt['ratings_settings_title'] = 'Post rating settings';
 $txt['rating_show_repair'] = 'Show repair link (for administrators only - allows to rebuild the rating stats for a post)';
 $txt['rating_allow_comments'] = 'Allow to submit a comment when rating a post';

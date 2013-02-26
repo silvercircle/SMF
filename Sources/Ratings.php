@@ -52,9 +52,6 @@ function LikeDispatch()
 	if(!isset($modSettings['ratings'][$rtype]))
 		AjaxErrorMsg($txt['unknown_rating_type']);
 
-	if($modSettings['ratings'][$rtype]['points'] && !allowedTo('can_view_ratings'))
-		AjaxErrorMsg($txt['no_access']);
-
 	if($user_info['is_admin'] && $action === 'fixlikes') {
 		FixLikes();
 		return;
@@ -69,9 +66,9 @@ function LikeDispatch()
 			mysql_free_result($request);
 			$board = $row ? $row['id_board'] : 0;
 		}
-		$allowed = isset($board) && $board && allowedTo('like_see', $board);
+		$allowed = isset($board) && $board && allowedTo('like_see', $board) && (allowedTo('like_details', $board) || $modSettings['ratings'][$rtype]['anon']);
 		if(!$allowed)
-			AjaxErrorMsg($txt['no_access'], 'Permission error');
+			AjaxErrorMsg($txt['no_access']);
 
 		$start = 0;
 		$users = array();
@@ -144,6 +141,7 @@ function GetRatingWidget()
 					'unique' => $rating['unique'],
 					'cost' => $cost,
 					'points' => isset($rating['points']) ? $rating['points'] : 0,
+					//'avail' => true
 					'avail' => $user_info['is_admin'] || $cost <= $pool_avail,
 				);
 			}
@@ -242,3 +240,4 @@ function LikesByUser($memID)
 	mysql_free_result($request);
 	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'ratings/profile_display');
 }
+

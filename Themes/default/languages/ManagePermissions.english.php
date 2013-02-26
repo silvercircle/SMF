@@ -356,6 +356,7 @@ $txt['permissiongroup_like'] = 'Rating system';
 $txt['permissiongroup_simple_like'] = 'Rating system';
 $txt['permissionname_like_see'] = "See ratings below posts";
 $txt['permissionname_like_give'] = "Use the post ratings system";
+$txt['permissionname_like_details'] = "Can see detailed rating stats";
 $txt['permissiongroup_share'] = 'Enable share links';
 $txt['permissiongroup_simple_share'] = 'Enable share links';
 $txt['permissionname_use_share'] = "Use social media share bar";

@@ -921,7 +921,8 @@ function loadPermissions()
 }
 
 // Loads an array of users' data by ID or member_name.
-function loadMemberData($users, $is_name = false, $set = 'normal')
+// meta data will be loaded
+function loadMemberData($users, $is_name = false, $set = 'normal', $do_meta = false)
 {
 	global $user_profile, $modSettings, $board_info;
 
@@ -959,8 +960,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 			mem.buddy_list, IFNULL(mg.group_name, {string:blank_string}) AS member_group,
 			mem.likes_received AS liked, mem.likes_given AS likesgiven,
 			IFNULL(pg.group_name, {string:blank_string}) AS post_group, mem.is_activated, mem.warning,
-			CASE WHEN mem.id_group = 0 OR mg.stars = {string:blank_string} THEN pg.stars ELSE mg.stars END AS stars' . (!empty($modSettings['titlesEnable']) ? ',
-			mem.usertitle' : '');
+			CASE WHEN mem.id_group = 0 OR mg.stars = {string:blank_string} THEN pg.stars ELSE mg.stars END AS stars, mem.usertitle' . ($do_meta ? ', mem.meta' : '');
 		$select_tables = '
 			LEFT JOIN {db_prefix}log_online AS lo ON (lo.id_member = mem.id_member)
 			LEFT JOIN {db_prefix}attachments AS a ON (a.id_member = mem.id_member)
@@ -975,7 +975,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal')
 			mem.real_name, mem.email_address, mem.hide_email, mem.date_registered,
 			mem.openid_uri, mem.birthdate, mem.posts, mem.last_login,
 			mem.member_ip, mem.member_ip2, mem.lngfile, mem.id_group, mem.id_theme, mem.buddy_list,
-			mem.pm_ignore_list, mem.pm_email_notify, mem.pm_receive_from, mem.time_offset' . (!empty($modSettings['titlesEnable']) ? ', mem.usertitle' : '') . ',
+			mem.pm_ignore_list, mem.pm_email_notify, mem.pm_receive_from, mem.time_offset, mem.usertitle' . ($do_meta ? ', mem.meta' : '') . ',
 			mem.time_format, mem.secret_question, mem.is_activated, mem.additional_groups, mem.smiley_set, mem.show_online,
 			mem.total_time_logged_in, mem.id_post_group, mem.notify_announcements, mem.notify_regularity, mem.notify_send_body,
 			mem.notify_types, lo.url, IFNULL(mg.group_name, {string:blank_string}) AS member_group,
@@ -1138,7 +1138,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'is_buddy' => $profile['buddy'],
 		'is_reverse_buddy' => in_array($user_info['id'], $buddy_list),
 		'buddies' => $buddy_list,
-		'title' => !empty($modSettings['titlesEnable']) ? $profile['usertitle'] : '',
+		'title' => $profile['usertitle'],
 		'href' => $m_href,
 		'link' => '<a class="member group_'.(empty($profile['id_group']) ? $profile['id_post_group'] : $profile['id_group']).'" data-mid="'.$profile['id_member'].'" href="' . $m_href . '" title="' . $txt['profile_of'] . ' ' . $profile['real_name'] . '">' . $profile['real_name'] . '</a>',
 		'email' => $profile['email_address'],
@@ -1189,6 +1189,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'liked' => isset($profile['liked']) ? $profile['liked'] : 0,
 		'likesgiven' => isset($profile['likesgiven']) ? $profile['likesgiven'] : 0,
 		'notify_optout' => isset($profile['notify_optout']) ? $profile['notify_optout'] : '',
+		'meta' => isset($profile['meta']) ? @unserialize($profile['meta']) : array()
 	);
 	
 	if($memberContext[$user]['avatar']['name'] == 'gravatar') {
@@ -1197,8 +1198,6 @@ function loadMemberContext($user, $display_custom_fields = false)
 		$memberContext[$user]['avatar']['href'] = 'http://www.gravatar.com/avatar/'.$hash;
 		$memberContext[$user]['avatar']['url'] = $memberContext[$user]['avatar']['href'];
 	}
-	// First do a quick run through to make sure there is something to be shown.
-	$memberContext[$user]['has_messenger'] = false;
 
 	// Are we also loading the members custom fields into context?
 	if ($display_custom_fields && !empty($modSettings['displayFields']))

@@ -89,11 +89,13 @@ function RecentPosts()
 		require_once($sourcedir . '/lib/Subs-Ratings.php');
 		$boards_like_see  = boardsAllowedTo('like_see');
 		$boards_like_give = boardsAllowedTo('like_give');
+		$boards_like_details = boardsAllowedTo('like_details');
 	}
 	else {
 		$context['can_see_like'] = $context['can_give_like'] = false;
 		$boards_like_see  = array();
 		$boards_like_give = array();
+		$boards_like_details = array();
 	}
 	$context['time_now'] = time();
 
@@ -353,6 +355,7 @@ function RecentPosts()
 
 		$context['can_see_like'] = count(array_intersect($check_boards, $boards_like_see)) > 0;
 		$context['can_give_like'] = count(array_intersect($check_boards, $boards_like_give)) > 0;
+		$context['can_see_like_details'] = count(array_intersect($check_boards, $boards_like_details)) > 0;
 
 		// Censor everything.
 		censorText($row['body']);
@@ -418,7 +421,7 @@ function RecentPosts()
 			'likelink' => ''
 		);
 		if($context['can_see_like'])
-			Ratings::addContent($context['posts'][$row['id_msg']], $context['can_give_like']);
+			Ratings::addContent($context['posts'][$row['id_msg']], $context['can_give_like'], $context['can_see_like_details']);
 
 		if ($user_info['id'] == $row['id_first_member'])
 			$board_ids['own'][$row['id_board']][] = $row['id_msg'];

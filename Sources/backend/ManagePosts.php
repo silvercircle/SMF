@@ -495,6 +495,7 @@ function ModifyRatingSettings()
 				'boards_denied' => isset($rating['boards_denied']) && !empty($rating['boards_denied']) ? implode(',', $rating['boards_denied']) : '',
 				'groups_denied' => isset($rating['groups_denied']) && !empty($rating['groups_denied']) ? implode(',', $rating['groups_denied']) : '',
 				'unique' => isset($rating['unique']) && !empty($rating['unique']) ? true : false,
+				'anon' => isset($rating['anon']) && !empty($rating['anon']) ? true : false,
 			);
 		}
 		else {
@@ -511,6 +512,7 @@ function ModifyRatingSettings()
 				'groups_denied' => '',
 				'localized' => '',
 				'unique' => true,
+				'anon' => true,
 			);
 		}
 	}
@@ -534,6 +536,7 @@ function ModifyRatingSettings()
 					'points' => isset($_REQUEST['rating_points_' . $i]) && !empty($_REQUEST['rating_points_' . $i]) ? $_REQUEST['rating_points_' . $i] : 0,
 					'cost' => isset($_POST['rating_cost_' . $i]) && !empty($_POST['rating_cost_' . $i]) ? $_POST['rating_cost_' . $i] : 0,
 					'unique' => isset($_REQUEST['rating_unique_' . $i]) && $_REQUEST['rating_unique_' . $i] ? true : false,
+					'anon' => isset($_REQUEST['rating_anon_' . $i]) && $_REQUEST['rating_anon_' . $i] ? true : false,
 				);
 			}
 		}

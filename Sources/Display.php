@@ -1451,7 +1451,7 @@ function prepareDisplayContext($reset = false)
 	);
 
 	if($context['can_see_like'])
-		Ratings::addContent($output, $context['can_give_like']);
+		Ratings::addContent($output, $context['can_give_like'], $context['can_see_like_details']);
 	else
 		$output['likes_count'] = 0;
 	// Is this user the message author?

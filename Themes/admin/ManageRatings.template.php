@@ -40,11 +40,14 @@ function template_manage_ratings()
 			<th class="glass cleantop nowrap">',
 				$txt['rating_class_boards_allowed'],'
 			</th>
-			<th class="last_th glass cleantop nowrap">',
+			<th class="glass cleantop nowrap">',
 				$txt['rating_class_points'],'
 			</th>
-			<th class="last_th glass cleantop nowrap">',
+			<th class="glass cleantop nowrap">',
 				$txt['rating_class_unique'],'
+			</th>
+			<th class="last_th glass cleantop nowrap">',
+				$txt['rating_class_anon'],'
 			</th>
 			</tr>
 			</thead>
@@ -82,6 +85,9 @@ function template_manage_ratings()
 					</td>
 					<td>
 						<input type="checkbox" ',($class['unique'] ? 'checked="checked"' : ''),' name="rating_unique_', $id, '" value="1" />
+					</td>
+					<td>
+						<input type="checkbox" ',($class['anon'] ? 'checked="checked"' : ''),' name="rating_anon_', $id, '" value="1" />
 					</td>
 				</tr>';
 			}

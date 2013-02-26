@@ -1498,8 +1498,7 @@ function loadAllPermissions($loadType = 'classic')
 			'drafts_allow' => array(false, 'drafts', 'drafts'),
 			'drafts_autosave_allow' => array(false, 'drafts', 'drafts'),
 			'post_links' => array(false, 'general', 'general'),
-			'can_dismiss_news' => array(false, 'general', 'general'),
-			'can_view_ratings' => array(false, 'general', 'general')
+			'can_dismiss_news' => array(false, 'general', 'general')
 		),
 		'board' => array(
 			'moderate_board' => array(false, 'general_board', 'moderate'),
@@ -1538,6 +1537,7 @@ function loadAllPermissions($loadType = 'classic')
 			'post_attachment' => array(false, 'attachment', 'attach'),
 			'like_see' => array(false, 'like', 'like'),
 			'like_give' => array(false, 'like', 'like'),
+			'like_details' => array(false, 'like', 'like'),
 			'use_share' => array(false, 'share', 'share'),
 			'see_hidden1' => array(false, 'hide', 'hide'),
 			'see_hidden2' => array(false, 'hide', 'hide'),

@@ -20,13 +20,18 @@ if (!defined('EOSA'))
 Ratings::init();
 
 class Ratings {
-	protected static 	$perm_can_see, $perm_can_give;
+	protected static 	$perm_can_see, $perm_can_give, $perm_can_see_details;
 	protected static 	$rate_bar = '';
 	protected static 	$is_valid;
 	protected static 	$show_repair_link;
-
+	/**
+	 * @var array		reference to the ratings array in $modSettings
+	 */
+	protected static	$_ratings;
 	const           	REFRESH = 1;
 	const				UPDATE = 2;
+	const				RETURN_POINTS = 4;
+	const				POOL_REFRESH_INTERVAL = 86400;
 
 	public static function init()
 	{
@@ -42,9 +47,12 @@ class Ratings {
 
 		$context['can_see_like'] = self::$perm_can_see = (self::$is_valid ? allowedTo('like_see') : false);
 		$context['can_give_like'] = self::$perm_can_give = (self::$is_valid ? allowedTo('like_give') : false);
-		
+		$context['can_see_like_details'] = self::$perm_can_see_details = (self::$is_valid ? allowedTo('like_details') : false);
+
 		self::$show_repair_link = !empty($modSettings['rating_show_repair']) ? true : false;
 		self::$rate_bar = '<a onclick="ratingWidgetInvoke($(this));return(false);" rel="nofollow" href="!#" class="widgetanchor">' . $txt['rate_this'] . '</a>';
+
+		self::$_ratings = &$modSettings['ratings'];
 	}
 
 	/**
@@ -69,7 +77,7 @@ class Ratings {
 	{
 		global $user_info, $modSettings;
 
-		$board_allowed = $board_denied = $group_allowed = false;
+		$board_allowed = $board_denied = $group_allowed = $group_denied = false;
 
 		$id = (int)$class_id;
 
@@ -90,20 +98,30 @@ class Ratings {
 			else
 				$group_allowed = true;
 
-			return $board_allowed && !$board_denied && $group_allowed ? true : false;
+			if(isset($rating['groups_denied']) && !empty($rating['groups_denied'])) {
+				$group_interset = array_intersect($rating['groups_denied'], $user_info['groups']);
+				$group_denied = !empty($group_interset) ? true : false;
+			}
+			else
+				$group_denied = false;
+
+
+			return $board_allowed && !$board_denied && $group_allowed && !$group_denied ? true : false;
 		}
 		return false;
 	}
 
 	/**
-	 * @param $row - array, fully prepared message
-	 * @param $can_give_like - int, permission to use the ratings
+	 * @param $row 				array, fully prepared message
+	 * @param $can_give_like 	int, permission to use the ratings
+	 * @param $can_see_details  boolean, true for detailed output (like_details permission controls who can see
+	 * 							how users rated a post).
 	 *
 	 * populates $row['likelink'] (all the links required to rate a post)
 	 * and $row['likers'] (the result of the like cache)
 	 * be used in a template. $can_give_like should be the result of a allowedTo('like_give') check.
 	 */
-	public static function addContent(&$row, $can_give_like)
+	public static function addContent(&$row, $can_give_like, $can_see_details = true)
 	{
 		global $user_info, $txt;
 		
@@ -132,7 +150,7 @@ class Ratings {
 		if(!empty($row['likelink']))
 			$row['likelink'] = '<div style="position:relative;"><span data-ctype="1" data-likebarid="'.$row['id'].'">'. $row['likelink'] . '</span></div>';
 		if($row['likes_count'] > 0)
-			self::generateOutput(unserialize($row['like_status']), $row['likers'], $row['id'], $have_liked_it);
+			self::generateOutput(unserialize($row['like_status']), $row['likers'], $row['id'], $have_liked_it, $can_see_details);
 	}
 
 	/**
@@ -183,28 +201,42 @@ class Ratings {
 	}
 
 	/**
-	 * @param $like_status - array. the cached like status (from like_cache table)
-	 * @param $output - string (ref) - where to store the output
-	 * @param $mid - int. the message id
-	 * @param $have_liked - int. if the current user has rated the post, this contains
-	 *        his rating id.
+	 * @param $like_status array 		the cached like status (from like_cache table)
+	 * @param $output string (ref) 		where to store the output
+	 * @param $mid int. 				the message id
+	 * @param $have_liked int. 			if the current user has rated the post, this contains
+	 *        							his rating id.
+	 * @param $can_see_details bool		show detailed output (like_details permission allowed)
 	 *
 	 * generate readable output from the cached like status
 	 */
-	public static function generateOutput($like_status, &$output, $mid, $have_liked)
+	public static function generateOutput($like_status, &$output, $mid, $have_liked, $can_see_detailed = true)
 	{
-		global $txt, $modSettings;
+		global $txt;
 		$parts = array();
 		$types = explode(',', $have_liked);
 
 		if(is_array($like_status)) {
 			foreach($like_status as $key => $the_like) {
-				if(isset($modSettings['ratings'][$key]) && isset($the_like['members'])) {
-					$parts[$key] = '<span data-rtype="'.$key.'" class="number">' . $the_like['count'] . '</span>&nbsp;' . $modSettings['ratings'][$key]['text'] . '&nbsp;';
-					if($the_like['count'] > 1)
-						$parts[$key] .= (in_array($key, $types) ? sprintf($the_like['count'] > 2 ? $txt['you_and_others'] : $txt['you_and_other'], $the_like['count'] - 1) : '(<a rel="nofollow" data-mid="'.$the_like['members'][0]['id'].'" class="mcard" href="'.URL::user($the_like['members'][0]['id'], $the_like['members'][0]['name']) .'">'.$the_like['members'][0]['name'].'</a>&nbsp;' . sprintf($the_like['count'] > 2 ? $txt['and_others'] : $txt['and_other'], $the_like['count'] - 1));
-					else
-						$parts[$key] .= (in_array($key, $types) ? $txt['rated_you'] : '(<a rel="nofollow" data-mid="'.$the_like['members'][0]['id'].'" class="mcard" href="'.URL::user($the_like['members'][0]['id'], $the_like['members'][0]['name']) .'">'.$the_like['members'][0]['name'].'</a>)');
+				if(isset(self::$_ratings[$key]) && isset($the_like['members'])) {
+					if($can_see_detailed || self::$_ratings[$key]['anon']) {
+						$parts[$key] = '<span data-rtype="'.$key.'" class="number">' . $the_like['count'] . '</span>&nbsp;' . self::$_ratings[$key]['text'] . '&nbsp;';
+						if($the_like['count'] > 1)
+							$parts[$key] .= (in_array($key, $types) ? sprintf($the_like['count'] > 2 ? $txt['you_and_others'] : $txt['you_and_other'], $the_like['count'] - 1) : '(<a rel="nofollow" data-mid="'.$the_like['members'][0]['id'].'" class="mcard" href="'.URL::user($the_like['members'][0]['id'], $the_like['members'][0]['name']) .'">'.$the_like['members'][0]['name'].'</a>&nbsp;' . sprintf($the_like['count'] > 2 ? $txt['and_others'] : $txt['and_other'], $the_like['count'] - 1));
+						else
+							$parts[$key] .= (in_array($key, $types) ? $txt['rated_you'] : '(<a rel="nofollow" data-mid="'.$the_like['members'][0]['id'].'" class="mcard" href="'.URL::user($the_like['members'][0]['id'], $the_like['members'][0]['name']) .'">'.$the_like['members'][0]['name'].'</a>)');
+					}
+					/*
+					 * this outputs a "anonymized" version - only list the number of ratings, do not show who rated
+					 * and don't allow the member to click the number to retrieve a detailed listing.
+					 */
+					else {
+						$parts[$key] = '<span data-rtype="'.$key.'" class="number_inactive">' . $the_like['count'] . '</span>&nbsp;' . self::$_ratings[$key]['text'] . '&nbsp;';
+						if($the_like['count'] > 1)
+							$parts[$key] .= (in_array($key, $types) ? sprintf($the_like['count'] > 2 ? $txt['you_and_others'] : $txt['you_and_other'], $the_like['count'] - 1) : '');
+						else
+							$parts[$key] .= (in_array($key, $types) ? $txt['rated_you'] : '');
+					}
 				}
 			}
 		}
@@ -216,7 +248,8 @@ class Ratings {
 	/**
 	 * @param $mid = int message (or content) id
 	 *
-	 * handle the ajax request for rating a post. Also handles deletion of 
+	 * handle the ajax request for rating a post. Also handles deletion of ratings
+	 * and (optionally) the repair action.
 	 * 
 	 * TODO: remove likes from the database when a user is deleted
 	 * TODO: make it work without AJAX and JavaScript
@@ -227,7 +260,9 @@ class Ratings {
 		global $context, $user_info, $sourcedir, $txt, $modSettings;
 		$total = array();
 		$content_type = 1;			// > post content type, we should define them elsewhere later when we have more than just this one
-		
+
+		$pool_avail = self::getPool();
+
 		if((int)$mid > 0) {
 			$uid = $user_info['id'];
 			$remove_it = isset($_REQUEST['remove']) ? true : false;
@@ -244,6 +279,13 @@ class Ratings {
 			}
 			if($user_info['is_guest'])
 				AjaxErrorMsg($txt['no_like_for_guests']);
+
+			/*
+			 * check whether we have enough points available
+			 */
+			$total_point_cost = self::getCosts($rtypes);
+			if(!$user_info['is_admin'] && !$remove_it && $total_point_cost > $pool_avail)
+				AjaxErrorMsg($txt['rating_not_enough_points']);
 
 			$request = smf_db_query('SELECT m.id_msg, m.id_member, m.id_board, m.id_topic, m.subject, l.id_msg AS like_message, l.rtype, l.id_user
 					FROM {db_prefix}messages AS m 
@@ -263,6 +305,15 @@ class Ratings {
 			$context['template_functions'] = 'rating_response';
 			$context['ratings_output']['mid'] = $mid;
 
+			/*
+			 * make sure all submitted ratings are allowed in the board
+			 */
+			if(!$remove_it) {
+				foreach($rtypes as $type) {
+					if(!self::isAllowed($type, $row['id_board']))
+						AjaxErrorMsg($txt['rating_type_not_allowed']);
+				}
+			}
 			/*
 			 * this is a debugging feature and allows the admin to repair
 			 * the likes for a post.
@@ -300,24 +351,71 @@ class Ratings {
 				AjaxErrorMsg($txt['like_no_permission']);
 
 			if($remove_it && $row['id_user'] > 0) {
+				global $memberContext;
+
 				// remove a rating
 				if($like_owner == $uid) {
-					smf_db_query('DELETE FROM {db_prefix}likes WHERE id_msg = {int:id_msg} AND id_user = {int:id_user} AND ctype = {int:ctype}',
+					if($like_receiver) {
+						loadMemberData($like_receiver, false, 'normal', true);
+						loadMemberContext($like_receiver);
+					}
+
+					$request = smf_db_query('SELECT rtype FROM {db_prefix}likes WHERE id_msg = {int:id_msg} AND id_user = {int:id_user} AND ctype = {int:ctype} LIMIT 1',
 						array('id_msg' => $mid, 'id_user' => $uid, 'ctype' => $content_type));
-					
-					if($like_receiver)
-						smf_db_query( 'UPDATE {db_prefix}members SET likes_received = likes_received - 1 WHERE id_member = {int:id_member}',
-							array('id_member' => $like_receiver));
-					
-					smf_db_query('UPDATE {db_prefix}members SET likes_given = likes_given - 1 WHERE id_member = {int:id_member}',
-						array('id_member' => $uid));
 
-					// if we remove a like (unlike) a post, also delete the corresponding activity
-					smf_db_query('DELETE a.*, n.* FROM {db_prefix}log_activities AS a LEFT JOIN {db_prefix}log_notifications AS n ON(n.id_act = a.id_act)
+					if(smf_db_affected_rows() > 0 && isset($memberContext[$like_receiver])) {
+						list($types) = mysql_fetch_row($request);
+
+						$rtypes = explode(',', $types);
+						mysql_free_result($request);
+
+						smf_db_query('DELETE FROM {db_prefix}likes WHERE id_msg = {int:id_msg} AND id_user = {int:id_user} AND ctype = {int:ctype}',
+							array('id_msg' => $mid, 'id_user' => $uid, 'ctype' => $content_type));
+
+						if($like_receiver)
+							smf_db_query( 'UPDATE {db_prefix}members SET likes_received = likes_received - 1 WHERE id_member = {int:id_member}',
+								array('id_member' => $like_receiver));
+
+						smf_db_query('UPDATE {db_prefix}members SET likes_given = likes_given - 1 WHERE id_member = {int:id_member}',
+							array('id_member' => $uid));
+
+						// if we remove a like (unlike) a post, also delete the corresponding activity
+						smf_db_query('DELETE a.*, n.* FROM {db_prefix}log_activities AS a LEFT JOIN {db_prefix}log_notifications AS n ON(n.id_act = a.id_act)
 						WHERE a.id_member = {int:id_member} AND a.id_type = 1 AND a.id_content = {int:id_content}',
-						array('id_member' => $uid, 'id_content' => $mid));
+							array('id_member' => $uid, 'id_content' => $mid));
 
-					$context['ratings_output']['likebar'] = self::$rate_bar;
+						$context['ratings_output']['likebar'] = self::$rate_bar;
+
+						if(!isset($memberContext[$like_receiver]['meta']['rating_stats']))
+							self::initStats($memberContext[$like_receiver]);
+
+						/*
+						 * record the stats
+						 */
+						foreach($rtypes as $type) {
+							if(isset(self::$_ratings[$type])) {
+								if(self::$_ratings[$type]['points'] > 0) {
+									$memberContext[$like_receiver]['meta']['rating_stats']['points_positive'] -= self::$_ratings[$type]['points'];
+									$memberContext[$like_receiver]['meta']['rating_stats']['count_positive']--;
+								}
+								elseif(self::$_ratings[$type]['points'] < 0) {
+									$memberContext[$like_receiver]['meta']['rating_stats']['points_negative'] += self::$_ratings[$type]['points'];
+									$memberContext[$like_receiver]['meta']['rating_stats']['count_negative']--;
+								}
+
+								if(!isset($memberContext[$like_receiver]['meta']['rating_stats'][$type]))
+									$memberContext[$like_receiver]['meta']['rating_stats'][$type] = 0;
+
+								$memberContext[$like_receiver]['meta']['rating_stats'][$type]--;
+
+							}
+						}
+						self::validateStats($memberContext[$like_receiver]['meta']['rating_stats']);
+						$total_point_cost = self::getCosts($rtypes);
+						updateMemberData($like_receiver, array('meta' => @serialize($memberContext[$like_receiver]['meta'])));
+						self::updatePool($total_point_cost, Ratings::UPDATE|Ratings::RETURN_POINTS);
+
+					}
 				}
 			}
 			else {
@@ -325,7 +423,7 @@ class Ratings {
 				global $memberContext;
 				
 				if($like_receiver) {					// we do have a member, but still allow to like posts made by guests
-					loadMemberData($like_receiver);		// but banned users shall not receive likes
+					loadMemberData($like_receiver, false, 'normal', true);		// but banned users shall not receive likes
 					loadMemberContext($like_receiver);
 				}
 				if(($like_receiver && !$memberContext[$like_receiver]['is_banned']) || $like_receiver == 0) {  // posts by guests can be liked
@@ -350,6 +448,33 @@ class Ratings {
 								  'rtype' => $like_type),
 								$row['id_board'], $row['id_topic'], $mid, $like_receiver);
 					}
+
+					if(!isset($memberContext[$like_receiver]['meta']['rating_stats']))
+						self::initStats($memberContext[$like_receiver]);
+
+					/*
+					 * record the stats
+					 */
+					foreach($rtypes as $type) {
+						if(isset(self::$_ratings[$type])) {
+							if(self::$_ratings[$type]['points'] > 0) {
+								$memberContext[$like_receiver]['meta']['rating_stats']['points_positive'] += self::$_ratings[$type]['points'];
+								$memberContext[$like_receiver]['meta']['rating_stats']['count_positive']++;
+							}
+							elseif(self::$_ratings[$type]['points'] < 0) {
+								$memberContext[$like_receiver]['meta']['rating_stats']['points_negative'] -= self::$_ratings[$type]['points'];
+								$memberContext[$like_receiver]['meta']['rating_stats']['count_negative']++;
+							}
+
+							if(!isset($memberContext[$like_receiver]['meta']['rating_stats'][$type]))
+								$memberContext[$like_receiver]['meta']['rating_stats'][$type] = 0;
+
+							$memberContext[$like_receiver]['meta']['rating_stats'][$type]++;
+						}
+					}
+					self::validateStats($memberContext[$like_receiver]['meta']['rating_stats']);
+					updateMemberData($like_receiver, array('meta' => @serialize($memberContext[$like_receiver]['meta'])));
+					self::updatePool($total_point_cost, Ratings::UPDATE);
 				}
 				else
 					AjaxErrorMsg($txt['like_cannot_like']);
@@ -401,6 +526,7 @@ class Ratings {
 			$row = mysql_fetch_assoc($request);
 			$pool_avail = $row['pool'];
 		}
+		mysql_free_result($request);
 
 		$user_info['meta']['rating_pool']['points'] = $pool_avail;
 		$user_info['meta']['rating_pool']['refresh'] = $context['time_now'];
@@ -410,6 +536,18 @@ class Ratings {
 	}
 
 	/**
+	 * cleans the rating point pool
+	 */
+	public static function cleanPool()
+	{
+		global $user_info;
+
+		$user_info['meta']['rating_pool']['points'] = 0;
+		$user_info['meta']['rating_pool']['refresh'] = 0;
+
+		updateMemberData($user_info['id'], array('meta' => @serialize($user_info['meta'])));
+	}
+	/**
 	 * @return int  the number of available rating points in the member's pool
 	 *
 	 * get the member's rating pool points. If the pool has not been initialized yet, do it.
@@ -418,9 +556,10 @@ class Ratings {
 	{
 		global $user_info, $context;
 
-		if(!isset($user_info['meta']['rating_pool']['refresh']) || $context['time_now'] - $user_info['meta']['rating_pool']['refresh'] > 86400)
+		if(!isset($user_info['meta']['rating_pool']['refresh']) || $context['time_now'] - $user_info['meta']['rating_pool']['refresh'] > Ratings::POOL_REFRESH_INTERVAL)
 			self::refreshPool();
 
+		//self::cleanPool();
 		return $user_info['meta']['rating_pool']['points'];
 	}
 
@@ -438,12 +577,71 @@ class Ratings {
 			self::refreshPool($mode & Ratings::UPDATE ? false : true);		// avoid db update if we also do a update afterwards
 
 		if($mode & Ratings::UPDATE) {
-			if($points <= $user_info['meta']['rating_pool']['points'])
-				$user_info['meta']['rating_pool']['points'] -= $points;
-			else
-				$user_info['meta']['rating_pool']['points'] = 0;
-
+			/*
+			 * make sure, we never get negative pool values
+			 */
+			if($mode & Ratings::RETURN_POINTS)
+				$user_info['meta']['rating_pool']['points'] += $points;
+			else {
+				if($points <= $user_info['meta']['rating_pool']['points'])
+					$user_info['meta']['rating_pool']['points'] -= $points;
+				else
+					$user_info['meta']['rating_pool']['points'] = 0;
+			}
 			updateMemberData($user_info['id'], array('meta' => @serialize($user_info['meta'])));
+		}
+	}
+
+	/**
+	 * @param $rating_types array of rating type ids
+	 *
+	 * @return int cost in rating points. Can be 0 >= $cost
+	 */
+	public static function getCosts(&$rating_types)
+	{
+		$cost = 0;
+		$ids = is_array($rating_types) ? array_unique($rating_types) : array($rating_types);
+
+		foreach($ids as $id) {
+			if(isset(self::$_ratings[$id]))
+				$cost += self::$_ratings[$id]['cost'];
+		}
+		return $cost;
+	}
+
+	/**
+	 * @param $profile	array member's profile (like in $memberContext)
+	 *
+	 * initialize the rating stats for a member profile.
+	 */
+	public static function initStats(&$profile)
+	{
+		$profile['meta']['rating_stats'] = array(
+			'points_positive' => 0,
+			'points_negative' => 0,
+			'count_positive' => 0,
+			'count_negative' => 0,
+			'rtypes' => array()
+		);
+	}
+
+	/**
+	 * @param $stats	array - a member's rating stats array (part of meta)
+	 */
+	public static function validateStats(&$stats)
+	{
+		if($stats['points_positive'] < 0)
+			$stats['points_positive'] = 0;
+
+		if($stats['points_negative'] > 0)
+			$stats['points_negative'] = 0;
+
+		$stats['count_positive'] = $stats['count_positive'] >= 0 ? $stats['count_positive'] : 0;
+		$stats['count_negative'] = $stats['count_negative'] >= 0 ? $stats['count_negative'] : 0;
+
+		if(count($stats['rtypes'])) {
+			foreach($stats['rtypes'] as $key => &$type)
+				$stats['rtypes'][$key] = $stats['rtypes'][$key] >= 0 ? $stats['rtypes'][$key] : 0;
 		}
 	}
 }

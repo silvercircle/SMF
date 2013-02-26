@@ -27,3 +27,5 @@ $txt['rate_this'] = 'Rate It';
 $txt['rate_this_post'] = 'Rate this post';
 $txt['ratingwidget_error'] = 'Select the rating you want to submit and click the <b>Submit</b> button or simply click <b>Close</b> to cancel your action';
 $txt['rating_attach_comment'] = 'Comment (optional, max. 100 characters)';
+$txt['rating_not_enough_points'] = 'You do not have enough rating point for this.';
+$txt['rating_type_not_allowed'] = 'One or more of the submitted rating types are not allowed in this board';

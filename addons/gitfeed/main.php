@@ -12,6 +12,8 @@
  * @version 1.0pre
  */
 
+// todo: make translatable
+
 // this should always be there
 if (!defined('EOSA'))
 	die('No access');
@@ -94,7 +96,8 @@ class GitFeed extends EoS_Plugin
 				curl_setopt_array($f, array(CURLOPT_URL => self::$my_git_api_url,
 					CURLOPT_HEADER => false,
 					CURLOPT_RETURNTRANSFER => true,
-					CURLOPT_SSL_VERIFYPEER => false
+					CURLOPT_SSL_VERIFYPEER => false,
+					CURLOPT_CONNECTTIMEOUT => 2
 				));
 				$json_response = curl_exec($f);
 				$data = json_decode($json_response, true);
@@ -116,16 +119,21 @@ class GitFeed extends EoS_Plugin
 			if(++$n > 5)
 				break;
 		}
+		EoS_Smarty::addTemplateDir(dirname(__FILE__));
+		EoS_Smarty::getConfigInstance()->registerHookTemplate('sidebar_below_userblock', 'gitfeed_sidebar_top');
 		if(!empty($data)) {
 			/* 
 			 * add our plugin directory to the list of directories to search for templates
 			 * and register the template hook.
 			 * only do this if we actually have something to display
 			 */
-			EoS_Smarty::addTemplateDir(dirname(__FILE__));
-			EoS_Smarty::getConfigInstance()->registerHookTemplate('sidebar_below_userblock', 'gitfeed_sidebar_top');
 			$context['gitfeed_global']['see_all']['href'] = self::$my_git_url . 'commits/master';
 			$context['gitfeed_global']['see_all']['txt'] = 'Browse all commits';
+			$context['gitfeed_global']['failed'] = false;
+		}
+		else {
+			$context['gitfeed_global']['failed'] = true;
+			$context['gitfeed_global']['message'] = 'GIT API connect failure';
 		}
 	}
 }

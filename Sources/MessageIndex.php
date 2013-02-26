@@ -439,7 +439,7 @@ function MessageIndex()
 			$l_post_mem_href = !empty($row['last_id_member']) ? URL::user($row['last_id_member'], $row['last_display_name'] ) : '';
 			$l_post_msg_href = URL::topic($row['id_topic'], $row['last_subject'], $user_info['is_guest'] ? (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) : 0, $user_info['is_guest'] ? true : false, $user_info['is_guest'] ? '' : ('.msg' . $row['id_last_msg']), $user_info['is_guest'] ? ('#msg' . $row['id_last_msg']) : '#new');
 
-			list($prefix_name, $prefix_class) = explode('||', $row['prefix_name']);
+			list($prefix_name, $prefix_class) = explode('||', $row['prefix_name'] . '||');
 			$context['topics'][$row['id_topic']] = array(
 				'id' => $row['id_topic'],
 				'first_post' => array(

@@ -2448,13 +2448,16 @@ span.ratings .title {
 	font-weight:bold;
 	font-size:13px;
 }
-span.ratings .number {
+span.ratings .number, span.ratings .number_inactive {
 	background:orange;
 	border-radius:2px;
 	padding:1px 4px;
 	font-weight:bold;
 	color:white;
 	cursor:pointer;
+}
+span.ratings .number_inactive {
+	cursor: default;
 }
 div.ratings.cost {
 	color:blue;
