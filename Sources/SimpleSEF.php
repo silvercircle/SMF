@@ -465,7 +465,7 @@ class SimpleSEF {
 	 */
 	public static function ob_simplesef_light($buffer)
 	{
-		global $scripturl;
+		global $scripturl, $memberContext, $settings, $context;
 
 		self::benchmark('buffer');
 		$matches = array();
@@ -495,7 +495,6 @@ class SimpleSEF {
 				$count = count($replacements);
 			}
 		}
-
 		self::benchmark('buffer');
 
   		/*

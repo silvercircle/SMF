@@ -207,6 +207,15 @@ blockquote.bbc_standard_quote, blockquote.bbc_alternate_quote {
 	margin: 0 10px 0.8em 10px;
 	overflow:hidden;
 }
+div.quotewrapper.indent {
+	margin-left:65px;
+}
+div.quoteavatar {
+	margin-top:10px;
+	padding:3px;
+	border:1px solid #ddd;
+	border-radius:2px;
+}
 .bbc_img {
 	max-width: 100%;
 	width: auto;
@@ -226,7 +235,7 @@ div.bbc_img_resizer {
 	margin-left:10px;
 }
 div.quoteheader, div.codeheader, div.spoiler.head {
-	margin: 10px 10px 0 20px;
+	margin: 10px 10px 0 10px;
 }
 div.codeheader, div.spoiler.head {
 	margin: 10px 0 0 0;

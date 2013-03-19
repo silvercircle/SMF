@@ -205,7 +205,7 @@ class Ratings {
 	 * @param $output string (ref) 		where to store the output
 	 * @param $mid int. 				the message id
 	 * @param $have_liked int. 			if the current user has rated the post, this contains
-	 *        							his rating id.
+	 *        							his rating id (multiple ids, separated with commas are possible).
 	 * @param $can_see_details bool		show detailed output (like_details permission allowed)
 	 *
 	 * generate readable output from the cached like status
@@ -578,11 +578,14 @@ class Ratings {
 
 		if($mode & Ratings::UPDATE) {
 			/*
-			 * make sure, we never get negative pool values
+			 * return points to the member's pool (this happens when one removes a rating)
 			 */
 			if($mode & Ratings::RETURN_POINTS)
 				$user_info['meta']['rating_pool']['points'] += $points;
 			else {
+				/*
+				 * make sure, we never get negative pool values
+				 */
 				if($points <= $user_info['meta']['rating_pool']['points'])
 					$user_info['meta']['rating_pool']['points'] -= $points;
 				else
@@ -593,9 +596,11 @@ class Ratings {
 	}
 
 	/**
-	 * @param $rating_types array of rating type ids
+	 * @param $rating_types array|int either a single rating id or an array of rating ids
 	 *
 	 * @return int cost in rating points. Can be 0 >= $cost
+	 *
+	 * calculate the cost (in points) for one or more ratings.
 	 */
 	public static function getCosts(&$rating_types)
 	{

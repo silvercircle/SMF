@@ -127,7 +127,7 @@ function GetMcard()
 		$context['member'] = $memberContext[$uid];
 
     	if(!empty($context['member']['gender']['name']))
-      		$context['member']['loc'][0] = $context['member']['gender']['image'] . $context['member']['gender']['name'];
+      		$context['member']['loc'][0] = $context['member']['gender']['name'];
 
     	if(isset($context['member']['birth_date']) && !empty($context['member']['birth_date'])) {
 		list ($birth_year, $birth_month, $birth_day) = sscanf($context['member']['birth_date'], '%d-%d-%d');

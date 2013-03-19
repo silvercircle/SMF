@@ -14,7 +14,7 @@
  *}
 <div id="profileview">
 	<div id="detailedinfo">
-		<h1 class="bigheader secondary title indent bordered">
+		<h1 class="bigheader section_header">
 			{$T.member_about} {($C.user.is_owner) ? $T.you_member : $C.member.name}
 		</h1>
 		<div class="blue_container cleantop">
@@ -142,12 +142,12 @@
 						{$C.member.signature}
 					</div>
 				{/if}
-                {if $C.user.is_owner}
+                {if $C.user.is_owner || $U.is_admin}
                     <br>
                     <a href="#!" onclick="$('#metainfo').show();return false;">Show the meta info</a>
                     <div id="metainfo" class="orange_container norounded" style="display:none;">
                         <pre style="font-size: 10px;">
-                            {$U.meta|print_r:true}
+                            {$C.member.meta|print_r:true}
                         </pre>
                     </div>
                 {/if}

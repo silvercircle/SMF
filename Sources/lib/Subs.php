@@ -1349,16 +1349,6 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 			),
 			array(
 				'tag' => 'quote',
-				'parameters' => array(
-					'author' => array('match' => '(.{1,192}?)', 'quoted' => true),
-				),
-				'before' => '<div class="quoteheader">{author} '.$txt['said'].':</div><blockquote>',
-				'after' => '</blockquote><div class="quotefooter"></div>',
-				'block_level' => true,
-				'disallow_children' => array('yt'),
-			),
-			array(
-				'tag' => 'quote',
 				'type' => 'parsed_equals',
 				'before' => '<div class="quoteheader">$1 '.$txt['said'].':</div><blockquote>',
 				'after' => '</blockquote><div class="quotefooter"></div>',
@@ -1372,14 +1362,38 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				'tag' => 'quote',
 				'parameters' => array(
 					'author' => array('match' => '([^<>]{1,192}?)'),
-					'link' => array('match' => '(?:board=\d+;)?((?:topic|threadid)=[\dmsg#\./]{1,40}(?:;start=[\dmsg#\./]{1,40})?|action=profile;u=\d+)'),
+					//'link' => array('match' => '(?:board=\d+;)?((?:topic|threadid)=[\dmsg#\./]{1,40}(?:;start=[\dmsg#\./]{1,40})?|action=profile;u=\d+)'),
+					'link' => array('match' => '((?:topic|threadid)=[\dmsg#\./]{1,40}(?:;start=[\dmsg#\./]{1,40})?)'),
 					'date' => array('match' => '(\d+)', 'validate' => 'timeformat'),
+					'uid' => array('match' => '(\d+)', 'optional' => true, 'validate' => function(&$data) {
+						global $context;
+						$context['additional_uids_to_load'][] = (int)$data;
+						return '[%%AV_QUOTE%%_' . $data . ']';
+					}),
 				),
-				'before' => '<div class="quoteheader"><a href="' . $scripturl . '?{link}">{author} ' . $txt['said'] . ', {date}</a></div><blockquote>',
-				'after' => '</blockquote><div class="quotefooter"></div>',
+				'before' => '{uid}<div class="quotewrapper"><div class="quoteheader"><a href="' . $scripturl . '?{link}">{author} ' . $txt['said'] . ', {date}</a></div><blockquote>',
+				'after' => '</blockquote><div class="quotefooter clear"></div></div>',
 				'block_level' => true,
+				//'content' => '{uid}<div class="quotewrapper"><div class="quoteheader"><a href="' . $scripturl . '?{link}">{author} ' . $txt['said'] . ', {date}</a></div><blockquote class="bbc_standard_quote">$1</blockquote><div class="quotefooter"></div></div>',
+				'validate' => function(&$tag, &$data, $disabled) {
+				},
 				'disallow_children' => array('yt'),
 			),
+			/*array(
+				'tag' => 'quote',
+				'type' => 'unparsed_content',
+				'parameters' => array(
+					'author' => array('match' => '([^<>]{1,192}?)'),
+					'link' => array('match' => '((?:topic|threadid)=[\dmsg#\./]{1,40}(?:;start=[\dmsg#\./]{1,40})?)'),
+					'uid' => array('match' => '(\d+)', 'optional' => true),
+					'date' => array('match' => '(\d+)', 'validate' => 'timeformat'),
+				),
+				'validate' => function(&$tag, &$data, $disabled) {
+					$tag['content'] = 'foo ' . $data;
+				},
+				'block_level' => true,
+				'disallow_children' => array('yt'),
+			),*/
 			array(
 				'tag' => 'quote',
 				'parameters' => array(
@@ -2377,7 +2391,7 @@ function parse_bbc_stage2(&$message, $mid = 0, $is_for_editor = false)
 {
 	global $context, $txt, $modSettings;
 
-	if (stripos($message, '[hide lev')) {
+	if (false !== stripos($message, '[hide lev')) {
 		$allowed_level[1] = isset($context['can_see_hidden_level1']) ? $context['can_see_hidden_level1'] : 0;
 		$allowed_level[2] = isset($context['can_see_hidden_level2']) ? $context['can_see_hidden_level2'] : 0;
 		$allowed_level[3] = isset($context['can_see_hidden_level3']) ? $context['can_see_hidden_level3'] : 0;
@@ -2651,6 +2665,10 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 	global $context, $modSettings;
 	static $header_done = false, $footer_done = false, $level = 0, $has_fatal_error = false;
 
+	if(isset($context['additional_uids_to_load'])) {
+		$ids_to_load = array_unique($context['additional_uids_to_load']);
+		loadMemberData($ids_to_load);
+	}
 	if(EoS_Smarty::isActive())
 		return EoS_Smarty::obExit($header, $do_footer, $from_index, $from_fatal_error);
 	

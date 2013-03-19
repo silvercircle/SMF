@@ -1,7 +1,19 @@
+html {
+	background:#e3ede9;
+}
 body {
-	background: #e2e2e2;
+	background-color: #e3ede9;
+	background: -moz-linear-gradient(top,  #e0eff9 0%, #b5c6d0 0%, #e3ede9 55%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e0eff9), color-stop(0%,#b5c6d0), color-stop(55%,#e3ede9));
+	background: -webkit-linear-gradient(top,  #e0eff9 0%,#b5c6d0 0%,#e3ede9 55%);
+	background: -o-linear-gradient(top,  #e0eff9 0%,#b5c6d0 0%,#e3ede9 55%);
+	background: -ms-linear-gradient(top,  #e0eff9 0%,#b5c6d0 0%,#e3ede9 55%);
+	background: linear-gradient(to bottom,  #e0eff9 0%,#b5c6d0 0%,#e3ede9 55%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0eff9', endColorstr='#e3ede9',GradientType=0 );
 	font-family: "Lucida Grande", "Lucida Sans Unicode", "Segoe UI", "Tahoma", "Arial", sans-serif;
 	font-size: 13px;
+	margin:0;
+	background-repeat: no-repeat;
 }
 a:link, a:visited {
 	color: #437d96;
@@ -14,10 +26,10 @@ a:hover {
 	color:#aa7d88;
 }
 div#wrap {
-	background-color: #e2e2e2;
+	background: transparent;
 }
 div#upper_section {
-	background:#e2e2e2 url(../images/upper_bg.png) 225px 12px no-repeat;
+	background:transparent url(../images/upper_bg.png) 225px 12px no-repeat;
 }
 div#content_section {
 	background:#f5f5f5;
@@ -517,7 +529,7 @@ div.boardlisting ul li.category {
 	background: transparent url(../images/clipsrc.png) -179px 0 no-repeat;
 }
 /* the main title, always stay at 45 pixels in height! */
-h1.forumtitle {
+h1.forumtitle, h1.title {
 	font-size: 1.4em;
 	margin: 0;
 	padding: 0;
@@ -535,13 +547,14 @@ h1.bigheader.topic {
 }
 h1.bigheader.secondary, h1.bigheader.section_header {
 	font-size: 14px;
-	font-weight:bold;
 	border-bottom: 1px solid #cce;
-	color: #88a;
+	color: #565674;
+	font-weight:normal;
+	text-shadow:1px 1px 1px white;
 }
 h1.bigheader.secondary.title, h1.bigheader.section_header {
 	background: #e5e5f0;
-	border-bottom: 2px solid orange;
+	border-bottom: 2px solid #8e9aba;
 }
 h1.bigheader.title.bordered, h1.bigheader.section_header.bordered {
 	border-left:1px solid #ddd;
@@ -577,7 +590,7 @@ h3, h4 {
 	font-size:0.9em;
 }
 .notibar {
-	background:#e2e2e2 url(../images/upper_bg.png) 225px 3px no-repeat;
+	background:transparent url(../images/upper_bg.png) 225px 3px no-repeat;
 	height: 24px;
 	line-height: 24px;
 	font-size: 11px;
@@ -2331,7 +2344,10 @@ span.arrow {
 	text-decoration: none;
 }
 div.quoteheader, div.codeheader, div.spoiler.head {
-	font-size: 90%;
+	font-size: 85%;
+	padding: 3px 10px;
+	border:1px solid #ddd;
+	border-bottom: 0;
 }
 div.codeheader, div.spoiler.head {
 	background-color: #ddd;

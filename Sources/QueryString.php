@@ -543,7 +543,7 @@ function JavaScriptEscape($string)
 // Rewrite URLs to include the session ID.
 function ob_sessrewrite($buffer)
 {
-	global $scripturl, $modSettings, $context, $user_info, $txt, $time_start, $db_count;
+	global $scripturl, $modSettings, $context, $user_info, $txt, $time_start, $db_count, $memberContext;
 	/*
 	 * tidy support as a debugging option to generate prettified output 
 	 * and only do it for the admin when 'tidyup' is set in the request string (tidy can be slow) 
@@ -578,6 +578,22 @@ function ob_sessrewrite($buffer)
 	$context['load_queries'] = $db_count;
 	$context['template_benchmark_time'] = round(array_sum(explode(' ', $now)) - array_sum(explode(' ', $context['template_benchmark'])), 3);
 
+	/*
+	 * additional rewrites
+	 */
+	if(false !== stripos($buffer, '[%%AV_QUOTE%%')) {
+		$matches = array();
+		$results = preg_match_all('~\[%%AV_QUOTE%%_((\d+)\]<div class="quotewrapper">)~iU', $buffer, $matches, PREG_SET_ORDER);
+		if($results > 0) {
+			if(!empty($context['additional_uids_to_load'])) {
+				loadMemberData($context['additional_uids_to_load']);
+				foreach($matches as $match) {
+					loadMemberContext($match[2]);
+					$buffer = str_replace($match[0], '<div class="floatleft quoteavatar"><span class="medium_avatar">' . (!empty($memberContext[$match[2]]['avatar']['image']) ? $memberContext[$match[2]]['avatar']['image'] : '<img alt="avatar" src="' . $settings['images_url'] . '/unknown.png' . '" />') . '</span></div>' . '<div class="quotewrapper indent">', $buffer);
+				}
+			}
+		}
+	}
 	if(!empty($modSettings['simplesef_enable'])) {
 		$buffer = isset($context['sef_full_rewrite']) ? SimpleSEF::ob_simplesef($buffer) : SimpleSEF::ob_simplesef_light($buffer);
 		//$buffer .= SimpleSEF::$debug_info;
@@ -586,5 +602,6 @@ function ob_sessrewrite($buffer)
 	$buffer = str_replace('@%%__loadtime__%%@', $user_info['is_admin'] ? ($context['load_time'] . 's CPU (' . $context['template_benchmark_time'] . $_t . $context['load_queries'] . ' ' . $txt['queries'] . SimpleSEF::getPerfData()) : '', $buffer);
 	if(isset($_REQUEST['xml']))
 		$buffer = ltrim($buffer);
+
 	return $buffer;
 }

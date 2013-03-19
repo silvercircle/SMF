@@ -92,7 +92,7 @@ function RecentPosts()
 		$boards_like_details = boardsAllowedTo('like_details');
 	}
 	else {
-		$context['can_see_like'] = $context['can_give_like'] = false;
+		$context['can_see_like'] = $context['can_give_like'] = $context['can_see_like_details'] = false;
 		$boards_like_see  = array();
 		$boards_like_give = array();
 		$boards_like_details = array();

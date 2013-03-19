@@ -535,7 +535,7 @@ function showPosts($memID)
 		$boards_like_see  = array();
 		$boards_like_give = array();
 		$boards_like_details = array();
-		$context['can_see_like'] = $context['can_give_like'] = false;
+		$context['can_see_like'] = $context['can_give_like'] = $context['can_see_like_details'] = false;
 	}
 
 	$time_now = time();

@@ -47,13 +47,13 @@ function ModifyProfile($post_errors = array())
 
 	// Did we get the user by name...
 	if (isset($_REQUEST['user']))
-		$memberResult = loadMemberData($_REQUEST['user'], true, 'profile');
+		$memberResult = loadMemberData($_REQUEST['user'], true, 'profile', true);
 	// ... or by id_member?
 	elseif (!empty($_REQUEST['u']))
-		$memberResult = loadMemberData((int) $_REQUEST['u'], false, 'profile');
+		$memberResult = loadMemberData((int) $_REQUEST['u'], false, 'profile', true);
 	// If it was just ?action=profile, edit your own profile.
 	else
-		$memberResult = loadMemberData($user_info['id'], false, 'profile');
+		$memberResult = loadMemberData($user_info['id'], false, 'profile', true);
 
 	// Check if loadMemberData() has returned a valid result.
 	if (!is_array($memberResult))

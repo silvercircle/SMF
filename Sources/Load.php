@@ -1148,7 +1148,6 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'blurb' => $profile['personal_text'],
 		'gender' => array(
 			'name' => $gendertxt,
-			'image' => !empty($profile['gender']) ? '<img class="gender" src="' . $settings['images_url'] . '/' . ($profile['gender'] == 1 ? 'Male' : 'Female') . '.gif" alt="' . $gendertxt . '" />' : ''
 		),
 		'birth_date' => empty($profile['birthdate']) || $profile['birthdate'] === '0001-01-01' ? '0000-00-00' : (substr($profile['birthdate'], 0, 4) === '0004' ? '0000' . substr($profile['birthdate'], 4) : $profile['birthdate']),
 		'signature' => $profile['signature'],
@@ -1238,7 +1237,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 		}
 	}
 
-	HookAPI::callHook('integrate_loadmembercontext', array(&$memberContext[$user], &$profile));
+	HookAPI::callHook('load_membercontext', array(&$memberContext[$user], &$profile));
 
 	return true;
 }

@@ -883,7 +883,7 @@ function Post()
 		{
 			// Make sure they _can_ quote this post, and if so get it.
 			$request = smf_db_query( '
-				SELECT m.subject, IFNULL(mem.real_name, m.poster_name) AS poster_name, m.poster_time, m.body
+				SELECT m.subject, IFNULL(mem.real_name, m.poster_name) AS poster_name, m.poster_time, m.body, m.id_member
 				FROM {db_prefix}messages AS m
 					INNER JOIN {db_prefix}boards AS b ON (b.id_board = m.id_board AND {query_see_board})
 					LEFT JOIN {db_prefix}members AS mem ON (mem.id_member = m.id_member)
@@ -897,7 +897,7 @@ function Post()
 			);
 			if (mysql_num_rows($request) == 0)
 				fatal_lang_error('quoted_post_deleted', false);
-			list ($form_subject, $mname, $mdate, $form_message) = mysql_fetch_row($request);
+			list ($form_subject, $mname, $mdate, $form_message, $memid) = mysql_fetch_row($request);
 			mysql_free_result($request);
 
 			// Add 'Re: ' to the front of the quoted subject.
@@ -938,7 +938,7 @@ function Post()
 			}
 
 			// Add a quote string on the front and end.
-			$form_message = '[quote author=' . $mname . ' link=topic=' . $topic . '.msg' . (int) $_REQUEST['quote'] . '#msg' . (int) $_REQUEST['quote'] . ' date=' . $mdate . ']' . "\n" . rtrim($form_message) . "\n" . '[/quote]';
+			$form_message = '[quote author=' . $mname . ' link=topic=' . $topic . '.msg' . (int) $_REQUEST['quote'] . '#msg' . (int) $_REQUEST['quote'] . ' date=' . $mdate . ' uid=' . $memid .  ']' . "\n" . rtrim($form_message) . "\n" . '[/quote]';
 			$context['quoted_id'] = intval($_REQUEST['quote']);
 		}
 		// Posting a reply without a quote?
@@ -2884,7 +2884,7 @@ function QuoteFast()
 
         parse_bbc_stage2($row['body'], 0, true);
 		// Add a quote string on the front and end.
-		$context['quote']['xml'] = '[quote author=' . $row['poster_name'] . ' link=topic=' . $row['id_topic'] . '.msg' . (int) $_REQUEST['quote'] . '#msg' . (int) $_REQUEST['quote'] . ' date=' . $row['poster_time'] . ']' . $lb . $row['body'] . $lb . '[/quote]' . "\n\n";
+		$context['quote']['xml'] = '[quote author=' . $row['poster_name'] . ' link=topic=' . $row['id_topic'] . '.msg' . (int) $_REQUEST['quote'] . '#msg' . (int) $_REQUEST['quote'] . ' date=' . $row['poster_time'] . ' uid=' . $row['id_member'] . ']' . $lb . $row['body'] . $lb . '[/quote]' . "\n\n";
 		//$context['quote']['xml'] = '[quote author=' . $row['poster_name'] . ' link=topic=' . $row['id_topic'] . '.msg' . (int) $_REQUEST['quote'] . '#msg' . (int) $_REQUEST['quote'] . ' date=' . $row['poster_time'] . ']' . $lb . $row['body'] . $lb . '[/quote]';
 		$context['quote']['text'] = strtr(un_htmlspecialchars($context['quote']['xml']), array('\'' => '\\\'', '\\' => '\\\\', "\n" => '\\n', '</script>' => '</\' + \'script>'));
 		$context['quote']['xml'] = strtr($context['quote']['xml'], array('&nbsp;' => '&#160;', '<' => '&lt;', '>' => '&gt;'));

@@ -165,7 +165,6 @@
       {$C.alternate = 0}
       {foreach from=$C.message_ids item=msg}
         {$SUPPORT->getMessage()}
-        {*{include 'postbits/postbit_'|cat:$message.postbit_template_class|cat:'.tpl'}*}
         {call 'postbit_'|cat:$message.postbit_template_class}
         {$C.alternate = !$C.alternate}
       {/foreach}

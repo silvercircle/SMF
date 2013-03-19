@@ -37,7 +37,7 @@
 {function unread_topics}
   <div id="recent" class="main_content">
   {if !empty($C.page_header)}
-    <h1 class="bigheader">
+    <h1 class="title">
       {$C.page_header}
     </h1>
   {/if}
