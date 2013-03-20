@@ -2618,7 +2618,7 @@ function SpiderCheck()
 
 	// Always attempt IPv6 first.
 	if (strpos($_SERVER['REMOTE_ADDR'], ':') !== false)
-		$ip_parts = convertIPv6toInts($_SERVER['REMOTE_ADDR']);
+		$ip_parts = EoS_QueryString::convertIPv6toInts($_SERVER['REMOTE_ADDR']);
 	else
 		preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/', $_SERVER['REMOTE_ADDR'], $ip_parts);
 

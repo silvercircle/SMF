@@ -63,7 +63,7 @@ loadDatabase();
 // Load the settings from the settings table, and perform operations like optimizing.
 reloadSettings();
 // Clean the request variables, add slashes, etc.
-cleanRequest();
+EoS_QueryString::cleanRequest();
 $context = array();
 //<editor-fold desc="Test">
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';

@@ -115,6 +115,8 @@ function MessageMain()
 	loadLanguage('PersonalMessage');
 	EoS_Smarty::setActive();
 	$context['need_synhlt'] = true;
+	EoS_QueryString::registerRewrite('EoS_QueryString::bbcRewrites');
+
 	// Load up the members maximum message capacity.
 	if ($user_info['is_admin'])
 		$context['message_limit'] = 0;

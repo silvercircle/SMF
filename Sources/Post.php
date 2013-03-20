@@ -86,6 +86,8 @@ function Post()
 	global $sourcedir, $options, $language;
 
 	$context['need_synhlt'] = true;
+	EoS_QueryString::registerRewrite('EoS_QueryString::bbcRewrites');
+
 	loadLanguage('Post');
 	loadLanguage('Tagging');
 	$context['tagging_ui'] = '';
@@ -1304,7 +1306,7 @@ function Post()
 function Post2()
 {
 	global $board, $topic, $txt, $modSettings, $sourcedir, $context;
-	global $user_info, $board_info, $options, $backend_subdir;
+	global $user_info, $board_info, $options;
 
 	/*  todo: drafts -> plugin
 	if(in_array('dr', $context['admin_features'])) {
@@ -1319,6 +1321,7 @@ function Post2()
 	$context['need_synhlt'] = true;
 	$context['no_astream'] = (isset($_REQUEST['noactivity']) && (int)$_REQUEST['noactivity'] == 1);
 	$context['can_tag_users'] = allowedTo('tag_users');
+	EoS_QueryString::registerRewrite('EoS_QueryString::bbcRewrites');
 
 	// Sneaking off, are we?
 	if (empty($_POST) && empty($topic))

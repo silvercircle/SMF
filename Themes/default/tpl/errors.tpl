@@ -18,11 +18,9 @@
 {extends 'base.tpl'}
 {block content}
 <div id="fatal_error">
-  <div class="cat_bar">
-    <h3 class="catbg">
-      {$C.error_title}
-    </h3>
-  </div>
+  <h1 class="bigheader section_header">
+    {$C.error_title}
+  </h1>
   <div class="blue_container cleantop">
     <div class="mediumpadding content">{$C.error_message}</div>
   </div>

@@ -1365,10 +1365,14 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 					//'link' => array('match' => '(?:board=\d+;)?((?:topic|threadid)=[\dmsg#\./]{1,40}(?:;start=[\dmsg#\./]{1,40})?|action=profile;u=\d+)'),
 					'link' => array('match' => '((?:topic|threadid)=[\dmsg#\./]{1,40}(?:;start=[\dmsg#\./]{1,40})?)'),
 					'date' => array('match' => '(\d+)', 'validate' => 'timeformat'),
-					'uid' => array('match' => '(\d+)', 'optional' => true, 'validate' => function(&$data) {
+					'uid' => array('match' => '([a-zA-Z0-9_]+)', 'optional' => true, 'validate' => function(&$data) {
 						global $context;
-						$context['additional_uids_to_load'][] = (int)$data;
-						return '[%%AV_QUOTE%%_' . $data . ']';
+						if((int)$data > 0) {
+							$context['additional_uids_to_load'][] = (int)$data;
+							return '[%%AV_QUOTE%%_' . $data . ']';
+						}
+						else
+							return '';
 					}),
 				),
 				'before' => '{uid}<div class="quotewrapper"><div class="quoteheader"><a href="' . $scripturl . '?{link}">{author} ' . $txt['said'] . ', {date}</a></div><blockquote>',
@@ -1379,28 +1383,22 @@ function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = arra
 				},
 				'disallow_children' => array('yt'),
 			),
-			/*array(
-				'tag' => 'quote',
-				'type' => 'unparsed_content',
-				'parameters' => array(
-					'author' => array('match' => '([^<>]{1,192}?)'),
-					'link' => array('match' => '((?:topic|threadid)=[\dmsg#\./]{1,40}(?:;start=[\dmsg#\./]{1,40})?)'),
-					'uid' => array('match' => '(\d+)', 'optional' => true),
-					'date' => array('match' => '(\d+)', 'validate' => 'timeformat'),
-				),
-				'validate' => function(&$tag, &$data, $disabled) {
-					$tag['content'] = 'foo ' . $data;
-				},
-				'block_level' => true,
-				'disallow_children' => array('yt'),
-			),*/
 			array(
 				'tag' => 'quote',
 				'parameters' => array(
 					'author' => array('match' => '(.{1,192}?)'),
+					'uid' => array('match' => '([a-zA-Z0-9_]+)', 'optional' => true, 'validate' => function(&$data) {
+						global $context;
+						if((int)$data > 0) {
+							$context['additional_uids_to_load'][] = (int)$data;
+							return '[%%AV_QUOTE%%_' . $data . ']';
+						}
+						else
+							return '';
+					}),
 				),
-				'before' => '<div class="quoteheader">{author} '.$txt['said'].':</div><blockquote>',
-				'after' => '</blockquote><div class="quotefooter"></div>',
+				'before' => '{uid}<div class="quotewrapper"><div class="quoteheader">{author} '.$txt['said'].':</div><blockquote>',
+				'after' => '</blockquote><div class="quotefooter"></div></div>',
 				'block_level' => true,
 				'disallow_children' => array('yt'),
 			),
@@ -2665,10 +2663,9 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 	global $context, $modSettings;
 	static $header_done = false, $footer_done = false, $level = 0, $has_fatal_error = false;
 
-	if(isset($context['additional_uids_to_load'])) {
-		$ids_to_load = array_unique($context['additional_uids_to_load']);
-		loadMemberData($ids_to_load);
-	}
+	if(isset($context['additional_uids_to_load']))
+		loadMemberData($context['additional_uids_to_load']);
+
 	if(EoS_Smarty::isActive())
 		return EoS_Smarty::obExit($header, $do_footer, $from_index, $from_fatal_error);
 	
@@ -2712,7 +2709,7 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 			$context['page_title_html_safe'] = $context['forum_name_html_safe'] . ' - ' . commonAPI::htmlspecialchars(un_htmlspecialchars($context['page_title']));
 
 		// Start up the session URL fixer.
-		ob_start('ob_sessrewrite');
+		ob_start('EoS_QueryString::ob_sessrewrite');
 
 		HookAPI::integrateOB();
 
@@ -3340,7 +3337,7 @@ function db_debug_junk()
 	else
 	{
 		ob_end_clean();
-		ob_start('ob_sessrewrite');
+		ob_start('EoS_QueryString::ob_sessrewrite');
 	}
 	if(EoS_Smarty::isActive()) {
 		$_t = EoS_Smarty::getSmartyInstance()->getTemplateDir();

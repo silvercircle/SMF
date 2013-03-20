@@ -1130,9 +1130,9 @@ function spamProtection($error_type)
 function constructBanQueryIP($fullip)
 {
 	// First attempt a IPv6 address.
-	if (isValidIPv6($fullip))
+	if (EoS_QueryString::isValidIPv6($fullip))
 	{
-		$ip_parts = convertIPv6toInts($fullip);
+		$ip_parts = EoS_QueryString::convertIPv6toInts($fullip);
 
 		$ban_query = '((' . $ip_parts[0] . ' BETWEEN bi.ip_low1 AND bi.ip_high1)
 			AND (' . $ip_parts[1] . ' BETWEEN bi.ip_low2 AND bi.ip_high2)

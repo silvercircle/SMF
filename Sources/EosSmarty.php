@@ -225,7 +225,7 @@ class EoS_Smarty {
 				$context['page_title_html_safe'] = $context['forum_name_html_safe'] . ' - ' . commonAPI::htmlspecialchars(un_htmlspecialchars($context['page_title']));
 
 			// Start up the session URL fixer.
-			ob_start('ob_sessrewrite');
+			ob_start('EoS_QueryString::ob_sessrewrite');
 
 			HookAPI::integrateOB();
 

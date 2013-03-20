@@ -826,7 +826,7 @@ function loadEssentialData()
 	if (file_exists($sourcedir . '/QueryString.php'))
 	{
 		require_once($sourcedir . '/QueryString.php');
-		cleanRequest();
+		EoS_QueryString::cleanRequest();
 	}
 
 	if (!isset($_GET['substep']))

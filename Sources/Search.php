@@ -1614,10 +1614,12 @@ function PlushSearch2()
 
 	$context['key_words'] = &$searchArray;
 
-	if(empty($context['compact']))
+	if(empty($context['compact'])) {
 		$context['need_synhlt'] = 1;
-	
-	$context['sub_template'] = 'results';
+		EoS_QueryString::registerRewrite('EoS_QueryString::bbcRewrites');
+	}
+
+		$context['sub_template'] = 'results';
 	$context['page_title'] = $txt['search_results'];
 	$context['get_topics'] = 'prepareSearchContext';
 	$context['can_send_pm'] = allowedTo('pm_send');

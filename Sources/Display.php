@@ -76,6 +76,8 @@ function Display()
 	$context['pcache_update_counter'] = !empty($modSettings['use_post_cache']) ? 0 : PCACHE_UPDATE_PER_VIEW + 1;
 	$context['time_cutoff_ref'] = time();
 
+	EoS_QueryString::registerRewrite('EoS_QueryString::bbcRewrites');
+
 	if(!empty($modSettings['karmaMode']))
 		require_once($sourcedir . '/lib/Subs-Ratings.php');
 	else

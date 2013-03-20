@@ -275,6 +275,7 @@ function showPosts($memID)
 	EoS_Smarty::loadTemplate('profile/profile_base');
 
 	$context['need_synhlt'] = true;
+	EoS_QueryString::registerRewrite('EoS_QueryString::bbcRewrites');
 
 	// Some initial context.
 	$context['start'] = (int) $_REQUEST['start'];
@@ -1447,7 +1448,7 @@ function TrackIP($memID = 0)
 	if (isset($_REQUEST['searchip']))
 		$context['ip'] = trim($_REQUEST['searchip']);
 
-	if (preg_match('/^\d{1,3}\.(\d{1,3}|\*)\.(\d{1,3}|\*)\.(\d{1,3}|\*)$/', $context['ip']) == 0 && isValidIPv6($context['ip']) === false)
+	if (preg_match('/^\d{1,3}\.(\d{1,3}|\*)\.(\d{1,3}|\*)\.(\d{1,3}|\*)$/', $context['ip']) == 0 && EoS_QueryString::isValidIPv6($context['ip']) === false)
 		fatal_lang_error('invalid_tracking_ip', false);
 
 	$ip_var = str_replace('*', '%', $context['ip']);

@@ -70,358 +70,450 @@ if (!defined('SMF'))
 		  versions lower than 4.3.0 - please upgrade if this hurts you.
 */
 
-function cleanRequest()
-{
-	global $board, $topic, $boardurl, $scripturl, $modSettings, $smcFunc;
+class EoS_QueryString {
 
-	// Makes it easier to refer to things this way.
-	$scripturl = $boardurl . '/index.php';
+	private static $_registeredRewrites = array();
 
-	// What function to use to reverse magic quotes - if sybase is on we assume that the database sensibly has the right unescape function!
-	$removeMagicQuoteFunction = ini_get('magic_quotes_sybase') || strtolower(ini_get('magic_quotes_sybase')) == 'on' ? 'unescapestring__recursive' : 'stripslashes__recursive';
-
-	// Save some memory.. (since we don't use these anyway.)
-	unset($GLOBALS['HTTP_POST_VARS'], $GLOBALS['HTTP_POST_VARS']);
-	unset($GLOBALS['HTTP_POST_FILES'], $GLOBALS['HTTP_POST_FILES']);
-
-	// These keys shouldn't be set...ever.
-	if (isset($_REQUEST['GLOBALS']) || isset($_COOKIE['GLOBALS']))
-		die('Invalid request variable.');
-
-	// Same goes for numeric keys.
-	foreach (array_merge(array_keys($_POST), array_keys($_GET), array_keys($_FILES)) as $key)
-		if (is_numeric($key))
-			die('Numeric request keys are invalid.');
-
-	// Numeric keys in cookies are less of a problem. Just unset those.
-	foreach ($_COOKIE as $key => $value)
-		if (is_numeric($key))
-			unset($_COOKIE[$key]);
-
-	// Get the correct query string.  It may be in an environment variable...
-	if (!isset($_SERVER['QUERY_STRING']))
-		$_SERVER['QUERY_STRING'] = getenv('QUERY_STRING');
-
-	// It seems that sticking a URL after the query string is mighty common, well, it's evil - don't.
-	if (strpos($_SERVER['QUERY_STRING'], 'http') === 0)
+	public static function cleanRequest()
 	{
-		header('HTTP/1.1 400 Bad Request');
-		die;
-	}
+		global $board, $topic, $boardurl, $scripturl, $modSettings;
 
-	// Are we going to need to parse the ; out?
-	if (strpos(ini_get('arg_separator.input'), ';') === false && !empty($_SERVER['QUERY_STRING']))
-	{
-		// Get rid of the old one! You don't know where it's been!
-		$_GET = array();
+		// Makes it easier to refer to things this way.
+		$scripturl = $boardurl . '/index.php';
 
-		// Was this redirected? If so, get the REDIRECT_QUERY_STRING.
-		// Do not urldecode() the querystring, unless you so much wish to break OpenID implementation. :)
-		$_SERVER['QUERY_STRING'] = substr($_SERVER['QUERY_STRING'], 0, 5) === 'url=/' ? $_SERVER['REDIRECT_QUERY_STRING'] : $_SERVER['QUERY_STRING'];
+		// What function to use to reverse magic quotes - if sybase is on we assume that the database sensibly has the right unescape function!
+		$removeMagicQuoteFunction = ini_get('magic_quotes_sybase') || strtolower(ini_get('magic_quotes_sybase')) == 'on' ? 'unescapestring__recursive' : 'stripslashes__recursive';
 
-		// Replace ';' with '&' and '&something&' with '&something=&'.  (this is done for compatibility...)
-		// @todo smflib
-		parse_str(preg_replace('/&(\w+)(?=&|$)/', '&$1=', strtr($_SERVER['QUERY_STRING'], array(';?' => '&', ';' => '&', '%00' => '', "\0" => ''))), $_GET);
+		// Save some memory.. (since we don't use these anyway.)
+		unset($GLOBALS['HTTP_POST_VARS'], $GLOBALS['HTTP_POST_VARS']);
+		unset($GLOBALS['HTTP_POST_FILES'], $GLOBALS['HTTP_POST_FILES']);
 
-		// Magic quotes still applies with parse_str - so clean it up.
-		if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc() != 0 && empty($modSettings['integrate_magic_quotes']))
-			$_GET = $removeMagicQuoteFunction($_GET);
-	}
-	elseif (strpos(ini_get('arg_separator.input'), ';') !== false)
-	{
-		if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc() != 0 && empty($modSettings['integrate_magic_quotes']))
-			$_GET = $removeMagicQuoteFunction($_GET);
+		// These keys shouldn't be set...ever.
+		if (isset($_REQUEST['GLOBALS']) || isset($_COOKIE['GLOBALS']))
+			die('Invalid request variable.');
 
-		// Search engines will send action=profile%3Bu=1, which confuses PHP.
-		foreach ($_GET as $k => $v)
+		// Same goes for numeric keys.
+		foreach (array_merge(array_keys($_POST), array_keys($_GET), array_keys($_FILES)) as $key)
+			if (is_numeric($key))
+				die('Numeric request keys are invalid.');
+
+		// Numeric keys in cookies are less of a problem. Just unset those.
+		foreach ($_COOKIE as $key => $value)
+			if (is_numeric($key))
+				unset($_COOKIE[$key]);
+
+		// Get the correct query string.  It may be in an environment variable...
+		if (!isset($_SERVER['QUERY_STRING']))
+			$_SERVER['QUERY_STRING'] = getenv('QUERY_STRING');
+
+		// It seems that sticking a URL after the query string is mighty common, well, it's evil - don't.
+		if (strpos($_SERVER['QUERY_STRING'], 'http') === 0)
 		{
-			if ((string) $v === $v && strpos($k, ';') !== false)
-			{
-				$temp = explode(';', $v);
-				$_GET[$k] = $temp[0];
+			header('HTTP/1.1 400 Bad Request');
+			die;
+		}
 
-				for ($i = 1, $n = count($temp); $i < $n; $i++)
+		// Are we going to need to parse the ; out?
+		if (strpos(ini_get('arg_separator.input'), ';') === false && !empty($_SERVER['QUERY_STRING']))
+		{
+			// Get rid of the old one! You don't know where it's been!
+			$_GET = array();
+
+			// Was this redirected? If so, get the REDIRECT_QUERY_STRING.
+			// Do not urldecode() the querystring, unless you so much wish to break OpenID implementation. :)
+			$_SERVER['QUERY_STRING'] = substr($_SERVER['QUERY_STRING'], 0, 5) === 'url=/' ? $_SERVER['REDIRECT_QUERY_STRING'] : $_SERVER['QUERY_STRING'];
+
+			// Replace ';' with '&' and '&something&' with '&something=&'.  (this is done for compatibility...)
+			// @todo smflib
+			parse_str(preg_replace('/&(\w+)(?=&|$)/', '&$1=', strtr($_SERVER['QUERY_STRING'], array(';?' => '&', ';' => '&', '%00' => '', "\0" => ''))), $_GET);
+
+			// Magic quotes still applies with parse_str - so clean it up.
+			if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc() != 0 && empty($modSettings['integrate_magic_quotes']))
+				$_GET = $removeMagicQuoteFunction($_GET);
+		}
+		elseif (strpos(ini_get('arg_separator.input'), ';') !== false)
+		{
+			if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc() != 0 && empty($modSettings['integrate_magic_quotes']))
+				$_GET = $removeMagicQuoteFunction($_GET);
+
+			// Search engines will send action=profile%3Bu=1, which confuses PHP.
+			foreach ($_GET as $k => $v)
+			{
+				if ((string) $v === $v && strpos($k, ';') !== false)
 				{
-					@list ($key, $val) = @explode('=', $temp[$i], 2);
-					if (!isset($_GET[$key]))
-						$_GET[$key] = $val;
+					$temp = explode(';', $v);
+					$_GET[$k] = $temp[0];
+
+					for ($i = 1, $n = count($temp); $i < $n; $i++)
+					{
+						@list ($key, $val) = @explode('=', $temp[$i], 2);
+						if (!isset($_GET[$key]))
+							$_GET[$key] = $val;
+					}
+				}
+
+				// This helps a lot with integration!
+				if (strpos($k, '?') === 0)
+				{
+					$_GET[substr($k, 1)] = $v;
+					unset($_GET[$k]);
 				}
 			}
+		}
 
-			// This helps a lot with integration!
-			if (strpos($k, '?') === 0)
+		// There's no query string, but there is a URL... try to get the data from there.
+		if (!empty($_SERVER['REQUEST_URI']))
+		{
+			// Remove the .html, assuming there is one.
+			if (substr($_SERVER['REQUEST_URI'], strrpos($_SERVER['REQUEST_URI'], '.'), 4) == '.htm')
+				$request = substr($_SERVER['REQUEST_URI'], 0, strrpos($_SERVER['REQUEST_URI'], '.'));
+			else
+				$request = $_SERVER['REQUEST_URI'];
+
+			// @todo smflib.
+			// Replace 'index.php/a,b,c/d/e,f' with 'a=b,c&d=&e=f' and parse it into $_GET.
+			if (strpos($request, basename($scripturl) . '/') !== false)
 			{
-				$_GET[substr($k, 1)] = $v;
-				unset($_GET[$k]);
+				parse_str(substr(preg_replace('/&(\w+)(?=&|$)/', '&$1=', strtr(preg_replace('~/([^,/]+),~', '/$1=', substr($request, strpos($request, basename($scripturl)) + strlen(basename($scripturl)))), '/', '&')), 1), $temp);
+				if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc() != 0 && empty($modSettings['integrate_magic_quotes']))
+					$temp = $removeMagicQuoteFunction($temp);
+				$_GET += $temp;
 			}
 		}
-	}
 
-	// There's no query string, but there is a URL... try to get the data from there.
-	if (!empty($_SERVER['REQUEST_URI']))
-	{
-		// Remove the .html, assuming there is one.
-		if (substr($_SERVER['REQUEST_URI'], strrpos($_SERVER['REQUEST_URI'], '.'), 4) == '.htm')
-			$request = substr($_SERVER['REQUEST_URI'], 0, strrpos($_SERVER['REQUEST_URI'], '.'));
-		else
-			$request = $_SERVER['REQUEST_URI'];
-
-		// @todo smflib.
-		// Replace 'index.php/a,b,c/d/e,f' with 'a=b,c&d=&e=f' and parse it into $_GET.
-		if (strpos($request, basename($scripturl) . '/') !== false)
+		// If magic quotes is on we have some work...
+		if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc() != 0)
 		{
-			parse_str(substr(preg_replace('/&(\w+)(?=&|$)/', '&$1=', strtr(preg_replace('~/([^,/]+),~', '/$1=', substr($request, strpos($request, basename($scripturl)) + strlen(basename($scripturl)))), '/', '&')), 1), $temp);
-			if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc() != 0 && empty($modSettings['integrate_magic_quotes']))
-				$temp = $removeMagicQuoteFunction($temp);
-			$_GET += $temp;
+			$_ENV = $removeMagicQuoteFunction($_ENV);
+			$_POST = $removeMagicQuoteFunction($_POST);
+			$_COOKIE = $removeMagicQuoteFunction($_COOKIE);
+			foreach ($_FILES as $k => $dummy)
+				if (isset($_FILES[$k]['name']))
+					$_FILES[$k]['name'] = $removeMagicQuoteFunction($_FILES[$k]['name']);
 		}
-	}
 
-	// If magic quotes is on we have some work...
-	if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc() != 0)
-	{
-		$_ENV = $removeMagicQuoteFunction($_ENV);
-		$_POST = $removeMagicQuoteFunction($_POST);
-		$_COOKIE = $removeMagicQuoteFunction($_COOKIE);
-		foreach ($_FILES as $k => $dummy)
-			if (isset($_FILES[$k]['name']))
-				$_FILES[$k]['name'] = $removeMagicQuoteFunction($_FILES[$k]['name']);
-	}
+		// Add entities to GET.  This is kinda like the slashes on everything else.
+		$_GET = htmlspecialchars__recursive($_GET);
 
-	// Add entities to GET.  This is kinda like the slashes on everything else.
-	$_GET = htmlspecialchars__recursive($_GET);
+		// Let's not depend on the ini settings... why even have COOKIE in there, anyway?
+		$_REQUEST = $_POST + $_GET;
 
-	// Let's not depend on the ini settings... why even have COOKIE in there, anyway?
-	$_REQUEST = $_POST + $_GET;
-
-	// Make sure $board and $topic are numbers.
-	if (isset($_REQUEST['board']))
-	{
-		// Make sure its a string and not something else like an array
-		$_REQUEST['board'] = (string) $_REQUEST['board'];
-
-		// If there's a slash in it, we've got a start value! (old, compatible links.)
-		if (strpos($_REQUEST['board'], '/') !== false)
-			list ($_REQUEST['board'], $_REQUEST['start']) = explode('/', $_REQUEST['board']);
-		// Same idea, but dots.  This is the currently used format - ?board=1.0...
-		elseif (strpos($_REQUEST['board'], '.') !== false)
-			list ($_REQUEST['board'], $_REQUEST['start']) = explode('.', $_REQUEST['board']);
-		// Now make absolutely sure it's a number.
-		$board = (int) $_REQUEST['board'];
-		$_REQUEST['start'] = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
-
-		// This is for "Who's Online" because it might come via POST - and it should be an int here.
-		$_GET['board'] = $board;
-	}
-	// Well, $board is going to be a number no matter what.
-	else
-		$board = 0;
-
-	// If there's a threadid, it's probably an old YaBB SE link.  Flow with it.
-	if (isset($_REQUEST['threadid']) && !isset($_REQUEST['topic']))
-		$_REQUEST['topic'] = $_REQUEST['threadid'];
-
-	// We've got topic!
-	if (isset($_REQUEST['topic']))
-	{
-		// Make sure its a string and not something else like an array
-		$_REQUEST['topic'] = (string) $_REQUEST['topic'];
-
-		// Slash means old, beta style, formatting.  That's okay though, the link should still work.
-		if (strpos($_REQUEST['topic'], '/') !== false)
-			list ($_REQUEST['topic'], $_REQUEST['start']) = explode('/', $_REQUEST['topic']);
-		// Dots are useful and fun ;).  This is ?topic=1.15.
-		elseif (strpos($_REQUEST['topic'], '.') !== false)
-			list ($_REQUEST['topic'], $_REQUEST['start']) = explode('.', $_REQUEST['topic']);
-
-		$topic = (int) $_REQUEST['topic'];
-
-		// Now make sure the online log gets the right number.
-		$_GET['topic'] = $topic;
-	}
-	else
-		$topic = 0;
-
-	// There should be a $_REQUEST['start'], some at least.  If you need to default to other than 0, use $_GET['start'].
-	if (empty($_REQUEST['start']) || $_REQUEST['start'] < 0 || (int) $_REQUEST['start'] > 2147473647)
-		$_REQUEST['start'] = 0;
-
-	// The action needs to be a string and not an array or anything else
-	if (isset($_REQUEST['action']))
-		$_REQUEST['action'] = (string) $_REQUEST['action'];
-	if (isset($_GET['action']))
-		$_GET['action'] = (string) $_GET['action'];
-
-	// Make sure we have a valid REMOTE_ADDR.
-	if (!isset($_SERVER['REMOTE_ADDR']))
-	{
-		$_SERVER['REMOTE_ADDR'] = '';
-		// A new magic variable to indicate we think this is command line.
-		$_SERVER['is_cli'] = true;
-	}
-	// Perhaps we have a IPv6 address.
-	elseif (!isValidIPv6($_SERVER['REMOTE_ADDR']) || preg_match('~::ffff:\d+\.\d+\.\d+\.\d+~', $_SERVER['REMOTE_ADDR']) !== 0)
-	{
-		$_SERVER['REMOTE_ADDR'] = preg_replace('~^::ffff:(\d+\.\d+\.\d+\.\d+)~', '\1', $_SERVER['REMOTE_ADDR']);
-
-		// Just incase we have a legacy IPv4 address.
-		// @ TODO: Convert to IPv6.
-		if (preg_match('~^((([1]?\d)?\d|2[0-4]\d|25[0-5])\.){3}(([1]?\d)?\d|2[0-4]\d|25[0-5])$~', $_SERVER['REMOTE_ADDR']) === 0)
-			$_SERVER['REMOTE_ADDR'] = 'unknown';
-	}
-
-	// Try to calculate their most likely IP for those people behind proxies (And the like).
-	$_SERVER['BAN_CHECK_IP'] = $_SERVER['REMOTE_ADDR'];
-
-	// Find the user's IP address. (but don't let it give you 'unknown'!)
-	// @ TODO: IPv6 really doesn't need this.
-	if (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_CLIENT_IP']) && (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['HTTP_CLIENT_IP']) == 0 || preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['REMOTE_ADDR']) != 0))
-	{
-		// We have both forwarded for AND client IP... check the first forwarded for as the block - only switch if it's better that way.
-		if (strtok($_SERVER['HTTP_X_FORWARDED_FOR'], '.') != strtok($_SERVER['HTTP_CLIENT_IP'], '.') && '.' . strtok($_SERVER['HTTP_X_FORWARDED_FOR'], '.') == strrchr($_SERVER['HTTP_CLIENT_IP'], '.') && (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown)~', $_SERVER['HTTP_X_FORWARDED_FOR']) == 0 || preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown)~', $_SERVER['REMOTE_ADDR']) != 0))
-			$_SERVER['BAN_CHECK_IP'] = implode('.', array_reverse(explode('.', $_SERVER['HTTP_CLIENT_IP'])));
-		else
-			$_SERVER['BAN_CHECK_IP'] = $_SERVER['HTTP_CLIENT_IP'];
-	}
-	if (!empty($_SERVER['HTTP_CLIENT_IP']) && (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['HTTP_CLIENT_IP']) == 0 || preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['REMOTE_ADDR']) != 0))
-	{
-		// Since they are in different blocks, it's probably reversed.
-		if (strtok($_SERVER['REMOTE_ADDR'], '.') != strtok($_SERVER['HTTP_CLIENT_IP'], '.'))
-			$_SERVER['BAN_CHECK_IP'] = implode('.', array_reverse(explode('.', $_SERVER['HTTP_CLIENT_IP'])));
-		else
-			$_SERVER['BAN_CHECK_IP'] = $_SERVER['HTTP_CLIENT_IP'];
-	}
-	elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
-	{
-		// If there are commas, get the last one.. probably.
-		if (strpos($_SERVER['HTTP_X_FORWARDED_FOR'], ',') !== false)
+		// Make sure $board and $topic are numbers.
+		if (isset($_REQUEST['board']))
 		{
-			$ips = array_reverse(explode(', ', $_SERVER['HTTP_X_FORWARDED_FOR']));
+			// Make sure its a string and not something else like an array
+			$_REQUEST['board'] = (string) $_REQUEST['board'];
 
-			// Go through each IP...
-			foreach ($ips as $i => $ip)
+			// If there's a slash in it, we've got a start value! (old, compatible links.)
+			if (strpos($_REQUEST['board'], '/') !== false)
+				list ($_REQUEST['board'], $_REQUEST['start']) = explode('/', $_REQUEST['board']);
+			// Same idea, but dots.  This is the currently used format - ?board=1.0...
+			elseif (strpos($_REQUEST['board'], '.') !== false)
+				list ($_REQUEST['board'], $_REQUEST['start']) = explode('.', $_REQUEST['board']);
+			// Now make absolutely sure it's a number.
+			$board = (int) $_REQUEST['board'];
+			$_REQUEST['start'] = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
+
+			// This is for "Who's Online" because it might come via POST - and it should be an int here.
+			$_GET['board'] = $board;
+		}
+		// Well, $board is going to be a number no matter what.
+		else
+			$board = 0;
+
+		// If there's a threadid, it's probably an old YaBB SE link.  Flow with it.
+		if (isset($_REQUEST['threadid']) && !isset($_REQUEST['topic']))
+			$_REQUEST['topic'] = $_REQUEST['threadid'];
+
+		// We've got topic!
+		if (isset($_REQUEST['topic']))
+		{
+			// Make sure its a string and not something else like an array
+			$_REQUEST['topic'] = (string) $_REQUEST['topic'];
+
+			// Slash means old, beta style, formatting.  That's okay though, the link should still work.
+			if (strpos($_REQUEST['topic'], '/') !== false)
+				list ($_REQUEST['topic'], $_REQUEST['start']) = explode('/', $_REQUEST['topic']);
+			// Dots are useful and fun ;).  This is ?topic=1.15.
+			elseif (strpos($_REQUEST['topic'], '.') !== false)
+				list ($_REQUEST['topic'], $_REQUEST['start']) = explode('.', $_REQUEST['topic']);
+
+			$topic = (int) $_REQUEST['topic'];
+
+			// Now make sure the online log gets the right number.
+			$_GET['topic'] = $topic;
+		}
+		else
+			$topic = 0;
+
+		// There should be a $_REQUEST['start'], some at least.  If you need to default to other than 0, use $_GET['start'].
+		if (empty($_REQUEST['start']) || $_REQUEST['start'] < 0 || (int) $_REQUEST['start'] > 2147473647)
+			$_REQUEST['start'] = 0;
+
+		// The action needs to be a string and not an array or anything else
+		if (isset($_REQUEST['action']))
+			$_REQUEST['action'] = (string) $_REQUEST['action'];
+		if (isset($_GET['action']))
+			$_GET['action'] = (string) $_GET['action'];
+
+		// Make sure we have a valid REMOTE_ADDR.
+		if (!isset($_SERVER['REMOTE_ADDR']))
+		{
+			$_SERVER['REMOTE_ADDR'] = '';
+			// A new magic variable to indicate we think this is command line.
+			$_SERVER['is_cli'] = true;
+		}
+		// Perhaps we have a IPv6 address.
+		elseif (!self::isValidIPv6($_SERVER['REMOTE_ADDR']) || preg_match('~::ffff:\d+\.\d+\.\d+\.\d+~', $_SERVER['REMOTE_ADDR']) !== 0)
+		{
+			$_SERVER['REMOTE_ADDR'] = preg_replace('~^::ffff:(\d+\.\d+\.\d+\.\d+)~', '\1', $_SERVER['REMOTE_ADDR']);
+
+			// Just incase we have a legacy IPv4 address.
+			// @ TODO: Convert to IPv6.
+			if (preg_match('~^((([1]?\d)?\d|2[0-4]\d|25[0-5])\.){3}(([1]?\d)?\d|2[0-4]\d|25[0-5])$~', $_SERVER['REMOTE_ADDR']) === 0)
+				$_SERVER['REMOTE_ADDR'] = 'unknown';
+		}
+
+		// Try to calculate their most likely IP for those people behind proxies (And the like).
+		$_SERVER['BAN_CHECK_IP'] = $_SERVER['REMOTE_ADDR'];
+
+		// Find the user's IP address. (but don't let it give you 'unknown'!)
+		// @ TODO: IPv6 really doesn't need this.
+		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_CLIENT_IP']) && (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['HTTP_CLIENT_IP']) == 0 || preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['REMOTE_ADDR']) != 0))
+		{
+			// We have both forwarded for AND client IP... check the first forwarded for as the block - only switch if it's better that way.
+			if (strtok($_SERVER['HTTP_X_FORWARDED_FOR'], '.') != strtok($_SERVER['HTTP_CLIENT_IP'], '.') && '.' . strtok($_SERVER['HTTP_X_FORWARDED_FOR'], '.') == strrchr($_SERVER['HTTP_CLIENT_IP'], '.') && (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown)~', $_SERVER['HTTP_X_FORWARDED_FOR']) == 0 || preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown)~', $_SERVER['REMOTE_ADDR']) != 0))
+				$_SERVER['BAN_CHECK_IP'] = implode('.', array_reverse(explode('.', $_SERVER['HTTP_CLIENT_IP'])));
+			else
+				$_SERVER['BAN_CHECK_IP'] = $_SERVER['HTTP_CLIENT_IP'];
+		}
+		if (!empty($_SERVER['HTTP_CLIENT_IP']) && (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['HTTP_CLIENT_IP']) == 0 || preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['REMOTE_ADDR']) != 0))
+		{
+			// Since they are in different blocks, it's probably reversed.
+			if (strtok($_SERVER['REMOTE_ADDR'], '.') != strtok($_SERVER['HTTP_CLIENT_IP'], '.'))
+				$_SERVER['BAN_CHECK_IP'] = implode('.', array_reverse(explode('.', $_SERVER['HTTP_CLIENT_IP'])));
+			else
+				$_SERVER['BAN_CHECK_IP'] = $_SERVER['HTTP_CLIENT_IP'];
+		}
+		elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
+		{
+			// If there are commas, get the last one.. probably.
+			if (strpos($_SERVER['HTTP_X_FORWARDED_FOR'], ',') !== false)
 			{
-				// Make sure it's in a valid range...
-				if (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $ip) != 0 && preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['REMOTE_ADDR']) == 0)
-					continue;
+				$ips = array_reverse(explode(', ', $_SERVER['HTTP_X_FORWARDED_FOR']));
 
-				// Otherwise, we've got an IP!
-				$_SERVER['BAN_CHECK_IP'] = trim($ip);
-				break;
+				// Go through each IP...
+				foreach ($ips as $i => $ip)
+				{
+					// Make sure it's in a valid range...
+					if (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $ip) != 0 && preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['REMOTE_ADDR']) == 0)
+						continue;
+
+					// Otherwise, we've got an IP!
+					$_SERVER['BAN_CHECK_IP'] = trim($ip);
+					break;
+				}
 			}
+			// Otherwise just use the only one.
+			elseif (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['HTTP_X_FORWARDED_FOR']) == 0 || preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['REMOTE_ADDR']) != 0)
+				$_SERVER['BAN_CHECK_IP'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
 		}
-		// Otherwise just use the only one.
-		elseif (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['HTTP_X_FORWARDED_FOR']) == 0 || preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['REMOTE_ADDR']) != 0)
-			$_SERVER['BAN_CHECK_IP'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+
+		// Make sure we know the URL of the current request.
+		if (empty($_SERVER['REQUEST_URI']))
+			$_SERVER['REQUEST_URL'] = $scripturl . (!empty($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : '');
+		elseif (preg_match('~^([^/]+//[^/]+)~', $scripturl, $match) == 1)
+			$_SERVER['REQUEST_URL'] = $match[1] . $_SERVER['REQUEST_URI'];
+		else
+			$_SERVER['REQUEST_URL'] = $_SERVER['REQUEST_URI'];
+
+		// And make sure HTTP_USER_AGENT is set.
+		$_SERVER['HTTP_USER_AGENT'] = isset($_SERVER['HTTP_USER_AGENT']) ? htmlspecialchars(stripslashes($_SERVER['HTTP_USER_AGENT']), ENT_QUOTES) : '';
+
+		// Some final checking.
+		if (preg_match('~^((([1]?\d)?\d|2[0-4]\d|25[0-5])\.){3}(([1]?\d)?\d|2[0-4]\d|25[0-5])$~', $_SERVER['BAN_CHECK_IP']) === 0 || !self::isValidIPv6($_SERVER['BAN_CHECK_IP']))
+			$_SERVER['BAN_CHECK_IP'] = '';
+		if ($_SERVER['REMOTE_ADDR'] == 'unknown')
+			$_SERVER['REMOTE_ADDR'] = '';
 	}
 
-	// Make sure we know the URL of the current request.
-	if (empty($_SERVER['REQUEST_URI']))
-		$_SERVER['REQUEST_URL'] = $scripturl . (!empty($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : '');
-	elseif (preg_match('~^([^/]+//[^/]+)~', $scripturl, $match) == 1)
-		$_SERVER['REQUEST_URL'] = $match[1] . $_SERVER['REQUEST_URI'];
-	else
-		$_SERVER['REQUEST_URL'] = $_SERVER['REQUEST_URI'];
-
-	// And make sure HTTP_USER_AGENT is set.
-	$_SERVER['HTTP_USER_AGENT'] = isset($_SERVER['HTTP_USER_AGENT']) ? htmlspecialchars(stripslashes($_SERVER['HTTP_USER_AGENT']), ENT_QUOTES) : '';
-
-	// Some final checking.
-	if (preg_match('~^((([1]?\d)?\d|2[0-4]\d|25[0-5])\.){3}(([1]?\d)?\d|2[0-4]\d|25[0-5])$~', $_SERVER['BAN_CHECK_IP']) === 0 || !isValidIPv6($_SERVER['BAN_CHECK_IP']))
-		$_SERVER['BAN_CHECK_IP'] = '';
-	if ($_SERVER['REMOTE_ADDR'] == 'unknown')
-		$_SERVER['REMOTE_ADDR'] = '';
-}
-
-/**
- * Validates a IPv6 address. returns true if it is ipv6.
- * @param string $ip ip address to be validated
- * @return bool true|false
- */
-function isValidIPv6($ip)
-{
-	// wow, impressive regex, but it can be done easier :)
-	//if (preg_match('~^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$~', $ip) === 0)
-	//return false;
-	if(defined('AF_INET6') && strstr($ip, ':') !== false && inet_pton($ip) != false)
-		return true;
-
-	return false;
-}
-
-/**
- * Converts IPv6s to numbers.  This makes ban checks much easier.
- * @param string $ip ip address to be converted
- * @return array 
- */
-function convertIPv6toInts($ip)
-{
-	static $expanded = array();
-
-	// Check if we have done this already.
-	if (isset($expanded[$ip]))
-		return $expanded[$ip];
-
-	// Expand the IP out.
-	$expanded_ip = explode(':', expandIPv6($ip));
-
-	$new_ip = array();
-	foreach ($expanded_ip as $int)
-		$new_ip[] = hexdec($int);
-
-	// Save this incase of repeated use.
-	$expanded[$ip] = $new_ip;
-
-	return $expanded[$ip];
-}
-
-/**
- * Expands a IPv6 address to its full form.
- * @param string $ip ip address to be converted
- * @return bool/string expanded ipv6 address.
- */
-function expandIPv6($addr, $strict_check = true)
-{
-	static $converted = array();
-
-	// Check if we have done this already.
-	if (isset($converted[$addr]))
-		return $converted[$addr];
-
-	// Check if there are segments missing, insert if necessary.
-	if (strpos($addr, '::') !== false)
+	/**
+	 * Validates a IPv6 address. returns true if it is ipv6.
+	 * @param string $ip ip address to be validated
+	 * @return bool true|false
+	 */
+	public static function isValidIPv6($ip)
 	{
-		$part = explode('::', $addr);
-		$part[0] = explode(':', $part[0]);
-		$part[1] = explode(':', $part[1]);
-		$missing = array();
+		// wow, impressive regex, but it can be done easier :)
+		//if (preg_match('~^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b)\.){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$~', $ip) === 0)
+		//return false;
+		if(defined('AF_INET6') && strstr($ip, ':') !== false && inet_pton($ip) != false)
+			return true;
 
-		for ($i = 0; $i < (8 - (count($part[0]) + count($part[1]))); $i++)
-			array_push($missing, '0000');
-
-		$part = array_merge($part[0], $missing, $part[1]);
-	}
-	else
-		$part = explode(':', $addr);
-
-	// Pad each segment until it has 4 digits.
-	foreach ($part as &$p)
-		while (strlen($p) < 4)
-			$p = '0' . $p;
-
-	unset($p);
-
-    // Join segments.
-	$result = implode(':', $part);
-
-	// Save this incase of repeated use.
-	$converted[$addr] = $result;
-
-	// Quick check to make sure the length is as expected. 
-	if (!$strict_check || strlen($result) == 39)
-		return $result;
-	else
 		return false;
+	}
+
+	/**
+	 * Converts IPv6s to numbers.  This makes ban checks much easier.
+	 * @param string $ip ip address to be converted
+	 * @return array
+	 */
+	public static function convertIPv6toInts($ip)
+	{
+		static $expanded = array();
+
+		// Check if we have done this already.
+		if (isset($expanded[$ip]))
+			return $expanded[$ip];
+
+		// Expand the IP out.
+		$expanded_ip = explode(':', self::expandIPv6($ip));
+
+		$new_ip = array();
+		foreach ($expanded_ip as $int)
+			$new_ip[] = hexdec($int);
+
+		// Save this incase of repeated use.
+		$expanded[$ip] = $new_ip;
+
+		return $expanded[$ip];
+	}
+
+	/**
+	 * Expands a IPv6 address to its full form.
+	 * @param string $ip ip address to be converted
+	 * @return bool/string expanded ipv6 address.
+	 */
+	public static function expandIPv6($addr, $strict_check = true)
+	{
+		static $converted = array();
+
+		// Check if we have done this already.
+		if (isset($converted[$addr]))
+			return $converted[$addr];
+
+		// Check if there are segments missing, insert if necessary.
+		if (strpos($addr, '::') !== false)
+		{
+			$part = explode('::', $addr);
+			$part[0] = explode(':', $part[0]);
+			$part[1] = explode(':', $part[1]);
+			$missing = array();
+
+			for ($i = 0; $i < (8 - (count($part[0]) + count($part[1]))); $i++)
+				array_push($missing, '0000');
+
+			$part = array_merge($part[0], $missing, $part[1]);
+		}
+		else
+			$part = explode(':', $addr);
+
+		// Pad each segment until it has 4 digits.
+		foreach ($part as &$p)
+			while (strlen($p) < 4)
+				$p = '0' . $p;
+
+		unset($p);
+
+		// Join segments.
+		$result = implode(':', $part);
+
+		// Save this incase of repeated use.
+		$converted[$addr] = $result;
+
+		// Quick check to make sure the length is as expected.
+		if (!$strict_check || strlen($result) == 39)
+			return $result;
+		else
+			return false;
+	}
+
+// Rewrite URLs to include the session ID.
+	public static function ob_sessrewrite($buffer)
+	{
+		global $scripturl, $modSettings, $context, $user_info, $txt, $time_start, $db_count;
+		/*
+		 * tidy support as a debugging option to generate prettified output
+		 * and only do it for the admin when 'tidyup' is set in the request string (tidy can be slow)
+		 * pretty HTML output might help with debugging templates
+		 */
+		if(isset($_REQUEST['tidyup']) && !isset($_REQUEST['xml']) && class_exists('Tidy') && $user_info['is_admin']) {
+			$tidy = new Tidy;
+
+			$tidy_config = array(
+				'indent'         => true,
+				'output-html'   => true,
+				'wrap'           => 0,
+				'merge-divs' => false,
+				'merge-spans' => false);
+
+			$tidy->parseString($buffer, $tidy_config, 'utf8');
+			$buffer = $tidy;
+		}
+		// If $scripturl is set to nothing, or the SID is not defined (SSI?) just quit.
+		if ($scripturl == '' || !defined('SID'))
+			return $buffer;
+
+		// rewrite urls with PHPSESSID, but only if the session isn't cookied and NOT for spiders
+		if (empty($_COOKIE) && SID != '' && empty($context['browser']['possibly_robot']))
+			$buffer = preg_replace('/"' . preg_quote($scripturl, '/') . '(?!\?' . preg_quote(SID, '/') . ')\\??/', '"' . $scripturl . '?' . SID . '&amp;', $buffer);
+		// Debugging templates, are we?
+		elseif (isset($_GET['debug']))
+			$buffer = preg_replace('/(?<!<link rel="canonical" href=)"' . preg_quote($scripturl, '/') . '\\??/', '"' . $scripturl . '?debug;', $buffer);
+
+		$now = microtime();
+		$context['load_time'] = round(array_sum(explode(' ', $now)) - array_sum(explode(' ', $time_start)), 3);
+		$context['load_queries'] = $db_count;
+		$context['template_benchmark_time'] = round(array_sum(explode(' ', $now)) - array_sum(explode(' ', $context['template_benchmark'])), 3);
+
+		/*
+		 * additional rewrites
+		 */
+		self::doRegisteredRewrites($buffer);
+
+		if(!empty($modSettings['simplesef_enable'])) {
+			$buffer = isset($context['sef_full_rewrite']) ? SimpleSEF::ob_simplesef($buffer) : SimpleSEF::ob_simplesef_light($buffer);
+			//$buffer .= SimpleSEF::$debug_info;
+		}
+		$_t = EoS_Smarty::isActive() ? 's template-smarty), ' : 's template), ';
+		$buffer = str_replace('@%%__loadtime__%%@', $user_info['is_admin'] ? ($context['load_time'] . 's CPU (' . $context['template_benchmark_time'] . $_t . $context['load_queries'] . ' ' . $txt['queries'] . SimpleSEF::getPerfData()) : '', $buffer);
+		if(isset($_REQUEST['xml']))
+			$buffer = ltrim($buffer);
+
+		return $buffer;
+	}
+
+	public static function doRegisteredRewrites(&$buffer)
+	{
+		foreach(self::$_registeredRewrites as $the_rewrite)
+			call_user_func_array($the_rewrite, array(&$buffer));
+	}
+
+	public static function registerRewrite($callback = '')
+	{
+		if(is_callable($callback)) {
+			if(!in_array($callback, self::$_registeredRewrites))
+				self::$_registeredRewrites[] = $callback;
+		}
+	}
+
+	public static function bbcRewrites(&$buffer)
+	{
+		global $context, $memberContext;
+
+		if(false !== stripos($buffer, '[%%AV_QUOTE%%')) {
+			$matches = array();
+			$results = preg_match_all('~\[%%AV_QUOTE%%_((\d+)\]<div class="quotewrapper">)~iU', $buffer, $matches, PREG_SET_ORDER);
+			if($results > 0) {
+				if(!empty($context['additional_uids_to_load'])) {
+					foreach($matches as $match) {
+						loadMemberContext($match[2]);
+						$buffer = str_replace($match[0], isset($memberContext[$match[2]]) && !empty($memberContext[$match[2]]['avatar']['image']) ? '<div class="floatleft quoteavatar"><span class="medium_avatar"><a class="mcard" data-mid="' . $match[2] . '" href="' . URL::user($match[2], $memberContext[$match[2]]['name']) . '">' . $memberContext[$match[2]]['avatar']['image'] . '</a></span></div><div class="quotewrapper indent">' : '', $buffer);
+					}
+				}
+			}
+		}
+	}
 }
 
 // Adds slashes to the array/variable.  Uses two underscores to guard against overloading.
@@ -538,70 +630,4 @@ function JavaScriptEscape($string)
 		'<a href' => '<a hr\'+\'ef',
 		$scripturl => $scripturl . '\'+\'',
 	)) . '\'';
-}
-
-// Rewrite URLs to include the session ID.
-function ob_sessrewrite($buffer)
-{
-	global $scripturl, $modSettings, $context, $user_info, $txt, $time_start, $db_count, $memberContext;
-	/*
-	 * tidy support as a debugging option to generate prettified output 
-	 * and only do it for the admin when 'tidyup' is set in the request string (tidy can be slow) 
-	 * pretty HTML output might help with debugging templates
-	 */
-	if(isset($_REQUEST['tidyup']) && !isset($_REQUEST['xml']) && class_exists('Tidy') && $user_info['is_admin']) {
-		$tidy = new Tidy;
-
-		$tidy_config = array(
-           'indent'         => true,
-           'output-html'   => true,
-           'wrap'           => 0,
-           'merge-divs' => false,
-           'merge-spans' => false);
-
-		$tidy->parseString($buffer, $tidy_config, 'utf8');
-		$buffer = $tidy;
-	}
-	// If $scripturl is set to nothing, or the SID is not defined (SSI?) just quit.
-	if ($scripturl == '' || !defined('SID'))
-		return $buffer;
-
-	// rewrite urls with PHPSESSID, but only if the session isn't cookied and NOT for spiders
-	if (empty($_COOKIE) && SID != '' && empty($context['browser']['possibly_robot']))
-		$buffer = preg_replace('/"' . preg_quote($scripturl, '/') . '(?!\?' . preg_quote(SID, '/') . ')\\??/', '"' . $scripturl . '?' . SID . '&amp;', $buffer);
-	// Debugging templates, are we?
-	elseif (isset($_GET['debug']))
-		$buffer = preg_replace('/(?<!<link rel="canonical" href=)"' . preg_quote($scripturl, '/') . '\\??/', '"' . $scripturl . '?debug;', $buffer);
-
-	$now = microtime();
-	$context['load_time'] = round(array_sum(explode(' ', $now)) - array_sum(explode(' ', $time_start)), 3);
-	$context['load_queries'] = $db_count;
-	$context['template_benchmark_time'] = round(array_sum(explode(' ', $now)) - array_sum(explode(' ', $context['template_benchmark'])), 3);
-
-	/*
-	 * additional rewrites
-	 */
-	if(false !== stripos($buffer, '[%%AV_QUOTE%%')) {
-		$matches = array();
-		$results = preg_match_all('~\[%%AV_QUOTE%%_((\d+)\]<div class="quotewrapper">)~iU', $buffer, $matches, PREG_SET_ORDER);
-		if($results > 0) {
-			if(!empty($context['additional_uids_to_load'])) {
-				loadMemberData($context['additional_uids_to_load']);
-				foreach($matches as $match) {
-					loadMemberContext($match[2]);
-					$buffer = str_replace($match[0], '<div class="floatleft quoteavatar"><span class="medium_avatar">' . (!empty($memberContext[$match[2]]['avatar']['image']) ? $memberContext[$match[2]]['avatar']['image'] : '<img alt="avatar" src="' . $settings['images_url'] . '/unknown.png' . '" />') . '</span></div>' . '<div class="quotewrapper indent">', $buffer);
-				}
-			}
-		}
-	}
-	if(!empty($modSettings['simplesef_enable'])) {
-		$buffer = isset($context['sef_full_rewrite']) ? SimpleSEF::ob_simplesef($buffer) : SimpleSEF::ob_simplesef_light($buffer);
-		//$buffer .= SimpleSEF::$debug_info;
-	}
-	$_t = EoS_Smarty::isActive() ? 's template-smarty), ' : 's template), ';
-	$buffer = str_replace('@%%__loadtime__%%@', $user_info['is_admin'] ? ($context['load_time'] . 's CPU (' . $context['template_benchmark_time'] . $_t . $context['load_queries'] . ' ' . $txt['queries'] . SimpleSEF::getPerfData()) : '', $buffer);
-	if(isset($_REQUEST['xml']))
-		$buffer = ltrim($buffer);
-
-	return $buffer;
 }
