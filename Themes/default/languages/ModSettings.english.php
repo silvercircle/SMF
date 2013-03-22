@@ -140,14 +140,6 @@ $txt['attachmentPostLimit'] = 'Max attachment size per post (in KB)';
 $txt['attachmentSizeLimit'] = 'Max size per attachment (in KB)';
 $txt['attachmentNumPerPostLimit'] = 'Max number of attachments per post';
 
-$txt['smf64'] = 'Disable karma|Enable karma total|Enable karma positive/negative';
-$txt['karmaMinPosts'] = 'Set the minimum posts needed to modify karma';
-$txt['karmaWaitTime'] = 'Set wait time in hours';
-$txt['karmaTimeRestrictAdmins'] = 'Restrict administrators to wait time';
-$txt['karmaLabel'] = 'Karma label';
-$txt['karmaApplaudLabel'] = 'Karma applaud label';
-$txt['karmaSmiteLabel'] = 'Karma smite label';
-
 $txt['mods_cat_calendar'] = 'Calendar';
 $txt['cal_enabled'] = 'Enable the calendar';
 $txt['cal_daysaslink'] = 'Show days as links to \'Post Event\'';

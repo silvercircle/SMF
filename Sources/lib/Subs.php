@@ -487,7 +487,7 @@ function updateMemberData($members, $data)
 	// Everything is assumed to be a string unless it's in the below.
 	$knownInts = array(
 		'date_registered', 'posts', 'id_group', 'last_login', 'instant_messages', 'unread_messages',
-		'new_pm', 'pm_prefs', 'gender', 'hide_email', 'show_online', 'pm_email_notify', 'pm_receive_from', 'karma_good', 'karma_bad',
+		'new_pm', 'pm_prefs', 'gender', 'hide_email', 'show_online', 'pm_email_notify', 'pm_receive_from',
 		'notify_announcements', 'notify_send_body', 'notify_regularity', 'notify_types',
 		'id_theme', 'is_activated', 'id_msg_last_visit', 'id_post_group', 'total_time_logged_in', 'warning',
 	);
@@ -934,7 +934,7 @@ function permute($array)
 // Parse bulletin board code in a string, as well as smileys optionally.
 function parse_bbc($message, $smileys = true, $cache_id = '', $parse_tags = array())
 {
-	global $txt, $scripturl, $context, $modSettings, $user_info, $board;
+	global $txt, $scripturl, $context, $modSettings, $user_info;
 	static $bbc_codes = array(), $itemcodes = array(), $no_autolink_tags = array();
 	static $disabled;
 

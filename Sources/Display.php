@@ -18,14 +18,6 @@ if (!defined('SMF'))
 	of SMF.  This file controls topic, message, and attachment display.  It
 	does so with the following functions:
 
-	void Display()
-		- loads the posts in a topic up so they can be displayed.
-		- uses the main sub template of the Display template.
-		- requires a topic, and can go to the previous or next topic from it.
-		- jumps to the correct post depending on a number/time/IS_MSG passed.
-		- depends on the messages_per_page, defaultMaxMessages and enableAllMessages settings.
-		- is accessed by ?topic=id_topic.START.
-
 	array prepareDisplayContext(bool reset = false)
 		- actually gets and prepares the message context.
 		- starts over from the beginning if reset is set to true, which is
@@ -61,7 +53,16 @@ $output = array();
 
 define('PCACHE_UPDATE_PER_VIEW', 5); // maximum number of posts to be parse-cached during a single topic page display. TODO: make that an admin panel setting?
 
-// The central part of the board - topic display.
+
+/**
+	void Display()
+	- loads the posts in a topic up so they can be displayed.
+	- uses the main sub template of the Display template.
+	- requires a topic, and can go to the previous or next topic from it.
+	- jumps to the correct post depending on a number/time/IS_MSG passed.
+	- depends on the messages_per_page, defaultMaxMessages and enableAllMessages settings.
+	- is accessed by ?topic=id_topic.START.
+ */
 function Display()
 {
 	global $scripturl, $txt, $modSettings, $context, $settings, $memberContext, $output;

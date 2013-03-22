@@ -17,63 +17,24 @@ if (!defined('SMF'))
 /*	This file does a lot of important stuff.  Mainly, this means it handles
 	the query string, request variables, and session management.  It contains
 	the following functions:
-
-	void cleanRequest()
-		- cleans the request variables (ENV, GET, POST, COOKIE, SERVER) and
-		  makes sure the query string was parsed correctly.
-		- handles the URLs passed by the queryless URLs option.
-		- makes sure, regardless of php.ini, everything has slashes.
-		- sets up $board, $topic, and $scripturl and $_REQUEST['start'].
-		- determines, or rather tries to determine, the client's IP.
-
-	array escapestring__recursive(array var)
-		- returns the var, as an array or string, with escapes as required.
-		- importantly escapes all keys and values!
-		- calls itself recursively if necessary.
-
-	array htmlspecialchars__recursive(array var)
-		- adds entities (&quot;, &lt;, &gt;) to the array or string var.
-		- importantly, does not effect keys, only values.
-		- calls itself recursively if necessary.
-
-	array urldecode__recursive(array var)
-		- takes off url encoding (%20, etc.) from the array or string var.
-		- importantly, does it to keys too!
-		- calls itself recursively if there are any sub arrays.
-
-	array unescapestring__recursive(array var)
-		- unescapes, recursively, from the array or string var.
-		- effects both keys and values of arrays.
-		- calls itself recursively to handle arrays of arrays.
-
-	array stripslashes__recursive(array var)
-		- removes slashes, recursively, from the array or string var.
-		- effects both keys and values of arrays.
-		- calls itself recursively to handle arrays of arrays.
-
-	array htmltrim__recursive(array var)
-		- trims a string or an the var array using html characters as well.
-		- does not effect keys, only values.
-		- may call itself recursively if needed.
-
-	string cleanXml(string var)
-		- removes invalid XML characters to assure the input string being
-		  parsed properly.
-
-	string ob_sessrewrite(string buffer)
-		- rewrites the URLs outputted to have the session ID, if the user
-		  is not accepting cookies and is using a standard web browser.
-		- handles rewriting URLs for the queryless URLs option.
-		- can be turned off entirely by setting $scripturl to an empty
-		  string, ''. (it wouldn't work well like that anyway.)
-		- because of bugs in certain builds of PHP, does not function in
-		  versions lower than 4.3.0 - please upgrade if this hurts you.
 */
 
 class EoS_QueryString {
 
+	/**
+	 * @var array - list of registered rewrite handlers that are called
+	 * 				in ob_sessrewrite()
+	 */
 	private static $_registeredRewrites = array();
 
+	/**
+		void cleanRequest()
+		- 	cleans the request variables (ENV, GET, POST, COOKIE, SERVER) and
+			makes sure the query string was parsed correctly.
+		- 	makes sure, regardless of php.ini, everything has slashes.
+		- 	sets up $board, $topic, and $scripturl and $_REQUEST['start'].
+		- 	determines, or rather tries to determine, the client's IP.
+	 */
 	public static function cleanRequest()
 	{
 		global $board, $topic, $boardurl, $scripturl, $modSettings;
@@ -303,7 +264,7 @@ class EoS_QueryString {
 				$ips = array_reverse(explode(', ', $_SERVER['HTTP_X_FORWARDED_FOR']));
 
 				// Go through each IP...
-				foreach ($ips as $i => $ip)
+				foreach ($ips as $ip)
 				{
 					// Make sure it's in a valid range...
 					if (preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $ip) != 0 && preg_match('~^((0|10|172\.(1[6-9]|2[0-9]|3[01])|192\.168|255|127)\.|unknown|::1|fe80::|fc00::)~', $_SERVER['REMOTE_ADDR']) == 0)
@@ -428,7 +389,18 @@ class EoS_QueryString {
 			return false;
 	}
 
-// Rewrite URLs to include the session ID.
+	/**
+	 * @param $buffer   			string - the output buffer
+	 * @return mixed|string|Tidy    rewritten output buffer
+	 *
+		- 	rewrites the URLs outputted to have the session ID, if the user
+			is not accepting cookies and is using a standard web browser.
+		- 	can be turned off entirely by setting $scripturl to an empty
+			string, ''. (it wouldn't work well like that anyway.)
+		- 	because of bugs in certain builds of PHP, does not function in
+			versions lower than 4.3.0 - please upgrade if this hurts you.
+	 *
+	 */
 	public static function ob_sessrewrite($buffer)
 	{
 		global $scripturl, $modSettings, $context, $user_info, $txt, $time_start, $db_count;
@@ -516,7 +488,16 @@ class EoS_QueryString {
 	}
 }
 
-// Adds slashes to the array/variable.  Uses two underscores to guard against overloading.
+/**
+ * @param $var array|string 	string(s) to be rewritten
+ * @return array|string         rewritten string
+ *
+	array escapestring__recursive(array var)
+	- returns the var, as an array or string, with escapes as required.
+	- importantly escapes all keys and values!
+	- calls itself recursively if necessary.
+ *
+ */
 function escapestring__recursive($var)
 {
 	if (!is_array($var))
@@ -532,7 +513,11 @@ function escapestring__recursive($var)
 	return $new_var;
 }
 
-// Adds html entities to the array/variable.  Uses two underscores to guard against overloading.
+/**
+ * @param $var          string|array string(s) to be rewritten
+ * @param int $level
+ * @return array|string rewritten string(s)
+ */
 function htmlspecialchars__recursive($var, $level = 0)
 {
 	if (!is_array($var))
@@ -545,7 +530,17 @@ function htmlspecialchars__recursive($var, $level = 0)
 	return $var;
 }
 
-// Removes url stuff from the array/variable.  Uses two underscores to guard against overloading.
+/**
+ * @param $var          string|array URLs to be decoded
+ * @param int $level
+ * @return array|string	decoded URLs
+ *
+	array urldecode__recursive(array var)
+	- takes off url encoding (%20, etc.) from the array or string var.
+	- importantly, does it to keys too!
+	- calls itself recursively if there are any sub arrays.
+ *
+ */
 function urldecode__recursive($var, $level = 0)
 {
 	if (!is_array($var))
@@ -560,7 +555,16 @@ function urldecode__recursive($var, $level = 0)
 
 	return $new_var;
 }
-// Unescapes any array or variable.  Two underscores for the normal reason.
+
+/**
+ * @param $var			array|string input
+ * @return array|string rewritten result
+ *
+	array unescapestring__recursive(array var)
+	- unescapes, recursively, from the array or string var.
+	- effects both keys and values of arrays.
+	- calls itself recursively to handle arrays of arrays.
+ */
 function unescapestring__recursive($var)
 {
 	if (!is_array($var))
@@ -576,7 +580,16 @@ function unescapestring__recursive($var)
 	return $new_var;
 }
 
-// Remove slashes recursively...
+/**
+ * @param $var			array|string input
+ * @param int $level
+ * @return array|string rewritten result
+ *
+	array stripslashes__recursive(array var)
+	- removes slashes, recursively, from the array or string var.
+	- effects both keys and values of arrays.
+	- calls itself recursively to handle arrays of arrays.
+ */
 function stripslashes__recursive($var, $level = 0)
 {
 	if (!is_array($var))
@@ -592,7 +605,16 @@ function stripslashes__recursive($var, $level = 0)
 	return $new_var;
 }
 
-// Trim a string including the HTML space, character 160.
+/**
+ * @param $var					array|string input
+ * @param int $level
+ * @return array|mixed|string	rewritten result
+ *
+	array htmltrim__recursive(array var)
+	- trims a string or an the var array using html characters as well.
+	- does not effect keys, only values.
+	- may call itself recursively if needed.
+ */
 function htmltrim__recursive($var, $level = 0)
 {
 	global $smcFunc;
@@ -608,13 +630,24 @@ function htmltrim__recursive($var, $level = 0)
 	return $var;
 }
 
-// Clean up the XML to make sure it doesn't contain invalid characters.
+/**
+ * @param $string   string input
+ * @return string   rewritten result
+ *
+	string cleanXml(string var)
+	- removes invalid XML characters to assure the input string being
+	  parsed properly.
+ */
 function cleanXml($string)
 {
 	//return preg_replace('~[\x00-\x08\x0B\x0C\x0E-\x19' . ($context['utf8'] ? '\x{FFFE}\x{FFFF}' : '') . ']~' . ($context['utf8'] ? 'u' : ''), '', $string);
 	return preg_replace('~[\x00-\x08\x0B\x0C\x0E-\x19' . ('\x{FFFE}\x{FFFF}') . ']~u', '', $string);
 }
 
+/**
+ * @param $string	string input
+ * @return string	rewritten result
+ */
 function JavaScriptEscape($string)
 {
 	global $scripturl;

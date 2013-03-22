@@ -325,7 +325,7 @@ function ModifyCoreFeatures($return_config = false)
 					return array();
 			'),
 		),
-		// k = karma.
+		// ratings
 		'k' => array(
 			'url' => 'action=admin;area=postsettings;sa=ratings',
 			'settings' => array(

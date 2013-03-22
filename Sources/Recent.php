@@ -270,6 +270,7 @@ function RecentPosts()
 	$key = 'recent-' . $user_info['id'] . '-' . md5(serialize(array_diff_key($query_parameters, array('max_id_msg' => 0)))) . '-' . (int) $_REQUEST['start'];
 	if (empty($modSettings['cache_enable']) || ($messages = CacheAPI::getCache($key, 120)) == null)
 	{
+		$request = null;
 		$done = false;
 		while (!$done)
 		{

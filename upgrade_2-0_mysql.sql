@@ -131,11 +131,6 @@ $nameChanges = array(
 		'ID_MEMBER' => 'ID_MEMBER id_member mediumint(8) unsigned NOT NULL default \'0\'',
 		'ID_GROUP' => 'ID_GROUP id_group smallint(5) unsigned NOT NULL default \'0\'',
 	),
-	'log_karma' => array(
-		'ID_TARGET' => 'ID_TARGET id_target mediumint(8) unsigned NOT NULL default \'0\'',
-		'ID_EXECUTOR' => 'ID_EXECUTOR id_executor mediumint(8) unsigned NOT NULL default \'0\'',
-		'logTime' => 'logTime log_time int(10) unsigned NOT NULL default \'0\'',
-	),
 	'log_mark_read' => array(
 		'ID_MEMBER' => 'ID_MEMBER id_member mediumint(8) unsigned NOT NULL default \'0\'',
 		'ID_MSG' => 'ID_MSG id_msg int(10) unsigned NOT NULL default \'0\'',
@@ -227,8 +222,6 @@ $nameChanges = array(
 		'showOnline' => 'showOnline show_online tinyint(4) NOT NULL default \'1\'',
 		'timeFormat' => 'timeFormat time_format varchar(80) NOT NULL default \'\'',
 		'timeOffset' => 'timeOffset time_offset float NOT NULL default \'0\'',
-		'karmaBad' => 'karmaBad karma_bad smallint(5) unsigned NOT NULL default \'0\'',
-		'karmaGood' => 'karmaGood karma_good smallint(5) unsigned NOT NULL default \'0\'',
 		'notifyAnnouncements' => 'notifyAnnouncements notify_announcements tinyint(4) NOT NULL default \'1\'',
 		'notifyRegularity' => 'notifyRegularity notify_regularity tinyint(4) NOT NULL default \'1\'',
 		'notifySendBody' => 'notifySendBody notify_send_body tinyint(4) NOT NULL default \'0\'',

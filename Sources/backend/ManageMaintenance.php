@@ -346,10 +346,6 @@ function MaintainEmptyUnimportantLogs()
 	smf_db_query( '
 		DELETE FROM {db_prefix}log_floodcontrol');
 
-	// Clear out the karma actions.
-	smf_db_query( '
-		DELETE FROM {db_prefix}log_karma');
-
 	// Last but not least, the search logs!
 	smf_db_query('
 		TRUNCATE {db_prefix}log_search_topics');
