@@ -33,7 +33,7 @@
   <ul class="reset" style="line-height:110%;">
     <li class="greeting"><a href="{$SUPPORT->url_user($C.user.id, $C.user.name)}">{$C.user.name}</a></li>
     <li class="smalltext">{$U.posts} {$T.posts}<li>
-    <li class="smalltext">{$U.likesreceived} {$T.likes}<li>
+{*    <li class="smalltext">{$U.likesreceived} {$T.likes}<li>*}
     <li class="floatright smalltext"><a href="{$SCRIPTURL}?action=logout;{$C.session_var}={$C.session_id}">Sign out</a></li>
   </ul>
 

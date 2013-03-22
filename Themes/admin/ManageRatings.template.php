@@ -20,6 +20,9 @@ function template_manage_ratings()
 			<thead>
 			<tr>
 			<th class="first_th glass cleantop" style="width:20px;">',
+				$txt['rating_class_enabled'],'
+			</th>
+			<th class="glass cleantop" style="width:20px;">',
 				$txt['rating_class_ID'],'
 			</th>
 			<th class="glass cleantop nowrap">',
@@ -56,6 +59,9 @@ function template_manage_ratings()
 				$id = $class['id'];
 				echo '
 				<tr>
+					<td>
+						<input type="checkbox" ',($class['enabled'] ? 'checked="checked"' : ''),' name="rating_enabled_', $id, '" value="1" />
+					</td>
 					<td>
 						<input type="text" size="3" name="rating_id_', $id, '" value="', $id, '" />
 					</td>

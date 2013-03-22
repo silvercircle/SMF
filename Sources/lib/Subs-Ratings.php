@@ -24,6 +24,7 @@ class Ratings {
 	protected static 	$rate_bar = '';
 	protected static 	$is_valid;
 	protected static 	$show_repair_link;
+	protected static	$user;
 	/**
 	 * @var array		reference to the ratings array in $modSettings
 	 */
@@ -32,6 +33,8 @@ class Ratings {
 	const				UPDATE = 2;
 	const				RETURN_POINTS = 4;
 	const				POOL_REFRESH_INTERVAL = 86400;
+	const				RATING_RATE	= 1;
+	const				RATING_REMOVE = -1;
 
 	public static function init()
 	{
@@ -325,14 +328,8 @@ class Ratings {
 				$total = self::updateForContent($mid);
 				$output = '';
 				self::generateOutput($total['status'], $output, $mid, $row['id_user'] > 0 ? $row['rtype'] : 0);
-				// fix like stats for the like_giver and like_receiver. This might be a very slow query, but
+				// TODO: fix like stats for the like_giver and like_receiver. This might be a very slow query, but
 				// since this feature will most likely go away, right now I do not care.
-				/*
-				smf_db_query('UPDATE {db_prefix}members AS m
-					SET m.likes_given = (SELECT COUNT(l.id_user) FROM {db_prefix}likes AS l WHERE l.id_user = m.id_member),
-						m.likes_received = (SELECT COUNT(l1.id_receiver) FROM {db_prefix}likes AS l1 WHERE l1.id_receiver = m.id_member)
-					WHERE m.id_member = {int:owner} OR m.id_member = {int:receiver}', array('owner' => $like_owner, 'receiver' => $like_receiver));
-					*/
 				invalidateMemberData(array($like_owner, $like_receiver));
 				if($is_xmlreq) {
 					$context['ratings_output']['output'] = $output;
@@ -369,15 +366,11 @@ class Ratings {
 						$rtypes = explode(',', $types);
 						mysql_free_result($request);
 
+						if(false === self::recordStats($rtypes, $like_receiver, self::RATING_REMOVE, $mid))
+							AjaxErrorMsg('Error recording stats');
+
 						smf_db_query('DELETE FROM {db_prefix}likes WHERE id_msg = {int:id_msg} AND id_user = {int:id_user} AND ctype = {int:ctype}',
 							array('id_msg' => $mid, 'id_user' => $uid, 'ctype' => $content_type));
-
-						if($like_receiver)
-							smf_db_query( 'UPDATE {db_prefix}members SET likes_received = likes_received - 1 WHERE id_member = {int:id_member}',
-								array('id_member' => $like_receiver));
-
-						smf_db_query('UPDATE {db_prefix}members SET likes_given = likes_given - 1 WHERE id_member = {int:id_member}',
-							array('id_member' => $uid));
 
 						// if we remove a like (unlike) a post, also delete the corresponding activity
 						smf_db_query('DELETE a.*, n.* FROM {db_prefix}log_activities AS a LEFT JOIN {db_prefix}log_notifications AS n ON(n.id_act = a.id_act)
@@ -386,33 +379,10 @@ class Ratings {
 
 						$context['ratings_output']['likebar'] = self::$rate_bar;
 
-						if(!isset($memberContext[$like_receiver]['meta']['rating_stats']))
-							self::initStats($memberContext[$like_receiver]);
-
 						/*
 						 * record the stats
 						 */
-						foreach($rtypes as $type) {
-							if(isset(self::$_ratings[$type])) {
-								if(self::$_ratings[$type]['points'] > 0) {
-									$memberContext[$like_receiver]['meta']['rating_stats']['points_positive'] -= self::$_ratings[$type]['points'];
-									$memberContext[$like_receiver]['meta']['rating_stats']['count_positive']--;
-								}
-								elseif(self::$_ratings[$type]['points'] < 0) {
-									$memberContext[$like_receiver]['meta']['rating_stats']['points_negative'] += self::$_ratings[$type]['points'];
-									$memberContext[$like_receiver]['meta']['rating_stats']['count_negative']--;
-								}
-
-								if(!isset($memberContext[$like_receiver]['meta']['rating_stats'][$type]))
-									$memberContext[$like_receiver]['meta']['rating_stats'][$type] = 0;
-
-								$memberContext[$like_receiver]['meta']['rating_stats'][$type]--;
-
-							}
-						}
-						self::validateStats($memberContext[$like_receiver]['meta']['rating_stats']);
 						$total_point_cost = self::getCosts($rtypes);
-						updateMemberData($like_receiver, array('meta' => @serialize($memberContext[$like_receiver]['meta'])));
 						self::updatePool($total_point_cost, Ratings::UPDATE|Ratings::RETURN_POINTS);
 
 					}
@@ -427,16 +397,13 @@ class Ratings {
 					loadMemberContext($like_receiver);
 				}
 				if(($like_receiver && !$memberContext[$like_receiver]['is_banned']) || $like_receiver == 0) {  // posts by guests can be liked
+
+					if(false === self::recordStats($rtypes, $like_receiver, self::RATING_RATE, $mid))
+						AjaxErrorMsg('Error recording stats');
+
 					smf_db_query('INSERT INTO {db_prefix}likes(id_msg, id_user, id_receiver, updated, ctype, rtype, comment) 
 							VALUES({int:id_message}, {int:id_user}, {int:id_receiver}, {int:updated}, {int:ctype}, {string:rtype}, {string:comment})',
 						array('id_message' => $mid, 'id_user' => $uid, 'id_receiver' => $like_receiver, 'updated' => time(), 'ctype' => $content_type, 'rtype' => $like_type, 'comment' => $comment));
-						
-					if($like_receiver)
-						smf_db_query('UPDATE {db_prefix}members SET likes_received = likes_received + 1 WHERE id_member = {int:id_member}',
-							array('id_member' => $like_receiver));
-						
-					smf_db_query('UPDATE {db_prefix}members SET likes_given = likes_given + 1 WHERE id_member = {int:uid}',
-						array('uid' => $uid));
 						
 					$update_mode = $like_type;
 
@@ -448,32 +415,6 @@ class Ratings {
 								  'rtype' => $like_type),
 								$row['id_board'], $row['id_topic'], $mid, $like_receiver);
 					}
-
-					if(!isset($memberContext[$like_receiver]['meta']['rating_stats']))
-						self::initStats($memberContext[$like_receiver]);
-
-					/*
-					 * record the stats
-					 */
-					foreach($rtypes as $type) {
-						if(isset(self::$_ratings[$type])) {
-							if(self::$_ratings[$type]['points'] > 0) {
-								$memberContext[$like_receiver]['meta']['rating_stats']['points_positive'] += self::$_ratings[$type]['points'];
-								$memberContext[$like_receiver]['meta']['rating_stats']['count_positive']++;
-							}
-							elseif(self::$_ratings[$type]['points'] < 0) {
-								$memberContext[$like_receiver]['meta']['rating_stats']['points_negative'] -= self::$_ratings[$type]['points'];
-								$memberContext[$like_receiver]['meta']['rating_stats']['count_negative']++;
-							}
-
-							if(!isset($memberContext[$like_receiver]['meta']['rating_stats'][$type]))
-								$memberContext[$like_receiver]['meta']['rating_stats'][$type] = 0;
-
-							$memberContext[$like_receiver]['meta']['rating_stats'][$type]++;
-						}
-					}
-					self::validateStats($memberContext[$like_receiver]['meta']['rating_stats']);
-					updateMemberData($like_receiver, array('meta' => @serialize($memberContext[$like_receiver]['meta'])));
 					self::updatePool($total_point_cost, Ratings::UPDATE);
 				}
 				else
@@ -615,19 +556,22 @@ class Ratings {
 	}
 
 	/**
-	 * @param $profile	array member's profile (like in $memberContext)
+	 * @param $stats	array a rating stats array (either ratings_given or ratings_received)
 	 *
-	 * initialize the rating stats for a member profile.
+	 * return a default stats record with everything cleared
 	 */
-	public static function initStats(&$profile)
+	public static function initStats()
 	{
-		$profile['meta']['rating_stats'] = array(
+		$stats = array(
 			'points_positive' => 0,
 			'points_negative' => 0,
 			'count_positive' => 0,
 			'count_negative' => 0,
+			'count_global' => 0,
 			'rtypes' => array()
 		);
+
+		return $stats;
 	}
 
 	/**
@@ -648,5 +592,87 @@ class Ratings {
 			foreach($stats['rtypes'] as $key => &$type)
 				$stats['rtypes'][$key] = $stats['rtypes'][$key] >= 0 ? $stats['rtypes'][$key] : 0;
 		}
+	}
+
+	/**
+	 * @param $rtypes		array 	rating type IDs
+	 * @param $receiver		int		member id of the member who receives the rating
+	 * @param $mode			int		either RATING_RATE or RATING_REMOVE
+	 * @param $cid			int		the content id (message id). Not really needed, but passed for debugging and logging
+	 *
+	 * @return				bool	true = success
+	 *
+	 * $memberContext[$receiver] should be loaded and valid
+	 * The rating member is always the active one ($user_info)
+	 *
+	 * record the stats for a rating in $user_info['ratings_given'] and $memberContext[$receiver]['ratings_received']
+	 */
+	public static function recordStats($rtypes, $receiver, $mode, $cid)
+	{
+		global $user_info, $memberContext;
+		$ratings_count = 0;
+
+		if(!isset($memberContext[$receiver])) {
+			if(loadMemberData($receiver) !== false)
+				loadMemberContext($receiver);
+			else {
+				log_error('Invalid or unknown rating receiver: ' . $receiver, __FILE__, __LINE__);
+				return false;
+			}
+		}
+
+		if(empty($user_info['ratings_given']))
+			$user_info['ratings_given'] = self::initStats();
+		if(empty($memberContext[$receiver]['ratings_received']))
+			$memberContext[$receiver]['ratings_received'] = self::initStats();
+
+		// shortcuts
+		$rater = &$user_info['ratings_given'];
+		$rated = &$memberContext[$receiver]['ratings_received'];
+
+		foreach($rtypes as $type) {
+			if(isset(self::$_ratings[$type])) {
+				$ratings_count++;
+				$points = self::$_ratings[$type]['points'];
+
+				// a positive rating
+				if($points > 0) {
+					$rated['points_positive'] += ($mode === self::RATING_RATE ? $points : -$points);
+					$rated['count_positive'] += ($mode === self::RATING_RATE ? +1 : -1);
+
+					$rater['points_positive'] += ($mode === self::RATING_RATE ? $points : -$points);
+					$rater['count_positive'] += ($mode === self::RATING_RATE ? +1 : -1);
+				}
+				else if($points < 0) {
+					$rated['points_negative'] += ($mode === self::RATING_RATE ? abs($points) : -abs($points));
+					$rated['count_negative'] += ($mode === self::RATING_RATE ? +1 : -1);
+
+					$rater['points_negative'] += ($mode === self::RATING_RATE ? $points : -$points);
+					$rater['count_negative'] += ($mode === self::RATING_RATE ? +1 : -1);
+				}
+
+				if(!isset($rater['rtypes'][$type]))
+					$rater['rtypes'][$type] = 0;
+
+				if(!isset($rated['rtypes'][$type]))
+					$rated['rtypes'][$type] = 0;
+
+				$rater['rtypes'][$type] += ($mode == self::RATING_RATE ? 1 : -1);
+				$rated['rtypes'][$type] += ($mode == self::RATING_RATE ? 1 : -1);
+			}
+		}
+
+		if(0 === $ratings_count)
+			log_error('Invalid rating(s) for content ID ' . $cid . ' by member ' . $user_info['name'] . ', RTYPES = ' . implode(',', $rtypes), __FILE__, __LINE__);
+		else {
+			self::validateStats($rater);
+			self::validateStats($rated);
+
+			updateMemberData($user_info['id'], array('ratings_given' => @serialize($rater)));
+			updateMemberData($receiver, array('ratings_received' => @serialize($rated)));
+		}
+
+		// only return success if we had at least one valid rating
+		return $ratings_count > 0 ? true : false;
 	}
 }

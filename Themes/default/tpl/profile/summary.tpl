@@ -149,6 +149,14 @@
                         <pre style="font-size: 10px;">
                             {$C.member.meta|print_r:true}
                         </pre>
+                        Ratings given:
+                        <pre style="font-size: 10px;">
+                            {$C.member.ratings_given|print_r:true}
+                        </pre>
+                        Ratings received:
+                        <pre style="font-size: 10px;">
+                            {$C.member.ratings_received|print_r:true}
+                        </pre>
                     </div>
                 {/if}
 			</div>

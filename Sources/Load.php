@@ -426,11 +426,11 @@ function loadUserSettings()
 		'ignoreboards' => !empty($user_settings['ignore_boards']) && !empty($modSettings['allow_ignore_boards']) ? explode(',', $user_settings['ignore_boards']) : array(),
 		'ignoreusers' => !empty($user_settings['pm_ignore_list']) ? explode(',', $user_settings['pm_ignore_list']) : array(),
 		'warning' => isset($user_settings['warning']) ? $user_settings['warning'] : 0,
-		'likesgiven' => isset($user_settings['likes_given']) ? $user_settings['likes_given'] : 0,
-		'likesreceived' => isset($user_settings['likes_received']) ? $user_settings['likes_received'] : 0,
 		'permissions' => array(),
 		'act_optout' => isset($user_settings['act_optout']) ? $user_settings['act_optout'] : '',
 		'notify_optout' => isset($user_settings['notify_optout']) ? $user_settings['notify_optout'] : '',
+		'ratings_given' => !empty($user_settings['ratings_given']) ? @unserialize($user_settings['ratings_given']) : array(),
+		'ratings_received' => !empty($user_settings['ratings_received']) ? @unserialize($user_settings['ratings_received']) : array(),
 		'meta' => !empty($user_settings['meta']) ? @unserialize($user_settings['meta']) : array()
 	);
 	$user_info['smf_sidebar_disabled'] = 0;
@@ -958,8 +958,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal', $do_meta = fa
 			mem.birthdate, mem.member_ip, mem.member_ip2, mem.posts, mem.last_login,
 			mem.id_post_group, mem.lngfile, mem.id_group, mem.time_offset, mem.show_online,
 			mem.buddy_list, IFNULL(mg.group_name, {string:blank_string}) AS member_group,
-			mem.likes_received AS liked, mem.likes_given AS likesgiven,
-			IFNULL(pg.group_name, {string:blank_string}) AS post_group, mem.is_activated, mem.warning,
+			IFNULL(pg.group_name, {string:blank_string}) AS post_group, mem.is_activated, mem.warning, mem.ratings_given, mem.ratings_received,
 			CASE WHEN mem.id_group = 0 OR mg.stars = {string:blank_string} THEN pg.stars ELSE mg.stars END AS stars, mem.usertitle' . ($do_meta ? ', mem.meta' : '');
 		$select_tables = '
 			LEFT JOIN {db_prefix}log_online AS lo ON (lo.id_member = mem.id_member)
@@ -979,7 +978,7 @@ function loadMemberData($users, $is_name = false, $set = 'normal', $do_meta = fa
 			mem.time_format, mem.secret_question, mem.is_activated, mem.additional_groups, mem.smiley_set, mem.show_online,
 			mem.total_time_logged_in, mem.id_post_group, mem.notify_announcements, mem.notify_regularity, mem.notify_send_body,
 			mem.notify_types, lo.url, IFNULL(mg.group_name, {string:blank_string}) AS member_group,
-			likes_received AS liked, likes_given AS likesgiven, IFNULL(pg.group_name, {string:blank_string}) AS post_group, mem.ignore_boards, mem.warning,
+			IFNULL(pg.group_name, {string:blank_string}) AS post_group, mem.ignore_boards, mem.warning, mem.ratings_given, mem.ratings_received,
 			CASE WHEN mem.id_group = 0 OR mg.stars = {string:blank_string} THEN pg.stars ELSE mg.stars END AS stars, mem.password_salt, mem.pm_prefs';
 		$select_tables = '
 			LEFT JOIN {db_prefix}log_online AS lo ON (lo.id_member = mem.id_member)
@@ -1185,9 +1184,9 @@ function loadMemberContext($user, $display_custom_fields = false)
 		'warning' => $profile['warning'],
 		'warning_status' => !empty($modSettings['warning_mute']) && $modSettings['warning_mute'] <= $profile['warning'] ? 'mute' : (!empty($modSettings['warning_moderate']) && $modSettings['warning_moderate'] <= $profile['warning'] ? 'moderate' : (!empty($modSettings['warning_watch']) && $modSettings['warning_watch'] <= $profile['warning'] ? 'watch' : (''))),
 		'local_time' => timeformat_static(time() + ($profile['time_offset'] - $user_info['time_offset']) * 3600, false),
-		'liked' => isset($profile['liked']) ? $profile['liked'] : 0,
-		'likesgiven' => isset($profile['likesgiven']) ? $profile['likesgiven'] : 0,
 		'notify_optout' => isset($profile['notify_optout']) ? $profile['notify_optout'] : '',
+		'ratings_given' => isset($profile['ratings_given']) ? @unserialize($profile['ratings_given']) : array(),
+		'ratings_received' => isset($profile['ratings_received']) ? @unserialize($profile['ratings_received']) : array(),
 		'meta' => isset($profile['meta']) ? @unserialize($profile['meta']) : array()
 	);
 	

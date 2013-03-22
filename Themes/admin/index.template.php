@@ -568,7 +568,6 @@ function template_sidebar_content_index()
 				 <ul class="reset" style="line-height:110%;">
 					<li class="greeting"><a href="',URL::user($context['user']['id'], $context['user']['name']),'">', $context['user']['name'], '</a></li>
 					<li class="smalltext">',$user_info['posts'],' ',$txt['posts'],'<li>
-					<li class="smalltext">',$user_info['likesreceived'],' ',$txt['likes'],'<li>
 					<li class="smalltext"><span class="smalltext floatright"><a href="',$scripturl,'?action=logout;',$context['session_var'],'=',$context['session_id'], '">Sign out</a></span><li>
 				 </ul>
 				 <div class="clear">
