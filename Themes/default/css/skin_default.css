@@ -2469,7 +2469,7 @@ span.ratings .title {
 	font-weight:bold;
 	font-size:13px;
 }
-span.ratings .number, span.ratings .number_inactive {
+span.ratings .number, span.ratings .number_inactive, span.rating_count {
 	background:orange;
 	border-radius:2px;
 	padding:1px 4px;
@@ -2477,8 +2477,22 @@ span.ratings .number, span.ratings .number_inactive {
 	color:white;
 	cursor:pointer;
 }
-span.ratings .number_inactive {
+span.ratings .number_inactive, span.rating_count {
 	cursor: default;
+}
+span.rating_x_times {
+	background: #e4eaee;
+	border-radius:2px;
+}
+span.rating_stats, div.rating_stats {
+	border:1px solid #ccc;
+	border-radius:2px;
+}
+span.ratings_positive {
+	color:green;
+}
+span.ratings_negative {
+	color:red;
 }
 div.ratings.cost {
 	color:blue;

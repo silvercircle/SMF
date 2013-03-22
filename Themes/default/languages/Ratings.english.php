@@ -13,6 +13,7 @@ $txt['unlike_label'] = "Remove my rating";
 $txt['like_profile_report'] = '%s has <a href="%s">rated</a> %d posts and <a href="%s">received %d ratings</a> on <a href="%s">%d posts</a>.';
 $txt['no_like_for_guests'] = 'You must be logged in to use this function';
 $txt['unknown_rating_type'] = 'Unknown or invalid rating type submitted.';
+$txt['no_valid_rating_type'] = 'At least one valid rating type must be submitted';
 $txt['like_remove_ok'] = 'Removing is ok';
 $txt['cannot_like_own'] = 'You cannot like your own post';
 $txt['like_no_permission'] = 'You have no permission to use the like system';
@@ -29,3 +30,7 @@ $txt['ratingwidget_error'] = 'Select the rating you want to submit and click the
 $txt['rating_attach_comment'] = 'Comment (optional, max. 100 characters)';
 $txt['rating_not_enough_points'] = 'You do not have enough rating point for this.';
 $txt['rating_type_not_allowed'] = 'One or more of the submitted rating types are not allowed in this board';
+$txt['ratings_overall_received'] = 'Overall ratings received:';
+$txt['ratings_positive_negative_count'] = 'Positive/Negative ratings:';
+$txt['ratings_neutral_count'] = 'Neutral ratings:';
+$txt['ratings_points'] = 'Points received:';

@@ -89,6 +89,9 @@
     {if !empty($message.member.blurb)}
       <li class="blurb">{$message.member.blurb}</li>
     {/if}
+    {if !empty($message.member.ratings_received.count_global)}
+      foo
+    {/if}
     {if !empty($message.member.custom_fields)}
       {$shown = false}
       {foreach from=$message.member.custom_fields item=custom}

@@ -89,6 +89,15 @@
     {if !empty($message.member.blurb)}
       <li class="blurb">{$message.member.blurb}</li>
     {/if}
+    {if !empty($M.karmaMode) and !empty($message.member.ratings_received.count_global)}
+      <li class="rating_stats" style="margin:5px 0;" id="stats_detailed_{$ID}">
+        <div style="position:relative;">
+        <span class="rating_stats orange_container" data-uid="{$message.member.id}" data-mid="{$ID}">
+          <strong>{$message.member.ratings_received.count_global}</strong> / <span class="ratings_positive">+<strong>{$message.member.ratings_received.count_positive}</strong></span> / <span class="ratings_negative">-<strong>{$message.member.ratings_received.count_negative}</strong></span>
+        </span>
+        </div>
+      </li>
+    {/if}
     {if !empty($message.member.custom_fields)}
       {$shown = false}
       {foreach from=$message.member.custom_fields item=custom}
@@ -118,7 +127,7 @@
       <li class="warning">{($C.can_issue_warning) ? ('<a href="'|cat:$SCRIPTURL|cat:'?action=profile;area=issuewarning;u='|cat:$message.member.id|cat:'">') : ''}<img src="{$S.images_url }}/warning_{$message.member.warning_status}.gif" alt="{$message.member.warning_status_desc}" />{($C.can_issue_warning) ? '</a>' : ''}<span class="warn_{$message.member.warning_status}">{$message.member.warning_status_desc1}</span></li>
     {/if}
     {if !empty($M.onlineEnable) and $message.member.is_guest == 0 and $message.member.online.is_online}
-      <li><br>{($C.can_send_pm) ? "<a href=\"{$message.member.online.href}\">" : '' }{$message.member.online.text}{($C.can_send_pm) ? '</a>' : ''}</li>
+      <li>{($C.can_send_pm) ? "<a href=\"{$message.member.online.href}\">" : '' }{$message.member.online.text}{($C.can_send_pm) ? '</a>' : ''}</li>
     {/if}
   {elseif $message.member.allow_show_email}
     <li class="email"><a href="{$SCRIPTURL}?action=emailuser;sa=email;msg={$ID}" rel="nofollow">{$T.email}</a></li>

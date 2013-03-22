@@ -113,6 +113,11 @@
       setDimmed(0);
     } 
   } );
+  $(document).ready(function() {
+      $('span.rating_stats').click(function() {
+          sendRequest('action=like;sa=stats_detailed;uid=' + $(this).attr('data-uid') + ';mid=' + $(this).attr('data-mid'), null);
+      } );
+  } );
   var topic_id = {$C.current_topic};
 // ]]>
 </script>

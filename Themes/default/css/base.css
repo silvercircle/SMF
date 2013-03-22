@@ -401,7 +401,6 @@ div.poster.std {
 	text-align: center;
 	margin:0 0 10px 0;
 	padding:0 5px;
-	overflow:hidden;
 }
 div.poster.comment {
 	margin-left:65px;
@@ -1225,8 +1224,14 @@ ol.category > li > div.info h3, h3.subcatlink {
 ol.category > li > div.info.subcat {
 	padding-right:0;
 }
-
-
+span.rating_stats, div.rating_stats {
+	cursor: pointer;
+	padding: 2px 4px;
+}
+span.rating_x_times {
+	padding:1px 2px;
+	margin:1px;
+}
 /* CSS sprites */
 /* clip:rect(top, right, bottom, left) (yes, weird, but that's how it is...) */
 img.clipsrc {

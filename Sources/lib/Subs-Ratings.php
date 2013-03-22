@@ -33,6 +33,7 @@ class Ratings {
 	const				UPDATE = 2;
 	const				RETURN_POINTS = 4;
 	const				POOL_REFRESH_INTERVAL = 86400;
+	const				STATS_REFRESH_INTERVAL = 86400;
 	const				RATING_RATE	= 1;
 	const				RATING_REMOVE = -1;
 
@@ -267,6 +268,8 @@ class Ratings {
 		$pool_avail = self::getPool();
 
 		if((int)$mid > 0) {
+			$rtypes = array();
+
 			$uid = $user_info['id'];
 			$remove_it = isset($_REQUEST['remove']) ? true : false;
 			$repair = isset($_REQUEST['repair']) && $user_info['is_admin'] ? true : false;
@@ -275,14 +278,19 @@ class Ratings {
 			$like_type = ((isset($_REQUEST['r']) && (int)$_REQUEST['r'] > 0) ? $_REQUEST['r'] : '1');
 			$comment = isset($_REQUEST['comment']) ? strip_tags($_REQUEST['comment']) : '';
 
-			$rtypes = explode(',', $like_type);
-			foreach($rtypes as $rtype) {
+			$rtypes_submitted = explode(',', $like_type);
+			foreach($rtypes_submitted as $rtype) {
 				if(!isset($modSettings['ratings'][$rtype]))
 					AjaxErrorMsg($txt['unknown_rating_type']);
+
+				if($modSettings['ratings'][$rtype]['enabled'])		// only enabled types can be used
+					$rtypes[] = (int)$rtype;
 			}
 			if($user_info['is_guest'])
 				AjaxErrorMsg($txt['no_like_for_guests']);
 
+			if(empty($rtypes))
+				AjaxErrorMsg($txt['no_valid_rating_type']);
 			/*
 			 * check whether we have enough points available
 			 */
@@ -595,7 +603,61 @@ class Ratings {
 	}
 
 	/**
-	 * @param $rtypes		array 	rating type IDs
+	 * @param $stats		array reference to a stats array (either ratings_given or ratings_received)
+	 *
+	 * recalculate points and rating counts.
+	 */
+	public static function recalcStats(&$stats)
+	{
+		global $context;
+
+		$stats['points_positive'] = $stats['points_negative'] = $stats['count_positive'] = $stats['count_negative'] = $stats['count_global'] = 0;
+		$stats['last_refresh'] = $context['time_now'];
+
+		if(!empty($stats['rtypes'])) {
+			foreach($stats['rtypes'] as $type => $count) {
+				if($count > 0 && isset(self::$_ratings[$type]) && !empty(self::$_ratings[$type]['enabled'])) {
+					$points = self::$_ratings[$type]['points'];
+					if($points > 0) {
+						$stats['count_positive']++;
+						$stats['points_positive'] += ($points * $count);
+					}
+					else if($points < 0) {
+						$stats['count_negative']++;
+						$stats['points_negative'] += ($points * $count);
+					}
+					$stats['count_global']++;
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param $id_member 		int 	the member id
+	 * @param string $mode		string  which stats array to update
+	 * @param bool $force       boolean force a refresh when true
+	 *
+	 * refresh a member's rating stats (either ratings_received or ratings_given)
+	 * it uses the $stats['rtypes'] array to recalculate the points and rating counts.
+	 */
+	public static function refreshStats($id_member, $mode = 'ratings_received', $force = false)
+	{
+		global $context, $memberContext;
+
+		if(!isset($memberContext[$id_member]))
+			return;
+
+		$stats = &$memberContext[$id_member][$mode];
+
+		if($force || !isset($stats['last_refresh']) || $context['time_now'] - $stats['last_refresh'] > self::STATS_REFRESH_INTERVAL) {
+			self::recalcStats($stats);
+			updateMemberData($id_member, array($mode => @serialize($stats)));
+		}
+	}
+	/**
+	 * @param $rtypes		array 	rating type IDs. Note that this function does NOT check permissions
+	 * 								or enabled state for each of the rating types. The caller must make sure
+	 * 								to pass only allowed rating types.
 	 * @param $receiver		int		member id of the member who receives the rating
 	 * @param $mode			int		either RATING_RATE or RATING_REMOVE
 	 * @param $cid			int		the content id (message id). Not really needed, but passed for debugging and logging
@@ -635,22 +697,6 @@ class Ratings {
 				$ratings_count++;
 				$points = self::$_ratings[$type]['points'];
 
-				// a positive rating
-				if($points > 0) {
-					$rated['points_positive'] += ($mode === self::RATING_RATE ? $points : -$points);
-					$rated['count_positive'] += ($mode === self::RATING_RATE ? +1 : -1);
-
-					$rater['points_positive'] += ($mode === self::RATING_RATE ? $points : -$points);
-					$rater['count_positive'] += ($mode === self::RATING_RATE ? +1 : -1);
-				}
-				else if($points < 0) {
-					$rated['points_negative'] += ($mode === self::RATING_RATE ? abs($points) : -abs($points));
-					$rated['count_negative'] += ($mode === self::RATING_RATE ? +1 : -1);
-
-					$rater['points_negative'] += ($mode === self::RATING_RATE ? $points : -$points);
-					$rater['count_negative'] += ($mode === self::RATING_RATE ? +1 : -1);
-				}
-
 				if(!isset($rater['rtypes'][$type]))
 					$rater['rtypes'][$type] = 0;
 
@@ -659,6 +705,8 @@ class Ratings {
 
 				$rater['rtypes'][$type] += ($mode == self::RATING_RATE ? 1 : -1);
 				$rated['rtypes'][$type] += ($mode == self::RATING_RATE ? 1 : -1);
+				self::recalcStats($rater);
+				self::recalcStats($rated);
 			}
 		}
 

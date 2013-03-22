@@ -249,7 +249,7 @@
       }
       Eos_Alert('Error', window._data['error_text']);
     }
-    ]]>
+    --> ]]>
   </handler>
 </document>
 {/function}

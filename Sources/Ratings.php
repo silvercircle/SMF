@@ -44,6 +44,10 @@ function LikeDispatch()
 		GetRatingWidget();
 		return;
 	}
+	else if($action === 'stats_detailed') {
+		DetailedStatsForUser();
+		return;
+	}
 
 	$ctype = isset($_REQUEST['ctype']) ? $_REQUEST['ctype'] : 1;		// default to content type = 1 (post)
 	$mid = isset($_REQUEST['m']) ? (int)$_REQUEST['m'] : 0;
@@ -132,7 +136,7 @@ function GetRatingWidget()
 		foreach($modSettings['ratings'] as $key => $rating) {
 			if($rating['unique'] != $uniqueness)
 				continue;
-			if(Ratings::isAllowed($key, $id_board)) {
+			if(!empty($rating['enabled']) && Ratings::isAllowed($key, $id_board)) {
 				$context['result_count']++;
 				$cost = isset($rating['cost']) ? $rating['cost'] : 0;
 				$context['ratings'][] = array(
@@ -151,6 +155,40 @@ function GetRatingWidget()
 	$context['content_id'] = $content_id;
 	$context['json_data'] = htmlspecialchars(json_encode(array('id' => $content_id, 'error_text' => $txt['ratingwidget_error'])));
 	$context['widget_help_href'] = URL::parse('?action=helpadmin;help=ratingwidget_help');
+}
+
+/**
+ * output a more detailed overview for a member's rating stats
+ */
+function DetailedStatsForUser()
+{
+	global $memberContext, $context, $modSettings;
+
+	$uid = isset($_REQUEST['uid']) ? (int)$_REQUEST['uid'] : 0;
+	$mid = isset($_REQUEST['mid']) ? (int)$_REQUEST['mid'] : 0;
+
+	if($mid > 0 && $uid > 0 && loadMemberData($uid) !== false) {
+		$ratings = &$modSettings['ratings'];
+
+		loadMemberContext($uid);
+		if(isset($memberContext[$uid])) {
+			Ratings::refreshStats($uid);
+			EoS_Smarty::loadTemplate('ratings/stats_output_detailed');
+			$context['rating_stats'] = $memberContext[$uid]['ratings_received'];
+
+			foreach($context['rating_stats']['rtypes'] as $type => $count) {
+				if($count > 0 && isset($ratings[$type]) && $ratings[$type]['enabled']) {
+					$context['rating_labels'][] = array(
+						'count' => $count,
+						'label' => $ratings[$type]['text']
+					);
+				}
+			}
+		}
+		$context['json_data'] = htmlspecialchars(json_encode(array('mid' => $mid)));
+	}
+	else
+		AjaxErrorMsg();
 }
 
 /**
