@@ -1,5 +1,5 @@
-{call collapser id='gitfeed_panel' title='Latest commits' widgetstyle='framed_region cleantop tinypadding'}
-<div class="blue_container norounded gradient_darken_down nopadding">
+{call collapser id='gitfeed_panel' title='Latest commits' widgetstyle='sidebar_section_container cleantop tinypadding' headerclass="sidebar_section_header"}
+<div class="nopadding">
   {if isset($C.gitfeed_global)}
     {if $C.gitfeed_global.failed == true}
         <div class="smalltext smallpadding">

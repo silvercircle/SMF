@@ -762,7 +762,7 @@ div.boardlisting ul li.category {
 }
 
 /* title bars */
-.cat_bar2 img, .cat_bar img, .cContainer_header img {
+.cat_bar2 img, .cat_bar img, .cContainer_header img, .sidebar_section_header img {
 	padding:0;
 	margin:5px 2px;
 }
@@ -770,7 +770,7 @@ div.boardlisting ul li.category {
 	float:left;
 	height:16px;
 }
-.cContainer_header, .cat_bar2, .cat_bar {
+.cContainer_header, .cat_bar2, .cat_bar, .sidebar_section_header {
 	margin-bottom: 0;
 	height:25px !important;
 	line-height:25px;

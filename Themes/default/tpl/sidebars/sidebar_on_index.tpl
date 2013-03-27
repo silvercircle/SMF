@@ -12,16 +12,16 @@
  *
  * side bar template for the board index
  *}
-{$widgetstyle = 'framed_region cleantop tinypadding'}
+{$widgetstyle = 'sidebar_section_container cleantop tinypadding'}
 {$SUPPORT->displayHook('sidebar_top')}
 <script>
 // <![CDATA[
   sidebar_content_loaded = 1;
 // ]]>
 </script>
-{call collapser id='user_panel' title='User panel' widgetstyle='framed_region cleantop tinypadding'}
+{call collapser id='user_panel' title='User panel' widgetstyle=$widgetstyle headerclass='sidebar_section_header'}
 {* If the user is logged in, display stuff like their name, new messages, etc. *}
-<div class="blue_container norounded gradient_darken_down nopadding">
+<div class="nopadding">
 {if $C.user.is_logged}
   <div class="smallpadding">
   <div class="smalltext user">
@@ -102,8 +102,8 @@
 {hook name="sidebar_below_userblock"}
 {* Show statistical style information... *}
 {if $S.show_stats_index and !empty($C.show_stats)}
-  {call collapser id='stats_panel' title=$T.forum_stats widgetstyle=$widgetstyle}
-  <div class="blue_container norounded smallpadding gradient_darken_down">
+  {call collapser id='stats_panel' title=$T.forum_stats widgetstyle=$widgetstyle headerclass="sidebar_section_header"}
+  <div class="smallpadding">
     <div class="nopadding smalltext">
       {if !empty($C.visible_team_members)}
         <h1 class="bigheader secondary">{$T.team_members_online}</h1>
@@ -149,6 +149,7 @@
           {($C.show_stats) ? "<a href=\"{$SUPPORT->url_action($SCRIPTURL|cat:'?action=stats')}\">{$T.more_stats}</a>" : ''}
         </div>
       </div>
+      <br>
       <h1 class="bigheader secondary">{$T.stats_header_online}</h1>
       {$T.who_summary_short|sprintf:$C.num_guests:$C.num_users_online}
     </div>
@@ -159,8 +160,8 @@
 {/if}
 {* social panel in the side bar *}
 {if $C.user.is_guest or ((empty($O.use_share_bar)) ? 1 : !$O.use_share_bar)}
-  {call collapser id='social_panel' title='Socialize' widgetstyle=$widgetstyle}
-  <div class="blue_container norounded smallpadding gradient_darken_down">
+  {call collapser id='social_panel' title='Socialize' widgetstyle=$widgetstyle headerclass="sidebar_section_header"}
+  <div class="smallpadding">
     <div id="socialshareprivacy"></div>
     <div class="clear"></div>
   </div>
@@ -169,8 +170,8 @@
 {/if}
 {* This is the "Recent Posts" bar. *}
 {if !empty($S.number_recent_posts) and (!empty($C.latest_posts) or !empty($C.latest_post))}
-  {call collapser id='recent_panel' title='<a href="'|cat:$SUPPORT->url_parse($SCRIPTURL|cat:'?action=recent')|cat:'">'|cat:$T.recent_posts|cat:'</a>' widgetstyle=$widgetstyle}
-  <div class="blue_container norounded nopadding gradient_darken_down">
+  {call collapser id='recent_panel' title='<a href="'|cat:$SUPPORT->url_parse($SCRIPTURL|cat:'?action=recent')|cat:'">'|cat:$T.recent_posts|cat:'</a>' widgetstyle=$widgetstyle headerclass="sidebar_section_header"}
+  <div class="nopadding">
     <div class="smalltext" id="recent_posts_content" style="line-height:120%;">
       <div class="entry-title" style="display: none;">{$C.forum_name_html_safe} - {$T.recent_posts}</div>
       <div class="entry-content" style="display: none;">
@@ -200,17 +201,17 @@
 {* Show information about events, birthdays, and holidays on the calendar. *}
 {if $C.show_calendar}
   {$title = ($C.calendar_only_today) ? $T.calendar_today : ($T.calendar|cat:' (Next '|cat:$M.cal_days_for_index|cat:' days)')}
-  {call collapser id='cal_panel' title='<a href="'|cat:$SUPPORT->url_action($SCRIPTURL|cat:'?action=calendar')|cat:'">'|cat:$title|cat:'</a>' widgetstyle=$widgetstyle}
-  <div class="blue_container norounded smallpadding gradient_darken_down">
+  {call collapser id='cal_panel' title='<a href="'|cat:$SUPPORT->url_action($SCRIPTURL|cat:'?action=calendar')|cat:'">'|cat:$title|cat:'</a>' widgetstyle=$widgetstyle headerclass="sidebar_section_header"}
+  <div class="smallpadding">
     <div class="smalltext">
     {* Holidays like "Christmas", "Chanukah", and "We Love [Unknown] Day" :P. *}
     {if !empty($C.calendar_holidays)}
-      <div class="holiday">{$T.calendar_prompt}</div>{", "|implode:$C.calendar_holidays}<br>
+      <h1 class="bigheader secondary">{$T.calendar_prompt}</h1>{", "|implode:$C.calendar_holidays}<br>
       <div class="cContainer_end"></div>
     {/if}
     {* People's birthdays. Like mine. And yours, I guess. Kidding. *}
     {if !empty($C.calendar_birthdays)}
-      <div class="birthday">{($C.calendar_only_today) ? $T.birthdays : $T.birthdays_upcoming}</div>
+      <h1 class="bigheader secondary">{($C.calendar_only_today) ? $T.birthdays : $T.birthdays_upcoming}</h1>
       {foreach from=$C.calendar_birthdays item=member}
         <a href="{$SUPPORT->url_user($member.id, $member.name)}">{($member.is_today) ? '<strong>' : ''}{$member.name}{($member.is_today) ? '</strong>' : ''}{(!empty($member.age)) ? (' ('|cat:$member.age|cat:')') : ''}</a>{($member.is_last) ? '<br>' : ', '}
       {/foreach}

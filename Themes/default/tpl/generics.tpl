@@ -1,6 +1,6 @@
 {function collapser}
 {$state = $id|array_search:$C.collapsed_containers}
-{$headerclass = 'cContainer_header'}
+{$headerclass = (isset($headerclass)) ? $headerclass : 'cContainer_header'}
 {$headerstyle = ''}
 <div class="{$headerclass}" {$headerstyle}>
   <div class="csrcwrapper16px floatright"><img onclick="cContainer($(this));" class="cContainer_c clipsrc {($state) ? '_expand' : '_collapse'}" id="{$id}" src="{$S.images_url}/clipsrc.png" alt="*" /></div>

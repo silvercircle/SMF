@@ -112,7 +112,7 @@
     <p class="information"{($C.draft_locked) ? '' : ' style="display: none"'} id="lock_warning">
       {$T.topic_locked_no_reply}
     </p>
-    <dl id="post_header">
+    <dl id="post_header" style="line-height:24px;">
     {if isset($C.name) and isset($C.email)}
       <dt>
         <span {(isset($C.post_error.long_name) or isset($C.post_error.no_name) or isset($C.post_error.bad_name)) ? ' class="error"' : ''} id="caption_guestname">{$T.name}:</span>
