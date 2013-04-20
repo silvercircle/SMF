@@ -2075,10 +2075,11 @@ function template_prefix_settings()
 		<table class="table_grid">
 		 <thead>
 		  <tr>
-			<th class="red_container nowrap">',$txt['prefix_name'],'</th>
-			<th class="red_container nowrap"></th>
-			<th class="red_container centertext" style="width:100%;">',$txt['prefix_boards'],'</th>
-			<th class="red_container centertext nowrap" style="width:100%;">',$txt['prefix_groups'],'</th>
+			<th class="glass first_th nowrap">',$txt['prefix_name'],'</th>
+			<th class="glass nowrap"></th>
+			<th class="glass centertext nowrap">',$txt['prefix_boards'],'</th>
+			<th class="glass centertext nowrap">',$txt['prefix_groups'],'</th>
+			<th class="glass centertext last_th">CSS class</th>
 		  </tr>
 		 </thead>
 		 <tbody>';
@@ -2086,23 +2087,25 @@ function template_prefix_settings()
 	echo '<tr>
 		   <td>
 			<input type="hidden" name="id_', $prefix['id_prefix'], '" value="1" />
-			<input type="text" size="80" value="',$prefix['name'],'" name="name_',$prefix['id_prefix'],'" />
+			<input type="text" size="60" value="',$prefix['name'],'" name="name_',$prefix['id_prefix'],'" />
 		   </td>
-		   <td class="nowrap">',$prefix['preview'],'</td>
+		   <td class="nowrap" style="width:100%;">',$prefix['preview'],'</td>
 		   <td style="text-align:right;"><input type="text" size="25" value="',$prefix['boards'],'" name="boards_',$prefix['id_prefix'],'" /></td>
 		   <td style="text-align:right;"><input type="text" size="25" value="',$prefix['groups'],'" name="groups_',$prefix['id_prefix'],'" /></td>
+		   <td style="text-align:right;"><input type="text" size="10" value="',$prefix['css'],'" name="css_',$prefix['id_prefix'],'" /></td>
 	      </tr>';
 	}
 	for($i = 0; $i < 5; $i++) {
 	echo '<tr>
 	       <td>
 			<input type="hidden" name="id_', $i, '" value="1" />
-			<input type="text" size="80" name="name_new_',$i,'" />
+			<input type="text" size="60" name="name_new_',$i,'" />
 		   </td>
 		   <td>
 		   </td>
 		   <td style="text-align:right;"><input type="text" size="25" name="boards_new_',$i,'" /></td>
 		   <td style="text-align:right;"><input type="text" size="25" name="groups_new_',$i,'" /></td>
+		   <td style="text-align:right;"><input type="text" size="10" name="css_new_',$i,'" /></td>
 	      </tr>';
 	}
 	

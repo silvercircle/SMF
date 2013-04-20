@@ -439,8 +439,8 @@ function ModifyPrefixSettings()
 					$boards = normalizeCommaDelimitedList($_POST['boards_'.$id]);
 					$groups = normalizeCommaDelimitedList($_POST['groups_'.$id]);
 					smf_db_query( '
-						UPDATE {db_prefix}prefixes SET name = {string:name}, boards = {string:boards}, groups = {string:groups} WHERE id_prefix = {int:id_prefix}',
-						array('id_prefix' => $id, 'name' => htmlspecialchars($_POST['name_'.$id]),
+						UPDATE {db_prefix}prefixes SET name = {string:name}, boards = {string:boards}, groups = {string:groups}, css = {string:css} WHERE id_prefix = {int:id_prefix}',
+						array('id_prefix' => $id, 'name' => htmlspecialchars($_POST['name_'.$id]), 'css' => htmlspecialchars($_POST['css_' . $id]),
 						'boards' => $boards, 'groups' => $groups));
 				}
 			}
@@ -457,8 +457,8 @@ function ModifyPrefixSettings()
 				$groups = normalizeCommaDelimitedList($_POST['groups_new_'.$id]);
 				smf_db_query( '
 					INSERT INTO {db_prefix}prefixes (name, boards, groups) VALUES({string:name},
-					{string:boards}, {string:groups})',
-					array('name' => htmlentities($_POST['name_new_'.$i]), 'boards' => $boards, 'groups' => $groups));
+					{string:boards}, {string:groups}, {string:css})',
+					array('name' => htmlentities($_POST['name_new_'.$i]), 'boards' => $boards, 'groups' => $groups, 'css' => htmlspecialchars($_POST['css_new_'.$id])));
 			}
 		}
 		redirectexit('action=admin;area=postsettings;sa=prefixes');

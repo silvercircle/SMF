@@ -370,7 +370,7 @@ function MessageIndex()
 				mf.poster_name AS first_member_name, mf.id_member AS first_id_member,
 				IFNULL(memf.real_name, mf.poster_name) AS first_display_name,
 				ml.smileys_enabled AS last_smileys, mf.smileys_enabled AS first_smileys,
-				p.name AS prefix_name
+				p.name AS prefix_name, p.css AS prefix_class
 			FROM {db_prefix}topics AS t	
 				INNER JOIN {db_prefix}messages AS ml ON (ml.id_msg = t.id_last_msg)
 				INNER JOIN {db_prefix}messages AS mf ON (mf.id_msg = t.id_first_msg)
@@ -439,7 +439,6 @@ function MessageIndex()
 			$l_post_mem_href = !empty($row['last_id_member']) ? URL::user($row['last_id_member'], $row['last_display_name'] ) : '';
 			$l_post_msg_href = URL::topic($row['id_topic'], $row['last_subject'], $user_info['is_guest'] ? (!empty($options['view_newest_first']) ? 0 : ((int) (($row['num_replies']) / $context['pageindex_multiplier'])) * $context['pageindex_multiplier']) : 0, $user_info['is_guest'] ? true : false, $user_info['is_guest'] ? '' : ('.msg' . $row['id_last_msg']), $user_info['is_guest'] ? ('#msg' . $row['id_last_msg']) : '#new');
 
-			list($prefix_name, $prefix_class) = explode('||', $row['prefix_name'] . '||');
 			$context['topics'][$row['id_topic']] = array(
 				'id' => $row['id_topic'],
 				'first_post' => array(
@@ -476,7 +475,7 @@ function MessageIndex()
 					'href' => $l_post_msg_href,
 					'link' => '<a href="' . $l_post_msg_href . ($row['num_replies'] == 0 ? '' : ' rel="nofollow"') . '>' . $row['last_subject'] . '</a>'
 				),
-				'prefix' => $prefix_name ? '<a href="'. URL::parse('?board=' . $board . ';prefix=' . $row['id_prefix']) . '" class="prefix' . (!empty($prefix_class) ? ' ' . $prefix_class : '') . '">'.(html_entity_decode($prefix_name) . '</a>') : '',
+				'prefix' => !empty($row['prefix_name']) ? '<a href="'. URL::parse('?board=' . $board . ';prefix=' . $row['id_prefix']) . '" class="prefix' . (!empty($row['prefix_class']) ? ' ' . $row['prefix_class'] : '') . '">'.(html_entity_decode($row['prefix_name']) . '</a>') : '',
 				'is_sticky' => !empty($modSettings['enableStickyTopics']) && !empty($row['is_sticky']),
 				'is_locked' => !empty($row['locked']),
 				'is_poll' => $modSettings['pollMode'] == '1' && $row['id_poll'] > 0,

@@ -480,7 +480,8 @@ class EoS_QueryString {
 				if(!empty($context['additional_uids_to_load'])) {
 					foreach($matches as $match) {
 						loadMemberContext($match[2]);
-						$buffer = str_replace($match[0], isset($memberContext[$match[2]]) && !empty($memberContext[$match[2]]['avatar']['image']) ? '<div class="floatleft quoteavatar"><span class="medium_avatar"><a class="mcard" data-mid="' . $match[2] . '" href="' . URL::user($match[2], $memberContext[$match[2]]['name']) . '">' . $memberContext[$match[2]]['avatar']['image'] . '</a></span></div><div class="quotewrapper indent">' : '', $buffer);
+						$buffer = str_replace($match[0], isset($memberContext[$match[2]]) && !empty($memberContext[$match[2]]['avatar']['image']) ? '<div class="floatleft quoteavatar"><span class="medium_avatar"><a class="mcard" data-mid="' . $match[2] . '" href="' . URL::user($match[2], $memberContext[$match[2]]['name']) . '">' . $memberContext[$match[2]]['avatar']['image'] . '</a></span></div><div class="quotewrapper indent">' : '<div class="quotewrapper">', $buffer);
+						//$buffer = str_replace($match[0], isset($memberContext[$match[2]]) && !empty($memberContext[$match[2]]['avatar']['image']) ? 'foo' : 'bar', $buffer);
 					}
 				}
 			}
