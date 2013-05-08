@@ -13,8 +13,9 @@
  */
 
 // todo: make translatable
-
 // this should always be there
+// todo: make configurable (add a admin section where the user can specify his GIT repository)
+
 if (!defined('EOSA'))
 	die('No access');
 
@@ -97,7 +98,9 @@ class GitFeed extends EoS_Plugin
 					CURLOPT_HEADER => false,
 					CURLOPT_RETURNTRANSFER => true,
 					CURLOPT_SSL_VERIFYPEER => false,
-					CURLOPT_CONNECTTIMEOUT => 2
+					CURLOPT_CONNECTTIMEOUT => 2,
+					// github requires a user agent header
+					CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13'
 				));
 				$json_response = curl_exec($f);
 				$data = json_decode($json_response, true);
@@ -112,6 +115,7 @@ class GitFeed extends EoS_Plugin
 					'message_short' => shorten_subject($commit['commit']['message'], 60),
 					'message' => nl2br($commit['commit']['message']),		// for the tool tip
 					'dateline' => timeformat(strtotime($commit['commit']['committer']['date'])),
+					'recent' => $context['time_now'] - strtotime($commit['commit']['committer']['date']) < 86400 * 3 ? true : false,
 					'sha' => $commit['sha'],
 					'href' => self::$my_git_url . 'commit/'. $commit['sha']
 				);

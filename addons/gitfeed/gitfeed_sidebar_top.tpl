@@ -6,10 +6,10 @@
           {$C.gitfeed_global.message}
         </div>
     {else}
-        <ol class="commonlist tinytext">
+        <ol class="commonlist tinytext" style="padding:0;">
           {foreach $C.gitfeed as $commit}
             <li>
-              <a href="{$commit.href}" class="easytip" data-tip="tip_{$commit.sha}">{$commit.message_short}</a>
+              <a href="{$commit.href}" class="easytip{($commit.recent == true) ? ' recent_commit' : ''}" data-tip="tip_{$commit.sha}">{$commit.message_short}</a>
               <span class="floatright">
                 {$commit.dateline}
               </span>
@@ -20,6 +20,9 @@
             </li>
           {/foreach}
           <li class="righttext">
+            <div class="righttext">
+                Red = recent commit (max. 3 days old)
+            </div>
             <a href="{$C.gitfeed_global.see_all.href}">{$C.gitfeed_global.see_all.txt}</a>
           </li>
         </ol>

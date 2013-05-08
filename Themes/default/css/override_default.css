@@ -7,12 +7,12 @@ div.posts_container {
 }
 div.post_wrapper.std {
 	background: rgb(238,238,238);
-	background: -moz-linear-gradient(left, rgba(238,238,238,1) 0%, rgba(245,245,245,1) 210px, rgba(245,245,245,1) 100%);
-	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(238,238,238,1)), color-stop(210px,rgba(245,245,245,1)), color-stop(100%,rgba(245,245,245,1)));
-	background: -webkit-linear-gradient(left, rgba(238,238,238,1) 0%,rgba(245,245,245,1) 210px,rgba(245,245,245,1) 100%);
-	background: -o-linear-gradient(left, rgba(238,238,238,1) 0%,rgba(245,245,245,1) 210px,rgba(245,245,245,1) 100%);
-	background: -ms-linear-gradient(left, rgba(238,238,238,1) 0%,rgba(245,245,245,1) 210px,rgba(245,245,245,1) 100%);
-	background: linear-gradient(to right, rgba(238,238,238,1) 0%,rgba(245,245,245,1) 210px,rgba(245,245,245,1) 100%);
+	background: -moz-linear-gradient(left, rgba(231, 231, 231,1) 0%, rgba(245,245,245,1) 210px, rgba(245,245,245,1) 100%);
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgb(231, 231, 231)), color-stop(210px,rgba(245,245,245,1)), color-stop(100%,rgba(245,245,245,1)));
+	background: -webkit-linear-gradient(left, rgba(231, 231, 231,1) 0%,rgba(245,245,245,1) 210px,rgba(245,245,245,1) 100%);
+	background: -o-linear-gradient(left, rgba(231, 231, 231,1) 0%,rgba(245,245,245,1) 210px,rgba(245,245,245,1) 100%);
+	background: -ms-linear-gradient(left, rgba(231, 231, 231,1) 0%,rgba(245,245,245,1) 210px,rgba(245,245,245,1) 100%);
+	background: linear-gradient(to right, rgba(231, 231, 231,1) 0%,rgba(245,245,245,1) 210px,rgba(245,245,245,1) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#f5f5f5',GradientType=1 );
 	border:2px solid #ddd;
 	border-radius: 4px;
@@ -34,7 +34,7 @@ div.keyinfo.std h5 {
 	display: inline;
 }
 div.keyinfo.std {
-	background:transparent !important;
+	/*background:transparent !important;*/
 	height:26px;
 	padding-left:230px;
 }
@@ -52,7 +52,7 @@ div.post_wrapper.std.alternate {
 }
 div.post_content.std {
 	background:#f5f5f5;
-	border-top: 1px dotted #ccc;
+	/*border-top: 1px dotted #ccc;*/
 }
 div.post_wrapper.std.alternate div.post_content.std {
 	background: rgba(238,244,249,1);
@@ -79,4 +79,8 @@ div.poster.std h4 a {
 a.prefix.req {
 	background: #70b8e5;
 	border:1px solid #527fe5;
+}
+
+a.recent_commit {
+	color: red;
 }
