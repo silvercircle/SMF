@@ -64,10 +64,13 @@
 <div class="clear"></div>
 {* Show information about the poster of this message. *}
 <div class="poster std borderbox">
-  <div style="width:210px;text-align:center;" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">
-    <h4 class="poster borderbox">{$message.member.link}</h4>
-  </div>
   <ul class="reset tinytext" id="msg_{$ID}_extra_info">
+  <li class="membername">
+    <div style="text-align:center;" itemscope="itemscope" itemtype="http://data-vocabulary.org/Person">
+      <h4>{$message.member.link}</h4>
+      {$message.member.group_stars}
+    </div>
+  </li>
   {if !$message.member.is_guest}
     {if $S.show_user_images and empty($O.show_no_avatars)}
       {if !empty($message.member.avatar.image)}
@@ -82,7 +85,6 @@
     {else}
       <br>
     {/if}
-    <li class="membergroup">{$message.member.group_stars}</li>
     {if !empty($message.member.title)}
       <li class="title">{$message.member.title}</li>
     {/if}

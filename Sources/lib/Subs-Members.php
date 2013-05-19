@@ -511,7 +511,7 @@ function registerMember(&$regOptions, $return_errors = false)
 	$regOptions['username'] = preg_replace('~[\t\n\r\x0B\0' . ($context['server']['complex_preg_chars'] ? '\x{A0}' : "\xC2\xA0") . ']+~u', ' ', $regOptions['username']);
 
 	// Don't use too long a name.
-	if (commonAPI::strlen($regOptions['username']) > 25)
+	if($modSettings['username_max_length'] > 0 && commonAPI::strlen($regOptions['username']) > $modSettings['username_max_length'])
 		$reg_errors[] = array('lang', 'error_long_name');
 
 	if($modSettings['username_min_length'] > 0 && commonAPI::strlen($regOptions['username']) < $modSettings['username_min_length'])

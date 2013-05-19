@@ -95,6 +95,8 @@ $txt['setting_coppaPhone'] = 'Contact number for parents to contact with age res
 
 $txt['setting_username_min_length'] = 'Minimum length of a member\'s name';
 $txt['setting_username_min_length_desc'] = 'Set to 0 to allow member names with a length of one or more characters.';
+$txt['setting_username_max_length'] = 'Maximum length of a member\'s name';
+$txt['setting_username_max_length_desc'] = 'Set to 0 to allow member name lengths up to the limit enforced in the database (80 characters).';
 
 $txt['admin_register'] = 'Registration of new member';
 $txt['admin_register_desc'] = 'From here you can register new members into the forum, and if desired, email them their details.';

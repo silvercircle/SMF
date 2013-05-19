@@ -948,10 +948,6 @@ div.poster.article {
 h4.poster {
 	font-size: 110%;
 }
-div.poster h4 a {
-	text-shadow: 1px 1px 3px white;
-}
-
 div.userbit_compact {
 	font-size: 11px;
 	color: #888;
@@ -2703,7 +2699,7 @@ a.member.group_2, span.member.group_2 {
 	color:purple;
 }
 a.member.group_6, a.member.group_11, span.member.group_6, span.member.group_11 {
-	color:#4f4 !important;
+	color:#484 !important;
 }
 span.member.online {
 	color:green;

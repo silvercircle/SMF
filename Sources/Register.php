@@ -853,4 +853,6 @@ function RegisterCheckUsername()
 
 	if((int)$modSettings['username_min_length'] > 0)
 		$context['valid_username'] &= (commonAPI::strlen($context['checked_username']) >= $modSettings['username_min_length'] ? true : false);
+	if((int)$modSettings['username_max_length'] > 0)
+		$context['valid_username'] &= (commonAPI::strlen($context['checked_username']) <= $modSettings['username_max_length'] ? true : false);
 }

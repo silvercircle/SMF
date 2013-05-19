@@ -275,6 +275,7 @@ function ModifyRegistrationSettings($return_config = false)
 			array('check', 'send_welcomeEmail'),
 		'',
 			array('int', 'username_min_length', 'subtext' => $txt['setting_username_min_length_desc']),
+			array('int', 'username_max_length', 'subtext' => $txt['setting_username_max_length_desc']),
 			array('int', 'coppaAge', 'subtext' => $txt['setting_coppaAge_desc'], 'onchange' => 'checkCoppa();'),
 			array('select', 'coppaType', array($txt['setting_coppaType_reject'], $txt['setting_coppaType_approval']), 'onchange' => 'checkCoppa();'),
 			array('large_text', 'coppaPost', 'subtext' => $txt['setting_coppaPost_desc']),
@@ -302,8 +303,11 @@ function ModifyRegistrationSettings($return_config = false)
 
 		// validate min- and maximum lengths for a member's name.
 
-		if($_POST['username_min_length'] < 0 || $_POST['username_min_length'] >= 25)
+		$_POST['username_max_length'] = ($_POST['username_max_length'] >= 80 || $_POST['username_max_length'] < 0 ? 80 : $_POST['username_max_length']);
+
+		if($_POST['username_min_length'] < 0 || $_POST['username_min_length'] >= 25 || $_POST['username_min_length'] >= $_POST['username_max_length'])
 			$_POST['username_min_length'] = 0;
+
 
 		saveDBSettings($config_vars);
 		redirectexit('action=admin;area=regcenter;sa=settings');
