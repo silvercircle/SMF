@@ -71,7 +71,7 @@
       <dl class="common rightbalance input">
         <dt><strong><label for="smf_autov_username">{$T.username}:</label></strong></dt>
         <dd class="smallpadding">
-          <input type="text" name="user" id="smf_autov_username" size="30" tabindex="{$C.tabindex}" maxlength="25" value="{(isset($C.username)) ? $C.username : ''}" class="input_text" />
+          <input type="text" name="user" id="smf_autov_username" size="30" tabindex="{$C.tabindex}" maxlength="{$M.username_max_length}" value="{(isset($C.username)) ? $C.username : ''}" class="input_text" />
           {$C.tabindex = $C.tabindex+1}
           <span id="smf_autov_username_div" style="display: none;">
           <a id="smf_autov_username_link" href="#">

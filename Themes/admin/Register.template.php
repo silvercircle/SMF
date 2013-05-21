@@ -49,7 +49,7 @@ function template_admin_register()
 						<span class="smalltext">', $txt['admin_register_username_desc'], '</span>
 					</dt>
 					<dd>
-						<input type="text" name="user" id="user_input" tabindex="', $context['tabindex']++, '" size="30" maxlength="25" class="input_text" />
+						<input type="text" name="user" id="user_input" tabindex="', $context['tabindex']++, '" size="50" maxlength="'.$modSettings['username_max_length'],'" class="input_text" />
 					</dd>
 					<dt>
 						<strong><label for="email_input">', $txt['admin_register_email'], ':</label></strong>

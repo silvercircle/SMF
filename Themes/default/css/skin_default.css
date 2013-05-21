@@ -601,7 +601,6 @@ h3, h4 {
 	float: right;
 	width: 500px;
 	padding-right:15px;
-	border-top-right-radius: 6px;
 }
 .notibar_intro {
 	background: transparent url(../images/clipsrc_l.png) 0 -32px no-repeat;
@@ -776,9 +775,10 @@ ol.commonlist.category {
 	background: linear-gradient(to bottom, #606c88 0%,#3f4c6b 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#606c88', endColorstr='#3f4c6b',GradientType=0 );	
 }
-div.keyinfo.std, div.keyinfo.lean, div.keyinfo.pm {
-	/*background-color: #b0b0b0 !important;*/
+div.keyinfo.lean {
+	background: #487ea3;
 }
+
 div.keyinfo.watched {
 	border-bottom:2px solid red !important;
 }
@@ -2699,10 +2699,10 @@ a.member.group_2, span.member.group_2 {
 	color:purple;
 }
 a.member.group_6, a.member.group_11, span.member.group_6, span.member.group_11 {
-	color:#484 !important;
+	color: #4e9c4e !important;
 }
 span.member.online {
-	color:green;
+	color: #009d00;
 }
 span.member.offline {
 	color:red;

@@ -19,7 +19,6 @@ div.post_wrapper.std {
 	margin-bottom:10px;*/
 }
 div.keyinfo.lean, div.keyinfo.pm {
-	background-color: #e0e0ea !important;
 	height:46px;
 	min-height:46px;
 	line-height:20px;
@@ -30,6 +29,17 @@ div.keyinfo.std h5, div.keyinfo.lean h5 {
 	font-weight:normal;
 	color:black;
 	font-style:italic;
+}
+div.keyinfo.std h5 {
+	color: #88c;
+	font-weight:bold;
+}
+
+div.post_wrapper.lean, div.keyinfo.lean {
+	border-radius: 4px 4px 0 0;
+}
+div.keyinfo.lean, div.keyinfo.lean h5 {
+	color:#eee;
 }
 div.keyinfo.std h5 {
 	display: inline;
@@ -67,10 +77,11 @@ div.poster.std ul {
 	-webkit-margin-before:0;
 	width:150px;
 	max-width:150px;
-	border: 1px solid #ccc;
+	border: 1px solid #314b64;
+	border-top-width:3px;
 	border-radius: 4px;
 	background: #ddd;
-	padding: 0 0 4px 0;
+	padding: 0 !important;
 }
 div.poster.std h4 a {
 	padding:2px 5px;
@@ -86,10 +97,18 @@ a.recent_commit {
 }
 
 li.membername {
-	background: #cce;
+	background: #33556e;
 }
 
 li.membername h4 {
 	font-size: 13px;
 	padding:2px 4px 2px 4px;
+}
+
+li.membername h4 a {
+	color: #eee;
+}
+
+.poster.std li.avatar {
+	background: #487ea3;
 }

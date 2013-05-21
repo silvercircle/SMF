@@ -17,15 +17,18 @@ div#wrap {
 	margin: 0 auto;
 	padding-bottom: 10px;
 	min-width:800px;
+	padding-left:30px;
+	padding-right:30px;
 }
 div#content_section {
 	padding: 10px 20px 5px 20px;
-	margin-left:30px;
-	margin-right:30px;
+	margin-left:auto;
+	margin-right:auto;
+	max-width:1500px;
 }
 div#header {
-	margin-left:30px;
-	margin-right:30px;
+	margin-left:-30px;
+	margin-right:-30px;
 }
 div#upper_section {
 	height: 67px;
@@ -399,7 +402,7 @@ div.poster.std {
 	max-width: 220px;
 	min-width: 220px;
 	text-align: center;
-	margin:0 0 10px 0;
+	margin:-10px 0 -10px 0;
 	padding:0 5px;
 }
 div.poster.comment {
@@ -427,11 +430,12 @@ div.poster ul ul {
 div.poster ul ul li {
 	display: inline;
 }
-div.poster li.stars, div.poster li.avatar, div.poster li.blurb, li.postcount {
+div.poster li.stars, div.poster li.blurb, li.postcount {
 	margin-top: 0.5em;
 }
 div.poster li.avatar {
 	overflow: hidden;
+	padding:6px 0;
 }
 div.poster li.warning {
 	line-height: 1.2em;
@@ -786,8 +790,8 @@ h4.catbg, h4.catbg2, h3.catbg, h3.catbg2, .table_list tbody.header td.catbg {
 /* pulldown menus */
 
 #main_menu {
-	padding: 0 0.5em 0 30px;
-	border-top-left-radius: 6px;
+	padding: 0 30px;
+	margin:0 auto;
 }
 ul.dropmenu, ul.dropmenu ul {
 	list-style: none;

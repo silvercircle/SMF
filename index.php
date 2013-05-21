@@ -67,7 +67,7 @@ EoS_QueryString::cleanRequest();
 $context = array();
 //<editor-fold desc="Test">
 $context['is_https'] = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on';
-$context['jsver'] = '?v=1598';
+$context['jsver'] = '?v=1599';
 $context['jquery_version'] = '1.7.2';
 $context['multiquote_cookiename'] = 'mquote';
 $context['time_now'] = time();
