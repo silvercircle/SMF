@@ -2663,8 +2663,10 @@ function obExit($header = null, $do_footer = null, $from_index = false, $from_fa
 	global $context, $modSettings;
 	static $header_done = false, $footer_done = false, $level = 0, $has_fatal_error = false;
 
-	if(isset($context['additional_uids_to_load']))
+	if(isset($context['additional_uids_to_load'])) {
+		$context['additional_uids_to_load'] = array_unique($context['additional_uids_to_load']);
 		loadMemberData($context['additional_uids_to_load']);
+	}
 
 	if(EoS_Smarty::isActive())
 		return EoS_Smarty::obExit($header, $do_footer, $from_index, $from_fatal_error);
