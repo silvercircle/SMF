@@ -35,7 +35,7 @@ div.keyinfo.std h5 {
 	font-weight:bold;
 }
 
-div.post_wrapper.lean, div.keyinfo.lean {
+div.post_wrapper.lean, div.keyinfo.lean, div.keyinfo.pm {
 	border-radius: 4px 4px 0 0;
 }
 div.keyinfo.lean, div.keyinfo.lean h5 {
@@ -111,4 +111,11 @@ li.membername h4 a {
 
 .poster.std li.avatar {
 	background: #487ea3;
+}
+
+div.lastpost {
+	padding: 0 4px;
+	border:1px solid #c6e0f2;
+	border-radius:3px;
+	background-color: #eaf0ea;
 }

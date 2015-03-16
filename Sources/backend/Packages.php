@@ -710,8 +710,6 @@ function PackageInstall()
 
 	require_once($sourcedir . '/lib/Subs-Package.php');
 
-	// !!! TODO: Perhaps do it in steps, if necessary?
-
 	$context['uninstalling'] = $_REQUEST['sa'] == 'uninstall2';
 
 	// Set up the linktree for other.

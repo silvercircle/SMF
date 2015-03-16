@@ -25,9 +25,9 @@ function aStreamDispatch()
 	$xml = isset($_REQUEST['xml']) ? true : false;
 	if(!$modSettings['astream_active']) {
 		if(!$xml)
-	    	redirectexit();
+                    redirectexit();
 		else
-			obExit(false);
+                    obExit(false);
 	}
 	require_once($sourcedir . '/lib/Subs-Activities.php');
 	$sub_actions = array(

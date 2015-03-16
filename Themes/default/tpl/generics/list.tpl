@@ -75,7 +75,7 @@
     {foreach $list_menu.links as $link}
       {$links[] = '<a href="'|cat:$link.href|cat:'">'|cat:$link.label|cat:'</a>'}
     {/foreach}
-    <table cellpadding="0" cellspacing="0" style="margin-', $list_menu['position'], ': 10px; width: 100%;">
+    <table cellpadding="0" cellspacing="0" style="margin-{$list_menu.position}: 10px; width: 100%;">
       <tr>{($list_menu.position == 'right') ? '<td>&nbsp;</td>' : ''}
         <td align="{$list_menu.position}">
           <table cellspacing="0" cellpadding="0">

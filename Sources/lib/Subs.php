@@ -13,7 +13,6 @@
  */
 if (!defined('SMF'))
 	die('Hacking attempt...');
-
 /*	This file has all the main functions in it that relate to, well,
 	everything.  It provides all of the following functions:
 
@@ -2660,12 +2659,22 @@ function redirectexit($setLocation = '', $refresh = false)
 // Ends execution.  Takes care of template loading and remembering the previous URL.
 function obExit($header = null, $do_footer = null, $from_index = false, $from_fatal_error = false)
 {
-	global $context, $modSettings;
+	global $context, $modSettings, $user_profile;
 	static $header_done = false, $footer_done = false, $level = 0, $has_fatal_error = false;
 
+	/*
+	 * if we have additional member ids to load (mainly for custom rewrites), do it now and make sure
+	 * we do not load member records that already exist in $user_profile[]
+	 */
 	if(isset($context['additional_uids_to_load'])) {
-		$context['additional_uids_to_load'] = array_unique($context['additional_uids_to_load']);
-		loadMemberData($context['additional_uids_to_load']);
+		foreach($context['additional_uids_to_load'] as $key => &$value) {
+			if(isset($user_profile[$value]))
+				unset($context['additional_uids_to_load'][$key]);
+		}
+		if(!empty($context['additional_uids_to_load'])) {
+			$context['additional_uids_to_load'] = array_unique($context['additional_uids_to_load']);
+			loadMemberData($context['additional_uids_to_load']);
+		}
 	}
 
 	if(EoS_Smarty::isActive())

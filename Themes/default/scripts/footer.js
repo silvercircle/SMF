@@ -319,7 +319,7 @@
                 }
             }
         });
-    }
+    };
 })(jQuery);
 
 function share_popup (url_add, width, height)  {
@@ -425,7 +425,7 @@ function bbc_refresh()
 	$('div.bbc_img_resizer').on('mouseleave', function(event) {
 		$(this).hide();
 		return(false);
-	})
+	});
 	$('div.spoiler.head').click(function() {
        var content = $(this).next();
 		if(content.css('display') != 'none')
@@ -885,7 +885,7 @@ function submitSearchBox()
 
 $('#adv_search').live('mouseleave',function(event) {
     $('#search_form input.default').hide();
-	$('#search_form').css({overflow: 'hidden', height: '26px', 'padding-bottom': '0'});
+	$('#search_form').css({overflow: 'hidden', height: '30px', 'padding-bottom': '0'});
 	$('#search_form').removeClass('search_form_active');
 });
 $('.brd_moderators_chld, #share_bar').live('mouseleave',function(event) {

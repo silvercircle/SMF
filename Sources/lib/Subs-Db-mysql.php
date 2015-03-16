@@ -11,7 +11,8 @@
  *
  * @version 1.0pre
  */
-if (!defined('SMF'))
+
+ if (!defined('SMF'))
 	die('Hacking attempt...');
 
 /*	This file has all the main functions in it that relate to the database.
@@ -59,7 +60,7 @@ function db_extend($type = 'extra')
 {
 	global $sourcedir, $db_type;
 
-	require_once($sourcedir . '/Db' . strtoupper($type[0]) . substr($type, 1) . '-' . $db_type . '.php');
+	require_once($sourcedir . '/Db' . strtoupper($type[0]) . substr($type, 1) . '-mysql.php');
 	$initFunc = 'db_' . $type . '_init';
 	$initFunc();
 }
