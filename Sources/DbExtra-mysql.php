@@ -423,4 +423,3 @@ function smf_db_table_sql($tableName)
 
 	return $schema_create;
 }
-?>

@@ -483,4 +483,3 @@ function clock()
 			}
 	}
 }
-?>

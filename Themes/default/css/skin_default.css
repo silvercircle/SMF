@@ -1,3 +1,16 @@
+@font-face {
+  font-family: "Monda";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Monda Bold"), local("Monda-Bold"), url("https://fonts.gstatic.com/s/monda/v4/uCFS-jQepl-zVlhjycME2fesZW2xOQ-xsNqO47m55DA.woff") format("woff");
+}
+@font-face {
+  font-family: "Monda";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Monda Regular"), local("Monda-Regular"), url("https://fonts.gstatic.com/s/monda/v4/sk05J8GA1NvUxDnk43EgAQ.woff") format("woff");
+}
+
 html {
 	background:#e3ede9;
 }
@@ -10,7 +23,7 @@ body {
 	background: -ms-linear-gradient(top,  #e0eff9 0%,#b5c6d0 0%,#e3ede9 55%);
 	background: linear-gradient(to bottom,  #e0eff9 0%,#b5c6d0 0%,#e3ede9 55%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0eff9', endColorstr='#e3ede9',GradientType=0 );
-	font-family: "Lucida Grande", "Lucida Sans Unicode", "Segoe UI", "Tahoma", "Arial", sans-serif;
+	font-family: "Monda", "Lucida Sans Unicode", "Segoe UI", "Tahoma", "Arial", sans-serif;
 	font-size: 13px;
 	margin:0;
 	background-repeat: no-repeat;
@@ -346,6 +359,7 @@ div.content {
 #main_menu {
 	background:#222;
 	font-size: 90%;
+	font-weight: bold;
 }
 ul.dropmenu, ul.dropmenu ul {
 	background-color: #222;
@@ -361,7 +375,7 @@ ul.dropmenu li a.firstlevel {
 	/*text-shadow: 0 0 2px #555;*/
 }
 ul.dropmenu li a.firstlevel.compact {
-	font-weight: normal;
+	font-weight: bold;
 	font-size:11px;
 	color:white;
 	text-shadow: 0 0 2px #555;
@@ -996,7 +1010,7 @@ div.post.fontstyle_0 {
 	font-family: "Georgia", "Times new Roman", serif;
 }
 div.post.fontstyle_1 {
-	font-family: "Lucida Grande", "Segoe UI", "Verdana", sans-serif;
+	font-family: "Monda", "Segoe UI", "Verdana", sans-serif;
 }
 /* avatars */
 .avatar img, div#mcard_inner img.avatar, div#basicinfo img.avatar {

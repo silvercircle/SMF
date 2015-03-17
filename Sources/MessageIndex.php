@@ -1,7 +1,7 @@
 <?php
 /**
  * @name      EosAlpha BBS
- * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ * @copyright 2015 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
  *
@@ -29,7 +29,7 @@ if (!defined('SMF'))
 function MessageIndex()
 {
 	global $txt, $scripturl, $board, $modSettings, $context;
-	global $options, $settings, $board_info, $user_info, $smcFunc, $sourcedir;
+	global $options, $settings, $board_info, $user_info, $sourcedir;
 	global $memberContext;
 	
 	// If this is a redirection board head off.
@@ -631,7 +631,7 @@ function MessageIndex()
 // Allows for moderation from the message index.
 function QuickModeration()
 {
-	global $sourcedir, $board, $user_info, $modSettings, $sourcedir, $smcFunc, $context;
+	global $sourcedir, $board, $user_info, $modSettings, $sourcedir, $context;
 
 	// Check the session = get or post.
 	checkSession('request');

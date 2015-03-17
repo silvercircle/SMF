@@ -1,7 +1,7 @@
 <?php
 /**
  * @name      EosAlpha BBS
- * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ * @copyright 2015 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
  *
@@ -948,5 +948,3 @@ function setKeys($method = 'rows', $keys = array(), $reverse = false)
 	// Rows or columns?
 	$context['key_method'] = $method == 'rows' ? 'rows' : 'cols';
 }
-
-?>

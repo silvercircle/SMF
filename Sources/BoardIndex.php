@@ -161,5 +161,3 @@ function CollapseCategory($is_ajax = false)
 	if(!$is_ajax)
 		BoardIndex();
 }
-
-?>

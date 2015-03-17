@@ -1,7 +1,7 @@
 <?php
 /**
  * @name      EosAlpha BBS
- * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ * @copyright 2015 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
  *
@@ -685,5 +685,3 @@ function validatePasswordFlood($id_member, $password_flood_value = false, $was_c
 	updateMemberData($id_member, array('passwd_flood' => $was_correct && $number_tries == 1 ? '' : $time_stamp . '|' . $number_tries));
 
 }
-
-?>

@@ -210,5 +210,3 @@ class custom_search
 		return $ignoreRequest;
 	}
 }
-
-?>

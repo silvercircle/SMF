@@ -1,7 +1,7 @@
 <?php
 /**
  * @name      EosAlpha BBS
- * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ * @copyright 2015 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
  *
@@ -605,6 +605,7 @@ class EoS_Smarty_Template_Support {
 	}
 	public function _eval($_arg)
 	{
+        // the globals must be declared here, because they might be used in $_arg
 		global $context, $txt, $modSettings, $settings, $options;
 		return eval($_arg);
 	}
