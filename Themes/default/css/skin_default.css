@@ -3064,6 +3064,7 @@ span.member.offline {
 
 .datewidget > span {
     display:block;
+
 }
 @media print {
 	#headerarea {

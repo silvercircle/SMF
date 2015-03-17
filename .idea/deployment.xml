@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="SMF">
+    <serverData>
+      <paths name="Domaintechnik">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/alex/www/forum" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="LOCAL BSD">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/public/www/forum" local="$PROJECT_DIR$" web="forum" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="SMF">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/alex/www/forum" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
+

@@ -1,7 +1,7 @@
 <?php
 /**
  * @name      EosAlpha BBS
- * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ * @copyright 2015 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
  *
@@ -839,7 +839,8 @@ function getEventPoster($event_id)
 // Consolidating the various INSERT statements into this function.
 function insertEvent(&$eventOptions)
 {
-	global $modSettings, $smcFunc;
+	$month = 0;
+	$day = 0;
 
 	// Add special chars to the title.
 	$eventOptions['title'] = commonAPI::htmlspecialchars($eventOptions['title'], ENT_QUOTES);
@@ -884,7 +885,8 @@ function insertEvent(&$eventOptions)
 
 function modifyEvent($event_id, &$eventOptions)
 {
-	global $smcFunc;
+	$month = 0;
+	$day = 0;
 
 	// Properly sanitize the title.
 	$eventOptions['title'] = commonAPI::htmlspecialchars($eventOptions['title'], ENT_QUOTES);
@@ -1042,5 +1044,3 @@ function removeHolidays($holiday_ids)
 		'calendar_updated' => time(),
 	));
 }
-
-?>
