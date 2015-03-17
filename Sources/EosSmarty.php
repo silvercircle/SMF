@@ -538,7 +538,7 @@ class EoS_Smarty_Template_Support {
   		$this->_smarty_instance->assignByRef('_COOKIE', $_COOKIE);
   		$this->_smarty_instance->assign('SID', SID != '' ? '&' . SID : '');
 	}
-
+    
 	/**
 	 * @static
 	 * @param $position - string. indicates where the template fragment 

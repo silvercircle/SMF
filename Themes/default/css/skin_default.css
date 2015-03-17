@@ -10,7 +10,6 @@
   font-weight: 400;
   src: local("Monda Regular"), local("Monda-Regular"), url("https://fonts.gstatic.com/s/monda/v4/sk05J8GA1NvUxDnk43EgAQ.woff") format("woff");
 }
-
 html {
 	background:#e3ede9;
 }
@@ -3054,6 +3053,7 @@ span.member.offline {
     padding:1px 0;
     background-color:#3a60a4;
 }
+
 .datewidget > .day {
     font-size:14px;
     font-weight:bold;

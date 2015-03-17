@@ -1,7 +1,7 @@
 <?php
 /**
  * @name      EosAlpha BBS
- * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ * @copyright 2015 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
  *
@@ -1485,5 +1485,3 @@ function mergePosts($msgs = array(), $from_topic, $target_topic)
 
 	updateLastMessages(array($from_board, $target_board));
 }
-
-?>
