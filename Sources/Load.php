@@ -1235,9 +1235,7 @@ function loadMemberContext($user, $display_custom_fields = false)
 			);
 		}
 	}
-
 	HookAPI::callHook('load_membercontext', array(&$memberContext[$user], &$profile));
-
 	return true;
 }
 
@@ -2717,7 +2715,7 @@ function logSpider()
 }
 
 /*
- * left here for compatibility...
+ * left here for compatibility (some addon product may use the old caching API)
  */
 function cache_put_data($key, $value, $ttl = 120)
 {

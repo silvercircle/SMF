@@ -66,8 +66,6 @@ if (!defined('SMF'))
 // Handle fatal errors - like connection errors or load average problems
 function db_fatal_error($loadavg = false)
 {
-	global $sourcedir;
-
 	show_db_error($loadavg);
 
 	// Since we use "or db_fatal_error();" this is needed...
@@ -77,7 +75,7 @@ function db_fatal_error($loadavg = false)
 // Log an error, if the option is on.
 function log_error($error_message, $error_type = 'general', $file = null, $line = null)
 {
-	global $txt, $modSettings, $sc, $user_info, $smcFunc, $scripturl, $last_error;
+	global $modSettings, $sc, $user_info, $scripturl, $last_error;
 
 	// Check if error logging is actually on.
 	if (empty($modSettings['enableErrorLogging']))
@@ -151,7 +149,7 @@ function log_error($error_message, $error_type = 'general', $file = null, $line 
 // An irrecoverable error.
 function fatal_error($error, $log = 'general')
 {
-	global $txt, $context, $modSettings;
+	global $txt, $modSettings;
 
 	// We don't have $txt yet, but that's okay...
 	if (empty($txt))
@@ -328,7 +326,7 @@ function setup_fatal_error_context($error_message)
 function show_db_error($loadavg = false)
 {
 	global $sourcedir, $mbname, $maintenance, $mtitle, $mmessage, $modSettings;
-	global $db_connection, $webmaster_email, $db_last_error, $db_error_send, $smcFunc;
+	global $db_connection, $webmaster_email, $db_last_error, $db_error_send;
 
 	// Don't cache this page!
 	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');

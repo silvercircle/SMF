@@ -736,7 +736,6 @@ function comma_format($number, $override_decimal_count = false)
 		$decimal_separator = $matches[2];
 		$decimal_count = strlen($matches[3]);
 	}
-
 	// Format the string with our friend, number_format.
 	return number_format($number, is_float($number) ? ($override_decimal_count === false ? $decimal_count : $override_decimal_count) : 0, $decimal_separator, $thousands_separator);
 }
@@ -744,7 +743,7 @@ function comma_format($number, $override_decimal_count = false)
 // Format a time to make it look purdy.
 function timeformat($log_time, $show_today = false, $offset_type = false)
 {
-	global $context, $user_info, $txt, $modSettings;
+	global $user_info, $txt, $modSettings;
 	static $non_twelve_hour = null;
 
 	// Offset the time.
@@ -3512,6 +3511,39 @@ function getLegacyAttachmentFilename($filename, $attachment_id, $dir = null, $ne
 	return $filename;
 }
 
+function smf_ipv6_expand($addr, $strict_check = true)
+{
+	/* Check if there are segments missing, insert if necessary */
+	if (strpos($addr, '::') !== false)
+	{
+		$part = explode('::', $addr);
+		$part[0] = explode(':', $part[0]);
+		$part[1] = explode(':', $part[1]);
+		$missing = array();
+		for ($i = 0; $i < (8 - (count($part[0]) + count($part[1]))); $i++)
+			array_push($missing, '0000');
+		$missing = array_merge($part[0], $missing);
+		$part = array_merge($missing, $part[1]);
+	}
+	else
+		$part = explode(":", $addr);
+
+	/* Pad each segment until it has 4 digits */
+	foreach ($part as &$p)
+		while (strlen($p) < 4)
+			$p = '0' . $p;
+
+	unset($p);
+
+	/* Join segments */
+	$result = implode(':', $part);
+
+	/* Quick check to make sure the length is as expected */
+	if (!$strict_check || strlen($result) == 39)
+		return $result;
+	else
+		return false;
+}
 // Convert a single IP to a ranged IP.
 function ip2range($fullip)
 {

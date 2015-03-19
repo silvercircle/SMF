@@ -1,7 +1,7 @@
 <?php
 /**
  * @name      EosAlpha BBS
- * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ * @copyright 2015 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
  *
@@ -448,5 +448,3 @@ function time_since($time_diff)
 	else
 		return sprintf($time_diff == 1 ? $txt['mq_second'] : $txt['mq_seconds'], $time_diff);
 }
-
-?>

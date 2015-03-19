@@ -278,4 +278,3 @@ function LikesByUser($memID)
 	mysql_free_result($request);
 	EoS_Smarty::getConfigInstance()->registerHookTemplate('profile_content_area', 'ratings/profile_display');
 }
-

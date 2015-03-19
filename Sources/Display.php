@@ -2002,6 +2002,5 @@ function QuickInTopicModeration()
 		if (allowedTo('delete_any') && (!allowedTo('delete_own') || $info[1] != $user_info['id']))
 			logAction('delete', array('topic' => $topic, 'subject' => $info[0], 'member' => $info[1], 'board' => $board));
 	}
-
 	redirectexit(!empty($topicGone) ? 'board=' . $board : 'topic=' . $topic . '.' . $_REQUEST['start']);
 }

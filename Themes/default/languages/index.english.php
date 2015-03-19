@@ -769,7 +769,7 @@ $txt['clear_cookies_warning'] = '<h1 class=\\\'bigheader secondary\\\'><strong>C
 $txt['link_disabled'] = '[link disabled (no permission)]';
 $txt['hidden_boards_notice_one'] = '%d board is hidden from display, because you are ignoring it. %sClick to view</a>.';
 $txt['hidden_boards_notice_many'] = '%d boards are hidden from display, because you are ignoring them. %sClick to view</a>';
-$txt['hidden_boards_setup_notice'] = '<a href="%s">Set up board ignore options</a>';
+$txt['hidden_boards_setup_notice'] = '<a href="%s">Configure ignored boards</a>';
 $txt['whatsnew_title'] = "Showing new or updated topics from the last %d days.";
 $txt['your_profile'] = 'Your profile';
 $txt['show_my_subscriptions'] = 'Show my subscribed topics';

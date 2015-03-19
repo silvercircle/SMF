@@ -353,6 +353,8 @@ function getBoardIndex($boardIndexOptions)
  * move hidden boards into a separate pseudo category to hide them from normal
  * board list display.
  *
+ * user can customize ignored boards in profile -> Ignore board options
+ *
  * @param $boardlist	array of boards (either a $category['boards'] or normal list
  * 						when categories are unwanted.
  * @return int			number of boards that are hidden in this list of boards

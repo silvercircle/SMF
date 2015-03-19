@@ -1,6 +1,6 @@
 div.post_wrapper.std {
 	padding:0;
-	margin-bottom:0;
+	margin-bottom:5px;
 }
 div.posts_container {
 	background: transparent;
@@ -8,7 +8,7 @@ div.posts_container {
 div.post_wrapper.std {
 	background: rgb(238,238,238);
 	background: -moz-linear-gradient(left, rgba(231, 231, 231,1) 0%, rgba(245,245,245,1) 210px, rgba(245,245,245,1) 100%);
-	background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgb(231, 231, 231)), color-stop(210px,rgba(245,245,245,1)), color-stop(100%,rgba(245,245,245,1)));
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgb(231, 231, 231)), color-stop(210, rgba(245,245,245,1)), color-stop(100%,rgba(245,245,245,1)));
 	background: -webkit-linear-gradient(left, rgba(231, 231, 231,1) 0%,rgba(245,245,245,1) 210px,rgba(245,245,245,1) 100%);
 	background: -o-linear-gradient(left, rgba(231, 231, 231,1) 0%,rgba(245,245,245,1) 210px,rgba(245,245,245,1) 100%);
 	background: -ms-linear-gradient(left, rgba(231, 231, 231,1) 0%,rgba(245,245,245,1) 210px,rgba(245,245,245,1) 100%);
@@ -52,7 +52,7 @@ div.keyinfo.std {
 div.post_wrapper.std.alternate {
 	background: rgb(214,228,239);
 	background: -moz-linear-gradient(left, rgba(214,228,239,1) 0%, rgba(238,244,249,1) 210px, rgba(238,244,249,1) 100%);
-	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(214,228,239,1)), color-stop(210px,rgba(238,244,249,1)), color-stop(100%,rgba(238,244,249,1)));
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(214,228,239,1)), color-stop(210,rgba(238,244,249,1)), color-stop(100%,rgba(238,244,249,1)));
 	background: -webkit-linear-gradient(left, rgba(214,228,239,1) 0%,rgba(238,244,249,1) 210px,rgba(238,244,249,1) 100%);
 	background: -o-linear-gradient(left, rgba(214,228,239,1) 0%,rgba(238,244,249,1) 210px,rgba(238,244,249,1) 100%);
 	background: -ms-linear-gradient(left, rgba(214,228,239,1) 0%,rgba(238,244,249,1) 210px,rgba(238,244,249,1) 100%);
@@ -77,10 +77,10 @@ div.poster.std ul {
 	-webkit-margin-before:0;
 	width:150px;
 	max-width:150px;
-	border: 1px solid #314b64;
+	/*border: 1px solid #314b64;
 	border-top-width:3px;
 	border-radius: 4px;
-	background: #ddd;
+	background: #ddd;*/
 	padding: 0 !important;
 }
 div.poster.std h4 a {
@@ -96,9 +96,11 @@ a.recent_commit {
 	color: red;
 }
 
+/*
 li.membername {
 	background: #33556e;
 }
+*/
 
 li.membername h4 {
 	font-size: 13px;
@@ -109,10 +111,11 @@ li.membername h4 a {
 	color: #eee;
 }
 
+/*
 .poster.std li.avatar {
 	background: #487ea3;
 }
-
+*/
 div.lastpost {
 	padding: 0 4px;
 	border:1px solid #c6e0f2;

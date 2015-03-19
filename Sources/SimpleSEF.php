@@ -1527,6 +1527,5 @@ class SimpleSEF {
         if (!empty($modSettings['simplesef_debug']))
             foreach (func_get_args() as $string)
                 log_error($string, 'debug', __FILE__);
-    }
-
+	}
 }

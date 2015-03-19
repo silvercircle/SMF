@@ -337,8 +337,6 @@ class HookAPI {
  * - Zend cache 
  * - memcached (both the old and new implementationms)
  * - file system caching
- * 
- * TODO: database cache backend (unsure)?
  */
 
 class cacheAPI {
@@ -639,7 +637,7 @@ class cacheAPI {
 	 *
 	 * This function does not work with all caching engines and should not
 	 * be relied on! It can help clearing stale caches, but caching in
-	 * general caching should try to be independent of this function. At
+	 * general should try to be independent of this function. At
 	 * this point, only xcache and the file cache support this feature.
 	 *
 	 * @param string $key
