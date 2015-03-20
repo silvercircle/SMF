@@ -3084,6 +3084,7 @@ span.member.offline {
     display:block;
 
 }
+
 @media print {
 	#headerarea {
 		display: none;

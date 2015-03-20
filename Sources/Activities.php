@@ -1,7 +1,7 @@
 <?php
 /**
  * @name      EosAlpha BBS
- * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ * @copyright 2015 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
  *
@@ -13,7 +13,7 @@
  *
  * activity stream main module
  */
-if (!defined('SMF'))
+if (!defined('EOSA'))
 	die('No access');
 
 @require_once($sourcedir . '/lib/Subs-Ratings.php');

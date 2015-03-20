@@ -640,12 +640,15 @@ class cacheAPI {
 	 * general should try to be independent of this function. At
 	 * this point, only xcache and the file cache support this feature.
 	 *
-	 * @param string $key
+	 * @param 	string 	$key
+	 * @return 	bool	result (true if operation is supported)
 	 */
 	public static function clearCacheByPrefix($key)
 	{
+		$result = false;
+
 		if(-1 == self::$API)
-			return;
+			return result;
 
 		$key = self::$basekey . strtr($key, ':', '-');
 
@@ -678,15 +681,18 @@ class cacheAPI {
 
 			case 2:
 				xcache_unset_by_prefix($key);
+				$result = true;
 				break;
 
 			case 0:
 				// Glob using the prefix and unlink all hits.
+				$result = true;
 				foreach(glob(self::$cachedir . '/data_' . $key . '*.php') as $filename) {
 					@unlink($filename);
 				}
 				break;
 		}
+		return $result;
 	}
 }
 
@@ -772,7 +778,8 @@ class Mobile_Detect {
 	/**
 	 * Construct and init this instance.
 	 */
-	function __construct(){
+	function __construct()
+	{
 
 		// Merge all rules together.
 		$this->detectionRules = array_merge(
@@ -823,7 +830,6 @@ class Mobile_Detect {
 	 */
 	public function __call($name, $arguments)
 	{
-
 		$key = substr($name, 2);
 		return $this->_detect($key);
 
@@ -836,7 +842,6 @@ class Mobile_Detect {
 	 */
 	private function _detect($key='')
 	{
-
 		if(empty($key)){
 
 			// Begin general search.
@@ -910,7 +915,8 @@ class Topiclist {
 	private $users_to_load = array();
 	private $topic_ids = array();
 
-	function __construct($request, $total_items, $not_profile = false) {
+	function __construct($request, $total_items, $not_profile = false)
+	{
 
 		global $context, $txt, $user_info, $scripturl, $options, $memberContext, $modSettings;
 
@@ -1030,20 +1036,26 @@ class Topiclist {
 		}
 	}
 
-	public function &getResult() {
+	public function &getResult()
+	{
 		return $this->topiclist;
 	}
 }
 
 /**
  * base class for a EoS Alpha plugin.
- */
+ * All plugins must inherit from this class and re-implement functions accordingly.
+  */
 class EoS_Plugin
 {
 	protected $plugindir;
 	protected $installError = 'OK';
+	protected $productShortName = '';
+	protected $installableHooks = array();
+	protected $_product = array();
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->plugindir = HookAPI::getAddonsDir() . $this->productShortName;
 	}
 
@@ -1116,5 +1128,7 @@ class EoS_Plugin
 	public function test()
 	{
 		echo $this->productShortName;
+
+
 	}
 }

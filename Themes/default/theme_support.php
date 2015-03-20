@@ -1,7 +1,7 @@
 <?php
 /**
  * @name      EosAlpha BBS
- * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ * @copyright 2015 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
  *
@@ -10,6 +10,15 @@
  * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
  * @version 1.0pre
+ */
+
+/**
+ * theme_support.php allows to customize a theme with additional functions that are
+ * available in the templates.
+ *
+ * This implementation serves as base and all its methods *must* always exist. If you
+ * write your own theme_support.php you *must* therefore inherit from the
+ * EoS_Smarty_Template_Support class
  */
 
 global $settings;
@@ -30,13 +39,20 @@ $settings['additional_css'] = array(
 	'_default' => 'override_default',
 );
 
+/**
+ * This is a mandatory function a theme_support.php must always have. It must instantiate and return
+ * a class that inherits from EoS_Smarty_Template_Support and pass $smarty_instance to its CTOR.
+ *
+ * @param $smarty_instance		The Smarty Class instance
+ * @return DefaultTheme
+ */
 function theme_support_autoload($smarty_instance)
 {
 	return new DefaultTheme($smarty_instance);
 }
 
 /**
- * your class MUST inherit from _EoS_Smarty_Template_Support
+ * your class MUST inherit from EoS_Smarty_Template_Support
  */
 class DefaultTheme extends EoS_Smarty_Template_Support
 {
@@ -182,4 +198,3 @@ class DefaultTheme extends EoS_Smarty_Template_Support
 			return true;
 	}
 }
-?>

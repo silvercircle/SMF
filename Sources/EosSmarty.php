@@ -43,6 +43,7 @@ class EoS_Smarty {
 
 		self::$_is_Debug = $debug;
 
+		// todo: Installer must check template cache directory for write access!
 		$compiledir = rtrim($boarddir, '/') . '/template_cache/themeid_' . $settings['theme_id'];		// TODO: make this customizable
 
 		@require_once($sourcedir . '/lib/Smarty/Smarty.class.php');
