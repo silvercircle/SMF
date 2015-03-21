@@ -1,7 +1,7 @@
 <?php
 /**
  * @name      EosAlpha BBS
- * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ * @copyright 2015 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
  *
@@ -14,10 +14,8 @@
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
-/*	This file maintains all XML-based interaction (mainly XMLhttp).
-
-	void GetJumpTo()
-
+/**
+ * This file maintains all XML-based interaction (mainly XMLhttp).
 */
 
 function XMLhttpMain()
@@ -98,7 +96,7 @@ function ListMessageIcons()
 		obExit(false);
 	$context['sub_template'] = 'message_icons';
 }
-/*
+/**
  * output the member card
  * todo: better error response
  */
@@ -159,7 +157,13 @@ function HandleLikeRequest()
 	else
 		AjaxErrorMsg($txt['post_ratings_disabled']);
 }
-// todo: check permissions!!
+
+/**
+ * Retrieve a preview (peek) for a topic in message index. Preview
+ * contains the first and last post of a thread.
+ *
+ * todo: respect permissions!!
+ */
 function TopicPeek()
 {
 	global $context;
@@ -232,6 +236,9 @@ function TopicPeek()
 	}
 }
 
+/**
+ * Dispatch AJAX requests of the thread tagging system (add / remove tag)
+ */
 function TagsActionDispatcher()
 {
 	global $sourcedir;
@@ -299,6 +306,9 @@ function InlinePrefixActions()
 	}
 }
 
+/**
+ * handles the Ajax request to collapse / expand a category
+ */
 function AjaxCollapseCategory()
 {
 	global $sourcedir;

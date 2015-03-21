@@ -14,12 +14,14 @@
 if (!defined('SMF'))
 	die('Hacking attempt...');
 
-/*	This file contains one humble function, which applauds or smites a user.
+/*
+ * Karma is basically dead in EoS Alpha. It has been replaced by the post rating system
+ * This file is here for historical reasons only, see below why.
+ */
 
-*/
-
-
-// What's this?  I dunno, what are you talking about?  Never seen this before, nope.  No siree.
+/**
+ * This is here for historical reasons and won't go away :)
+ */
 function BookOfUnknown()
 {
 	global $context;

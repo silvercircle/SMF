@@ -1,7 +1,7 @@
 <?php
 /**
  * @name      EosAlpha BBS
- * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ * @copyright 2015 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
  *
@@ -2047,6 +2047,12 @@ function ModerationSettings()
 	);
 }
 
+/**
+ * handles everything related to topic bans. Ban, unban and showing the list
+ * of active topic bans in the administration center.
+ *
+ * todo: improve UI, test paged display with lots of bans.
+ */
 function TopicBans()
 {
 	global $context, $board_info, $topic, $txt, $memberContext, $user_info;

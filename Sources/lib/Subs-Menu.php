@@ -269,5 +269,3 @@ function destroyMenu($menu_id = 'last')
 
 	unset($context[$menu_name]);
 }
-
-?>
