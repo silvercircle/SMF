@@ -1503,6 +1503,8 @@ class SimpleSEF {
      * Small helper function for benchmarking SimpleSEF.  It's semi smart in the
      * fact that you don't need to specify a 'start' or 'stop'... just pass the
      * 'marker' twice and that starts and stops it automatically and adds to the total
+	 *
+	 * This is primarily used to measure time for buffer rewrites
      *
      * @param string $marker
      */

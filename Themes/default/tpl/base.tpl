@@ -381,7 +381,7 @@
     }
     </script>
     <noscript>
-      <div style="width:0px;height:0px;"><img src="{$M.piwik_uri}/piwik.php?idsite=1" style="border:0" alt="" /></div>
+      <div style="width:0;height:0;"><img src="{$M.piwik_uri}/piwik.php?idsite=1" style="border:0" alt="" /></div>
     </noscript>
   {/if}
   </div>
