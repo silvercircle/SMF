@@ -1,7 +1,7 @@
 <?php
 /**
  * @name      EosAlpha BBS
- * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ * @copyright 2015 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
  *
@@ -816,5 +816,3 @@ function EditBoardSettings($return_config = false)
 	// Prepare the settings...
 	prepareDBSettingContext($config_vars);
 }
-
-?>

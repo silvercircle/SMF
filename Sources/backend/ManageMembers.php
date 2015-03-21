@@ -1,7 +1,7 @@
 <?php
 /**
  * @name      EosAlpha BBS
- * @copyright 2011 Alex Vie silvercircle(AT)gmail(DOT)com
+ * @copyright 2015 Alex Vie silvercircle(AT)gmail(DOT)com
  *
  * This software is a derived product, based on:
  *
@@ -1295,5 +1295,3 @@ function jeffsdatediff($old)
 	// Divide out the seconds in a day to get the number of days.
 	return ceil($dis / (24 * 60 * 60));
 }
-
-?>

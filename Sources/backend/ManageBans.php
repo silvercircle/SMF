@@ -1,17 +1,15 @@
 <?php
-
 /**
- * This file contains all the functions used for the ban center.
- * @todo refactor as controller-model
+ * @name      EosAlpha BBS
+ * @copyright 2015 Alex Vie silvercircle(AT)gmail(DOT)com
+ *
+ * This software is a derived product, based on:
  *
  * Simple Machines Forum (SMF)
+ * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
- * @package SMF
- * @author Simple Machines http://www.simplemachines.org
- * @copyright 2011 Simple Machines
- * @license http://www.simplemachines.org/about/smf/license.php BSD
- *
- * @version 2.1 Alpha 1
+ * @version 1.0pre
  */
 
 if (!defined('SMF'))
@@ -1854,5 +1852,3 @@ function updateBanMembers()
 	// Update the latest member and our total members as banning may change them.
 	updateStats('member');
 }
-
-?>
