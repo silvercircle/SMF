@@ -1,4 +1,5 @@
   <div class="clear" id="footer_section">
+    {$SUPPORT->displayHook('theme_debug_output')}
     <div>
       {*customization space in the footer*}
       {$SUPPORT->displayHook('footer_area')}

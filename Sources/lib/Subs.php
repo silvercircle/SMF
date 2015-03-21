@@ -3349,25 +3349,13 @@ function db_debug_junk()
 		ob_end_clean();
 		ob_start('EoS_QueryString::ob_sessrewrite');
 	}
-	if(EoS_Smarty::isActive()) {
-		$_t = EoS_Smarty::getSmartyInstance()->getTemplateDir();
-		$smarty_template_dirs = is_array($_t) ? implode(', ', $_t) : $_t;
-		$_t = EoS_Smarty::getTemplates();
-		$smarty_templates = is_array($_t) ? implode(', ', $_t) : $_t;
-
-		$smarty_debug_info = '<h1 class="bigheader secondary borderless">Smarty debug info</h1><span style="font-size:1.1em;color:red;"><strong>Template directories:</strong></span> ' . $smarty_template_dirs . '</br><span style="font-size:1.1em;color:red;"><strong>Templates:</strong></span> ' . $smarty_templates . '<br>' . EoS_Smarty::getConfigInstance()->getHookDebugInfo() . '<br>';
-	}
-	else
-		$smarty_debug_info = '';
-
 	echo preg_replace('~</body>\s*</html>~', '', $temp), '
 <div class="smalltext" style="text-align: left; margin: 1ex;">
 	', (isset($context['debug']['templates']) ? ($txt['debug_templates'] . count($context['debug']['templates']) . ': <em>' . implode('</em>, <em>', $context['debug']['templates']) . '</em>.<br />') : ''),'
 	', (isset($context['debug']['sub_templates']) ? ($txt['debug_subtemplates'] . count($context['debug']['sub_templates']) . ': <em>' . implode('</em>, <em>', $context['debug']['sub_templates']) . '</em>.<br />') : ''),'
 	', $txt['debug_language_files'], count($context['debug']['language_files']), ': <em>', implode('</em>, <em>', $context['debug']['language_files']), '</em>.<br />
 	', $txt['debug_stylesheets'], count($context['debug']['sheets']), ': <em>', implode('</em>, <em>', $context['debug']['sheets']), '</em>.<br />
-	', $txt['debug_files_included'], count($files), ' - ', round($total_size / 1024), $txt['debug_kb'], ' (<a href="javascript:void(0);" onclick="document.getElementById(\'debug_include_info\').style.display = \'inline\'; this.style.display = \'none\'; return false;">', $txt['debug_show'], '</a><span id="debug_include_info" style="display: none;"><em>', implode('</em>, <em>', $files), '</em></span>)<br />',
-	$smarty_debug_info;
+	', $txt['debug_files_included'], count($files), ' - ', round($total_size / 1024), $txt['debug_kb'], ' (<a href="javascript:void(0);" onclick="document.getElementById(\'debug_include_info\').style.display = \'inline\'; this.style.display = \'none\'; return false;">', $txt['debug_show'], '</a><span id="debug_include_info" style="display: none;"><em>', implode('</em>, <em>', $files), '</em></span>)<br />';
 
 	if (!empty($modSettings['cache_enable']) && !empty($cache_hits))
 	{

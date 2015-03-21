@@ -32,16 +32,17 @@ class EoS_Smarty {
 	private static $_is_Debug = false;
 
 	/**
-	 * @param bool $debug - true enables the debug mode
+	 * @param bool $debug - true enables template debug mode
 	 *
 	 * this initializes the smarty template system. Should be called early in index.php,
-	 * but after all settings have been loaded.
+	 * but after all settings have been loaded, especially AFTER loadTheme()
 	 */
 	public static function init($debug = false)
 	{
-		global $sourcedir, $settings, $boarddir, $context;
+		global $sourcedir, $settings, $boarddir, $context, $user_info;
 
-		self::$_is_Debug = $debug;
+		// set debug context from Settings.php, but only for admins
+		self::$_is_Debug = $user_info['is_admin'] ? $debug : false;
 
 		// todo: Installer must check template cache directory for write access!
 		$compiledir = rtrim($boarddir, '/') . '/template_cache/themeid_' . $settings['theme_id'];		// TODO: make this customizable
@@ -190,8 +191,33 @@ class EoS_Smarty {
 
   		$context['template_benchmark'] = microtime();
   		self::$_configInstance->setupContext();
-  		foreach(self::$_template_names as $the_template)
+
+		// if we are in template debugging mode, register the output template and
+		// set up the debugging context.
+		if(self::$_is_Debug) {
+			self::$_configInstance->registerHookTemplate('theme_debug_output', 'admin/theme_debug');
+			self::prepareDebugContext();
+		}
+
+		foreach(self::$_template_names as $the_template)
 			self::$_smartyInstance->display($the_template);
+	}
+
+	/**
+	 * @static
+	 * prepares the template debug output with information from the template engine
+	 * The special template admin/theme_debug.tpl will output it and is called via
+	 * a template hook (theme_debug_output), by default in the footer template fragment.
+	 */
+	public static function prepareDebugContext()
+	{
+		global $context, $settings;
+
+		loadLanguage('ThemeDebug');
+		$context['theme_debug'] = array(
+				'template_hooks' => self::$_configInstance->getHookDebugInfo(),
+				'template_dirs' => implode('<br>', self::$_smartyInstance->getTemplateDir(null)),
+		);
 	}
 
 	// Ends execution.  Takes care of template loading and remembering the previous URL.
