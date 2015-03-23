@@ -43,7 +43,7 @@ $settings['additional_css'] = array(
  * This is a mandatory function a theme_support.php must always have. It must instantiate and return
  * a class that inherits from EoS_Smarty_Template_Support and pass $smarty_instance to its CTOR.
  *
- * @param $smarty_instance		The Smarty Class instance
+ * @param $smarty_instance		Smarty Class instance
  * @return DefaultTheme
  */
 function theme_support_autoload($smarty_instance)
@@ -73,13 +73,7 @@ class DefaultTheme extends EoS_Smarty_Template_Support
 
 	public function testfunction($param)
 	{
-		//global $context, $txt;
 		echo "We are in test function and this is our param: ", $param;
-
-		/*
-		 * display a custom theme template from overrides/
-		 */
-		//$this->_smarty_instance->display('overrides/foo.tpl');
 	}
 
 	/**

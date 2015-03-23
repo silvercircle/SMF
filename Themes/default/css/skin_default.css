@@ -146,7 +146,7 @@ input[type="text"], input[type="password"], select {
 	border-radius: 3px;
 	font-family: "Lucida Sans Unicode", "Segoe UI", "Tahoma", "Arial", sans-serif;
 	font-size: 11px !important;
-	line-height:11px !important;
+	line-height:13px !important;
 	box-shadow: 0 0 5px 0 #ddd inset;
 }
 textarea {
@@ -1077,28 +1077,28 @@ div#quickreplybox {
 }
 ul.buttonlist li a, span.button, input[type=button], input[type=submit] {
 	font-size: 11px !important;
-	text-shadow: 1px 1px 1px #eee;
 	text-decoration: none;
 	color: #222;
-	border: 1px solid white;
-	background: #e2e2e2;
+	border: 1px solid blue;
+	background: #f2f2f2;
 	font-family:Tahoma,sans-serif;
 	vertical-align: middle;
-	outline: 1px solid #999;
+	/*outline: 1px solid #999;*/
 }
 span.button.default, ul.buttonlist li a.active, input[type=submit].default {
 	background: #4685cc;
 	color:white;
 	text-shadow: none;
-	border:1px solid white;
-	outline: 1px solid #4685cc;
+	border:1px solid #4685cc;
+	/*outline: 1px solid #4685cc;*/
 }
 span.button:hover, ul.buttonlist li a:hover, input[type=submit]:hover {
-	background: #ccc;
-	border:1px solid orange !important;
+	background: #2665ac;
+	color: white;
+	/*border:1px solid orange !important;*/
 }
 input[type=submit].default:hover, span.button.default:hover, ul.buttonlist li a.active:hover, input[type=submit].default:active {
-	border:1px solid orange !important;
+	/*border:1px solid orange !important;*/
 	background: #2665ac !important;
 	color:white;
 }

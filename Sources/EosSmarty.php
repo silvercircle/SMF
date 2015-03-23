@@ -6,7 +6,7 @@
  * This software is a derived product, based on:
  *
  * Simple Machines Forum (SMF)
- * copyright:	2011 Simple Machines (http://www.simplemachines.org)
+ * copyright:	2015 Simple Machines (http://www.simplemachines.org)
  * license:  	BSD, See included LICENSE.TXT for terms and conditions.
  *
  * @version 1.0pre
@@ -32,7 +32,7 @@ class EoS_Smarty {
 	private static $_is_Debug = false;
 
 	/**
-	 * @param bool $debug - true enables template debug mode
+	 * @param bool $debug	true enables template debug mode
 	 *
 	 * this initializes the smarty template system. Should be called early in index.php,
 	 * but after all settings have been loaded, especially AFTER loadTheme()
@@ -182,7 +182,7 @@ class EoS_Smarty {
 	 * set up the template context, load and display the template
 	 * this does everything needed to get our ouput
 	 */
-	public static function Display()
+	private static function Display()
 	{
 		global $context;
 	
@@ -208,19 +208,36 @@ class EoS_Smarty {
 	 * prepares the template debug output with information from the template engine
 	 * The special template admin/theme_debug.tpl will output it and is called via
 	 * a template hook (theme_debug_output), by default in the footer template fragment.
+	 *
+	 * this function is only executed when $theme_use_debug is set to true in Settings.php
 	 */
-	public static function prepareDebugContext()
+	private static function prepareDebugContext()
 	{
-		global $context, $settings;
+		global $context, $settings, $txt;
+
 
 		loadLanguage('ThemeDebug');
 		$context['theme_debug'] = array(
 				'template_hooks' => self::$_configInstance->getHookDebugInfo(),
 				'template_dirs' => implode('<br>', self::$_smartyInstance->getTemplateDir(null)),
+				'templates_used' => implode('<br>', self::$_template_names),
+				'compile_dir' => self::$_smartyInstance->getCompileDir(),
+				'default_theme_dir' => $settings['default_theme_dir'],
+				'smarty_version' => Smarty::SMARTY_VERSION,
+				'allow_overrides' => $settings['allow_template_overrides'] ? $txt['yes'] : $txt['no'],
+				'primary_css' => $settings['primary_css'],
+				'secondary_css' => $settings['secondary_css'],
 		);
 	}
 
-	// Ends execution.  Takes care of template loading and remembering the previous URL.
+	/**
+	 * @param null $header
+	 * @param null $do_footer
+	 * @param bool $from_index
+	 * @param bool $from_fatal_error
+	 *
+	 * output everything. This is the same as obExit in Subs.php except that it handles rendering via Smarty.
+	 */
 	public static function obExit($header = null, $do_footer = null, $from_index = false, $from_fatal_error = false)
 	{
 		global $context, $modSettings;
@@ -298,7 +315,7 @@ class EoS_Smarty {
 			exit;
 	}
 
-	public static function template_header()
+	private static function template_header()
 	{
 		global $txt, $context, $user_info, $boarddir;
 

@@ -41,14 +41,12 @@
   </div>
 {/function}
 <div class="main_section" id="memberlist">
-  <div class="cat_bar">
-    <h3>
-      {$T.members_list}
-      {if !isset($C.old_search)}
-        <span class="floatright">{$C.letter_links}</span>
-      {/if}
-    </h3>
-  </div>
+  <h1 class="bigheader section_header">
+    {$T.members_list}
+    {if !isset($C.old_search)}
+      <span class="floatright">{$C.letter_links}</span>
+    {/if}
+  </h1>
   <div class="flat_container cleantop smallpadding">
   {if isset($C.page_index)}
     <div class="pagelinks pagesection">{$C.page_index}</div>

@@ -577,15 +577,20 @@ ul.plainbuttonlist li a {
 }
 ul.buttonlist li a, span.button, input[type=button], input[type=submit] {
 	float: left;
-	height:21px !important;
-	line-height:19px !important;
-	padding: 0 6px 1px 6px;
+	height:24px !important;
+	line-height: 22px !important;
 	cursor: pointer;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 	vertical-align: middle;
+	padding: 0 5px;
 }
+
+input[type=button], input[type=submit] {
+	line-height: inherit !important;
+}
+
 ul.buttonlist.vertical li a {
 	float:none;
 	display:block;
